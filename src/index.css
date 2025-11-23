@@ -1,0 +1,63 @@
+@tailwind utilities;
+
+@import "tailwindcss";
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap");
+
+:root {
+  --navbarHeight: 4rem;
+  --sectionHeight: calc(100dvh - var(--navbarHeight));
+  --clr-primary: #1b64f1;
+  --clr-primary-light: #1b64f1;
+  --clr-primary-dark: #1b64f1;
+  --all-pages-spacing: 1.5rem;
+  --all-pages-spacing-small: 1rem;
+  --tw-enter-translate-x: -5%;
+}
+
+/* 
+$ ======================== Dark Mode Styles as per user preference ======================
+*/
+
+/* @media (prefers-color-scheme: light) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+} */
+
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+  scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  border-color: transparent;
+  box-sizing: border-box;
+}
+
+input:focus {
+  border-color: transparent;
+  outline: none;
+}
+
+@layer base {
+  /* $ ============================ Home Page Styles ============================ */
+}
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
