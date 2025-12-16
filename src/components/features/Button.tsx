@@ -1,5 +1,3 @@
-"use client";
-
 // $ The component is used to create buttons in the app by passing in the various props to create the button
 
 // Check out useFormStatus explanation from John Smilga on React Forms, section 10, lecture 32
