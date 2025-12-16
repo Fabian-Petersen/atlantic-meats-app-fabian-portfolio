@@ -33,21 +33,21 @@ const LoginForm = () => {
         >
           <FormField
             control={form.control}
-            name="mobileNumber"
+            name="email"
             render={({ field }) => (
               <FormItem className="tracking-wider">
                 <FormLabel
-                  htmlFor="mobileNumber"
+                  htmlFor="email"
                   className="dark:text-gray-300 text-slate-500"
                 >
-                  Mobile Number
+                  Email
                 </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     disabled={isPending}
                     type="email"
-                    placeholder="0731234567"
+                    placeholder="john@atlanticmeat.co.za"
                     className="text-slate-500 dark:text-gray-300 placeholder:text-gray-400 dark:placeholder-gray-500 dark:border-gray-200 border-slate-400"
                   />
                 </FormControl>

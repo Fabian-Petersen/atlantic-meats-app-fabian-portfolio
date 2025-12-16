@@ -2,8 +2,8 @@ import * as z from "zod";
 
 // $ Schema for the Login Form
 export const LoginSchema = z.object({
-  mobileNumber: z.string().regex(/^0\d{9}$/, {
-    message: "Please enter a valid 10-digit mobile number",
+  email: z.email({
+    message: "Please enter a valid email",
   }),
   password: z
     .string()

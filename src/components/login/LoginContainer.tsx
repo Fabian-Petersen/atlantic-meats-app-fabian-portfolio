@@ -2,7 +2,7 @@ import LoginForm from "./LoginForm";
 
 const LoginContainer = () => {
   return (
-    <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-4">
+    <div className="w-full max-w-[20rem] bg-white rounded-xl shadow-lg p-4">
       <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
         Sign In
       </h2>

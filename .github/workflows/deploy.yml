@@ -1,0 +1,96 @@
+name: Deploy Atlantic Meat App
+on:
+  push:
+    branches: [main]
+
+env:
+  VITE_PUBLIC_API_URL: ${{ secrets.VITE_PUBLIC_API_URL }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        env:
+          VITE_PUBLIC_API_URL: ${{ secrets.VITE_PUBLIC_API_URL }}
+        run: |
+          echo "VITE_PUBLIC_API_URL=$VITE_PUBLIC_API_URL"
+          npm run build
+
+      - name: List build output
+        run: ls -la dist/
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: af-south-1
+
+      - name: Deploy to S3
+        run: |
+          # HTML files
+          aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET }} \
+            --exclude "*" \
+            --include "*.html" \
+            --metadata-directive REPLACE \
+            --cache-control max-age=0,no-cache,no-store,must-revalidate \
+            --content-type text/html
+
+          # CSS files
+          aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET }} \
+            --exclude "*" \
+            --include "*.css" \
+            --metadata-directive REPLACE \
+            --cache-control max-age=31536000 \
+            --content-type text/css
+
+          # JavaScript files
+          aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET }} \
+            --exclude "*" \
+            --include "*.js" \
+            --metadata-directive REPLACE \
+            --cache-control max-age=31536000 \
+            --content-type application/javascript
+
+          # Images
+          aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET }} \
+            --exclude "*" \
+            --include "*.jpg" \
+            --include "*.jpeg" \
+            --include "*.png" \
+            --include "*.gif" \
+            --include "*.ico" \
+            --metadata-directive REPLACE \
+            --cache-control max-age=31536000
+
+          # Other static assets
+          aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET }} \
+            --exclude "*.html" \
+            --exclude "*.css" \
+            --exclude "*.js" \
+            --exclude "*.jpg" \
+            --exclude "*.jpeg" \
+            --exclude "*.png" \
+            --exclude "*.gif" \
+            --exclude "*.ico" \
+            --delete
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
+
+      - name: Verify S3 upload
+        run: aws s3 ls s3://${{ secrets.AWS_S3_BUCKET }}
