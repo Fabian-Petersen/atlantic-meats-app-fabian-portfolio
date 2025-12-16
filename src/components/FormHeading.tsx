@@ -1,5 +1,3 @@
-import React from "react";
-
 type FormHeadingProps = {
   heading: string;
   className?: string;
