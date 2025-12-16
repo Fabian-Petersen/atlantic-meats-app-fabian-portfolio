@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { ZodType, ZodError } from "zod";
+import type { ZodType } from "zod";
 
 type FormErrors = {
   [key: string]: string;
