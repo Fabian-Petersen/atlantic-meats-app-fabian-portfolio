@@ -1,11 +1,13 @@
-// import Logo from "./Logo";
-import NavbarActionButtons from "./NavbarActionButtons";
+import Logo from "./Logo";
+// import NavbarActionButtons from "./NavbarActionButtons";
 
 const Navbar = () => {
   return (
-    <nav className="flex w-full justify-end p-4">
-      {/* <Logo variant="navbar" /> */}
-      <NavbarActionButtons />
+    <nav className="fixed w-full justify-between px-4 bg-(--clr-primary) h-24">
+      <div className="flex justify-between w-full h-full items-center">
+        <Logo />
+        {/* <NavbarActionButtons /> */}
+      </div>
     </nav>
   );
 };

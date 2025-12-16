@@ -9,7 +9,7 @@
 :root {
   --navbarHeight: 4rem;
   --sectionHeight: calc(100dvh - var(--navbarHeight));
-  --clr-primary: #1b64f1;
+  --clr-primary: #fcb53b;
   --clr-primary-light: #1b64f1;
   --clr-primary-dark: #1b64f1;
   --all-pages-spacing: 1.5rem;

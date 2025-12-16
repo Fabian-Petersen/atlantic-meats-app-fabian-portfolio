@@ -23,7 +23,7 @@ const ThemeToggleButton = () => {
         <Button
           type="button"
           onClick={handleClick}
-          className="dark:text-white text-fontDark"
+          className="dark:text-white text-white"
         >
           <Moon size={isMobile ? 20 : 24} />
         </Button>
@@ -31,7 +31,7 @@ const ThemeToggleButton = () => {
         <Button
           type="button"
           onClick={handleClick}
-          className="dark:text-white text-fontDark"
+          className="dark:text-white text-white"
         >
           <Sun size={isMobile ? 20 : 24} />
         </Button>
