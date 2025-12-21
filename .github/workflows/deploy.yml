@@ -37,6 +37,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: af-south-1
 
+        # Add Cognito configuration validation
+      - name: Validate Cognito Configuration
+        run: |
+          aws cognito-idp describe-user-pool \
+            --user-pool-id ${{ secrets.COGNITO_USERPOOL_ID }} \
+            --query 'UserPool.Id' \
+            --output text
+
       - name: Deploy to S3
         run: |
           # HTML files
