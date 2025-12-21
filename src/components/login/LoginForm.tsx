@@ -82,11 +82,11 @@ const LoginForm = () => {
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button
-            className="bg-(--clr-primary) text-white leading-2 hover:bg-(--clr-primary)/90 hover:cursor-pointer"
+            className="bg-(--clr-primary) text-white leading-2 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider"
             type="submit"
             disabled={isPending}
           >
-            Submit
+            Sign in
           </Button>
         </div>
       </form>
