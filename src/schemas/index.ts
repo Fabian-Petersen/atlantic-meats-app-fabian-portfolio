@@ -11,13 +11,10 @@ export const LoginSchema = z.object({
       message: "Please enter a valid password",
     })
     .refine(
-      (value) =>
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/g.test(
-          value
-        ),
+      (value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value),
       {
         message:
-          "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&)",
+          "Password must contain at least one uppercase letter, one lowercase letter, and one number, with no special characters",
       }
     ),
 });

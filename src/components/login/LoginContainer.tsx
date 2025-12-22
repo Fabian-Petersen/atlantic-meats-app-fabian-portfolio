@@ -1,16 +1,15 @@
+import FormHeading from "../customComponents/FormHeading";
 import LoginForm from "./LoginForm";
 
 const LoginContainer = () => {
   return (
-    <div className="w-full max-w-100 bg-white h-100 rounded-xl shadow-lg p-4">
-      <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
-        Sign In
-      </h2>
+    <div className="flex flex-col gap-8 w-full max-w-100 bg-white h-100 rounded-xl shadow-lg p-4">
+      <FormHeading heading="Sign In" className="text-center" />
       <LoginForm />
-      <div className="mt-8 text-center">
+      <div className="mt-auto text-center pb-4">
         <a
           href="/forgotPassword"
-          className="text-blue-400 hover:text-blue-500 text-sm"
+          className="text-blue-400 hover:text-blue-500 text-sm mt-auto"
         >
           Forgot Password
         </a>
