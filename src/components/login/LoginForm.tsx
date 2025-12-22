@@ -15,7 +15,6 @@ import { awsCognitoLogin } from "../../utils/aws-signin";
 import { fetchUserAttributes } from "aws-amplify/auth";
 
 import FormRowInput from "../customComponents/FormRowInput";
-import FormRowSelect from "../customComponents/FormRowSelect";
 // import { useGlobalContext } from "@/useGlobalContext";
 
 type FormValues = z.infer<typeof LoginSchema>;
