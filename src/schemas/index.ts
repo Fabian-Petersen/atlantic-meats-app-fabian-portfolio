@@ -2,47 +2,47 @@ import * as z from "zod";
 
 // $ Schema for the Login Form
 export const LoginSchema = z.object({
-  email: z.email({
-    message: "Please enter a valid email",
-  }),
+  email: z.email({ message: "Please enter a valid email" }),
   password: z
     .string()
-    .min(1, {
-      message: "Please enter a valid password",
-    })
+    .min(1, { message: "Please enter a valid password" })
     .refine(
       (value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value),
       {
         message:
-          "Password must contain at least one uppercase letter, one lowercase letter, and one number, with no special characters",
+          "Password must be 8 characters with one uppercase letter, one lowercase letter and one number",
       }
     ),
 });
 
-// $ Schema for the Job Card Upload Form
-export const projectsFormSchema = z.object({
-  projectTitle: z
-    .string()
-    .min(1, { message: "Please enter a valid email address" }),
-  description: z
-    .string()
-    .min(0, { message: "Please enter a valid description" }),
-  aim: z.string().min(0, { message: "Please enter a valid aim" }),
-  typeOfProject: z.string().min(0, {
-    message: "Please select a valid project type",
+export const changePasswordSchema = z
+  .object({
+    email: z.email({ message: "Please enter a valid email" }),
+    newPassword: z
+      .string()
+      .min(8)
+      .regex(/(?=.*[a-z])/)
+      .regex(/(?=.*[A-Z])/)
+      .regex(/(?=.*\d)/),
+    confirmPassword: z.string(),
+  })
+  .refine((v) => v.newPassword === v.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match",
+  });
+
+export const createJobSchema = z.object({
+  description: z.string().min(1, {
+    message: "Please enter a description",
   }),
-  websiteLink: z.string().url({ message: "Please enter a valid URL" }),
-  githubLink: z.string().url({ message: "Please enter a valid URL" }),
-  // // singlePage: z.object({
-  // //   aim: z.string().min(1, { message: "Please enter a valid aim" }),
-  // projectDetails: z.string().min(0, {
-  //   message: "Please enter a valid description",
-  // }),
-  // challenges: z.string().min(0, { message: "Please enter a valid challenges" }),
-  // ! fix the bug using the select input, the value expected by the form is a string[] and string is returned
-  // projectStack: z.array(z.string()).min(1, {
-  //   message: "Please enter a valid skills set",
-  // }),
-  // image: z.string().min(1, { message: "Please enter a valid image" }),
-  // }),
+  store: z.string().min(1, { message: "Please select a store" }),
+  priority: z.string().min(1, { message: "Please select a priority" }),
+  status: z.string().min(1, { message: "Please select a status" }),
+  type: z.string().min(1, { message: "Please select a type" }),
+  equipment: z.string().min(1, { message: "Please select equipment" }),
+  images: z.array(z.string()).optional(),
 });
+
+export type LoginFormValues = z.infer<typeof LoginSchema>;
+export type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
+export type CreateJobFormValues = z.infer<typeof createJobSchema>;

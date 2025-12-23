@@ -8,6 +8,8 @@ type FormInputProps<TFieldValues extends FieldValues> = {
   register: UseFormRegister<TFieldValues>;
   control: Control<TFieldValues>;
   error?: FieldError;
+  multiple?: boolean;
+  accept?: string;
   disabled?: boolean;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -33,9 +35,11 @@ const FormRowInput = <TFieldValues extends FieldValues>({
   disabled,
   control,
   type = "text",
+  multiple = false,
+  accept,
 }: FormInputProps<TFieldValues>) => {
   const value = useWatch({ name, control });
-  const isValid = !error && value;
+  const isValid = !error && (type === "file" ? value?.length > 0 : value);
 
   return (
     <div className="relative w-full mb-2 group">
@@ -51,6 +55,8 @@ const FormRowInput = <TFieldValues extends FieldValues>({
         )}
         placeholder={placeholder}
         disabled={disabled}
+        multiple={multiple}
+        accept={accept}
       ></input>
       {label && (
         <label

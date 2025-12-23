@@ -1,23 +1,17 @@
-import { Button } from "@/components/ui/button";
-// import { PasswordToggleInput } from "@/components/PasswordToggleInput";
-
-// $ React-Hook-Form, zod & schema
-import { LoginSchema } from "../../schemas/index";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
 import FormRowInput from "../customComponents/FormRowInput";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-// $ Import schemas
-import type { LoginFormValues } from "../../schemas/index";
+import { Button } from "@/components/ui/button";
+import { changePasswordSchema } from "../../schemas/index";
 
-// const { userAttributes, setUserAttributes } = useGlobalContext();
+import type { ChangePasswordFormValues } from "../../schemas/index";
 
-const LoginForm = ({
+const ChangePasswordForm = ({
   onSubmit,
   loading,
 }: {
-  onSubmit: (data: LoginFormValues) => void;
+  onSubmit: (data: ChangePasswordFormValues) => void;
   loading: boolean;
 }) => {
   // $ Form Schema
@@ -26,8 +20,8 @@ const LoginForm = ({
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<LoginFormValues>({
-    resolver: zodResolver(LoginSchema),
+  } = useForm<ChangePasswordFormValues>({
+    resolver: zodResolver(changePasswordSchema),
   });
 
   return (
@@ -48,22 +42,31 @@ const LoginForm = ({
         <FormRowInput
           label="Password"
           type="password"
-          name="password"
+          name="newPassword"
           control={control}
           placeholder="Enter your password"
           register={register}
-          error={errors.password}
+          error={errors.newPassword}
+        />
+        <FormRowInput
+          label="Confirm Password"
+          type="password"
+          name="confirmPassword"
+          control={control}
+          placeholder="Confirm your password"
+          register={register}
+          error={errors.confirmPassword}
         />
         <Button
           className="bg-(--clr-primary) text-white leading-2 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider py-6"
           type="submit"
           disabled={loading}
         >
-          {loading ? "Signing in..." : "Sign In"}
+          {loading ? "Updating..." : "Update Password"}
         </Button>
       </div>
     </form>
   );
 };
 
-export default LoginForm;
+export default ChangePasswordForm;

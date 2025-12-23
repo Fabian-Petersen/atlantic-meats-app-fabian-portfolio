@@ -1,10 +1,12 @@
 import type { UseFormRegister } from "react-hook-form";
+//$ Have a union type for options that can take a array string and a json object with label and value
+type SelectOption = string | { label: string; value: string };
 
 type FormSelectProps<TFieldValues extends FieldValues> = {
   name: Path<TFieldValues>;
   label: string;
   className?: string;
-  options: string[];
+  options: SelectOption[];
   error?: FieldError;
   placeholder?: string;
   defaultValues?: string | string[];
@@ -60,11 +62,16 @@ const FormRowSelect = <TFieldValues extends FieldValues>({
         required={required}
       >
         {!multiple && <option value={placeholder}>{placeholder}</option>}
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
+        {options.map((option) => {
+          const value = typeof option === "string" ? option : option.value;
+          const label = typeof option === "string" ? option : option.label;
+
+          return (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          );
+        })}
       </select>
       {label && (
         <label

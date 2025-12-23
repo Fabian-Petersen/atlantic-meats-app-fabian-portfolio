@@ -1,10 +1,14 @@
-// Create Job Page
+import FormHeading from "@/components/customComponents/FormHeading";
+import CreateJobForm from "@/components/maintenance/CreateJobForm";
 
 const CreateJob = () => {
   return (
-    <section className="px-4 h-screen lg:h-screen bg-cover bg-center bg-no-repeat bg-[#f6f7f9] dark:bg-bgDark">
-      CreateJob
-    </section>
+    <div className="h-screen bg-gray-100 flex items-center justify-center px-4">
+      <div className="flex flex-col gap-8 w-full max-w-100 bg-white h-auto rounded-xl shadow-lg p-4">
+        <FormHeading heading="Create Maintenance Query" />
+        <CreateJobForm />
+      </div>
+    </div>
   );
 };
 

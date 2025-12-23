@@ -3,10 +3,10 @@
 import { Amplify } from "aws-amplify";
 
 export default function configureAmplify() {
-  console.log({
-    userPoolId: import.meta.env.VITE_COGNITO_USERPOOL_ID,
-    clientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
-  });
+  // console.log({
+  //   userPoolId: import.meta.env.VITE_COGNITO_USERPOOL_ID,
+  //   clientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
+  // });
   if (
     !import.meta.env.VITE_COGNITO_USERPOOL_ID ||
     !import.meta.env.VITE_COGNITO_CLIENT_ID

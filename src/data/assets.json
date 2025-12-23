@@ -1,0 +1,118 @@
+{
+  "assets": [
+    {
+      "id": "BS-002",
+      "equipment": "Band Saw",
+      "model": null,
+      "manufacturer": null,
+      "year": null,
+      "location": "DCN",
+      "serialNumber": null,
+      "status": "Operational"
+    },
+    {
+      "id": "MX-004",
+      "equipment": "Mixer",
+      "model": null,
+      "manufacturer": "Meatpack IT",
+      "year": null,
+      "location": "DCN",
+      "serialNumber": null,
+      "status": "Operational"
+    },
+    {
+      "id": "MN-002",
+      "equipment": "Mincer",
+      "model": null,
+      "manufacturer": null,
+      "year": null,
+      "location": "DCN",
+      "serialNumber": null,
+      "status": "Operational"
+    },
+
+    {
+      "id": "SL-003",
+      "equipment": "Slicer",
+      "model": null,
+      "manufacturer": "Rheninghaus",
+      "year": null,
+      "location": "PHI",
+      "serialNumber": null,
+      "status": "Operational"
+    },
+    {
+      "id": "TS-003",
+      "equipment": "Tray Wrapping Sealer",
+      "model": "KW-450",
+      "manufacturer": "Meatpack IT",
+      "year": "2024-06",
+      "location": "PHI",
+      "serialNumber": null,
+      "status": "Operational"
+    },
+    {
+      "id": "GS-002",
+      "equipment": "Gas Stove",
+      "model": null,
+      "manufacturer": null,
+      "year": null,
+      "location": "KHA",
+      "serialNumber": null,
+      "status": "Operational"
+    },
+    {
+      "id": "HS-003",
+      "equipment": "Hand Sealer",
+      "model": "KS-400",
+      "manufacturer": "Vala Impulse",
+      "year": 2023,
+      "location": "KHA",
+      "serialNumber": null,
+      "status": "Operational"
+    },
+
+    {
+      "id": "VF-005",
+      "equipment": "Vacuum Sausage Filler",
+      "model": "VF50",
+      "manufacturer": "Handtmann",
+      "year": null,
+      "location": "BEL",
+      "serialNumber": null,
+      "status": "Repair"
+    },
+    {
+      "id": "PF-004",
+      "equipment": "Piston Sausage Filler",
+      "model": null,
+      "manufacturer": "Supra",
+      "year": null,
+      "location": "BEL",
+      "serialNumber": null,
+      "status": "Spare"
+    },
+
+    {
+      "id": "VB-002",
+      "equipment": "V-mag Bins",
+      "model": null,
+      "manufacturer": "Meatpack IT",
+      "year": null,
+      "location": "MAI",
+      "serialNumber": null,
+      "status": "Operational"
+    },
+
+    {
+      "id": "SC-002",
+      "equipment": "Scale",
+      "model": null,
+      "manufacturer": null,
+      "year": null,
+      "location": "WYN",
+      "serialNumber": null,
+      "status": "Operational"
+    }
+  ]
+}
