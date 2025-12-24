@@ -4,7 +4,7 @@ type SelectOption = string | { label: string; value: string };
 
 type FormSelectProps<TFieldValues extends FieldValues> = {
   name: Path<TFieldValues>;
-  label: string;
+  label?: string;
   className?: string;
   options: SelectOption[];
   error?: FieldError;

@@ -19,7 +19,7 @@ import assets from "@/data/assets.json";
 
 // const { userAttributes, setUserAttributes } = useGlobalContext();
 
-const CreateJobForm = () => {
+const MaintenanceRequestForm = () => {
   //   const navigate = useNavigate();
 
   // $ Form Schema
@@ -53,7 +53,7 @@ const CreateJobForm = () => {
           error={errors.description}
         />
         <FormRowSelect
-          label="Store"
+          // label="Store"
           name="store"
           options={stores}
           control={control}
@@ -62,7 +62,7 @@ const CreateJobForm = () => {
           error={errors.store}
         />
         <FormRowSelect
-          label="Equipment"
+          // label="Equipment"
           name="equipment"
           options={assets.assets.map((a) => ({
             label: a.equipment,
@@ -96,4 +96,4 @@ const CreateJobForm = () => {
   );
 };
 
-export default CreateJobForm;
+export default MaintenanceRequestForm;

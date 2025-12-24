@@ -5,10 +5,10 @@ import { Navigate, Outlet, Routes, Route } from "react-router-dom";
 
 //$ Routes
 import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import CreateJob from "./pages/CreateJob";
+import DashboardPage from "./pages/Dashboard";
+import MaintenanceRequestPage from "./pages/MaintenanceRequestPage";
 import Assets from "./pages/Assets";
-// import Settings from "./pages/Settings";
+import Sidebar from "./components/dashboardSidebar/Sidebar";
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useAuth();
@@ -16,15 +16,19 @@ const ProtectedRoute = () => {
 };
 
 function App() {
+  const { isAuthenticated } = useAuth();
   return (
     <>
-      <Navbar />
+      {isAuthenticated ? <Sidebar /> : <Navbar />}
       <Routes>
         <Route path="/" element={<Login />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/create-job" element={<CreateJob />} />
-          <Route path="/assets" element={<Assets />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route
+            path="/maintenance-request"
+            element={<MaintenanceRequestPage />}
+          />
+          <Route path="/asset-register" element={<Assets />} />
         </Route>
       </Routes>
     </>

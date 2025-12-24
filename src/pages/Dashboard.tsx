@@ -1,40 +1,88 @@
-// Dashboard Page
-import { Button } from "@/components/ui/button";
-import { signOut } from "aws-amplify/auth";
-import { useNavigate } from "react-router-dom";
+// import RevenueExpenseChart from "../charts/RevenueExpenseChart";
+// // import ProjectSummaryTable from "../charts/ProjectSummaryTable";
+// import Cards from "../dashboardCards/Cards";
+// import TaskContainer from "../tasks/TasksContainer";
+// import NotificationSidebar from "../notifications/NotificationBar";
+
+import Sidebar from "@/components/dashboardSidebar/Sidebar";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    await signOut();
-    // Optionally, you can redirect the user to the login page after sign out
-    window.location.href = "/";
-  };
-
   return (
-    <section className="px-4 h-screen lg:h-screen bg-cover bg-center bg-no-repeat">
-      <Button
-        className="fixed bg-(--clr-primary) text-white leading-2 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider py-6 mt-54"
-        onClick={handleSignOut}
-      >
-        Sign Out
-      </Button>
-      <div className="flex justify-center items-center h-full w-full border border-red-500">
-        <Button
-          className="bg-blue-400 p-4 text-white rounded-lg mx-2 hover:cursor-pointer"
-          onClick={() => navigate("/assets")}
+    <main className="w-full text-gray-700 dark:text-gray-100 h-screen">
+      {/* <NotificationSidebar /> */}
+      <Sidebar />
+
+      {/* <section
+        className="
+        grid grid-cols-2 gap-4
+        lg:grid-cols-3
+        xl:grid-cols-4
+        overflow-x-hidden
+        h-full
+        "
+      > */}
+      {/* Cards */}
+      {/* <section className="col-span-2 lg:col-span-3 xl:col-span-4">
+          {/* <Cards /> 
+          </section> 
+          */}
+
+      {/* Revenue & Expense Chart */}
+      {/* 
+        <section
+          className="
+          col-span-2 xl:col-span-3
+          h-[300px]
+          rounded-md
+          bg-white dark:bg-[#1d2739]
+          border border-white dark:border-gray-700/50
+            p-2
+            shadow-sm
+            text-gray-600 dark:text-gray-100
+          "
         >
-          Assets
-        </Button>
-        <Button
-          className="bg-blue-400 p-4 text-white rounded-lg mx-2 hover:cursor-pointer"
-          onClick={() => navigate("/create-job")}
+          {/* <RevenueExpenseChart />
+        </section> 
+        */}
+
+      {/* Tasks
+        <aside
+          className="
+            row-span-2
+            col-span-2 lg:col-span-1
+            self-start
+            h-full
+            overflow-y-auto
+            rounded-md
+            bg-white dark:bg-[#1d2739]
+            border border-white dark:border-gray-700/50
+            p-4
+            shadow-sm
+          "
         >
-          create job
-        </Button>
-      </div>
-    </section>
+          {/* <TaskContainer />
+        </aside>
+
+        {/* Projects Table
+        <section
+          className="
+            col-span-2 lg:col-span-2 xl:col-span-3
+            self-start
+            w-full min-w-0
+            h-full
+            overflow-y-auto
+            rounded-md
+            bg-white dark:bg-[#1d2739]
+            border border-white dark:border-gray-700/50
+            p-4
+            shadow-sm
+          "
+        >
+          {/* <ProjectSummaryTable /> 
+        </section>
+      </section>
+          */}
+    </main>
   );
 };
 

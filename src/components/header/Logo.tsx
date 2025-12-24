@@ -1,10 +1,13 @@
 import { useNavigate } from "react-router-dom";
 
-const Logo = () => {
+type Props = {
+  className?: string;
+};
+const Logo = ({ className }: Props) => {
   const navigate = useNavigate();
   return (
     <div
-      className="hover:cursor-pointer h-full"
+      className={`${className} hover:cursor-pointer h-24`}
       onClick={() => navigate("https://www.atlanticmeat.co.za")}
     >
       <img

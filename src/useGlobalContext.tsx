@@ -2,6 +2,9 @@
 import React from "react";
 import { createContext, useContext, useState } from "react";
 
+// $ import the user attributes state
+import type { FetchUserAttributesOutput } from "@aws-amplify/auth";
+
 import type { Dispatch, SetStateAction } from "react";
 
 // $ Step 0: Define the types and specify the navOpen type and set it to false initially'
@@ -17,6 +20,20 @@ export type T = {
   setIsDarkTheme: Dispatch<SetStateAction<boolean>>;
   projectType: string;
   setProjectType: Dispatch<SetStateAction<string>>;
+
+  // $ Sidebar State
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  isActive: boolean;
+  setIsActive: (isActive: boolean) => void;
+  activeItem: string | null;
+  setActiveItem: (activeItem: string) => void;
+
+  // $ AWS State
+  userAttributes: FetchUserAttributesOutput | null;
+  setUserAttributes: React.Dispatch<
+    React.SetStateAction<FetchUserAttributesOutput | null>
+  >;
 };
 
 // const initialState: T = {
@@ -37,7 +54,6 @@ export const AppContext = createContext<T | undefined>(undefined);
 // $ Step 2: Create the provider for the context
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   // $ Step 3: Create the state and set the initial state value
-
   // ? The navOpen state toggles the navbar on and off on mobile devices
   const [navOpen, setNavOpen] = useState<boolean>(false);
 
@@ -51,6 +67,15 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [projectType, setProjectType] = useState<string>("all");
   // $ State to filter the projects by projectType to display the different projects in the gallery component.
 
+  // $ Set state for the sidebar
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const [activeItem, setActiveItem] = useState<string | null>(null);
+
+  // $ AWS Authentication State
+  const [userAttributes, setUserAttributes] =
+    useState<FetchUserAttributesOutput | null>(null);
+
   return (
     <AppContext.Provider
       value={{
@@ -62,6 +87,14 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsDarkTheme,
         projectType,
         setProjectType,
+        isOpen,
+        setIsOpen,
+        isActive,
+        setIsActive,
+        activeItem,
+        setActiveItem,
+        userAttributes,
+        setUserAttributes,
       }}
     >
       {children}
