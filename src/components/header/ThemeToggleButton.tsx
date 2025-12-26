@@ -18,22 +18,22 @@ const ThemeToggleButton = () => {
   };
 
   return (
-    <div className="hover:cursor-pointer">
+    <div className="hover:cursor-pointer border-2 border-yellow-600 flex rounded-full justify-center p-1">
       {isDarkTheme ? (
         <Button
           type="button"
           onClick={handleClick}
-          className="dark:text-white text-white"
+          className="text-blue-800 hover:cursor-pointer"
         >
-          <Moon size={isMobile ? 20 : 24} />
+          <Moon size={isMobile ? 18 : 24} />
         </Button>
       ) : (
         <Button
           type="button"
           onClick={handleClick}
-          className="dark:text-white text-white"
+          className="text-yellow-100 hover:cursor-pointer"
         >
-          <Sun size={isMobile ? 20 : 24} />
+          <Sun size={isMobile ? 18 : 24} />
         </Button>
       )}
     </div>

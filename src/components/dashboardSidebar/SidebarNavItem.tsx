@@ -25,19 +25,15 @@ const SidebarNavItem = ({
   const isActive = path === url;
 
   return (
-    <div className="w-full list-none">
+    <div className="w-full list-none py-1">
       <button
         type="button"
         onClick={onClick}
-        className={`group flex w-full items-center gap-4 py-3 text-black transition-all duration-150 hover:bg-(--clr-primary) hover:font-medium hover:cursor-pointer
-          ${
-            isActive
-              ? "pl-3 bg-primary border-l-4 border-(--clr-primary)"
-              : "pl-4"
-          }`}
+        className={`group flex w-full items-center gap-4 py-3 text-(--clr-font) transition-all duration-150 hover:bg-(--clr-primary) hover:font-medium hover:cursor-pointer
+          ${isActive ? "pl-3 bg-primary border-l-4 border-red-400" : "pl-4"}`}
       >
         <Icon size={18} />
-        <span className="text-lg lg:text-xl capitalize">{children}</span>
+        <span className="text-xl capitalize">{children}</span>
       </button>
     </div>
   );

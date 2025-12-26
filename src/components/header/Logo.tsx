@@ -7,7 +7,7 @@ const Logo = ({ className }: Props) => {
   const navigate = useNavigate();
   return (
     <div
-      className={`${className} hover:cursor-pointer h-24`}
+      className={`${className} hover:cursor-pointer h-full max-h-24 hidden lg:block`}
       onClick={() => navigate("https://www.atlanticmeat.co.za")}
     >
       <img

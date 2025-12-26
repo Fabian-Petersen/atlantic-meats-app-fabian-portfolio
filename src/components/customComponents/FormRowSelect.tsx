@@ -53,15 +53,19 @@ const FormRowSelect = <TFieldValues extends FieldValues>({
         multiple={multiple}
         className={clsx(
           "text-sm py-3 px-2 peer w-full rounded-md outline-none placeholder-transparent",
-          "border border-gray-300 focus:border-rose-600",
+          "border border-gray-300 focus:border-rose-600 capitalize",
           isValid && "border-green-500",
-          error && "border-red-300"
+          error && "border-red-400"
         )}
         defaultValue={multiple ? defaultValues || [] : defaultValues}
         onChange={handleChange}
         required={required}
       >
-        {!multiple && <option value={placeholder}>{placeholder}</option>}
+        {!multiple && (
+          <option value="" disabled>
+            {placeholder}
+          </option>
+        )}
         {options.map((option) => {
           const value = typeof option === "string" ? option : option.value;
           const label = typeof option === "string" ? option : option.label;

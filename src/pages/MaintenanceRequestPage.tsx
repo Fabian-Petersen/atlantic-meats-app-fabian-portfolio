@@ -3,9 +3,9 @@ import MaintenanceRequestForm from "@/components/maintenance/MaintenanceRequestF
 
 const MaintenanceRequestPage = () => {
   return (
-    <div className="h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="flex flex-col gap-8 w-full max-w-100 bg-white h-auto rounded-xl shadow-lg p-4">
-        <FormHeading heading="Maintenance Request" />
+    <div className="bg-gray-100 flex items-center justify-center w-full h-full p-4">
+      <div className="bg-white flex flex-col gap-4 w-full lg:max-w-4xl h-auto rounded-xl shadow-lg p-4">
+        <FormHeading className="mx-auto" heading="Maintenance Request" />
         <MaintenanceRequestForm />
       </div>
     </div>

@@ -19,21 +19,19 @@ const SidebarLogoutButton = ({ className }: Props) => {
       ${className}
         w-full
         px-4
-        py-6
+        py-3
         flex
         items-center
         gap-4
-        bg-[rgba(29,39,57,0.1)]
-        text-red-500
+        text-(--clr-font)
+        bg-[rgba(252,18,59,0.2)]
         hover:bg-[#222e44]
-        hover:text-red-600
         cursor-pointer
         rounded-none
-        dark:bg-[#1d2739]
       `}
     >
       <HiLogout size={18} />
-      <span className="text-[1.1rem]">Logout</span>
+      <span className="text-xl">Logout</span>
     </button>
   );
 };

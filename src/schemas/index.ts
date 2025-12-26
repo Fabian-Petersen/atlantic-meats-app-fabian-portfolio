@@ -36,11 +36,15 @@ export const createJobSchema = z.object({
     message: "Please enter a description",
   }),
   store: z.string().min(1, { message: "Please select a store" }),
+  type: z.string().min(1, { message: "Please select maintenance type" }),
+  impact: z.string().min(1, { message: "Please select impact" }),
   priority: z.string().min(1, { message: "Please select a priority" }),
-  status: z.string().min(1, { message: "Please select a status" }),
-  type: z.string().min(1, { message: "Please select a type" }),
+  // status: z.string().min(1, { message: "Please select a status" }),
+  // type: z.string().min(1, { message: "Please select a type" }),
   equipment: z.string().min(1, { message: "Please select equipment" }),
-  images: z.array(z.string()).optional(),
+  userId: z.string().optional(),
+  userName: z.string().optional(),
+  // images: z.array(z.string()).default([]),
 });
 
 export type LoginFormValues = z.infer<typeof LoginSchema>;

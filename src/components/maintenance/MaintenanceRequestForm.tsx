@@ -14,8 +14,19 @@ import FormRowSelect from "../customComponents/FormRowSelect";
 
 // $ Import schemas
 import type { CreateJobFormValues } from "../../schemas/index";
-import stores from "@/data/stores";
+
+//$ AWS Amplify
+import { fetchUserAttributes } from "aws-amplify/auth";
+
+import {
+  stores,
+  priority,
+  type,
+  impact,
+} from "@/data/maintenanceRequestFormData";
+
 import assets from "@/data/assets.json";
+import { createMaintenanceRequest } from "@/utils/maintenanceRequests";
 
 // const { userAttributes, setUserAttributes } = useGlobalContext();
 
@@ -27,22 +38,45 @@ const MaintenanceRequestForm = () => {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<CreateJobFormValues>({
+    defaultValues: {
+      description: "",
+      store: "",
+      type: "",
+      priority: "",
+      equipment: "",
+      impact: "",
+      // images: [],
+    },
     resolver: zodResolver(createJobSchema),
   });
 
-  const onSubmit = (data: CreateJobFormValues) => {
+  const onSubmit = async (data: CreateJobFormValues) => {
+    try {
+      const user = await fetchUserAttributes();
+      const payload = {
+        ...data,
+        userId: user.id,
+        userName: user.name,
+      };
+
+      const response = await createMaintenanceRequest(payload);
+      console.log("created request:", response);
+    } catch (error) {
+      console.error(error);
+    }
+
     console.log("form submitted");
     console.log(data);
   };
 
   return (
     <form
-      className="flex flex-col gap-8 rounded-lg max-w-xl text-gray-700"
+      className="flex flex-col rounded-lg lg:w-full text-(--clr-font)"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex flex-col mt-auto gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full lg:pt-6">
         <FormRowInput
           label="Description"
           type="text"
@@ -53,23 +87,50 @@ const MaintenanceRequestForm = () => {
           error={errors.description}
         />
         <FormRowSelect
-          // label="Store"
+          label="Store"
           name="store"
           options={stores}
           control={control}
-          placeholder="Select a Store"
+          placeholder="Select store"
           register={register}
           error={errors.store}
         />
         <FormRowSelect
-          // label="Equipment"
+          label="Request Type"
+          name="type"
+          options={type}
+          control={control}
+          placeholder="Select type"
+          register={register}
+          error={errors.type}
+        />
+        <FormRowSelect
+          label="Impact"
+          name="impact"
+          options={impact}
+          control={control}
+          placeholder="Select Impact"
+          register={register}
+          error={errors.impact}
+        />
+        <FormRowSelect
+          label="Priority"
+          name="priority"
+          options={priority}
+          control={control}
+          placeholder="Select Priority"
+          register={register}
+          error={errors.priority}
+        />
+        <FormRowSelect
+          label="Equipment"
           name="equipment"
           options={assets.assets.map((a) => ({
             label: a.equipment,
-            value: a.id,
+            value: a.equipment,
           }))}
           control={control}
-          placeholder="Select Asset"
+          placeholder="Select Equipment"
           register={register}
           error={errors.equipment}
         />
@@ -83,15 +144,14 @@ const MaintenanceRequestForm = () => {
           multiple={true}
           accept="image/*"
         /> */}
-        <Button
-          className="bg-(--clr-primary) text-white leading-2 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider py-6"
-          type="submit"
-          //   disabled={loading}
-        >
-          {/* {loading ? "Signing in..." : "Sign In"} */}
-          Create Job
-        </Button>
       </div>
+      <Button
+        className="bg-(--clr-primary) text-white leading-1 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider py-6 mt-6 text-lg"
+        type="submit"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? "Creating Request..." : "Submit"}
+      </Button>
     </form>
   );
 };

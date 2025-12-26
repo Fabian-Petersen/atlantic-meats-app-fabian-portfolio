@@ -1,18 +1,24 @@
 import {
   // DollarSign,
   File,
-  FileText,
+  // FileText,
   Home,
   Info,
   LogOut,
   // LucideIcon,
   Settings,
   User2,
-  Users,
+  // Users,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-export type NavItemProps = {
+export type MaintenanceItemProps = {
+  name: string;
+  icon: LucideIcon;
+  url: string;
+};
+
+export type assetItemProps = {
   name: string;
   icon: LucideIcon;
   url: string;
@@ -29,12 +35,18 @@ export type AuthLinks = {
   icon: LucideIcon;
 };
 
-export const navbarLinks: NavItemProps[] = [
+export const mainLinks: MaintenanceItemProps[] = [
   { name: "dashboard", icon: Home, url: "/dashboard" },
-  { name: "request service", icon: File, url: "/request-service" },
-  { name: "asset register", icon: FileText, url: "/asset-register" },
-  { name: "store KPI", icon: Users, url: "/store-kpi" },
-  { name: "service list", icon: Info, url: "/service-list" },
+] as const;
+
+export const maintenanceLinks: MaintenanceItemProps[] = [
+  { name: "request", icon: File, url: "/maintenance-request" },
+  { name: "list", icon: Info, url: "/maintenance-list" },
+] as const;
+
+export const assetLinks: assetItemProps[] = [
+  { name: "asset register", icon: Home, url: "/asset-register" },
+  { name: "asset", icon: File, url: "/asset/${id}" },
 ] as const;
 
 export const PreferencesLinks: PreferencesLinksProps[] = [

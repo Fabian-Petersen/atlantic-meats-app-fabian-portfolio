@@ -11,7 +11,7 @@ const config: Config = {
         accent: "#F59E0B",
         lightBg: "#F9FAFB",
         darkBg: "#0F172A",
-        fontLight: "#F3F4F6",
+        fontLight: "#001433",
         fontDark: "#1F2937",
       },
       fontFamily: {

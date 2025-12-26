@@ -7,9 +7,12 @@
 @import "tailwindcss";
 
 :root {
-  --navbarHeight: 4rem;
-  --sectionHeight: calc(100dvh - var(--navbarHeight));
+  --sm-navbarHeight: 4rem;
+  --lg-navbarHeight: 6rem;
+  --sm-sidebarHeight: calc(100dvh - var(--sm-navbarHeight));
+  --lg-sidebarHeight: calc(100dvh - var(--lg-navbarHeight));
   --clr-primary: #fcb53b;
+  --clr-font: #001433;
   --clr-primary-light: #1b64f1;
   --clr-primary-dark: #1b64f1;
   --all-pages-spacing: 1.5rem;
