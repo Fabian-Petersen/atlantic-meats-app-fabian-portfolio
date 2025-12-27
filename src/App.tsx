@@ -1,14 +1,17 @@
 import "./index.css";
-// import Navbar from "@/components/header/Navbar";
-// import { useAuth } from "./auth/AuthContext";
 import { Routes, Route } from "react-router-dom";
 
-//$ Routes
+//$ Public Routes
 import Login from "./pages/Login";
+
+//$ Protected Routes
 import DashboardPage from "./pages/Dashboard";
 import MaintenanceRequestPage from "./pages/MaintenanceRequestPage";
-import Assets from "./pages/Assets";
+import AssetsOverviewPage from "./pages/AssetsOverviewPage";
+import MaintenanceRequestList from "./pages/MaintenanceRequestList";
+import MaintenanceListItemPage from "./pages/MaintenanceListItemPage";
 
+//$ Page Layouts
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 import { PublicLayout } from "./routes/PublicLayout";
 import { AppLayout } from "./routes/AppLayout";
@@ -31,9 +34,13 @@ function App() {
             />
             <Route
               path="/maintenance-list"
-              element={<MaintenanceRequestPage />}
+              element={<MaintenanceRequestList />}
             />
-            <Route path="/asset-register" element={<Assets />} />
+            <Route
+              path="/maintenance-request/:id"
+              element={<MaintenanceListItemPage />}
+            />
+            <Route path="/asset-register" element={<AssetsOverviewPage />} />
           </Route>
         </Route>
       </Routes>

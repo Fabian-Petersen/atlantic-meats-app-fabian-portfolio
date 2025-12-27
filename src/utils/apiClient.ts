@@ -1,8 +1,16 @@
 import axios from "axios";
+// import { getAccessToken } from "./aws-getAccessToken";
 
-const API_BASE_URL = import.meta.env.VITE_API_GATEWAY_URL;
+const BASE_URL = import.meta.env.VITE_SITE_URL;
 
 export const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: BASE_URL,
   headers: { "Content-Type": "application/json" },
 });
+
+// Automatically attach token to every request
+// api.interceptors.request.use(async (config) => {
+//   const token = await getAccessToken();
+//   config.headers.Authorization = `Bearer ${token}`;
+//   return config;
+// });

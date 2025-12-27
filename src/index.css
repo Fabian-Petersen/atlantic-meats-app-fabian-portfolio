@@ -1,14 +1,13 @@
-@tailwind utilities;
-
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;800;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap");
 
+@tailwind utilities;
 @import "tailwindcss";
 
 :root {
-  --sm-navbarHeight: 4rem;
-  --lg-navbarHeight: 6rem;
+  --sm-navbarHeight: 3rem;
+  --lg-navbarHeight: 4rem;
   --sm-sidebarHeight: calc(100dvh - var(--sm-navbarHeight));
   --lg-sidebarHeight: calc(100dvh - var(--lg-navbarHeight));
   --clr-primary: #fcb53b;
@@ -28,7 +27,7 @@ html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Poppins", sans-serif;
   scroll-behavior: smooth;
 }
 

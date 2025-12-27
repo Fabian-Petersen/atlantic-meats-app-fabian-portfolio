@@ -55,7 +55,11 @@ const LoginForm = ({
           error={errors.password}
         />
         <Button
-          className="bg-(--clr-primary) text-white leading-2 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider py-6"
+          className={` ${
+            loading
+              ? "bg-yellow-400 text-black"
+              : "bg-(--clr-primary) text-white"
+          }   leading-2 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider py-6`}
           type="submit"
           disabled={loading}
         >

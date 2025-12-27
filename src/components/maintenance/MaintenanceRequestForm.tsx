@@ -1,5 +1,6 @@
-// import { useNavigate } from "react-router-dom";
+//$ This component is used to create a maintenace job, the data is submitted to the database (dynamoDB) via API Gateway and Lambda on aws.
 
+// import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 // import { PasswordToggleInput } from "@/components/PasswordToggleInput";
 
@@ -26,11 +27,12 @@ import {
 } from "@/data/maintenanceRequestFormData";
 
 import assets from "@/data/assets.json";
-import { createMaintenanceRequest } from "@/utils/maintenanceRequests";
+import { useCreateMaintenanceRequest } from "@/utils/maintenanceRequests";
 
 // const { userAttributes, setUserAttributes } = useGlobalContext();
 
 const MaintenanceRequestForm = () => {
+  const { mutateAsync } = useCreateMaintenanceRequest();
   //   const navigate = useNavigate();
 
   // $ Form Schema
@@ -61,14 +63,11 @@ const MaintenanceRequestForm = () => {
         userName: user.name,
       };
 
-      const response = await createMaintenanceRequest(payload);
+      const response = await mutateAsync(payload);
       console.log("created request:", response);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
     }
-
-    console.log("form submitted");
-    console.log(data);
   };
 
   return (
@@ -76,7 +75,7 @@ const MaintenanceRequestForm = () => {
       className="flex flex-col rounded-lg lg:w-full text-(--clr-font)"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full lg:pt-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full lg:py-6">
         <FormRowInput
           label="Description"
           type="text"
@@ -94,6 +93,7 @@ const MaintenanceRequestForm = () => {
           placeholder="Select store"
           register={register}
           error={errors.store}
+          className="capitalize"
         />
         <FormRowSelect
           label="Request Type"

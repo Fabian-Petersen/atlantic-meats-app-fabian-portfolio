@@ -42,7 +42,8 @@ export const createJobSchema = z.object({
   // status: z.string().min(1, { message: "Please select a status" }),
   // type: z.string().min(1, { message: "Please select a type" }),
   equipment: z.string().min(1, { message: "Please select equipment" }),
-  userId: z.string().optional(),
+  id: z.string().optional(),
+  createdAt: z.string().optional(),
   userName: z.string().optional(),
   // images: z.array(z.string()).default([]),
 });

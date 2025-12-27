@@ -1,46 +1,101 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "./apiClient";
-// Types should match your Zod schema
 import type { CreateJobFormValues } from "@/schemas";
 
-// $ ========================== POST ======================= //
-export const createMaintenanceRequest = async (
-  payload: CreateJobFormValues
-) => {
-  const { data } = await api.post<CreateJobFormValues>(
-    " /maintenance-request",
-    payload
-  );
-  return data;
+// $ =========================
+// $ Query Keys
+// $ =========================
+const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
+
+// $ =========================
+// $ Hooks
+// $ =========================
+
+// $ GET all
+export const useMaintenanceRequests = () => {
+  return useQuery<CreateJobFormValues[]>({
+    queryKey: MAINTENANCE_REQUESTS_KEY,
+    queryFn: async () => {
+      const { data } = await api.get<CreateJobFormValues[]>(
+        "/maintenance-request"
+      );
+      return data;
+    },
+  });
 };
 
-// $ ========================== GET ======================= //
-export const getMaintenanceRequests = async () => {
-  const { data } = await api.get<CreateJobFormValues[]>("/maintenance-request");
-  return data;
+// $ GET by ID
+export const useMaintenanceRequestById = (id: string) => {
+  return useQuery<CreateJobFormValues>({
+    queryKey: [...MAINTENANCE_REQUESTS_KEY, id],
+    queryFn: async () => {
+      const { data } = await api.get<CreateJobFormValues>(
+        `/maintenance-request/${id}`
+      );
+      return data;
+    },
+    enabled: !!id,
+  });
 };
 
-// $ ========================== GET by ID ======================= //
+// $ CREATE
+export const useCreateMaintenanceRequest = () => {
+  const queryClient = useQueryClient();
 
-export const getMaintenanceRequestById = async (id: string) => {
-  const { data } = await api.get<CreateJobFormValues>(
-    `/maintenance-request/${id}`
-  );
-  return data;
+  return useMutation({
+    mutationFn: async (payload: CreateJobFormValues) => {
+      const { data } = await api.post<CreateJobFormValues>(
+        "/maintenance-request",
+        payload
+      );
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: MAINTENANCE_REQUESTS_KEY,
+      });
+    },
+  });
 };
 
-// $ ========================== UPDATE ======================= //
-export const updateMaintenanceRequest = async (
-  id: string,
-  payload: Partial<CreateJobFormValues>
-) => {
-  const { data } = await api.put<CreateJobFormValues>(
-    `/maintenance-request/${id}`,
-    payload
-  );
-  return data;
+// $ UPDATE
+export const useUpdateMaintenanceRequest = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: Partial<CreateJobFormValues>;
+    }) => {
+      const { data } = await api.put<CreateJobFormValues>(
+        `/maintenance-request/${id}`,
+        payload
+      );
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: MAINTENANCE_REQUESTS_KEY,
+      });
+    },
+  });
 };
 
-// $ ========================== DELETE ======================= //
-export const deleteMaintenanceRequest = async (id: string) => {
-  await api.delete(`/maintenance-request/${id}`);
+// $ DELETE
+export const useDeleteMaintenanceRequest = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      await api.delete(`/maintenance-request/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: MAINTENANCE_REQUESTS_KEY,
+      });
+    },
+  });
 };

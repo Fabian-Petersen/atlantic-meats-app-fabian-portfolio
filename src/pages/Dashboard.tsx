@@ -4,13 +4,12 @@
 // import TaskContainer from "../tasks/TasksContainer";
 // import NotificationSidebar from "../notifications/NotificationBar";
 
-import Sidebar from "@/components/dashboardSidebar/Sidebar";
+// import Sidebar from "@/components/dashboardSidebar/Sidebar";
 
 const Dashboard = () => {
   return (
     <main className="w-full text-gray-700 dark:text-gray-100 h-screen">
       {/* <NotificationSidebar /> */}
-      <Sidebar />
 
       {/* <section
         className="

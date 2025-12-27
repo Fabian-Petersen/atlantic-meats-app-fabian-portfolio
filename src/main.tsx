@@ -1,9 +1,15 @@
 import { StrictMode } from "react";
+// $ React Router Dom
 import { createRoot } from "react-dom/client";
-import AppProvider from "./useGlobalContext.tsx";
 import { BrowserRouter } from "react-router-dom";
+
+import AppProvider from "./useGlobalContext.tsx";
 import { AuthProvider } from "./auth/AuthContext";
+
+// $ React Query
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 import "./index.css";
 import App from "./App.tsx";
 
@@ -36,6 +42,7 @@ createRoot(document.getElementById("root")!).render(
           </AppProvider>
         </BrowserRouter>
       </AuthProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </StrictMode>
 );
