@@ -1,4 +1,3 @@
-"use client";
 // $ Hook handling the logic for logging user out of session
 import { useLogout } from "@/utils/aws-signout";
 

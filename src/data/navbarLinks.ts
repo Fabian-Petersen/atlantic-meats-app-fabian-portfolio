@@ -1,14 +1,11 @@
 import {
-  // DollarSign,
   File,
-  // FileText,
   Home,
-  Info,
   LogOut,
-  // LucideIcon,
   Settings,
   User2,
-  // Users,
+  Library,
+  Wrench,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -40,12 +37,12 @@ export const mainLinks: MaintenanceItemProps[] = [
 ] as const;
 
 export const maintenanceLinks: MaintenanceItemProps[] = [
-  { name: "request", icon: File, url: "/maintenance-request" },
-  { name: "list", icon: Info, url: "/maintenance-list" },
+  { name: "create request", icon: Wrench, url: "/maintenance-request" },
+  { name: "view requests", icon: File, url: "/maintenance-list" },
 ] as const;
 
 export const assetLinks: assetItemProps[] = [
-  { name: "asset register", icon: Home, url: "/asset-register" },
+  { name: "asset register", icon: Library, url: "/asset-register" },
   { name: "asset", icon: File, url: "/asset/${id}" },
 ] as const;
 

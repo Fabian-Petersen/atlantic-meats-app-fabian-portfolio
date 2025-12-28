@@ -1,4 +1,6 @@
 import { StrictMode } from "react";
+import "./index.css";
+
 // $ React Router Dom
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -10,7 +12,6 @@ import { AuthProvider } from "./auth/AuthContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import "./index.css";
 import App from "./App.tsx";
 
 // $ Add the toast (now called sonner) to the application

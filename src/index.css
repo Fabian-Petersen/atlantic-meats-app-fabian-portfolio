@@ -2,7 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap");
 
-@tailwind utilities;
+@config "../tailwind.config.ts";
 @import "tailwindcss";
 
 :root {
@@ -11,6 +11,7 @@
   --sm-sidebarHeight: calc(100dvh - var(--sm-navbarHeight));
   --lg-sidebarHeight: calc(100dvh - var(--lg-navbarHeight));
   --clr-primary: #fcb53b;
+  --clr-activeLink: #c97e00;
   --clr-font: #001433;
   --clr-primary-light: #1b64f1;
   --clr-primary-dark: #1b64f1;
@@ -19,9 +20,7 @@
   --tw-enter-translate-x: -5%;
 }
 
-/* 
-$ ======================== Dark Mode Styles as per user preference ======================
-*/
+/* $ ======================== Dark Mode Styles as per user preference ====================== */
 
 html {
   margin: 0;
@@ -34,24 +33,7 @@ html {
 *,
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
-  border-color: transparent;
+  /* margin: 0; */
+  /* padding: 0; */
   box-sizing: border-box;
-}
-
-input:focus {
-  border-color: transparent;
-  outline: none;
-}
-
-@layer base {
-  /* $ ============================ Home Page Styles ============================ */
-}
-
-@layer utilities {
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
 }

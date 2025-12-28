@@ -88,7 +88,7 @@ export function AssetsOverviewTable({ data }: Props) {
             ))}
           </thead>
 
-          <tbody className="">
+          <tbody className="text-xs">
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}

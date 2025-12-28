@@ -75,7 +75,7 @@ const MaintenanceRequestForm = () => {
       className="flex flex-col rounded-lg lg:w-full text-(--clr-font)"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full lg:py-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
         <FormRowInput
           label="Description"
           type="text"
@@ -86,7 +86,7 @@ const MaintenanceRequestForm = () => {
           error={errors.description}
         />
         <FormRowSelect
-          label="Store"
+          // label="Store"
           name="store"
           options={stores}
           control={control}
@@ -96,7 +96,7 @@ const MaintenanceRequestForm = () => {
           className="capitalize"
         />
         <FormRowSelect
-          label="Request Type"
+          // label="Request Type"
           name="type"
           options={type}
           control={control}
@@ -105,7 +105,7 @@ const MaintenanceRequestForm = () => {
           error={errors.type}
         />
         <FormRowSelect
-          label="Impact"
+          // label="Impact"
           name="impact"
           options={impact}
           control={control}
@@ -114,7 +114,7 @@ const MaintenanceRequestForm = () => {
           error={errors.impact}
         />
         <FormRowSelect
-          label="Priority"
+          // label="Priority"
           name="priority"
           options={priority}
           control={control}
@@ -123,7 +123,7 @@ const MaintenanceRequestForm = () => {
           error={errors.priority}
         />
         <FormRowSelect
-          label="Equipment"
+          // label="equipment"
           name="equipment"
           options={assets.assets.map((a) => ({
             label: a.equipment,

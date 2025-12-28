@@ -5,7 +5,9 @@ type FormHeadingProps = {
 
 const FormHeading = ({ heading, className }: FormHeadingProps) => {
   return (
-    <div className={`text-3xl ${className} text-(--clr-font)`}>
+    <div
+      className={`text-lg lg:text-2xl ${className} w-full text-center lg:text-left`}
+    >
       <h2>{heading}</h2>
     </div>
   );

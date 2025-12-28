@@ -7,11 +7,12 @@ const config: Config = {
     extend: {
       colors: {
         primary: "#fcb53b",
+        activelink: "#c97e00",
         secondary: "#06B6D4",
         accent: "#F59E0B",
         lightBg: "#F9FAFB",
         darkBg: "#0F172A",
-        fontLight: "#001433",
+        font: "#001433",
         fontDark: "#1F2937",
       },
       fontFamily: {
