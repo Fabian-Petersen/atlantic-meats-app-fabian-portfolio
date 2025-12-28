@@ -42,7 +42,7 @@ export const maintenanceLinks: MaintenanceItemProps[] = [
 ] as const;
 
 export const assetLinks: assetItemProps[] = [
-  { name: "asset register", icon: Library, url: "/asset-register" },
+  { name: "asset register", icon: Library, url: "/asset" },
   { name: "asset", icon: File, url: "/asset/${id}" },
 ] as const;
 

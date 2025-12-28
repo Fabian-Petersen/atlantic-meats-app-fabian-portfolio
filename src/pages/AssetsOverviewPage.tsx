@@ -3,11 +3,11 @@
 
 import FormHeading from "@/components/customComponents/FormHeading";
 import { AssetsOverviewTable } from "@/components/assets/AssetsOverviewTable";
-import { useMaintenanceRequests } from "@/utils/maintenanceRequests";
+import { useAssetsList } from "@/utils/maintenanceRequests";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 
 const MaintenanceRequestList = () => {
-  const { data, isLoading, isError } = useMaintenanceRequests();
+  const { data, isLoading, isError } = useAssetsList();
   if (isLoading) return <PageLoadingSpinner />;
   if (isError) return <p>Error retrieving asset data...</p>;
 

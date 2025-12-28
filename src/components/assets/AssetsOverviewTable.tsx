@@ -8,12 +8,12 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
-import type { CreateJobFormValues } from "@/schemas";
+import type { AssetFormValues } from "@/schemas";
 import { ColumnSelectFilter } from "./ColumnSelectFilter";
 import { columns } from "./columns";
 
 type Props = {
-  data: CreateJobFormValues[];
+  data: AssetFormValues[];
 };
 
 export function AssetsOverviewTable({ data }: Props) {
@@ -35,7 +35,7 @@ export function AssetsOverviewTable({ data }: Props) {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  const uniqueValues = (key: keyof CreateJobFormValues) =>
+  const uniqueValues = (key: keyof AssetFormValues) =>
     [...new Set(data.map((d) => d[key]))].map((v) => ({
       label: String(v),
       value: String(v),
@@ -46,17 +46,17 @@ export function AssetsOverviewTable({ data }: Props) {
       {/* Filters */}
       <div className="flex flex-wrap lg:gap-8 py-1 border border-gray-200 rounded-lg">
         <ColumnSelectFilter
-          placeholder="All Stores"
-          value={table.getColumn("store")?.getFilterValue()}
-          onChange={(v) => table.getColumn("store")?.setFilterValue(v)}
-          options={uniqueValues("store")}
+          placeholder="All Locations"
+          value={table.getColumn("location")?.getFilterValue()}
+          onChange={(v) => table.getColumn("location")?.setFilterValue(v)}
+          options={uniqueValues("location")}
         />
 
         <ColumnSelectFilter
-          placeholder="All Priorities"
-          value={table.getColumn("priority")?.getFilterValue()}
-          onChange={(v) => table.getColumn("priority")?.setFilterValue(v)}
-          options={uniqueValues("priority")}
+          placeholder="All Equipment"
+          value={table.getColumn("description")?.getFilterValue()}
+          onChange={(v) => table.getColumn("description")?.setFilterValue(v)}
+          options={uniqueValues("description")}
         />
         <input
           type="date"
@@ -69,7 +69,7 @@ export function AssetsOverviewTable({ data }: Props) {
 
       {/* Table */}
       <div className="lg:overflow-hidden overflow-x-scroll rounded-lg w-full border border-gray-200">
-        <table className="w-full text-sm">
+        <table className="w-full text-xs">
           <thead className="bg-gray-200">
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id}>
@@ -94,7 +94,7 @@ export function AssetsOverviewTable({ data }: Props) {
                 key={row.id}
                 onClick={() => {
                   console.log("Navigating to ID:", row.original.id);
-                  navigate(`/maintenance-request/${row.original.id}`);
+                  navigate(`/asset/${row.original.id}`);
                 }}
                 className="cursor-pointer hover:bg-(--clr-primary)/20"
               >

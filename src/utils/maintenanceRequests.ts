@@ -1,11 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "./apiClient";
-import type { CreateJobFormValues } from "@/schemas";
+import type { AssetFormValues, CreateJobFormValues } from "@/schemas";
 
 // $ =========================
 // $ Query Keys
 // $ =========================
 const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
+const ASSETS_REQUESTS_KEY = ["assetRequests"];
 
 // $ =========================
 // $ Hooks
@@ -19,6 +20,16 @@ export const useMaintenanceRequests = () => {
       const { data } = await api.get<CreateJobFormValues[]>(
         "/maintenance-request"
       );
+      return data;
+    },
+  });
+};
+
+export const useAssetsList = () => {
+  return useQuery<AssetFormValues[]>({
+    queryKey: ASSETS_REQUESTS_KEY,
+    queryFn: async () => {
+      const { data } = await api.get<AssetFormValues[]>("/asset");
       return data;
     },
   });

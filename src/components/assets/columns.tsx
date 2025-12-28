@@ -1,10 +1,10 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { CreateJobFormValues } from "@/schemas";
+import type { AssetFormValues } from "@/schemas";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const columns: ColumnDef<CreateJobFormValues>[] = [
+export const columns: ColumnDef<AssetFormValues>[] = [
   // {
   //   accessorKey: "id",
   //   header: "ID",
@@ -25,23 +25,47 @@ export const columns: ColumnDef<CreateJobFormValues>[] = [
   },
   {
     accessorKey: "description",
-    header: "Description",
-  },
-  {
-    accessorKey: "equipment",
     header: "Equipment",
   },
   {
-    accessorKey: "impact",
-    header: "Impact",
+    accessorKey: "assetID",
+    header: "asset ID",
   },
   {
-    accessorKey: "priority",
-    header: "Priority",
+    accessorKey: "condition",
+    header: "Condition",
   },
   {
-    accessorKey: "store",
-    header: "Store",
+    accessorKey: "location",
+    header: "Location",
+  },
+  {
+    accessorKey: "warranty",
+    header: "Warranty",
+  },
+  {
+    accessorKey: "warranty_expire",
+    header: "Warranty Expire",
+  },
+  {
+    accessorKey: "serialNumber",
+    header: "Serial Number",
+  },
+  {
+    accessorKey: "manufacturer",
+    header: "Manufacturer",
+  },
+  {
+    accessorKey: "date_of_manufacture",
+    header: "Date of Manufacture",
+  },
+  {
+    accessorKey: "model",
+    header: "Model",
+  },
+  {
+    accessorKey: "status",
+    header: "status",
   },
   {
     accessorKey: "type",

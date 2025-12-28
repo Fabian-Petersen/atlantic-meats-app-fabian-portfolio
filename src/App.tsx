@@ -1,4 +1,4 @@
-import "./index.css";
+// import "./index.css";
 import { Routes, Route } from "react-router-dom";
 
 //$ Public Routes
@@ -40,7 +40,7 @@ function App() {
               path="/maintenance-request/:id"
               element={<MaintenanceListItemPage />}
             />
-            <Route path="/asset-register" element={<AssetsOverviewPage />} />
+            <Route path="/asset" element={<AssetsOverviewPage />} />
           </Route>
         </Route>
       </Routes>
