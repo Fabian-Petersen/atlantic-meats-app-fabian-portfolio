@@ -15,10 +15,12 @@ const Navbar = ({ className }: Props) => {
     >
       <div className="flex justify-between w-full h-full items-center">
         <Logo />
-        <div className="flex justify-between w-full">
-          <NavbarMenuButton />
-          {pathname !== "/login" && <NavbarActionButtons />}
-        </div>
+        {pathname !== "/" && (
+          <div className="flex justify-between w-full">
+            <NavbarMenuButton />
+            <NavbarActionButtons />
+          </div>
+        )}
       </div>
     </nav>
   );

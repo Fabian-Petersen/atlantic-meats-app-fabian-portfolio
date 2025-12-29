@@ -5,7 +5,9 @@ type FormHeadingProps = {
 
 const SectionHeading = ({ heading, className }: FormHeadingProps) => {
   return (
-    <div className={`text-sm ${className} text-gray-100 px-2 pb-1 capitalize`}>
+    <div
+      className={`text-sm tracking-wide font-semibold ${className} px-2 capitalize text-gray-600 `}
+    >
       <h2>{heading}</h2>
     </div>
   );

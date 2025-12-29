@@ -38,7 +38,7 @@ createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <BrowserRouter>
           <AppProvider>
-            <Toaster position="bottom-right" />
+            <Toaster position="top-center" richColors />
             <App />
           </AppProvider>
         </BrowserRouter>

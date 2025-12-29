@@ -2,9 +2,6 @@
 import React from "react";
 import { createContext, useContext, useState } from "react";
 
-// $ import the user attributes state
-import type { FetchUserAttributesOutput } from "@aws-amplify/auth";
-
 import type { Dispatch, SetStateAction } from "react";
 
 // $ Step 0: Define the types and specify the navOpen type and set it to false initially'
@@ -28,12 +25,6 @@ export type T = {
   setIsActive: (isActive: boolean) => void;
   activeItem: string | null;
   setActiveItem: (activeItem: string) => void;
-
-  // $ AWS State
-  userAttributes: FetchUserAttributesOutput | null;
-  setUserAttributes: React.Dispatch<
-    React.SetStateAction<FetchUserAttributesOutput | null>
-  >;
 };
 
 // const initialState: T = {
@@ -72,10 +63,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isActive, setIsActive] = useState<boolean>(false);
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
-  // $ AWS Authentication State
-  const [userAttributes, setUserAttributes] =
-    useState<FetchUserAttributesOutput | null>(null);
-
   return (
     <AppContext.Provider
       value={{
@@ -93,8 +80,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsActive,
         activeItem,
         setActiveItem,
-        userAttributes,
-        setUserAttributes,
       }}
     >
       {children}

@@ -9,6 +9,12 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
+export type SidebarLinkItemProps = {
+  name: string;
+  icon: LucideIcon;
+  url: string;
+};
+
 export type MaintenanceItemProps = {
   name: string;
   icon: LucideIcon;

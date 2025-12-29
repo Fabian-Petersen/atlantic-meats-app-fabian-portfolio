@@ -2,9 +2,9 @@
 import { signOut } from "aws-amplify/auth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { useGlobalContext } from "../useGlobalContext";
-
 import { useAuth } from "../auth/AuthContext";
+import { useUserAttributes } from "./aws-userAttributes";
+import { capitalize } from "@/utils/capitalize";
 
 // $ 1. Function making the api call to aws cognito
 export async function awsCognitoSignOut() {
@@ -21,15 +21,18 @@ export async function awsCognitoSignOut() {
 
 export const useLogout = () => {
   const { refreshAuth } = useAuth();
-  const context = useGlobalContext();
+  const { data } = useUserAttributes();
+  console.log(data);
+
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      const { userAttributes } = context;
       await awsCognitoSignOut();
       sessionStorage.removeItem("formData");
-      toast(`Goodbye ${userAttributes?.name}`);
+      toast.success(`Goodbye ${capitalize(data?.name)}`, {
+        className: "rounded-xl",
+      });
       navigate("/");
       await refreshAuth();
     } catch (error) {

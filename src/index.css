@@ -7,6 +7,7 @@
 
 :root {
   --sm-navbarHeight: 3rem;
+  --radius: 10px;
   --lg-navbarHeight: 4rem;
   --sm-sidebarHeight: calc(100dvh - var(--sm-navbarHeight));
   --lg-sidebarHeight: calc(100dvh - var(--lg-navbarHeight));

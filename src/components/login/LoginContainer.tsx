@@ -8,6 +8,10 @@ import LoginForm from "./LoginForm";
 import ChangePasswordForm from "./ChangePasswordForm";
 import { useAuth } from "../../auth/AuthContext";
 
+import { useUserAttributes } from "../../utils/aws-userAttributes";
+import { toast } from "sonner";
+import { capitalize } from "@/utils/capitalize";
+
 // $ Types
 import type {
   LoginFormValues,
@@ -18,28 +22,31 @@ type Step = "LOGIN" | "NEW_PASSWORD";
 
 export default function LoginContainer() {
   const [step, setStep] = useState<Step>("LOGIN");
-  // const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { refreshAuth } = useAuth();
 
-  /* -------- LOGIN -------- */
-  const handleLogin = async (data: LoginFormValues) => {
-    setLoading(true);
+  // $ Hook to request the user data from Cognito
 
+  /* -------- LOGIN -------- */
+  const { data } = useUserAttributes();
+
+  const handleLogin = async (loginData: LoginFormValues) => {
+    setLoading(true);
     try {
       await signOut(); // ensure no user is logged in
       const res = await signIn({
-        username: data.email,
-        password: data.password,
+        username: loginData.email,
+        password: loginData.password,
       });
       await refreshAuth();
+      toast.success(`Welcome ${capitalize(data?.name)}`, {
+        className: "rounded-xl",
+      });
       navigate("/dashboard");
-      // console.log("Login response:", res);
       if (
         res.nextStep.signInStep === "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED"
       ) {
-        // setUser(res);
         setStep("NEW_PASSWORD");
         return;
       }

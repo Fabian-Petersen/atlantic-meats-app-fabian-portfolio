@@ -1,69 +1,42 @@
 // import RevenueExpenseChart from "../charts/RevenueExpenseChart";
 // // import ProjectSummaryTable from "../charts/ProjectSummaryTable";
-// import Cards from "../dashboardCards/Cards";
 // import TaskContainer from "../tasks/TasksContainer";
 // import NotificationSidebar from "../notifications/NotificationBar";
 
 // import Sidebar from "@/components/dashboardSidebar/Sidebar";
+import OpenRequestsPieChart from "@/components/dashboard/charts/OpenRequestsPieChart";
+import CardContainer from "../components/dashboard/CardContainer";
+import MaintenanceRequestsChart from "@/components/dashboard/charts/MaintenanceRequestsChart";
+import ChartHeading from "@/components/dashboard/ChartHeading";
 
 const Dashboard = () => {
   return (
-    <main className="w-full text-gray-700 dark:text-gray-100 h-screen">
+    <main className="w-full bg-gray-200 h-full">
       {/* <NotificationSidebar /> */}
+      <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 xl:grid-cols-4 overflow-x-hidden h-auto px-2">
+        {/* Cards */}
+        <section className="col-span-2 lg:col-span-3 xl:col-span-4">
+          <CardContainer />
+        </section>
 
-      {/* <section
-        className="
-        grid grid-cols-2 gap-4
-        lg:grid-cols-3
-        xl:grid-cols-4
-        overflow-x-hidden
-        h-full
-        "
-      > */}
-      {/* Cards */}
-      {/* <section className="col-span-2 lg:col-span-3 xl:col-span-4">
-          {/* <Cards /> 
-          </section> 
-          */}
+        {/* Revenue & Expense Chart */}
 
-      {/* Revenue & Expense Chart */}
-      {/* 
         <section
-          className="
-          col-span-2 xl:col-span-3
-          h-[300px]
-          rounded-md
-          bg-white dark:bg-[#1d2739]
-          border border-white dark:border-gray-700/50
-            p-2
-            shadow-sm
-            text-gray-600 dark:text-gray-100
-          "
+          className="col-span-2 xl:col-span-3 h-[300px] rounded-md bg-white dark:bg-[#1d2739]
+          border border-white dark:border-gray-700/50 p-2 shadow-sm
+            text-gray-600 dark:text-gray-100"
         >
-          {/* <RevenueExpenseChart />
-        </section> 
-        */}
-
-      {/* Tasks
-        <aside
-          className="
-            row-span-2
-            col-span-2 lg:col-span-1
-            self-start
-            h-full
-            overflow-y-auto
-            rounded-md
-            bg-white dark:bg-[#1d2739]
-            border border-white dark:border-gray-700/50
-            p-4
-            shadow-sm
-          "
-        >
-          {/* <TaskContainer />
-        </aside>
-
-        {/* Projects Table
+          <MaintenanceRequestsChart />
+        </section>
         <section
+          className="col-span-2 xl:col-span-1 h-[300px] rounded-md bg-white dark:bg-dark_bg
+          border border-white dark:border-gray-700/50 p-2 shadow-sm 
+            text-white dark:text-gray-100"
+        >
+          <OpenRequestsPieChart />
+        </section>
+
+        <div
           className="
             col-span-2 lg:col-span-2 xl:col-span-3
             self-start
@@ -77,10 +50,16 @@ const Dashboard = () => {
             shadow-sm
           "
         >
-          {/* <ProjectSummaryTable /> 
-        </section>
-      </section>
-          */}
+          <div
+            className="h-54 rounded-md bg-white dark:bg-[#1d2739]
+          border border-white dark:border-gray-700/50 p-2 shadow-sm
+            text-gray-600 dark:text-gray-100"
+          >
+            <ChartHeading title="Placeholder" />
+          </div>
+          {/* <ProjectSummaryTable /> */}
+        </div>
+      </div>
     </main>
   );
 };

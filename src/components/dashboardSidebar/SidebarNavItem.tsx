@@ -29,10 +29,8 @@ const SidebarNavItem = ({
       <button
         type="button"
         onClick={onClick}
-        className={`group flex w-full items-center gap-4 py-3 px-4 text-font transition-all duration-150 hover:font-medium hover:cursor-pointer ${
-          isActive
-            ? "bg-green-500/50 tracking-wide text-white hover:bg-green-500/80"
-            : "hover:text-green-700"
+        className={`group flex p-2 w-full rounded-lg items-center gap-4 py-3 px-4 text-gray-600 bg-gray-200 transition-all duration-150 hover:font-medium hover:cursor-pointer ${
+          isActive && "bg-primary/90 tracking-wide` hover:bg-primary"
         }`}
       >
         <Icon size={24} />
