@@ -1,13 +1,21 @@
+// $ This page renders the full details of a maintenance request information with the supporting pictures
+
 import { useParams } from "react-router-dom";
 import { useMaintenanceRequestById } from "../utils/maintenanceRequests";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 
-const MaintenanceListItemPage = () => {
+const MaintRequestSingleItemPage = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data: item } = useMaintenanceRequestById(id || "");
+  const { data: item, isLoading } = useMaintenanceRequestById(id || "");
+  // id "Testing from mobile: 4e9a8b44-f9e2-4fc0-ad8e-640fd23c7211"
+  console.log(item);
 
   if (!id || !item) {
+    return <p>Cannot find what you are looking for</p>;
+  }
+
+  if (isLoading) {
     return <PageLoadingSpinner />;
   }
 
@@ -22,4 +30,4 @@ const MaintenanceListItemPage = () => {
   );
 };
 
-export default MaintenanceListItemPage;
+export default MaintRequestSingleItemPage;

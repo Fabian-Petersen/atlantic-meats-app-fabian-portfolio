@@ -11,7 +11,7 @@ const Navbar = ({ className }: Props) => {
   const { pathname } = useLocation();
   return (
     <nav
-      className={`${className} fixed w-full justify-between px-4 bg-(--clr-primary) h-(--sm-navbarHeight) lg:h-(--lg-navbarHeight)`}
+      className={`${className} fixed z-1000 w-full justify-between px-4 bg-(--clr-primary) h-(--sm-navbarHeight) lg:h-(--lg-navbarHeight)`}
     >
       <div className="flex justify-between w-full h-full items-center">
         <Logo />

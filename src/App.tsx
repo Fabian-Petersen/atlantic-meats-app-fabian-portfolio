@@ -8,13 +8,13 @@ import Login from "./pages/Login";
 import DashboardPage from "./pages/Dashboard";
 import MaintenanceRequestPage from "./pages/MaintenanceRequestPage";
 import AssetsOverviewPage from "./pages/AssetsOverviewPage";
-import MaintenanceRequestList from "./pages/MaintenanceRequestList";
-import MaintenanceListItemPage from "./pages/MaintenanceListItemPage";
 
 //$ Page Layouts
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 import { PublicLayout } from "./routes/PublicLayout";
 import { AppLayout } from "./routes/AppLayout";
+import MaintenanceRequestOverviewPage from "./pages/MaintenanceRequestOverviewPage";
+import MaintRequestSingleItemPage from "./pages/MaintRequestSingleItemPage";
 
 function App() {
   return (
@@ -33,11 +33,11 @@ function App() {
             />
             <Route
               path="/maintenance-list"
-              element={<MaintenanceRequestList />}
+              element={<MaintenanceRequestOverviewPage />}
             />
             <Route
               path="/maintenance-request/:id"
-              element={<MaintenanceListItemPage />}
+              element={<MaintRequestSingleItemPage />}
             />
             <Route path="/asset" element={<AssetsOverviewPage />} />
           </Route>

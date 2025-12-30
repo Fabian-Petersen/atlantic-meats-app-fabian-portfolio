@@ -15,11 +15,11 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`z-1000 w-60 fixed top-(--sm-navbarHeight) lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight)
-      bg-white transform transition-transform duration-75 ease-in lg:translate-x-0
+      className={`z-1000 w-60 fixed top-(--sm-navbarHeight) lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-r border-r-gray-200 dark:border-r-[rgba(55,65,81,0.5)]
+      bg-white dark:bg-bgdark transform transition-transform duration-75 ease-in lg:translate-x-0
     ${isOpen ? "translate-x-0" : "-translate-x-full ease-out"}`}
     >
-      <div className="flex flex-col h-full border-r border-r-gray-300 gap-2 mt-6">
+      <div className="flex flex-col h-full gap-2 mt-6">
         {/* Content */}
         <SidebarSection data={mainLinks} heading="Main" />
         <Separator />

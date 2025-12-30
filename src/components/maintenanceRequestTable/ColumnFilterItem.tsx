@@ -1,4 +1,4 @@
-// src/components/table/ColumnSelectFilter.tsx
+// src/components/table/ColumnFilterItem.tsx
 type Option = { label: string; value: string };
 
 export type Props = {
@@ -8,7 +8,7 @@ export type Props = {
   placeholder: string;
 };
 
-export function ColumnSelectFilter({
+export function ColumnFilterItem({
   value,
   onChange,
   options,
@@ -16,7 +16,7 @@ export function ColumnSelectFilter({
 }: Props) {
   return (
     <select
-      className="rounded-lg px-3 py-2 text-sm w-fit focus:outline-none hover:cursor-pointer"
+      className="rounded-lg px-3 py-2 text-sm w-fit focus:outline-none hover:cursor-pointer dark:bg-[#1d2739] dark:text-gray-200"
       value={(value ?? "") as string}
       onChange={(e) => onChange(e.target.value)}
     >

@@ -21,10 +21,10 @@ const LogoutButton = ({ className }: Props) => {
         lg:flex
         items-center
         justify-center
-        text-font
+        text-gray-200
         cursor-pointer
         rounded-full
-        bg-red-400
+        bg-red-500/80
         tracking-wide
         hover:bg-red-500/90
         hidden

@@ -52,8 +52,8 @@ const FormRowSelect = <TFieldValues extends FieldValues>({
         id={String(name)}
         multiple={multiple}
         className={clsx(
-          "text-sm py-3 px-2 peer w-full rounded-md outline-none placeholder-transparent",
-          "border border-gray-300 focus:border-rose-600 capitalize",
+          "text-sm py-3 px-2 peer w-full rounded-md outline-none text-gray-700 dark:text-gray-100/50",
+          "border border-gray-300 focus:border-rose-600 capitalize dark:border-gray-700/50",
           isValid && "border-green-500",
           error && "border-red-400"
         )}
@@ -80,10 +80,10 @@ const FormRowSelect = <TFieldValues extends FieldValues>({
       {label && (
         <label
           htmlFor={String(name)}
-          className="absolute text-sm -top-5 left-0 transition-all duration-400 text-gray-400
-            peer-placeholder-shown:top-3 px-2 mb-0 peer-placeholder-shown:text-gray-600
+          className="absolute text-sm -top-5 left-0 transition-all duration-400 text-gray-400 dark:text-white
+            peer-placeholder-shown:top-3 px-2 mb-0 peer-placeholder-shown:text-gray-600 dark:peer-placeholder-shown:text-gray-100
             peer-focus:-top-5 peer-focus:text-gray-600 peer-focus:text-sm tracking-wider
-            dark:peer-focus:text-gray-400 dark:peer-placeholder-shown:text-fontLight
+            dark:peer-focus:text-gray-200
             "
         >
           {label}

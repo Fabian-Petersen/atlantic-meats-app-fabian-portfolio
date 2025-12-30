@@ -15,7 +15,7 @@ const CardItem = () => {
               bg-white dark:bg-[#1d2739]
               text-gray-600 dark:text-white
               p-[0.325rem] xl:p-2
-              border-4 border-white dark:border-[rgba(55,65,81,0.5)]
+              bordee border-white dark:border-[rgba(55,65,81,0.5)]
             "
           >
             {/* Card Title & Value */}

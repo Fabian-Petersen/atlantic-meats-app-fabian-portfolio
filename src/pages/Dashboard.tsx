@@ -11,11 +11,11 @@ import ChartHeading from "@/components/dashboard/ChartHeading";
 
 const Dashboard = () => {
   return (
-    <main className="w-full bg-gray-200 h-full">
+    <main className="w-full bg-gray-100 dark:bg-bgdark h-full">
       {/* <NotificationSidebar /> */}
       <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 xl:grid-cols-4 overflow-x-hidden h-auto px-2">
         {/* Cards */}
-        <section className="col-span-2 lg:col-span-3 xl:col-span-4">
+        <section className="col-span-2 lg:col-span-3 xl:col-span-4 dark:border-gray-700/50">
           <CardContainer />
         </section>
 
