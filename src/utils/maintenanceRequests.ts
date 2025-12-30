@@ -49,6 +49,23 @@ export const useMaintenanceRequestById = (id: string) => {
   });
 };
 
+export const useById = <T>(options: {
+  id: string;
+  queryKey: readonly unknown[];
+  endpoint: string;
+}) => {
+  const { id, queryKey, endpoint } = options;
+
+  return useQuery<T>({
+    queryKey: [...queryKey, id],
+    queryFn: async () => {
+      const { data } = await api.get<T>(`${endpoint}/${id}`);
+      return data;
+    },
+    enabled: !!id,
+  });
+};
+
 // $ CREATE
 export const useCreateMaintenanceRequest = () => {
   const queryClient = useQueryClient();

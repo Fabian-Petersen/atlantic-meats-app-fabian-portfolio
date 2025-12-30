@@ -31,6 +31,14 @@ html {
   scroll-behavior: smooth;
 }
 
+:root {
+  --chart-text: #364153;
+}
+
+.dark {
+  --chart-text: #f9fafb;
+}
+
 *,
 *::before,
 *::after {

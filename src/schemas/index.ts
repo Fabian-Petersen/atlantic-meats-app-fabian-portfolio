@@ -50,6 +50,7 @@ export const createJobSchema = z.object({
 
 export const assetSchema = z.object({
   id: z.string().optional(),
+  createdAt: z.string().optional(),
   description: z.string().min(1, {
     message: "Please enter a description",
   }),

@@ -15,6 +15,7 @@ import { PublicLayout } from "./routes/PublicLayout";
 import { AppLayout } from "./routes/AppLayout";
 import MaintenanceRequestOverviewPage from "./pages/MaintenanceRequestOverviewPage";
 import MaintRequestSingleItemPage from "./pages/MaintRequestSingleItemPage";
+import AssetsSingleItemPage from "./pages/AssetsSingleItemPage";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
               element={<MaintRequestSingleItemPage />}
             />
             <Route path="/asset" element={<AssetsOverviewPage />} />
+            <Route path="/asset/:id" element={<AssetsSingleItemPage />} />
           </Route>
         </Route>
       </Routes>

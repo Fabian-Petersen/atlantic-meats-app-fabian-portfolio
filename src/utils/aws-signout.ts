@@ -22,7 +22,7 @@ export async function awsCognitoSignOut() {
 export const useLogout = () => {
   const { refreshAuth } = useAuth();
   const { data } = useUserAttributes();
-  console.log(data);
+  // console.log(data);
 
   const navigate = useNavigate();
 
