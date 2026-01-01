@@ -1,13 +1,20 @@
-import { useNavigate } from "react-router-dom";
+import clsx from "clsx";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type Props = {
   className?: string;
 };
 const Logo = ({ className }: Props) => {
+  const { pathname } = useLocation();
+  const isRoot = pathname === "/";
   const navigate = useNavigate();
   return (
     <div
-      className={`${className} hover:cursor-pointer h-full max-h-24 lg:block hidden`}
+      className={clsx(
+        className,
+        "hover:cursor-pointer h-full max-h-24",
+        isRoot ? "block" : "hidden lg:block" // This only display the logo when on "/" and when in desktop view
+      )}
       onClick={() => navigate("https://www.atlanticmeat.co.za")}
     >
       <img

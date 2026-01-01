@@ -24,7 +24,7 @@ export default function LoginContainer() {
   const [step, setStep] = useState<Step>("LOGIN");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { refreshAuth } = useAuth();
+  const { refreshAuth, isAuthenticated } = useAuth();
 
   // $ Hook to request the user data from Cognito
 
@@ -33,6 +33,9 @@ export default function LoginContainer() {
 
   const handleLogin = async (loginData: LoginFormValues) => {
     setLoading(true);
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
     try {
       await signOut(); // ensure no user is logged in
       const res = await signIn({

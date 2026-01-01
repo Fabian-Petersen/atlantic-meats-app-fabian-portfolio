@@ -1,4 +1,5 @@
 import type { HTMLInputTypeAttribute } from "react";
+import PasswordToggle from "@/components/features/PasswordToggle";
 
 type FormInputProps<TFieldValues extends FieldValues> = {
   label: string;
@@ -12,6 +13,8 @@ type FormInputProps<TFieldValues extends FieldValues> = {
   accept?: string;
   disabled?: boolean;
   value?: string;
+  isVisible?: boolean; // Used only on input type "password"
+  togglePassword?: () => void; // Used only on input type "password"
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -37,9 +40,14 @@ const FormRowInput = <TFieldValues extends FieldValues>({
   type = "text",
   multiple = false,
   accept,
+  isVisible,
+  togglePassword,
 }: FormInputProps<TFieldValues>) => {
   const value = useWatch({ name, control });
   const isValid = !error && (type === "file" ? value?.length > 0 : value);
+
+  // $ Manange the Password Visibility
+  const isPassword = name === "password";
 
   return (
     <div className="relative w-full mb-2 group">
@@ -58,6 +66,12 @@ const FormRowInput = <TFieldValues extends FieldValues>({
         multiple={multiple}
         accept={accept}
       ></input>
+      {isPassword && togglePassword && (
+        <PasswordToggle
+          visible={isVisible ?? false}
+          onToggle={togglePassword}
+        />
+      )}
       {label && (
         <label
           htmlFor={String(name)}

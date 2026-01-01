@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-// import { PasswordToggleInput } from "@/components/PasswordToggleInput";
 
 // $ React-Hook-Form, zod & schema
 import { LoginSchema } from "../../schemas/index";
@@ -8,10 +7,11 @@ import { useForm } from "react-hook-form";
 
 import FormRowInput from "../customComponents/FormRowInput";
 
+// Show and Hide the Password
+import { usePasswordVisibility } from "@/utils/usePasswordVisibility";
+
 // $ Import schemas
 import type { LoginFormValues } from "../../schemas/index";
-
-// const { userAttributes, setUserAttributes } = useGlobalContext();
 
 const LoginForm = ({
   onSubmit,
@@ -30,6 +30,9 @@ const LoginForm = ({
     resolver: zodResolver(LoginSchema),
   });
 
+  // $ Manange the Password Visibility
+  const showPassword = usePasswordVisibility();
+
   return (
     <form
       className="flex flex-col gap-8 rounded-lg max-w-xl text-gray-700"
@@ -47,7 +50,9 @@ const LoginForm = ({
         />
         <FormRowInput
           label="Password"
-          type="password"
+          type={showPassword.type} // comes from the usePasswordVisibility hook
+          togglePassword={showPassword.toggle} // comes from the usePasswordVisibility hook
+          isVisible={showPassword.isVisible} // comes from the usePasswordVisibility hook
           name="password"
           control={control}
           placeholder="Enter your password"
