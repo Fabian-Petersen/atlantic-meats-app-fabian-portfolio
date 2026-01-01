@@ -9,6 +9,14 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/main.tsx">
+      const theme = localStorage.getItem("theme");
+      console.log("systemTheme:",theme)
+       if (theme === "dark") {
+         document.documentElement.classList.add("dark");
+       } else {
+         document.documentElement.classList.remove("dark");
+       }
+    </script>
   </body>
 </html>

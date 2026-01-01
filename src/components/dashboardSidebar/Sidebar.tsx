@@ -4,6 +4,7 @@ import {
   maintenanceLinks,
   assetLinks,
   mainLinks,
+  profileLinks,
 } from "../../data/navbarLinks";
 
 import SidebarSection from "./SidebarSection";
@@ -26,6 +27,8 @@ const Sidebar = () => {
         <SidebarSection data={maintenanceLinks} heading="Maintenance" />
         <Separator />
         <SidebarSection data={assetLinks} heading="Assets" />
+        <Separator />
+        <SidebarSection data={profileLinks} heading="Profile" />
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ import { AppLayout } from "./routes/AppLayout";
 import MaintenanceRequestOverviewPage from "./pages/MaintenanceRequestOverviewPage";
 import MaintRequestSingleItemPage from "./pages/MaintRequestSingleItemPage";
 import AssetsSingleItemPage from "./pages/AssetsSingleItemPage";
+import UserProfilePage from "./pages/UserProfilePage";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
             />
             <Route path="/asset" element={<AssetsOverviewPage />} />
             <Route path="/asset/:id" element={<AssetsSingleItemPage />} />
+            <Route path="/user-profile" element={<UserProfilePage />} />
           </Route>
         </Route>
       </Routes>

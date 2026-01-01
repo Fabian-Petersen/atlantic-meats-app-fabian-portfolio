@@ -57,7 +57,7 @@ const FormRowInput = <TFieldValues extends FieldValues>({
         type={type}
         className={clsx(
           "text-sm py-3 px-2 peer w-full rounded-md outline-none placeholder-transparent text-gray-700 dark:text-gray-100/50",
-          "border border-gray-300 dark:border-gray-700/50 placeholder:dark:text-white focus:border-rose-600",
+          "border border-gray-300 dark:border-gray-700/50 placeholder:dark:text-white focus:border-rose-600 focus:dark:bg-gray-600",
           isValid && "border-green-500",
           error && "border-red-300"
         )}

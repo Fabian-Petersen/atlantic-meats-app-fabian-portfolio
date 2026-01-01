@@ -7,7 +7,11 @@ import { useGlobalContext } from "@/useGlobalContext";
 import { Moon, Sun } from "lucide-react";
 import Button from "@/components/features/Button";
 
-const ThemeToggleButton = () => {
+type Props = {
+  className?: string;
+};
+
+const ThemeToggleButton = ({ className }: Props) => {
   const { toggleDarkTheme } = useSetTheme();
   const { isDarkTheme } = useGlobalContext()!;
 
@@ -21,17 +25,17 @@ const ThemeToggleButton = () => {
         <Button
           type="button"
           onClick={handleClick}
-          className="text-(--clr-font) hover:cursor-pointer"
+          className={`${className} text-(--clr-font) hover:cursor-pointer`}
         >
-          <Moon size={24} />
+          <Sun size={24} />
         </Button>
       ) : (
         <Button
           type="button"
           onClick={handleClick}
-          className="text-(--clr-font) hover:cursor-pointer"
+          className={`${className} text-(--clr-font) hover:cursor-pointer`}
         >
-          <Sun size={24} />
+          <Moon size={24} />
         </Button>
       )}
     </>

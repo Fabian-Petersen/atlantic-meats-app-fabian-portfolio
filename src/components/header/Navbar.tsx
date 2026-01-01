@@ -2,6 +2,7 @@ import NavbarMenuButton from "./NavbarMenuButton";
 import Logo from "./Logo";
 import NavbarActionButtons from "./NavbarActionButtons";
 import { useLocation } from "react-router-dom";
+import ThemeToggleButton from "./ThemeToggleButton";
 
 type Props = {
   className?: string;
@@ -15,11 +16,13 @@ const Navbar = ({ className }: Props) => {
     >
       <div className="flex justify-between w-full h-full items-center">
         <Logo />
-        {pathname !== "/" && (
+        {pathname !== "/" ? (
           <div className="flex justify-between w-full">
             <NavbarMenuButton />
             <NavbarActionButtons />
           </div>
+        ) : (
+          <ThemeToggleButton className="px-4 lg:px-6" />
         )}
       </div>
     </nav>

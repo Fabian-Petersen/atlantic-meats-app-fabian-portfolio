@@ -5,10 +5,10 @@ import { useGlobalContext } from "@/useGlobalContext";
 import SidebarNavItem from "./SidebarNavItem";
 import SectionHeading from "./SectionHeading";
 
-import type { SidebarLinkItemProps } from "@/data/navbarLinks";
+import type { NavlinkProps } from "@/data/navbarLinks";
 
 type Props = {
-  data: SidebarLinkItemProps[];
+  data: NavlinkProps[];
   heading: string;
 };
 

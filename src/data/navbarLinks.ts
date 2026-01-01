@@ -1,60 +1,66 @@
 import {
   File,
   Home,
-  LogOut,
-  Settings,
+  // LogOut,
+  // Settings,
   User2,
   Library,
   Wrench,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-export type SidebarLinkItemProps = {
+export type NavlinkProps = {
   name: string;
   icon: LucideIcon;
   url: string;
 };
 
-export type MaintenanceItemProps = {
-  name: string;
-  icon: LucideIcon;
-  url: string;
-};
+// export type SidebarLinkItemProps = {
+//   name: string;
+//   icon: LucideIcon;
+//   url: string;
+// };
 
-export type assetItemProps = {
-  name: string;
-  icon: LucideIcon;
-  url: string;
-};
+// export type MaintenanceItemProps = {
+//   name: string;
+//   icon: LucideIcon;
+//   url: string;
+// };
 
-export type PreferencesLinksProps = {
-  name: string;
-  icon: LucideIcon;
-  url: string;
-};
+// export type assetItemProps = {
+//   name: string;
+//   icon: LucideIcon;
+//   url: string;
+// };
 
-export type AuthLinks = {
-  name: string;
-  icon: LucideIcon;
-};
+// export type PreferencesLinksProps = {
+//   name: string;
+//   icon: LucideIcon;
+//   url: string;
+// };
 
-export const mainLinks: MaintenanceItemProps[] = [
+// export type AuthLinks = {
+//   name: string;
+//   icon: LucideIcon;
+// };
+
+export const mainLinks: NavlinkProps[] = [
   { name: "dashboard", icon: Home, url: "/dashboard" },
 ] as const;
 
-export const maintenanceLinks: MaintenanceItemProps[] = [
+export const maintenanceLinks: NavlinkProps[] = [
   { name: "create request", icon: Wrench, url: "/maintenance-request" },
   { name: "view requests", icon: File, url: "/maintenance-list" },
 ] as const;
 
-export const assetLinks: assetItemProps[] = [
+export const assetLinks: NavlinkProps[] = [
+  { name: "create asset", icon: File, url: "/create-asset" },
   { name: "asset register", icon: Library, url: "/asset" },
-  { name: "asset", icon: File, url: "/asset/${id}" },
 ] as const;
 
-export const PreferencesLinks: PreferencesLinksProps[] = [
-  { name: "Settings", icon: Settings, url: "/settings" },
-  { name: "Profile", icon: User2, url: "profile" },
+export const profileLinks: NavlinkProps[] = [
+  // { name: "Settings", icon: Settings, url: "/settings" },
+  { name: "User Profile", icon: User2, url: "/user-profile" },
 ];
 
-export const AuthLinks: AuthLinks[] = [{ name: "Logout", icon: LogOut }];
+// export const AuthLinks: AuthLinks[] = [{ name: "Logout", icon: LogOut }];
