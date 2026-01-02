@@ -54,19 +54,19 @@ export const assetSchema = z.object({
   description: z.string().min(1, {
     message: "Please enter a description",
   }),
+  equipment: z.string().min(1, { message: "Please select a equipment" }),
   assetID: z.string().min(1, {
     message: "Please enter asset id",
   }),
   condition: z.string().min(1, { message: "Please select condition" }),
   location: z.string().min(1, { message: "Please select a location" }),
-  warranty: z.boolean(),
-  warranty_expire: z.date().optional(),
+  // warranty: z.string().min(1, { message: "Please indicate if warranty valid" }),
+  // warranty_expire: z.date().optional(),
   serialNumber: z.string().optional(),
   manufacturer: z.string().optional(),
-  date_of_manufacture: z.date().optional(),
+  // date_of_manufacture: z.date().optional(),
   model: z.string().optional(),
-  status: z.string().min(1, { message: "Please select a status" }),
-  type: z.string().min(1, { message: "Please select a type" }),
+  // status: z.string().min(1, { message: "Please select a status" }),
   // images: z.array(z.string()).default([]),
 });
 

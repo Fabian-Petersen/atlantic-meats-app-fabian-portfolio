@@ -18,6 +18,7 @@ import MaintenanceRequestOverviewPage from "./pages/MaintenanceRequestOverviewPa
 import MaintRequestSingleItemPage from "./pages/MaintRequestSingleItemPage";
 import AssetsSingleItemPage from "./pages/AssetsSingleItemPage";
 import UserProfilePage from "./pages/UserProfilePage";
+import CreateAssetPage from "./pages/CreateAssetPage";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
+            {/* // $ ======================= Maintenance Routes ======================= */}
             <Route
               path="/maintenance-request"
               element={<MaintenanceRequestPage />}
@@ -47,8 +49,11 @@ function App() {
               path="/maintenance-request/:id"
               element={<MaintRequestSingleItemPage />}
             />
+            {/* // $ ======================= Asset Routes ======================= */}
             <Route path="/asset" element={<AssetsOverviewPage />} />
+            <Route path="/create-asset" element={<CreateAssetPage />} />
             <Route path="/asset/:id" element={<AssetsSingleItemPage />} />
+            {/* // $ ======================= Settings Routes ======================= */}
             <Route path="/user-profile" element={<UserProfilePage />} />
           </Route>
         </Route>

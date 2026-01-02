@@ -1,10 +1,14 @@
-type Props = { height?: string };
+type Props = { height?: string; width?: string; className?: string };
 
-export default function Separator({ height = "0.15px" }: Props) {
+export default function Separator({
+  height = "0.15px",
+  width,
+  className,
+}: Props) {
   return (
     <div
-      className="w-[90%] mx-auto border-t border-gray-300"
-      style={{ borderTopWidth: height }}
+      className={`${className} mx-auto border-t dark:border-gray-100/20 border-gray-700/50`}
+      style={{ borderTopWidth: height, width: width }}
     />
   );
 }

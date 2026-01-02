@@ -33,10 +33,12 @@ html {
 
 :root {
   --chart-text: #364153;
+  --chevron: #fcb53b;
 }
 
 .dark {
   --chart-text: #f9fafb;
+  --chevron: #fcb53b;
 }
 
 *,

@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "./apiClient";
 import type { AssetFormValues, CreateJobFormValues } from "@/schemas";
+import { useNavigate } from "react-router-dom";
 
 // $ =========================
 // $ Query Keys
@@ -49,6 +50,7 @@ export const useMaintenanceRequestById = (id: string) => {
   });
 };
 
+// $ Generic: GET by ID
 export const useById = <T>(options: {
   id: string;
   queryKey: readonly unknown[];
@@ -81,6 +83,29 @@ export const useCreateMaintenanceRequest = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: MAINTENANCE_REQUESTS_KEY,
+      });
+    },
+  });
+};
+
+//$ Generic: POST new Item
+export const useCreateNewItem = <TResponse, TPayload>(options: {
+  queryKey: readonly unknown[];
+  endpoint: string;
+  redirect: string;
+}) => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation<TResponse, Error, TPayload>({
+    mutationFn: async (payload: TPayload) => {
+      const { data } = await api.post<TResponse>(options.endpoint, payload);
+      return data;
+    },
+    onSuccess: () => {
+      navigate(options.redirect);
+      queryClient.invalidateQueries({
+        queryKey: options.queryKey,
       });
     },
   });

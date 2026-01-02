@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
 import type { AssetFormValues } from "@/schemas";
-import { ColumnSelectFilter } from "./ColumnSelectFilter";
+// import { ColumnSelectFilter } from "./ColumnSelectFilter";
 import { columns } from "./columns";
 
 type Props = {
@@ -35,42 +35,20 @@ export function AssetsOverviewTable({ data }: Props) {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  const uniqueValues = (key: keyof AssetFormValues) =>
-    [...new Set(data.map((d) => d[key]))].map((v) => ({
-      label: String(v),
-      value: String(v),
-    }));
+  // const uniqueValues = (key: keyof AssetFormValues) =>
+  //   [...new Set(data.map((d) => d[key]))].map((v) => ({
+  //     label: String(v),
+  //     value: String(v),
+  //   }));
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 dark:bg-[#1d2739] dark:text-gray-200">
       {/* Filters */}
-      <div className="flex flex-wrap lg:gap-8 py-1 border border-gray-200 rounded-lg">
-        <ColumnSelectFilter
-          placeholder="All Locations"
-          value={table.getColumn("location")?.getFilterValue()}
-          onChange={(v) => table.getColumn("location")?.setFilterValue(v)}
-          options={uniqueValues("location")}
-        />
-
-        <ColumnSelectFilter
-          placeholder="All Equipment"
-          value={table.getColumn("description")?.getFilterValue()}
-          onChange={(v) => table.getColumn("description")?.setFilterValue(v)}
-          options={uniqueValues("description")}
-        />
-        <input
-          type="date"
-          className="px-3 py-2 text-sm hover:cursor-pointer"
-          onChange={(e) =>
-            table.getColumn("createdAt")?.setFilterValue(e.target.value)
-          }
-        />
-      </div>
-
+      {/* <FilterContainer data={data} /> */}
       {/* Table */}
-      <div className="lg:overflow-hidden overflow-x-scroll rounded-lg w-full border border-gray-200">
-        <table className="w-full text-xs">
-          <thead className="bg-gray-200">
+      <div className="lg:overflow-hidden overflow-x-scroll rounded-lg w-full border border-gray-200 dark:border-gray-700/50 text-md">
+        <table className="w-full">
+          <thead className="bg-gray-200 dark:bg-bgdark dark:text-fontlight">
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id}>
                 {hg.headers.map((header) => (
@@ -88,7 +66,7 @@ export function AssetsOverviewTable({ data }: Props) {
             ))}
           </thead>
 
-          <tbody className="text-xs">
+          <tbody className="text-xs dark:bg-bgdark dark:text-gray-200">
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
@@ -96,7 +74,7 @@ export function AssetsOverviewTable({ data }: Props) {
                   console.log("Navigating to ID:", row.original.id);
                   navigate(`/asset/${row.original.id}`);
                 }}
-                className="cursor-pointer hover:bg-(--clr-primary)/20"
+                className="cursor-pointer hover:bg-primary/20 dark:bg-[#1d2739] dark:text-gray-200"
               >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id} className="px-4 py-3 text-gray-700">

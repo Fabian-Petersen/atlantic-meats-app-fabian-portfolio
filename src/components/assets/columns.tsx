@@ -29,7 +29,7 @@ export const columns: ColumnDef<AssetFormValues>[] = [
   },
   {
     accessorKey: "assetID",
-    header: "asset ID",
+    header: "Asset ID",
   },
   {
     accessorKey: "condition",
@@ -39,36 +39,36 @@ export const columns: ColumnDef<AssetFormValues>[] = [
     accessorKey: "location",
     header: "Location",
   },
-  {
-    accessorKey: "warranty",
-    header: "Warranty",
-  },
-  {
-    accessorKey: "warranty_expire",
-    header: "Warranty Expire",
-  },
+  // {
+  //   accessorKey: "warranty",
+  //   header: "Warranty",
+  // },
+  // {
+  //   accessorKey: "warranty_expire",
+  //   header: "Warranty Expire",
+  // },
+  // {
+  //   accessorKey: "serialNumber",
+  //   header: "Serial Number",
+  // },
+  // {
+  //   accessorKey: "manufacturer",
+  //   header: "Manufacturer",
+  // },
+  // {
+  //   accessorKey: "date_of_manufacture",
+  //   header: "Date of Manufacture",
+  // },
+  // {
+  //   accessorKey: "model",
+  //   header: "Model",
+  // },
   {
     accessorKey: "serialNumber",
     header: "Serial Number",
   },
   {
-    accessorKey: "manufacturer",
-    header: "Manufacturer",
-  },
-  {
-    accessorKey: "date_of_manufacture",
-    header: "Date of Manufacture",
-  },
-  {
-    accessorKey: "model",
-    header: "Model",
-  },
-  {
-    accessorKey: "status",
-    header: "status",
-  },
-  {
-    accessorKey: "type",
-    header: "Type",
+    accessorKey: "warranty",
+    header: "Warranty",
   },
 ];

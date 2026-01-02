@@ -72,7 +72,7 @@ const MaintenanceRequestForm = () => {
 
   return (
     <form
-      className="flex flex-col rounded-lg lg:w-full text-(--clr-font) dark:bg-[#1d2739]"
+      className="flex flex-col rounded-lg lg:w-full text-font dark:bg-[#1d2739]"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
