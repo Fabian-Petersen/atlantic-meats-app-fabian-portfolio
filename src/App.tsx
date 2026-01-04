@@ -19,6 +19,7 @@ import MaintRequestSingleItemPage from "./pages/MaintRequestSingleItemPage";
 import AssetsSingleItemPage from "./pages/AssetsSingleItemPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import CreateAssetPage from "./pages/CreateAssetPage";
+import MaintRequestActionItemPage from "./pages/MaintRequestActionItemPage";
 
 function App() {
   return (
@@ -48,6 +49,10 @@ function App() {
             <Route
               path="/maintenance-request/:id"
               element={<MaintRequestSingleItemPage />}
+            />
+            <Route
+              path="/maintenance-action/:id"
+              element={<MaintRequestActionItemPage />}
             />
             {/* // $ ======================= Asset Routes ======================= */}
             <Route path="/asset" element={<AssetsOverviewPage />} />

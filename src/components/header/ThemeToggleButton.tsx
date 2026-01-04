@@ -20,12 +20,12 @@ const ThemeToggleButton = ({ className }: Props) => {
   };
 
   return (
-    <>
+    <div className="bg-menu-btn/40 p-2 flex items-center justify-center rounded-md text-gray-800 hover:cursor-pointer">
       {isDarkTheme ? (
         <Button
           type="button"
           onClick={handleClick}
-          className={`${className} text-(--clr-font) hover:cursor-pointer`}
+          className={`${className} hover:cursor-pointer`}
         >
           <Sun size={24} />
         </Button>
@@ -33,12 +33,12 @@ const ThemeToggleButton = ({ className }: Props) => {
         <Button
           type="button"
           onClick={handleClick}
-          className={`${className} text-(--clr-font) hover:cursor-pointer`}
+          className={`${className} hover:cursor-pointer`}
         >
           <Moon size={24} />
         </Button>
       )}
-    </>
+    </div>
   );
 };
 

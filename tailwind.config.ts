@@ -18,6 +18,7 @@ const config: Config = {
         borderdark: "",
         font: "#001433",
         fontDark: "#1F2937",
+        menuBtn: "#fef9c2 ",
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],

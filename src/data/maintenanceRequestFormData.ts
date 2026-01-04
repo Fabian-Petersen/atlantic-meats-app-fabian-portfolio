@@ -1,9 +1,25 @@
-export const priority: string[] = [
-  "Critical",
-  "High Priority",
-  "Medium",
-  "Low",
-];
+export const priority: string[] = ["Critical", "High", "Medium", "Low"];
+export type Priority = (typeof PRIORITIES)[number];
+export const PRIORITIES = ["Critical", "High", "Medium", "Low"] as const;
+
+export const priorityColors: Record<Priority, { bg: string; text: string }> = {
+  Critical: {
+    bg: "bg-red-600",
+    text: "text-white",
+  },
+  High: {
+    bg: "bg-orange-500",
+    text: "text-white",
+  },
+  Medium: {
+    bg: "bg-yellow-400",
+    text: "text-gray-900",
+  },
+  Low: {
+    bg: "bg-green-500",
+    text: "text-white",
+  },
+};
 
 export const type: string[] = ["corrective", "preventative", "legislative"];
 export const impact: string[] = ["production", "safety", "compliance"];
@@ -14,8 +30,3 @@ export const stores: string[] = [
   "Khayelitsha",
   "Wynberg",
 ];
-
-// Emergency/Critical (A-Level): Immediate action needed; production down, severe safety risk, major environmental hazard.
-// High Priority (B-Level): Significant risk of failure or production loss; needs prompt attention, often scheduled soon.
-// Medium Priority (B/C-Level): Prevents future issues or performance degradation; less urgent but important.
-// Low Priority (C-Level): Routine checks, minor adjustments; minimal impact, can wait for planned downtime

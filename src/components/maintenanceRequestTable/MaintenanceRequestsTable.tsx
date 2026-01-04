@@ -2,43 +2,45 @@
 import {
   // type ColumnDef,
   flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
-  useReactTable,
+  // getCoreRowModel,
+  // getFilteredRowModel,
+  // getSortedRowModel,
+  // useReactTable,
+  type Table,
 } from "@tanstack/react-table";
+
 import { useNavigate } from "react-router-dom";
 import type { CreateJobFormValues } from "@/schemas";
-import { DropdownMenuDialog } from "../modals/Example";
 
-import { columns } from "./columns";
+// import { columns } from "./columns";
 // import FilterContainer from "./FilterContainer";
 
 type Props = {
-  data: CreateJobFormValues[];
+  table: Table<CreateJobFormValues>;
+  className?: string;
 };
 
-export function MaintenanceRequestsTable({ data }: Props) {
+export function MaintenanceRequestsTable({ table, className }: Props) {
   const navigate = useNavigate();
 
-  const table = useReactTable({
-    data: data,
-    columns: columns,
-    state: {
-      sorting: [
-        {
-          id: "createdAt",
-          desc: true,
-        },
-      ],
-    },
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-  });
+  // const table = useReactTable({
+  //   data: data,
+  //   columns: columns,
+  //   state: {
+  //     sorting: [
+  //       {
+  //         id: "createdAt",
+  //         desc: true,
+  //       },
+  //     ],
+  //   },
+  //   getCoreRowModel: getCoreRowModel(),
+  //   getFilteredRowModel: getFilteredRowModel(),
+  //   getSortedRowModel: getSortedRowModel(),
+  // });
 
   return (
-    <div className="flex flex-col gap-2 dark:bg-[#1d2739] dark:text-gray-200">
+    <div className={`${className}dark:bg-[#1d2739] dark:text-gray-200`}>
       {/* Filters */}
       {/* <FilterContainer data={data} /> */}
       {/* Table */}
@@ -67,7 +69,6 @@ export function MaintenanceRequestsTable({ data }: Props) {
               <tr
                 key={row.id}
                 onClick={() => {
-                  // console.log("Navigating to ID:", row.original.id);
                   navigate(`/maintenance-request/${row.original.id}`);
                 }}
                 className="cursor-pointer hover:bg-primary/20 dark:bg-[#1d2739] dark:text-gray-200"
@@ -77,13 +78,6 @@ export function MaintenanceRequestsTable({ data }: Props) {
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
-                {/* Actions column */}
-                <td
-                  className="px-2 py-3 text-right"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <DropdownMenuDialog data={row.original} />
-                </td>
               </tr>
             ))}
           </tbody>

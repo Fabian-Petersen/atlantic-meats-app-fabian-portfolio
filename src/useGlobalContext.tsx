@@ -37,6 +37,9 @@ export type T = {
   // $ Data
   data: CreateJobFormValues | undefined;
   setData: Dispatch<SetStateAction<CreateJobFormValues | undefined>>;
+  // Action Data
+  actionData: CreateJobFormValues | null;
+  setActionData: Dispatch<SetStateAction<CreateJobFormValues | null>>;
 };
 
 // const initialState: T = {
@@ -82,6 +85,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   // $ State for the data to update/delete an item
   const [data, setData] = useState<CreateJobFormValues | undefined>(undefined);
+  const [actionData, setActionData] = useState<CreateJobFormValues | null>(
+    null
+  );
 
   return (
     <AppContext.Provider
@@ -110,6 +116,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         // $ Data
         data,
         setData,
+        actionData,
+        setActionData,
       }}
     >
       {children}

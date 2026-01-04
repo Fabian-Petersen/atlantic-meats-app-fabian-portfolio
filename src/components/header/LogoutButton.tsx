@@ -35,7 +35,7 @@ const LogoutButton = ({ className }: Props) => {
       {/* // Mobile Button */}
       <button
         onClick={handleLogout}
-        className="lg:hidden flex hover:cursor-pointer text-red-500 hover:text-red-500/90"
+        className="lg:hidden bg-menu-btn/40 p-2 items-center justify-center rounded-md flex hover:cursor-pointer text-red-500 hover:text-red-500/90"
       >
         <Power size={24} />
       </button>

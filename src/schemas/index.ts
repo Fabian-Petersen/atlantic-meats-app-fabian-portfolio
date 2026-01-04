@@ -48,6 +48,28 @@ export const createJobSchema = z.object({
   // images: z.array(z.string()).default([]),
 });
 
+export const actionJobSchema = z.object({
+  description: z.string().min(1, {
+    message: "Please enter a description",
+  }),
+  store: z.string().min(1, { message: "Please select a store" }),
+  start_time: z.string().min(1, { message: "Please select maintenance type" }),
+  end_time: z.string().min(1, { message: "Please select impact" }),
+  km_start: z.string().min(1, { message: "Please select a priority" }),
+  km_end: z.string().min(1, { message: "Please select a status" }),
+  notes: z.string().min(1, { message: "Please select a type" }),
+  spares: z.string().min(1, { message: "Please select equipment" }),
+  root_cause: z.string(),
+  additional_notes: z.string().optional(),
+
+  //$ for the backend
+  id: z.string(),
+  request_id: z.string(),
+  createdAt: z.string().optional(),
+  userName: z.string().optional(),
+  images: z.array(z.string()).default([]),
+});
+
 export const assetSchema = z.object({
   id: z.string().optional(),
   createdAt: z.string().optional(),
@@ -64,7 +86,7 @@ export const assetSchema = z.object({
   // warranty_expire: z.date().optional(),
   serialNumber: z.string().optional(),
   manufacturer: z.string().optional(),
-  // date_of_manufacture: z.date().optional(),
+  date_of_manufacture: z.date().optional(),
   model: z.string().optional(),
   // status: z.string().min(1, { message: "Please select a status" }),
   // images: z.array(z.string()).default([]),
@@ -73,4 +95,5 @@ export const assetSchema = z.object({
 export type LoginFormValues = z.infer<typeof LoginSchema>;
 export type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
 export type CreateJobFormValues = z.infer<typeof createJobSchema>;
+export type ActionJobFormValues = z.infer<typeof actionJobSchema>;
 export type AssetFormValues = z.infer<typeof assetSchema>;
