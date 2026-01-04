@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "@/components/header/Navbar";
 import ScrollToTopButton from "@/components/features/ScrollToTopButton";
 import Sidebar from "@/components/dashboardSidebar/Sidebar";
+import ModalManager from "@/components/modals/ModalManager";
 
 // AppLayout.tsx
 export const AppLayout = () => (
@@ -16,5 +17,6 @@ export const AppLayout = () => (
     <main className="row-start-2 col-start-1 lg:col-start-2 h-full w-full lg:max-w-screen">
       <Outlet />
     </main>
+    <ModalManager />
   </div>
 );

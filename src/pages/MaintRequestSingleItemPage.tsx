@@ -9,7 +9,7 @@ const MaintRequestSingleItemPage = () => {
 
   const { data: item, isLoading } = useMaintenanceRequestById(id || "");
   // id "Testing from mobile: 4e9a8b44-f9e2-4fc0-ad8e-640fd23c7211"
-  console.log(item);
+  // console.log(item);
 
   if (!id || !item) {
     return (

@@ -3,19 +3,21 @@ import { useState } from "react";
 import { ChevronLeftCircle, ChevronRightCircle } from "lucide-react";
 import {} from "../../../public/images/20251124_150123.jpg";
 
+import FullscreenImageModal from "../modals/FullscreenImageModal";
+
 type Props = {
   item: AssetFormValues;
 };
 
-export const AssetSingleItemImages = ({ item }: Props) => {
-  console.log(item);
+export const AssetSingleItemImages = ({}: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
   //   const images = item.images; // string[] (urls)
   const images = [
     "/images/20251124_121905.jpg",
     "/images/20251124_121924.jpg",
     "/images/20251124_121928.jpg",
     "/images/20251124_150109.jpg",
-    "/images/20251124_150123.jp",
+    "/images/20251124_150123.jpg",
   ];
   const MAX_VISIBLE = 3;
 
@@ -28,15 +30,28 @@ export const AssetSingleItemImages = ({ item }: Props) => {
   const canScrollRight = startIndex + MAX_VISIBLE < images.length;
 
   return (
-    <div className="bg-gray-100 grid grid-rows-[25rem_8rem] md:grid-rows-[30rem_12rem] gap-2 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] p-2 h-full">
+    <div className="bg-white p-2 grid grid-rows-[25rem_8rem] md:grid-rows-[30rem_12rem] gap-2 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full">
       {/* Main Image */}
-      <div className="rounded-md h-full w-full flex items-center justify-center overflow-hidden">
+      <div
+        className="rounded-md h-full w-full flex items-center justify-center overflow-hidden hover:cursor-pointer"
+        onClick={() => {
+          console.log("Active Index Main Image:", activeIndex);
+          setIsOpen(true);
+        }}
+      >
         <img
           src={images[activeIndex]}
           className="object-cover h-full w-full"
           alt="Active"
         />
       </div>
+      {isOpen && (
+        <FullscreenImageModal
+          images={images}
+          setIsOpen={setIsOpen}
+          activeIndex={activeIndex}
+        />
+      )}
 
       {/* Thumbnails */}
       <div className="relative flex items-center gap-2 h-32 md:h-48 group">
@@ -60,7 +75,10 @@ export const AssetSingleItemImages = ({ item }: Props) => {
             return (
               <div
                 key={img}
-                onClick={() => setActiveIndex(actualIndex)}
+                onClick={() => {
+                  console.log("Active Index Thumbnail Image:", activeIndex);
+                  setActiveIndex(actualIndex);
+                }}
                 className={`cursor-pointer bg-gray-200 rounded-md h-full w-full overflow-hidden ${
                   actualIndex === activeIndex ? "ring-2 ring-primary" : ""
                 } ${index === 2 ? "group/thumb" : ""}`}

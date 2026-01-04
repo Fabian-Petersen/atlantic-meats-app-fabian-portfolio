@@ -7,6 +7,7 @@ import type { Dispatch, SetStateAction } from "react";
 // $ Step 0: Define the types and specify the navOpen type and set it to false initially'
 
 export type Theme = "light" | "dark";
+import type { CreateJobFormValues } from "./schemas";
 
 export type T = {
   navOpen: boolean;
@@ -25,6 +26,17 @@ export type T = {
   setIsActive: (isActive: boolean) => void;
   activeItem: string | null;
   setActiveItem: (activeItem: string) => void;
+
+  // $ Modals and Dialog
+  showUpdateDialog: boolean;
+  setShowUpdateDialog: Dispatch<SetStateAction<boolean>>;
+  showActionDialog: boolean;
+  setShowActionDialog: Dispatch<SetStateAction<boolean>>;
+  showDeleteDialog: boolean;
+  setShowDeleteDialog: Dispatch<SetStateAction<boolean>>;
+  // $ Data
+  data: CreateJobFormValues | undefined;
+  setData: Dispatch<SetStateAction<CreateJobFormValues | undefined>>;
 };
 
 // const initialState: T = {
@@ -63,6 +75,14 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isActive, setIsActive] = useState<boolean>(false);
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
+  // $ State for the dialogs (modals)
+  const [showUpdateDialog, setShowUpdateDialog] = useState<boolean>(false); // update maintenance request modal
+  const [showActionDialog, setShowActionDialog] = useState<boolean>(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+
+  // $ State for the data to update/delete an item
+  const [data, setData] = useState<CreateJobFormValues | undefined>(undefined);
+
   return (
     <AppContext.Provider
       value={{
@@ -80,6 +100,16 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsActive,
         activeItem,
         setActiveItem,
+        //$ Modals and Dialog State
+        showUpdateDialog,
+        showActionDialog,
+        showDeleteDialog,
+        setShowUpdateDialog,
+        setShowActionDialog,
+        setShowDeleteDialog,
+        // $ Data
+        data,
+        setData,
       }}
     >
       {children}

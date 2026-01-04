@@ -16,7 +16,7 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`z-1000 w-60 fixed top-16 lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-r border-r-gray-200 dark:border-r-[rgba(55,65,81,0.5)]
+      className={`z-200 w-60 fixed top-16 lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-r border-r-gray-200 dark:border-r-[rgba(55,65,81,0.5)]
       bg-white dark:bg-bgdark transform transition-transform duration-75 ease-in lg:translate-x-0
     ${isOpen ? "translate-x-0" : "-translate-x-full ease-out"}`}
     >

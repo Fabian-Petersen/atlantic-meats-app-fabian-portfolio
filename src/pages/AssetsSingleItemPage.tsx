@@ -1,5 +1,4 @@
 // $ This page renders the full details of a maintenance request information with the supporting pictures
-
 import { useParams } from "react-router-dom";
 // import { useMaintenanceRequestById } from "../utils/maintenanceRequests";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
@@ -35,29 +34,17 @@ const AssetsSingleItemPage = () => {
   }
 
   return (
-    <div className="dark:text-gray-800 text-gray-100 p-4 grid md:grid-cols-2 h-full gap-2">
-      <AssetSingleItemImages item={item} />
-      <div className="bg-white dark:bg-[#1d2739] rounded-md border-gray-700/70">
-        <AssetSingleItemInfo item={item} />
+    <div className="p-4">
+      <div className="h-auto bg-white dark:bg-[#1d2739] border-gray-700/70 rounded-md grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800">
+        <div>
+          <AssetSingleItemImages item={item} />
+        </div>
+        <div>
+          <AssetSingleItemInfo item={item} />
+        </div>
       </div>
     </div>
   );
 };
 
 export default AssetsSingleItemPage;
-// <ul className="flex flex-col gap-4">
-//       {data.map((item) => (
-//         <li key={item.name} className="w-full">
-//           <Link to={item.url}>
-//             <SidebarNavItem
-//               icon={item.icon}
-//               url={item.url}
-//               isActive={activeItem === item.name}
-//               onClick={() => handleSidebarLinkClick(item.name)}
-//             >
-//               {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
-//             </SidebarNavItem>
-//           </Link>
-//         </li>
-//       ))}
-//     </ul>

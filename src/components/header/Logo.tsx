@@ -12,8 +12,8 @@ const Logo = ({ className }: Props) => {
     <div
       className={clsx(
         className,
-        "hover:cursor-pointer h-full max-h-24",
-        isRoot ? "block" : "hidden lg:block" // This only display the logo when on "/" and when in desktop view
+        "hover:cursor-pointer h-16 max-h-24",
+        isRoot ? "lg:block" : "hidden lg:block" // This only display the logo when on "/" and when in desktop view
       )}
       onClick={() => navigate("https://www.atlanticmeat.co.za")}
     >

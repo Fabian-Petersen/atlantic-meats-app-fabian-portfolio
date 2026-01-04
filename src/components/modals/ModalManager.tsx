@@ -1,19 +1,20 @@
-// const ModalManager = () => {
-//   const { isDeleteModalOpen, setIsDeleteModalOpen } = useGlobalContext();
+import { useGlobalContext } from "@/useGlobalContext";
+import UpdateRequestDialog from "./UpdateRequestDialog";
 
-//   const isAnyModalOpen = isDeleteModalOpen;
-//   if (!isAnyModalOpen) return null;
+const ModalManager = () => {
+  const { showUpdateDialog } = useGlobalContext();
 
-//   return (
-//     <div className="fixed inset-0 w-full h-screen p-4 z-50">
-//       {isDeleteModalOpen && (
-//         <DeleteItemModal closeModal={setIsDeleteModalOpen} />
-//       )}
-//       {isDeleteModalOpen && (
-//         <DialogConfirmDeleteModal closeModal={setIsDeleteModalOpen} />
-//       )}
-//     </div>
-//   );
-// };
+  const isAnyModalOpen = showUpdateDialog;
+  if (!isAnyModalOpen) return null;
 
-// export default ModalManager;
+  return (
+    <div className="fixed inset-0 w-full h-screen p-4 z-3000">
+      {showUpdateDialog && <UpdateRequestDialog />}
+      {/* {isDeleteModalOpen && (
+        <DialogConfirmDeleteModal closeModal={setIsDeleteModalOpen} />
+      )} */}
+    </div>
+  );
+};
+
+export default ModalManager;
