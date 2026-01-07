@@ -16,26 +16,13 @@ function UpdateRequestDialog() {
   return (
     <Dialog open={showUpdateDialog} onOpenChange={setShowUpdateDialog}>
       <DialogContent className="sm:max-w-[625px] bg-white z-1000">
-        <DialogTitle>
-          <FormHeading heading="Update maintenance request" />
+        <DialogTitle className="py-4">
+          <FormHeading
+            className="font-normal"
+            heading="Update Maintenance request"
+          />
         </DialogTitle>
         <MaintenanceUpdateForm />
-        {/* <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              variant="outline"
-              className="border-0 bg-red-500 text-white hover:cursor-pointer hover:bg-red-600"
-            >
-              Cancel
-            </Button>
-          </DialogClose>
-          <Button
-            type="submit"
-            className="border-0 bg-yellow-500 text-white hover:cursor-pointer"
-          >
-            Update
-          </Button>
-        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );

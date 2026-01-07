@@ -1,23 +1,19 @@
 //$ This component is used to create a maintenace job, the data is submitted to the database (dynamoDB) via API Gateway and Lambda on aws.
 
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 // import { PasswordToggleInput } from "@/components/PasswordToggleInput";
 
 // $ React-Hook-Form, zod & schema
-import { createJobSchema } from "../../schemas/index";
+import {
+  createJobSchema,
+  type CreateJobFormValues,
+  type CreateJobPayload,
+} from "../../schemas/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import FormRowInput from "../customComponents/FormRowInput";
 import FormRowSelect from "../customComponents/FormRowSelect";
-// import { useGlobalContext } from "@/useGlobalContext";
-
-// $ Import schemas
-import type { CreateJobFormValues } from "../../schemas/index";
-
-//$ AWS Amplify
-import { fetchUserAttributes } from "aws-amplify/auth";
 
 import {
   stores,
@@ -28,45 +24,72 @@ import {
 
 import assets from "@/data/assets.json";
 import { useCreateMaintenanceRequest } from "@/utils/maintenanceRequests";
-
-// const { userAttributes, setUserAttributes } = useGlobalContext();
+import FileInput from "../customComponents/FileInput";
+import TextAreaInput from "../customComponents/TextAreaInput";
+import { toast } from "sonner";
 
 const MaintenanceRequestForm = () => {
   const { mutateAsync } = useCreateMaintenanceRequest();
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   // $ Form Schema
   const {
-    register,
     handleSubmit,
     control,
+    register,
     formState: { errors, isSubmitting },
-  } = useForm<CreateJobFormValues>({
+  } = useForm({
     defaultValues: {
-      description: "",
       store: "",
       type: "",
-      priority: "",
       equipment: "",
+      priority: "",
+      images: [],
+      additional_notes: "",
       impact: "",
-      // images: [],
     },
     resolver: zodResolver(createJobSchema),
   });
 
   const onSubmit = async (data: CreateJobFormValues) => {
     try {
-      const user = await fetchUserAttributes();
-      const payload = {
+      // 1. Build API payload (metadata only)
+      const payload: CreateJobPayload = {
         ...data,
-        userId: user.id,
-        userName: user.name,
+        images: data.images.map((file) => ({
+          filename: file.name,
+          content_type: file.type,
+          // console.log("content_type from frontend:",file.type)
+        })),
       };
 
+      // 2. Create maintenance request (DynamoDB + presigned URLs)
       const response = await mutateAsync(payload);
-      console.log("created request:", response);
+
+      const { presigned_urls } = response;
+
+      // 3. Upload files directly to S3
+      await Promise.all(
+        presigned_urls.map((item: any) => {
+          const file = data.images.find((f) => f.name === item.filename);
+
+          if (!file) return Promise.resolve();
+
+          return fetch(item.url, {
+            method: "PUT",
+            headers: {
+              "Content-Type": item.content_type,
+            },
+            body: file,
+          });
+        })
+      );
+      toast.success("Maintenance request created successfully!", {
+        duration: 1000,
+      });
+      navigate("/maintenance-list");
     } catch (err) {
-      console.error(err);
+      console.error("Failed to create maintenance request", err);
     }
   };
 
@@ -76,54 +99,8 @@ const MaintenanceRequestForm = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
-        <FormRowInput
-          label="Description"
-          type="text"
-          name="description"
-          control={control}
-          placeholder="Job Description"
-          register={register}
-          error={errors.description}
-        />
         <FormRowSelect
-          // label="Store"
-          name="store"
-          options={stores}
-          control={control}
-          placeholder="Select store"
-          register={register}
-          error={errors.store}
-          className="capitalize"
-        />
-        <FormRowSelect
-          // label="Request Type"
-          name="type"
-          options={type}
-          control={control}
-          placeholder="Select type"
-          register={register}
-          error={errors.type}
-        />
-        <FormRowSelect
-          // label="Impact"
-          name="impact"
-          options={impact}
-          control={control}
-          placeholder="Select Impact"
-          register={register}
-          error={errors.impact}
-        />
-        <FormRowSelect
-          // label="Priority"
-          name="priority"
-          options={priority}
-          control={control}
-          placeholder="Select Priority"
-          register={register}
-          error={errors.priority}
-        />
-        <FormRowSelect
-          // label="equipment"
+          label="Equipment"
           name="equipment"
           options={assets.assets.map((a) => ({
             label: a.equipment,
@@ -134,24 +111,79 @@ const MaintenanceRequestForm = () => {
           register={register}
           error={errors.equipment}
         />
-        {/* <FormRowInput
-          label="Image"
-          type="file"
-          name="images"
+        <FormRowSelect
+          label="Store"
+          name="store"
+          options={stores}
           control={control}
-          placeholder="Add Image"
+          placeholder="Select store"
           register={register}
+          error={errors.store}
+          className="capitalize"
+        />
+        <FormRowSelect
+          label="Request Type"
+          name="type"
+          options={type}
+          control={control}
+          placeholder="Select type"
+          register={register}
+          error={errors.type}
+        />
+        <FormRowSelect
+          label="Impact"
+          name="impact"
+          options={impact}
+          control={control}
+          placeholder="Select Impact"
+          register={register}
+          error={errors.impact}
+        />
+        <FormRowSelect
+          label="Priority"
+          name="priority"
+          options={priority}
+          control={control}
+          placeholder="Select Priority"
+          register={register}
+          error={errors.priority}
+        />
+        <FileInput
+          label="Supporting Documents"
+          control={control}
+          name="images"
           multiple={true}
-          accept="image/*"
-        /> */}
+          // error={errors.images}
+        />
+        <TextAreaInput
+          name="additional_notes"
+          register={register}
+          control={control}
+          rows={4}
+          label="Additional Notes"
+          className="lg:col-span-2"
+        />
       </div>
-      <Button
-        className="bg-(--clr-primary) text-white leading-1 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider py-6 mt-6 text-lg"
-        type="submit"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? "Creating Request..." : "Submit"}
-      </Button>
+      <div className="flex gap-2 w-full justify-end">
+        <Button
+          type="button"
+          onClick={() => {
+            navigate("/maintenance-list");
+          }}
+          variant="cancel"
+          size="lg"
+        >
+          Cancel
+        </Button>
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          variant="submit"
+          size="lg"
+        >
+          {isSubmitting ? "Sending..." : "Submit"}
+        </Button>
+      </div>
     </form>
   );
 };

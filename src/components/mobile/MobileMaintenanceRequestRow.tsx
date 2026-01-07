@@ -32,7 +32,7 @@ export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
 
       {isOpen && (
         <div className="mt-3 text-sm grid gap-2">
-          <span>{row.original.description}</span>
+          <span>{row.original.additional_notes}</span>
           <div className="flex flex-col">
             <span>{row.original.equipment}</span>
             {/* <span>{row.original.assetID}</span> Add the asset ID */}

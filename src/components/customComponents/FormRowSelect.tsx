@@ -7,7 +7,7 @@ type FormSelectProps<TFieldValues extends FieldValues> = {
   label?: string;
   className?: string;
   options: SelectOption[];
-  error?: FieldError;
+  error?: FieldError | undefined;
   placeholder?: string;
   defaultValues?: string | string[];
   onChange?: (selectedValues: string[]) => void;
@@ -21,7 +21,7 @@ import type { FieldError, FieldValues, Path, Control } from "react-hook-form";
 import { useWatch } from "react-hook-form";
 import clsx from "clsx";
 
-const FormRowSelect = <TFieldValues extends FieldValues>({
+function FormRowSelect<TFieldValues extends FieldValues>({
   name,
   label,
   options,
@@ -33,7 +33,7 @@ const FormRowSelect = <TFieldValues extends FieldValues>({
   register,
   onChange,
   required,
-}: FormSelectProps<TFieldValues>) => {
+}: FormSelectProps<TFieldValues>) {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedOptions = multiple
       ? Array.from(event.target.selectedOptions, (option) => option.value)
@@ -42,8 +42,16 @@ const FormRowSelect = <TFieldValues extends FieldValues>({
     if (onChange) onChange(selectedOptions);
   };
 
-  const value = useWatch({ name, control });
-  const isValid = !error && value != null && value.length !== 0;
+  const value = useWatch({
+    name,
+    control,
+  }) as (string | File | number | null)[] | string | number | undefined;
+
+  const isValid =
+    !error &&
+    (Array.isArray(value)
+      ? value.length > 0
+      : value !== undefined && value !== "");
 
   return (
     <div className="relative w-full mb-2 group">
@@ -92,6 +100,6 @@ const FormRowSelect = <TFieldValues extends FieldValues>({
       {error && <span className="text-xs text-red-600">{error.message}</span>}
     </div>
   );
-};
+}
 
 export default FormRowSelect;

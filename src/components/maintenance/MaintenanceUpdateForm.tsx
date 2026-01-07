@@ -5,10 +5,13 @@ import { createJobSchema } from "../../schemas/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+// $ Form Components
 import FormRowInput from "../customComponents/FormRowInput";
 import FormRowSelect from "../customComponents/FormRowSelect";
-import { useGlobalContext } from "@/useGlobalContext";
+import FileInput from "../customComponents/FileInput";
 import { Button } from "../ui/button";
+
+import { useGlobalContext } from "@/useGlobalContext";
 
 // $ Import schemas
 import type { CreateJobFormValues } from "../../schemas/index";
@@ -34,21 +37,27 @@ const MaintenanceUpdateForm = () => {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<CreateJobFormValues>({
-    defaultValues: initialData,
+  } = useForm({
+    defaultValues: initialData as CreateJobFormValues,
     resolver: zodResolver(createJobSchema),
   });
 
-  const onSubmit = async (initialData: CreateJobFormValues) => {
+  const onSubmit = async (data: CreateJobFormValues) => {
     try {
-      const payload = {
-        ...initialData,
-      };
+      const base64Images = await Promise.all(
+        (data.images || []).map(
+          (file) =>
+            new Promise<string>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(reader.result as string);
+              reader.onerror = reject;
+              reader.readAsDataURL(file);
+            })
+        )
+      );
 
+      const payload = { ...data, images: base64Images };
       console.log("Submit Update Form:", payload);
-      setTimeout(() => setShowUpdateDialog(false), 2000);
-      // const response = await mutateAsync(payload);
-      // console.log("created request:", response);
     } catch (err) {
       console.error(err);
     }
@@ -56,38 +65,41 @@ const MaintenanceUpdateForm = () => {
 
   return (
     <form
-      className="flex flex-col rounded-lg lg:w-full text-font dark:bg-[#1d2739]"
+      className="flex flex-col rounded-lg lg:w-full text-font dark:bg-[#1d2739] gap-6"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
         <FormRowInput
-          label="Description"
+          label="Additional Notes"
           type="text"
-          name="description"
+          name="additional_notes"
           control={control}
-          placeholder="Job Description"
+          placeholder="Enter additional notes"
           register={register}
-          error={errors.description}
+          error={errors.additional_notes}
         />
         <FormRowSelect
           name="store"
+          label="Store"
           options={stores}
           control={control}
-          placeholder="Select store"
+          placeholder="Select Store"
           register={register}
           error={errors.store}
           className="capitalize"
         />
         <FormRowSelect
           name="type"
+          label="Type"
           options={type}
           control={control}
-          placeholder="Select type"
+          placeholder="Select Type"
           register={register}
           error={errors.type}
         />
         <FormRowSelect
           name="impact"
+          label="Impact"
           options={impact}
           control={control}
           placeholder="Select Impact"
@@ -96,6 +108,7 @@ const MaintenanceUpdateForm = () => {
         />
         <FormRowSelect
           name="priority"
+          label="Priority"
           options={priority}
           control={control}
           placeholder="Select Priority"
@@ -104,6 +117,7 @@ const MaintenanceUpdateForm = () => {
         />
         <FormRowSelect
           name="equipment"
+          label="Equipment"
           options={assets.assets.map((a) => ({
             label: a.equipment,
             value: a.equipment,
@@ -113,16 +127,7 @@ const MaintenanceUpdateForm = () => {
           register={register}
           error={errors.equipment}
         />
-        {/* <FormRowInput
-          label="Image"
-          type="file"
-          name="images"
-          control={control}
-          placeholder="Add Image"
-          register={register}
-          multiple={true}
-          accept="image/*"
-          /> */}
+        <FileInput control={control} name="images" multiple={true} />
       </div>
       <div className="flex gap-2 w-full justify-end">
         <Button onClick={() => setShowUpdateDialog(false)} variant={"cancel"}>

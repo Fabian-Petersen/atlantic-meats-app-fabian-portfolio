@@ -25,8 +25,8 @@ export const columns: ColumnDef<CreateJobFormValues>[] = [
     sortingFn: "datetime",
   },
   {
-    accessorKey: "description",
-    header: "Description",
+    accessorKey: "additional_notes",
+    header: "Additional Notes",
   },
   {
     accessorKey: "equipment",

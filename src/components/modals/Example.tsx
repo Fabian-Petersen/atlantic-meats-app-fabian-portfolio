@@ -10,10 +10,11 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
+  //   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { CreateJobFormValues } from "@/schemas";
+// import Separator from "../dashboardSidebar/Seperator";
 
 type DropdownMenuDialogProps = {
   data: CreateJobFormValues;
@@ -50,7 +51,7 @@ export function DropdownMenuDialog({ data }: DropdownMenuDialogProps) {
           className="w-40 bg-gray-100 border-0 text-font"
           align="end"
         >
-          <DropdownMenuLabel className="font-[550]">Action</DropdownMenuLabel>
+          {/* <DropdownMenuLabel className="text-sm">Action</DropdownMenuLabel> */}
           <DropdownMenuGroup className="space-y-1">
             {menuItems.map((item) => {
               const Icon = item.icon;

@@ -1,5 +1,8 @@
 import * as z from "zod";
 
+//$ import types
+import { ROOT_CAUSES } from "@/data/maintenanceAction";
+
 // $ Schema for the Login Form
 export const LoginSchema = z.object({
   email: z.email({ message: "Please enter a valid email" }),
@@ -32,20 +35,16 @@ export const changePasswordSchema = z
   });
 
 export const createJobSchema = z.object({
-  description: z.string().min(1, {
-    message: "Please enter a description",
-  }),
+  id: z.string().optional().default("string"),
+  createdAt: z.string().optional().default(""),
+  equipment: z.string().min(1, { message: "Please select equipment" }),
   store: z.string().min(1, { message: "Please select a store" }),
   type: z.string().min(1, { message: "Please select maintenance type" }),
   impact: z.string().min(1, { message: "Please select impact" }),
   priority: z.string().min(1, { message: "Please select a priority" }),
-  // status: z.string().min(1, { message: "Please select a status" }),
-  // type: z.string().min(1, { message: "Please select a type" }),
-  equipment: z.string().min(1, { message: "Please select equipment" }),
-  id: z.string().optional(),
-  createdAt: z.string().optional(),
-  userName: z.string().optional(),
-  // images: z.array(z.string()).default([]),
+  userName: z.string().optional().default(""),
+  additional_notes: z.string().optional().default(""),
+  images: z.array(z.instanceof(File)).default([]),
 });
 
 export const actionJobSchema = z.object({
@@ -57,22 +56,35 @@ export const actionJobSchema = z.object({
   end_time: z.string().min(1, { message: "Please select impact" }),
   km_start: z.string().min(1, { message: "Please select a priority" }),
   km_end: z.string().min(1, { message: "Please select a status" }),
-  notes: z.string().min(1, { message: "Please select a type" }),
-  spares: z.string().min(1, { message: "Please select equipment" }),
-  root_cause: z.string(),
+  work_completed: z.string().min(1, { message: "Please select a type" }),
+  materials: z.string().min(1, { message: "Please select equipment" }),
+  materials_cost: z.string().min(1, { message: "Please select equipment" }),
+  status: z.string().min(1, { message: "" }), // "pending", "in progress", "complete"
+  root_cause: z.enum(ROOT_CAUSES, {
+    message: "please select a root cause for breakdown",
+  }), // "wear & tear", "malicious damage", "negligence","asset fatigue", ""
   additional_notes: z.string().optional(),
+  images: z.array(z.string()).default([]),
 
   //$ for the backend
   id: z.string(),
   request_id: z.string(),
   createdAt: z.string().optional(),
   userName: z.string().optional(),
-  images: z.array(z.string()).default([]),
 });
-
+//  description: "",
+//       equipment: "",
+//       assetID: "",
+//       condition: "",
+//       location: "",
+//       //   warranty: "",
+//       serialNumber: "",
+//       manufacturer: "",
+//       model: "",
+//       images: [],
 export const assetSchema = z.object({
-  id: z.string().optional(),
-  createdAt: z.string().optional(),
+  // id: z.string().optional(),
+  // createdAt: z.string().optional(),
   description: z.string().min(1, {
     message: "Please enter a description",
   }),
@@ -82,14 +94,14 @@ export const assetSchema = z.object({
   }),
   condition: z.string().min(1, { message: "Please select condition" }),
   location: z.string().min(1, { message: "Please select a location" }),
-  // warranty: z.string().min(1, { message: "Please indicate if warranty valid" }),
-  // warranty_expire: z.date().optional(),
   serialNumber: z.string().optional(),
   manufacturer: z.string().optional(),
-  date_of_manufacture: z.date().optional(),
+  // date_of_manufacture: z.date().optional(),
   model: z.string().optional(),
+  images: z.array(z.instanceof(File)).default([]),
+  // warranty_expire: z.date().optional(),
+  // warranty: z.string().min(1, { message: "Please indicate if warranty valid" }),
   // status: z.string().min(1, { message: "Please select a status" }),
-  // images: z.array(z.string()).default([]),
 });
 
 export type LoginFormValues = z.infer<typeof LoginSchema>;
@@ -97,3 +109,16 @@ export type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
 export type CreateJobFormValues = z.infer<typeof createJobSchema>;
 export type ActionJobFormValues = z.infer<typeof actionJobSchema>;
 export type AssetFormValues = z.infer<typeof assetSchema>;
+
+export type CreateAssetPayload = Omit<AssetFormValues, "images"> & {
+  images: {
+    filename: string;
+    content_type: string;
+  }[];
+};
+export type CreateJobPayload = Omit<CreateJobFormValues, "images"> & {
+  images: {
+    filename: string;
+    content_type: string;
+  }[];
+};

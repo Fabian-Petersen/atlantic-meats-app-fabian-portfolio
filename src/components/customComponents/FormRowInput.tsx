@@ -29,7 +29,7 @@ import type {
   Control,
 } from "react-hook-form";
 
-const FormRowInput = <TFieldValues extends FieldValues>({
+function FormRowInput<TFieldValues extends FieldValues>({
   label,
   name,
   placeholder,
@@ -42,7 +42,7 @@ const FormRowInput = <TFieldValues extends FieldValues>({
   accept,
   isVisible,
   togglePassword,
-}: FormInputProps<TFieldValues>) => {
+}: FormInputProps<TFieldValues>) {
   const value = useWatch({ name, control });
   const isValid = !error && (type === "file" ? value?.length > 0 : value);
 
@@ -87,6 +87,6 @@ const FormRowInput = <TFieldValues extends FieldValues>({
       {error && <span className="text-xs text-red-600">{error.message}</span>}
     </div>
   );
-};
+}
 
 export default FormRowInput;

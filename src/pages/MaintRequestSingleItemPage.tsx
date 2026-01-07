@@ -28,7 +28,7 @@ const MaintRequestSingleItemPage = () => {
       <h1>Maintenance Item {item.id}</h1>
       <p>Store: {item.store}</p>
       <p>Priority: {item.priority}</p>
-      <p>Description: {item.description}</p>
+      {/* <p>Description: {item.description}</p> */}
       {/* Render other fields as needed */}
     </div>
   );

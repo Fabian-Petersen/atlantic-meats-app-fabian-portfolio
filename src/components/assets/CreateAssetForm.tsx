@@ -1,5 +1,6 @@
 //$ This component is used to create a maintenace job, the data is submitted to the database (dynamoDB) via API Gateway and Lambda on aws.
 
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 // import { PasswordToggleInput } from "@/components/PasswordToggleInput";
 
@@ -12,46 +13,34 @@ import FormRowInput from "../customComponents/FormRowInput";
 import FormRowSelect from "../customComponents/FormRowSelect";
 
 // $ Import schemas
-import type { AssetFormValues } from "../../schemas/index";
-
-export type AssetResponse = {
-  id: string;
-  createdAt: string;
-  description: string;
-  assetID: string;
-  equipment: string;
-  location: string;
-  condition: string;
-  serialNumber?: string | null;
-  manufacturer?: string | null;
-  model?: string | null;
-};
+import type { AssetFormValues, CreateAssetPayload } from "../../schemas/index";
 
 // $ Import API interaction Functions
-import { useCreateNewItem } from "@/utils/maintenanceRequests";
+import {
+  useCreateNewAsset,
+  // useCreateNewItem,
+} from "@/utils/maintenanceRequests";
 
 //$ Import Select Options Data
 import { condition, equipment, location } from "@/data/assetSelectOptions";
+import FileInput from "../customComponents/FileInput";
+import { toast } from "sonner";
 
 // const { userAttributes, setUserAttributes } = useGlobalContext();
 
 const CreateAssetForm = () => {
-  const { mutateAsync, isPending } = useCreateNewItem<
-    AssetResponse,
-    AssetFormValues
-  >({
-    queryKey: ["assets"],
-    endpoint: "/asset",
-    redirect: "/asset",
-  });
+  const { mutateAsync } = useCreateNewAsset();
+  const navigate = useNavigate();
+
+  // const { mutateAsync } = useCreateMaintenanceRequest();
 
   // $ Form Schema
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors },
-  } = useForm<AssetFormValues>({
+    formState: { errors, isSubmitting },
+  } = useForm({
     defaultValues: {
       description: "",
       equipment: "",
@@ -62,20 +51,53 @@ const CreateAssetForm = () => {
       serialNumber: "",
       manufacturer: "",
       model: "",
-      //   images: [],
+      images: [],
     },
     resolver: zodResolver(assetSchema),
   });
 
-  const sortedLocations = [...location].sort((a, b) => a.localeCompare(b)); // sort the locations in alphabetical order
+  // $ sort the in  locations in alphabetical order
+  const sortedLocations = [...location].sort((a, b) => a.localeCompare(b));
 
   const onSubmit = async (data: AssetFormValues) => {
     try {
-      const response = await mutateAsync(data);
-      console.log("New Asset Data:", response);
-      console.log("Form Data:", data);
+      // 1. Build API payload (metadata only)
+      const payload: CreateAssetPayload = {
+        ...data,
+        images: data.images.map((file) => ({
+          filename: file.name,
+          content_type: file.type,
+          // console.log("content_type from frontend:",file.type)
+        })),
+      };
+
+      // 2. Create maintenance request (DynamoDB + presigned URLs)
+      const response = await mutateAsync(payload);
+
+      const { presigned_urls } = response;
+
+      // 3. Upload files directly to S3
+      await Promise.all(
+        presigned_urls.map((item: any) => {
+          const file = data.images.find((f) => f.name === item.filename);
+
+          if (!file) return Promise.resolve();
+
+          return fetch(item.url, {
+            method: "PUT",
+            headers: {
+              "Content-Type": item.content_type,
+            },
+            body: file,
+          });
+        })
+      );
+      toast.success("New Asset Successfully Created!", {
+        duration: 1000,
+      });
+      // navigate("/assets");
     } catch (err) {
-      console.error(err);
+      console.error("Failed to create new asset", err);
     }
   };
 
@@ -185,15 +207,34 @@ const CreateAssetForm = () => {
           register={register}
           error={errors.model}
         />
+        <FileInput
+          label="Supporting Documents"
+          control={control}
+          name="images"
+          multiple={true}
+          // error={errors.images}
+        />
       </div>
-      <Button
-        className="bg-(--clr-primary) text-white leading-1 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider py-6 mt-6 text-lg"
-        type="submit"
-        // disabled={isSubmitting}
-        disabled={isPending}
-      >
-        {isPending ? "Create New Asset..." : "Submit"}
-      </Button>
+      <div className="flex gap-2 w-full justify-end">
+        <Button
+          type="button"
+          onClick={() => {
+            navigate("/asset");
+          }}
+          variant="cancel"
+          size="lg"
+        >
+          Cancel
+        </Button>
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          variant="submit"
+          size="lg"
+        >
+          {isSubmitting ? "Sending..." : "Submit"}
+        </Button>
+      </div>
     </form>
   );
 };
