@@ -1,5 +1,6 @@
 import type { UseFormRegister } from "react-hook-form";
 //$ Have a union type for options that can take a array string and a json object with label and value
+import type { FieldError, FieldValues, Path, Control } from "react-hook-form";
 type SelectOption = string | { label: string; value: string };
 
 type FormSelectProps<TFieldValues extends FieldValues> = {
@@ -17,7 +18,6 @@ type FormSelectProps<TFieldValues extends FieldValues> = {
   control: Control<TFieldValues>;
 };
 
-import type { FieldError, FieldValues, Path, Control } from "react-hook-form";
 import { useWatch } from "react-hook-form";
 import clsx from "clsx";
 
