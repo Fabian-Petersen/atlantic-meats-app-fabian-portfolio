@@ -7,13 +7,17 @@ import { Button } from "@/components/ui/button";
 // $ React-Hook-Form, zod & schema
 import { assetSchema } from "../../schemas/index";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 
 import FormRowInput from "../customComponents/FormRowInput";
 import FormRowSelect from "../customComponents/FormRowSelect";
 
 // $ Import schemas
-import type { AssetFormValues, CreateAssetPayload } from "../../schemas/index";
+import type {
+  AssetFormValues,
+  CreateAssetPayload,
+  PresignedUrlResponse,
+} from "../../schemas/index";
 
 // $ Import API interaction Functions
 import {
@@ -53,7 +57,7 @@ const CreateAssetForm = () => {
       model: "",
       images: [],
     },
-    resolver: zodResolver(assetSchema),
+    resolver: zodResolver(assetSchema) as unknown as Resolver<AssetFormValues>,
   });
 
   // $ sort the in  locations in alphabetical order
@@ -78,8 +82,10 @@ const CreateAssetForm = () => {
 
       // 3. Upload files directly to S3
       await Promise.all(
-        presigned_urls.map((item: any) => {
-          const file = data.images.find((f) => f.name === item.filename);
+        presigned_urls.map((item: PresignedUrlResponse[number]) => {
+          const file = (data.images ?? []).find(
+            (f) => f.name === item.filename
+          );
 
           if (!file) return Promise.resolve();
 
@@ -111,7 +117,7 @@ const CreateAssetForm = () => {
           label="Description"
           type="text"
           name="description"
-          control={control}
+          // control={control}
           placeholder="Asset Description"
           register={register}
           error={errors.description}
@@ -120,7 +126,7 @@ const CreateAssetForm = () => {
           label="Asset ID"
           type="text"
           name="assetID"
-          control={control}
+          // control={control}
           placeholder="Asset ID e.g. MX001"
           register={register}
           error={errors.assetID}
@@ -129,7 +135,7 @@ const CreateAssetForm = () => {
           label="Equipment Type"
           name="equipment"
           options={equipment}
-          control={control}
+          // control={control}
           placeholder="Select Equipment"
           register={register}
           error={errors.equipment}
@@ -138,7 +144,7 @@ const CreateAssetForm = () => {
           // label="Store"
           name="location"
           options={sortedLocations}
-          control={control}
+          // control={control}
           placeholder="Select Location"
           register={register}
           error={errors.location}
@@ -148,7 +154,7 @@ const CreateAssetForm = () => {
           label="Condition"
           name="condition"
           options={condition}
-          control={control}
+          // control={control}
           placeholder="Select Condition"
           register={register}
           error={errors.condition}
@@ -157,7 +163,7 @@ const CreateAssetForm = () => {
           label="Equipment Serial Number"
           type="text"
           name="serialNumber"
-          control={control}
+          // control={control}
           placeholder="Serial Number"
           register={register}
           error={errors.serialNumber}
@@ -184,7 +190,7 @@ const CreateAssetForm = () => {
           label="Manufacturer"
           type="text"
           name="manufacturer"
-          control={control}
+          // control={control}
           placeholder="Manufacturer"
           register={register}
           error={errors.manufacturer}
@@ -202,7 +208,7 @@ const CreateAssetForm = () => {
           label="Model"
           type="text"
           name="model"
-          control={control}
+          // control={control}
           placeholder="Model"
           register={register}
           error={errors.model}

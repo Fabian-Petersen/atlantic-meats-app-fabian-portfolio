@@ -18,7 +18,7 @@ const ChangePasswordForm = ({
   const {
     register,
     handleSubmit,
-    control,
+    // control,
     formState: { errors },
   } = useForm<ChangePasswordFormValues>({
     resolver: zodResolver(changePasswordSchema),
@@ -34,7 +34,7 @@ const ChangePasswordForm = ({
           label="Email"
           type="email"
           name="email"
-          control={control}
+          // control={control}
           placeholder="Enter your email"
           register={register}
           error={errors.email}
@@ -43,7 +43,7 @@ const ChangePasswordForm = ({
           label="Password"
           type="password"
           name="newPassword"
-          control={control}
+          // control={control}
           placeholder="Enter your password"
           register={register}
           error={errors.newPassword}
@@ -52,7 +52,7 @@ const ChangePasswordForm = ({
           label="Confirm Password"
           type="password"
           name="confirmPassword"
-          control={control}
+          // control={control}
           placeholder="Confirm your password"
           register={register}
           error={errors.confirmPassword}

@@ -24,7 +24,7 @@ const LoginForm = ({
   const {
     register,
     handleSubmit,
-    control,
+    // control,
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(LoginSchema),
@@ -43,7 +43,7 @@ const LoginForm = ({
           label="Email"
           type="email"
           name="email"
-          control={control}
+          // control={control}
           placeholder="Enter your email"
           register={register}
           error={errors.email}
@@ -54,7 +54,7 @@ const LoginForm = ({
           togglePassword={showPassword.toggle} // comes from the usePasswordVisibility hook
           isVisible={showPassword.isVisible} // comes from the usePasswordVisibility hook
           name="password"
-          control={control}
+          // control={control}
           placeholder="Enter your password"
           register={register}
           error={errors.password}

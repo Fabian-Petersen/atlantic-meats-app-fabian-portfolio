@@ -4,17 +4,21 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 // import { PasswordToggleInput } from "@/components/PasswordToggleInput";
 
-// $ React-Hook-Form, zod & schema
-import {
-  createJobSchema,
-  type CreateJobFormValues,
-  type CreateJobPayload,
-} from "../../schemas/index";
+// $ React-Hook-Form
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, type Control, type Resolver } from "react-hook-form";
+
+// $ Zod Schema and Types
+import type {
+  CreateJobFormValues,
+  CreateJobPayload,
+  PresignedUrlResponse,
+} from "../../schemas/index";
+import { createJobSchema } from "../../schemas/index";
 
 import FormRowSelect from "../customComponents/FormRowSelect";
 
+// $ Data for select options
 import {
   stores,
   priority,
@@ -38,40 +42,47 @@ const MaintenanceRequestForm = () => {
     control,
     register,
     formState: { errors, isSubmitting },
-  } = useForm({
+  } = useForm<CreateJobFormValues>({
     defaultValues: {
+      equipment: "",
       store: "",
       type: "",
-      equipment: "",
-      priority: "",
-      images: [],
-      additional_notes: "",
       impact: "",
+      priority: "",
+      additional_notes: "",
+      images: [],
     },
-    resolver: zodResolver(createJobSchema),
+    resolver: zodResolver(
+      createJobSchema
+    ) as unknown as Resolver<CreateJobFormValues>,
   });
 
   const onSubmit = async (data: CreateJobFormValues) => {
+    console.log("Submitting maintenance request:", data);
     try {
-      // 1. Build API payload (metadata only)
+      // $ 1. Build API payload (metadata only)
       const payload: CreateJobPayload = {
         ...data,
-        images: data.images.map((file) => ({
+        images: (data.images ?? []).map((file) => ({
           filename: file.name,
           content_type: file.type,
-          // console.log("content_type from frontend:",file.type)
         })),
       };
+      console.log("Payload for API:", payload);
 
-      // 2. Create maintenance request (DynamoDB + presigned URLs)
+      // $ 2. Create maintenance request (DynamoDB + presigned URLs)
       const response = await mutateAsync(payload);
+      console.log("API Response:", response);
 
       const { presigned_urls } = response;
+      console.log("Presigned URLs:", presigned_urls);
 
-      // 3. Upload files directly to S3
+      // $ 3. Upload files directly to S3
       await Promise.all(
-        presigned_urls.map((item: any) => {
-          const file = data.images.find((f) => f.name === item.filename);
+        presigned_urls.map((item: PresignedUrlResponse[number]) => {
+          const file = (data.images ?? []).find(
+            (f) => f.name === item.filename
+          );
 
           if (!file) return Promise.resolve();
 
@@ -106,7 +117,7 @@ const MaintenanceRequestForm = () => {
             label: a.equipment,
             value: a.equipment,
           }))}
-          control={control}
+          // control={control}
           placeholder="Select Equipment"
           register={register}
           error={errors.equipment}
@@ -115,8 +126,8 @@ const MaintenanceRequestForm = () => {
           label="Store"
           name="store"
           options={stores}
-          control={control}
-          placeholder="Select store"
+          // control={control}
+          placeholder="Select Store"
           register={register}
           error={errors.store}
           className="capitalize"
@@ -125,7 +136,7 @@ const MaintenanceRequestForm = () => {
           label="Request Type"
           name="type"
           options={type}
-          control={control}
+          // control={control}
           placeholder="Select type"
           register={register}
           error={errors.type}
@@ -134,7 +145,7 @@ const MaintenanceRequestForm = () => {
           label="Impact"
           name="impact"
           options={impact}
-          control={control}
+          // control={control}
           placeholder="Select Impact"
           register={register}
           error={errors.impact}
@@ -143,22 +154,22 @@ const MaintenanceRequestForm = () => {
           label="Priority"
           name="priority"
           options={priority}
-          control={control}
+          // control={control}
           placeholder="Select Priority"
           register={register}
           error={errors.priority}
         />
+
         <FileInput
           label="Supporting Documents"
-          control={control}
+          control={control as unknown as Control<CreateJobFormValues>}
           name="images"
           multiple={true}
-          // error={errors.images}
         />
         <TextAreaInput
           name="additional_notes"
           register={register}
-          control={control}
+          // control={control}
           rows={4}
           label="Additional Notes"
           className="lg:col-span-2"

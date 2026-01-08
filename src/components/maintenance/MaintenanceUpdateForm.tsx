@@ -73,7 +73,7 @@ const MaintenanceUpdateForm = () => {
           label="Additional Notes"
           type="text"
           name="additional_notes"
-          control={control}
+          // control={control}
           placeholder="Enter additional notes"
           register={register}
           error={errors.additional_notes}
@@ -82,7 +82,7 @@ const MaintenanceUpdateForm = () => {
           name="store"
           label="Store"
           options={stores}
-          control={control}
+          // control={control}
           placeholder="Select Store"
           register={register}
           error={errors.store}
@@ -92,7 +92,7 @@ const MaintenanceUpdateForm = () => {
           name="type"
           label="Type"
           options={type}
-          control={control}
+          // control={control}
           placeholder="Select Type"
           register={register}
           error={errors.type}
@@ -101,7 +101,7 @@ const MaintenanceUpdateForm = () => {
           name="impact"
           label="Impact"
           options={impact}
-          control={control}
+          // control={control}
           placeholder="Select Impact"
           register={register}
           error={errors.impact}
@@ -110,7 +110,7 @@ const MaintenanceUpdateForm = () => {
           name="priority"
           label="Priority"
           options={priority}
-          control={control}
+          // control={control}
           placeholder="Select Priority"
           register={register}
           error={errors.priority}
@@ -122,7 +122,7 @@ const MaintenanceUpdateForm = () => {
             label: a.equipment,
             value: a.equipment,
           }))}
-          control={control}
+          // control={control}
           placeholder="Select Equipment"
           register={register}
           error={errors.equipment}

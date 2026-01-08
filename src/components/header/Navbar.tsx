@@ -17,12 +17,12 @@ const Navbar = ({ className }: Props) => {
       <div className="flex justify-between w-full h-full items-center">
         <Logo />
         {pathname !== "/" ? (
-          <div className="flex justify-between w-full">
+          <div className="flex justify-between w-full px-2 lg:px-4">
             <NavbarMenuButton />
             <NavbarActionButtons />
           </div>
         ) : (
-          <ThemeToggleButton className="px-4 lg:px-6" />
+          <ThemeToggleButton className="" />
         )}
       </div>
     </nav>

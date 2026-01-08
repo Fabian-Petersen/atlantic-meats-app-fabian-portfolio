@@ -1,7 +1,7 @@
 import type {
   FieldError,
   FieldValues,
-  Control,
+  // Control,
   Path,
   UseFormRegister,
 } from "react-hook-form";
@@ -10,7 +10,7 @@ import clsx from "clsx";
 type FormRowTextAreaProps<T extends FieldValues> = {
   name: Path<T>;
   label?: string;
-  control: Control<T>;
+  // control: Control<T>;
   placeholder?: string;
   register: UseFormRegister<T>;
   error?: FieldError;

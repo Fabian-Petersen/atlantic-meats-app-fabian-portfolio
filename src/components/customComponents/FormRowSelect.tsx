@@ -1,10 +1,17 @@
-import type { UseFormRegister } from "react-hook-form";
 //$ Have a union type for options that can take a array string and a json object with label and value
-import type { FieldError, FieldValues, Path, Control } from "react-hook-form";
+import type {
+  FieldError,
+  FieldValues,
+  Path,
+  // Control,
+  UseFormRegister,
+} from "react-hook-form";
+
 type SelectOption = string | { label: string; value: string };
 
-type FormSelectProps<TFieldValues extends FieldValues> = {
-  name: Path<TFieldValues>;
+type FormSelectProps<T extends FieldValues> = {
+  name: Path<T>;
+  register: UseFormRegister<T>;
   label?: string;
   className?: string;
   options: SelectOption[];
@@ -14,26 +21,25 @@ type FormSelectProps<TFieldValues extends FieldValues> = {
   onChange?: (selectedValues: string[]) => void;
   required?: boolean;
   multiple?: boolean;
-  register: UseFormRegister<TFieldValues>;
-  control: Control<TFieldValues>;
+  // control: Control<T>;
 };
 
-import { useWatch } from "react-hook-form";
+// import { useWatch } from "react-hook-form";
 import clsx from "clsx";
 
-function FormRowSelect<TFieldValues extends FieldValues>({
+function FormRowSelect<T extends FieldValues>({
   name,
   label,
   options,
   error,
   defaultValues,
   multiple,
-  control,
+  // control,
   placeholder,
   register,
   onChange,
   required,
-}: FormSelectProps<TFieldValues>) {
+}: FormSelectProps<T>) {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedOptions = multiple
       ? Array.from(event.target.selectedOptions, (option) => option.value)
@@ -42,16 +48,16 @@ function FormRowSelect<TFieldValues extends FieldValues>({
     if (onChange) onChange(selectedOptions);
   };
 
-  const value = useWatch({
-    name,
-    control,
-  }) as (string | File | number | null)[] | string | number | undefined;
+  // const value = useWatch({
+  //   name,
+  //   control,
+  // }) as (string | File | number | null)[] | string | number | undefined;
 
-  const isValid =
-    !error &&
-    (Array.isArray(value)
-      ? value.length > 0
-      : value !== undefined && value !== "");
+  // const isValid =
+  //   !error &&
+  //   (Array.isArray(value)
+  //     ? value.length > 0
+  //     : value !== undefined && value !== "");
 
   return (
     <div className="relative w-full mb-2 group">
@@ -62,10 +68,10 @@ function FormRowSelect<TFieldValues extends FieldValues>({
         className={clsx(
           "text-sm py-3 px-2 peer w-full rounded-md outline-none text-gray-700 dark:text-gray-100/50",
           "border border-gray-300 focus:border-rose-600 capitalize dark:border-gray-700/50",
-          isValid && "border-green-500",
+          // isValid && "border-green-500",
           error && "border-red-400"
         )}
-        defaultValue={multiple ? defaultValues || [] : defaultValues}
+        defaultValue={multiple ? defaultValues || [] : ""}
         onChange={handleChange}
         required={required}
       >

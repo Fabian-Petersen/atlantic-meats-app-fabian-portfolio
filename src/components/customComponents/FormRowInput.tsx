@@ -7,7 +7,7 @@ type FormInputProps<TFieldValues extends FieldValues> = {
   type?: HTMLInputTypeAttribute;
   placeholder?: string;
   register: UseFormRegister<TFieldValues>;
-  control: Control<TFieldValues>;
+  // control: Control<TFieldValues>;
   error?: FieldError;
   multiple?: boolean;
   accept?: string;
@@ -18,7 +18,7 @@ type FormInputProps<TFieldValues extends FieldValues> = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-import { useWatch } from "react-hook-form";
+// import { useWatch } from "react-hook-form";
 import clsx from "clsx";
 
 import type {
@@ -26,7 +26,7 @@ import type {
   UseFormRegister,
   FieldValues,
   Path,
-  Control,
+  // Control,
 } from "react-hook-form";
 
 function FormRowInput<TFieldValues extends FieldValues>({
@@ -36,15 +36,16 @@ function FormRowInput<TFieldValues extends FieldValues>({
   register,
   error,
   disabled,
-  control,
+  // control,
   type = "text",
   multiple = false,
   accept,
   isVisible,
   togglePassword,
 }: FormInputProps<TFieldValues>) {
-  const value = useWatch({ name, control });
-  const isValid = !error && (type === "file" ? value?.length > 0 : value);
+  {
+    /* import type {Control} from "react-hook-form"; */
+  }
 
   // $ Manange the Password Visibility
   const isPassword = name === "password";
@@ -58,7 +59,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
         className={clsx(
           "text-sm py-3 px-2 peer w-full rounded-md outline-none placeholder-transparent text-gray-700 dark:text-gray-100/50",
           "border border-gray-300 dark:border-gray-700/50 placeholder:dark:text-white focus:border-rose-600 focus:dark:bg-gray-600",
-          isValid && "border-green-500",
+          // isValid && "border-green-500",
           error && "border-red-300"
         )}
         placeholder={placeholder}

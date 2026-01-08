@@ -35,16 +35,15 @@ export const changePasswordSchema = z
   });
 
 export const createJobSchema = z.object({
-  id: z.string().optional().default("string"),
-  createdAt: z.string().optional().default(""),
+  id: z.string().optional(), // used by the mobile accordion list
+  createdAt: z.string().optional(), // used by the mobile accordion list
   equipment: z.string().min(1, { message: "Please select equipment" }),
   store: z.string().min(1, { message: "Please select a store" }),
   type: z.string().min(1, { message: "Please select maintenance type" }),
   impact: z.string().min(1, { message: "Please select impact" }),
   priority: z.string().min(1, { message: "Please select a priority" }),
-  userName: z.string().optional().default(""),
   additional_notes: z.string().optional().default(""),
-  images: z.array(z.instanceof(File)).default([]),
+  images: z.array(z.instanceof(File)).default([]).optional(),
 });
 
 export const actionJobSchema = z.object({
@@ -83,8 +82,8 @@ export const actionJobSchema = z.object({
 //       model: "",
 //       images: [],
 export const assetSchema = z.object({
-  // id: z.string().optional(),
-  // createdAt: z.string().optional(),
+  id: z.string().optional(),
+  createdAt: z.string().optional(),
   description: z.string().min(1, {
     message: "Please enter a description",
   }),
@@ -122,3 +121,10 @@ export type CreateJobPayload = Omit<CreateJobFormValues, "images"> & {
     content_type: string;
   }[];
 };
+
+export type PresignedUrlResponse = {
+  filename: string;
+  url: string;
+  key: string;
+  content_type: string;
+}[];
