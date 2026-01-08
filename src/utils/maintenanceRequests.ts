@@ -165,17 +165,20 @@ export const useUpdateMaintenanceRequest = () => {
 };
 
 // $ DELETE
-export const useDeleteMaintenanceRequest = () => {
+export const useDeleteItem = (options: {
+  id: string;
+  endpoint: string;
+  queryKey: readonly unknown[];
+}) => {
   const queryClient = useQueryClient();
+  const { id, endpoint, queryKey } = options;
 
   return useMutation({
-    mutationFn: async (id: string) => {
-      await api.delete(`/maintenance-request/${id}`);
+    mutationFn: async (): Promise<void> => {
+      await api.delete(`${endpoint}/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: MAINTENANCE_REQUESTS_KEY,
-      });
+      queryClient.invalidateQueries({ queryKey });
     },
   });
 };

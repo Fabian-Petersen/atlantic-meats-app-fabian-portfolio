@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { CreateJobFormValues } from "@/schemas";
-import { DropdownMenuDialog } from "../modals/Example";
+import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -55,7 +55,7 @@ export const columns: ColumnDef<CreateJobFormValues>[] = [
     enableHiding: false,
     cell: ({ row }) => (
       <div className="text-right" onClick={(e) => e.stopPropagation()}>
-        <DropdownMenuDialog data={row.original} />
+        <DropdownMenuButtonDialog data={row.original} />
       </div>
     ),
   },

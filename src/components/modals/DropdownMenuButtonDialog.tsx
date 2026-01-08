@@ -1,4 +1,4 @@
-// $ This is an example to open a modal from a button using ShadCN Dropdown and Dialog components
+// $ This model is to open a modal from a button using ShadCN Dropdown and Dialog components
 
 import { MoreVertical } from "lucide-react";
 import { getMaintenanceTableMenuItems } from "@/data/TableMenuItems";
@@ -20,7 +20,7 @@ type DropdownMenuDialogProps = {
   data: CreateJobFormValues;
 };
 
-export function DropdownMenuDialog({ data }: DropdownMenuDialogProps) {
+export function DropdownMenuButtonDialog({ data }: DropdownMenuDialogProps) {
   const {
     setShowUpdateDialog,
     setShowActionDialog,
@@ -48,7 +48,7 @@ export function DropdownMenuDialog({ data }: DropdownMenuDialogProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="w-40 bg-gray-100 border-0 text-font"
+          className="w-40 bg-gray-100 border-0 text-font py-4 px-1"
           align="end"
         >
           {/* <DropdownMenuLabel className="text-sm">Action</DropdownMenuLabel> */}
@@ -60,6 +60,7 @@ export function DropdownMenuDialog({ data }: DropdownMenuDialogProps) {
                   key={item.id}
                   className="hover:cursor-pointer text-font flex justify-between"
                   onSelect={() => {
+                    console.log(`Selected action: ${item.action}`);
                     setData(data);
                     item.action(true);
                   }}

@@ -11,7 +11,7 @@ type Props = {
 
 export const AssetSingleItemImages = ({ imageUrls }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  // console.log("image_urls:", imageUrls);
+  console.log("image_urls:", imageUrls);
 
   const MAX_VISIBLE = 3;
 

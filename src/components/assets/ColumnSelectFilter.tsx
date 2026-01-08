@@ -19,6 +19,7 @@ export function ColumnSelectFilter({
       className="rounded-lg px-3 py-2 text-sm max-w-64 lg:w-36 focus:outline-none hover:cursor-pointer"
       value={(value ?? "") as string}
       onChange={(e) => onChange(e.target.value)}
+      aria-label={placeholder}
     >
       <option value="" className="hover:cursor-pointer">
         {placeholder}

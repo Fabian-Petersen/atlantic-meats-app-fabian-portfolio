@@ -1,19 +1,7 @@
-// src/components/MaintenanceRequestsTable.tsx
-import {
-  // type ColumnDef,
-  flexRender,
-  // getCoreRowModel,
-  // getFilteredRowModel,
-  // getSortedRowModel,
-  // useReactTable,
-  type Table,
-} from "@tanstack/react-table";
+import { flexRender, type Table } from "@tanstack/react-table";
 
 import { useNavigate } from "react-router-dom";
 import type { CreateJobFormValues } from "@/schemas";
-
-// import { columns } from "./columns";
-// import FilterContainer from "./FilterContainer";
 
 type Props = {
   table: Table<CreateJobFormValues>;
@@ -22,22 +10,6 @@ type Props = {
 
 export function MaintenanceRequestsTable({ table, className }: Props) {
   const navigate = useNavigate();
-
-  // const table = useReactTable({
-  //   data: data,
-  //   columns: columns,
-  //   state: {
-  //     sorting: [
-  //       {
-  //         id: "createdAt",
-  //         desc: true,
-  //       },
-  //     ],
-  //   },
-  //   getCoreRowModel: getCoreRowModel(),
-  //   getFilteredRowModel: getFilteredRowModel(),
-  //   getSortedRowModel: getSortedRowModel(),
-  // });
 
   return (
     <div className={`${className}dark:bg-[#1d2739] dark:text-gray-200`}>

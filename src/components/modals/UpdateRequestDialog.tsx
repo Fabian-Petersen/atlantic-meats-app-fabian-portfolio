@@ -15,7 +15,7 @@ function UpdateRequestDialog() {
   const { showUpdateDialog, setShowUpdateDialog } = useGlobalContext();
   return (
     <Dialog open={showUpdateDialog} onOpenChange={setShowUpdateDialog}>
-      <DialogContent className="sm:max-w-[625px] bg-white z-1000">
+      <DialogContent className="sm:max-w-[625px] bg-white z-3000">
         <DialogTitle className="py-4">
           <FormHeading
             className="font-normal"

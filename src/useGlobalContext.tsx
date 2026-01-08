@@ -1,5 +1,5 @@
 // use the react context hook to manage the state of navOpen (true or false) and setNavOpen to change the state
-import React from "react";
+
 import { createContext, useContext, useState } from "react";
 
 import type { Dispatch, SetStateAction } from "react";
@@ -38,20 +38,9 @@ export type T = {
   data: CreateJobFormValues | undefined;
   setData: Dispatch<SetStateAction<CreateJobFormValues | undefined>>;
   // Action Data
-  actionData: CreateJobFormValues | null;
+  actionData: CreateJobFormValues;
   setActionData: Dispatch<SetStateAction<CreateJobFormValues | null>>;
 };
-
-// const initialState: T = {
-//   navOpen: false,
-//   setNavOpen: () => {},
-//   theme: "light",
-//   setTheme: () => {},
-//   isDarkTheme: false,
-//   setIsDarkTheme: () => {},
-//   projectType: "all",
-//   setProjectType: () => {},
-// };
 
 // $ Step 1: Create the context
 // % The ThemeContext type takes in the ThemeContext type or null
@@ -85,9 +74,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   // $ State for the data to update/delete an item
   const [data, setData] = useState<CreateJobFormValues | undefined>(undefined);
-  const [actionData, setActionData] = useState<CreateJobFormValues | null>(
-    null
-  );
+  // const [actionData, setActionData] = useState<CreateJobFormValues | null>(
+  //   null
+  // );
 
   return (
     <AppContext.Provider
@@ -116,8 +105,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         // $ Data
         data,
         setData,
-        actionData,
-        setActionData,
+        // actionData,
+        // setActionData,
       }}
     >
       {children}
