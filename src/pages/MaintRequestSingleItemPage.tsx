@@ -1,35 +1,54 @@
 // $ This page renders the full details of a maintenance request information with the supporting pictures
 
 import { useParams } from "react-router-dom";
-import { useMaintenanceRequestById } from "../utils/maintenanceRequests";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
+import { useById } from "../utils/maintenanceRequests";
+import { type CreateJobFormValues } from "@/schemas";
+import { AssetSingleItemImages } from "@/components/assets/AssetSingleItemImages";
+import MaintenanceSingleItemInfo from "@/components/maintenance/MaintenanceSingleItemInfo";
+
+export type PresignedUrlResponse = {
+  key: string;
+  filename?: string;
+  url: string;
+};
+
+type WithImages = {
+  imageUrls?: PresignedUrlResponse[];
+};
 
 const MaintRequestSingleItemPage = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data: item, isLoading } = useMaintenanceRequestById(id || "");
-  // id "Testing from mobile: 4e9a8b44-f9e2-4fc0-ad8e-640fd23c7211"
-  // console.log(item);
+  const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
+
+  const { data: item, isPending } = useById<CreateJobFormValues & WithImages>({
+    id: id || "",
+    queryKey: MAINTENANCE_REQUESTS_KEY,
+    endpoint: "/maintenance-request",
+  });
 
   if (!id || !item) {
-    return (
-      <p className="h-full flex justify-center items-center dark:text-gray-200 text-font">
-        Cannot find what you are looking for
-      </p>
-    );
-  }
-
-  if (isLoading) {
     return <PageLoadingSpinner />;
   }
 
+  if (isPending) {
+    return <PageLoadingSpinner />;
+  }
+
+  const imageUrls = item.imageUrls;
+
+  // console.log("Item Data with Presigned URLS:", item);
   return (
-    <div className="dark:text-gray-100 p-4">
-      <h1>Maintenance Item {item.id}</h1>
-      <p>Store: {item.store}</p>
-      <p>Priority: {item.priority}</p>
-      {/* <p>Description: {item.description}</p> */}
-      {/* Render other fields as needed */}
+    <div className="p-4">
+      <div className="h-auto bg-white dark:bg-[#1d2739] border-gray-700/70 rounded-md grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800">
+        <div>
+          <AssetSingleItemImages imageUrls={imageUrls ?? []} />
+        </div>
+        <div>
+          <MaintenanceSingleItemInfo item={item} />
+        </div>
+      </div>
     </div>
   );
 };

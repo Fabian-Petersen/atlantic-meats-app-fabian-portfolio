@@ -1,33 +1,30 @@
-import type { AssetFormValues } from "@/schemas";
 import { useState } from "react";
 import { ChevronLeftCircle, ChevronRightCircle } from "lucide-react";
 import {} from "../../../public/images/20251124_150123.jpg";
+import type { PresignedUrlResponse } from "@/pages/MaintRequestSingleItemPage";
 
 import FullscreenImageModal from "../modals/FullscreenImageModal";
 
 type Props = {
-  item: AssetFormValues;
+  imageUrls: PresignedUrlResponse[];
 };
 
-export const AssetSingleItemImages = ({}: Props) => {
+export const AssetSingleItemImages = ({ imageUrls }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  //   const images = item.images; // string[] (urls)
-  const images = [
-    "/images/20251124_121905.jpg",
-    "/images/20251124_121924.jpg",
-    "/images/20251124_121928.jpg",
-    "/images/20251124_150109.jpg",
-    "/images/20251124_150123.jpg",
-  ];
+  // console.log("image_urls:", imageUrls);
+
   const MAX_VISIBLE = 3;
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [startIndex, setStartIndex] = useState(0);
 
-  const visibleImages = images.slice(startIndex, startIndex + MAX_VISIBLE);
+  const visibleImages = (imageUrls ?? []).slice(
+    startIndex,
+    startIndex + MAX_VISIBLE
+  );
 
   const canScrollLeft = startIndex > 0;
-  const canScrollRight = startIndex + MAX_VISIBLE < images.length;
+  const canScrollRight = startIndex + MAX_VISIBLE < imageUrls.length;
 
   return (
     <div className="bg-white p-2 grid grid-rows-[25rem_8rem] md:grid-rows-[30rem_12rem] gap-2 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full">
@@ -40,14 +37,14 @@ export const AssetSingleItemImages = ({}: Props) => {
         }}
       >
         <img
-          src={images[activeIndex]}
+          src={imageUrls[activeIndex]?.url}
           className="object-cover h-full w-full"
-          alt="Active"
+          alt={imageUrls[activeIndex]?.filename}
         />
       </div>
       {isOpen && (
         <FullscreenImageModal
-          images={images}
+          images={imageUrls.map((img) => img.url)}
           setIsOpen={setIsOpen}
           activeIndex={activeIndex}
         />
@@ -58,7 +55,10 @@ export const AssetSingleItemImages = ({}: Props) => {
         {/* Left Scroll */}
         {canScrollLeft && (
           <button
+            type="button"
             onClick={() => setStartIndex((prev) => prev - 1)}
+            aria-label="Scroll left"
+            title="Scroll left"
             className="absolute px-2 hover:cursor-pointer top-1/2 left-[2%] -translate-y-1/2"
           >
             <ChevronLeftCircle
@@ -74,7 +74,7 @@ export const AssetSingleItemImages = ({}: Props) => {
             const actualIndex = startIndex + index;
             return (
               <div
-                key={img}
+                key={index}
                 onClick={() => {
                   console.log("Active Index Thumbnail Image:", activeIndex);
                   setActiveIndex(actualIndex);
@@ -84,9 +84,9 @@ export const AssetSingleItemImages = ({}: Props) => {
                 } ${index === 2 ? "group/thumb" : ""}`}
               >
                 <img
-                  src={img}
+                  src={img.url}
                   className="h-full w-full object-cover rounded-md"
-                  alt=""
+                  alt={img.filename}
                 />
               </div>
             );
@@ -96,7 +96,10 @@ export const AssetSingleItemImages = ({}: Props) => {
         {/* Right Scroll */}
         {canScrollRight && (
           <button
+            type="button"
             onClick={() => setStartIndex((prev) => prev + 1)}
+            aria-label="Scroll right"
+            title="Scroll right"
             className="absolute top-1/2 right-[2%] -translate-y-1/2 px-2
                  opacity-0 pointer-events-none hover:cursor-pointer
                  transition-opacity

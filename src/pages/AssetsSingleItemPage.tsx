@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 // import { useMaintenanceRequestById } from "../utils/maintenanceRequests";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "@/utils/maintenanceRequests";
-import { AssetSingleItemImages } from "@/components/assets/AssetSingleItemImages";
+// import { AssetSingleItemImages } from "@/components/assets/AssetSingleItemImages";
 
 import type { AssetFormValues } from "@/schemas";
 
@@ -36,9 +36,7 @@ const AssetsSingleItemPage = () => {
   return (
     <div className="p-4">
       <div className="h-auto bg-white dark:bg-[#1d2739] border-gray-700/70 rounded-md grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800">
-        <div>
-          <AssetSingleItemImages item={item} />
-        </div>
+        <div>{/* <AssetSingleItemImages item={item} /> */}</div>
         <div>
           <AssetSingleItemInfo item={item} />
         </div>

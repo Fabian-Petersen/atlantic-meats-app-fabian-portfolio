@@ -5,6 +5,7 @@ import type {
   CreateAssetPayload,
   CreateJobFormValues,
   CreateJobPayload,
+  PresignedUrlResponse,
 } from "@/schemas";
 // import { useNavigate } from "react-router-dom";
 
@@ -55,6 +56,10 @@ export const useMaintenanceRequestById = (id: string) => {
   });
 };
 
+type WithImages = {
+  presignedURLs?: PresignedUrlResponse[];
+};
+
 // $ Generic: GET by ID
 export const useById = <T>(options: {
   id: string;
@@ -63,10 +68,10 @@ export const useById = <T>(options: {
 }) => {
   const { id, queryKey, endpoint } = options;
 
-  return useQuery<T>({
+  return useQuery<T & WithImages>({
     queryKey: [...queryKey, id],
     queryFn: async () => {
-      const { data } = await api.get<T>(`${endpoint}/${id}`);
+      const { data } = await api.get<T & WithImages>(`${endpoint}/${id}`);
       return data;
     },
     enabled: !!id,

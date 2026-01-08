@@ -123,7 +123,7 @@ export type CreateJobPayload = Omit<CreateJobFormValues, "images"> & {
 };
 
 export type PresignedUrlResponse = {
-  filename: string;
+  filename?: string;
   url: string;
   key: string;
   content_type: string;
