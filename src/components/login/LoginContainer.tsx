@@ -29,13 +29,14 @@ export default function LoginContainer() {
   // $ Hook to request the user data from Cognito
 
   /* -------- LOGIN -------- */
-  const { data } = useUserAttributes();
+  const { refetch } = useUserAttributes();
 
   const handleLogin = async (loginData: LoginFormValues) => {
     setLoading(true);
     if (isAuthenticated) {
       navigate("/dashboard");
     }
+
     try {
       await signOut(); // ensure no user is logged in
       const res = await signIn({
@@ -43,18 +44,20 @@ export default function LoginContainer() {
         password: loginData.password,
       });
       await refreshAuth();
-      toast.success(`Welcome ${capitalize(data?.name)}`, {
-        className: "rounded-xl",
-      });
+
+      const userData = await refetch(); // wait for latest attributes
+      if (userData.data?.name) {
+        toast.success(`Welcome ${capitalize(userData.data.name)}`);
+      }
+
       navigate("/dashboard");
+
       if (
         res.nextStep.signInStep === "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED"
       ) {
         setStep("NEW_PASSWORD");
         return;
       }
-
-      // console.log("Authenticated");
     } finally {
       setLoading(false);
     }
@@ -63,7 +66,7 @@ export default function LoginContainer() {
   /* ----- NEW PASSWORD ----- */
   const handleChangePassword = async (data: ChangePasswordFormValues) => {
     setLoading(true);
-    // console.log("Changing password to:", data.newPassword);
+
     try {
       await confirmSignIn({
         challengeResponse: data.newPassword,
@@ -71,7 +74,6 @@ export default function LoginContainer() {
       await signOut(); // clears the auto-login session
       navigate("/login");
 
-      // setUser(null);
       setStep("LOGIN");
       alert("Password updated. Please sign in.");
     } finally {

@@ -19,6 +19,11 @@
   --all-pages-spacing: 1.5rem;
   --all-pages-spacing-small: 1rem;
   --tw-enter-translate-x: -5%;
+
+  --chart-text: #364153;
+  --chevron: #fcb53b;
+  --size-5: 1.5rem;
+  --font-size: 1rem;
 }
 
 /* $ ======================== Dark Mode Styles as per user preference ====================== */
@@ -31,11 +36,6 @@ html {
   scroll-behavior: smooth;
 }
 
-:root {
-  --chart-text: #364153;
-  --chevron: #fcb53b;
-}
-
 .dark {
   --chart-text: #f9fafb;
   --chevron: #fcb53b;
@@ -44,7 +44,22 @@ html {
 *,
 *::before,
 *::after {
-  /* margin: 0; */
-  /* padding: 0; */
   box-sizing: border-box;
+}
+
+/* Manage the toast styles */
+.toaster [data-title] {
+  font-size: var(--font-size);
+  font-weight: 400;
+}
+
+.toaster [data-description] {
+  font-size: calc(var(--font-size) * 0.85);
+  opacity: 0.9;
+}
+
+.toaster [data-icon] svg {
+  width: calc(var(--font-size) * 1.5);
+  height: calc(var(--font-size) * 1.5);
+  padding-right: 0.25rem;
 }
