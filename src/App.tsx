@@ -23,47 +23,44 @@ import MaintRequestActionItemPage from "./pages/MaintRequestActionItemPage";
 
 function App() {
   return (
-    <>
-      <Routes>
-        {/* <Route element={<PublicLayout />}>
+    <Routes>
+      {/* <Route element={<PublicLayout />}>
           <Route path="/" element={<Login />} />
         </Route> */}
-        {/* Login Route Only: Authenticated users must logout to direct to logout */}
-        <Route element={<PublicOnlyRoute />}>
-          <Route path="/" element={<Login />} />
-        </Route>
+      {/* Login Route Only: Authenticated users must logout to direct to logout */}
+      <Route element={<PublicOnlyRoute />}>
+        <Route path="/" element={<Login />} />
+      </Route>
 
-        {/* Protected: Authenticated Users */}
-        <Route element={<ProtectedRoute />}>
-          <Route element={<AppLayout />}>
-            <Route path="/dashboard" element={<DashboardPage />} />
-            {/* // $ ======================= Maintenance Routes ======================= */}
-            <Route
-              path="/maintenance-request"
-              element={<MaintenanceRequestPage />}
-            />
-            <Route
-              path="/maintenance-list"
-              element={<MaintenanceRequestOverviewPage />}
-            />
-            <Route
-              path="/maintenance-request/:id"
-              element={<MaintRequestSingleItemPage />}
-            />
-            <Route
-              path="/maintenance-action/:id"
-              element={<MaintRequestActionItemPage />}
-            />
-            {/* // $ ======================= Asset Routes ======================= */}
-            <Route path="/asset" element={<AssetsOverviewPage />} />
-            <Route path="/create-asset" element={<CreateAssetPage />} />
-            <Route path="/asset/:id" element={<AssetsSingleItemPage />} />
-            {/* // $ ======================= Settings Routes ======================= */}
-            <Route path="/user-profile" element={<UserProfilePage />} />
-          </Route>
+      {/* Protected: Authenticated Users */}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<AppLayout />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+          {/* // $ ======================= Maintenance Routes ======================= */}          <Route
+            path="/maintenance-request"
+            element={<MaintenanceRequestPage />}
+          />
+          <Route
+            path="/maintenance-list"
+            element={<MaintenanceRequestOverviewPage />}
+          />
+          <Route
+            path="/maintenance-request/:id"
+            element={<MaintRequestSingleItemPage />}
+          />
+          <Route
+            path="/maintenance-action/:id"
+            element={<MaintRequestActionItemPage />}
+          />
+          {/* // $ ======================= Asset Routes ======================= */}
+          <Route path="/asset" element={<AssetsOverviewPage />} />
+          <Route path="/create-asset" element={<CreateAssetPage />} />
+          <Route path="/asset/:id" element={<AssetsSingleItemPage />} />
+          {/* // $ ======================= Settings Routes ======================= */}
+          <Route path="/user-profile" element={<UserProfilePage />} />
         </Route>
-      </Routes>
-    </>
+      </Route>
+    </Routes>
   );
 }
 

@@ -11,7 +11,6 @@ type Props = {
 
 export const AssetSingleItemImages = ({ imageUrls }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  console.log("image_urls:", imageUrls);
 
   const MAX_VISIBLE = 3;
 
@@ -29,10 +28,11 @@ export const AssetSingleItemImages = ({ imageUrls }: Props) => {
   return (
     <div className="bg-white p-2 grid grid-rows-[25rem_8rem] md:grid-rows-[30rem_12rem] gap-2 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full">
       {/* Main Image */}
-      <div
+      <button
+        type="button"
+        aria-label="open large image view"
         className="rounded-md h-full w-full flex items-center justify-center overflow-hidden hover:cursor-pointer"
         onClick={() => {
-          console.log("Active Index Main Image:", activeIndex);
           setIsOpen(true);
         }}
       >
@@ -41,7 +41,7 @@ export const AssetSingleItemImages = ({ imageUrls }: Props) => {
           className="object-cover h-full w-full"
           alt={imageUrls[activeIndex]?.filename}
         />
-      </div>
+      </button>
       {isOpen && (
         <FullscreenImageModal
           images={imageUrls.map((img) => img.url)}
@@ -73,10 +73,11 @@ export const AssetSingleItemImages = ({ imageUrls }: Props) => {
           {visibleImages.map((img, index) => {
             const actualIndex = startIndex + index;
             return (
-              <div
+              <button
+                type="button"
+                aria-label="button to set the image in large view"
                 key={index}
                 onClick={() => {
-                  console.log("Active Index Thumbnail Image:", activeIndex);
                   setActiveIndex(actualIndex);
                 }}
                 className={`cursor-pointer bg-gray-200 rounded-md h-full w-full overflow-hidden ${
@@ -88,7 +89,7 @@ export const AssetSingleItemImages = ({ imageUrls }: Props) => {
                   className="h-full w-full object-cover rounded-md"
                   alt={img.filename}
                 />
-              </div>
+              </button>
             );
           })}
         </div>

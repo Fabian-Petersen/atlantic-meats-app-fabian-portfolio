@@ -47,29 +47,49 @@ export const createJobSchema = z.object({
 });
 
 export const actionJobSchema = z.object({
-  description: z.string().min(1, {
-    message: "Please enter a description",
-  }),
-  store: z.string().min(1, { message: "Please select a store" }),
-  start_time: z.string().min(1, { message: "Please select maintenance type" }),
-  end_time: z.string().min(1, { message: "Please select impact" }),
-  km_start: z.string().min(1, { message: "Please select a priority" }),
-  km_end: z.string().min(1, { message: "Please select a status" }),
-  work_completed: z.string().min(1, { message: "Please select a type" }),
-  materials: z.string().min(1, { message: "Please select equipment" }),
+  start_time: z
+    .string()
+    .min(1, "Start time required")
+    .refine((val) => !Number.isNaN(Date.parse(val)), "Invalid date/time"),
+  end_time: z
+    .string()
+    .min(1, "End time required")
+    .refine((val) => !Number.isNaN(Date.parse(val)), "Invalid date/time"),
+  start_km: z
+    .string()
+    .min(1, { message: "Start km is required" })
+    .refine(
+      (val) => {
+        const num = Number(val);
+        return Number.isFinite(num) && num > 0;
+      },
+      { message: "Start km must be a greater than zero" }
+    ),
+  end_km: z
+    .string()
+    .min(1, { message: "End km is required" })
+    .refine(
+      (val) => {
+        const num = Number(val);
+        return Number.isFinite(num) && num > 0;
+      },
+      { message: "End km must be a greater than zero" }
+    ),
+  work_completed: z.string().min(1, { message: "Please enter work completed" }),
+  materials: z.string().optional(),
   materials_cost: z.string().min(1, { message: "Please select equipment" }),
   status: z.string().min(1, { message: "" }), // "pending", "in progress", "complete"
   root_cause: z.enum(ROOT_CAUSES, {
     message: "please select a root cause for breakdown",
-  }), // "wear & tear", "malicious damage", "negligence","asset fatigue", ""
+  }),
   additional_notes: z.string().optional(),
-  images: z.array(z.string()).default([]),
+  // images: z.array(z.instanceof(File)).default([]).optional(),
 
   //$ for the backend
-  id: z.string(),
-  request_id: z.string(),
-  createdAt: z.string().optional(),
-  userName: z.string().optional(),
+  // id: z.string(),
+  // request_id: z.string(),
+  // createdAt: z.string().optional(),
+  // userName: z.string().optional(),
 });
 //  description: "",
 //       equipment: "",
@@ -81,6 +101,7 @@ export const actionJobSchema = z.object({
 //       manufacturer: "",
 //       model: "",
 //       images: [],
+
 export const assetSchema = z.object({
   id: z.string().optional(),
   createdAt: z.string().optional(),

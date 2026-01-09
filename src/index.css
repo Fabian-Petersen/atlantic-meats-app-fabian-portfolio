@@ -49,17 +49,17 @@ html {
 
 /* Manage the toast styles */
 .toaster [data-title] {
-  font-size: var(--font-size);
+  font-size: var(--font-size) !important;
   font-weight: 400;
 }
 
 .toaster [data-description] {
-  font-size: calc(var(--font-size) * 0.85);
+  font-size: calc(var(--font-size) * 0.85) !important;
   opacity: 0.9;
 }
 
 .toaster [data-icon] svg {
-  width: calc(var(--font-size) * 1.5);
-  height: calc(var(--font-size) * 1.5);
+  width: calc(var(--font-size) * 1.5) !important;
+  height: calc(var(--font-size) * 1.5) !important;
   padding-right: 0.25rem;
 }

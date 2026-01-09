@@ -53,7 +53,7 @@ const TextAreaInput = <T extends FieldValues>({
         <label
           htmlFor={String(name)}
           className={clsx(
-            "absolute text-sm -top-5 left-0 px-2 transition-all duration-300",
+            "absolute text-xs -top-5 left-0 px-2 transition-all duration-300",
             "text-gray-700 dark:text-gray-100/50 tracking-wider",
             "peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-600",
             "peer-focus:-top-5 peer-focus:text-sm peer-focus:text-gray-600",

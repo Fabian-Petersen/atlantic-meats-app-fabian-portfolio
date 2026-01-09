@@ -174,26 +174,26 @@ const MaintenanceRequestForm = () => {
           label="Additional Notes"
           className="lg:col-span-2"
         />
-      </div>
-      <div className="flex gap-2 w-full justify-end">
-        <Button
-          type="button"
-          onClick={() => {
-            navigate("/maintenance-list");
-          }}
-          variant="cancel"
-          size="lg"
-        >
-          Cancel
-        </Button>
-        <Button
-          disabled={isSubmitting}
-          type="submit"
-          variant="submit"
-          size="lg"
-        >
-          {isSubmitting ? "Sending..." : "Submit"}
-        </Button>
+        <div className="flex gap-2 w-full justify-end">
+          <Button
+            type="button"
+            onClick={() => {
+              navigate("/maintenance-list");
+            }}
+            variant="cancel"
+            size="lg"
+          >
+            Cancel
+          </Button>
+          <Button
+            disabled={isSubmitting}
+            type="submit"
+            variant="submit"
+            size="lg"
+          >
+            {isSubmitting ? "Sending..." : "Submit"}
+          </Button>
+        </div>
       </div>
     </form>
   );
