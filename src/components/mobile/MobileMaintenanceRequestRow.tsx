@@ -18,7 +18,7 @@ export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
       className="hover:cursor-pointer dark:border rounded-md p-3 mb-2 bg-gray-100 dark:bg-bgdark"
       onClick={onToggle}
     >
-      <div className="flex justify-between items-start">
+      <div className="flex justify-between items-start dark:text-gray-200">
         <p className="font-medium">{row.original.store}</p>
         <ChevronDown
           className={`transition-transform ${isOpen ? "rotate-180" : ""}`}

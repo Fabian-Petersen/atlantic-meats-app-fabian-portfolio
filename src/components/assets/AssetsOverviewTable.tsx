@@ -1,39 +1,15 @@
-// src/components/MaintenanceRequestsTable.tsx
-import {
-  // type ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { flexRender, type Table } from "@tanstack/react-table";
+
 import { useNavigate } from "react-router-dom";
 import type { AssetFormValues } from "@/schemas";
-// import { ColumnSelectFilter } from "./ColumnSelectFilter";
-import { columns } from "./columns";
 
 type Props = {
-  data: AssetFormValues[];
+  table: Table<AssetFormValues>;
+  className?: string;
 };
 
-export function AssetsOverviewTable({ data }: Props) {
+export function AssetsOverviewTable({ table, className }: Props) {
   const navigate = useNavigate();
-
-  const table = useReactTable({
-    data: data,
-    columns: columns,
-    state: {
-      sorting: [
-        {
-          id: "createdAt",
-          desc: true,
-        },
-      ],
-    },
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-  });
 
   // const uniqueValues = (key: keyof AssetFormValues) =>
   //   [...new Set(data.map((d) => d[key]))].map((v) => ({
@@ -42,7 +18,9 @@ export function AssetsOverviewTable({ data }: Props) {
   //   }));
 
   return (
-    <div className="flex flex-col gap-2 dark:bg-[#1d2739] dark:text-gray-200">
+    <div
+      className={`flex flex-col gap-2 dark:bg-[#1d2739] dark:text-gray-200 ${className}`}
+    >
       {/* Filters */}
       {/* <FilterContainer data={data} /> */}
       {/* Table */}

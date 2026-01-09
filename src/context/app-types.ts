@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { CreateJobFormValues } from "../schemas";
+import type { AssetFormValues, CreateJobFormValues } from "../schemas";
 
 export type AppContextType = {
   //$ Theme State
@@ -27,4 +27,7 @@ export type AppContextType = {
   // $ Data
   data: CreateJobFormValues | undefined;
   setData: Dispatch<SetStateAction<CreateJobFormValues | undefined>>;
+
+  assetsData: AssetFormValues | undefined;
+  setAssetsData: Dispatch<SetStateAction<AssetFormValues | undefined>>;
 };

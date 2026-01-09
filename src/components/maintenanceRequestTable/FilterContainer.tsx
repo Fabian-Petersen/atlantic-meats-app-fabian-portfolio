@@ -1,77 +1,67 @@
-// import { useState } from "react";
-// import { ColumnFilterItem } from "./ColumnFilterItem";
-// import type { CreateJobFormValues } from "@/schemas";
-// import { columns } from "./columns";
-// import {
-//   getCoreRowModel,
-//   getFilteredRowModel,
-//   getSortedRowModel,
-//   useReactTable,
-// } from "@tanstack/react-table";
+import { useState } from "react";
+import { ColumnFilterItem } from "./ColumnFilterItem";
+import type { AssetFormValues } from "@/schemas";
+import { type Table } from "@tanstack/react-table";
 
-// type Props = {
-//   data: CreateJobFormValues[];
-// };
-// function FilterContainer({ data }: Props) {
-//   const [dateValue, setDateValue] = useState("");
+type Props = {
+  table: Table<AssetFormValues>;
+};
+function FilterContainer({ table }: Props) {
+  const [dateValue, setDateValue] = useState("");
 
-//   const table = useReactTable({
-//     data: data,
-//     columns: columns,
-//     state: {
-//       sorting: [
-//         {
-//           id: "createdAt",
-//           desc: true,
-//         },
-//       ],
-//     },
-//     getCoreRowModel: getCoreRowModel(),
-//     getFilteredRowModel: getFilteredRowModel(),
-//     getSortedRowModel: getSortedRowModel(),
-//   });
+  const uniqueValues = (key: keyof AssetFormValues) => {
+    const rows = table.getCoreRowModel().rows;
 
-//   const uniqueValues = (key: keyof CreateJobFormValues) =>
-//     [...new Set(data.map((d) => d[key]))].map((v) => ({
-//       label: String(v),
-//       value: String(v),
-//     }));
+    return Array.from(
+      new Set(
+        rows
+          .map((row) => row.original[key])
+          .filter((v): v is string => typeof v === "string")
+      )
+    ).map((v) => ({
+      label: v,
+      value: v,
+    }));
+  };
 
-//   return (
-//     <div className="flex w-full gap-4 lg:gap-8 py-1 border border-gray-200 rounded-lg">
-//       <ColumnFilterItem
-//         placeholder="All Stores"
-//         value={table.getColumn("store")?.getFilterValue()}
-//         onChange={(v) => table.getColumn("store")?.setFilterValue(v)}
-//         options={uniqueValues("store")}
-//       />
+  return (
+    <div className="flex flex-col md:flex-row w-full gap-4 lg:gap-8 py-1 md:border md:border-gray-200 md:rounded-lg">
+      <ColumnFilterItem
+        placeholder="All Locations"
+        value={(table.getColumn("location")?.getFilterValue() as string) ?? ""}
+        onChange={(v) => table.getColumn("location")?.setFilterValue(v)}
+        options={uniqueValues("location")}
+      />
 
-//       <ColumnFilterItem
-//         placeholder="All Priorities"
-//         value={table.getColumn("priority")?.getFilterValue()}
-//         onChange={(v) => table.getColumn("priority")?.setFilterValue(v)}
-//         options={uniqueValues("priority")}
-//       />
-//       {/* // ! todo Hide the placeholder "yyyy/mm/dd" with "date"*/}
-//       <div className="relative">
-//         <input
-//           type="date"
-//           value={dateValue}
-//           className="px-3 py-2 text-sm w-fit hover:cursor-pointer text-transparent"
-//           onChange={(e) => {
-//             setDateValue(e.target.value);
-//             table.getColumn("createdAt")?.setFilterValue(e.target.value);
-//           }}
-//         />
+      <ColumnFilterItem
+        placeholder="All Equipment"
+        value={
+          (table.getColumn("description")?.getFilterValue() as string) ?? ""
+        }
+        onChange={(v) => table.getColumn("description")?.setFilterValue(v)}
+        options={uniqueValues("description")}
+      />
+      {/* // ! todo Hide the placeholder "yyyy/mm/dd" with "date"*/}
+      <div className="relative">
+        <input
+          aria-label="date filter"
+          type="date"
+          value={dateValue}
+          className="px-3 py-2 text-sm w-fit hover:cursor-pointer text-transparent"
+          onChange={(e) => {
+            setDateValue(e.target.value);
+            table.getColumn("createdAt")?.setFilterValue(e.target.value);
+          }}
+        />
 
-//         {!dateValue && (
-//           <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
-//             Date
-//           </span>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
+        {!dateValue && (
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
+            Date
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
 
-// export default FilterContainer;
+export default FilterContainer;
