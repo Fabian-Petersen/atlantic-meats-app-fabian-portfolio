@@ -2,7 +2,7 @@ import type { CreateJobFormValues } from "@/schemas";
 import { ChevronDown } from "lucide-react";
 import type { Row } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
-import { useGlobalContext } from "@/useGlobalContext";
+import useGlobalContext from "@/context/useGlobalContext";
 
 type Props = {
   row: Row<CreateJobFormValues>;
@@ -12,7 +12,7 @@ type Props = {
 
 export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
   const navigate = useNavigate();
-  const { setActionData } = useGlobalContext();
+  const { setData } = useGlobalContext();
   return (
     <div
       className="hover:cursor-pointer dark:border rounded-md p-3 mb-2 bg-gray-100 dark:bg-bgdark"
@@ -43,7 +43,7 @@ export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
               e.stopPropagation();
               console.log(row.original.id);
               navigate(`/maintenance-action/${row.original.id}`);
-              setActionData(row.original);
+              setData(row.original);
               //   console.log(actionData);
             }}
           >

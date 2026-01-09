@@ -1,4 +1,4 @@
 import { createContext } from "react";
-import type { T } from "./app-types";
+import type { AppContextType } from "./app-types";
 
-export const AppContext = createContext<T | undefined>(undefined);
+export const AppContext = createContext<AppContextType | null>(null);

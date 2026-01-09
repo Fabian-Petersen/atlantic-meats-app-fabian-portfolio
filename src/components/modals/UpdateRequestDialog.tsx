@@ -8,7 +8,7 @@ import {
 
 import MaintenanceUpdateForm from "../maintenance/MaintenanceUpdateForm";
 
-import { useGlobalContext } from "@/useGlobalContext";
+import useGlobalContext from "@/context/useGlobalContext";
 import FormHeading from "../customComponents/FormHeading";
 
 function UpdateRequestDialog() {

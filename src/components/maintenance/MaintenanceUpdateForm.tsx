@@ -11,7 +11,7 @@ import FormRowSelect from "../customComponents/FormRowSelect";
 import FileInput from "../customComponents/FileInput";
 import { Button } from "../ui/button";
 
-import { useGlobalContext } from "@/useGlobalContext";
+import useGlobalContext from "@/context/useGlobalContext";
 
 // $ Import schemas
 import type { CreateJobFormValues } from "../../schemas/index";

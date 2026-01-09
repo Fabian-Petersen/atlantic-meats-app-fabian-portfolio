@@ -9,7 +9,7 @@ import {
 
 import SidebarSection from "./SidebarSection";
 
-import { useGlobalContext } from "../../useGlobalContext";
+import useGlobalContext from "../../context/useGlobalContext";
 
 const Sidebar = () => {
   const { isOpen } = useGlobalContext();

@@ -3,7 +3,7 @@
 // $ The icons for the theme toggle are imported from the component ThemeToggleIcon.
 
 import useSetTheme from "@/customHooks/useSetDarkTheme";
-import { useGlobalContext } from "@/useGlobalContext";
+import useGlobalContext from "@/context/useGlobalContext";
 import { Moon, Sun } from "lucide-react";
 import Button from "@/components/features/Button";
 

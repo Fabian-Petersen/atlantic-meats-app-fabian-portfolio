@@ -1,6 +1,6 @@
 // $ This hook manages the logic to set the theme by toggling between dark and light mode.
 import { useEffect } from "react";
-import { useGlobalContext } from "@/useGlobalContext";
+import useGlobalContext from "@/context/useGlobalContext";
 
 const useSetDarkTheme = () => {
   const { isDarkTheme, setIsDarkTheme, setTheme } = useGlobalContext()!;

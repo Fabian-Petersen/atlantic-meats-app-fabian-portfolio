@@ -1,4 +1,4 @@
-import { useGlobalContext } from "@/useGlobalContext";
+import useGlobalContext from "@/context/useGlobalContext";
 import { FiMenu } from "react-icons/fi";
 
 type Props = {
@@ -9,8 +9,8 @@ const NavbarMenuButton = ({ className }: Props) => {
   const { setIsOpen, isOpen } = useGlobalContext();
   return (
     <button
+      aria-label="Open sidebar"
       onClick={() => {
-        // console.log(`menu button clicked:${isOpen}`);
         setIsOpen(!isOpen);
       }}
       className={`${className} bg-menu-btn/40 p-2 items-center justify-center rounded-md flex hover:cursor-pointer text-gray-800 lg:invisible

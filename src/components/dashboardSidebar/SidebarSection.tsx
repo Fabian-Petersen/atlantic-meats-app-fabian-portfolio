@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useGlobalContext } from "@/useGlobalContext";
+import useGlobalContext from "@/context/useGlobalContext";
 
 // $ Components
 import SidebarNavItem from "./SidebarNavItem";

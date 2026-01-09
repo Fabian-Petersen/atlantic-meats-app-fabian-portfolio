@@ -2,7 +2,7 @@
 
 import { MoreVertical } from "lucide-react";
 import { getMaintenanceTableMenuItems } from "@/data/TableMenuItems";
-import { useGlobalContext } from "@/useGlobalContext";
+import useGlobalContext from "@/context/useGlobalContext";
 
 import { Button } from "@/components/ui/button";
 import {

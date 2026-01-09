@@ -1,13 +1,10 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { CreateJobFormValues } from "../schemas";
 
-export type Theme = "light" | "dark";
-
-export type T = {
-  navOpen: boolean;
-  setNavOpen: Dispatch<SetStateAction<boolean>>;
-  // theme: Theme;
-  // setTheme: Dispatch<SetStateAction<Theme>>;
+export type AppContextType = {
+  //$ Theme State
+  theme: "light" | "dark";
+  setTheme: Dispatch<SetStateAction<"light" | "dark">>;
   isDarkTheme: boolean;
   setIsDarkTheme: Dispatch<SetStateAction<boolean>>;
 
@@ -26,10 +23,8 @@ export type T = {
   setShowActionDialog: Dispatch<SetStateAction<boolean>>;
   showDeleteDialog: boolean;
   setShowDeleteDialog: Dispatch<SetStateAction<boolean>>;
+
   // $ Data
   data: CreateJobFormValues | undefined;
   setData: Dispatch<SetStateAction<CreateJobFormValues | undefined>>;
-  // Action Data
-  // actionData: CreateJobFormValues;
-  // setActionData: Dispatch<SetStateAction<CreateJobFormValues | null>>;
 };

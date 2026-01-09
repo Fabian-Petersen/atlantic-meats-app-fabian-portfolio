@@ -1,34 +1,33 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { AppContext } from "./app-context";
-// export type Theme = "light" | "dark";
 import type { CreateJobFormValues } from "../schemas";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
-  // $ Step 3: Create the state and set the initial state value
-  // ? The navOpen state toggles the navbar on and off on mobile devices
-  const [navOpen, setNavOpen] = useState<boolean>(false);
+  // $ [Step 3]: Create the state and set the initial state value
 
+  // $ State for the theme mode
   // ? The isDarkTheme is used to set the theme in the 'useSetDarkTheme' hook.
   const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
-  // $ Set state for the sidebar
+  // $ State for the sidebar behavior
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isActive, setIsActive] = useState<boolean>(false);
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
   // $ State for the dialogs (modals)
-  const [showUpdateDialog, setShowUpdateDialog] = useState<boolean>(false); // update maintenance request modal
+  const [showUpdateDialog, setShowUpdateDialog] = useState<boolean>(false);
   const [showActionDialog, setShowActionDialog] = useState<boolean>(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false); // Delete confirmation dialog
 
   // $ State for the data to update/delete an item
-  const [data, setData] = useState<CreateJobFormValues | undefined>(undefined);
+  const [data, setData] = useState<CreateJobFormValues | undefined>(undefined); // Stet the data in state for maintenance request to update/delete
 
   return (
     <AppContext.Provider
       value={{
-        navOpen,
-        setNavOpen,
+        theme,
+        setTheme,
         isDarkTheme,
         setIsDarkTheme,
         isOpen,
@@ -50,14 +49,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
     </AppContext.Provider>
   );
-};
-
-export const useGlobalContext = () => {
-  const context = useContext(AppContext);
-  if (!context) {
-    throw new Error("useGlobalContext must be used within AppProvider");
-  }
-  return context;
 };
 
 export default AppProvider;

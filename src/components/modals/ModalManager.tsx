@@ -1,4 +1,4 @@
-import { useGlobalContext } from "@/useGlobalContext";
+import useGlobalContext from "@/context/useGlobalContext";
 import UpdateRequestDialog from "./UpdateRequestDialog";
 import DeleteItemModal from "./DeleteItemModal";
 
