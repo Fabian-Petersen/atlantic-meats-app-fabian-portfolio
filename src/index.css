@@ -41,6 +41,24 @@ html {
   --chevron: #fcb53b;
 }
 
+.resizer {
+  position: "absolute";
+  opacity: 0;
+  top: 0;
+  right: 0;
+  height: "100%";
+  width: "5px";
+  background-color: "#27bbff";
+  cursor: "col-resize";
+  border-radius: "6px";
+}
+
+.isResizing {
+  border: "3px solid rgb(0,0,255)";
+  opacity: 1;
+  /* *:hover: cursor-pointer; */
+}
+
 *,
 *::before,
 *::after {

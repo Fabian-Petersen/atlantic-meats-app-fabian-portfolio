@@ -9,8 +9,6 @@ import { MobileAssetsOverviewTable } from "@/components/mobile/MolbileAssetsOver
 import FilterContainer from "@/components/maintenanceRequestTable/FilterContainer";
 
 import {
-  // type ColumnDef,
-  // flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
@@ -25,11 +23,20 @@ const AssetsOverviewPage = () => {
   const table = useReactTable({
     data: data ?? [],
     columns: columns,
+    columnResizeMode: "onChange",
+    // initialState: {
+    //   columnFilters: [
+    //     {
+    //       id: "name",
+    //       value: "John", // filter the name column by 'John' by default
+    //     },
+    //   ],
+    // },
     state: {
       sorting: [
         {
           id: "createdAt",
-          desc: true,
+          desc: false,
         },
       ],
     },
@@ -40,6 +47,8 @@ const AssetsOverviewPage = () => {
 
   if (isLoading) return <PageLoadingSpinner />;
   if (isError) return <p>Error retrieving asset data...</p>;
+
+  // console.log("Asset Table Filter State:", table.getState().columnFilters); // Check if the filters are in runaway state
 
   return (
     <div className="flex w-full p-4 h-auto">

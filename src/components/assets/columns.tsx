@@ -12,19 +12,22 @@ export const columns: ColumnDef<AssetFormValues>[] = [
   {
     accessorKey: "createdAt",
     header: "Date Created",
-    cell: ({ getValue }) =>
-      new Date(getValue<string>()).toLocaleString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      }),
-    sortingFn: "datetime",
+    cell: ({ getValue }) => (
+      <p className="">
+        {new Date(getValue<string>()).toLocaleString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })}
+      </p>
+    ),
+    // sortingFn: "datetime",
   },
   {
-    accessorKey: "description",
+    accessorKey: "equipment",
     header: "Equipment",
   },
   {
@@ -34,6 +37,11 @@ export const columns: ColumnDef<AssetFormValues>[] = [
   {
     accessorKey: "condition",
     header: "Condition",
+    cell: ({ getValue }) => {
+      if (getValue<string>() === "repair")
+        return <p className="text-red-500 capitalize">{getValue<string>()}</p>;
+      return <p className="capitalize">{getValue<string>()}</p>;
+    },
   },
   {
     accessorKey: "location",
@@ -67,8 +75,8 @@ export const columns: ColumnDef<AssetFormValues>[] = [
     accessorKey: "serialNumber",
     header: "Serial Number",
   },
-  {
-    accessorKey: "warranty",
-    header: "Warranty",
-  },
+  // {
+  //   accessorKey: "warranty",
+  //   header: "Warranty",
+  // },
 ];
