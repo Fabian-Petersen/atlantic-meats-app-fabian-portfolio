@@ -105,9 +105,6 @@ export const actionJobSchema = z.object({
 export const assetSchema = z.object({
   id: z.string().optional(),
   createdAt: z.string().optional(),
-  description: z.string().min(1, {
-    message: "Please enter a description",
-  }),
   equipment: z.string().min(1, { message: "Please select a equipment" }),
   assetID: z.string().min(1, {
     message: "Please enter asset id",
@@ -115,10 +112,11 @@ export const assetSchema = z.object({
   condition: z.string().min(1, { message: "Please select condition" }),
   location: z.string().min(1, { message: "Please select a location" }),
   serialNumber: z.string().optional(),
-  manufacturer: z.string().optional(),
-  // date_of_manufacture: z.date().optional(),
-  model: z.string().optional(),
+  // manufacturer: z.string().optional(),
+  // model: z.string().optional(),
+  additional_notes: z.string().optional(),
   images: z.array(z.instanceof(File)).default([]),
+  // date_of_manufacture: z.date().optional(),
   // warranty_expire: z.date().optional(),
   // warranty: z.string().min(1, { message: "Please indicate if warranty valid" }),
   // status: z.string().min(1, { message: "Please select a status" }),
@@ -136,6 +134,7 @@ export type CreateAssetPayload = Omit<AssetFormValues, "images"> & {
     content_type: string;
   }[];
 };
+
 export type CreateJobPayload = Omit<CreateJobFormValues, "images"> & {
   images: {
     filename: string;

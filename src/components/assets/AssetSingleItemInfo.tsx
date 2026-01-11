@@ -8,7 +8,7 @@ type Props = {
 function AssetSingleItemInfo({ item }: Props) {
   return (
     <div className="flex gap flex-col text-font dark:text-gray-100 rounded-md p-4 md:p-2 dark:border-gray-700/50">
-      <h1 className="text-lg md:text-2xl">Asset : {item.description}</h1>
+      <h1 className="text-lg md:text-2xl">Asset : {item.equipment}</h1>
       <Separator width="100%" className="mt-2 mb-4" />
       <ul className="flex flex-col gap-4 md:text-md text-sm">
         <li className="capitalize flex gap-2">
@@ -24,16 +24,12 @@ function AssetSingleItemInfo({ item }: Props) {
           <span>{item.location}</span>
         </li>
         <li className="capitalize flex gap-2">
-          <span>Manufacturer : </span>
-          <span>{item.manufacturer}</span>
-        </li>
-        <li className="capitalize flex gap-2">
-          <span>Model : </span>
-          <span>{item.model}</span>
-        </li>
-        <li className="capitalize flex gap-2">
           <span>Serial Number : </span>
           <span>{item.serialNumber}</span>
+        </li>
+        <li className="capitalize flex gap-2">
+          <span>Comments : </span>
+          <span>{item.additional_notes}</span>
         </li>
       </ul>
       <div className="flex gap-4 md:w-1/2 w-full pt-8">

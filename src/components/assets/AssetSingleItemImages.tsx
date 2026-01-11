@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronLeftCircle, ChevronRightCircle } from "lucide-react";
-import {} from "../../../public/images/20251124_150123.jpg";
+// import {} from "../../../public/images/20251124_150123.jpg";
 import type { PresignedUrlResponse } from "@/pages/MaintRequestSingleItemPage";
 
 import FullscreenImageModal from "../modals/FullscreenImageModal";

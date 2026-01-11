@@ -29,6 +29,7 @@ import {
 import { condition, equipment, location } from "@/data/assetSelectOptions";
 import FileInput from "../customComponents/FileInput";
 import { toast } from "sonner";
+import TextAreaInput from "../customComponents/TextAreaInput";
 
 // const { userAttributes, setUserAttributes } = useGlobalContext();
 
@@ -44,17 +45,14 @@ const CreateAssetForm = () => {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm({
+  } = useForm<AssetFormValues>({
     defaultValues: {
-      description: "",
       equipment: "",
       assetID: "",
       condition: "",
       location: "",
-      //   warranty: "",
       serialNumber: "",
-      manufacturer: "",
-      model: "",
+      additional_notes: "",
       images: [],
     },
     resolver: zodResolver(assetSchema) as unknown as Resolver<AssetFormValues>,
@@ -64,23 +62,26 @@ const CreateAssetForm = () => {
   const sortedLocations = [...location].sort((a, b) => a.localeCompare(b));
 
   const onSubmit = async (data: AssetFormValues) => {
+    console.log("Create new asset:", data);
     try {
-      // 1. Build API payload (metadata only)
+      // $ 1. Build API payload (metadata only)
       const payload: CreateAssetPayload = {
         ...data,
-        images: data.images.map((file) => ({
+        images: (data.images ?? []).map((file) => ({
           filename: file.name,
           content_type: file.type,
-          // console.log("content_type from frontend:",file.type)
         })),
       };
+      console.log("Payload for API:", payload);
 
-      // 2. Create maintenance request (DynamoDB + presigned URLs)
+      // $ 2. Create maintenance request (DynamoDB + presigned URLs)
       const response = await mutateAsync(payload);
+      console.log("API Response:", response);
 
       const { presigned_urls } = response;
+      console.log("Presigned URLs:", presigned_urls);
 
-      // 3. Upload files directly to S3
+      // $ 3. Upload files directly to S3
       await Promise.all(
         presigned_urls.map((item: PresignedUrlResponse[number]) => {
           const file = (data.images ?? []).find(
@@ -98,12 +99,12 @@ const CreateAssetForm = () => {
           });
         })
       );
-      toast.success("New Asset Successfully Created!", {
+      toast.success("Asset successfully created!", {
         duration: 1000,
       });
-      // navigate("/assets");
+      // navigate("/asset");
     } catch (err) {
-      console.error("Failed to create new asset", err);
+      console.error("Failed to create asset", err);
     }
   };
 
@@ -113,14 +114,14 @@ const CreateAssetForm = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
-        <FormRowInput
-          label="Description"
-          type="text"
-          name="description"
+        <FormRowSelect
+          label="Equipment"
+          name="equipment"
+          options={equipment}
           // control={control}
-          placeholder="Asset Description"
+          placeholder="Select Equipment"
           register={register}
-          error={errors.description}
+          error={errors.equipment}
         />
         <FormRowInput
           label="Asset ID"
@@ -132,16 +133,7 @@ const CreateAssetForm = () => {
           error={errors.assetID}
         />
         <FormRowSelect
-          label="Equipment Type"
-          name="equipment"
-          options={equipment}
-          // control={control}
-          placeholder="Select Equipment"
-          register={register}
-          error={errors.equipment}
-        />
-        <FormRowSelect
-          // label="Store"
+          label="Location"
           name="location"
           options={sortedLocations}
           // control={control}
@@ -160,7 +152,7 @@ const CreateAssetForm = () => {
           error={errors.condition}
         />
         <FormRowInput
-          label="Equipment Serial Number"
+          label="Serial Number"
           type="text"
           name="serialNumber"
           // control={control}
@@ -168,57 +160,20 @@ const CreateAssetForm = () => {
           register={register}
           error={errors.serialNumber}
         />
-        {/* <FormRowSelect
-          label="Warranty"
-          name="warranty"
-          options={warranty}
-          control={control}
-          placeholder="Warranty Valid"
-          register={register}
-          error={errors.warranty}
-        /> */}
-        {/* <FormRowInput
-          label="Warranty Expiry Date"
-          name="warranty_expire"
-          control={control}
-          type="date"
-          placeholder="Warranty Expiry Date"
-          register={register}
-          error={errors.warranty_expire}
-        /> */}
-        <FormRowInput
-          label="Manufacturer"
-          type="text"
-          name="manufacturer"
-          // control={control}
-          placeholder="Manufacturer"
-          register={register}
-          error={errors.manufacturer}
-        />
-        {/* <FormRowInput
-          label="Date of Manufacture"
-          type="date"
-          name="date_of_manufacture"
-          control={control}
-          placeholder="Date of Manufacture"
-          register={register}
-          error={errors.date_of_manufacture}
-        /> */}
-        <FormRowInput
-          label="Model"
-          type="text"
-          name="model"
-          // control={control}
-          placeholder="Model"
-          register={register}
-          error={errors.model}
-        />
         <FileInput
           label="Supporting Documents"
           control={control}
           name="images"
           multiple={true}
           // error={errors.images}
+        />
+        <TextAreaInput
+          label="Comments"
+          name="additional_notes"
+          placeholder="Comments"
+          register={register}
+          className="md:col-span-2"
+          rows={3}
         />
       </div>
       <div className="flex gap-2 w-full justify-end">

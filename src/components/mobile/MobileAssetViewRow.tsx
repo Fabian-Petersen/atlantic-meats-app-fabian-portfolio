@@ -19,7 +19,7 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
       onClick={onToggle}
     >
       <div className="flex justify-between items-start dark:text-gray-200">
-        <p className="font-medium">{row.original.description}</p>
+        <p className="font-medium">{row.original.equipment}</p>
         <ChevronDown
           className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
         />
@@ -40,14 +40,6 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
             <li className="flex gap-2 w-full justify-between">
               <span>Serial Number</span>
               <span>{row.original.serialNumber}</span>
-            </li>
-            <li className="flex gap-2 w-full justify-between">
-              <span>Manufacturer</span>
-              <span>{row.original.manufacturer}</span>
-            </li>
-            <li className="flex gap-2 w-full justify-between">
-              <span>Model</span>
-              <span>{row.original.model}</span>
             </li>
           </ul>
           <div className="flex gap-2 w-full justify-between px-2 mt-auto">
