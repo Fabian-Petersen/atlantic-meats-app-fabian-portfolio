@@ -2,7 +2,7 @@
 
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-// import { PasswordToggleInput } from "@/components/PasswordToggleInput";
+import { useState } from "react";
 
 // $ React-Hook-Form, zod & schema
 import { assetSchema } from "../../schemas/index";
@@ -26,18 +26,43 @@ import {
 } from "@/utils/maintenanceRequests";
 
 //$ Import Select Options Data
-import { condition, equipment, location } from "@/data/assetSelectOptions";
+import {
+  condition,
+  // equipment,
+  location,
+  CeateAssetFormOptionsData,
+} from "@/data/assetSelectOptions";
 import FileInput from "../customComponents/FileInput";
 import { toast } from "sonner";
 import TextAreaInput from "../customComponents/TextAreaInput";
 
-// const { userAttributes, setUserAttributes } = useGlobalContext();
+type BusinessUnit = keyof typeof CeateAssetFormOptionsData.business_unit;
+
+type Category<B extends BusinessUnit> =
+  keyof (typeof CeateAssetFormOptionsData.business_unit)[B]["category"];
 
 const CreateAssetForm = () => {
+  // Use cascading (dependent) select inputs driven directly from the data structure.
+  const [businessUnit, setBusinessUnit] = useState<BusinessUnit | null>(null);
+  const [category, setCategory] = useState<string | null>(null);
+
+  const DATA = CeateAssetFormOptionsData;
+
+  const businessUnitOptions = Object.keys(DATA.business_unit) as BusinessUnit[];
+
+  const categoryOptions = businessUnit
+    ? Object.keys(DATA.business_unit[businessUnit].category)
+    : [];
+
+  const itemOptions =
+    businessUnit && category
+      ? DATA.business_unit[businessUnit].category[
+          category as keyof (typeof DATA.business_unit)[typeof businessUnit]["category"]
+        ]
+      : [];
+
   const { mutateAsync } = useCreateNewAsset();
   const navigate = useNavigate();
-
-  // const { mutateAsync } = useCreateMaintenanceRequest();
 
   // $ Form Schema
   const {
@@ -114,10 +139,35 @@ const CreateAssetForm = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
+        {/* ===================== Add Above to Schema and backend functions ================== */}
+        <FormRowSelect
+          name="business_unit"
+          label="Business Unit"
+          placeholder="Select business unit"
+          register={register}
+          options={businessUnitOptions}
+          onChange={([value]) => {
+            setBusinessUnit(value);
+            setCategory(null);
+          }}
+          required
+        />
+
+        <FormRowSelect
+          name="category"
+          label="Category"
+          placeholder="Select category"
+          register={register}
+          options={categoryOptions}
+          onChange={([value]) => setCategory(value)}
+          required
+        />
+
+        {/* =================================================================================== */}
         <FormRowSelect
           label="Equipment"
           name="equipment"
-          options={equipment}
+          options={itemOptions}
           // control={control}
           placeholder="Select Equipment"
           register={register}
