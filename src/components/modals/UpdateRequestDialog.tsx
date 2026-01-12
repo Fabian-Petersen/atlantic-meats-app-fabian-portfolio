@@ -12,9 +12,13 @@ import useGlobalContext from "@/context/useGlobalContext";
 import FormHeading from "../customComponents/FormHeading";
 
 function UpdateRequestDialog() {
-  const { showUpdateDialog, setShowUpdateDialog } = useGlobalContext();
+  const { showUpdateMaintenanceDialog, setShowUpdateMaintenanceDialog } =
+    useGlobalContext();
   return (
-    <Dialog open={showUpdateDialog} onOpenChange={setShowUpdateDialog}>
+    <Dialog
+      open={showUpdateMaintenanceDialog}
+      onOpenChange={setShowUpdateMaintenanceDialog}
+    >
       <DialogContent className="sm:max-w-[625px] bg-white z-3000">
         <DialogTitle className="py-4">
           <FormHeading

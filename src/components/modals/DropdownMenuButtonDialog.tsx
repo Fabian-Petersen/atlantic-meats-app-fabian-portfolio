@@ -22,14 +22,14 @@ type DropdownMenuDialogProps = {
 
 export function DropdownMenuButtonDialog({ data }: DropdownMenuDialogProps) {
   const {
-    setShowUpdateDialog,
+    setShowUpdateMaintenanceDialog,
     setShowActionDialog,
     setShowDeleteDialog,
     setData,
   } = useGlobalContext();
 
   const menuItems = getMaintenanceTableMenuItems(
-    setShowUpdateDialog,
+    setShowUpdateMaintenanceDialog,
     setShowActionDialog,
     setShowDeleteDialog
   );
