@@ -13,7 +13,7 @@ export type PresignedUrlResponse = {
   url: string;
 };
 
-type WithImages = {
+export type WithImages = {
   imageUrls?: PresignedUrlResponse[];
 };
 

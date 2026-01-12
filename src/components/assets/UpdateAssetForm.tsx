@@ -1,50 +1,87 @@
-//$ This component is used to create a maintenace job, the data is submitted to the database (dynamoDB) via API Gateway and Lambda on aws.
-
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
-
-// $ React-Hook-Form, zod & schema
-import { assetSchema } from "../../schemas/index";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm, type Resolver } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
-import FormRowInput from "../customComponents/FormRowInput";
-import FormRowSelect from "../customComponents/FormRowSelect";
+// $ API hooks
+import { useById, useUpdateItem } from "@/utils/maintenanceRequests";
 
-// $ Import schemas
+// $ Schema & types
+import { assetSchema } from "@/schemas";
 import type {
   AssetFormValues,
   CreateAssetPayload,
   PresignedUrlResponse,
-} from "../../schemas/index";
+} from "@/schemas";
+import type { WithImages } from "@/pages/AssetsSingleItemPage";
 
-// $ Import API interaction Functions
-import {
-  useCreateNewAsset,
-  // useCreateNewItem,
-} from "@/utils/maintenanceRequests";
-
-//$ Import Select Options Data
+// $ Select options
 import {
   condition,
-  // equipment,
   location,
   CeateAssetFormOptionsData,
 } from "@/data/assetSelectOptions";
+
+// $ Components
 import FileInput from "../customComponents/FileInput";
-import { toast } from "sonner";
+import FormRowSelect from "../customComponents/FormRowSelect";
+import FormRowInput from "../customComponents/FormRowInput";
 import TextAreaInput from "../customComponents/TextAreaInput";
+import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
+import { Button } from "../ui/button";
+
+// $ Context
+import useGlobalContext from "@/context/useGlobalContext";
 
 type BusinessUnit = keyof typeof CeateAssetFormOptionsData.business_unit;
 
-// type Category<B extends BusinessUnit> =
-//   keyof (typeof CeateAssetFormOptionsData.business_unit)[B]["category"];
+const ASSETS_KEY = ["assets"];
 
-const CreateAssetForm = () => {
-  // $ Use cascading (dependent) select inputs driven directly from the data structure.
+const UpdateAssetForm = () => {
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const { setShowUpdateAssetDialog } = useGlobalContext();
+
   const [businessUnit, setBusinessUnit] = useState<BusinessUnit | null>(null);
   const [category, setCategory] = useState<string | null>(null);
+
+  // $ Fetch asset
+  const { data: item, isPending } = useById<AssetFormValues & WithImages>({
+    id: id || "",
+    queryKey: ASSETS_KEY,
+    endpoint: "/asset",
+  });
+
+  // $ Update hook
+  const updateAsset = useUpdateItem<
+    CreateAssetPayload,
+    { presigned_urls?: PresignedUrlResponse }
+  >({
+    endpoint: "asset",
+    queryKey: ASSETS_KEY,
+  });
+
+  // $ Form
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm<AssetFormValues>({
+    defaultValues: item,
+    resolver: zodResolver(assetSchema) as unknown as Resolver<AssetFormValues>,
+    values: item
+      ? {
+          ...item,
+          images: [], // cannot hydrate File[]
+        }
+      : undefined,
+  });
+
+  if (!id || isPending || !item) {
+    return <PageLoadingSpinner />;
+  }
 
   const DATA = CeateAssetFormOptionsData;
 
@@ -61,37 +98,11 @@ const CreateAssetForm = () => {
         ]
       : [];
 
-  const { mutateAsync } = useCreateNewAsset();
-  const navigate = useNavigate();
-
-  // $ Form Schema
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors, isSubmitting },
-  } = useForm<AssetFormValues>({
-    defaultValues: {
-      business_unit: "",
-      category: "",
-      equipment: "",
-      assetID: "",
-      condition: "",
-      location: "",
-      serialNumber: "",
-      additional_notes: "",
-      images: [],
-    },
-    resolver: zodResolver(assetSchema) as unknown as Resolver<AssetFormValues>,
-  });
-
-  // $ sort the locations in alphabetical order
   const sortedLocations = [...location].sort((a, b) => a.localeCompare(b));
 
+  // $ Submit
   const onSubmit = async (data: AssetFormValues) => {
-    console.log("Create new asset:", data);
     try {
-      // $ 1. Build API payload (metadata only)
       const payload: CreateAssetPayload = {
         ...data,
         images: (data.images ?? []).map((file) => ({
@@ -99,39 +110,37 @@ const CreateAssetForm = () => {
           content_type: file.type,
         })),
       };
-      console.log("Payload for API:", payload);
 
-      // $ 2. Create maintenance request (DynamoDB + presigned URLs)
-      const response = await mutateAsync(payload);
-      console.log("API Response:", response);
-
-      const { presigned_urls } = response;
-      console.log("Presigned URLs:", presigned_urls);
-
-      // $ 3. Upload files directly to S3
-      await Promise.all(
-        presigned_urls.map((item: PresignedUrlResponse[number]) => {
-          const file = (data.images ?? []).find(
-            (f) => f.name === item.filename
-          );
-
-          if (!file) return Promise.resolve();
-
-          return fetch(item.url, {
-            method: "PUT",
-            headers: {
-              "Content-Type": item.content_type,
-            },
-            body: file,
-          });
-        })
-      );
-      toast.success("Asset successfully created!", {
-        duration: 1000,
+      const response = await updateAsset.mutateAsync({
+        id,
+        payload,
       });
+
+      const { presigned_urls } = response ?? {};
+
+      if (presigned_urls?.length) {
+        await Promise.all(
+          presigned_urls.map((item) => {
+            const file = data.images?.find((f) => f.name === item.filename);
+
+            if (!file) return Promise.resolve();
+
+            return fetch(item.url, {
+              method: "PUT",
+              headers: {
+                "Content-Type": item.content_type,
+              },
+              body: file,
+            });
+          })
+        );
+      }
+
+      toast.success("Asset successfully updated", { duration: 1000 });
       navigate("/asset");
-    } catch (err) {
-      console.error("Failed to create asset", err);
+    } catch (error) {
+      console.error("Update failed", error);
+      toast.error("Failed to update asset");
     }
   };
 
@@ -228,7 +237,8 @@ const CreateAssetForm = () => {
         <Button
           type="button"
           onClick={() => {
-            navigate("/asset");
+            setShowUpdateAssetDialog(false);
+            // navigate("/asset");
           }}
           variant="cancel"
           size="lg"
@@ -248,4 +258,4 @@ const CreateAssetForm = () => {
   );
 };
 
-export default CreateAssetForm;
+export default UpdateAssetForm;

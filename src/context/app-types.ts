@@ -17,12 +17,14 @@ export type AppContextType = {
   setActiveItem: Dispatch<SetStateAction<string | null>>;
 
   // $ Modals and Dialog
-  showUpdateDialog: boolean;
-  setShowUpdateDialog: Dispatch<SetStateAction<boolean>>;
+  showUpdateMaintenanceDialog: boolean;
+  setShowUpdateMaintenanceDialog: Dispatch<SetStateAction<boolean>>;
   showActionDialog: boolean;
   setShowActionDialog: Dispatch<SetStateAction<boolean>>;
   showDeleteDialog: boolean;
   setShowDeleteDialog: Dispatch<SetStateAction<boolean>>;
+  showUpdateAssetDialog: boolean;
+  setShowUpdateAssetDialog: Dispatch<SetStateAction<boolean>>;
 
   // $ Data
   data: CreateJobFormValues | undefined;

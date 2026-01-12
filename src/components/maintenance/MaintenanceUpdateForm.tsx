@@ -23,12 +23,13 @@ import {
   impact,
 } from "@/data/maintenanceRequestFormData";
 
-import assets from "@/data/assets.json";
+// import assets from "@/data/assets.json";
 // import { useCreateMaintenanceRequest } from "@/utils/maintenanceRequests";
 
 const MaintenanceUpdateForm = () => {
   // const { mutateAsync } = useCreateMaintenanceRequest();
-  const { data: initialData, setShowUpdateDialog } = useGlobalContext();
+  const { data: initialData, setShowUpdateMaintenanceDialog } =
+    useGlobalContext();
   //   const navigate = useNavigate();
 
   // $ Form Schema
@@ -118,10 +119,11 @@ const MaintenanceUpdateForm = () => {
         <FormRowSelect
           name="equipment"
           label="Equipment"
-          options={assets.assets.map((a) => ({
-            label: a.equipment,
-            value: a.equipment,
-          }))}
+          options={[]}
+          // options={assets.assets.map((a) => ({
+          //   label: a.equipment,
+          //   value: a.equipment,
+          // }))}
           // control={control}
           placeholder="Select Equipment"
           register={register}
@@ -130,7 +132,10 @@ const MaintenanceUpdateForm = () => {
         <FileInput control={control} name="images" multiple={true} />
       </div>
       <div className="flex gap-2 w-full justify-end">
-        <Button onClick={() => setShowUpdateDialog(false)} variant={"cancel"}>
+        <Button
+          onClick={() => setShowUpdateMaintenanceDialog(false)}
+          variant={"cancel"}
+        >
           Cancel
         </Button>
         <Button disabled={isSubmitting} type="submit" variant={"submit"}>

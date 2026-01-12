@@ -26,7 +26,7 @@ import {
   impact,
 } from "@/data/maintenanceRequestFormData";
 
-import assets from "@/data/assets.json";
+// import assets from "@/data/assets.json";
 import { useCreateMaintenanceRequest } from "@/utils/maintenanceRequests";
 import FileInput from "../customComponents/FileInput";
 import TextAreaInput from "../customComponents/TextAreaInput";
@@ -113,10 +113,11 @@ const MaintenanceRequestForm = () => {
         <FormRowSelect
           label="Equipment"
           name="equipment"
-          options={assets.assets.map((a) => ({
-            label: a.equipment,
-            value: a.equipment,
-          }))}
+          options={[]}
+          // options={assets.categories.retail.system.security.map((a) => ({
+          //   label: a.equipment,
+          //   value: a.equipment,
+          // }))}
           // control={control}
           placeholder="Select Equipment"
           register={register}

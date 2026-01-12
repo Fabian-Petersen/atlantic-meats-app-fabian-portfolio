@@ -16,8 +16,11 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
   // $ State for the dialogs (modals)
-  const [showUpdateDialog, setShowUpdateDialog] = useState<boolean>(false);
+  const [showUpdateMaintenanceDialog, setShowUpdateMaintenanceDialog] =
+    useState<boolean>(false);
   const [showActionDialog, setShowActionDialog] = useState<boolean>(false);
+  const [showUpdateAssetDialog, setShowUpdateAssetDialog] =
+    useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false); // Delete confirmation dialog
 
   // $ State for the data to update/delete an item
@@ -39,8 +42,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsActive,
         activeItem,
         setActiveItem,
-        showUpdateDialog,
-        setShowUpdateDialog,
+        showUpdateMaintenanceDialog,
+        setShowUpdateMaintenanceDialog,
+        showUpdateAssetDialog,
+        setShowUpdateAssetDialog,
         showActionDialog,
         setShowActionDialog,
         showDeleteDialog,

@@ -164,6 +164,32 @@ export const useUpdateMaintenanceRequest = () => {
   });
 };
 
+// $ UPDATE ITEM
+type UpdateArgs<TPayload> = {
+  id: string;
+  payload: TPayload;
+};
+
+export const useUpdateItem = <TPayload, TResponse>({
+  endpoint,
+  queryKey,
+}: {
+  endpoint: string;
+  queryKey: readonly unknown[];
+}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, payload }: UpdateArgs<TPayload>) => {
+      const { data } = await api.put<TResponse>(`/${endpoint}/${id}`, payload);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
+};
+
 // $ DELETE
 export const useDeleteItem = (options: {
   id: string;
