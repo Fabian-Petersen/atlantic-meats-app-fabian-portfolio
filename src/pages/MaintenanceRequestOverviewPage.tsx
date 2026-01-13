@@ -12,6 +12,7 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
+  type SortingState,
 } from "@tanstack/react-table";
 // import { columns } from "../components/maintenanceRequestTable/columns";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
@@ -19,9 +20,14 @@ import { MobileMaintenanceRequestsTable } from "@/components/mobile/MobileMainte
 import { getMaintenanceTableMenuItems } from "@/data/TableMenuItems";
 import useGlobalContext from "@/context/useGlobalContext";
 import { getMaintenanceColumns } from "@/components/maintenanceRequestTable/columns";
+import { useState } from "react";
 
 const MaintenanceRequestOverviewPage = () => {
   const { data, isLoading, error } = useMaintenanceRequests();
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "createdAt", desc: true },
+  ]);
+
   const {
     setShowUpdateMaintenanceDialog,
     setShowActionDialog,
@@ -39,14 +45,16 @@ const MaintenanceRequestOverviewPage = () => {
   const table = useReactTable({
     data: data ?? [],
     columns: columns,
-    state: {
-      sorting: [
-        {
-          id: "createdAt",
-          desc: true,
-        },
-      ],
-    },
+    state: { sorting },
+    onSortingChange: setSorting,
+    // state: {
+    //   sorting: [
+    //     {
+    //       id: "createdAt",
+    //       desc: true,
+    //     },
+    //   ],
+    // },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),

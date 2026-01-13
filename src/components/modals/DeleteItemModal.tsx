@@ -6,10 +6,11 @@ import FormHeading from "../customComponents/FormHeading";
 import { toast } from "sonner";
 
 const DeleteItemModal = () => {
-  const { setShowDeleteDialog, data, showDeleteDialog } = useGlobalContext();
-  console.log("DeleteItemModal state:", showDeleteDialog, data);
+  const { setShowDeleteDialog, genericData, showDeleteDialog } =
+    useGlobalContext();
+  console.log("DeleteItemModal state:", showDeleteDialog, genericData);
 
-  const id = data?.id;
+  const id = genericData?.id;
   const { isPending, mutateAsync } = useDeleteItem({
     id: id || "",
     endpoint: "maintenance-request",

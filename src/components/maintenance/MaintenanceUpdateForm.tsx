@@ -28,7 +28,7 @@ import {
 
 const MaintenanceUpdateForm = () => {
   // const { mutateAsync } = useCreateMaintenanceRequest();
-  const { data: initialData, setShowUpdateMaintenanceDialog } =
+  const { genericData: initialData, setShowUpdateMaintenanceDialog } =
     useGlobalContext();
   //   const navigate = useNavigate();
 

@@ -12,7 +12,7 @@ type Props = {
 
 export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
   const navigate = useNavigate();
-  const { setData } = useGlobalContext();
+  const { setGenericData } = useGlobalContext();
   return (
     <div
       className="hover:cursor-pointer dark:border rounded-md p-3 mb-2 bg-gray-100 dark:bg-bgdark"
@@ -43,7 +43,7 @@ export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
               e.stopPropagation();
               console.log(row.original.id);
               navigate(`/maintenance-action/${row.original.id}`);
-              setData(row.original);
+              setGenericData(row.original);
               //   console.log(actionData);
             }}
           >

@@ -9,7 +9,7 @@ type Props = {
 };
 
 function MaintenanceSingleItemInfo({ item }: Readonly<Props>) {
-  const { setData } = useGlobalContext();
+  const { setGenericData } = useGlobalContext();
   const navigate = useNavigate();
 
   return (
@@ -61,7 +61,7 @@ function MaintenanceSingleItemInfo({ item }: Readonly<Props>) {
             size="xl"
             className="flex-1"
             onClick={() => {
-              setData(item);
+              setGenericData(item);
               navigate(`/maintenance-action/${item.id}`);
             }}
           >

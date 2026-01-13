@@ -13,14 +13,19 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
+  type SortingState,
 } from "@tanstack/react-table";
 
 import { getAssetColumns } from "../components/assets/columns";
 import { getAssetTableMenuItems } from "@/data/TableMenuItems";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useEffect, useState } from "react";
 
 const AssetsOverviewPage = () => {
   const { data, isLoading, isError } = useAssetsList();
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "createdAt", desc: true },
+  ]);
 
   const { setShowUpdateAssetDialog, setShowDeleteDialog } = useGlobalContext();
 
@@ -35,6 +40,8 @@ const AssetsOverviewPage = () => {
     data: data ?? [],
     columns: columns,
     columnResizeMode: "onChange",
+    state: { sorting },
+    onSortingChange: setSorting,
     // initialState: {
     //   columnFilters: [
     //     {
@@ -43,22 +50,25 @@ const AssetsOverviewPage = () => {
     //     },
     //   ],
     // },
-    state: {
-      sorting: [
-        {
-          id: "createdAt",
-          desc: false,
-        },
-      ],
-    },
+    // state: {
+    //   sorting: [
+    //     {
+    //       id: "createdAt",
+    //       desc: false,
+    //     },
+    //   ],
+    // },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
 
+  useEffect(() => {
+    console.log(table.getState());
+  }, [table]);
+
   if (isLoading) return <PageLoadingSpinner />;
   if (isError) return <p>Error retrieving asset data...</p>;
-
   // console.log("Asset Table Filter State:", table.getState().columnFilters); // Check if the filters are in runaway state
 
   return (

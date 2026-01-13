@@ -11,7 +11,7 @@ type Props = {
 
 function AssetSingleItemInfo({ item }: Props) {
   const navigate = useNavigate();
-  const { setAssetsData, setShowUpdateAssetDialog } = useGlobalContext();
+  const { setGenericData, setShowUpdateAssetDialog } = useGlobalContext();
   return (
     <div className="flex gap flex-col text-font dark:text-gray-100 rounded-md p-4 md:p-2 dark:border-gray-700/50">
       <UpdateAssetDialog />
@@ -66,7 +66,7 @@ function AssetSingleItemInfo({ item }: Props) {
             size="xl"
             className="flex-1"
             onClick={() => {
-              setAssetsData(item);
+              setGenericData(item);
               setShowUpdateAssetDialog(true);
             }}
           >

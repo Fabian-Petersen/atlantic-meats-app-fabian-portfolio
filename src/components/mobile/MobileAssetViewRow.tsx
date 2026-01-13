@@ -12,7 +12,7 @@ type Props = {
 
 export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
   const navigate = useNavigate();
-  const { setAssetsData } = useGlobalContext();
+  const { setGenericData } = useGlobalContext();
   return (
     <div
       className="hover:cursor-pointer dark:border rounded-md p-3 mb-2 bg-gray-100 dark:bg-bgdark"
@@ -49,7 +49,7 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
                 e.stopPropagation();
                 console.log(row.original.id);
                 navigate(`/asset/${row.original.id}`);
-                setAssetsData(row.original);
+                setGenericData(row.original);
                 //   console.log(actionData);
               }}
             >
@@ -61,7 +61,7 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
                 e.stopPropagation();
                 console.log(row.original.id);
                 navigate(`/asset/${row.original.id}`);
-                setAssetsData(row.original);
+                setGenericData(row.original);
                 //   console.log(actionData);
               }}
             >
@@ -73,7 +73,7 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
                 e.stopPropagation();
                 console.log(row.original.id);
                 navigate(`/asset/${row.original.id}`);
-                setAssetsData(row.original);
+                setGenericData(row.original);
               }}
             >
               Delete

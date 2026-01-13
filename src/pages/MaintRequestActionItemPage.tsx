@@ -7,7 +7,7 @@ import MaintenanceActionForm from "@/components/maintenance/MaintenanceActionFor
 import useGlobalContext from "@/context/useGlobalContext";
 
 const MaintRequestActionPage = () => {
-  const { data: requestData } = useGlobalContext();
+  const { genericData: requestData } = useGlobalContext();
   console.log("Data from the request on parent:", requestData);
   return (
     <div className="flex items-center justify-center w-full h-full p-4 dark:bg-bgdark bg-gray-100 max-w-6xl">
@@ -17,10 +17,10 @@ const MaintRequestActionPage = () => {
           className="text-center w-full border border-red-500"
         />
         <ul className="px-2 h-12 items-center border-b border-b-gray-300 lg:pb-1 w-full flex lg:gap-2 justify-between text-xs bg-transparent">
-          <li className="flex gap-1">
+          {/* <li className="flex gap-1">
             <span>Store:</span>
             <span>{requestData?.store}</span>
-          </li>
+          </li> */}
           <li className="flex gap-1">
             <span>Date:</span>
             <span>{requestData?.createdAt}</span>
