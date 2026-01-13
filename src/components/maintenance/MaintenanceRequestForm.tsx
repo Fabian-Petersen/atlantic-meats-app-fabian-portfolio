@@ -2,11 +2,13 @@
 
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-// import { PasswordToggleInput } from "@/components/PasswordToggleInput";
 
 // $ React-Hook-Form
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Control, type Resolver } from "react-hook-form";
+
+// $ Import image compression hook
+import { compressImagesToWebp } from "@/utils/compressImagesToWebp";
 
 // $ Zod Schema and Types
 import type {
@@ -60,36 +62,36 @@ const MaintenanceRequestForm = () => {
   const onSubmit = async (data: CreateJobFormValues) => {
     console.log("Submitting maintenance request:", data);
     try {
-      // $ 1. Build API payload (metadata only)
+      // $ 1️⃣ Compress images in browser
+      const originalFiles = data.images ?? [];
+      const compressedFiles = await compressImagesToWebp(originalFiles);
+
+      // $ 2️⃣ Build API payload (metadata only)
       const payload: CreateJobPayload = {
         ...data,
-        images: (data.images ?? []).map((file) => ({
+        images: compressedFiles.map((file) => ({
           filename: file.name,
           content_type: file.type,
         })),
       };
+
       console.log("Payload for API:", payload);
 
       // $ 2. Create maintenance request (DynamoDB + presigned URLs)
       const response = await mutateAsync(payload);
-      console.log("API Response:", response);
-
       const { presigned_urls } = response;
-      console.log("Presigned URLs:", presigned_urls);
 
       // $ 3. Upload files directly to S3
       await Promise.all(
         presigned_urls.map((item: PresignedUrlResponse[number]) => {
-          const file = (data.images ?? []).find(
-            (f) => f.name === item.filename
-          );
+          const file = compressedFiles.find((f) => f.name === item.filename);
 
           if (!file) return Promise.resolve();
 
           return fetch(item.url, {
             method: "PUT",
             headers: {
-              "Content-Type": item.content_type,
+              "Content-Type": "image/webp",
             },
             body: file,
           });
@@ -98,7 +100,7 @@ const MaintenanceRequestForm = () => {
       toast.success("Maintenance request created successfully!", {
         duration: 1000,
       });
-      navigate("/maintenance-list");
+      // navigate("/maintenance-list");
     } catch (err) {
       console.error("Failed to create maintenance request", err);
     }
@@ -113,7 +115,7 @@ const MaintenanceRequestForm = () => {
         <FormRowSelect
           label="Equipment"
           name="equipment"
-          options={[]}
+          options={["test equipment"]}
           // options={assets.categories.retail.system.security.map((a) => ({
           //   label: a.equipment,
           //   value: a.equipment,

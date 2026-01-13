@@ -5,12 +5,14 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 // $ React-Hook-Form, zod & schema
-import { assetSchema } from "../../schemas/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Resolver } from "react-hook-form";
 
 import FormRowInput from "../customComponents/FormRowInput";
 import FormRowSelect from "../customComponents/FormRowSelect";
+
+// $ Import image compression hook
+import { compressImagesToWebp } from "@/utils/compressImagesToWebp";
 
 // $ Import schemas
 import type {
@@ -18,6 +20,7 @@ import type {
   CreateAssetPayload,
   PresignedUrlResponse,
 } from "../../schemas/index";
+import { assetSchema } from "../../schemas/index";
 
 // $ Import API interaction Functions
 import {
@@ -88,52 +91,99 @@ const CreateAssetForm = () => {
   // $ sort the locations in alphabetical order
   const sortedLocations = [...location].sort((a, b) => a.localeCompare(b));
 
+  // $ Form and Images Submit with Image Compression
   const onSubmit = async (data: AssetFormValues) => {
     console.log("Create new asset:", data);
+
     try {
-      // $ 1. Build API payload (metadata only)
+      // $ 1️⃣ Compress images in browser
+      const originalFiles = data.images ?? [];
+      const compressedFiles = await compressImagesToWebp(originalFiles);
+
+      // $ 2️⃣ Build API payload (metadata only)
       const payload: CreateAssetPayload = {
         ...data,
-        images: (data.images ?? []).map((file) => ({
+        images: compressedFiles.map((file) => ({
           filename: file.name,
           content_type: file.type,
         })),
       };
+
       console.log("Payload for API:", payload);
 
-      // $ 2. Create maintenance request (DynamoDB + presigned URLs)
+      // $ 3️⃣ Create asset + get presigned URLs
       const response = await mutateAsync(payload);
-      console.log("API Response:", response);
-
       const { presigned_urls } = response;
-      console.log("Presigned URLs:", presigned_urls);
 
-      // $ 3. Upload files directly to S3
+      // $ 4️⃣ Upload compressed images to S3
       await Promise.all(
         presigned_urls.map((item: PresignedUrlResponse[number]) => {
-          const file = (data.images ?? []).find(
-            (f) => f.name === item.filename
-          );
+          const file = compressedFiles.find((f) => f.name === item.filename);
 
           if (!file) return Promise.resolve();
 
           return fetch(item.url, {
             method: "PUT",
             headers: {
-              "Content-Type": item.content_type,
+              "Content-Type": "image/webp",
             },
             body: file,
           });
         })
       );
-      toast.success("Asset successfully created!", {
-        duration: 1000,
-      });
-      navigate("/asset");
+
+      toast.success("Asset successfully created!", { duration: 1000 });
     } catch (err) {
       console.error("Failed to create asset", err);
     }
   };
+
+  // const onSubmit = async (data: AssetFormValues) => {
+  //   console.log("Create new asset:", data);
+  //   try {
+  //     // $ 1. Build API payload (metadata only)
+  //     const payload: CreateAssetPayload = {
+  //       ...data,
+  //       images: (data.images ?? []).map((file) => ({
+  //         filename: file.name,
+  //         content_type: file.type,
+  //       })),
+  //     };
+  //     console.log("Payload for API:", payload);
+
+  //     // $ 2. Create maintenance request (DynamoDB + presigned URLs)
+  //     const response = await mutateAsync(payload);
+  //     console.log("API Response:", response);
+
+  //     const { presigned_urls } = response;
+  //     console.log("Presigned URLs:", presigned_urls);
+
+  //     // $ 3. Upload files directly to S3
+  //     await Promise.all(
+  //       presigned_urls.map((item: PresignedUrlResponse[number]) => {
+  //         const file = (data.images ?? []).find(
+  //           (f) => f.name === item.filename
+  //         );
+
+  //         if (!file) return Promise.resolve();
+
+  //         return fetch(item.url, {
+  //           method: "PUT",
+  //           headers: {
+  //             "Content-Type": item.content_type,
+  //           },
+  //           body: file,
+  //         });
+  //       })
+  //     );
+  //     toast.success("Asset successfully created!", {
+  //       duration: 1000,
+  //     });
+  //     // navigate("/asset");
+  //   } catch (err) {
+  //     console.error("Failed to create asset", err);
+  //   }
+  // };
 
   return (
     <form
