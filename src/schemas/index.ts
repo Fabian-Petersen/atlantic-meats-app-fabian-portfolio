@@ -124,6 +124,9 @@ export const assetSchema = z.object({
   // status: z.string().min(1, { message: "Please select a status" }),
 });
 
+// GlobalContext.ts
+export type GlobalData = CreateJobFormValues | AssetFormValues;
+
 export type LoginFormValues = z.infer<typeof LoginSchema>;
 export type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
 export type CreateJobFormValues = z.infer<typeof createJobSchema>;

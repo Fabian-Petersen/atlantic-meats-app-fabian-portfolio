@@ -13,12 +13,28 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { columns } from "../components/maintenanceRequestTable/columns";
+// import { columns } from "../components/maintenanceRequestTable/columns";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { MobileMaintenanceRequestsTable } from "@/components/mobile/MobileMaintenanceRequestsTable";
+import { getMaintenanceTableMenuItems } from "@/data/TableMenuItems";
+import useGlobalContext from "@/context/useGlobalContext";
+import { getMaintenanceColumns } from "@/components/maintenanceRequestTable/columns";
 
 const MaintenanceRequestOverviewPage = () => {
   const { data, isLoading, error } = useMaintenanceRequests();
+  const {
+    setShowUpdateMaintenanceDialog,
+    setShowActionDialog,
+    setShowDeleteDialog,
+  } = useGlobalContext();
+
+  const menuItems = getMaintenanceTableMenuItems(
+    setShowUpdateMaintenanceDialog,
+    setShowActionDialog,
+    setShowDeleteDialog
+  );
+
+  const columns = getMaintenanceColumns(menuItems);
 
   const table = useReactTable({
     data: data ?? [],

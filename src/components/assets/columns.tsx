@@ -1,5 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { AssetFormValues } from "@/schemas";
+import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
+import type { TableMenuProps } from "@/data/TableMenuItems";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -20,10 +22,13 @@ function getConditionClasses(condition: EquipmentCondition) {
   }
 }
 
-export const columns: ColumnDef<AssetFormValues>[] = [
+export const getAssetColumns = (
+  menuStateActions: TableMenuProps[]
+): ColumnDef<AssetFormValues>[] => [
   {
     accessorKey: "createdAt",
     header: "Date Created",
+    // sortingFn: "datetime",
     cell: ({ getValue }) => (
       <p className="">
         {new Date(getValue<string>()).toLocaleString("en-GB", {
@@ -36,7 +41,6 @@ export const columns: ColumnDef<AssetFormValues>[] = [
         })}
       </p>
     ),
-    // sortingFn: "datetime",
   },
   {
     accessorKey: "equipment",
@@ -71,32 +75,19 @@ export const columns: ColumnDef<AssetFormValues>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: "warranty",
-  //   header: "Warranty",
-  // },
-  // {
-  //   accessorKey: "warranty_expire",
-  //   header: "Warranty Expire",
-  // },
-  // {
-  //   accessorKey: "serialNumber",
-  //   header: "Serial Number",
-  // },
-  // {
-  //   accessorKey: "manufacturer",
-  //   header: "Manufacturer",
-  // },
-  // {
-  //   accessorKey: "date_of_manufacture",
-  //   header: "Date of Manufacture",
-  // },
-  // {
-  //   accessorKey: "model",
-  //   header: "Model",
-  // },
-  // {
-  //   accessorKey: "warranty",
-  //   header: "Warranty",
-  // },
+  {
+    id: "actions",
+    header: "", // or "Actions"
+    enableSorting: false,
+    enableHiding: false,
+    size: 10,
+    cell: ({ row }) => (
+      <div className="w-fit text-center" onClick={(e) => e.stopPropagation()}>
+        <DropdownMenuButtonDialog
+          data={row.original}
+          menuStateActions={menuStateActions}
+        />
+      </div>
+    ),
+  },
 ];

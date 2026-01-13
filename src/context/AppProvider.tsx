@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AppContext } from "./app-context";
-import type { AssetFormValues, CreateJobFormValues } from "../schemas";
+import type { GlobalData } from "../schemas";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   // $ [Step 3]: Create the state and set the initial state value
@@ -24,10 +24,13 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false); // Delete confirmation dialog
 
   // $ State for the data to update/delete an item
-  const [data, setData] = useState<CreateJobFormValues | undefined>(undefined); // Set the data Maintenance Requests
-  const [assetsData, setAssetsData] = useState<AssetFormValues | undefined>(
+  const [genericData, setGenericData] = useState<GlobalData | undefined>(
     undefined
-  ); // Set the data for Assets
+  ); // Set the generic data
+
+  // const [assetsData, setAssetsData] = useState<AssetFormValues | undefined>(
+  //   undefined
+  // ); // Set the data for Assets
 
   return (
     <AppContext.Provider
@@ -50,10 +53,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setShowActionDialog,
         showDeleteDialog,
         setShowDeleteDialog,
-        data,
-        setData,
-        assetsData,
-        setAssetsData,
+        genericData,
+        setGenericData,
       }}
     >
       {children}

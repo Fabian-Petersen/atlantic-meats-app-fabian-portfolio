@@ -1,8 +1,8 @@
 // $ This model is to open a modal from a button using ShadCN Dropdown and Dialog components
 
 import { MoreVertical } from "lucide-react";
-import { getMaintenanceTableMenuItems } from "@/data/TableMenuItems";
 import useGlobalContext from "@/context/useGlobalContext";
+import type { TableMenuProps } from "@/data/TableMenuItems";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,26 +13,20 @@ import {
   //   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { CreateJobFormValues } from "@/schemas";
+import type { GlobalData } from "@/schemas";
+// import type { AssetFormValues, CreateJobFormValues } from "@/schemas";
 // import Separator from "../dashboardSidebar/Seperator";
 
-type DropdownMenuDialogProps = {
-  data: CreateJobFormValues;
+type DropdownMenuDialogProps<T> = {
+  data: T;
+  menuStateActions: TableMenuProps[];
 };
 
-export function DropdownMenuButtonDialog({ data }: DropdownMenuDialogProps) {
-  const {
-    setShowUpdateMaintenanceDialog,
-    setShowActionDialog,
-    setShowDeleteDialog,
-    setData,
-  } = useGlobalContext();
-
-  const menuItems = getMaintenanceTableMenuItems(
-    setShowUpdateMaintenanceDialog,
-    setShowActionDialog,
-    setShowDeleteDialog
-  );
+export function DropdownMenuButtonDialog<T extends GlobalData>({
+  data,
+  menuStateActions,
+}: DropdownMenuDialogProps<T>) {
+  const { setGenericData } = useGlobalContext();
 
   return (
     <>
@@ -53,7 +47,7 @@ export function DropdownMenuButtonDialog({ data }: DropdownMenuDialogProps) {
         >
           {/* <DropdownMenuLabel className="text-sm">Action</DropdownMenuLabel> */}
           <DropdownMenuGroup className="space-y-1">
-            {menuItems.map((item) => {
+            {menuStateActions.map((item) => {
               const Icon = item.icon;
               return (
                 <DropdownMenuItem
@@ -61,7 +55,7 @@ export function DropdownMenuButtonDialog({ data }: DropdownMenuDialogProps) {
                   className="hover:cursor-pointer text-font flex justify-between"
                   onSelect={() => {
                     console.log(`Selected action: ${item.action}`);
-                    setData(data);
+                    setGenericData(data);
                     item.action(true);
                   }}
                 >

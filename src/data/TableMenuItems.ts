@@ -1,25 +1,36 @@
-import { Pencil, Trash2Icon, Wrench } from "lucide-react";
-import type { Dispatch, SetStateAction } from "react";
+import { Pencil, Trash2Icon, Wrench, type LucideIcon } from "lucide-react";
 
 export type TableMenuProps = {
   id: number;
-  url: string;
+  url?: string;
   name: string;
-  icon: React.ComponentType;
-  action: Dispatch<SetStateAction<boolean>>;
+  icon: LucideIcon;
+  action: (v: boolean) => void;
 };
 
+// const {
+//   setShowUpdateMaintenanceDialog,
+//   setShowActionDialog,
+//   setShowDeleteDialog,
+// } = useGlobalContext();
+
+// const menuItems = getMaintenanceTableMenuItems(
+//   setShowUpdateMaintenanceDialog,
+//   setShowActionDialog,
+//   setShowDeleteDialog
+// );
+
 export const getMaintenanceTableMenuItems = (
-  setShowUpdateDialog: Dispatch<SetStateAction<boolean>>,
-  setShowActionDialog: Dispatch<SetStateAction<boolean>>,
-  setShowDeleteDialog: Dispatch<SetStateAction<boolean>>
+  setShowUpdateMaintenanceDialog: (v: boolean) => void,
+  setShowActionDialog: (v: boolean) => void,
+  setShowDeleteDialog: (v: boolean) => void
 ): TableMenuProps[] => [
   {
     id: 1,
     url: "/update-request",
     name: "Edit",
     icon: Pencil,
-    action: setShowUpdateDialog,
+    action: setShowUpdateMaintenanceDialog,
   },
   {
     id: 2,
@@ -31,6 +42,26 @@ export const getMaintenanceTableMenuItems = (
   {
     id: 3,
     url: "/delete-request",
+    name: "Delete",
+    icon: Trash2Icon,
+    action: setShowDeleteDialog,
+  },
+];
+
+export const getAssetTableMenuItems = (
+  setShowUpdateDialog: (v: boolean) => void,
+  setShowDeleteDialog: (v: boolean) => void
+): TableMenuProps[] => [
+  {
+    id: 1,
+    url: "/update-asset",
+    name: "Edit",
+    icon: Pencil,
+    action: setShowUpdateDialog,
+  },
+  {
+    id: 2,
+    url: "/delete-asset",
     name: "Delete",
     icon: Trash2Icon,
     action: setShowDeleteDialog,

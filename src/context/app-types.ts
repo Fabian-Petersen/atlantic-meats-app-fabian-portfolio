@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { AssetFormValues, CreateJobFormValues } from "../schemas";
+import type { GlobalData } from "../schemas";
 
 export type AppContextType = {
   //$ Theme State
@@ -18,18 +18,15 @@ export type AppContextType = {
 
   // $ Modals and Dialog
   showUpdateMaintenanceDialog: boolean;
-  setShowUpdateMaintenanceDialog: Dispatch<SetStateAction<boolean>>;
+  setShowUpdateMaintenanceDialog: (v: boolean) => void;
   showActionDialog: boolean;
-  setShowActionDialog: Dispatch<SetStateAction<boolean>>;
+  setShowActionDialog: (v: boolean) => void;
   showDeleteDialog: boolean;
-  setShowDeleteDialog: Dispatch<SetStateAction<boolean>>;
+  setShowDeleteDialog: (v: boolean) => void;
   showUpdateAssetDialog: boolean;
-  setShowUpdateAssetDialog: Dispatch<SetStateAction<boolean>>;
+  setShowUpdateAssetDialog: (v: boolean) => void;
 
   // $ Data
-  data: CreateJobFormValues | undefined;
-  setData: Dispatch<SetStateAction<CreateJobFormValues | undefined>>;
-
-  assetsData: AssetFormValues | undefined;
-  setAssetsData: Dispatch<SetStateAction<AssetFormValues | undefined>>;
+  genericData: GlobalData | undefined;
+  setGenericData<T extends GlobalData>(data: T): void;
 };

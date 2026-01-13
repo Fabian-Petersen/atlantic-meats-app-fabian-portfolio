@@ -15,10 +15,21 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { columns } from "../components/assets/columns";
+import { getAssetColumns } from "../components/assets/columns";
+import { getAssetTableMenuItems } from "@/data/TableMenuItems";
+import useGlobalContext from "@/context/useGlobalContext";
 
 const AssetsOverviewPage = () => {
   const { data, isLoading, isError } = useAssetsList();
+
+  const { setShowUpdateAssetDialog, setShowDeleteDialog } = useGlobalContext();
+
+  const menuStateActions = getAssetTableMenuItems(
+    setShowUpdateAssetDialog,
+    setShowDeleteDialog
+  );
+
+  const columns = getAssetColumns(menuStateActions);
 
   const table = useReactTable({
     data: data ?? [],

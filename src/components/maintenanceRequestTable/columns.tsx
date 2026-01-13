@@ -1,15 +1,14 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { CreateJobFormValues } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
+import { type TableMenuProps } from "@/data/TableMenuItems";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const columns: ColumnDef<CreateJobFormValues>[] = [
-  // {
-  //   accessorKey: "id",
-  //   header: "ID",
-  // },
+export const getMaintenanceColumns = (
+  menuStateActions: TableMenuProps[]
+): ColumnDef<CreateJobFormValues>[] => [
   {
     accessorKey: "createdAt",
     header: "Date Created",
@@ -50,12 +49,15 @@ export const columns: ColumnDef<CreateJobFormValues>[] = [
   },
   {
     id: "actions",
-    header: "", // or "Actions"
+    header: "",
     enableSorting: false,
     enableHiding: false,
     cell: ({ row }) => (
       <div className="text-right" onClick={(e) => e.stopPropagation()}>
-        <DropdownMenuButtonDialog data={row.original} />
+        <DropdownMenuButtonDialog<CreateJobFormValues>
+          data={row.original}
+          menuStateActions={menuStateActions}
+        />
       </div>
     ),
   },
