@@ -51,11 +51,11 @@ function FilterContainer({ table }: Props) {
           />
         </div>
       </div>
-      <div className="py-2 hidden md:inline-block">
+      <div className="py-2 hidden md:inline-block ml-auto">
         <label className="text-sm md:text-md text-transparent">
           Create New Asset
         </label>
-        <AddNewItemButton title="Create Asset" className="w-full" />
+        <AddNewItemButton title="Create Asset" className="" />
       </div>
     </div>
   );

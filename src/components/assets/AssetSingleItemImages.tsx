@@ -28,7 +28,7 @@ export const AssetSingleItemImages = ({ imageUrls, className }: Props) => {
 
   return (
     <div
-      className={` ${className} bg-white p-2 grid grid-rows-[25rem_8rem] md:grid-rows-[28rem_12rem] gap-2 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full border border-red-500`}
+      className={` ${className} bg-white p-2 grid grid-rows-[25rem_8rem] md:grid-rows-[28rem_12rem] gap-2 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full`}
     >
       {/* Main Image */}
       <button

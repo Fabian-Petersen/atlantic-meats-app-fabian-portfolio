@@ -13,7 +13,7 @@ type Props = {
 export function MobileAssetsOverviewTable({ className, data }: Props) {
   const [openRowId, setOpenRowId] = useState<string | null>(null);
   return (
-    <div className={`${className} flex flex-col gap-2 w-full p-2`}>
+    <div className={`${className} flex flex-col gap-2 w-full`}>
       {data.map((row) => (
         <MobileAssetViewRow
           key={row.id}
