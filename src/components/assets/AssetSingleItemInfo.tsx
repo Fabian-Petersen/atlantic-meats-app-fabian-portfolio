@@ -48,7 +48,7 @@ function AssetSingleItemInfo({ item }: Props) {
         </li>
       </ul>
       <div className="flex w-full justify-end pt-6">
-        <div className="flex gap-4 w-1/2">
+        <div className="flex gap-4 w-full md:w-1/2">
           <Button
             type="button"
             onClick={() => {
@@ -56,7 +56,7 @@ function AssetSingleItemInfo({ item }: Props) {
             }}
             variant="cancel"
             size="xl"
-            className="flex-1 bg-transparent border border-red-500 text-gray-600"
+            className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
           >
             Back
           </Button>

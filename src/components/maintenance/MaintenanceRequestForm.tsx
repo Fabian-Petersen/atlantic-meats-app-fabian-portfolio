@@ -111,7 +111,7 @@ const MaintenanceRequestForm = () => {
       className="flex flex-col rounded-lg lg:w-full text-font dark:bg-[#1d2739]"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6 border-dashed border-blue-500">
         <FormRowSelect
           label="Equipment"
           name="equipment"
@@ -177,14 +177,17 @@ const MaintenanceRequestForm = () => {
           label="Additional Notes"
           className="lg:col-span-2"
         />
-        <div className="flex gap-2 w-full justify-end">
+      </div>
+      <div className="flex w-full">
+        <div className="flex lg:w-1/2 ml-auto gap-2">
           <Button
             type="button"
             onClick={() => {
               navigate("/maintenance-list");
             }}
-            variant="cancel"
+            variant="ghost"
             size="lg"
+            className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
           >
             Cancel
           </Button>
@@ -193,6 +196,7 @@ const MaintenanceRequestForm = () => {
             type="submit"
             variant="submit"
             size="lg"
+            className="flex-1"
           >
             {isSubmitting ? "Sending..." : "Submit"}
           </Button>

@@ -31,8 +31,8 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
       </div>
 
       {isOpen && (
-        <div className="mt-3 text-sm grid gap-2">
-          <ul className="grid gap-2">
+        <div className="mt-3 text-xs grid gap-6">
+          <ul className="grid gap-4">
             <li className="flex gap-2 w-full justify-between">
               <span>Condition</span>
               <span>{row.original.condition}</span>
@@ -42,9 +42,9 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
               <span>{row.original.serialNumber}</span>
             </li>
           </ul>
-          <div className="flex gap-2 w-full justify-between px-2 mt-auto">
+          <div className="w-full flex gap-12 justify-between mt-auto">
             <button
-              className="py-2 dark:text-gray-200 text-gray-600 hover:cursor-pointer hover:text-green-500"
+              className="py-1 dark:text-gray-200 text-green-700 hover:cursor-pointer hover:text-green-700 bg-green-200/90 flex-1 rounded-full"
               onClick={(e) => {
                 e.stopPropagation();
                 console.log(row.original.id);
@@ -56,7 +56,7 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
               Edit
             </button>
             <button
-              className="py-2 dark:text-gray-200 text-gray-600 hover:cursor-pointer hover:text-primary"
+              className="py-2 dark:text-gray-200 text-yellow-600 hover:cursor-pointer hover:text-primary bg-primary/40 flex-1 rounded-full"
               onClick={(e) => {
                 e.stopPropagation();
                 console.log(row.original.id);
@@ -68,7 +68,7 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
               View
             </button>
             <button
-              className="py-2 dark:text-gray-200 text-gray-600 hover:cursor-pointer hover:text-red-500"
+              className="py-2 dark:text-gray-200 text-red-500 hover:cursor-pointer hover:text-red-500 bg-red-200/90 flex-1 rounded-full"
               onClick={(e) => {
                 e.stopPropagation();
                 console.log(row.original.id);

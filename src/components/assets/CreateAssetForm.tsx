@@ -274,25 +274,29 @@ const CreateAssetForm = () => {
           rows={3}
         />
       </div>
-      <div className="flex gap-2 w-full justify-end">
-        <Button
-          type="button"
-          onClick={() => {
-            navigate("/asset");
-          }}
-          variant="cancel"
-          size="lg"
-        >
-          Cancel
-        </Button>
-        <Button
-          disabled={isSubmitting}
-          type="submit"
-          variant="submit"
-          size="lg"
-        >
-          {isSubmitting ? "Sending..." : "Submit"}
-        </Button>
+      <div className="flex w-full">
+        <div className="flex lg:w-1/2 ml-auto gap-2">
+          <Button
+            type="button"
+            onClick={() => {
+              navigate("/asset");
+            }}
+            variant="cancel"
+            size="lg"
+            className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
+          >
+            Cancel
+          </Button>
+          <Button
+            disabled={isSubmitting}
+            type="submit"
+            variant="submit"
+            size="lg"
+            className="flex-1"
+          >
+            {isSubmitting ? "Sending..." : "Submit"}
+          </Button>
+        </div>
       </div>
     </form>
   );

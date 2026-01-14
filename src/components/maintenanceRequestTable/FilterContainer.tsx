@@ -1,13 +1,14 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { ColumnFilterItem } from "./ColumnFilterItem";
 import type { AssetFormValues } from "@/schemas";
 import { type Table } from "@tanstack/react-table";
+import AddNewItemButton from "../features/AddNewItemButton";
 
 type Props = {
   table: Table<AssetFormValues>;
 };
 function FilterContainer({ table }: Props) {
-  const [dateValue, setDateValue] = useState("");
+  // const [dateValue, setDateValue] = useState("");
 
   const uniqueValues = (key: keyof AssetFormValues) => {
     const rows = table.getCoreRowModel().rows;
@@ -25,8 +26,45 @@ function FilterContainer({ table }: Props) {
   };
 
   return (
-    <div className="grid grid-cols-3 md:flex-row w-full gap-4 h-auto rounded-md lg:gap-4 py-1 shadow-sm p-2 md:rounded-lg">
-      <div className="w-full flex-col py-2">
+    <div className="flex gap-4 justify-between w-full md:gap-2 h-auto">
+      <div className="flex gap-2 shadow-sm  py-1 p-2 rounded-md">
+        <div className="py-2">
+          <label className="text-sm md:text-md text-gray-500">Equipment</label>
+          <ColumnFilterItem
+            placeholder="All"
+            value={
+              (table.getColumn("equipment")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(v) => table.getColumn("equipment")?.setFilterValue(v)}
+            options={uniqueValues("equipment")}
+          />
+        </div>
+        <div className="py-2">
+          <label className="text-sm md:text-md text-gray-500">Location</label>
+          <ColumnFilterItem
+            placeholder="All"
+            value={
+              (table.getColumn("location")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(v) => table.getColumn("location")?.setFilterValue(v)}
+            options={uniqueValues("location")}
+          />
+        </div>
+      </div>
+      <div className="py-2 hidden md:inline-block">
+        <label className="text-sm md:text-md text-transparent">
+          Create New Asset
+        </label>
+        <AddNewItemButton title="Create Asset" className="w-full" />
+      </div>
+    </div>
+  );
+}
+
+export default FilterContainer;
+
+{
+  /* <div className="w-full flex-col py-2">
         <label className="text-sm md:text-md text-gray-500">Date Created</label>
         <input
           aria-label="date filter"
@@ -44,32 +82,5 @@ function FilterContainer({ table }: Props) {
             Date
           </span>
         )}
-      </div>
-      <div className="py-2">
-        <label className="text-sm md:text-md text-gray-500">Equipment</label>
-        <ColumnFilterItem
-          placeholder="All"
-          value={
-            (table.getColumn("equipment")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(v) => table.getColumn("equipment")?.setFilterValue(v)}
-          options={uniqueValues("equipment")}
-        />
-      </div>
-      <div className="py-2">
-        <label className="text-sm md:text-md text-gray-500">Location</label>
-        <ColumnFilterItem
-          placeholder="All"
-          value={
-            (table.getColumn("location")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(v) => table.getColumn("location")?.setFilterValue(v)}
-          options={uniqueValues("location")}
-        />
-      </div>
-      {/* // ! todo Hide the placeholder "yyyy/mm/dd" with "date"*/}
-    </div>
-  );
+      </div> */
 }
-
-export default FilterContainer;

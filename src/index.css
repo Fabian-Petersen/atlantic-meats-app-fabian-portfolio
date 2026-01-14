@@ -24,6 +24,7 @@
   --chevron: #fcb53b;
   --size-5: 1.5rem;
   --font-size: 0.9rem;
+  --minheight-page: calc(100vh-var(--sm-navbarHeight));
 }
 
 /* $ ======================== Dark Mode Styles as per user preference ====================== */

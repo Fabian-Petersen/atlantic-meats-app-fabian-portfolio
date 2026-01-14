@@ -2,7 +2,6 @@ import { flexRender, type Table } from "@tanstack/react-table";
 
 import { useNavigate } from "react-router-dom";
 import type { AssetFormValues } from "@/schemas";
-import AddNewItemButton from "../features/AddNewItemButton";
 
 type Props = {
   table: Table<AssetFormValues>;
@@ -21,9 +20,6 @@ export function AssetsOverviewTable({ table, className }: Props) {
       {/* Filters */}
       {/* <FilterContainer data={data} /> */}
       {/* Table */}
-      <div className="w-full justify-end flex">
-        <AddNewItemButton title="Create Asset" />
-      </div>
       <div className="lg:overflow-hidden overflow-x-scroll rounded-lg w-full border border-gray-200 dark:border-gray-700/50 text-md">
         <table className="w-full">
           <thead className="bg-gray-200 dark:bg-bgdark dark:text-fontlight">

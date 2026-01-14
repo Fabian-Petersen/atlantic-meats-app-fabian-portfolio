@@ -7,9 +7,10 @@ import FullscreenImageModal from "../modals/FullscreenImageModal";
 
 type Props = {
   imageUrls: PresignedUrlResponse[];
+  className?: string;
 };
 
-export const AssetSingleItemImages = ({ imageUrls }: Props) => {
+export const AssetSingleItemImages = ({ imageUrls, className }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const MAX_VISIBLE = 3;
@@ -26,7 +27,9 @@ export const AssetSingleItemImages = ({ imageUrls }: Props) => {
   const canScrollRight = startIndex + MAX_VISIBLE < imageUrls.length;
 
   return (
-    <div className="bg-white p-2 grid grid-rows-[25rem_8rem] md:grid-rows-[30rem_12rem] gap-2 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full">
+    <div
+      className={` ${className} bg-white p-2 grid grid-rows-[25rem_8rem] md:grid-rows-[28rem_12rem] gap-2 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full border border-red-500`}
+    >
       {/* Main Image */}
       <button
         type="button"

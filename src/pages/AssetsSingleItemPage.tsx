@@ -42,12 +42,12 @@ const AssetsSingleItemPage = () => {
   const imageUrls = item.imageUrls;
 
   return (
-    <div className="p-4">
-      <div className="h-auto bg-white dark:bg-[#1d2739] border-gray-700/70 rounded-md grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800">
-        <div>
+    <div className="p-2">
+      <div className="min-h-(var(--minheight-page)) bg-white dark:bg-[#1d2739] border-gray-700/70 rounded-md grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800">
+        <div className="order-2 md:order-1">
           <AssetSingleItemImages imageUrls={imageUrls ?? []} />
         </div>
-        <div>
+        <div className="order-1 md:order-2">
           <AssetSingleItemInfo item={item} />
         </div>
       </div>
