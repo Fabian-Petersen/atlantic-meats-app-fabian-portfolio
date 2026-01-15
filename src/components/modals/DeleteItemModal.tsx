@@ -1,34 +1,27 @@
 import React from "react";
 import { AlertTriangle } from "lucide-react";
-import { useDeleteItem } from "@/utils/maintenanceRequests";
 import useGlobalContext from "@/context/useGlobalContext";
 import FormHeading from "../customComponents/FormHeading";
 import { toast } from "sonner";
 
 const DeleteItemModal = () => {
-  const { setShowDeleteDialog, genericData, showDeleteDialog } =
-    useGlobalContext();
-  console.log("DeleteItemModal state:", showDeleteDialog, genericData);
+  const { setShowDeleteDialog, pendingTableAction } = useGlobalContext();
 
-  const id = genericData?.id;
-  const { isPending, mutateAsync } = useDeleteItem({
-    id: id || "",
-    endpoint: "maintenance-request",
-    queryKey: ["maintenanceRequests"],
-  });
+  if (!pendingTableAction) return null;
+
+  const { id, action } = pendingTableAction;
 
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    console.log("Delete Modal State:", setShowDeleteDialog);
     try {
-      await mutateAsync();
+      console.log(id);
+      await action(id);
+
       setShowDeleteDialog(false);
-      toast.success("Maintenance request deleted successfully.", {
-        duration: 1000,
-      });
-      //   console.log(`Deleted ${id} successfully.`);
     } catch (error) {
-      console.error(`Error deleting ${id}:`, error);
+      console.error("Delete failed:", error);
+      toast.error("Delete failed");
     }
   };
 
@@ -56,7 +49,7 @@ const DeleteItemModal = () => {
         <div className="mt-6 flex flex-col gap-4 lg:flex-row justify-end">
           <button
             type="button"
-            disabled={isPending}
+            // disabled={isPending}
             onClick={() => setShowDeleteDialog(false)}
             className="w-full rounded-full bg-red-500 px-6 py-2 transition hover:bg-red-500/90 hover:cursor-pointer text-white disabled:opacity-50 dark:text-gray-200 lg:w-32"
           >
@@ -65,11 +58,11 @@ const DeleteItemModal = () => {
 
           <button
             type="submit"
-            disabled={isPending}
-            onClick={handleDelete}
+            // disabled={isPending}
             className="w-full rounded-full bg-primary/90 px-6 py-2 text-gray-700 transition hover:bg-primary hover:cursor-pointer disabled:opacity-50 lg:w-32"
           >
-            {isPending ? "Deleting…" : "Delete"}
+            Delete
+            {/* {isPending ? "Deleting…" : "Delete"} */}
           </button>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import { useParams } from "react-router-dom";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-import { useById } from "../utils/maintenanceRequests";
+import { useById } from "../utils/api";
 import { type CreateJobFormValues } from "@/schemas";
 import { AssetSingleItemImages } from "@/components/assets/AssetSingleItemImages";
 import MaintenanceSingleItemInfo from "@/components/maintenance/MaintenanceSingleItemInfo";

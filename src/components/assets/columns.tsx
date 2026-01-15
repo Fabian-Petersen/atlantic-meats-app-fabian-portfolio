@@ -1,3 +1,5 @@
+// $ This component renders the columns for the Assets Table.
+
 import type { ColumnDef } from "@tanstack/react-table";
 import type { AssetFormValues } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
@@ -75,6 +77,7 @@ export const getAssetColumns = (
       );
     },
   },
+  // $ This is the actions column in the table with the delete, edit and delete logic
   {
     id: "actions",
     header: "", // or "Actions"

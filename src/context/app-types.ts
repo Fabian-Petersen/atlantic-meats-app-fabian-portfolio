@@ -1,7 +1,11 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { GlobalData } from "../schemas";
+import type { GlobalData, PendingTableAction } from "../schemas";
 
 export type AppContextType = {
+  //$ Error State
+  hasError: boolean;
+  setHasError: Dispatch<SetStateAction<boolean>>;
+
   //$ Theme State
   theme: "light" | "dark";
   setTheme: Dispatch<SetStateAction<"light" | "dark">>;
@@ -33,6 +37,10 @@ export type AppContextType = {
   // $ Data
   genericData: GlobalData | undefined;
   setGenericData<T extends GlobalData>(data: T): void;
+
+  // $ State for the Maintennace and Assets Table Ations (delete, update and edit item)
+  pendingTableAction: PendingTableAction;
+  setPendingTableAction: Dispatch<SetStateAction<PendingTableAction | null>>;
 };
 
 export type DeleteModalPayload = {

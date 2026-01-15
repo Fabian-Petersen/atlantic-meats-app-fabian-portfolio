@@ -1,4 +1,5 @@
-import Separator from "./Seperator";
+// import Separator from "./Seperator";
+import { Separator } from "../ui/separator";
 
 import {
   maintenanceLinks,

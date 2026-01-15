@@ -1,35 +1,59 @@
 import { Pencil, Trash2Icon, Wrench, type LucideIcon } from "lucide-react";
 
 export type TableMenuProps = {
-  id: number;
+  id: string;
   url?: string;
   name: string;
   icon: LucideIcon;
-  action: (v: boolean) => void;
+  openModal: (v: boolean) => void;
+  action: (id: string) => Promise<void>;
 };
+
+export const getAssetTableMenuItems = (
+  setShowUpdateDialog: (v: boolean) => void,
+  setShowDeleteDialog: (v: boolean) => void,
+  deleteItem: (id: string) => Promise<void>
+): TableMenuProps[] => [
+  {
+    id: "1",
+    name: "Edit",
+    icon: Pencil,
+    openModal: setShowUpdateDialog,
+    action: deleteItem,
+  },
+  {
+    id: "2",
+    name: "Delete",
+    icon: Trash2Icon,
+    openModal: setShowDeleteDialog,
+    action: deleteItem,
+  },
+];
 
 export const getMaintenanceTableMenuItems = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
   setShowActionDialog: (v: boolean) => void,
-  setShowDeleteDialog: (v: boolean) => void
+  setShowDeleteDialog: (v: boolean) => void,
+  deleteItem: (id: string) => Promise<void>
 ): TableMenuProps[] => [
   {
-    id: 1,
+    id: "1",
     url: "/update-request",
     name: "Edit",
     icon: Pencil,
-    action: setShowUpdateMaintenanceDialog,
+    openModal: setShowUpdateMaintenanceDialog,
+    action: deleteItem,
   },
   {
-    id: 2,
+    id: "2",
     url: "/maintenance-action",
     name: "Action",
     icon: Wrench,
-    action: setShowActionDialog,
+    openModal: setShowActionDialog,
+    action: deleteItem,
   },
   {
-    id: 3,
-    url: "/delete-request",
+    id: "3",
     name: "Delete",
     icon: Trash2Icon,
     action: setShowDeleteDialog,

@@ -3,7 +3,7 @@
 
 import FormHeading from "@/components/customComponents/FormHeading";
 import { MaintenanceRequestsTable } from "@/components/maintenanceRequestTable/MaintenanceRequestsTable";
-import { useMaintenanceRequests } from "@/utils/maintenanceRequests";
+import { useDeleteItem, useMaintenanceRequests } from "@/utils/api";
 
 import {
   // type ColumnDef,
@@ -21,12 +21,18 @@ import { getMaintenanceTableMenuItems } from "@/data/TableMenuItems";
 import useGlobalContext from "@/context/useGlobalContext";
 import { getMaintenanceColumns } from "@/components/maintenanceRequestTable/columns";
 import { useState } from "react";
+import { ErrorPage } from "@/components/features/Error";
 
 const MaintenanceRequestOverviewPage = () => {
-  const { data, isLoading, error } = useMaintenanceRequests();
+  const { data, isLoading, isError, refetch } = useMaintenanceRequests();
   const [sorting, setSorting] = useState<SortingState>([
     { id: "createdAt", desc: true },
   ]);
+
+  const { mutateAsync: deleteItem } = useDeleteItem({
+    resourcePath: "maintenance",
+    queryKey: ["MAINTENANCE_DELETE_ITEM"],
+  });
 
   const {
     setShowUpdateMaintenanceDialog,
@@ -37,7 +43,8 @@ const MaintenanceRequestOverviewPage = () => {
   const menuItems = getMaintenanceTableMenuItems(
     setShowUpdateMaintenanceDialog,
     setShowActionDialog,
-    setShowDeleteDialog
+    setShowDeleteDialog,
+    deleteItem
   );
 
   const columns = getMaintenanceColumns(menuItems);
@@ -62,7 +69,7 @@ const MaintenanceRequestOverviewPage = () => {
 
   if (isLoading) return <PageLoadingSpinner />;
 
-  if (error) return <p>Error Loading maintenance requests</p>;
+  if (isError) return <ErrorPage onRetry={refetch} />;
 
   return (
     <div className="flex w-full p-4 h-auto">

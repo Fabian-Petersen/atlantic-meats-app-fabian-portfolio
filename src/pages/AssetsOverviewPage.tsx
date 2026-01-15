@@ -3,11 +3,12 @@
 
 import FormHeading from "@/components/customComponents/FormHeading";
 import { AssetsOverviewTable } from "@/components/assets/AssetsOverviewTable";
-import { useAssetsList } from "@/utils/maintenanceRequests";
+import { useDeleteItem, useGetAll } from "@/utils/api";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { MobileAssetsOverviewTable } from "@/components/mobile/MolbileAssetsOverviewTable";
 import FilterContainer from "@/components/maintenanceRequestTable/FilterContainer";
 
+// $ Import Tanstack Table
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -19,10 +20,25 @@ import {
 import { getAssetColumns } from "../components/assets/columns";
 import { getAssetTableMenuItems } from "@/data/TableMenuItems";
 import useGlobalContext from "@/context/useGlobalContext";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import type { AssetFormValues } from "@/schemas";
+import { ErrorPage } from "@/components/features/Error";
+
+// import type { AssetFormValues } from "@/schemas";
 
 const AssetsOverviewPage = () => {
-  const { data, isLoading, isError } = useAssetsList();
+  const ASSETS_REQUESTS_KEY = ["assetRequests"];
+  const { data, isLoading, isError, refetch } = useGetAll<AssetFormValues>(
+    "asset",
+    ASSETS_REQUESTS_KEY
+  );
+
+  // $ Logic to Delete an item from the table.
+  const { mutateAsync: deleteItem } = useDeleteItem({
+    resourcePath: "asset",
+    queryKey: ASSETS_REQUESTS_KEY,
+  });
+
   const [sorting, setSorting] = useState<SortingState>([
     { id: "createdAt", desc: true },
   ]);
@@ -31,12 +47,13 @@ const AssetsOverviewPage = () => {
 
   const menuStateActions = getAssetTableMenuItems(
     setShowUpdateAssetDialog,
-    setShowDeleteDialog
+    setShowDeleteDialog,
+    deleteItem
   );
 
   const columns = getAssetColumns(menuStateActions);
 
-  const table = useReactTable({
+  const table = useReactTable<AssetFormValues>({
     data: data ?? [],
     columns: columns,
     columnResizeMode: "onChange",
@@ -47,12 +64,15 @@ const AssetsOverviewPage = () => {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  useEffect(() => {
-    console.log(table.getState());
-  }, [table]);
-
   if (isLoading) return <PageLoadingSpinner />;
-  if (isError) return <p>Error retrieving asset data...</p>;
+  if (isError)
+    return (
+      <ErrorPage
+        title="Failed to load assets"
+        message="Please check your connection and try again."
+        onRetry={refetch}
+      />
+    );
   // console.log("Asset Table Filter State:", table.getState().columnFilters); // Check if the filters are in runaway state
 
   return (

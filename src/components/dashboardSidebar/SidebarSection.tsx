@@ -26,8 +26,8 @@ const SidebarSection = ({ data, heading }: Props) => {
 
   return (
     <section className="flex h-auto flex-col gap-4 lg:py-4 p-2">
-      <SectionHeading heading={heading} />
-      <ul className="flex flex-col gap-4">
+      <SectionHeading heading={heading} className="text-xs" />
+      <ul className="flex flex-col gap-3">
         {data.map((item) => (
           <li key={item.name} className="w-full">
             <Link to={item.url}>

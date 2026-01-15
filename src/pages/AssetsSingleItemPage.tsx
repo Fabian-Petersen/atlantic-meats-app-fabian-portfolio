@@ -2,7 +2,7 @@
 import { useParams } from "react-router-dom";
 // import { useMaintenanceRequestById } from "../utils/maintenanceRequests";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-import { useById } from "@/utils/maintenanceRequests";
+import { useById } from "@/utils/api";
 import { AssetSingleItemImages } from "@/components/assets/AssetSingleItemImages";
 import AssetSingleItemInfo from "@/components/assets/AssetSingleItemInfo";
 import type { AssetFormValues } from "@/schemas";
