@@ -8,18 +8,6 @@ export type TableMenuProps = {
   action: (v: boolean) => void;
 };
 
-// const {
-//   setShowUpdateMaintenanceDialog,
-//   setShowActionDialog,
-//   setShowDeleteDialog,
-// } = useGlobalContext();
-
-// const menuItems = getMaintenanceTableMenuItems(
-//   setShowUpdateMaintenanceDialog,
-//   setShowActionDialog,
-//   setShowDeleteDialog
-// );
-
 export const getMaintenanceTableMenuItems = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
   setShowActionDialog: (v: boolean) => void,
@@ -67,3 +55,15 @@ export const getAssetTableMenuItems = (
     action: setShowDeleteDialog,
   },
 ];
+
+// const {
+//   setShowUpdateMaintenanceDialog,
+//   setShowActionDialog,
+//   setShowDeleteDialog,
+// } = useGlobalContext();
+
+// const menuItems = getMaintenanceTableMenuItems(
+//   setShowUpdateMaintenanceDialog,
+//   setShowActionDialog,
+//   setShowDeleteDialog
+// );

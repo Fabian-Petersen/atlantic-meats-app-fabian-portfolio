@@ -21,12 +21,24 @@ export type AppContextType = {
   setShowUpdateMaintenanceDialog: (v: boolean) => void;
   showActionDialog: boolean;
   setShowActionDialog: (v: boolean) => void;
+  setShowUpdateAssetDialog: (v: boolean) => void;
+  showUpdateAssetDialog: boolean;
+
+  // $ Delete Modal
   showDeleteDialog: boolean;
   setShowDeleteDialog: (v: boolean) => void;
-  showUpdateAssetDialog: boolean;
-  setShowUpdateAssetDialog: (v: boolean) => void;
+  deletePayload: DeleteModalPayload | null;
+  setDeletePayload: (payload: DeleteModalPayload | null) => void;
 
   // $ Data
   genericData: GlobalData | undefined;
   setGenericData<T extends GlobalData>(data: T): void;
+};
+
+export type DeleteModalPayload = {
+  id: string;
+  endpoint: string;
+  queryKey: string[];
+  title?: string;
+  successMessage?: string;
 };

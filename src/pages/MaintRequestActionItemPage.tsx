@@ -14,7 +14,7 @@ const MaintRequestActionPage = () => {
       <div className="bg-white flex flex-col gap-6 lg:gap-4 w-full max-w-xl lg:max-w-3xl h-auto rounded-xl shadow-lg p-4 dark:bg-[#1d2739] dark:text-gray-100 dark:border-gray-700/50 dark:border">
         <FormHeading
           heading="Action Maintenance Request"
-          className="text-center w-full border border-red-500"
+          className="text-center w-full"
         />
         <ul className="px-2 h-12 items-center border-b border-b-gray-300 lg:pb-1 w-full flex lg:gap-2 justify-between text-xs bg-transparent">
           {/* <li className="flex gap-1">

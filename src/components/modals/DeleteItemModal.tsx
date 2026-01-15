@@ -53,12 +53,12 @@ const DeleteItemModal = () => {
         </p>
 
         {/* Actions */}
-        <div className="mt-6 flex flex-col gap-4 lg:flex-row">
+        <div className="mt-6 flex flex-col gap-4 lg:flex-row justify-end">
           <button
             type="button"
             disabled={isPending}
             onClick={() => setShowDeleteDialog(false)}
-            className="w-full rounded-full border border-red-500/80 bg-transparent px-6 py-2 text-gray-600 transition hover:bg-red-500 hover:cursor-pointer hover:text-white disabled:opacity-50 dark:text-gray-200 lg:w-32"
+            className="w-full rounded-full bg-red-500 px-6 py-2 transition hover:bg-red-500/90 hover:cursor-pointer text-white disabled:opacity-50 dark:text-gray-200 lg:w-32"
           >
             Cancel
           </button>
@@ -66,6 +66,7 @@ const DeleteItemModal = () => {
           <button
             type="submit"
             disabled={isPending}
+            onClick={handleDelete}
             className="w-full rounded-full bg-primary/90 px-6 py-2 text-gray-700 transition hover:bg-primary hover:cursor-pointer disabled:opacity-50 lg:w-32"
           >
             {isPending ? "Deleting…" : "Delete"}

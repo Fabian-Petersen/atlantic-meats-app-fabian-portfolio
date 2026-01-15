@@ -3,6 +3,7 @@
 import { MoreVertical } from "lucide-react";
 import useGlobalContext from "@/context/useGlobalContext";
 import type { TableMenuProps } from "@/data/TableMenuItems";
+import type { GlobalData } from "@/schemas";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,19 +14,19 @@ import {
   //   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { GlobalData } from "@/schemas";
+
 // import type { AssetFormValues, CreateJobFormValues } from "@/schemas";
 // import Separator from "../dashboardSidebar/Seperator";
 
-type DropdownMenuDialogProps<T> = {
-  data: T;
+type DropdownMenuDialogProps<GlobalData> = {
+  data: GlobalData;
   menuStateActions: TableMenuProps[];
 };
 
-export function DropdownMenuButtonDialog<T extends GlobalData>({
+export function DropdownMenuButtonDialog({
   data,
   menuStateActions,
-}: DropdownMenuDialogProps<T>) {
+}: DropdownMenuDialogProps<GlobalData>) {
   const { setGenericData } = useGlobalContext();
 
   return (

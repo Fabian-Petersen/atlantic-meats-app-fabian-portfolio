@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AppContext } from "./app-context";
 import type { GlobalData } from "../schemas";
+import type { DeleteModalPayload } from "./app-types";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   // $ [Step 3]: Create the state and set the initial state value
@@ -21,7 +22,12 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [showActionDialog, setShowActionDialog] = useState<boolean>(false);
   const [showUpdateAssetDialog, setShowUpdateAssetDialog] =
     useState<boolean>(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false); // Delete confirmation dialog
+
+  const [deletePayload, setDeletePayload] = useState<DeleteModalPayload | null>(
+    null
+  );
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
 
   // $ State for the data to update/delete an item
   const [genericData, setGenericData] = useState<GlobalData | undefined>(
@@ -53,6 +59,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setShowActionDialog,
         showDeleteDialog,
         setShowDeleteDialog,
+        deletePayload,
+        setDeletePayload,
         genericData,
         setGenericData,
       }}
