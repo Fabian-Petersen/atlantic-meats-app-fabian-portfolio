@@ -3,7 +3,7 @@
 
 import FormHeading from "@/components/customComponents/FormHeading";
 import { MaintenanceRequestsTable } from "@/components/maintenanceRequestTable/MaintenanceRequestsTable";
-import { useDeleteItem, useMaintenanceRequests } from "@/utils/api";
+import { useDeleteItem, useGetAll, useMaintenanceRequests } from "@/utils/api";
 
 import {
   // type ColumnDef,
@@ -24,7 +24,7 @@ import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
 
 const MaintenanceRequestOverviewPage = () => {
-  const { data, isLoading, isError, refetch } = useMaintenanceRequests();
+  const { data, isLoading, isError, refetch } = useGetAll("maintenance");
   const [sorting, setSorting] = useState<SortingState>([
     { id: "createdAt", desc: true },
   ]);

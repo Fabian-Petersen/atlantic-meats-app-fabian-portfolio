@@ -133,6 +133,7 @@ const CreateAssetForm = () => {
       );
 
       toast.success("Asset successfully created!", { duration: 1000 });
+      navigate("/asset");
     } catch (err) {
       console.error("Failed to create asset", err);
     }

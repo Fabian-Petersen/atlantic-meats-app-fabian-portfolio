@@ -26,13 +26,8 @@ type DropdownMenuDialogProps<GlobalData> = {
 export function DropdownMenuButtonDialog({
   data,
   menuStateActions,
-<<<<<<< HEAD
 }: DropdownMenuDialogProps<GlobalData>) {
-  const { setGenericData } = useGlobalContext();
-=======
-}: DropdownMenuDialogProps<T>) {
   const { setGenericData, setPendingTableAction } = useGlobalContext();
->>>>>>> fc37ae84524d4de220d3e43bda9d1ad02c5b91d0
 
   return (
     <>

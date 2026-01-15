@@ -13,12 +13,10 @@ const DeleteItemModal = () => {
 
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Delete Modal State:", setShowDeleteDialog);
     try {
-      console.log(id);
       await action(id);
-
       setShowDeleteDialog(false);
+      toast.success("The itemm was sucessfulky deleted");
     } catch (error) {
       console.error("Delete failed:", error);
       toast.error("Delete failed");
@@ -41,8 +39,8 @@ const DeleteItemModal = () => {
 
         {/* Body */}
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-          Are you sure you want to delete the maintenance request? This action
-          cannot be undone.
+          Are you sure you want to delete the item? This action cannot be
+          undone.
         </p>
 
         {/* Actions */}

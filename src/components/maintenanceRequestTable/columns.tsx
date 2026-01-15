@@ -54,7 +54,7 @@ export const getMaintenanceColumns = (
     enableHiding: false,
     cell: ({ row }) => (
       <div className="text-right" onClick={(e) => e.stopPropagation()}>
-        <DropdownMenuButtonDialog<CreateJobFormValues>
+        <DropdownMenuButtonDialog
           data={row.original}
           menuStateActions={menuStateActions}
         />

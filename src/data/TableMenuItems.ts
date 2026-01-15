@@ -56,38 +56,7 @@ export const getMaintenanceTableMenuItems = (
     id: "3",
     name: "Delete",
     icon: Trash2Icon,
-    action: setShowDeleteDialog,
+    openModal: setShowDeleteDialog,
+    action: deleteItem,
   },
 ];
-
-export const getAssetTableMenuItems = (
-  setShowUpdateDialog: (v: boolean) => void,
-  setShowDeleteDialog: (v: boolean) => void
-): TableMenuProps[] => [
-  {
-    id: 1,
-    url: "/update-asset",
-    name: "Edit",
-    icon: Pencil,
-    action: setShowUpdateDialog,
-  },
-  {
-    id: 2,
-    url: "/delete-asset",
-    name: "Delete",
-    icon: Trash2Icon,
-    action: setShowDeleteDialog,
-  },
-];
-
-// const {
-//   setShowUpdateMaintenanceDialog,
-//   setShowActionDialog,
-//   setShowDeleteDialog,
-// } = useGlobalContext();
-
-// const menuItems = getMaintenanceTableMenuItems(
-//   setShowUpdateMaintenanceDialog,
-//   setShowActionDialog,
-//   setShowDeleteDialog
-// );
