@@ -3,7 +3,7 @@
 
 import FormHeading from "@/components/customComponents/FormHeading";
 import { MaintenanceRequestsTable } from "@/components/maintenanceRequestTable/MaintenanceRequestsTable";
-import { useMaintenanceRequests } from "@/utils/api";
+import { useDeleteItem, useMaintenanceRequests } from "@/utils/api";
 
 import {
   // type ColumnDef,
@@ -29,6 +29,11 @@ const MaintenanceRequestOverviewPage = () => {
     { id: "createdAt", desc: true },
   ]);
 
+  const { mutateAsync: deleteItem } = useDeleteItem({
+    resourcePath: "maintenance",
+    queryKey: ["MAINTENANCE_DELETE_ITEM"],
+  });
+
   const {
     setShowUpdateMaintenanceDialog,
     setShowActionDialog,
@@ -38,7 +43,8 @@ const MaintenanceRequestOverviewPage = () => {
   const menuItems = getMaintenanceTableMenuItems(
     setShowUpdateMaintenanceDialog,
     setShowActionDialog,
-    setShowDeleteDialog
+    setShowDeleteDialog,
+    deleteItem
   );
 
   const columns = getMaintenanceColumns(menuItems);
