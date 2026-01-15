@@ -25,10 +25,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [showUpdateAssetDialog, setShowUpdateAssetDialog] =
     useState<boolean>(false);
 
-  const [deletePayload, setDeletePayload] = useState<DeleteModalPayload | null>(
-    null
-  );
-
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
 
   // $ State for the data to update/delete an item
@@ -65,8 +61,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setShowActionDialog,
         showDeleteDialog,
         setShowDeleteDialog,
-        deletePayload,
-        setDeletePayload,
         genericData,
         setGenericData,
         hasError,

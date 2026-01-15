@@ -3,7 +3,7 @@
 
 import FormHeading from "@/components/customComponents/FormHeading";
 import { MaintenanceRequestsTable } from "@/components/maintenanceRequestTable/MaintenanceRequestsTable";
-import { useDeleteItem, useGetAll, useMaintenanceRequests } from "@/utils/api";
+import { useDeleteItem, useGetAll } from "@/utils/api";
 
 import {
   // type ColumnDef,
@@ -22,9 +22,15 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { getMaintenanceColumns } from "@/components/maintenanceRequestTable/columns";
 import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
+import type { CreateJobFormValues } from "@/schemas";
 
 const MaintenanceRequestOverviewPage = () => {
-  const { data, isLoading, isError, refetch } = useGetAll("maintenance");
+  const MAINTENANCE_REQUESTS_KEY = ["allMaintenanceRequests"];
+  const { data, isLoading, isError, refetch } = useGetAll<CreateJobFormValues>(
+    "maintenance",
+    MAINTENANCE_REQUESTS_KEY
+  );
+
   const [sorting, setSorting] = useState<SortingState>([
     { id: "createdAt", desc: true },
   ]);
@@ -40,28 +46,20 @@ const MaintenanceRequestOverviewPage = () => {
     setShowDeleteDialog,
   } = useGlobalContext();
 
-  const menuItems = getMaintenanceTableMenuItems(
+  const menuStateActions = getMaintenanceTableMenuItems(
     setShowUpdateMaintenanceDialog,
     setShowActionDialog,
     setShowDeleteDialog,
     deleteItem
   );
 
-  const columns = getMaintenanceColumns(menuItems);
+  const columns = getMaintenanceColumns(menuStateActions);
 
   const table = useReactTable({
     data: data ?? [],
     columns: columns,
     state: { sorting },
     onSortingChange: setSorting,
-    // state: {
-    //   sorting: [
-    //     {
-    //       id: "createdAt",
-    //       desc: true,
-    //     },
-    //   ],
-    // },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),

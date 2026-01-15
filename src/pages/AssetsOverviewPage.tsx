@@ -33,15 +33,15 @@ const AssetsOverviewPage = () => {
     ASSETS_REQUESTS_KEY
   );
 
-  // $ Logic to Delete an item from the table.
-  const { mutateAsync: deleteItem } = useDeleteItem({
-    resourcePath: "asset",
-    queryKey: ASSETS_REQUESTS_KEY,
-  });
-
   const [sorting, setSorting] = useState<SortingState>([
     { id: "createdAt", desc: true },
   ]);
+
+  // $ Logic to Delete an item from the table.
+  const { mutateAsync: deleteItem } = useDeleteItem({
+    resourcePath: "asset",
+    queryKey: ["ASSETS_DELETE_KEY"],
+  });
 
   const { setShowUpdateAssetDialog, setShowDeleteDialog } = useGlobalContext();
 

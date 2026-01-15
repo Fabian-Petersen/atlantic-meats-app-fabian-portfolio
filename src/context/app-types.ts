@@ -31,8 +31,8 @@ export type AppContextType = {
   // $ Delete Modal
   showDeleteDialog: boolean;
   setShowDeleteDialog: (v: boolean) => void;
-  deletePayload: DeleteModalPayload | null;
-  setDeletePayload: (payload: DeleteModalPayload | null) => void;
+  // deletePayload: DeleteModalPayload | null;
+  // setDeletePayload: (payload: DeleteModalPayload | null) => void;
 
   // $ Data
   genericData: GlobalData | undefined;
