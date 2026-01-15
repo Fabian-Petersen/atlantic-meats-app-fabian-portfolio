@@ -29,7 +29,7 @@ function FilterContainer({ table }: Props) {
     <div className="flex gap-4 justify-between w-full md:gap-2 h-auto">
       <div className="flex gap-2 shadow-sm  py-1 p-2 rounded-md">
         <div className="py-2">
-          <label className="text-sm md:text-md text-gray-500">Equipment</label>
+          <label className="text-xs text-gray-500">Equipment</label>
           <ColumnFilterItem
             placeholder="All"
             value={
@@ -40,7 +40,7 @@ function FilterContainer({ table }: Props) {
           />
         </div>
         <div className="py-2">
-          <label className="text-sm md:text-md text-gray-500">Location</label>
+          <label className="text-xs text-gray-500">Location</label>
           <ColumnFilterItem
             placeholder="All"
             value={

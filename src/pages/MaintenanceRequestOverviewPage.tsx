@@ -27,7 +27,7 @@ import type { CreateJobFormValues } from "@/schemas";
 const MaintenanceRequestOverviewPage = () => {
   const MAINTENANCE_REQUESTS_KEY = ["allMaintenanceRequests"];
   const { data, isLoading, isError, refetch } = useGetAll<CreateJobFormValues>(
-    "maintenance",
+    "maintenance-request",
     MAINTENANCE_REQUESTS_KEY
   );
 
@@ -36,7 +36,7 @@ const MaintenanceRequestOverviewPage = () => {
   ]);
 
   const { mutateAsync: deleteItem } = useDeleteItem({
-    resourcePath: "maintenance",
+    resourcePath: "maintenance-request",
     queryKey: ["MAINTENANCE_DELETE_ITEM"],
   });
 

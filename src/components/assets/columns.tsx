@@ -12,13 +12,13 @@ type EquipmentCondition = "operational" | "new" | "poor" | "broken";
 function getConditionClasses(condition: EquipmentCondition) {
   switch (condition.toLowerCase()) {
     case "operational":
-      return "text-green-700 bg-green-300/70";
+      return "text-green-700 bg-green-300/60";
     case "new":
-      return "text-blue-700 bg-blue-300/70";
+      return "text-blue-700 bg-blue-300/60";
     case "poor":
-      return "text-orange-700 bg-orange-300/70";
+      return "text-orange-700 bg-orange-300/60";
     case "broken":
-      return "text-red-700 bg-red-300/70";
+      return "text-red-700 bg-red-300/60";
     default:
       return "text-gray-700 bg-gray-200";
   }
@@ -68,7 +68,7 @@ export const getAssetColumns = (
 
       return (
         <p
-          className={`capitalize py-1.5 px-2 w-20 text-center rounded-full ${getConditionClasses(
+          className={`capitalize px-1.5 py-2 w-24 min-w-fit text-center rounded-full ${getConditionClasses(
             value as EquipmentCondition
           )}`}
         >
@@ -80,7 +80,7 @@ export const getAssetColumns = (
   // $ This is the actions column in the table with the delete, edit and delete logic
   {
     id: "actions",
-    header: "", // or "Actions"
+    header: "Actions", // or "Actions"
     enableSorting: false,
     enableHiding: false,
     size: 10,

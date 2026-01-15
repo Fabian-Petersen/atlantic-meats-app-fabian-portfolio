@@ -10,7 +10,7 @@ import type {
   PresignedUrlResponse,
 } from "@/schemas";
 
-export type Resource = "asset" | "maintenance";
+export type Resource = "asset" | "maintenance-request" | "maintenance-list";
 
 // $ Combine the types into a union type for the generic functions
 export type EntityType = AssetFormValues | CreateJobFormValues;

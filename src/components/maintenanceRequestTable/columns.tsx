@@ -49,7 +49,7 @@ export const getMaintenanceColumns = (
   },
   {
     id: "actions",
-    header: "",
+    header: "Actions",
     enableSorting: false,
     enableHiding: false,
     cell: ({ row }) => (
