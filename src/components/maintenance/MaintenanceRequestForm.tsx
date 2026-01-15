@@ -2,6 +2,7 @@
 
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 
 // $ React-Hook-Form
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,13 +30,17 @@ import {
 } from "@/data/maintenanceRequestFormData";
 
 // import assets from "@/data/assets.json";
-import { useCreateMaintenanceRequest } from "@/utils/maintenanceRequests";
+// import { useCreateMaintenanceRequest } from "@/utils/api";
 import FileInput from "../customComponents/FileInput";
 import TextAreaInput from "../customComponents/TextAreaInput";
 import { toast } from "sonner";
+import { useCreateMaintenanceRequest } from "@/utils/api";
+import useGlobalContext from "@/context/useGlobalContext";
 
 const MaintenanceRequestForm = () => {
-  const { mutateAsync } = useCreateMaintenanceRequest();
+  const { mutateAsync, isError } = useCreateMaintenanceRequest();
+  const { setHasError } = useGlobalContext();
+
   const navigate = useNavigate();
 
   // $ Form Schema
@@ -75,8 +80,6 @@ const MaintenanceRequestForm = () => {
         })),
       };
 
-      console.log("Payload for API:", payload);
-
       // $ 2. Create maintenance request (DynamoDB + presigned URLs)
       const response = await mutateAsync(payload);
       const { presigned_urls } = response;
@@ -105,6 +108,12 @@ const MaintenanceRequestForm = () => {
       console.error("Failed to create maintenance request", err);
     }
   };
+
+  useEffect(() => {
+    if (isError) {
+      setHasError(true);
+    }
+  }, [isError, setHasError]);
 
   return (
     <form

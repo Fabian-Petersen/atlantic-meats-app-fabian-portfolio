@@ -1,5 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "./apiClient";
+import { apiClient } from "./apiClient";
+
+// $ Types
 import type {
   AssetFormValues,
   CreateAssetPayload,
@@ -7,7 +9,18 @@ import type {
   CreateJobPayload,
   PresignedUrlResponse,
 } from "@/schemas";
-// import { useNavigate } from "react-router-dom";
+
+export type Resource = "asset" | "maintenance";
+
+// $ Combine the types into a union type for the generic functions
+export type EntityType = AssetFormValues | CreateJobFormValues;
+
+// $ Format the data according to API requirements
+// const formatData = <T extends EntityType>(item: T): Omit<T, "id"> => {
+//   return item;
+// };
+
+// console.log(formatData);
 
 // $ =========================
 // $ Query Keys
@@ -19,40 +32,22 @@ const ASSETS_REQUESTS_KEY = ["assetRequests"];
 // $ Hooks
 // $ =========================
 
-// $ GET all
-export const useMaintenanceRequests = () => {
-  return useQuery<CreateJobFormValues[]>({
-    queryKey: MAINTENANCE_REQUESTS_KEY,
+// $ Generic: GET All
+export const useGetAll = <T extends EntityType>(
+  resourcePath: Resource,
+  queryKey: readonly unknown[] = [resourcePath]
+) => {
+  return useQuery<T[]>({
+    queryKey,
     queryFn: async () => {
-      const { data } = await api.get<CreateJobFormValues[]>(
-        "/maintenance-request"
-      );
-      return data;
+      try {
+        const response = await apiClient.get(`/${resourcePath}`);
+        return response.data as T[];
+      } catch (error) {
+        console.error(`Error fetching ${resourcePath}:`, error);
+        throw error;
+      }
     },
-  });
-};
-
-export const useAssetsList = () => {
-  return useQuery<AssetFormValues[]>({
-    queryKey: ASSETS_REQUESTS_KEY,
-    queryFn: async () => {
-      const { data } = await api.get<AssetFormValues[]>("/asset");
-      return data;
-    },
-  });
-};
-
-// $ GET by ID
-export const useMaintenanceRequestById = (id: string) => {
-  return useQuery<CreateJobFormValues>({
-    queryKey: [...MAINTENANCE_REQUESTS_KEY, id],
-    queryFn: async () => {
-      const { data } = await api.get<CreateJobFormValues>(
-        `/maintenance-request/${id}`
-      );
-      return data;
-    },
-    enabled: !!id,
   });
 };
 
@@ -71,7 +66,63 @@ export const useById = <T>(options: {
   return useQuery<T & WithImages>({
     queryKey: [...queryKey, id],
     queryFn: async () => {
-      const { data } = await api.get<T & WithImages>(`${endpoint}/${id}`);
+      const { data } = await apiClient.get<T & WithImages>(`${endpoint}/${id}`);
+      return data;
+    },
+    enabled: !!id,
+  });
+};
+
+// $ Generic: DELETE
+export const useDeleteItem = (options: {
+  resourcePath: Resource;
+  queryKey: readonly unknown[];
+}) => {
+  const queryClient = useQueryClient();
+  const { resourcePath, queryKey } = options;
+
+  return useMutation({
+    mutationFn: async (id: string): Promise<void> => {
+      await apiClient.delete(`${resourcePath}/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
+};
+
+// % ========================================================================
+
+export const useMaintenanceRequests = () => {
+  return useQuery<CreateJobFormValues[]>({
+    queryKey: MAINTENANCE_REQUESTS_KEY,
+    queryFn: async () => {
+      const { data } = await apiClient.get<CreateJobFormValues[]>(
+        "/maintenance-request"
+      );
+      return data;
+    },
+  });
+};
+
+export const useAssetsList = () => {
+  return useQuery<AssetFormValues[]>({
+    queryKey: ASSETS_REQUESTS_KEY,
+    queryFn: async () => {
+      const { data } = await apiClient.get<AssetFormValues[]>("/asset");
+      return data;
+    },
+  });
+};
+
+// $ GET by ID
+export const useMaintenanceRequestById = (id: string) => {
+  return useQuery<CreateJobFormValues>({
+    queryKey: [...MAINTENANCE_REQUESTS_KEY, id],
+    queryFn: async () => {
+      const { data } = await apiClient.get<CreateJobFormValues>(
+        `/maintenance-request/${id}`
+      );
       return data;
     },
     enabled: !!id,
@@ -84,7 +135,7 @@ export const useCreateMaintenanceRequest = () => {
 
   return useMutation({
     mutationFn: async (payload: CreateJobPayload) => {
-      const { data } = await api.post("/maintenance-request", payload, {
+      const { data } = await apiClient.post("/maintenance-request", payload, {
         headers: { "Content-Type": "application/json" },
       });
       return data;
@@ -102,7 +153,7 @@ export const useCreateNewAsset = () => {
 
   return useMutation({
     mutationFn: async (payload: CreateAssetPayload) => {
-      const { data } = await api.post("/asset", payload, {
+      const { data } = await apiClient.post("/asset", payload, {
         headers: { "Content-Type": "application/json" },
       });
       return data;
@@ -114,29 +165,6 @@ export const useCreateNewAsset = () => {
     },
   });
 };
-
-// //$ Generic: POST new Item
-// export const useCreateNewItem = <TResponse, TPayload>(options: {
-//   queryKey: readonly unknown[];
-//   endpoint: string;
-//   redirect: string;
-// }) => {
-//   const queryClient = useQueryClient();
-//   const navigate = useNavigate();
-
-//   return useMutation<TResponse, Error, TPayload>({
-//     mutationFn: async (payload: TPayload) => {
-//       const { data } = await api.post<TResponse>(options.endpoint, payload);
-//       return data;
-//     },
-//     onSuccess: () => {
-//       navigate(options.redirect);
-//       queryClient.invalidateQueries({
-//         queryKey: options.queryKey,
-//       });
-//     },
-//   });
-// };
 
 // $ UPDATE
 export const useUpdateMaintenanceRequest = () => {
@@ -150,7 +178,7 @@ export const useUpdateMaintenanceRequest = () => {
       id: string;
       payload: Partial<CreateJobFormValues>;
     }) => {
-      const { data } = await api.put<CreateJobFormValues>(
+      const { data } = await apiClient.put<CreateJobFormValues>(
         `/maintenance-request/${id}`,
         payload
       );
@@ -181,27 +209,11 @@ export const useUpdateItem = <TPayload, TResponse>({
 
   return useMutation({
     mutationFn: async ({ id, payload }: UpdateArgs<TPayload>) => {
-      const { data } = await api.put<TResponse>(`/${endpoint}/${id}`, payload);
+      const { data } = await apiClient.put<TResponse>(
+        `/${endpoint}/${id}`,
+        payload
+      );
       return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey });
-    },
-  });
-};
-
-// $ DELETE
-export const useDeleteItem = (options: {
-  id: string;
-  endpoint: string;
-  queryKey: readonly unknown[];
-}) => {
-  const queryClient = useQueryClient();
-  const { id, endpoint, queryKey } = options;
-
-  return useMutation({
-    mutationFn: async (): Promise<void> => {
-      await api.delete(`${endpoint}/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });

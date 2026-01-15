@@ -26,7 +26,7 @@ export function DropdownMenuButtonDialog<T extends GlobalData>({
   data,
   menuStateActions,
 }: DropdownMenuDialogProps<T>) {
-  const { setGenericData } = useGlobalContext();
+  const { setGenericData, setPendingTableAction } = useGlobalContext();
 
   return (
     <>
@@ -54,9 +54,13 @@ export function DropdownMenuButtonDialog<T extends GlobalData>({
                   key={item.id}
                   className="hover:cursor-pointer text-font flex justify-between"
                   onSelect={() => {
-                    console.log(`Selected action: ${item.action}`);
+                    // console.log(`Selected action: ${item.action}`);
                     setGenericData(data);
-                    item.action(true);
+                    setPendingTableAction({
+                      id: data.id ?? "",
+                      action: item.action,
+                    });
+                    item.openModal(true);
                   }}
                 >
                   <span>{item.name}</span>

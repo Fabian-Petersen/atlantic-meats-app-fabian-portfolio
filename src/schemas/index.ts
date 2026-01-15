@@ -153,3 +153,9 @@ export type PresignedUrlResponse = {
   key: string;
   content_type: string;
 }[];
+
+// $ Type handling the table menu actions (delete, update, edit)
+export type PendingTableAction = {
+  id: string;
+  action: (id: string) => Promise<void>;
+} | null;

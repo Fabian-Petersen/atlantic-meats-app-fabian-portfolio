@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { AppContext } from "./app-context";
-import type { GlobalData } from "../schemas";
+import type { GlobalData, PendingTableAction } from "../schemas";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   // $ [Step 3]: Create the state and set the initial state value
+
+  // $ Error State to show the Error Page
+  const [hasError, setHasError] = useState<boolean>(false);
 
   // $ State for the theme mode
   // ? The isDarkTheme is used to set the theme in the 'useSetDarkTheme' hook.
@@ -27,6 +30,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [genericData, setGenericData] = useState<GlobalData | undefined>(
     undefined
   ); // Set the generic data
+
+  // $ State handling the actions for the tables (delete, update, edit)
+  const [pendingTableAction, setPendingTableAction] =
+    useState<PendingTableAction | null>(null);
 
   // const [assetsData, setAssetsData] = useState<AssetFormValues | undefined>(
   //   undefined
@@ -55,6 +62,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setShowDeleteDialog,
         genericData,
         setGenericData,
+        hasError,
+        setHasError,
+        pendingTableAction,
+        setPendingTableAction,
       }}
     >
       {children}
