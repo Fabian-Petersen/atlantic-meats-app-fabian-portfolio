@@ -29,13 +29,13 @@ const SidebarNavItem = ({
       <button
         type="button"
         onClick={onClick}
-        className={`group flex p-2 w-full rounded-lg items-center gap-4 py-3 px-4 text-gray-600 dark:text-fontlight hover:dark:text-gray-900 hover:bg-primary/20 transition-all duration-150 hover:font-medium hover:cursor-pointer ${
+        className={`group flex p-2 w-full rounded-lg items-center gap-4 lg:gap-4 py-3 px-4 text-gray-600 dark:text-fontlight hover:dark:text-gray-900 hover:bg-primary/20 transition-all duration-150 hover:font-medium hover:cursor-pointer ${
           isActive &&
           "bg-primary/70 tracking-wide hover:bg-primary/70 hover:dark:text-white hover:text-gray-600"
         }`}
       >
-        <Icon size={24} />
-        <span className="lg:text-md text-md capitalize">{children}</span>
+        <Icon size={22} />
+        <span className="lg:text-sm text-sm capitalize">{children}</span>
       </button>
     </div>
   );
