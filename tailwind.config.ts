@@ -24,6 +24,9 @@ const config: Config = {
         sans: ["Inter", "sans-serif"],
         heading: ["Poppins", "sans-serif"],
       },
+      text: {
+        md: "1rem",
+      },
     },
   },
   plugins: [],

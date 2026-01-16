@@ -18,6 +18,11 @@ export const LoginSchema = z.object({
     ),
 });
 
+// $ Schema for the Login Form
+export const forgotPasswordSchema = z.object({
+  email: z.email({ message: "Please enter a valid email" }),
+});
+
 export const changePasswordSchema = z
   .object({
     email: z.email({ message: "Please enter a valid email" }),
@@ -128,6 +133,7 @@ export const assetSchema = z.object({
 export type GlobalData = CreateJobFormValues | AssetFormValues;
 
 export type LoginFormValues = z.infer<typeof LoginSchema>;
+export type ForgotFormValues = z.infer<typeof forgotPasswordSchema>;
 export type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
 export type CreateJobFormValues = z.infer<typeof createJobSchema>;
 export type ActionJobFormValues = z.infer<typeof actionJobSchema>;

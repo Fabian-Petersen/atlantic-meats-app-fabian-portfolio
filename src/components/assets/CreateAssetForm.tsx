@@ -93,7 +93,7 @@ const CreateAssetForm = () => {
 
   // $ Form and Images Submit with Image Compression
   const onSubmit = async (data: AssetFormValues) => {
-    console.log("Create new asset:", data);
+    // console.log("Create new asset:", data);
 
     try {
       // $ 1️⃣ Compress images in browser

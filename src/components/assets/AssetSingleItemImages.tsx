@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ChevronLeftCircle, ChevronRightCircle } from "lucide-react";
 // import {} from "../../../public/images/20251124_150123.jpg";
 import type { PresignedUrlResponse } from "@/pages/MaintRequestSingleItemPage";
+import NoImagePlaceholder from "../features/NoImagePlaceholder";
 
 import FullscreenImageModal from "../modals/FullscreenImageModal";
 
@@ -26,9 +27,19 @@ export const AssetSingleItemImages = ({ imageUrls, className }: Props) => {
   const canScrollLeft = startIndex > 0;
   const canScrollRight = startIndex + MAX_VISIBLE < imageUrls.length;
 
+  if (!imageUrls || imageUrls.length === 0) {
+    return (
+      <div
+        className={`${className} bg-white p-2 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full`}
+      >
+        <NoImagePlaceholder className="h-full min-h-100" />
+      </div>
+    );
+  }
+
   return (
     <div
-      className={` ${className} bg-white p-2 grid grid-rows-[25rem_8rem] md:grid-rows-[28rem_12rem] gap-2 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full`}
+      className={` ${className} bg-white p-2 grid grid-rows-[25rem_8rem] md:grid-rows-[28rem_12rem] gap-4 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full`}
     >
       {/* Main Image */}
       <button
@@ -54,7 +65,7 @@ export const AssetSingleItemImages = ({ imageUrls, className }: Props) => {
       )}
 
       {/* Thumbnails */}
-      <div className="relative flex items-center gap-2 h-32 md:h-48 group">
+      <div className="relative flex items-center gap-4 h-32 md:h-48 group">
         {/* Left Scroll */}
         {canScrollLeft && (
           <button
@@ -84,7 +95,7 @@ export const AssetSingleItemImages = ({ imageUrls, className }: Props) => {
                   setActiveIndex(actualIndex);
                 }}
                 className={`cursor-pointer bg-gray-200 rounded-md h-full w-full overflow-hidden ${
-                  actualIndex === activeIndex ? "ring-6 ring-primary" : ""
+                  actualIndex === activeIndex ? "ring-1 ring-primary" : ""
                 } ${index === 2 ? "group/thumb" : ""}`}
               >
                 <img

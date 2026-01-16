@@ -32,21 +32,3 @@ export async function awsCognitoSetNewPassword(
     throw error;
   }
 }
-
-// import { signIn, confirmSignIn } from 'aws-amplify/auth';
-
-// async function forceNewPasswordFlow(username, temporaryPassword, newPassword) {
-//   try {
-//     const user = await signIn({ username, password: temporaryPassword });
-
-//     if (user.nextStep.signInStep === 'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED') {
-//       const newUser = await confirmSignIn(
-//         { challengeResponse: newPassword }
-//       );
-//       // User is now signed in with their new password
-//       console.log('Signed in successfully with new password', newUser);
-//     }
-//   } catch (error) {
-//     console.error('Error during forced password change:', error);
-//   }
-// }

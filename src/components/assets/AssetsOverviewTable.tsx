@@ -2,6 +2,7 @@ import { flexRender, type Table } from "@tanstack/react-table";
 
 import { useNavigate } from "react-router-dom";
 import type { AssetFormValues } from "@/schemas";
+import EmptyTablePlaceholder from "../features/EmptyTablePlaceholder";
 
 type Props = {
   table: Table<AssetFormValues>;
@@ -52,22 +53,32 @@ export function AssetsOverviewTable({ table, className }: Props) {
           </thead>
 
           <tbody className="text-xs dark:bg-bgdark dark:text-gray-200">
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                onClick={() => {
-                  // console.log("Navigating to ID:", row.original.id);
-                  navigate(`/asset/${row.original.id}`);
-                }}
-                className="cursor-pointer hover:bg-primary/20 dark:bg-[#1d2739] dark:text-gray-200"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-4 py-3 text-gray-700">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {table.getRowModel().rows.length === 0 ? (
+              <EmptyTablePlaceholder
+                colSpan={table.getAllColumns().length}
+                message="No Assets Available yet"
+              />
+            ) : (
+              table.getRowModel().rows.map((row) => (
+                <tr
+                  key={row.id}
+                  onClick={() => {
+                    // console.log("Navigating to ID:", row.original.id);
+                    navigate(`/asset/${row.original.id}`);
+                  }}
+                  className="cursor-pointer hover:bg-primary/20 dark:bg-[#1d2739] dark:text-gray-200"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="px-4 py-3 text-gray-700">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

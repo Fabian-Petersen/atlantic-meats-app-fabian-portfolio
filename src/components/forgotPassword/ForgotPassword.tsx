@@ -1,67 +1,71 @@
-import { useState } from "react";
+import FormRowInput from "../customComponents/FormRowInput";
+
+// $ React-Hook-Form, zod & schema
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
+import { useForgotPassword } from "@/utils/aws-forgotPassword";
+
+// $ Import schemas
+import {
+  forgotPasswordSchema,
+  type ForgotFormValues,
+} from "../../schemas/index";
+import FormHeading from "../customComponents/FormHeading";
+import { Button } from "../ui/button";
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  // $ Form Schema
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ForgotFormValues>({
+    defaultValues: {
+      email: "",
+    },
+    resolver: zodResolver(forgotPasswordSchema),
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setMessage(null);
+  const { isLoading, sendResetCode } = useForgotPassword();
 
-    try {
-      // TODO: Replace with your API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setMessage("If an account exists, a reset link has been sent.");
-    } catch {
-      setMessage("Something went wrong. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
+  const onSubmit = async (data: ForgotFormValues) => {
+    const { email } = data;
+    const response = await sendResetCode(email);
+    console.log(response);
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow">
-        <h1 className="mb-2 text-center text-2xl font-semibold text-gray-900">
-          Forgot Password
-        </h1>
-        <p className="mb-6 text-center text-sm text-gray-600">
-          Enter your email and we’ll send you a reset link.
-        </p>
+      <div className="w-full max-w-md rounded-lg bg-white p-4 shadow flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <FormHeading heading="Forgot Password" />
+          <p className="mb-6 text-left text-sm text-gray-600">
+            Enter your email for a reset link.
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label
-              htmlFor="email"
-              className="mb-1 block text-sm font-medium text-gray-700"
-            >
-              Email address
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-              placeholder="you@example.com"
-            />
-          </div>
-
-          <button
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+          <FormRowInput
+            label="Email"
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            register={register}
+            error={errors.email}
+          />
+          <Button
+            className={` ${
+              isLoading
+                ? "bg-yellow-400 text-black"
+                : "bg-(--clr-primary) text-white"
+            }   w-full leading-2 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider py-6`}
             type="submit"
-            disabled={isSubmitting}
-            className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+            disabled={isLoading}
           >
-            {isSubmitting ? "Sending..." : "Send reset link"}
-          </button>
+            {isLoading ? "Sending..." : "Reset Password"}
+          </Button>
         </form>
-
-        {message && (
-          <p className="mt-4 text-center text-sm text-gray-700">{message}</p>
-        )}
       </div>
     </div>
   );
