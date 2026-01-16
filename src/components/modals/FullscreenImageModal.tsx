@@ -52,7 +52,9 @@ function FullscreenImageModal({ images, setIsOpen, activeIndex }: Props) {
     >
       {/* Close button */}
       <button
-        className="absolute top-8 right-8 text-white text-2xl z-50 hover:cursor-pointer"
+        type="button"
+        aria-label="Close Button"
+        className="absolute top-8 right-10 text-white text-2xl z-50 hover:cursor-pointer hover:bg-white/30 hover:rounded-full p-2"
         onClick={() => setIsOpen(false)}
       >
         <X size={24} />
@@ -61,14 +63,15 @@ function FullscreenImageModal({ images, setIsOpen, activeIndex }: Props) {
       {/* Image container */}
       <div
         ref={imgRef}
-        className="p-4 relative w-full h-full flex items-center justify-center transition-transform duration-300"
-        style={{ transform: `translateX(${touchMoveX}px)` }}
+        className="p-4 relative w-full h-full flex items-center justify-center transition-transform duration-300 transform translate-x-[`${touchMove}px`]"
+        // style={{ transform: `translateX(${touchMoveX}px)` }}
         onClick={(e) => e.stopPropagation()}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
         <img
+          aria-label="Main Image of Item"
           src={images[currentIndex]}
           //   src={images[activeIndex]}
           className="max-h-full max-w-full object-contain rounded-md"
@@ -77,7 +80,9 @@ function FullscreenImageModal({ images, setIsOpen, activeIndex }: Props) {
 
       {/* Prev button */}
       <button
-        className={`absolute left-4 z-50 ${
+        type="button"
+        aria-label="Previous Button"
+        className={`absolute left-8 hover:bg-white/30 h-20 rounded-sm z-50 ${
           currentIndex === 0
             ? "opacity-30 cursor-not-allowed"
             : "cursor-pointer"
@@ -93,7 +98,9 @@ function FullscreenImageModal({ images, setIsOpen, activeIndex }: Props) {
 
       {/* Next button */}
       <button
-        className={`absolute right-4 z-50 ${
+        type="button"
+        aria-label="Next Button"
+        className={`absolute right-8 hover:bg-white/30 h-20 rounded-sm z-50 ${
           currentIndex === images.length - 1
             ? "opacity-30 cursor-not-allowed"
             : "cursor-pointer"

@@ -37,23 +37,23 @@ export function DropdownMenuButtonDialog({
             aria-label="Open menu"
             size="icon-sm"
             onClick={(e) => e.stopPropagation()}
-            className="p-1 rounded-md hover:bg-muted outline-none bg-transparent hover:cursor-pointer"
+            className="p-2 rounded-full hover:bg-muted outline-none hover:bg-gray-200/80 bg-transparent hover:cursor-pointer"
           >
             <MoreVertical />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="w-40 bg-gray-100 border-0 text-font py-4 px-1"
+          className="w-24 bg-gray-100 border-0 text-font p-2"
           align="end"
         >
           {/* <DropdownMenuLabel className="text-sm">Action</DropdownMenuLabel> */}
-          <DropdownMenuGroup className="space-y-1">
+          <DropdownMenuGroup className="space-y-2">
             {menuStateActions.map((item) => {
               const Icon = item.icon;
               return (
                 <DropdownMenuItem
                   key={item.id}
-                  className="hover:cursor-pointer text-font flex justify-between"
+                  className=""
                   onSelect={() => {
                     // console.log(`Selected action: ${item.action}`);
                     setGenericData(data);
@@ -64,10 +64,12 @@ export function DropdownMenuButtonDialog({
                     item.openModal(true);
                   }}
                 >
-                  <span>{item.name}</span>
-                  <span className="flex items-center">
-                    <Icon />
-                  </span>
+                  <div className="text-font text-xs flex w-full justify-center items-center hover:cursor-pointer">
+                    <span className="flex-1 h-full">{item.name}</span>
+                    <span className="flex-1 flex justify-end h-full p-0">
+                      <Icon />
+                    </span>
+                  </div>
                 </DropdownMenuItem>
               );
             })}

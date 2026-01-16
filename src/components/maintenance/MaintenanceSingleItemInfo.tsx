@@ -51,7 +51,7 @@ function MaintenanceSingleItemInfo({ item }: Readonly<Props>) {
             }}
             variant="cancel"
             size="xl"
-            className="flex-1 bg-transparent border border-red-500 text-gray-600"
+            className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
           >
             Back
           </Button>

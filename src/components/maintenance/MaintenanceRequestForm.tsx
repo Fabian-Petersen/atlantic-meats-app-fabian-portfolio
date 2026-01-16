@@ -194,7 +194,7 @@ const MaintenanceRequestForm = () => {
             onClick={() => {
               navigate("/maintenance-list");
             }}
-            variant="ghost"
+            variant="cancel"
             size="lg"
             className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
           >
