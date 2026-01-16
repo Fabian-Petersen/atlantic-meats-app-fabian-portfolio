@@ -83,10 +83,13 @@ export default function LoginContainer() {
   };
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-100 bg-white h-auto rounded-xl shadow-lg p-4 dark:border-gray-700/50 dark:bg-[#1d2739]">
+    <div className="flex flex-col gap-8 w-full max-w-100 max-h-92 h-92 bg-white rounded-xl shadow-lg p-4 dark:border-gray-700/50 dark:bg-[#1d2739]">
       {step === "LOGIN" && (
-        <div>
-          <FormHeading heading="Sign In" className="text-center pb-8 pt-2" />
+        <div className="h-full flex flex-col gap-4">
+          <FormHeading
+            heading="Login to your Account"
+            className="text-center pb-4 pt-2"
+          />
           <LoginForm onSubmit={handleLogin} loading={loading} />
         </div>
       )}
@@ -100,14 +103,6 @@ export default function LoginContainer() {
           />
         </div>
       )}
-      <div className="mt-6 text-center">
-        <a
-          href="/forgotPassword"
-          className="text-blue-400 hover:text-blue-500 text-sm mt-auto"
-        >
-          Forgot Password
-        </a>
-      </div>
     </div>
   );
 }

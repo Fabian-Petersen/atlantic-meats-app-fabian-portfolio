@@ -20,6 +20,7 @@ import AssetsSingleItemPage from "./pages/AssetsSingleItemPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import CreateAssetPage from "./pages/CreateAssetPage";
 import MaintRequestActionItemPage from "./pages/MaintRequestActionItemPage";
+import ForgotPassword from "./components/forgotPassword/ForgotPassword";
 
 function App() {
   return (
@@ -30,13 +31,15 @@ function App() {
       {/* Login Route Only: Authenticated users must logout to direct to logout */}
       <Route element={<PublicOnlyRoute />}>
         <Route path="/" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Route>
 
       {/* Protected: Authenticated Users */}
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
-          {/* // $ ======================= Maintenance Routes ======================= */}          <Route
+          {/* // $ ======================= Maintenance Routes ======================= */}{" "}
+          <Route
             path="/maintenance-request"
             element={<MaintenanceRequestPage />}
           />

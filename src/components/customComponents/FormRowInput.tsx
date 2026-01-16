@@ -1,5 +1,6 @@
 import type { HTMLInputTypeAttribute } from "react";
 import PasswordToggle from "@/components/features/PasswordToggle";
+import type { LucideIcon } from "lucide-react";
 
 type FormInputProps<TFieldValues extends FieldValues> = {
   label: string;
@@ -16,6 +17,7 @@ type FormInputProps<TFieldValues extends FieldValues> = {
   isVisible?: boolean; // Used only on input type "password"
   togglePassword?: () => void; // Used only on input type "password"
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  Icon?: LucideIcon;
 };
 
 // import { useWatch } from "react-hook-form";
@@ -42,6 +44,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
   accept,
   isVisible,
   togglePassword,
+  Icon,
 }: FormInputProps<TFieldValues>) {
   {
     /* import type {Control} from "react-hook-form"; */
@@ -52,6 +55,12 @@ function FormRowInput<TFieldValues extends FieldValues>({
 
   return (
     <div className="relative w-full mb-2 group">
+      {Icon && (
+        <span className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-gray-400">
+          <Icon size={16} />
+        </span>
+      )}
+
       <input
         {...register(name)}
         id={String(name)}
@@ -61,7 +70,8 @@ function FormRowInput<TFieldValues extends FieldValues>({
           "border border-gray-300 dark:border-gray-700/50 placeholder:dark:text-white placeholder:text-xs focus:border-rose-600 focus:dark:bg-gray-600",
 
           // isValid && "border-green-500",
-          error && "border-red-300"
+          error && "border-red-300",
+          Icon ? "pl-12" : ""
         )}
         placeholder={placeholder}
         disabled={disabled}
@@ -78,8 +88,9 @@ function FormRowInput<TFieldValues extends FieldValues>({
         <label
           htmlFor={String(name)}
           className={clsx(
-            "absolute text-xs -top-5 left-0 px-2 mb-0 transition-all duration-400 text-gray-700 dark:text-gray-100/50 tracking-wider",
-            "peer-placeholder-shown:top-3  peer-placeholder-shown:text-gray-600 peer-focus:-top-5 peer-focus:text-gray-600 peer-focus:text-sm dark:peer-focus:text-gray-400 dark:peer-placeholder-shown:text-fontLight"
+            "absolute text-xs -top-5 left-0 px-2 mb-0 transition-all duration-400 text-gray-700  dark:text-gray-100/50 tracking-wider",
+            "peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-600 peer-focus:-top-5  peer-focus:text-gray-600 peer-focus:text-sm dark:peer-focus:text-gray-400 dark:peer-placeholder-shown:text-fontLight",
+            Icon ? "left-8 peer-focus:left-3 peer-placeholder-shown:top-0" : ""
           )}
         >
           {label}

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { LoginSchema } from "../../schemas/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+// import { Mail } from "lucide-react";
 
 import FormRowInput from "../customComponents/FormRowInput";
 
@@ -35,42 +36,52 @@ const LoginForm = ({
 
   return (
     <form
-      className="flex flex-col gap-8 rounded-lg max-w-xl text-gray-700"
+      className="flex flex-col gap-2 h-full rounded-lg max-w-xl text-gray-700"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex flex-col mt-auto gap-8">
-        <FormRowInput
-          label="Email"
-          type="email"
-          name="email"
-          // control={control}
-          placeholder="Enter your email"
-          register={register}
-          error={errors.email}
-        />
-        <FormRowInput
-          label="Password"
-          type={showPassword.type} // comes from the usePasswordVisibility hook
-          togglePassword={showPassword.toggle} // comes from the usePasswordVisibility hook
-          isVisible={showPassword.isVisible} // comes from the usePasswordVisibility hook
-          name="password"
-          // control={control}
-          placeholder="Enter your password"
-          register={register}
-          error={errors.password}
-        />
-        <Button
-          className={` ${
-            loading
-              ? "bg-yellow-400 text-black"
-              : "bg-(--clr-primary) text-white"
-          }   leading-2 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider py-6`}
-          type="submit"
-          disabled={loading}
-        >
-          {loading ? "Signing in..." : "Sign In"}
-        </Button>
+      <div className="flex flex-col flex-1 gap-1">
+        <div className="flex flex-col gap-6">
+          <FormRowInput
+            label="Email"
+            type="email"
+            name="email"
+            // control={control}
+            placeholder="Enter your email"
+            register={register}
+            error={errors.email}
+            // Icon={Mail}
+          />
+          <FormRowInput
+            label="Password"
+            type={showPassword.type} // comes from the usePasswordVisibility hook
+            togglePassword={showPassword.toggle} // comes from the usePasswordVisibility hook
+            isVisible={showPassword.isVisible} // comes from the usePasswordVisibility hook
+            name="password"
+            // control={control}
+            placeholder="Enter your password"
+            register={register}
+            error={errors.password}
+            // Icon={Lock}
+          />
+        </div>
+        <div className="flex justify-end">
+          <a
+            href="/forgot-password"
+            className="text-blue-400 hover:text-blue-500 text-xs mt-auto"
+          >
+            Forgot Password
+          </a>
+        </div>
       </div>
+      <Button
+        className={` ${
+          loading ? "bg-yellow-400 text-black" : "bg-(--clr-primary) text-white"
+        }   leading-2 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider py-6`}
+        type="submit"
+        disabled={loading}
+      >
+        {loading ? "Signing in..." : "Sign In"}
+      </Button>
     </form>
   );
 };

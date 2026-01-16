@@ -84,7 +84,7 @@ export const AssetSingleItemImages = ({ imageUrls, className }: Props) => {
                   setActiveIndex(actualIndex);
                 }}
                 className={`cursor-pointer bg-gray-200 rounded-md h-full w-full overflow-hidden ${
-                  actualIndex === activeIndex ? "ring-2 ring-primary" : ""
+                  actualIndex === activeIndex ? "ring-6 ring-primary" : ""
                 } ${index === 2 ? "group/thumb" : ""}`}
               >
                 <img
