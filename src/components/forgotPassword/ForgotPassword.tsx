@@ -31,6 +31,7 @@ const ForgotPassword = () => {
 
   const onSubmit = async (data: ForgotFormValues) => {
     const { email } = data;
+    console.log(data);
     const response = await sendResetCode(email);
     console.log(response);
   };

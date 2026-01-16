@@ -6,7 +6,7 @@ import { signIn, confirmSignIn, signOut } from "aws-amplify/auth";
 
 import LoginForm from "./LoginForm";
 import ChangePasswordForm from "./ChangePasswordForm";
-import { useAuth } from "../../auth/AuthContext";
+import { useAuth } from "../../auth/useAuth";
 
 import { useUserAttributes } from "../../utils/aws-userAttributes";
 import { toast } from "sonner";

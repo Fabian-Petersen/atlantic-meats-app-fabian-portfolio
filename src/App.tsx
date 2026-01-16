@@ -20,7 +20,7 @@ import AssetsSingleItemPage from "./pages/AssetsSingleItemPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import CreateAssetPage from "./pages/CreateAssetPage";
 import MaintRequestActionItemPage from "./pages/MaintRequestActionItemPage";
-import ForgotPassword from "./components/forgotPassword/ForgotPassword";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 function App() {
   return (
@@ -31,7 +31,7 @@ function App() {
       {/* Login Route Only: Authenticated users must logout to direct to logout */}
       <Route element={<PublicOnlyRoute />}>
         <Route path="/" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       </Route>
 
       {/* Protected: Authenticated Users */}

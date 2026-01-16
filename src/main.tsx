@@ -6,7 +6,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import AppProvider from "./context/AppProvider.tsx";
-import { AuthProvider } from "./auth/AuthContext";
+import { AuthProvider } from "./auth/AuthProvider.tsx";
 
 // $ React Query
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

@@ -2,7 +2,7 @@
 import { signOut } from "aws-amplify/auth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { useAuth } from "../auth/AuthContext";
+import { useAuth } from "../auth/useAuth";
 import { useUserAttributes } from "./aws-userAttributes";
 import { capitalize } from "@/utils/capitalize";
 
@@ -36,6 +36,7 @@ export const useLogout = () => {
       navigate("/");
       await refreshAuth();
     } catch (error) {
+      console.log(error);
       navigate("/");
     }
   };
