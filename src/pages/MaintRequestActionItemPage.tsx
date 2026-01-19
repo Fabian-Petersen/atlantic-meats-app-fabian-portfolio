@@ -1,6 +1,6 @@
 // $ This is the maintence request page with the maintenance request form. The user can create a maintenance job/action from this page.
 
-import FormHeading from "@/components/customComponents/FormHeading";
+import FormHeading from "../../customComponents/FormHeading";
 // import Separator from "@/components/dashboardSidebar/Seperator";
 // import Seperator from "@/components/ui/separator";
 import MaintenanceActionForm from "@/components/maintenance/MaintenanceActionForm";

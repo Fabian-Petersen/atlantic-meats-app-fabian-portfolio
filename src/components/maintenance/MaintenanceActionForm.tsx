@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Resolver } from "react-hook-form";
 
-import FormRowInput from "../customComponents/FormRowInput";
-import FormRowSelect from "../customComponents/FormRowSelect";
+import FormRowInput from "../../../customComponents/FormRowInput";
+import FormRowSelect from "../../../customComponents/FormRowSelect";
 // import useGlobalContext from "@/context/useGlobalContext";
 
 // $ Import schemas
@@ -18,7 +18,7 @@ import {
 } from "../../schemas/index";
 
 import { ROOT_CAUSES, status } from "@/data/maintenanceAction";
-import TextAreaInput from "../customComponents/TextAreaInput";
+import TextAreaInput from "../../../customComponents/TextAreaInput";
 //// import FileInput from "../customComponents/FileInput";
 
 const MaintenanceActionForm = () => {
@@ -47,7 +47,7 @@ const MaintenanceActionForm = () => {
     // additional_notes: "",
     // },
     resolver: zodResolver(
-      actionJobSchema
+      actionJobSchema,
     ) as unknown as Resolver<ActionJobFormValues>,
   });
 

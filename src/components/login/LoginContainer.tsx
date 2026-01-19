@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import FormHeading from "../customComponents/FormHeading";
+import FormHeading from "../../../customComponents/FormHeading";
 import { signIn, confirmSignIn, signOut } from "aws-amplify/auth";
 
 import LoginForm from "./LoginForm";

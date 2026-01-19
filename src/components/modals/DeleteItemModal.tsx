@@ -1,7 +1,7 @@
 import React from "react";
 import { AlertTriangle } from "lucide-react";
 import useGlobalContext from "@/context/useGlobalContext";
-import FormHeading from "../customComponents/FormHeading";
+import FormHeading from "../../../customComponents/FormHeading";
 import { toast } from "sonner";
 
 const DeleteItemModal = () => {

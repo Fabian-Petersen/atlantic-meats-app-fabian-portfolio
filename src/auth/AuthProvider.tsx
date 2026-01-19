@@ -1,7 +1,7 @@
 // src/auth/AuthContext.tsx
 import { useEffect, useState } from "react";
 import { fetchAuthSession, signOut } from "aws-amplify/auth";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "./authContext";
 
 export type AuthContextType = {
   isAuthenticated: boolean;

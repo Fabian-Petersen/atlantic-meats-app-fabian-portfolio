@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 // import { Mail } from "lucide-react";
 
-import FormRowInput from "../customComponents/FormRowInput";
+import FormRowInput from "../../../customComponents/FormRowInput";
 
 // Show and Hide the Password
 import { usePasswordVisibility } from "@/utils/usePasswordVisibility";

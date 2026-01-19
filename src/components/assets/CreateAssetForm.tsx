@@ -8,8 +8,8 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Resolver } from "react-hook-form";
 
-import FormRowInput from "../customComponents/FormRowInput";
-import FormRowSelect from "../customComponents/FormRowSelect";
+import FormRowInput from "../../../customComponents/FormRowInput";
+import FormRowSelect from "../../../customComponents/FormRowSelect";
 
 // $ Import image compression hook
 import { compressImagesToWebp } from "@/utils/compressImagesToWebp";
@@ -35,9 +35,9 @@ import {
   location,
   CeateAssetFormOptionsData,
 } from "@/data/assetSelectOptions";
-import FileInput from "../customComponents/FileInput";
+import FileInput from "../../../customComponents/FileInput";
 import { toast } from "sonner";
-import TextAreaInput from "../customComponents/TextAreaInput";
+import TextAreaInput from "../../../customComponents/TextAreaInput";
 
 type BusinessUnit = keyof typeof CeateAssetFormOptionsData.business_unit;
 
@@ -129,7 +129,7 @@ const CreateAssetForm = () => {
             },
             body: file,
           });
-        })
+        }),
       );
 
       toast.success("Asset successfully created!", { duration: 1000 });

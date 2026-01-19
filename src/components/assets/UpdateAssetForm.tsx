@@ -24,10 +24,10 @@ import {
 } from "@/data/assetSelectOptions";
 
 // $ Components
-import FileInput from "../customComponents/FileInput";
-import FormRowSelect from "../customComponents/FormRowSelect";
-import FormRowInput from "../customComponents/FormRowInput";
-import TextAreaInput from "../customComponents/TextAreaInput";
+import FileInput from "../../../customComponents/FileInput";
+import FormRowSelect from "../../../customComponents/FormRowSelect";
+import FormRowInput from "../../../customComponents/FormRowInput";
+import TextAreaInput from "../../../customComponents/TextAreaInput";
 import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 import { Button } from "../ui/button";
 
@@ -132,7 +132,7 @@ const UpdateAssetForm = () => {
               },
               body: file,
             });
-          })
+          }),
         );
       }
 

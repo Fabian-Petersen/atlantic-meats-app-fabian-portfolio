@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 
 import useGlobalContext from "@/context/useGlobalContext";
-import FormHeading from "../customComponents/FormHeading";
+import FormHeading from "../../../customComponents/FormHeading";
 import UpdateAssetForm from "../assets/UpdateAssetForm";
 
 function UpdateAssetDialog() {

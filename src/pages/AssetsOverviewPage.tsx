@@ -1,7 +1,7 @@
 // $ This component renders the page for the assets register in a table format.
 // $ The list is from a Get request to the getAssetsRegister.py lambda function.
 
-import FormHeading from "@/components/customComponents/FormHeading";
+import FormHeading from "../../customComponents/FormHeading";
 import { AssetsOverviewTable } from "@/components/assets/AssetsOverviewTable";
 import { useDeleteItem, useGetAll } from "@/utils/api";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
@@ -30,7 +30,7 @@ const AssetsOverviewPage = () => {
   const ASSETS_REQUESTS_KEY = ["assetRequests"];
   const { data, isLoading, isError, refetch } = useGetAll<AssetFormValues>(
     "asset",
-    ASSETS_REQUESTS_KEY
+    ASSETS_REQUESTS_KEY,
   );
 
   const [sorting, setSorting] = useState<SortingState>([
@@ -48,7 +48,7 @@ const AssetsOverviewPage = () => {
   const menuStateActions = getAssetTableMenuItems(
     setShowUpdateAssetDialog,
     setShowDeleteDialog,
-    deleteItem
+    deleteItem,
   );
 
   const columns = getAssetColumns(menuStateActions);

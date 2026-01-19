@@ -1,7 +1,7 @@
 // $ This component renders the page for the maintenance requests in a table format.
 // $ The list is from a Get request to the getMaintenanceRequest.py lambda function.
 
-import FormHeading from "@/components/customComponents/FormHeading";
+import FormHeading from "../../customComponents/FormHeading";
 import { MaintenanceRequestsTable } from "@/components/maintenanceRequestTable/MaintenanceRequestsTable";
 import { useDeleteItem, useGetAll } from "@/utils/api";
 
@@ -28,7 +28,7 @@ const MaintenanceRequestOverviewPage = () => {
   const MAINTENANCE_REQUESTS_KEY = ["allMaintenanceRequests"];
   const { data, isLoading, isError, refetch } = useGetAll<CreateJobFormValues>(
     "maintenance-request",
-    MAINTENANCE_REQUESTS_KEY
+    MAINTENANCE_REQUESTS_KEY,
   );
 
   const [sorting, setSorting] = useState<SortingState>([
@@ -50,7 +50,7 @@ const MaintenanceRequestOverviewPage = () => {
     setShowUpdateMaintenanceDialog,
     setShowActionDialog,
     setShowDeleteDialog,
-    deleteItem
+    deleteItem,
   );
 
   const columns = getMaintenanceColumns(menuStateActions);

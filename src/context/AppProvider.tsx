@@ -22,6 +22,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [showUpdateMaintenanceDialog, setShowUpdateMaintenanceDialog] =
     useState<boolean>(false);
   const [showActionDialog, setShowActionDialog] = useState<boolean>(false);
+  const [showUserProfileDialog, setShowUserProfileDialog] =
+    useState<boolean>(false);
   const [showUpdateAssetDialog, setShowUpdateAssetDialog] =
     useState<boolean>(false);
 
@@ -29,7 +31,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   // $ State for the data to update/delete an item
   const [genericData, setGenericData] = useState<GlobalData | undefined>(
-    undefined
+    undefined,
   ); // Set the generic data
 
   // $ State handling the actions for the tables (delete, update, edit)
@@ -61,6 +63,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setShowActionDialog,
         showDeleteDialog,
         setShowDeleteDialog,
+        showUserProfileDialog,
+        setShowUserProfileDialog,
         genericData,
         setGenericData,
         hasError,

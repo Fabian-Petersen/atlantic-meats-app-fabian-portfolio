@@ -19,7 +19,7 @@ import type {
 } from "../../schemas/index";
 import { createJobSchema } from "../../schemas/index";
 
-import FormRowSelect from "../customComponents/FormRowSelect";
+import FormRowSelect from "../../../customComponents/FormRowSelect";
 
 // $ Data for select options
 import {
@@ -31,8 +31,8 @@ import {
 
 // import assets from "@/data/assets.json";
 // import { useCreateMaintenanceRequest } from "@/utils/api";
-import FileInput from "../customComponents/FileInput";
-import TextAreaInput from "../customComponents/TextAreaInput";
+import FileInput from "../../../customComponents/FileInput";
+import TextAreaInput from "../../../customComponents/TextAreaInput";
 import { toast } from "sonner";
 import { useCreateMaintenanceRequest } from "@/utils/api";
 import useGlobalContext from "@/context/useGlobalContext";
@@ -60,7 +60,7 @@ const MaintenanceRequestForm = () => {
       images: [],
     },
     resolver: zodResolver(
-      createJobSchema
+      createJobSchema,
     ) as unknown as Resolver<CreateJobFormValues>,
   });
 
@@ -98,7 +98,7 @@ const MaintenanceRequestForm = () => {
             },
             body: file,
           });
-        })
+        }),
       );
       toast.success("Maintenance request created successfully!", {
         duration: 1000,
@@ -188,7 +188,7 @@ const MaintenanceRequestForm = () => {
         />
       </div>
       <div className="flex w-full">
-        <div className="flex lg:w-1/2 ml-auto gap-2">
+        <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72">
           <Button
             type="button"
             onClick={() => {

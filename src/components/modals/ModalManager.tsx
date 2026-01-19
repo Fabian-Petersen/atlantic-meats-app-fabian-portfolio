@@ -2,16 +2,21 @@ import useGlobalContext from "@/context/useGlobalContext";
 import UpdateRequestDialog from "./UpdateRequestDialog";
 import DeleteItemModal from "./DeleteItemModal";
 import UpdateAssetDialog from "./UpdateAssetDialog";
+import UpdateUserDialog from "./UpdateUserDialog";
 
 const ModalManager = () => {
   const {
     showUpdateMaintenanceDialog,
     showDeleteDialog,
     showUpdateAssetDialog,
+    showUserProfileDialog,
   } = useGlobalContext();
 
   const isAnyModalOpen =
-    showUpdateMaintenanceDialog || showDeleteDialog || showUpdateAssetDialog;
+    showUpdateMaintenanceDialog ||
+    showDeleteDialog ||
+    showUpdateAssetDialog ||
+    showUserProfileDialog;
   // console.log("ModalManager state:", {
   //   showUpdateMaintenanceDialog,
   //   showDeleteDialog,
@@ -25,6 +30,7 @@ const ModalManager = () => {
       {showUpdateMaintenanceDialog && <UpdateRequestDialog />}
       {showDeleteDialog && <DeleteItemModal />}
       {showUpdateAssetDialog && <UpdateAssetDialog />}
+      {showUserProfileDialog && <UpdateUserDialog />}
     </div>
   );
 };

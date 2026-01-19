@@ -1,4 +1,4 @@
-import FormRowInput from "../customComponents/FormRowInput";
+import FormRowInput from "../../../customComponents/FormRowInput";
 
 // $ React-Hook-Form, zod & schema
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,7 +11,7 @@ import {
   forgotPasswordSchema,
   type ForgotFormValues,
 } from "../../schemas/index";
-import FormHeading from "../customComponents/FormHeading";
+import FormHeading from "../../../customComponents/FormHeading";
 import { Button } from "../ui/button";
 
 const ForgotPassword = () => {

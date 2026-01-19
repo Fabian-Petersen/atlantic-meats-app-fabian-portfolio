@@ -6,9 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 // $ Form Components
-import FormRowInput from "../customComponents/FormRowInput";
-import FormRowSelect from "../customComponents/FormRowSelect";
-import FileInput from "../customComponents/FileInput";
+import FormRowInput from "../../../customComponents/FormRowInput";
+import FormRowSelect from "../../../customComponents/FormRowSelect";
+import FileInput from "../../../customComponents/FileInput";
 import { Button } from "../ui/button";
 
 import useGlobalContext from "@/context/useGlobalContext";
@@ -53,8 +53,8 @@ const MaintenanceUpdateForm = () => {
               reader.onload = () => resolve(reader.result as string);
               reader.onerror = reject;
               reader.readAsDataURL(file);
-            })
-        )
+            }),
+        ),
       );
 
       const payload = { ...data, images: base64Images };

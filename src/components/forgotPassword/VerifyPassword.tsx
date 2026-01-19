@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import FormHeading from "../customComponents/FormHeading";
+import FormHeading from "../../../customComponents/FormHeading";
 import { Button } from "../ui/button";
 
 // React Hook Form + Zod

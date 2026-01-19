@@ -1,6 +1,6 @@
 // $ This is the maintence request page with the maintenance request form. The user can create a maintenance job/action from this page.
 
-import FormHeading from "@/components/customComponents/FormHeading";
+import FormHeading from "../../customComponents/FormHeading";
 import CreateAssetForm from "@/components/assets/CreateAssetForm";
 
 const CreateAssetPage = () => {

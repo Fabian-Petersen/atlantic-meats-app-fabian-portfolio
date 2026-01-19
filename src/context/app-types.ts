@@ -27,6 +27,8 @@ export type AppContextType = {
   setShowActionDialog: (v: boolean) => void;
   setShowUpdateAssetDialog: (v: boolean) => void;
   showUpdateAssetDialog: boolean;
+  showUserProfileDialog: boolean;
+  setShowUserProfileDialog: (v: boolean) => void;
 
   // $ Delete Modal
   showDeleteDialog: boolean;

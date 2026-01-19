@@ -9,7 +9,7 @@ import {
 import MaintenanceUpdateForm from "../maintenance/MaintenanceUpdateForm";
 
 import useGlobalContext from "@/context/useGlobalContext";
-import FormHeading from "../customComponents/FormHeading";
+import FormHeading from "../../../customComponents/FormHeading";
 
 function UpdateRequestDialog() {
   const { showUpdateMaintenanceDialog, setShowUpdateMaintenanceDialog } =

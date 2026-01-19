@@ -3,6 +3,12 @@ import * as z from "zod";
 //$ import types
 import { ROOT_CAUSES } from "@/data/maintenanceAction";
 
+// $ Schema for the user attributes
+export const userAttributesSchema = z.object({
+  email: z.email({ message: "Please enter a valid email" }).optional(),
+  name: z.string().min(1, { message: "Your name is required" }).optional(),
+});
+
 // $ Schema for the Login Form
 export const LoginSchema = z.object({
   email: z.email({ message: "Please enter a valid email" }),
@@ -14,7 +20,7 @@ export const LoginSchema = z.object({
       {
         message:
           "Password must be 8 characters with one uppercase letter, one lowercase letter and one number",
-      }
+      },
     ),
 });
 
@@ -76,7 +82,7 @@ export const actionJobSchema = z.object({
         const num = Number(val);
         return Number.isFinite(num) && num > 0;
       },
-      { message: "Start km must be a greater than zero" }
+      { message: "Start km must be a greater than zero" },
     ),
   end_km: z
     .string()
@@ -86,7 +92,7 @@ export const actionJobSchema = z.object({
         const num = Number(val);
         return Number.isFinite(num) && num > 0;
       },
-      { message: "End km must be a greater than zero" }
+      { message: "End km must be a greater than zero" },
     ),
   work_completed: z.string().min(1, { message: "Please enter work completed" }),
   materials: z.string().optional(),
@@ -149,6 +155,7 @@ export type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
 export type CreateJobFormValues = z.infer<typeof createJobSchema>;
 export type ActionJobFormValues = z.infer<typeof actionJobSchema>;
 export type AssetFormValues = z.infer<typeof assetSchema>;
+export type UserAttributesFormValues = z.infer<typeof userAttributesSchema>;
 
 export type CreateAssetPayload = Omit<AssetFormValues, "images"> & {
   images: {
@@ -176,3 +183,6 @@ export type PendingTableAction = {
   id: string;
   action: (id: string) => Promise<void>;
 } | null;
+
+// $ User Profile type returned from Cognito.
+export type UserAttributes = Partial<Record<string, string>>;
