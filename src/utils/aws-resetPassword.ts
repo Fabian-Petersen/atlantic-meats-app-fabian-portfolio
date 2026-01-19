@@ -1,4 +1,6 @@
 // $ This function request a confirmation code from the API using the users username (email). The confirmation code must be used with the confirmResetPassword function.
+// $ AWS Docs to update user attributes using amplify/auth
+// $ https://docs.amplify.aws/gen1/react/build-a-backend/auth/manage-user-profile/
 
 import { resetPassword, type ResetPasswordOutput } from "aws-amplify/auth";
 
@@ -19,7 +21,7 @@ function handleResetPasswordNextSteps(output: ResetPasswordOutput) {
       const codeDeliveryDetails = nextStep.codeDeliveryDetails;
 
       console.log(
-        `Confirmation code was sent to ${codeDeliveryDetails.deliveryMedium}`
+        `Confirmation code was sent to ${codeDeliveryDetails.deliveryMedium}`,
       );
       // Collect the confirmation code and pass it to confirmResetPassword
       break;
