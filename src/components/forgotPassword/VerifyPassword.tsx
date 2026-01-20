@@ -20,8 +20,9 @@ type VerifyPasswordProps = {
 /*                                Component                                   */
 /* -------------------------------------------------------------------------- */
 
-const VerifyPassword = ({ isLoading }: VerifyPasswordProps) => {
+const VerifyPassword = ({ isLoading, onNext }: VerifyPasswordProps) => {
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
+  console.log(isLoading, onNext);
 
   const {
     handleSubmit,
@@ -86,7 +87,9 @@ const VerifyPassword = ({ isLoading }: VerifyPasswordProps) => {
               <input
                 aria-label="pin input"
                 key={index}
-                ref={(el) => (inputsRef.current[index] = el)}
+                ref={(el) => {
+                  inputsRef.current[index] = el;
+                }}
                 type="text"
                 inputMode="numeric"
                 maxLength={1}
