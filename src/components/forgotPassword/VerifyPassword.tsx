@@ -73,7 +73,7 @@ const VerifyPassword = ({ isLoading, onNext }: VerifyPasswordProps) => {
   return (
     <div className="flex min-h-screen dark:bg-bgdark items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md rounded-lg bg-white dark:bg-[#1d2739] p-4 shadow flex flex-col gap-4">
-        <div className="flex flex-col gap-2 text-gray-100">
+        <div className="flex flex-col gap-2">
           <FormHeading heading="Verify Code" />
           <p className="text-left text-sm text-gray-600 dark:text-gray-400">
             Enter the 6-digit code sent to your email.

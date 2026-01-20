@@ -16,7 +16,7 @@ const Navbar = ({ className }: Props) => {
     >
       <div className="flex justify-between w-full h-full items-center">
         <Logo />
-        {pathname !== "/" ? (
+        {pathname !== "/" && pathname !== "/forgot-password" ? (
           <div className="flex justify-between w-full px-2 lg:px-4">
             <NavbarMenuButton />
             <NavbarActionButtons />

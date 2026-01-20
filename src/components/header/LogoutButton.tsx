@@ -32,7 +32,7 @@ const LogoutButton = ({ className }: Props) => {
         capitalize
         `}
       >
-        signpve out
+        sign out
       </button>
       {/* // Mobile Button */}
       <button
