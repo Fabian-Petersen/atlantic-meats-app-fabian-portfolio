@@ -18,7 +18,7 @@ function UpdateAssetDialog() {
       open={showUpdateAssetDialog}
       onOpenChange={setShowUpdateAssetDialog}
     >
-      <DialogContent className="sm:max-w-[625px] bg-white z-3000">
+      <DialogContent className="sm:max-w-[625px] bg-white z-3000 dark:bg-[#1d2739] border-none dark:text-gray-100 dark:border-gray-700/50">
         <DialogTitle className="py-4">
           <FormHeading className="font-normal" heading="Update Asset" />
         </DialogTitle>

@@ -66,10 +66,11 @@ function FormRowSelect<T extends FieldValues>({
         id={String(name)}
         multiple={multiple}
         className={clsx(
-          "text-sm py-3 px-2 peer w-full rounded-md outline-none text-gray-700 dark:text-gray-100/50",
-          "border border-gray-300 focus:border-rose-600 capitalize dark:border-gray-700/50",
+          "text-xs py-3 px-2 peer w-full rounded-md outline-none text-gray-700",
+          "border border-gray-300 focus:border-rose-600 capitalize",
+          "dark:bg-gray-900/20 dark:border-gray-700/50 dark:text-gray-200",
           // isValid && "border-green-500",
-          error && "border-red-400"
+          error && "border-red-400",
         )}
         defaultValue={multiple ? defaultValues || [] : ""}
         onChange={handleChange}
@@ -94,11 +95,13 @@ function FormRowSelect<T extends FieldValues>({
       {label && (
         <label
           htmlFor={String(name)}
-          className="absolute text-sm -top-5 left-0 transition-all duration-400 text-gray-400 dark:text-white
-            peer-placeholder-shown:top-3 px-2 mb-0 peer-placeholder-shown:text-gray-600 dark:peer-placeholder-shown:text-gray-100
-            peer-focus:-top-5 peer-focus:text-gray-600 peer-focus:text-sm tracking-wider
-            dark:peer-focus:text-gray-200
-            "
+          className={clsx(
+            "absolute text-xs -top-5 left-0 transition-all duration-400 text-gray-400 dark:text-gray-100/20",
+            "peer-placeholder-shown:top-3 px-2 mb-0 peer-placeholder-shown:text-gray-600",
+            "dark:peer-placeholder-shown:text-gray-100",
+            "peer-focus:-top-5 peer-focus:text-gray-600 peer-focus:text-xs tracking-wider",
+            "dark:peer-focus:text-blue-300 dark:text-gray-100/30",
+          )}
         >
           {label}
         </label>

@@ -16,7 +16,7 @@ const LogoutButton = ({ className }: Props) => {
         className={`
         ${className}
         w-full
-        px-3
+        px-4
         py-2
         lg:flex
         items-center
@@ -24,16 +24,19 @@ const LogoutButton = ({ className }: Props) => {
         text-gray-200
         cursor-pointer
         rounded-full
-        bg-red-500/80
+        bg-red-500/90
         tracking-wide
-        hover:bg-red-500/90
+        hover:bg-red-500
+        hover:shadow
         hidden
+        capitalize
         `}
       >
-        Logout
+        signpve out
       </button>
       {/* // Mobile Button */}
       <button
+        aria-label="logout button"
         onClick={handleLogout}
         className="lg:hidden bg-menu-btn/40 p-2 items-center justify-center rounded-md flex hover:cursor-pointer text-red-500 hover:text-red-500/90"
       >

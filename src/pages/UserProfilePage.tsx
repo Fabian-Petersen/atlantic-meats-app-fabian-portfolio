@@ -5,10 +5,12 @@ import FormActionButtons from "@/components/features/FormActionButtons";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { ErrorPage } from "@/components/features/Error";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useNavigate } from "react-router-dom";
 
 function UserProfilePage() {
   const { data: user, isLoading, isError } = useUserAttributes();
-  const { setShowUserProfileDialog, showUserProfileDialog } =
+  const navigate = useNavigate();
+  const { showUserProfileDialog, setShowUserProfileDialog } =
     useGlobalContext();
 
   if (isLoading) return <PageLoadingSpinner />;
@@ -22,7 +24,7 @@ function UserProfilePage() {
         <FormHeading heading="My Profile" />
         <UserProfile user={user ?? null} />
         <FormActionButtons
-          redirect="/dashboard"
+          handleCancel={() => navigate("/dashboard")}
           redirectText="Back"
           actionText="Edit"
           action={() => setShowUserProfileDialog(true)}

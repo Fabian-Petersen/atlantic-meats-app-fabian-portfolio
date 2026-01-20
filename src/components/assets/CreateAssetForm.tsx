@@ -2,7 +2,7 @@
 
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { Activity, useState } from "react";
 
 // $ React-Hook-Form, zod & schema
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -259,13 +259,14 @@ const CreateAssetForm = () => {
           register={register}
           error={errors.serialNumber}
         />
-        <FileInput
-          label="Supporting Documents"
-          control={control}
-          name="images"
-          multiple={true}
-          // error={errors.images}
-        />
+        <Activity mode="visible">
+          <FileInput
+            control={control}
+            name="images"
+            multiple={true}
+            // error={errors.images}
+          />
+        </Activity>
         <TextAreaInput
           label="Comments"
           name="additional_notes"

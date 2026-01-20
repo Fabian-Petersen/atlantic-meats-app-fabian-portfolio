@@ -120,7 +120,7 @@ const MaintenanceRequestForm = () => {
       className="flex flex-col rounded-lg lg:w-full text-font dark:bg-[#1d2739]"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6 border-dashed border-blue-500">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
         <FormRowSelect
           label="Equipment"
           name="equipment"
@@ -173,7 +173,7 @@ const MaintenanceRequestForm = () => {
         />
 
         <FileInput
-          label="Supporting Documents"
+          label=""
           control={control as unknown as Control<CreateJobFormValues>}
           name="images"
           multiple={true}

@@ -17,9 +17,11 @@ import {
 } from "../../schemas/index";
 import { useUserAttributes } from "@/utils/aws-userAttributes";
 import FormActionButtons from "../features/FormActionButtons";
+import useGlobalContext from "@/context/useGlobalContext";
 
 function UserProfileUpdateForm() {
   const { data: user } = useUserAttributes();
+  const { setShowUserProfileDialog } = useGlobalContext();
   // $ Form Schema
   const {
     register,
@@ -34,7 +36,7 @@ function UserProfileUpdateForm() {
   });
 
   const onSubmit = async (user: UserAttributesFormValues) => {
-    console.log("Submit the data for update:", user);
+    alert(`user name: ${user.name} & user email: ${user.email}`);
   };
 
   return (
@@ -59,7 +61,7 @@ function UserProfileUpdateForm() {
       </div>
       <FormActionButtons
         disabled={isSubmitting}
-        redirect="/user-profile"
+        handleCancel={() => setShowUserProfileDialog(false)}
         redirectText="cancel"
         actionText="update"
       />
