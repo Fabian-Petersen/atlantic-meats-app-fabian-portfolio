@@ -7,13 +7,15 @@ type FormInputProps<TFieldValues extends FieldValues> = {
   name: Path<TFieldValues>;
   type?: HTMLInputTypeAttribute;
   placeholder?: string;
-  register: UseFormRegister<TFieldValues>;
+  register?: UseFormRegister<TFieldValues>;
   // control: Control<TFieldValues>;
   error?: FieldError;
   multiple?: boolean;
+  readOnly?: boolean;
   accept?: string;
   disabled?: boolean;
   value?: string;
+  className?: string;
   isVisible?: boolean; // Used only on input type "password"
   togglePassword?: () => void; // Used only on input type "password"
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -38,6 +40,8 @@ function FormRowInput<TFieldValues extends FieldValues>({
   register,
   error,
   disabled,
+  className,
+  readOnly,
   // control,
   type,
   multiple = false,
@@ -62,10 +66,11 @@ function FormRowInput<TFieldValues extends FieldValues>({
       )}
 
       <input
-        {...register(name)}
+        {...(register ? register(name) : {})}
         id={String(name)}
         type={type}
         className={clsx(
+          `${className}`,
           "text-xs py-3 px-2 peer w-full rounded-md outline-none placeholder-transparent text-gray-700",
           "border border-gray-300 dark:border-gray-700/50 placeholder:dark:text-gray-700 placeholder:text-xs focus:border-rose-600 focus:dark:bg-gray-600",
           "dark:bg-gray-900/20 dark:text-gray-100/50",
@@ -76,6 +81,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
         )}
         placeholder={placeholder}
         disabled={disabled}
+        readOnly={readOnly}
         multiple={multiple}
         accept={accept}
       ></input>

@@ -7,6 +7,14 @@ import { ROOT_CAUSES } from "@/data/maintenanceAction";
 export const userAttributesSchema = z.object({
   email: z.email({ message: "Please enter a valid email" }).optional(),
   name: z.string().min(1, { message: "Your name is required" }).optional(),
+  surname: z
+    .string()
+    .min(1, { message: "Your surname is required" })
+    .optional(),
+  role: z.string().min(1, { message: "Your role is required" }),
+  mobile: z.string().min(1, { message: "Your mobile is required" }).optional(),
+  branch: z.string().min(1, { message: "Enter the branch" }),
+  division: z.string().min(1, { message: "Enter your division" }),
 });
 
 // $ Schema for the Login Form

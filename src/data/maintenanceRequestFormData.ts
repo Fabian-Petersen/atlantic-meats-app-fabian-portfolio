@@ -23,10 +23,3 @@ export const priorityColors: Record<Priority, { bg: string; text: string }> = {
 
 export const type: string[] = ["corrective", "preventative", "legislative"];
 export const impact: string[] = ["production", "safety", "compliance"];
-
-export const stores: string[] = [
-  "Phillipi",
-  "Bellville",
-  "Khayelitsha",
-  "Wynberg",
-];

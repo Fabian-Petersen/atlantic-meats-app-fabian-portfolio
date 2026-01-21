@@ -16,12 +16,8 @@ import useGlobalContext from "@/context/useGlobalContext";
 // $ Import schemas
 import type { CreateJobFormValues } from "../../schemas/index";
 
-import {
-  stores,
-  priority,
-  type,
-  impact,
-} from "@/data/maintenanceRequestFormData";
+import { priority, type, impact } from "@/data/maintenanceRequestFormData";
+import { stores } from "@/data/stores";
 
 // import assets from "@/data/assets.json";
 // import { useCreateMaintenanceRequest } from "@/utils/maintenanceRequests";

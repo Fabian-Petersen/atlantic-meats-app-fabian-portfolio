@@ -22,12 +22,8 @@ import { createJobSchema } from "../../schemas/index";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
 
 // $ Data for select options
-import {
-  stores,
-  priority,
-  type,
-  impact,
-} from "@/data/maintenanceRequestFormData";
+import { priority, type, impact } from "@/data/maintenanceRequestFormData";
+import { stores } from "@/data/stores";
 
 // import assets from "@/data/assets.json";
 // import { useCreateMaintenanceRequest } from "@/utils/api";

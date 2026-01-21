@@ -1,3 +1,8 @@
-const stores: string[] = ["Phillipi", "Bellville", "Khayelitsha", "Wynberg"];
-
-export default stores;
+export const stores: string[] = [
+  "Phillipi",
+  "Bellville",
+  "Khayelitsha",
+  "Wynberg",
+  "Maitland",
+  "Golden Acre",
+];
