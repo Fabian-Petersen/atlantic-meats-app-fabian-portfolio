@@ -3,6 +3,7 @@ import { flexRender, type Table } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
 import type { AssetFormValues } from "@/schemas";
 import EmptyTablePlaceholder from "../features/EmptyTablePlaceholder";
+import TablePaginationControls from "./TablePaginationControls";
 
 type Props = {
   table: Table<AssetFormValues>;
@@ -33,7 +34,7 @@ export function AssetsOverviewTable({ table, className }: Props) {
                   >
                     {flexRender(
                       header.column.columnDef.header,
-                      header.getContext()
+                      header.getContext(),
                     )}
                     {/* //todo: Complete the column resizing */}
                     {/* <div
@@ -72,7 +73,7 @@ export function AssetsOverviewTable({ table, className }: Props) {
                     <td key={cell.id} className="px-4 py-3 text-gray-700">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </td>
                   ))}
@@ -81,6 +82,7 @@ export function AssetsOverviewTable({ table, className }: Props) {
             )}
           </tbody>
         </table>
+        <TablePaginationControls table={table} />
       </div>
     </div>
   );

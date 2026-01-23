@@ -109,7 +109,7 @@ const CreateAssetForm = () => {
         })),
       };
 
-      console.log("Payload for API:", payload);
+      // console.log("Payload for API:", payload);
 
       // $ 3️⃣ Create asset + get presigned URLs
       const response = await mutateAsync(payload);
@@ -133,7 +133,7 @@ const CreateAssetForm = () => {
       );
 
       toast.success("Asset successfully created!", { duration: 1000 });
-      navigate("/asset");
+      // navigate("/asset"); // $ temporary disabled navigation
     } catch (err) {
       console.error("Failed to create asset", err);
     }

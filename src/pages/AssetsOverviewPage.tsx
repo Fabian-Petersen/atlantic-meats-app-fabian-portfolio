@@ -14,7 +14,9 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
+  getPaginationRowModel,
   type SortingState,
+  type PaginationState,
 } from "@tanstack/react-table";
 
 import { getAssetColumns } from "../components/assets/columns";
@@ -37,6 +39,11 @@ const AssetsOverviewPage = () => {
     { id: "createdAt", desc: true },
   ]);
 
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 5,
+  });
+
   // $ Logic to Delete an item from the table.
   const { mutateAsync: deleteItem } = useDeleteItem({
     resourcePath: "asset",
@@ -57,11 +64,13 @@ const AssetsOverviewPage = () => {
     data: data ?? [],
     columns: columns,
     columnResizeMode: "onChange",
-    state: { sorting },
+    state: { sorting, pagination },
     onSortingChange: setSorting,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   if (isLoading) return <PageLoadingSpinner />;
