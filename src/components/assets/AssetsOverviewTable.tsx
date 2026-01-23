@@ -82,8 +82,8 @@ export function AssetsOverviewTable({ table, className }: Props) {
             )}
           </tbody>
         </table>
-        <TablePaginationControls table={table} />
       </div>
+      <TablePaginationControls table={table} />
     </div>
   );
 }

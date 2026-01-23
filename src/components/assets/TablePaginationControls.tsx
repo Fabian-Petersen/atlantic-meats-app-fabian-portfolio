@@ -10,7 +10,7 @@ function TablePaginationControls<T>({ table, className }: Props<T>) {
 
   return (
     <div
-      className={`flex items-center justify-items-center gap-2 text-xs p-2 shadow-md ${className ?? ""}`}
+      className={`flex items-center justify-items-center gap-2 text-xs p-2 ${className ?? ""}`}
     >
       <button
         onClick={() => table.previousPage()}
