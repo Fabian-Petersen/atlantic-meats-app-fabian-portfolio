@@ -37,13 +37,13 @@ export function DropdownMenuButtonDialog({
             aria-label="Open menu"
             size="icon-sm"
             onClick={(e) => e.stopPropagation()}
-            className="p-2 rounded-full hover:bg-muted outline-none hover:bg-gray-200/80 bg-transparent hover:cursor-pointer"
+            className="p-2 rounded-full hover:bg-muted outline-none hover:bg-gray-100 bg-transparent hover:cursor-pointer"
           >
             <MoreVertical />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="w-24 bg-gray-100 border-0 text-font p-2"
+          className="w-24 bg-white dark:bg-bgdark dark:text-gray-100 shadow-md border-0 text-font p-2"
           align="end"
         >
           {/* <DropdownMenuLabel className="text-sm">Action</DropdownMenuLabel> */}

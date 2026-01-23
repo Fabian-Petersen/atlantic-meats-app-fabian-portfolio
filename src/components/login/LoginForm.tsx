@@ -13,14 +13,12 @@ import { usePasswordVisibility } from "@/utils/usePasswordVisibility";
 
 // $ Import schemas
 import type { LoginFormValues } from "../../schemas/index";
-
-const LoginForm = ({
-  onSubmit,
-  loading,
-}: {
+type Props = {
   onSubmit: (data: LoginFormValues) => void;
   loading: boolean;
-}) => {
+};
+
+const LoginForm = ({ onSubmit, loading }: Props) => {
   // $ Form Schema
   const {
     register,

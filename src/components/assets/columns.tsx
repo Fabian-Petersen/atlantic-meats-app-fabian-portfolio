@@ -25,7 +25,7 @@ function getConditionClasses(condition: EquipmentCondition) {
 }
 
 export const getAssetColumns = (
-  menuStateActions: TableMenuProps[]
+  menuStateActions: TableMenuProps[],
 ): ColumnDef<AssetFormValues>[] => [
   {
     accessorKey: "createdAt",
@@ -68,8 +68,8 @@ export const getAssetColumns = (
 
       return (
         <p
-          className={`capitalize px-1.5 py-2 w-24 min-w-fit text-center rounded-full ${getConditionClasses(
-            value as EquipmentCondition
+          className={`capitalize px-1.5 py-2 text-center rounded-full ${getConditionClasses(
+            value as EquipmentCondition,
           )}`}
         >
           {value}

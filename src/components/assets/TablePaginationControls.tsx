@@ -7,11 +7,10 @@ type Props<T> = {
 
 function TablePaginationControls<T>({ table, className }: Props<T>) {
   const { pageIndex } = table.getState().pagination;
+  const isLastPage = !table.getCanNextPage();
 
   return (
-    <div
-      className={`flex items-center justify-items-center gap-2 text-xs p-2 ${className ?? ""}`}
-    >
+    <div className={`flex items-center gap-2 text-xs p-2 ${className ?? ""}`}>
       <button
         onClick={() => table.previousPage()}
         disabled={!table.getCanPreviousPage()}
@@ -29,8 +28,8 @@ function TablePaginationControls<T>({ table, className }: Props<T>) {
         onClick={() => {
           table.nextPage();
         }}
-        disabled={!table.getCanNextPage()}
-        className="hover:cursor-pointer"
+        disabled={isLastPage}
+        className={`${isLastPage ? "text-gray-500" : "hover:cursor-pointer"}`}
       >
         Next
       </button>

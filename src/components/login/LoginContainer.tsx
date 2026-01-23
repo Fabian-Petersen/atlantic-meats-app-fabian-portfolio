@@ -7,6 +7,7 @@ import { signIn, confirmSignIn, signOut } from "aws-amplify/auth";
 import LoginForm from "./LoginForm";
 import ChangePasswordForm from "./ChangePasswordForm";
 import { useAuth } from "../../auth/useAuth";
+import { getAuthErrorMessage } from "@/utils/getAuthErrorMessage";
 
 import { useUserAttributes } from "../../utils/aws-userAttributes";
 import { toast } from "sonner";
@@ -33,16 +34,20 @@ export default function LoginContainer() {
 
   const handleLogin = async (loginData: LoginFormValues) => {
     setLoading(true);
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    }
 
     try {
+      if (isAuthenticated) {
+        navigate("/dashboard");
+        return;
+      }
+
       await signOut(); // ensure no user is logged in
+
       const res = await signIn({
         username: loginData.email,
         password: loginData.password,
       });
+
       await refreshAuth();
 
       const userData = await refetch(); // wait for latest attributes
@@ -50,14 +55,15 @@ export default function LoginContainer() {
         toast.success(`Welcome ${capitalize(userData.data.name)}`);
       }
 
-      navigate("/dashboard");
-
       if (
         res.nextStep.signInStep === "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED"
       ) {
         setStep("NEW_PASSWORD");
         return;
       }
+      navigate("/dashboard");
+    } catch (error: unknown) {
+      toast.error(getAuthErrorMessage(error));
     } finally {
       setLoading(false);
     }

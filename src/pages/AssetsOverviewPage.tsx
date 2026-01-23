@@ -41,7 +41,7 @@ const AssetsOverviewPage = () => {
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 5,
+    pageSize: 8,
   });
 
   // $ Logic to Delete an item from the table.

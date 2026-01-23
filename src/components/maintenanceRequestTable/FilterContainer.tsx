@@ -17,8 +17,8 @@ function FilterContainer({ table }: Props) {
       new Set(
         rows
           .map((row) => row.original[key])
-          .filter((v): v is string => typeof v === "string")
-      )
+          .filter((v): v is string => typeof v === "string"),
+      ),
     ).map((v) => ({
       label: v,
       value: v,
@@ -28,7 +28,7 @@ function FilterContainer({ table }: Props) {
   return (
     <div className="flex gap-4 justify-between w-full md:gap-2 h-auto">
       <div className="flex gap-2 shadow-sm  py-1 p-2 rounded-md">
-        <div className="py-2">
+        <div className="py-2 flex-1">
           <label className="text-xs text-gray-500">Equipment</label>
           <ColumnFilterItem
             placeholder="All"
@@ -39,7 +39,7 @@ function FilterContainer({ table }: Props) {
             options={uniqueValues("equipment")}
           />
         </div>
-        <div className="py-2">
+        <div className="py-2 flex-1">
           <label className="text-xs text-gray-500">Location</label>
           <ColumnFilterItem
             placeholder="All"
@@ -48,6 +48,17 @@ function FilterContainer({ table }: Props) {
             }
             onChange={(v) => table.getColumn("location")?.setFilterValue(v)}
             options={uniqueValues("location")}
+          />
+        </div>
+        <div className="py-2 flex-1">
+          <label className="text-xs text-gray-500">Condition</label>
+          <ColumnFilterItem
+            placeholder="All"
+            value={
+              (table.getColumn("condition")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(v) => table.getColumn("condition")?.setFilterValue(v)}
+            options={uniqueValues("condition")}
           />
         </div>
       </div>

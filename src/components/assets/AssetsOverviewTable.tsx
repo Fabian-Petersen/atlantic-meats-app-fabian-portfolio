@@ -83,7 +83,7 @@ export function AssetsOverviewTable({ table, className }: Props) {
           </tbody>
         </table>
       </div>
-      <TablePaginationControls table={table} />
+      <TablePaginationControls table={table} className="justify-end" />
     </div>
   );
 }
