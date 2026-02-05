@@ -15,8 +15,9 @@ const DeleteItemModal = () => {
     e.preventDefault();
     try {
       await action(id);
+      alert("delete me");
       setShowDeleteDialog(false);
-      toast.success("The itemm was sucessfulky deleted");
+      toast.success("The itemm was sucessfully deleted");
     } catch (error) {
       console.error("Delete failed:", error);
       toast.error("Delete failed");

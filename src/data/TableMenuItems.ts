@@ -1,18 +1,26 @@
-import { Pencil, Trash2Icon, Wrench, type LucideIcon } from "lucide-react";
+import {
+  Pencil,
+  Trash2Icon,
+  Wrench,
+  type LucideIcon,
+  DownloadIcon,
+} from "lucide-react";
 
 export type TableMenuProps = {
   id: string;
   url?: string;
   name: string;
   icon: LucideIcon;
-  openModal: (v: boolean) => void;
+  openModal?: (v: boolean) => void;
   action: (id: string) => Promise<void>;
 };
+
+type TableAction = (id: string) => Promise<void>;
 
 export const getAssetTableMenuItems = (
   setShowUpdateDialog: (v: boolean) => void,
   setShowDeleteDialog: (v: boolean) => void,
-  deleteItem: (id: string) => Promise<void>
+  deleteItem: (id: string) => Promise<void>,
 ): TableMenuProps[] => [
   {
     id: "1",
@@ -34,7 +42,8 @@ export const getMaintenanceTableMenuItems = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
   setShowActionDialog: (v: boolean) => void,
   setShowDeleteDialog: (v: boolean) => void,
-  deleteItem: (id: string) => Promise<void>
+  deleteItem: TableAction,
+  downloadItem: TableAction,
 ): TableMenuProps[] => [
   {
     id: "1",
@@ -58,5 +67,11 @@ export const getMaintenanceTableMenuItems = (
     icon: Trash2Icon,
     openModal: setShowDeleteDialog,
     action: deleteItem,
+  },
+  {
+    id: "4",
+    name: "Download",
+    icon: DownloadIcon,
+    action: downloadItem,
   },
 ];

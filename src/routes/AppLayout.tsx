@@ -12,7 +12,7 @@ export const AppLayout = () => (
     <aside className="lg:block row-start-2 col-start-1">
       <Sidebar />
     </aside>
-    <main className="row-start-2 col-start-1 lg:col-start-2 h-full w-full lg:max-w-screen">
+    <main className="row-start-2 col-start-1 lg:col-start-2 min-h-0 w-full lg:max-w-screen">
       <Outlet />
     </main>
     <ModalManager />

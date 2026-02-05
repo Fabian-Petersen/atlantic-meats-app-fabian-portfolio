@@ -3,11 +3,9 @@
 
 import FormHeading from "../../customComponents/FormHeading";
 import { MaintenanceRequestsTable } from "@/components/maintenanceRequestTable/MaintenanceRequestsTable";
-import { useDeleteItem, useGetAll } from "@/utils/api";
+import { useDeleteItem, useDownloadPdf, useGetAll } from "@/utils/api";
 
 import {
-  // type ColumnDef,
-  // flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
@@ -23,6 +21,7 @@ import { getMaintenanceColumns } from "@/components/maintenanceRequestTable/colu
 import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
 import type { CreateJobFormValues } from "@/schemas";
+// import FilterContainer from "@/components/maintenanceRequestTable/FilterContainer";
 
 const MaintenanceRequestOverviewPage = () => {
   const MAINTENANCE_REQUESTS_KEY = ["allMaintenanceRequests"];
@@ -46,11 +45,16 @@ const MaintenanceRequestOverviewPage = () => {
     setShowDeleteDialog,
   } = useGlobalContext();
 
+  const { mutateAsync: downloadItem } = useDownloadPdf({
+    resourcePath: "maintenance-jobcard",
+  });
+
   const menuStateActions = getMaintenanceTableMenuItems(
     setShowUpdateMaintenanceDialog,
     setShowActionDialog,
     setShowDeleteDialog,
     deleteItem,
+    downloadItem,
   );
 
   const columns = getMaintenanceColumns(menuStateActions);
@@ -66,8 +70,14 @@ const MaintenanceRequestOverviewPage = () => {
   });
 
   if (isLoading) return <PageLoadingSpinner />;
-
-  if (isError) return <ErrorPage onRetry={refetch} />;
+  if (isError)
+    return (
+      <ErrorPage
+        title="Failed to load maintenance requests"
+        message="Please check your connection and try again."
+        onRetry={refetch}
+      />
+    );
 
   return (
     <div className="flex w-full p-4 h-auto">

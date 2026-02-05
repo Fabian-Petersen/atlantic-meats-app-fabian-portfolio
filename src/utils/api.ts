@@ -10,7 +10,11 @@ import type {
   PresignedUrlResponse,
 } from "@/schemas";
 
-export type Resource = "asset" | "maintenance-request" | "maintenance-list";
+export type Resource =
+  | "asset"
+  | "maintenance-request"
+  | "maintenance-list"
+  | "maintenance-jobcard";
 
 // $ Combine the types into a union type for the generic functions
 export type EntityType = AssetFormValues | CreateJobFormValues;
@@ -35,7 +39,7 @@ const ASSETS_REQUESTS_KEY = ["assetRequests"];
 // $ Generic: GET All
 export const useGetAll = <T extends EntityType>(
   resourcePath: Resource,
-  queryKey: readonly unknown[] = [resourcePath]
+  queryKey: readonly unknown[] = [resourcePath],
 ) => {
   return useQuery<T[]>({
     queryKey,
@@ -98,7 +102,7 @@ export const useMaintenanceRequests = () => {
     queryKey: MAINTENANCE_REQUESTS_KEY,
     queryFn: async () => {
       const { data } = await apiClient.get<CreateJobFormValues[]>(
-        "/maintenance-request"
+        "/maintenance-request",
       );
       return data;
     },
@@ -121,7 +125,7 @@ export const useMaintenanceRequestById = (id: string) => {
     queryKey: [...MAINTENANCE_REQUESTS_KEY, id],
     queryFn: async () => {
       const { data } = await apiClient.get<CreateJobFormValues>(
-        `/maintenance-request/${id}`
+        `/maintenance-request/${id}`,
       );
       return data;
     },
@@ -180,7 +184,7 @@ export const useUpdateMaintenanceRequest = () => {
     }) => {
       const { data } = await apiClient.put<CreateJobFormValues>(
         `/maintenance-request/${id}`,
-        payload
+        payload,
       );
       return data;
     },
@@ -211,7 +215,7 @@ export const useUpdateItem = <TPayload, TResponse>({
     mutationFn: async ({ id, payload }: UpdateArgs<TPayload>) => {
       const { data } = await apiClient.put<TResponse>(
         `/${endpoint}/${id}`,
-        payload
+        payload,
       );
       return data;
     },
@@ -220,3 +224,48 @@ export const useUpdateItem = <TPayload, TResponse>({
     },
   });
 };
+
+// $ Download maintenane jobcard pdf
+export const useDownloadPdf = (options: { resourcePath: Resource }) => {
+  const { resourcePath } = options;
+  return useMutation({
+    mutationFn: async (id: string) => {
+      alert("download me");
+      const response = await apiClient.get(`${resourcePath}/${id}`, {
+        responseType: "blob",
+      });
+
+      return response.data;
+    },
+    onSuccess: (blob) => {
+      const url = window.URL.createObjectURL(
+        new Blob([blob], { type: "application/pdf" }),
+      );
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "document.pdf";
+      link.click();
+
+      window.URL.revokeObjectURL(url);
+    },
+  });
+};
+
+// // $ Generic: DELETE
+// export const useDeleteItem = (options: {
+//   resourcePath: Resource;
+//   queryKey: readonly unknown[];
+// }) => {
+//   const queryClient = useQueryClient();
+//   const { resourcePath, queryKey } = options;
+
+//   return useMutation({
+//     mutationFn: async (id: string): Promise<void> => {
+//       await apiClient.delete(`${resourcePath}/${id}`);
+//     },
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({ queryKey });
+//     },
+//   });
+// };
