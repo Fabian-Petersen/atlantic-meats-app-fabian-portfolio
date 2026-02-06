@@ -16,7 +16,7 @@ import {
   useReactTable,
   getPaginationRowModel,
   type SortingState,
-  type PaginationState,
+  // type PaginationState,
 } from "@tanstack/react-table";
 
 import { getAssetColumns } from "../components/assets/columns";
@@ -39,10 +39,10 @@ const AssetsOverviewPage = () => {
     { id: "createdAt", desc: true },
   ]);
 
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 8,
-  });
+  // const [pagination, setPagination] = useState<PaginationState>({
+  //   pageIndex: 0,
+  //   pageSize: 5,
+  // });
 
   // $ Logic to Delete an item from the table.
   const { mutateAsync: deleteItem } = useDeleteItem({
@@ -64,9 +64,9 @@ const AssetsOverviewPage = () => {
     data: data ?? [],
     columns: columns,
     columnResizeMode: "onChange",
-    state: { sorting, pagination },
+    state: { sorting },
     onSortingChange: setSorting,
-    onPaginationChange: setPagination,
+    // onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -82,18 +82,25 @@ const AssetsOverviewPage = () => {
         onRetry={refetch}
       />
     );
-  // console.log("Asset Table Filter State:", table.getState().columnFilters); // Check if the filters are in runaway state
 
-  //$  if (!data) {
-  //$    return <div>There are not assets to display!!</div>;
-  //$  }
+  if (!data) {
+    return (
+      <ErrorPage
+        title="There are not assets to display!!"
+        message="Create an asset to view the details."
+      />
+    );
+  }
 
   return (
-    <div className="flex w-full md:p-4 h-auto">
-      <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto">
+    <div className="flex w-full md:p-4 min-h-0">
+      <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 border-dashed min-h-0">
         <FormHeading className="mx-auto" heading="Assets Register" />
         <FilterContainer table={table} />
-        <AssetsOverviewTable className="hidden lg:flex" table={table} />
+        <AssetsOverviewTable
+          className="hidden lg:flex table-fixed"
+          table={table}
+        />
         <MobileAssetsOverviewTable
           className="flex lg:hidden"
           data={table.getRowModel().rows}

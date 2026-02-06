@@ -61,7 +61,7 @@ export function DropdownMenuButtonDialog({
                       id: data.id ?? "",
                       action: item.action,
                     });
-                    item.openModal(true);
+                    item.openModal?.(true);
                   }}
                 >
                   <div className="text-font text-xs flex w-full justify-center items-center hover:cursor-pointer">

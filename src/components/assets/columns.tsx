@@ -43,6 +43,9 @@ export const getAssetColumns = (
         })}
       </p>
     ),
+    size: 140,
+    minSize: 120,
+    maxSize: 160,
   },
   {
     accessorKey: "equipment",
@@ -51,6 +54,9 @@ export const getAssetColumns = (
   {
     accessorKey: "assetID",
     header: "Asset ID",
+    size: 140,
+    minSize: 120,
+    maxSize: 160,
   },
   {
     accessorKey: "location",
@@ -85,7 +91,7 @@ export const getAssetColumns = (
     enableHiding: false,
     size: 10,
     cell: ({ row }) => (
-      <div className="w-fit text-center" onClick={(e) => e.stopPropagation()}>
+      <div className="text-center" onClick={(e) => e.stopPropagation()}>
         <DropdownMenuButtonDialog
           data={row.original}
           menuStateActions={menuStateActions}
