@@ -3,7 +3,7 @@
 
 import FormHeading from "../../customComponents/FormHeading";
 import { MaintenanceRequestsTable } from "@/components/maintenanceRequestTable/MaintenanceRequestsTable";
-import { useDeleteItem, useDownloadPdf, useGetAll } from "@/utils/api";
+import { useDownloadPdf, useGetAll } from "@/utils/api";
 
 import {
   getCoreRowModel,
@@ -12,16 +12,13 @@ import {
   useReactTable,
   type SortingState,
 } from "@tanstack/react-table";
-// import { columns } from "../components/maintenanceRequestTable/columns";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { MobileMaintenanceRequestsTable } from "@/components/mobile/MobileMaintenanceRequestsTable";
-import { getMaintenanceTableMenuItems } from "@/data/TableMenuItems";
 import useGlobalContext from "@/context/useGlobalContext";
 import { getMaintenanceColumns } from "@/components/maintenanceRequestTable/columns";
 import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
 import type { CreateJobFormValues } from "@/schemas";
-// import FilterContainer from "@/components/maintenanceRequestTable/FilterContainer";
 
 const MaintenanceRequestOverviewPage = () => {
   const MAINTENANCE_REQUESTS_KEY = ["allMaintenanceRequests"];
@@ -34,30 +31,25 @@ const MaintenanceRequestOverviewPage = () => {
     { id: "createdAt", desc: true },
   ]);
 
-  const { mutateAsync: deleteItem } = useDeleteItem({
-    resourcePath: "maintenance-request",
-    queryKey: ["MAINTENANCE_DELETE_ITEM"],
+  const { mutateAsync: downloadItem } = useDownloadPdf({
+    resourcePath: "maintenance-jobcard",
   });
 
   const {
     setShowUpdateMaintenanceDialog,
     setShowActionDialog,
     setShowDeleteDialog,
+    setSelectedRowId,
   } = useGlobalContext();
 
-  const { mutateAsync: downloadItem } = useDownloadPdf({
-    resourcePath: "maintenance-jobcard",
-  });
-
-  const menuStateActions = getMaintenanceTableMenuItems(
+  // $ Pass the props to the function generating the columns to be used in the table
+  const columns = getMaintenanceColumns(
     setShowUpdateMaintenanceDialog,
     setShowActionDialog,
     setShowDeleteDialog,
-    deleteItem,
+    setSelectedRowId,
     downloadItem,
   );
-
-  const columns = getMaintenanceColumns(menuStateActions);
 
   const table = useReactTable({
     data: data ?? [],

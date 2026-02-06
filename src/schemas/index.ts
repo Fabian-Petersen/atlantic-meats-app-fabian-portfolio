@@ -73,6 +73,12 @@ export const createJobSchema = z.object({
   images: z.array(z.instanceof(File)).default([]).optional(),
 });
 
+// $ Schema for the Maintenance Table Menu
+export const maintenanceTableRowSchema = createJobSchema.extend({
+  id: z.string(),
+  createdAt: z.string(),
+});
+
 export const actionJobSchema = z.object({
   start_time: z
     .string()
@@ -128,12 +134,6 @@ export const assetSchema = z.object({
   serialNumber: z.string().optional(),
   additional_notes: z.string().optional(),
   images: z.array(z.instanceof(File)).default([]),
-  // manufacturer: z.string().optional(),
-  // model: z.string().optional(),
-  // date_of_manufacture: z.date().optional(),
-  // warranty_expire: z.date().optional(),
-  // warranty: z.string().min(1, { message: "Please indicate if warranty valid" }),
-  // status: z.string().min(1, { message: "Please select a status" }),
 });
 
 // GlobalContext.ts
@@ -149,6 +149,7 @@ export type CreateJobFormValues = z.infer<typeof createJobSchema>;
 export type ActionJobFormValues = z.infer<typeof actionJobSchema>;
 export type AssetFormValues = z.infer<typeof assetSchema>;
 export type UserAttributesFormValues = z.infer<typeof userAttributesSchema>;
+export type MaintenanceTableRow = z.infer<typeof maintenanceTableRowSchema>;
 
 export type CreateAssetPayload = Omit<AssetFormValues, "images"> & {
   images: {

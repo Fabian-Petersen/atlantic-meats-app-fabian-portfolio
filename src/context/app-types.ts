@@ -30,6 +30,10 @@ export type AppContextType = {
   showUserProfileDialog: boolean;
   setShowUserProfileDialog: (v: boolean) => void;
 
+  // $ TableMenuItems
+  setSelectedRowId: (v: string) => void;
+  selectedRowId: string;
+
   // $ Delete Modal
   showDeleteDialog: boolean;
   setShowDeleteDialog: (v: boolean) => void;

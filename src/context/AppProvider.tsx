@@ -26,10 +26,12 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     useState<boolean>(false);
   const [showUpdateAssetDialog, setShowUpdateAssetDialog] =
     useState<boolean>(false);
-
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
 
-  // $ State for the data to update/delete an item
+  // $ State for the TableMenuItems
+  const [selectedRowId, setSelectedRowId] = useState<string>("");
+
+  // $ State for the data to update/delete an items
   const [genericData, setGenericData] = useState<GlobalData | undefined>(
     undefined,
   ); // Set the generic data
@@ -71,6 +73,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setHasError,
         pendingTableAction,
         setPendingTableAction,
+        selectedRowId,
+        setSelectedRowId,
       }}
     >
       {children}

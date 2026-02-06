@@ -20,7 +20,7 @@ import {
 } from "@tanstack/react-table";
 
 import { getAssetColumns } from "../components/assets/columns";
-import { getAssetTableMenuItems } from "@/data/TableMenuItems";
+import { getAssetTableMenuItems } from "@/lib/TableMenuItemsActions";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState } from "react";
 import type { AssetFormValues } from "@/schemas";

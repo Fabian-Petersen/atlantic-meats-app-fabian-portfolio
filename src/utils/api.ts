@@ -203,18 +203,20 @@ type UpdateArgs<TPayload> = {
 };
 
 export const useUpdateItem = <TPayload, TResponse>({
-  endpoint,
+  resourcePath,
   queryKey,
 }: {
-  endpoint: string;
+  resourcePath: string;
   queryKey: readonly unknown[];
 }) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ id, payload }: UpdateArgs<TPayload>) => {
+      console.log("request_id:", id);
+      console.log("resource_path:", resourcePath);
       const { data } = await apiClient.put<TResponse>(
-        `/${endpoint}/${id}`,
+        `/${resourcePath}/${id}`,
         payload,
       );
       return data;
@@ -230,11 +232,11 @@ export const useDownloadPdf = (options: { resourcePath: Resource }) => {
   const { resourcePath } = options;
   return useMutation({
     mutationFn: async (id: string) => {
-      alert("download me");
+      console.log("request_id:", id);
+      console.log("resource_path:", resourcePath);
       const response = await apiClient.get(`${resourcePath}/${id}`, {
         responseType: "blob",
       });
-
       return response.data;
     },
     onSuccess: (blob) => {
@@ -251,21 +253,3 @@ export const useDownloadPdf = (options: { resourcePath: Resource }) => {
     },
   });
 };
-
-// // $ Generic: DELETE
-// export const useDeleteItem = (options: {
-//   resourcePath: Resource;
-//   queryKey: readonly unknown[];
-// }) => {
-//   const queryClient = useQueryClient();
-//   const { resourcePath, queryKey } = options;
-
-//   return useMutation({
-//     mutationFn: async (id: string): Promise<void> => {
-//       await apiClient.delete(`${resourcePath}/${id}`);
-//     },
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey });
-//     },
-//   });
-// };

@@ -3,7 +3,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { AssetFormValues } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
-import type { TableMenuProps } from "@/data/TableMenuItems";
+import type { TableMenuProps } from "@/lib/TableMenuItemsActions";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.

@@ -19,7 +19,7 @@ import {
 
 import { ROOT_CAUSES, status } from "@/data/maintenanceAction";
 import TextAreaInput from "../../../customComponents/TextAreaInput";
-import DigitalSignature from "./digitalSignature";
+import DigitalSignature from "./DigitalSignature";
 import FileInput from "../../../customComponents/FileInput";
 //// import FileInput from "../customComponents/FileInput";
 

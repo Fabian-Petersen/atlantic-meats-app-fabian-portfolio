@@ -1,14 +1,15 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { CreateJobFormValues } from "@/schemas";
+import type { MaintenanceTableRow } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
-import { type TableMenuProps } from "@/data/TableMenuItems";
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+import { getMaintenanceTableMenuItems } from "@/lib/TableMenuItemsActions";
 
 export const getMaintenanceColumns = (
-  menuStateActions: TableMenuProps[]
-): ColumnDef<CreateJobFormValues>[] => [
+  setShowUpdateMaintenanceDialog: (v: boolean) => void,
+  setShowActionDialog: (v: boolean) => void,
+  setShowDeleteDialog: (v: boolean) => void,
+  setSelectedRowId: (id: string) => void,
+  downloadItem: (id: string) => Promise<void>,
+): ColumnDef<MaintenanceTableRow>[] => [
   {
     accessorKey: "createdAt",
     header: "Date Created",
@@ -52,13 +53,23 @@ export const getMaintenanceColumns = (
     header: "Actions",
     enableSorting: false,
     enableHiding: false,
-    cell: ({ row }) => (
-      <div className="text-right" onClick={(e) => e.stopPropagation()}>
-        <DropdownMenuButtonDialog
-          data={row.original}
-          menuStateActions={menuStateActions}
-        />
-      </div>
-    ),
+    cell: ({ row }) => {
+      const selectedRowId = row.original.id;
+
+      const menuItems = getMaintenanceTableMenuItems(
+        selectedRowId,
+        setShowUpdateMaintenanceDialog,
+        setShowActionDialog,
+        setShowDeleteDialog,
+        setSelectedRowId,
+        downloadItem,
+      );
+
+      return (
+        <div className="text-right" onClick={(e) => e.stopPropagation()}>
+          <DropdownMenuButtonDialog data={row.original} menuItems={menuItems} />
+        </div>
+      );
+    },
   },
 ];
