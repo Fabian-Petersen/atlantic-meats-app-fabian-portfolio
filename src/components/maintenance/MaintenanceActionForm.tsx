@@ -1,10 +1,10 @@
 //$ This component is used to action and closeout a maintenace job, the data is submitted to the database (dynamoDB) referenced to the requested_id.
 
 import { Button } from "@/components/ui/button";
-
+import { useState } from "react";
 // $ React-Hook-Form & zod
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type Resolver } from "react-hook-form";
+import { useForm, type Control, type Resolver } from "react-hook-form";
 
 import FormRowInput from "../../../customComponents/FormRowInput";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
@@ -19,9 +19,12 @@ import {
 
 import { ROOT_CAUSES, status } from "@/data/maintenanceAction";
 import TextAreaInput from "../../../customComponents/TextAreaInput";
+import DigitalSignature from "./digitalSignature";
+import FileInput from "../../../customComponents/FileInput";
 //// import FileInput from "../customComponents/FileInput";
 
 const MaintenanceActionForm = () => {
+  const [signature, setSignature] = useState<string | null>(null);
   //// const { mutateAsync } = useCreateMaintenanceRequest();
 
   //// const navigate = useNavigate();
@@ -30,7 +33,7 @@ const MaintenanceActionForm = () => {
   const {
     register,
     handleSubmit,
-    // control,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<ActionJobFormValues>({
     // defaultValues: {
@@ -56,7 +59,9 @@ const MaintenanceActionForm = () => {
       // //const user = await fetchUserAttributes();
       const payload = {
         ...data,
+        signature, // base64 PNG
       };
+      console.log(signature);
       //// const response = await mutateAsync(payload);
       console.log("data from actioned request:", payload);
     } catch (err) {
@@ -132,15 +137,12 @@ const MaintenanceActionForm = () => {
           register={register}
           error={errors.status}
         />
-        {/* <FileInput
-          control={control}
-          label="Image"
+        <FileInput
+          label=""
+          control={control as unknown as Control<ActionJobFormValues>}
           name="images"
-          // register={register}
           multiple={true}
-          accept="image/*"
-        /> 
-        */}
+        />
         <TextAreaInput
           label="Materials Used"
           name="materials"
@@ -169,13 +171,34 @@ const MaintenanceActionForm = () => {
           error={errors.additional_notes}
         />
       </div>
-      <Button
-        disabled={isSubmitting}
-        className="bg-(--clr-primary) text-white leading-1 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider py-6 text-lg"
-        type="submit"
-      >
-        {isSubmitting ? "Submitting..." : "Submit"}
-      </Button>
+      <DigitalSignature onSave={setSignature} />
+      {signature && (
+        <img
+          src={signature}
+          alt="Saved signature"
+          className="border mt-2 w-40"
+        />
+      )}
+
+      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72">
+        <Button
+          className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
+          variant="cancel"
+          size="lg"
+          type="button"
+        >
+          Clear
+        </Button>
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          variant="submit"
+          size="lg"
+          className="flex-1"
+        >
+          {isSubmitting ? "Submitting..." : "Submit"}
+        </Button>
+      </div>
     </form>
   );
 };

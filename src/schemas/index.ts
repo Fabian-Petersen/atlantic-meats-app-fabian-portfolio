@@ -110,24 +110,9 @@ export const actionJobSchema = z.object({
     message: "please select a root cause for breakdown",
   }),
   additional_notes: z.string().optional(),
-  // images: z.array(z.instanceof(File)).default([]).optional(),
-
-  //$ for the backend
-  // id: z.string(),
-  // request_id: z.string(),
-  // createdAt: z.string().optional(),
-  // userName: z.string().optional(),
+  images: z.array(z.instanceof(File)).default([]).optional(),
+  signtuture: z.string().optional(),
 });
-//  description: "",
-//       equipment: "",
-//       assetID: "",
-//       condition: "",
-//       location: "",
-//       //   warranty: "",
-//       serialNumber: "",
-//       manufacturer: "",
-//       model: "",
-//       images: [],
 
 export const assetSchema = z.object({
   id: z.string().optional(),
