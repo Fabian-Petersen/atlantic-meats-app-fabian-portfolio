@@ -65,7 +65,7 @@ export const createJobSchema = z.object({
   id: z.string().optional(), // used by the mobile accordion list
   createdAt: z.string().optional(), // used by the mobile accordion list
   equipment: z.string().min(1, { message: "Please select equipment" }),
-  store: z.string().min(1, { message: "Please select a store" }),
+  location: z.string().min(1, { message: "Please select a location" }),
   type: z.string().min(1, { message: "Please select maintenance type" }),
   impact: z.string().min(1, { message: "Please select impact" }),
   priority: z.string().min(1, { message: "Please select a priority" }),
@@ -136,6 +136,12 @@ export const assetSchema = z.object({
   images: z.array(z.instanceof(File)).default([]),
 });
 
+// $ Schema for the Asset Table Menu
+export const assetTableRowSchema = assetSchema.extend({
+  id: z.string(),
+  createdAt: z.string(),
+});
+
 // GlobalContext.ts
 export type GlobalData = CreateJobFormValues | AssetFormValues;
 
@@ -150,6 +156,7 @@ export type ActionJobFormValues = z.infer<typeof actionJobSchema>;
 export type AssetFormValues = z.infer<typeof assetSchema>;
 export type UserAttributesFormValues = z.infer<typeof userAttributesSchema>;
 export type MaintenanceTableRow = z.infer<typeof maintenanceTableRowSchema>;
+export type AssetTableRow = z.infer<typeof assetTableRowSchema>;
 
 export type CreateAssetPayload = Omit<AssetFormValues, "images"> & {
   images: {

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AppContext } from "./app-context";
 import type { GlobalData, PendingTableAction } from "../schemas";
+import type { DeleteConfig } from "./app-types";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   // $ [Step 3]: Create the state and set the initial state value
@@ -26,11 +27,23 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     useState<boolean>(false);
   const [showUpdateAssetDialog, setShowUpdateAssetDialog] =
     useState<boolean>(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleteConfig, setDeleteConfig] = useState<DeleteConfig | null>(null);
+  const openDeleteDialog = (id: string, config: DeleteConfig) => {
+    setSelectedRowId(id);
+    setDeleteConfig(config);
+    setShowDeleteDialog(true);
+  };
+
+  const closeDeleteDialog = () => {
+    setShowDeleteDialog(false);
+    setSelectedRowId(null);
+    setDeleteConfig(null);
+  };
 
   // $ State for the TableMenuItems
-  const [selectedRowId, setSelectedRowId] = useState<string>("");
-
+  const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   // $ State for the data to update/delete an items
   const [genericData, setGenericData] = useState<GlobalData | undefined>(
     undefined,
@@ -75,6 +88,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setPendingTableAction,
         selectedRowId,
         setSelectedRowId,
+        deleteConfig,
+        setDeleteConfig,
+        openDeleteDialog,
+        closeDeleteDialog,
       }}
     >
       {children}

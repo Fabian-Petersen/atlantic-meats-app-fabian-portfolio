@@ -17,10 +17,10 @@ export function calculatePageSizeFromHeight(
   }: PageSizeConfig,
 ): number {
   const availableHeight = container.clientHeight - headerHeight - footerHeight;
-  console.log("availableHeight:", availableHeight);
+  // console.log("availableHeight:", availableHeight);
 
   const rows = Math.floor(availableHeight / rowHeight);
-  console.log("rows:", rows);
+  // console.log("rows:", rows);
 
   return Math.max(rows, minRows);
 }

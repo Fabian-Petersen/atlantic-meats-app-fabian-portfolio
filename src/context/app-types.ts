@@ -1,6 +1,14 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { GlobalData, PendingTableAction } from "../schemas";
 
+import type { Resource } from "@/utils/api";
+
+// $ The config passed to the modal to delete an asset or maintenance item.
+export type DeleteConfig = {
+  resourcePath: Resource;
+  queryKey: readonly unknown[];
+} | null;
+
 export type AppContextType = {
   //$ Error State
   hasError: boolean;
@@ -32,11 +40,17 @@ export type AppContextType = {
 
   // $ TableMenuItems
   setSelectedRowId: (v: string) => void;
-  selectedRowId: string;
+  selectedRowId: string | null;
 
   // $ Delete Modal
   showDeleteDialog: boolean;
   setShowDeleteDialog: (v: boolean) => void;
+  setDeleteConfig: (config: DeleteConfig) => void;
+  deleteConfig: DeleteConfig | null;
+
+  openDeleteDialog: (id: string, config: DeleteConfig) => void;
+  closeDeleteDialog: () => void;
+
   // deletePayload: DeleteModalPayload | null;
   // setDeletePayload: (payload: DeleteModalPayload | null) => void;
 
@@ -51,7 +65,7 @@ export type AppContextType = {
 
 export type DeleteModalPayload = {
   id: string;
-  endpoint: string;
+  resourcePath: string;
   queryKey: string[];
   title?: string;
   successMessage?: string;

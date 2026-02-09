@@ -2,13 +2,17 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { MaintenanceTableRow } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getMaintenanceTableMenuItems } from "@/lib/TableMenuItemsActions";
+import type { Resource } from "@/utils/api";
 
 export const getMaintenanceColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
   setShowActionDialog: (v: boolean) => void,
-  setShowDeleteDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   downloadItem: (id: string) => Promise<void>,
+  openDeleteDialog: (
+    selectedRowId: string,
+    config: { resourcePath: Resource; queryKey: readonly unknown[] },
+  ) => void,
 ): ColumnDef<MaintenanceTableRow>[] => [
   {
     accessorKey: "createdAt",
@@ -31,6 +35,7 @@ export const getMaintenanceColumns = (
   {
     accessorKey: "equipment",
     header: "Equipment",
+    enableColumnFilter: true,
   },
   {
     accessorKey: "impact",
@@ -39,10 +44,12 @@ export const getMaintenanceColumns = (
   {
     accessorKey: "priority",
     header: "Priority",
+    enableColumnFilter: true,
   },
   {
-    accessorKey: "store",
-    header: "Store",
+    accessorKey: "location",
+    header: "Location",
+    enableColumnFilter: true,
   },
   {
     accessorKey: "type",
@@ -60,9 +67,9 @@ export const getMaintenanceColumns = (
         selectedRowId,
         setShowUpdateMaintenanceDialog,
         setShowActionDialog,
-        setShowDeleteDialog,
         setSelectedRowId,
         downloadItem,
+        openDeleteDialog,
       );
 
       return (

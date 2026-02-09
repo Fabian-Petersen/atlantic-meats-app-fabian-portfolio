@@ -19,6 +19,7 @@ import { getMaintenanceColumns } from "@/components/maintenanceRequestTable/colu
 import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
 import type { CreateJobFormValues } from "@/schemas";
+import FilterContainer from "@/components/features/FilterContainer";
 
 const MaintenanceRequestOverviewPage = () => {
   const MAINTENANCE_REQUESTS_KEY = ["allMaintenanceRequests"];
@@ -38,17 +39,17 @@ const MaintenanceRequestOverviewPage = () => {
   const {
     setShowUpdateMaintenanceDialog,
     setShowActionDialog,
-    setShowDeleteDialog,
     setSelectedRowId,
+    openDeleteDialog,
   } = useGlobalContext();
 
   // $ Pass the props to the function generating the columns to be used in the table
   const columns = getMaintenanceColumns(
     setShowUpdateMaintenanceDialog,
     setShowActionDialog,
-    setShowDeleteDialog,
     setSelectedRowId,
     downloadItem,
+    openDeleteDialog,
   );
 
   const table = useReactTable({
@@ -78,6 +79,7 @@ const MaintenanceRequestOverviewPage = () => {
           className="mx-auto dark:text-gray-100"
           heading="Maintenance Request List"
         />
+        <FilterContainer table={table} />
         <MaintenanceRequestsTable
           table={table}
           className="hidden md:flex flex-col gap-2"

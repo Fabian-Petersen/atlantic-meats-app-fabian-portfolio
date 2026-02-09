@@ -48,7 +48,7 @@ const MaintenanceRequestForm = () => {
   } = useForm<CreateJobFormValues>({
     defaultValues: {
       equipment: "",
-      store: "",
+      location: "",
       type: "",
       impact: "",
       priority: "",
@@ -131,13 +131,13 @@ const MaintenanceRequestForm = () => {
           error={errors.equipment}
         />
         <FormRowSelect
-          label="Store"
-          name="store"
+          label="Location"
+          name="location"
           options={stores}
           // control={control}
           placeholder="Select Store"
           register={register}
-          error={errors.store}
+          error={errors.location}
           className="capitalize"
         />
         <FormRowSelect

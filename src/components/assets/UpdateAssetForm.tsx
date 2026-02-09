@@ -58,7 +58,7 @@ const UpdateAssetForm = () => {
     CreateAssetPayload,
     { presigned_urls?: PresignedUrlResponse }
   >({
-    endpoint: "asset",
+    resourcePath: "asset",
     queryKey: ASSETS_KEY,
   });
 

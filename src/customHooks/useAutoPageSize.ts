@@ -30,7 +30,7 @@ export function useAutoPageSize<T>(
         10,
       );
 
-      console.log("nextPageSize:", nextPageSize);
+      // console.log("nextPageSize:", nextPageSize);
 
       // ✅ Prevent infinite loop
       if (lastPageSizeRef.current === nextPageSize) return;

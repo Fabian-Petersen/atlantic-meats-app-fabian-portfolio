@@ -3,10 +3,10 @@
 
 import FormHeading from "../../customComponents/FormHeading";
 import { AssetsOverviewTable } from "@/components/assets/AssetsOverviewTable";
-import { useDeleteItem, useGetAll } from "@/utils/api";
+import { useGetAll } from "@/utils/api";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { MobileAssetsOverviewTable } from "@/components/mobile/MolbileAssetsOverviewTable";
-import FilterContainer from "@/components/maintenanceRequestTable/FilterContainer";
+import FilterContainer from "@/components/features/FilterContainer";
 
 // $ Import Tanstack Table
 import {
@@ -20,7 +20,7 @@ import {
 } from "@tanstack/react-table";
 
 import { getAssetColumns } from "../components/assets/columns";
-import { getAssetTableMenuItems } from "@/lib/TableMenuItemsActions";
+// import { getAssetTableMenuItems } from "@/lib/TableMenuItemsActions";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState } from "react";
 import type { AssetFormValues } from "@/schemas";
@@ -45,20 +45,30 @@ const AssetsOverviewPage = () => {
   // });
 
   // $ Logic to Delete an item from the table.
-  const { mutateAsync: deleteItem } = useDeleteItem({
-    resourcePath: "asset",
-    queryKey: ["ASSETS_DELETE_KEY"],
-  });
+  // $ The mutations functions will be passed into the modal
+  // const { mutateAsync: deleteItem } = useDeleteItem({
+  //   resourcePath: "asset",
+  //   queryKey: ["ASSETS_DELETE_KEY"],
+  // });
 
-  const { setShowUpdateAssetDialog, setShowDeleteDialog } = useGlobalContext();
+  // const { mutateAsync: updateItem } = useUpdateItem({
+  //   resourcePath: "asset",
+  //   queryKey: ["ASSETS_DELETE_KEY"],
+  // });
 
-  const menuStateActions = getAssetTableMenuItems(
+  const {
     setShowUpdateAssetDialog,
-    setShowDeleteDialog,
-    deleteItem,
-  );
+    // setShowDeleteDialog,
+    setSelectedRowId,
+    openDeleteDialog,
+  } = useGlobalContext();
 
-  const columns = getAssetColumns(menuStateActions);
+  const columns = getAssetColumns(
+    setShowUpdateAssetDialog,
+    // setShowDeleteDialog,
+    setSelectedRowId,
+    openDeleteDialog,
+  );
 
   const table = useReactTable<AssetFormValues>({
     data: data ?? [],

@@ -11,7 +11,7 @@ const ModalManager = () => {
     showUpdateAssetDialog,
     showUserProfileDialog,
   } = useGlobalContext();
-
+  console.log(showUpdateAssetDialog);
   const isAnyModalOpen =
     showUpdateMaintenanceDialog ||
     showDeleteDialog ||

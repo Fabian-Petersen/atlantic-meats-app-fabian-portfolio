@@ -1,13 +1,14 @@
 // $ This component renders the columns for the Assets Table.
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { AssetFormValues } from "@/schemas";
+import type { AssetTableRow } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
-import type { TableMenuProps } from "@/lib/TableMenuItemsActions";
+import { getAssetTableMenuItems } from "@/lib/TableMenuItemsActions";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 type EquipmentCondition = "operational" | "new" | "poor" | "broken";
+import type { Resource } from "@/utils/api";
 
 function getConditionClasses(condition: EquipmentCondition) {
   switch (condition.toLowerCase()) {
@@ -25,12 +26,17 @@ function getConditionClasses(condition: EquipmentCondition) {
 }
 
 export const getAssetColumns = (
-  menuStateActions: TableMenuProps[],
-): ColumnDef<AssetFormValues>[] => [
+  setShowUpdateAssetDialog: (v: boolean) => void,
+  // setShowDeleteDialog: (v: boolean) => void,
+  setSelectedRowId: (id: string) => void,
+  openDeleteDialog: (
+    selectedRowId: string,
+    config: { resourcePath: Resource; queryKey: readonly unknown[] },
+  ) => void,
+): ColumnDef<AssetTableRow>[] => [
   {
     accessorKey: "createdAt",
     header: "Date Created",
-    // sortingFn: "datetime",
     cell: ({ getValue }) => (
       <p className="">
         {new Date(getValue<string>()).toLocaleString("en-GB", {
@@ -50,6 +56,7 @@ export const getAssetColumns = (
   {
     accessorKey: "equipment",
     header: "Equipment",
+    enableColumnFilter: true,
   },
   {
     accessorKey: "assetID",
@@ -57,10 +64,12 @@ export const getAssetColumns = (
     size: 140,
     minSize: 120,
     maxSize: 160,
+    enableColumnFilter: true,
   },
   {
     accessorKey: "location",
     header: "Location",
+    enableColumnFilter: true,
   },
   {
     accessorKey: "serialNumber",
@@ -69,9 +78,9 @@ export const getAssetColumns = (
   {
     accessorKey: "condition",
     header: "Condition",
+    enableColumnFilter: true,
     cell: ({ getValue }) => {
       const value = getValue<string>();
-
       return (
         <p
           className={`capitalize px-1.5 py-2 text-center rounded-full ${getConditionClasses(
@@ -90,13 +99,21 @@ export const getAssetColumns = (
     enableSorting: false,
     enableHiding: false,
     size: 10,
-    cell: ({ row }) => (
-      <div className="text-center" onClick={(e) => e.stopPropagation()}>
-        <DropdownMenuButtonDialog
-          data={row.original}
-          menuStateActions={menuStateActions}
-        />
-      </div>
-    ),
+    cell: ({ row }) => {
+      const rowId = row.original.id;
+
+      const menuItems = getAssetTableMenuItems(
+        rowId,
+        setSelectedRowId,
+        setShowUpdateAssetDialog,
+        openDeleteDialog,
+      );
+
+      return (
+        <div className="text-center" onClick={(e) => e.stopPropagation()}>
+          <DropdownMenuButtonDialog data={row.original} menuItems={menuItems} />
+        </div>
+      );
+    },
   },
 ];

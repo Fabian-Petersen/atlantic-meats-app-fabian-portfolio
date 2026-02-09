@@ -13,51 +13,68 @@ export type TableMenuItemActions = {
   id: string;
   icon: LucideIcon;
   url?: string;
-  action?: () => void | Promise<void>;
   onClick: () => void | Promise<void>;
 };
 
-export type TableMenuProps = {
-  label: string;
-  openModal?: (v: boolean) => void;
-  id: string;
-  icon: LucideIcon;
-  url?: string;
-  downloadItem?: (id: string) => Promise<void>;
-  deleteItem?: (id: string) => Promise<void>;
-  updateItem?: (id: string) => Promise<void>;
-};
+import type { Resource } from "@/utils/api";
+// import type { AppContextType } from "@/context/app-types";
+
+// export type TableMenuProps = {
+//   label: string;
+//   openModal?: (v: boolean) => void;
+//   id: string;
+//   icon: LucideIcon;
+//   url?: string;
+//   downloadItem?: (id: string) => Promise<void>;
+//   deleteItem?: (id: string) => Promise<void>;
+//   updateItem?: (id: string) => Promise<void>;
+// };
 
 export const getAssetTableMenuItems = (
-  selectedRowId: string,
-  setShowUpdateDialog: (v: boolean) => void,
-  setShowDeleteDialog: (v: boolean) => void,
-  deleteItem: (id: string) => Promise<void>,
-  updateItem: (id: string) => Promise<void>,
+  rowId: string,
+  setSelectedRowId: (id: string) => void,
+  setShowUpdateAssetDialog: (v: boolean) => void,
+  // setShowDeleteDialog: (v: boolean) => void,
+  // openDeleteDialog: AppContextType["openDeleteDialog"],
+  openDeleteDialog: (
+    id: string,
+    config: { resourcePath: Resource; queryKey: readonly unknown[] },
+  ) => void,
 ): TableMenuItemActions[] => [
   {
     id: "1",
     label: "Edit",
     icon: Pencil,
-    onClick: () => setShowUpdateDialog(true),
-    action: () => updateItem(selectedRowId),
+    onClick: () => {
+      setShowUpdateAssetDialog(true);
+      setSelectedRowId(rowId);
+    },
   },
   {
     id: "2",
     label: "Delete",
     icon: Trash2Icon,
-    onClick: () => setShowDeleteDialog(true),
-    action: () => deleteItem(selectedRowId),
+    onClick: () => {
+      openDeleteDialog(rowId, {
+        resourcePath: "asset",
+        queryKey: ["ASSETS_DELETE_KEY"] as const,
+      });
+      console.log("delete-asset-id:", rowId);
+    },
   },
 ];
 
 export const getMaintenanceTableMenuItems = (
-  selectedRowId: string,
+  rowId: string,
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
   setShowActionDialog: (v: boolean) => void,
-  setShowDeleteDialog: (v: boolean) => void,
+  // setShowDeleteDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   downloadItem: (id: string) => Promise<void>,
+  openDeleteDialog: (
+    id: string,
+    config: { resourcePath: Resource; queryKey: readonly unknown[] },
+  ) => void,
 ): TableMenuItemActions[] => [
   {
     id: "1",
@@ -65,9 +82,9 @@ export const getMaintenanceTableMenuItems = (
     label: "Edit",
     icon: Pencil,
     onClick: () => {
-      console.log("update-maintenance-id:", selectedRowId);
+      console.log("update-maintenance-id:", rowId);
       setShowUpdateMaintenanceDialog(true);
-      setSelectedRowId(selectedRowId);
+      setSelectedRowId(rowId);
     },
   },
   {
@@ -77,7 +94,7 @@ export const getMaintenanceTableMenuItems = (
     icon: Wrench,
     onClick: () => {
       setShowActionDialog(true);
-      setSelectedRowId(selectedRowId);
+      setSelectedRowId(rowId);
     },
   },
   {
@@ -85,8 +102,11 @@ export const getMaintenanceTableMenuItems = (
     label: "Delete",
     icon: Trash2Icon,
     onClick: () => {
-      setShowDeleteDialog(true);
-      setSelectedRowId(selectedRowId);
+      openDeleteDialog(rowId, {
+        resourcePath: "maintenance-list",
+        queryKey: ["MAINTENANCE_DELETE_KEY"] as const,
+      });
+      setSelectedRowId(rowId);
     },
   },
   {
@@ -95,7 +115,7 @@ export const getMaintenanceTableMenuItems = (
     url: "maintenance-jobcard",
     icon: DownloadIcon,
     onClick: () => {
-      downloadItem(selectedRowId);
+      downloadItem(rowId);
     },
   },
 ];

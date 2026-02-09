@@ -3,20 +3,33 @@ import { AlertTriangle } from "lucide-react";
 import useGlobalContext from "@/context/useGlobalContext";
 import FormHeading from "../../../customComponents/FormHeading";
 import { toast } from "sonner";
+import { useDeleteItem, type Resource } from "@/utils/api";
 
 const DeleteItemModal = () => {
-  const { setShowDeleteDialog, pendingTableAction } = useGlobalContext();
+  const {
+    setShowDeleteDialog,
+    selectedRowId,
+    deleteConfig,
+    showDeleteDialog,
+    closeDeleteDialog,
+  } = useGlobalContext();
 
-  if (!pendingTableAction) return null;
+  console.log("Delete Config:", deleteConfig, "selectedRowId:", selectedRowId);
 
-  const { id, action } = pendingTableAction;
+  const config = deleteConfig ?? {
+    resourcePath: "asset" as Resource,
+    queryKey: [] as const,
+  };
+
+  const { mutateAsync: deleteItem, isPending } = useDeleteItem(config);
+
+  if (!showDeleteDialog || !selectedRowId || !deleteConfig) return null;
 
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await action(id);
-      alert("delete me");
-      setShowDeleteDialog(false);
+      await deleteItem(selectedRowId);
+      closeDeleteDialog();
       toast.success("The itemm was sucessfully deleted");
     } catch (error) {
       console.error("Delete failed:", error);
@@ -57,11 +70,10 @@ const DeleteItemModal = () => {
 
           <button
             type="submit"
-            // disabled={isPending}
+            disabled={isPending}
             className="w-full rounded-full bg-primary/90 px-6 py-2 text-gray-700 transition hover:bg-primary hover:cursor-pointer disabled:opacity-50 lg:w-32"
           >
-            Delete
-            {/* {isPending ? "Deleting…" : "Delete"} */}
+            <span>{isPending ? "Deleting…" : "Delete"}</span>
           </button>
         </div>
       </div>
