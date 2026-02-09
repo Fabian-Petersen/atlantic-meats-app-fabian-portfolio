@@ -12,10 +12,17 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave }) => {
     sigRef.current?.clear();
   };
 
-  const handleSave = () => {
-    if (!sigRef.current || sigRef.current.isEmpty()) return;
-    const dataUrl = sigRef.current.toDataURL("image/png");
-    onSave(dataUrl);
+  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const handleEnd = () => {
+    if (saveTimeout.current) {
+      clearTimeout(saveTimeout.current);
+    }
+
+    saveTimeout.current = setTimeout(() => {
+      if (!sigRef.current || sigRef.current.isEmpty()) return;
+      onSave(sigRef.current.toDataURL("image/png"));
+    }, 1000); // save after 1s of inactivity
   };
 
   return (
@@ -25,6 +32,7 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave }) => {
       <div className="border border-gray-300 rounded-md outline-none bg-white">
         <SignatureCanvas
           ref={sigRef}
+          onEnd={handleEnd}
           penColor="black"
           canvasProps={{
             className: "w-full h-40 touch-none",
@@ -32,22 +40,22 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave }) => {
         />
       </div>
 
-      <div className="flex gap-3 mt-3">
+      <div className="flex gap-3 mt-2">
         <button
           type="button"
           onClick={handleClear}
-          className="px-3 py-1 text-sm border rounded"
+          className="px-3 py-1 text-sm hover:text-red-500 border rounded-sm border-gray-300 hover:cursor-pointer tracking-wide"
         >
           Clear
         </button>
 
-        <button
+        {/* <button
           type="button"
           onClick={handleSave}
           className="px-3 py-1 text-sm bg-black text-white rounded"
         >
           Save Signature
-        </button>
+        </button> */}
       </div>
     </div>
   );

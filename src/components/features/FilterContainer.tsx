@@ -2,11 +2,7 @@
 import { ColumnFilterItem } from "./ColumnFilterItem";
 // import type { AssetFormValues, CreateJobFormValues } from "@/schemas";
 import { type Table } from "@tanstack/react-table";
-// import AddNewItemButton from "./AddNewItemButton";
-
-// type Props = {
-//   table: Table<AssetFormValues> | Table<CreateJobFormValues>;
-// };
+import AddNewItemButton from "./AddNewItemButton";
 
 type Props<T extends Record<string, unknown>> = {
   table: Table<T>;
@@ -49,57 +45,14 @@ function FilterContainer<T extends Record<string, unknown>>({
           />
         </div>
       ))}
+      <div className="py-2 hidden md:inline-block ml-auto">
+        <label className="text-sm md:text-md text-transparent">
+          Create New Asset
+        </label>
+        <AddNewItemButton title="Create Asset" className="" />
+      </div>
     </div>
   );
 }
-
-// return (
-//   <div className="flex gap-4 justify-between w-full md:gap-2 h-auto">
-//     <div className="flex gap-2 shadow-sm  py-1 p-2 rounded-md">
-//       <div className="py-2 flex-1">
-//         <label className="text-xs text-gray-500">Equipment</label>
-//         <ColumnFilterItem
-//           placeholder="All"
-//           value={
-//             (table.getColumn("equipment")?.getFilterValue() as string) ?? ""
-//           }
-//           onChange={(v) => table.getColumn("equipment")?.setFilterValue(v)}
-//           options={uniqueValues("equipment")}
-//         />
-//       </div>
-//       <div className="py-2 flex-1">
-//         <label className="text-xs text-gray-500">Location</label>
-//         <ColumnFilterItem
-//           placeholder="All"
-//           value={
-//             (table.getColumn("location")?.getFilterValue() as string) ?? ""
-//           }
-//           onChange={(v) => table.getColumn("location")?.setFilterValue(v)}
-//           options={uniqueValues("location")}
-//         />
-//       </div>
-//       {table.getColumn("condition") ? (
-//         <div className="py-2 flex-1">
-//           <label className="text-xs text-gray-500">Condition</label>
-//           <ColumnFilterItem
-//             placeholder="All"
-//             value={
-//               (table.getColumn("condition")?.getFilterValue() as string) ?? ""
-//             }
-//             onChange={(v) => table.getColumn("condition")?.setFilterValue(v)}
-//             options={uniqueValues("condition")}
-//           />
-//         </div>
-//       ) : null}
-//     </div>
-//     <div className="py-2 hidden md:inline-block ml-auto">
-//       <label className="text-sm md:text-md text-transparent">
-//         Create New Asset
-//       </label>
-//       <AddNewItemButton title="Create Asset" className="" />
-//     </div>
-//   </div>
-// );
-// }
 
 export default FilterContainer;

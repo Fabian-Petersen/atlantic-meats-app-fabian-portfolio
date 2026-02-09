@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+
 // $ React-Hook-Form & zod
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Control, type Resolver } from "react-hook-form";
@@ -11,23 +12,20 @@ import FormRowSelect from "../../../customComponents/FormRowSelect";
 // import useGlobalContext from "@/context/useGlobalContext";
 
 // $ Import schemas
-import {
-  actionJobSchema,
-  //// type CreateJobFormValues,
-  type ActionJobFormValues,
-} from "../../schemas/index";
+import { actionJobSchema, type ActionJobFormValues } from "../../schemas/index";
 
 import { ROOT_CAUSES, status } from "@/data/maintenanceAction";
 import TextAreaInput from "../../../customComponents/TextAreaInput";
 import DigitalSignature from "./DigitalSignature";
 import FileInput from "../../../customComponents/FileInput";
 //// import FileInput from "../customComponents/FileInput";
+type Props = {
+  onCancel: () => void;
+};
 
-const MaintenanceActionForm = () => {
+const MaintenanceActionForm = ({ onCancel }: Props) => {
   const [signature, setSignature] = useState<string | null>(null);
-  //// const { mutateAsync } = useCreateMaintenanceRequest();
-
-  //// const navigate = useNavigate();
+  // const { setShowActionDialog } = useGlobalContext();
 
   // $ Form Schema
   const {
@@ -74,12 +72,12 @@ const MaintenanceActionForm = () => {
       className="flex flex-col rounded-lg lg:w-full text-font dark:bg-[#1d2739] pt-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-6 w-full lg:py-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-6 w-full lg:py-6">
         <FormRowInput
           label="Start Date/Time"
           type="datetime-local"
           name="start_time"
-          // placeholder="Start Time"
+          placeholder="Start Time"
           register={register}
           error={errors.start_time}
         />
@@ -87,33 +85,25 @@ const MaintenanceActionForm = () => {
           label="End Date/Time"
           type="datetime-local"
           name="end_time"
-          // placeholder="End Time"
+          placeholder="End Time"
           register={register}
           error={errors.end_time}
         />
         <FormRowInput
-          label="Start Km"
+          label="Kilometers"
           type="text"
-          name="start_km"
-          placeholder="Start Km"
+          name="total_km"
+          placeholder="Total Km's"
           register={register}
-          error={errors.start_km}
+          error={errors.total_km}
         />
         <FormRowInput
-          label="End Km"
+          label="Works Order Number"
           type="text"
-          name="end_km"
-          placeholder="End Km"
+          name="works_order_number"
+          placeholder="Works Order Number"
           register={register}
-          error={errors.end_km}
-        />
-        <FormRowInput
-          label="Materials Cost"
-          type="text"
-          name="materials_cost"
-          placeholder="Materials Cost"
-          register={register}
-          error={errors.materials_cost}
+          error={errors.works_order_number}
         />
         <FormRowSelect
           label="Root Cause"
@@ -127,7 +117,6 @@ const MaintenanceActionForm = () => {
           register={register}
           error={errors.root_cause}
         />
-
         <FormRowSelect
           label="Status"
           name="status"
@@ -137,57 +126,41 @@ const MaintenanceActionForm = () => {
           register={register}
           error={errors.status}
         />
+        <TextAreaInput
+          label="Work Completed"
+          name="work_completed"
+          placeholder="Work Completed"
+          register={register}
+          className=""
+          rows={3}
+          error={errors.work_completed}
+        />
+        <TextAreaInput
+          label="Findings"
+          name="findings"
+          placeholder="Findings"
+          className=""
+          register={register}
+          rows={3}
+          error={errors.findings}
+        />
         <FileInput
           label=""
           control={control as unknown as Control<ActionJobFormValues>}
           name="images"
           multiple={true}
         />
-        <TextAreaInput
-          label="Materials Used"
-          name="materials"
-          placeholder=""
-          register={register}
-          rows={3}
-          className="col-span-1"
-        />
-
-        <TextAreaInput
-          label="Work Completed"
-          name="work_completed"
-          placeholder="Work Completed"
-          register={register}
-          className="col-span-1"
-          rows={3}
-          error={errors.work_completed}
-        />
-        <TextAreaInput
-          label="Additional Notes"
-          name="additional_notes"
-          placeholder="Additional Notes"
-          className="lg:col-span-1"
-          register={register}
-          rows={3}
-          error={errors.additional_notes}
-        />
       </div>
       <DigitalSignature onSave={setSignature} />
-      {signature && (
-        <img
-          src={signature}
-          alt="Saved signature"
-          className="border mt-2 w-40"
-        />
-      )}
-
       <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72">
         <Button
           className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
           variant="cancel"
           size="lg"
           type="button"
+          onClick={onCancel}
         >
-          Clear
+          Cancel
         </Button>
         <Button
           disabled={isSubmitting}

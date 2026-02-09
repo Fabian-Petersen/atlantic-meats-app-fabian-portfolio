@@ -76,13 +76,13 @@ const MaintenanceUpdateForm = () => {
           error={errors.additional_notes}
         />
         <FormRowSelect
-          name="store"
-          label="Store"
+          name="location"
+          label="Location"
           options={stores}
           // control={control}
           placeholder="Select Store"
           register={register}
-          error={errors.store}
+          error={errors.location}
           className="capitalize"
         />
         <FormRowSelect
@@ -127,15 +127,24 @@ const MaintenanceUpdateForm = () => {
         />
         <FileInput control={control} name="images" multiple={true} />
       </div>
-      <div className="flex gap-2 w-full justify-end">
+      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72">
         <Button
+          className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
           onClick={() => setShowUpdateMaintenanceDialog(false)}
           variant={"cancel"}
+          size="lg"
+          type="button"
         >
           Cancel
         </Button>
-        <Button disabled={isSubmitting} type="submit" variant={"submit"}>
-          Update
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          variant="submit"
+          size="lg"
+          className="flex-1"
+        >
+          {isSubmitting ? "Updating..." : "Update"}
         </Button>
       </div>
     </form>
@@ -143,3 +152,23 @@ const MaintenanceUpdateForm = () => {
 };
 
 export default MaintenanceUpdateForm;
+
+// <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72">
+//       <Button
+//         className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
+//         variant="cancel"
+//         size="lg"
+//         type="button"
+//         onClick={onCancel}
+//       >
+//         Cancel
+//       </Button>
+//       <Button
+//         disabled={isSubmitting}
+//         type="submit"
+//         variant="submit"
+//         size="lg"
+//         className="flex-1"
+//       >
+//         {isSubmitting ? "Submitting..." : "Submit"}
+//       </Button>

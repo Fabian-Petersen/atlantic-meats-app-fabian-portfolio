@@ -59,7 +59,7 @@ export const getAssetTableMenuItems = (
         resourcePath: "asset",
         queryKey: ["ASSETS_DELETE_KEY"] as const,
       });
-      console.log("delete-asset-id:", rowId);
+      // console.log("delete-asset-id:", rowId);
     },
   },
 ];
@@ -103,7 +103,7 @@ export const getMaintenanceTableMenuItems = (
     icon: Trash2Icon,
     onClick: () => {
       openDeleteDialog(rowId, {
-        resourcePath: "maintenance-list",
+        resourcePath: "maintenance-request",
         queryKey: ["MAINTENANCE_DELETE_KEY"] as const,
       });
       setSelectedRowId(rowId);

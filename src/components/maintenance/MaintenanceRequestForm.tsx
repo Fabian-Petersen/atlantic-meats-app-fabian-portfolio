@@ -61,7 +61,7 @@ const MaintenanceRequestForm = () => {
   });
 
   const onSubmit = async (data: CreateJobFormValues) => {
-    console.log("Submitting maintenance request:", data);
+    // console.log("Submitting maintenance request:", data);
     try {
       // $ 1️⃣ Compress images in browser
       const originalFiles = data.images ?? [];
@@ -99,7 +99,7 @@ const MaintenanceRequestForm = () => {
       toast.success("Maintenance request created successfully!", {
         duration: 1000,
       });
-      // navigate("/maintenance-list");
+      navigate("/maintenance-list");
     } catch (err) {
       console.error("Failed to create maintenance request", err);
     }

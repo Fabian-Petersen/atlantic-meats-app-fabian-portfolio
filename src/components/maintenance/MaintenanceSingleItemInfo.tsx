@@ -23,7 +23,7 @@ function MaintenanceSingleItemInfo({ item }: Readonly<Props>) {
         </li>
         <li className="capitalize flex gap-2">
           <span>Store : </span>
-          <span>{item.store}</span>
+          <span>{item.location}</span>
         </li>
         <li className="capitalize flex gap-2">
           <span>Type : </span>

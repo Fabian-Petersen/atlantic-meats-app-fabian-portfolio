@@ -14,7 +14,7 @@ const DeleteItemModal = () => {
     closeDeleteDialog,
   } = useGlobalContext();
 
-  console.log("Delete Config:", deleteConfig, "selectedRowId:", selectedRowId);
+  // console.log("Delete Config:", deleteConfig, "selectedRowId:", selectedRowId);
 
   const config = deleteConfig ?? {
     resourcePath: "asset" as Resource,

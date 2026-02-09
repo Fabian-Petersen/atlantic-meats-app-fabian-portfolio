@@ -88,7 +88,7 @@ export const actionJobSchema = z.object({
     .string()
     .min(1, "End time required")
     .refine((val) => !Number.isNaN(Date.parse(val)), "Invalid date/time"),
-  start_km: z
+  total_km: z
     .string()
     .min(1, { message: "Start km is required" })
     .refine(
@@ -98,24 +98,15 @@ export const actionJobSchema = z.object({
       },
       { message: "Start km must be a greater than zero" },
     ),
-  end_km: z
-    .string()
-    .min(1, { message: "End km is required" })
-    .refine(
-      (val) => {
-        const num = Number(val);
-        return Number.isFinite(num) && num > 0;
-      },
-      { message: "End km must be a greater than zero" },
-    ),
+  works_order_number: z.string().optional(),
   work_completed: z.string().min(1, { message: "Please enter work completed" }),
-  materials: z.string().optional(),
-  materials_cost: z.string().min(1, { message: "Please select equipment" }),
+  // materials: z.string().optional(),
+  // materials_cost: z.string().min(1, { message: "Please select equipment" }),
   status: z.string().min(1, { message: "" }), // "pending", "in progress", "complete"
   root_cause: z.enum(ROOT_CAUSES, {
     message: "please select a root cause for breakdown",
   }),
-  additional_notes: z.string().optional(),
+  findings: z.string().optional(),
   images: z.array(z.instanceof(File)).default([]).optional(),
   signtuture: z.string().optional(),
 });

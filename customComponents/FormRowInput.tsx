@@ -3,7 +3,7 @@ import PasswordToggle from "@/components/features/PasswordToggle";
 import type { LucideIcon } from "lucide-react";
 
 type FormInputProps<TFieldValues extends FieldValues> = {
-  label: string;
+  label?: string;
   name: Path<TFieldValues>;
   type?: HTMLInputTypeAttribute;
   placeholder?: string;
