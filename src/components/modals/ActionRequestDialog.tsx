@@ -17,14 +17,16 @@ function ActionRequestDialog() {
   const { showActionDialog, setShowActionDialog } = useGlobalContext();
   return (
     <Dialog open={showActionDialog} onOpenChange={setShowActionDialog}>
-      <DialogContent className="sm:max-w-[625px] bg-white z-3000 border-none max-h-[90dvh]">
-        <DialogTitle className="py-4">
+      <DialogContent className="sm:max-w-[625px] bg-white z-3000 border-none max-h-[90vh] flex flex-col">
+        <DialogTitle className="py-4 shrink-0">
           <FormHeading
             className="font-normal"
             heading="Action Maintenance Request"
           />
         </DialogTitle>
-        <MaintenanceActionForm onCancel={() => setShowActionDialog(false)} />
+        <div className="overflow-y-auto flex-1 no-scrollbar">
+          <MaintenanceActionForm onCancel={() => setShowActionDialog(false)} />
+        </div>
       </DialogContent>
     </Dialog>
   );

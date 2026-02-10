@@ -23,14 +23,14 @@ import { getAssetColumns } from "../components/assets/columns";
 // import { getAssetTableMenuItems } from "@/lib/TableMenuItemsActions";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState } from "react";
-import type { AssetFormValues } from "@/schemas";
+import type { AssetTableRow } from "@/schemas";
 import { ErrorPage } from "@/components/features/Error";
 
 // import type { AssetFormValues } from "@/schemas";
 
 const AssetsOverviewPage = () => {
   const ASSETS_REQUESTS_KEY = ["assetRequests"];
-  const { data, isLoading, isError, refetch } = useGetAll<AssetFormValues>(
+  const { data, isLoading, isError, refetch } = useGetAll<AssetTableRow>(
     "asset",
     ASSETS_REQUESTS_KEY,
   );
@@ -38,23 +38,6 @@ const AssetsOverviewPage = () => {
   const [sorting, setSorting] = useState<SortingState>([
     { id: "createdAt", desc: true },
   ]);
-
-  // const [pagination, setPagination] = useState<PaginationState>({
-  //   pageIndex: 0,
-  //   pageSize: 5,
-  // });
-
-  // $ Logic to Delete an item from the table.
-  // $ The mutations functions will be passed into the modal
-  // const { mutateAsync: deleteItem } = useDeleteItem({
-  //   resourcePath: "asset",
-  //   queryKey: ["ASSETS_DELETE_KEY"],
-  // });
-
-  // const { mutateAsync: updateItem } = useUpdateItem({
-  //   resourcePath: "asset",
-  //   queryKey: ["ASSETS_DELETE_KEY"],
-  // });
 
   const {
     setShowUpdateAssetDialog,
@@ -70,7 +53,7 @@ const AssetsOverviewPage = () => {
     openDeleteDialog,
   );
 
-  const table = useReactTable<AssetFormValues>({
+  const table = useReactTable({
     data: data ?? [],
     columns: columns,
     columnResizeMode: "onChange",

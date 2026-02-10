@@ -45,76 +45,78 @@ function UserProfileForm({ user }: UserProfileProps) {
 
   return (
     <form
-      className="grid md:grid-cols-2 gap-8 py-4 text-xs border border-red-500"
+      className="flex flex-col rounded-lg lg:w-full text-font dark:bg-[#1d2739] pt-4 h-full"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <FormHeading
-        heading="Profile Information"
-        className="col-span-full text-md lg:text-md"
-      />
-      <FormRowInputEditable
-        label="Name"
-        name="name"
-        className="capitalize"
-        register={register}
-      />
-      {/* <FormRowInput
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-6 w-full lg:py-6">
+        <FormHeading
+          heading="Profile Information"
+          className="col-span-full text-md lg:text-md"
+        />
+        <FormRowInputEditable
+          label="Name"
+          name="name"
+          className="capitalize"
+          register={register}
+        />
+        {/* <FormRowInput
         label="Name"
         name="name"
         className="capitalize"
         register={register}
       /> */}
-      <FormRowInput
-        label="Surname"
-        name="surname"
-        readOnly={true}
-        register={register}
-        className="capitalize"
-      />
-      <FormRowInputEditable
-        label="Branch"
-        name="branch"
-        register={register}
-        className="capitalize"
-      />
-      <FormRowInputEditable
-        label="Division"
-        name="division"
-        register={register}
-        className="capitalize"
-      />
-      <FormRowInputEditable
-        label="Role"
-        name="role"
-        register={register}
-        className="capitalize"
-        // errors={error}
-      />
-      <FormHeading
-        heading="Contact Information"
-        className="col-span-full text-md lg:text-md"
-      />
-      <FormRowInput
-        label="Email"
-        type="email"
-        name="email"
-        readOnly={true}
-        register={register}
-      />
-      <FormRowInputEditable
-        label="Mobile"
-        type="text"
-        name="mobile"
-        register={register}
-        className="capitalize"
-      />
-      <div className="justify-end flex w-full ml-auto gap-2 max-w-72 mt-auto border border-red-500">
+        <FormRowInput
+          label="Surname"
+          name="surname"
+          readOnly={true}
+          register={register}
+          className="capitalize"
+        />
+        <FormRowInputEditable
+          label="Branch"
+          name="branch"
+          register={register}
+          className="capitalize"
+        />
+        <FormRowInputEditable
+          label="Division"
+          name="division"
+          register={register}
+          className="capitalize"
+        />
+        <FormRowInputEditable
+          label="Role"
+          name="role"
+          register={register}
+          className="capitalize"
+          // errors={error}
+        />
+        <FormHeading
+          heading="Contact Information"
+          className="col-span-full text-md lg:text-md"
+        />
+        <FormRowInput
+          label="Email"
+          type="email"
+          name="email"
+          readOnly={true}
+          register={register}
+        />
+        <FormRowInputEditable
+          label="Mobile"
+          type="text"
+          name="mobile"
+          register={register}
+          className="capitalize"
+        />
+      </div>
+      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 sticky bottom-0 bg-white mt-auto pb-4">
         <Button
+          className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white capitalize"
           type="button"
           onClick={() => navigate("/dashboard")}
           variant="cancel"
           size="lg"
-          className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white capitalize"
         >
           Cancel
         </Button>
@@ -125,7 +127,7 @@ function UserProfileForm({ user }: UserProfileProps) {
           size="lg"
           className="flex-1 capitalize"
         >
-          Update
+          {isSubmitting ? "Updating..." : "Update"}
         </Button>
       </div>
     </form>

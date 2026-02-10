@@ -143,10 +143,10 @@ export type VerifyPinFormValues = z.infer<typeof verifyPinSchema>;
 
 export type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
 export type CreateJobFormValues = z.infer<typeof createJobSchema>;
+export type MaintenanceTableRow = z.infer<typeof maintenanceTableRowSchema>;
 export type ActionJobFormValues = z.infer<typeof actionJobSchema>;
 export type AssetFormValues = z.infer<typeof assetSchema>;
 export type UserAttributesFormValues = z.infer<typeof userAttributesSchema>;
-export type MaintenanceTableRow = z.infer<typeof maintenanceTableRowSchema>;
 export type AssetTableRow = z.infer<typeof assetTableRowSchema>;
 
 export type CreateAssetPayload = Omit<AssetFormValues, "images"> & {

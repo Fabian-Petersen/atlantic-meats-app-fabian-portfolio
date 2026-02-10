@@ -1,13 +1,13 @@
 import { flexRender, type Table } from "@tanstack/react-table";
 
 import { useNavigate } from "react-router-dom";
-import type { AssetFormValues } from "@/schemas";
+import type { AssetTableRow } from "@/schemas";
 import EmptyTablePlaceholder from "../features/EmptyTablePlaceholder";
 import TablePaginationControls from "./TablePaginationControls";
 import { useAutoPageSize } from "@/customHooks/useAutoPageSize";
 
 type Props = {
-  table: Table<AssetFormValues>;
+  table: Table<AssetTableRow>;
   className?: string;
 };
 

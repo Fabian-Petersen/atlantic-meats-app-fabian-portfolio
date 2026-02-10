@@ -2,10 +2,10 @@ import { flexRender, type Table } from "@tanstack/react-table";
 import EmptyTablePlaceholder from "../features/EmptyTablePlaceholder";
 
 import { useNavigate } from "react-router-dom";
-import type { CreateJobFormValues } from "@/schemas";
+import type { MaintenanceTableRow } from "@/schemas";
 
 type Props = {
-  table: Table<CreateJobFormValues>;
+  table: Table<MaintenanceTableRow>;
   className?: string;
 };
 
@@ -29,7 +29,7 @@ export function MaintenanceRequestsTable({ table, className }: Props) {
                   >
                     {flexRender(
                       header.column.columnDef.header,
-                      header.getContext()
+                      header.getContext(),
                     )}
                   </th>
                 ))}
@@ -56,7 +56,7 @@ export function MaintenanceRequestsTable({ table, className }: Props) {
                     <td key={cell.id} className="px-4 py-3 text-gray-700">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </td>
                   ))}

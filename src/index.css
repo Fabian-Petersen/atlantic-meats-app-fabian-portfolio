@@ -82,3 +82,12 @@ html {
   height: calc(var(--font-size) * 1.5) !important;
   padding-right: 0.25rem;
 }
+
+/* Hide scrollbar but allow scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

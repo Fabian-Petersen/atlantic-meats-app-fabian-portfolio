@@ -18,12 +18,12 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { getMaintenanceColumns } from "@/components/maintenanceRequestTable/columns";
 import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
-import type { CreateJobFormValues } from "@/schemas";
+import type { MaintenanceTableRow } from "@/schemas";
 import FilterContainer from "@/components/features/FilterContainer";
 
 const MaintenanceRequestOverviewPage = () => {
   const MAINTENANCE_REQUESTS_KEY = ["allMaintenanceRequests"];
-  const { data, isLoading, isError, refetch } = useGetAll<CreateJobFormValues>(
+  const { data, isLoading, isError, refetch } = useGetAll<MaintenanceTableRow>(
     "maintenance-request",
     MAINTENANCE_REQUESTS_KEY,
   );

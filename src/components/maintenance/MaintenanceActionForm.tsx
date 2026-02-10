@@ -152,7 +152,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
         />
       </div>
       <DigitalSignature onSave={setSignature} />
-      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72">
+      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 sticky bottom-0 bg-white pt-2">
         <Button
           className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
           variant="cancel"
