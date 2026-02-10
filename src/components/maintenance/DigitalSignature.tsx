@@ -26,8 +26,8 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave }) => {
   };
 
   return (
-    <div className="w-full">
-      <p className="mb-2 text-sm">Customer Signature</p>
+    <div className="w-full mt-4">
+      <p className="mb-2 text-xs ml-1">Customer Signature</p>
 
       <div className="border border-gray-300 rounded-md outline-none bg-white">
         <SignatureCanvas

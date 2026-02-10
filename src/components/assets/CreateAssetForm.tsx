@@ -276,7 +276,7 @@ const CreateAssetForm = () => {
           rows={3}
         />
       </div>
-      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 sticky bottom-0 bg-white pt-2">
+      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 bg-white pt-2">
         <Button
           type="button"
           onClick={() => {

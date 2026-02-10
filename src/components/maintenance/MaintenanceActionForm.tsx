@@ -72,7 +72,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
       className="flex flex-col rounded-lg lg:w-full text-font dark:bg-[#1d2739] pt-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-6 w-full lg:py-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-6 w-full lg:pt-6">
         <FormRowInput
           label="Start Date/Time"
           type="datetime-local"
@@ -121,35 +121,39 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
           label="Status"
           name="status"
           options={status}
+          className="gap-2"
           // control={control}
           placeholder="Action Status"
           register={register}
           error={errors.status}
         />
-        <TextAreaInput
-          label="Work Completed"
-          name="work_completed"
-          placeholder="Work Completed"
-          register={register}
-          className=""
-          rows={3}
-          error={errors.work_completed}
-        />
-        <TextAreaInput
-          label="Findings"
-          name="findings"
-          placeholder="Findings"
-          className=""
-          register={register}
-          rows={3}
-          error={errors.findings}
-        />
-        <FileInput
-          label=""
-          control={control as unknown as Control<ActionJobFormValues>}
-          name="images"
-          multiple={true}
-        />
+        <div className="col-span-full grid grid-cols-2 gap-y-0 gap-x-6">
+          <TextAreaInput
+            label="Work Completed"
+            name="work_completed"
+            placeholder="Work Completed"
+            register={register}
+            className="gap-2"
+            rows={3}
+            error={errors.work_completed}
+          />
+          <TextAreaInput
+            label="Findings"
+            name="findings"
+            placeholder="Findings"
+            className=""
+            register={register}
+            rows={3}
+            error={errors.findings}
+          />
+          <FileInput
+            label=""
+            control={control as unknown as Control<ActionJobFormValues>}
+            name="images"
+            multiple={true}
+            className="col-span-2"
+          />
+        </div>
       </div>
       <DigitalSignature onSave={setSignature} />
       <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 sticky bottom-0 bg-white pt-2">
