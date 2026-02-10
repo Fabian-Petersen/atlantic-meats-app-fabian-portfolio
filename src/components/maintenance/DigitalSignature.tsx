@@ -3,9 +3,13 @@ import SignatureCanvas from "react-signature-canvas";
 
 type DigitalSignatureProps = {
   onSave: (signature: string) => void;
+  className?: string;
 };
 
-const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave }) => {
+const DigitalSignature: React.FC<DigitalSignatureProps> = ({
+  onSave,
+  className,
+}) => {
   const sigRef = useRef<SignatureCanvas | null>(null);
 
   const handleClear = () => {
@@ -26,7 +30,7 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({ onSave }) => {
   };
 
   return (
-    <div className="w-full mt-4">
+    <div className={`w-full mt-4 ${className}`}>
       <p className="mb-2 text-xs ml-1">Customer Signature</p>
 
       <div className="border border-gray-300 rounded-md outline-none bg-white">

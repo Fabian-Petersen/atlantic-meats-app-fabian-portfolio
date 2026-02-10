@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -40,15 +40,15 @@ const ASSETS_KEY = ["assets"];
 
 const UpdateAssetForm = () => {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
-  const { setShowUpdateAssetDialog } = useGlobalContext();
+  const { setShowUpdateAssetDialog, selectedRowId: id } = useGlobalContext();
+  console.log("selectedRowId:", id);
 
   const [businessUnit, setBusinessUnit] = useState<BusinessUnit | null>(null);
   const [category, setCategory] = useState<string | null>(null);
 
   // $ Fetch asset
   const { data: item, isPending } = useById<AssetFormValues & WithImages>({
-    id: id || "",
+    id: id ?? "",
     queryKey: ASSETS_KEY,
     endpoint: "/asset",
   });
@@ -67,7 +67,7 @@ const UpdateAssetForm = () => {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<AssetFormValues>({
     defaultValues: item,
     resolver: zodResolver(assetSchema) as unknown as Resolver<AssetFormValues>,
@@ -78,6 +78,8 @@ const UpdateAssetForm = () => {
         }
       : undefined,
   });
+
+  console.log("item in form:", item);
 
   if (!id || isPending || !item) {
     return <PageLoadingSpinner />;
@@ -175,7 +177,6 @@ const UpdateAssetForm = () => {
           label="Equipment"
           name="equipment"
           options={itemOptions}
-          // control={control}
           placeholder="Select Equipment"
           register={register}
           error={errors.equipment}
@@ -184,7 +185,6 @@ const UpdateAssetForm = () => {
           label="Asset ID"
           type="text"
           name="assetID"
-          // control={control}
           placeholder="Asset ID e.g. MX001"
           register={register}
           error={errors.assetID}
@@ -193,7 +193,6 @@ const UpdateAssetForm = () => {
           label="Location"
           name="location"
           options={sortedLocations}
-          // control={control}
           placeholder="Select Location"
           register={register}
           error={errors.location}
@@ -203,7 +202,6 @@ const UpdateAssetForm = () => {
           label="Condition"
           name="condition"
           options={condition}
-          // control={control}
           placeholder="Select Condition"
           register={register}
           error={errors.condition}
@@ -212,16 +210,16 @@ const UpdateAssetForm = () => {
           label="Serial Number"
           type="text"
           name="serialNumber"
-          // control={control}
           placeholder="Serial Number"
           register={register}
           error={errors.serialNumber}
         />
         <FileInput
-          label="Supporting Documents"
+          label=""
           control={control}
           name="images"
           multiple={true}
+          className="col-span-2"
           // error={errors.images}
         />
         <TextAreaInput
@@ -233,25 +231,26 @@ const UpdateAssetForm = () => {
           rows={3}
         />
       </div>
-      <div className="flex gap-2 w-full justify-end">
+      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 bg-white mt-auto">
         <Button
           type="button"
           onClick={() => {
             setShowUpdateAssetDialog(false);
-            // navigate("/asset");
           }}
           variant="cancel"
           size="lg"
+          className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
         >
           Cancel
         </Button>
         <Button
-          disabled={isSubmitting}
+          disabled={isPending}
           type="submit"
           variant="submit"
           size="lg"
+          className="flex-1"
         >
-          {isSubmitting ? "Sending..." : "Submit"}
+          {isPending ? "Sending..." : "Submit"}
         </Button>
       </div>
     </form>

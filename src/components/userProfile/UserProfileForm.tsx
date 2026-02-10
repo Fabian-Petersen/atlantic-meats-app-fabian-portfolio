@@ -45,7 +45,7 @@ function UserProfileForm({ user }: UserProfileProps) {
 
   return (
     <form
-      className="flex flex-col rounded-lg lg:w-full text-font dark:bg-[#1d2739] pt-4 h-full"
+      className="flex flex-col rounded-lg lg:w-full text-font dark:bg-[#1d2739] pt-4 h-auto"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-6 w-full lg:py-6">
@@ -110,7 +110,7 @@ function UserProfileForm({ user }: UserProfileProps) {
           className="capitalize"
         />
       </div>
-      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 sticky bottom-0 bg-white mt-auto pb-4">
+      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 bg-white pb-4">
         <Button
           className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white capitalize"
           type="button"
