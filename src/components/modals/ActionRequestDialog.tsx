@@ -9,12 +9,17 @@ import {
 } from "@/components/ui/dialog";
 
 import MaintenanceActionForm from "../maintenance/MaintenanceActionForm";
+import { useGetJobDetails } from "@/customHooks/useGetJobDetails";
 
 import useGlobalContext from "@/context/useGlobalContext";
 import FormHeading from "../../../customComponents/FormHeading";
 
 function ActionRequestDialog() {
-  const { showActionDialog, setShowActionDialog } = useGlobalContext();
+  const { showActionDialog, setShowActionDialog, selectedRowId } =
+    useGlobalContext();
+
+  const { jobData } = useGetJobDetails(selectedRowId!);
+
   return (
     <Dialog open={showActionDialog} onOpenChange={setShowActionDialog}>
       <DialogContent className="sm:max-w-[625px] bg-white z-3000 border-none max-h-[90vh] flex flex-col">
@@ -23,6 +28,7 @@ function ActionRequestDialog() {
             className="font-normal"
             heading="Action Maintenance Request"
           />
+          <span className="text-xs font-medium">{jobData?.jobCardNumber}</span>
         </DialogTitle>
         <div className="overflow-y-auto flex-1 no-scrollbar">
           <MaintenanceActionForm onCancel={() => setShowActionDialog(false)} />

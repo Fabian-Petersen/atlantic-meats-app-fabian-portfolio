@@ -8,6 +8,7 @@ import type {
   CreateJobFormValues,
   CreateJobPayload,
   PresignedUrlResponse,
+  CreateActionPayload,
 } from "@/schemas";
 
 export type Resource =
@@ -133,7 +134,8 @@ export const useMaintenanceRequestById = (id: string) => {
   });
 };
 
-// $ CREATE
+// $ CREATE "Create a Generic POST Request funtion that can be used across different resources (e.g., maintenance requests, assets, etc.)"
+
 export const useCreateMaintenanceRequest = () => {
   const queryClient = useQueryClient();
 
@@ -165,6 +167,24 @@ export const useCreateNewAsset = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ASSETS_REQUESTS_KEY,
+      });
+    },
+  });
+};
+
+export const useCreateActionRequest = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: CreateActionPayload) => {
+      const { data } = await apiClient.post("/maintenance-action", payload, {
+        headers: { "Content-Type": "application/json" },
+      });
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: MAINTENANCE_REQUESTS_KEY,
       });
     },
   });

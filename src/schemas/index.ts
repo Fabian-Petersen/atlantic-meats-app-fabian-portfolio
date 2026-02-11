@@ -73,6 +73,14 @@ export const createJobSchema = z.object({
   images: z.array(z.instanceof(File)).default([]).optional(),
 });
 
+// $ Schema for the Response from the database when fetching the maintenance requests
+export const jobResponseSchema = createJobSchema.extend({
+  id: z.string(),
+  createdAt: z.string(),
+  jobCardNumber: z.string(),
+  status: z.string(),
+});
+
 // $ Schema for the Maintenance Table Menu
 export const maintenanceTableRowSchema = createJobSchema.extend({
   id: z.string(),
@@ -90,7 +98,7 @@ export const actionJobSchema = z.object({
     .refine((val) => !Number.isNaN(Date.parse(val)), "Invalid date/time"),
   total_km: z
     .string()
-    .min(1, { message: "Start km is required" })
+    .min(1, { message: "Total km is required" })
     .refine(
       (val) => {
         const num = Number(val);
@@ -143,6 +151,7 @@ export type VerifyPinFormValues = z.infer<typeof verifyPinSchema>;
 
 export type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
 export type CreateJobFormValues = z.infer<typeof createJobSchema>;
+export type JobAPIResponse = z.infer<typeof jobResponseSchema>;
 export type MaintenanceTableRow = z.infer<typeof maintenanceTableRowSchema>;
 export type ActionJobFormValues = z.infer<typeof actionJobSchema>;
 export type AssetFormValues = z.infer<typeof assetSchema>;
@@ -161,6 +170,17 @@ export type CreateJobPayload = Omit<CreateJobFormValues, "images"> & {
     filename: string;
     content_type: string;
   }[];
+};
+
+// $ Schema for the Maintenance Action Table Menu
+export type CreateActionPayload = Omit<ActionJobFormValues, "images"> & {
+  images: {
+    filename: string;
+    content_type: string;
+  }[];
+  signature?: string | null; // base64 PNG
+  selectedRowId: string;
+  jobCardNumber?: string; // ID of the maintenance request being actioned
 };
 
 export type PresignedUrlResponse = {

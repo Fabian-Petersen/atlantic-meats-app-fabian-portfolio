@@ -1,7 +1,9 @@
 //$ This component is used to action and closeout a maintenace job, the data is submitted to the database (dynamoDB) referenced to the requested_id.
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 // $ React-Hook-Form & zod
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,20 +14,57 @@ import FormRowSelect from "../../../customComponents/FormRowSelect";
 // import useGlobalContext from "@/context/useGlobalContext";
 
 // $ Import schemas
-import { actionJobSchema, type ActionJobFormValues } from "../../schemas/index";
+import {
+  actionJobSchema,
+  type ActionJobFormValues,
+  type CreateActionPayload,
+  type PresignedUrlResponse,
+} from "../../schemas/index";
+
+// $ Import api & hooks
+import { useCreateActionRequest } from "@/utils/api";
+
+// $ Import image compression hook
+import { compressImagesToWebp } from "@/utils/compressImagesToWebp";
 
 import { ROOT_CAUSES, status } from "@/data/maintenanceAction";
 import TextAreaInput from "../../../customComponents/TextAreaInput";
 import DigitalSignature from "./DigitalSignature";
 import FileInput from "../../../customComponents/FileInput";
-//// import FileInput from "../customComponents/FileInput";
+import useGlobalContext from "@/context/useGlobalContext";
+
 type Props = {
   onCancel: () => void;
 };
 
 const MaintenanceActionForm = ({ onCancel }: Props) => {
+  const { mutateAsync, isError } = useCreateActionRequest();
+
   const [signature, setSignature] = useState<string | null>(null);
-  // const { setShowActionDialog } = useGlobalContext();
+  const { setHasError, selectedRowId } = useGlobalContext();
+  const navigate = useNavigate();
+
+  // $ Ensure selectedRowId is available
+  useEffect(() => {
+    if (!selectedRowId) {
+      toast.error("No maintenance request selected for actioning.", {
+        duration: 1000,
+      });
+      navigate("/maintenance-list");
+    }
+  }, [selectedRowId, navigate]);
+
+  // $ Ensure signature is captured before allowing submission
+  useEffect(() => {
+    if (signature === null) {
+      setHasError(true);
+      toast.error("Please provide a digital signature before submitting.", {
+        duration: 1000,
+      });
+    } else {
+      setHasError(false);
+    }
+  }, [signature, setHasError]);
 
   // $ Form Schema
   const {
@@ -35,37 +74,77 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
     formState: { errors, isSubmitting },
   } = useForm<ActionJobFormValues>({
     // defaultValues: {
-    // start_km: "",
-    // end_km: "",
-    // images: [],
     // start_time: toDateTimeLocal(now),
     // end_time: toDateTimeLocal(now),
+    // total_km: "",
+    // works_order_number: "",
     // work_completed: "",
-    // materials: "",
-    // materials_cost: "",
     // status: "",
     // root_cause: "",
-    // additional_notes: "",
+    // findings: "",
+    // images: [],
+    // signature: "",
     // },
+
     resolver: zodResolver(
       actionJobSchema,
     ) as unknown as Resolver<ActionJobFormValues>,
   });
 
   const onSubmit = async (data: ActionJobFormValues) => {
+    // $ 1. 1️⃣ Compress images in browser
+    const originalFiles = data.images ?? [];
+    const compressedFiles = await compressImagesToWebp(originalFiles);
+
     try {
-      // //const user = await fetchUserAttributes();
-      const payload = {
+      // $ 2. Prepare payload with compressed images and signature
+      const payload: CreateActionPayload = {
         ...data,
-        signature, // base64 PNG
+        images: compressedFiles.map((file) => ({
+          filename: file.name,
+          content_type: file.type,
+        })),
+        signature,
+        selectedRowId: selectedRowId!,
       };
-      console.log(signature);
-      //// const response = await mutateAsync(payload);
+
       console.log("data from actioned request:", payload);
+      // $ 3. Create maintenance request (DynamoDB + presigned URLs)
+      const response = await mutateAsync(payload);
+
+      const { presigned_urls } = response;
+
+      // $ 4. Upload files directly to S3
+      await Promise.all(
+        presigned_urls.map((item: PresignedUrlResponse[number]) => {
+          const file = compressedFiles.find((f) => f.name === item.filename);
+
+          if (!file) return Promise.resolve();
+
+          return fetch(item.url, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "image/webp",
+            },
+            body: file,
+          });
+        }),
+      );
+
+      toast.success("Request successfully Actioned!", {
+        duration: 1000,
+      });
+      navigate("/maintenance-list");
     } catch (err) {
-      console.error(err);
+      console.error("Failed to create maintenance request", err);
     }
   };
+
+  useEffect(() => {
+    if (isError) {
+      setHasError(true);
+    }
+  }, [isError, setHasError]);
 
   return (
     <form
