@@ -73,7 +73,9 @@ const DeleteItemModal = () => {
             disabled={isPending}
             className="w-full rounded-full bg-primary/90 px-6 py-2 text-gray-700 transition hover:bg-primary hover:cursor-pointer disabled:opacity-50 lg:w-32"
           >
-            <span>{isPending ? "Deleting…" : "Delete"}</span>
+            <span className="text-white">
+              {isPending ? "Deleting…" : "Delete"}
+            </span>
           </button>
         </div>
       </div>

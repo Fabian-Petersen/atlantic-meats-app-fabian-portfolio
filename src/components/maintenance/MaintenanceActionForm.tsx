@@ -41,7 +41,8 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
   const { mutateAsync, isError } = useCreateActionRequest();
 
   const [signature, setSignature] = useState<string | null>(null);
-  const { setHasError, selectedRowId } = useGlobalContext();
+  const { setHasError, selectedRowId, setShowActionDialog } =
+    useGlobalContext();
   const navigate = useNavigate();
 
   // $ Ensure selectedRowId is available
@@ -58,9 +59,6 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
   useEffect(() => {
     if (signature === null) {
       setHasError(true);
-      toast.error("Please provide a digital signature before submitting.", {
-        duration: 1000,
-      });
     } else {
       setHasError(false);
     }
@@ -108,7 +106,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
         selectedRowId: selectedRowId!,
       };
 
-      console.log("data from actioned request:", payload);
+      // console.log("data from actioned request:", payload);
       // $ 3. Create maintenance request (DynamoDB + presigned URLs)
       const response = await mutateAsync(payload);
 
@@ -134,6 +132,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
       toast.success("Request successfully Actioned!", {
         duration: 1000,
       });
+      setShowActionDialog(false);
       navigate("/maintenance-list");
     } catch (err) {
       console.error("Failed to create maintenance request", err);

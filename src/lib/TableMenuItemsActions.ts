@@ -82,7 +82,7 @@ export const getMaintenanceTableMenuItems = (
     label: "Edit",
     icon: Pencil,
     onClick: () => {
-      console.log("update-maintenance-id:", rowId);
+      // console.log("update-maintenance-id:", rowId);
       setShowUpdateMaintenanceDialog(true);
       setSelectedRowId(rowId);
     },

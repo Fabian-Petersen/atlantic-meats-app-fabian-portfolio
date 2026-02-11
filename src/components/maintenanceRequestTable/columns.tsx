@@ -41,6 +41,7 @@ export const getMaintenanceColumns = (
     accessorKey: "impact",
     header: "Impact",
   },
+  { accessorKey: "status", header: "Status", enableColumnFilter: true },
   {
     accessorKey: "priority",
     header: "Priority",
