@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { AlertTriangle } from "lucide-react";
 import useGlobalContext from "@/context/useGlobalContext";
 import FormHeading from "../../../customComponents/FormHeading";
@@ -32,8 +33,13 @@ const DeleteItemModal = () => {
       closeDeleteDialog();
       toast.success("The itemm was sucessfully deleted");
     } catch (error) {
+      console.log(error);
       console.error("Delete failed:", error);
-      toast.error("Delete failed");
+      if (axios.isAxiosError<{ message: string }>(error)) {
+        // The error returned is AxiosError hence to access response the type must be handled as such
+        toast.error(error?.response?.data?.message); // Pass the message from the backend to the user to inform user what must be done
+        toast.error("Failed to delete item");
+      }
     }
   };
 

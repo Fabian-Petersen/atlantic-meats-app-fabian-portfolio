@@ -29,33 +29,54 @@ export const getMaintenanceColumns = (
     sortingFn: "datetime",
   },
   {
-    accessorKey: "additional_notes",
-    header: "Additional Notes",
-  },
-  {
-    accessorKey: "equipment",
-    header: "Equipment",
-    enableColumnFilter: true,
-  },
-  {
-    accessorKey: "impact",
-    header: "Impact",
-  },
-  { accessorKey: "status", header: "Status", enableColumnFilter: true },
-  {
-    accessorKey: "priority",
-    header: "Priority",
-    enableColumnFilter: true,
-  },
-  {
     accessorKey: "location",
     header: "Location",
     enableColumnFilter: true,
   },
   {
-    accessorKey: "type",
-    header: "Type",
+    accessorKey: "description",
+    header: "Description",
   },
+  {
+    accessorKey: "equipment",
+    header: "Equipment",
+    enableColumnFilter: false,
+  },
+  {
+    accessorKey: "assetID",
+    header: "assetID",
+    enableColumnFilter: true,
+  },
+  {
+    accessorKey: "impact",
+    header: "Impact",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
+    accessorKey: "priority",
+    header: "Priority",
+    enableColumnFilter: true,
+  },
+  // {
+  //   accessorKey: "additional_notes",
+  //   header: "Additional Notes",
+  // },
+  // {
+  //   accessorKey: "type",
+  //   header: "Type",
+  // },
   {
     id: "actions",
     header: "Actions",
@@ -72,9 +93,8 @@ export const getMaintenanceColumns = (
         downloadItem,
         openDeleteDialog,
       );
-
       return (
-        <div className="text-right" onClick={(e) => e.stopPropagation()}>
+        <div className="tex-center" onClick={(e) => e.stopPropagation()}>
           <DropdownMenuButtonDialog data={row.original} menuItems={menuItems} />
         </div>
       );

@@ -2,14 +2,17 @@
 import { ColumnFilterItem } from "./ColumnFilterItem";
 // import type { AssetFormValues, CreateJobFormValues } from "@/schemas";
 import { type Table } from "@tanstack/react-table";
-import AddNewItemButton from "./AddNewItemButton";
+// import AddNewItemButton from "./AddNewItemButton";
 
 type Props<T extends Record<string, unknown>> = {
   table: Table<T>;
+  className: string;
 };
 
 function FilterContainer<T extends Record<string, unknown>>({
   table,
+  className,
+  // onClick,
 }: Props<T>) {
   const filterableColumns = table
     .getAllLeafColumns()
@@ -31,9 +34,9 @@ function FilterContainer<T extends Record<string, unknown>>({
   if (!filterableColumns.length) return null;
 
   return (
-    <div className="flex gap-2 shadow-sm py-1 p-2 rounded-md">
+    <div className={`${className} flex gap-2 shadow-sm py-1 p-2 rounded-md`}>
       {filterableColumns.map((column) => (
-        <div key={column.id} className="py-2 flex-1">
+        <div key={column.id} className="py-2 flex-1 capitalize">
           <label className="text-xs text-gray-500">
             {column.columnDef.header as string}
           </label>
@@ -45,12 +48,6 @@ function FilterContainer<T extends Record<string, unknown>>({
           />
         </div>
       ))}
-      <div className="py-2 hidden md:inline-block ml-auto">
-        <label className="text-sm md:text-md text-transparent">
-          Create New Asset
-        </label>
-        <AddNewItemButton title="Create Asset" className="" />
-      </div>
     </div>
   );
 }

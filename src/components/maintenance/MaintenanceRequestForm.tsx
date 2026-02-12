@@ -149,11 +149,19 @@ const MaintenanceRequestForm = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
+        <TextAreaInput
+          name="description"
+          register={register}
+          // control={control}
+          rows={1}
+          label="Description"
+          className="lg:col-span-2"
+        />
         <FormRowSelect
           label="Location"
           name="location"
           options={locationOptions}
-          placeholder="Select Store"
+          placeholder="Select Location"
           register={register}
           error={errors.location}
           className="capitalize"

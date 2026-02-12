@@ -4,6 +4,7 @@
 import FormHeading from "../../customComponents/FormHeading";
 import { MaintenanceRequestsTable } from "@/components/maintenanceRequestTable/MaintenanceRequestsTable";
 import { useDownloadPdf, useGetAll } from "@/utils/api";
+import { useNavigate } from "react-router-dom";
 
 import {
   getCoreRowModel,
@@ -20,14 +21,15 @@ import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
 import type { MaintenanceTableRow } from "@/schemas";
 import FilterContainer from "@/components/features/FilterContainer";
+import AddNewItemButton from "@/components/features/AddNewItemButton";
 
 const MaintenanceRequestOverviewPage = () => {
   const MAINTENANCE_REQUESTS_KEY = ["allMaintenanceRequests"];
-  const { data, isLoading, isError, refetch } = useGetAll<MaintenanceTableRow>(
+  const { data, isPending, isError, refetch } = useGetAll<MaintenanceTableRow>(
     "maintenance-request",
     MAINTENANCE_REQUESTS_KEY,
   );
-
+  const navigate = useNavigate();
   const [sorting, setSorting] = useState<SortingState>([
     { id: "createdAt", desc: true },
   ]);
@@ -62,7 +64,7 @@ const MaintenanceRequestOverviewPage = () => {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  if (isLoading) return <PageLoadingSpinner />;
+  if (isPending) return <PageLoadingSpinner />;
   if (isError)
     return (
       <ErrorPage
@@ -72,6 +74,10 @@ const MaintenanceRequestOverviewPage = () => {
       />
     );
 
+  const handleSubmit = () => {
+    navigate("/maintenance-request");
+  };
+
   return (
     <div className="flex w-full p-4 h-auto">
       <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto">
@@ -79,7 +85,19 @@ const MaintenanceRequestOverviewPage = () => {
           className="mx-auto dark:text-gray-100"
           heading="Maintenance Request List"
         />
-        <FilterContainer table={table} />
+        <div className="flex gap-4 items-end w-full">
+          <FilterContainer table={table} className="" />
+          <div className="py-2 hidden md:inline-block ml-auto">
+            <label className="text-sm md:text-md text-transparent">
+              Create Asset
+            </label>
+            <AddNewItemButton
+              title="Add Job"
+              className=""
+              onClick={handleSubmit}
+            />
+          </div>
+        </div>
         <MaintenanceRequestsTable
           table={table}
           className="hidden md:flex flex-col gap-2"

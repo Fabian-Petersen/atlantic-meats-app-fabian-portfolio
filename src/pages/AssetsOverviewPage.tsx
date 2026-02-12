@@ -23,12 +23,17 @@ import { getAssetColumns } from "../components/assets/columns";
 // import { getAssetTableMenuItems } from "@/lib/TableMenuItemsActions";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import type { AssetTableRow } from "@/schemas";
 import { ErrorPage } from "@/components/features/Error";
+import AddNewItemButton from "@/components/features/AddNewItemButton";
 
 // import type { AssetFormValues } from "@/schemas";
 
 const AssetsOverviewPage = () => {
+  const navigate = useNavigate();
+
   const ASSETS_REQUESTS_KEY = ["assetRequests"];
   const { data, isLoading, isError, refetch } = useGetAll<AssetTableRow>(
     "asset",
@@ -85,11 +90,28 @@ const AssetsOverviewPage = () => {
     );
   }
 
+  const handleSubmit = () => {
+    navigate("/create-asset");
+  };
+
   return (
     <div className="flex w-full md:p-4 min-h-0">
       <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 border-dashed min-h-0">
         <FormHeading className="mx-auto" heading="Assets Register" />
-        <FilterContainer table={table} />
+        <div className="flex gap-4 items-end w-full">
+          <FilterContainer table={table} className="" />
+          <div className="py-2 hidden md:inline-block ml-auto">
+            <label className="text-sm md:text-md text-transparent">
+              Create Asset
+            </label>
+            <AddNewItemButton
+              title="Add Asset"
+              className=""
+              onClick={handleSubmit}
+            />
+          </div>
+        </div>
+
         <AssetsOverviewTable
           className="hidden lg:flex table-fixed"
           table={table}

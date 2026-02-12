@@ -37,7 +37,7 @@ export function DropdownMenuButtonDialog({
             aria-label="Open menu"
             size="icon-sm"
             onClick={(e) => e.stopPropagation()}
-            className="p-2 rounded-full hover:bg-muted outline-none hover:bg-gray-100 bg-transparent hover:cursor-pointer"
+            className="p-2 rounded-full hover:bg-muted outline-none hover:bg-primary/40 bg-transparent hover:cursor-pointer"
           >
             <MoreVertical />
           </Button>
