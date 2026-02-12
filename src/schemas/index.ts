@@ -64,8 +64,9 @@ export const changePasswordSchema = z
 export const createJobSchema = z.object({
   id: z.string().optional(), // used by the mobile accordion list
   createdAt: z.string().optional(), // used by the mobile accordion list
-  equipment: z.string().min(1, { message: "Please select equipment" }),
   location: z.string().min(1, { message: "Please select a location" }),
+  equipment: z.string().min(1, { message: "Please select equipment" }),
+  assetID: z.string().optional(),
   type: z.string().min(1, { message: "Please select maintenance type" }),
   impact: z.string().min(1, { message: "Please select impact" }),
   priority: z.string().min(1, { message: "Please select a priority" }),

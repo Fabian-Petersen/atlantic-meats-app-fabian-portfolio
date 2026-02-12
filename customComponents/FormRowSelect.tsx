@@ -34,35 +34,18 @@ function FormRowSelect<T extends FieldValues>({
   error,
   defaultValues,
   multiple,
-  // control,
   placeholder,
   register,
   onChange,
   required,
 }: FormSelectProps<T>) {
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedOptions = multiple
-      ? Array.from(event.target.selectedOptions, (option) => option.value)
-      : [event.target.value]; // Wrap single value in array
+  const { onChange: rhfOnChange, ...restRegister } = register(name);
 
-    if (onChange) onChange(selectedOptions);
-  };
-
-  // const value = useWatch({
-  //   name,
-  //   control,
-  // }) as (string | File | number | null)[] | string | number | undefined;
-
-  // const isValid =
-  //   !error &&
-  //   (Array.isArray(value)
-  //     ? value.length > 0
-  //     : value !== undefined && value !== "");
-
+  // $ Added the rhfOnChange to the onChange event of the select input. This will update the react-hook-form state when the user selects an option. The onChange prop is optional and can be used to perform additional actions when the user selects an option.
   return (
     <div className="relative w-full mb-2 group">
       <select
-        {...register(name)}
+        {...restRegister}
         id={String(name)}
         multiple={multiple}
         className={clsx(
@@ -73,7 +56,15 @@ function FormRowSelect<T extends FieldValues>({
           error && "border-red-400",
         )}
         defaultValue={multiple ? defaultValues || [] : ""}
-        onChange={handleChange}
+        onChange={(event) => {
+          rhfOnChange(event); // ✅ Update RHF state
+
+          const selectedOptions = multiple
+            ? Array.from(event.target.selectedOptions, (option) => option.value)
+            : [event.target.value];
+
+          if (onChange) onChange(selectedOptions); // ✅ Your custom logic
+        }}
         required={required}
       >
         {!multiple && (

@@ -2,11 +2,15 @@
 
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
 
 // $ React-Hook-Form
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type Control, type Resolver } from "react-hook-form";
+import {
+  useForm,
+  type Control,
+  type Resolver,
+  useWatch,
+} from "react-hook-form";
 
 // $ Import image compression hook
 import { compressImagesToWebp } from "@/utils/compressImagesToWebp";
@@ -23,19 +27,22 @@ import FormRowSelect from "../../../customComponents/FormRowSelect";
 
 // $ Data for select options
 import { priority, type, impact } from "@/data/maintenanceRequestFormData";
-import { stores } from "@/data/stores";
 
-// import assets from "@/data/assets.json";
-// import { useCreateMaintenanceRequest } from "@/utils/api";
 import FileInput from "../../../customComponents/FileInput";
 import TextAreaInput from "../../../customComponents/TextAreaInput";
 import { toast } from "sonner";
+
+// $ Import api & custom hooks
 import { useCreateMaintenanceRequest } from "@/utils/api";
-import useGlobalContext from "@/context/useGlobalContext";
+import { useAssetFilters } from "@/customHooks/useAssetFilters";
+
+// import useGlobalContext from "@/context/useGlobalContext";
 
 const MaintenanceRequestForm = () => {
   const { mutateAsync, isError } = useCreateMaintenanceRequest();
-  const { setHasError } = useGlobalContext();
+
+  // $ Custom hook that manages the select input options based on asset data
+
   const navigate = useNavigate();
 
   // $ Form Schema
@@ -43,10 +50,12 @@ const MaintenanceRequestForm = () => {
     handleSubmit,
     control,
     register,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<CreateJobFormValues>({
     defaultValues: {
       equipment: "",
+      assetID: "",
       location: "",
       type: "",
       impact: "",
@@ -59,8 +68,31 @@ const MaintenanceRequestForm = () => {
     ) as unknown as Resolver<CreateJobFormValues>,
   });
 
+  const selectedLocation = useWatch({
+    control,
+    name: "location",
+  });
+
+  const selectedEquipment = useWatch({
+    control,
+    name: "equipment",
+  });
+
+  const selectedAssetID = useWatch({
+    control,
+    name: "assetID",
+  });
+
+  const { equipmentOptions, assetIdOptions, locationOptions } = useAssetFilters(
+    {
+      location: selectedLocation,
+      equipment: selectedEquipment,
+      assetID: selectedAssetID,
+      setValue,
+    },
+  );
+
   const onSubmit = async (data: CreateJobFormValues) => {
-    // console.log("Submitting maintenance request:", data);
     try {
       // $ 1️⃣ Compress images in browser
       const originalFiles = data.images ?? [];
@@ -101,14 +133,15 @@ const MaintenanceRequestForm = () => {
       navigate("/maintenance-list");
     } catch (err) {
       console.error("Failed to create maintenance request", err);
+      toast.error(
+        "Failed to create maintenance request. Please try again later.",
+      );
+    }
+
+    if (isError) {
+      return toast.error("Failed to load assets. Please refresh the page.");
     }
   };
-
-  useEffect(() => {
-    if (isError) {
-      setHasError(true);
-    }
-  }, [isError, setHasError]);
 
   return (
     <form
@@ -117,27 +150,32 @@ const MaintenanceRequestForm = () => {
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
         <FormRowSelect
+          label="Location"
+          name="location"
+          options={locationOptions}
+          placeholder="Select Store"
+          register={register}
+          error={errors.location}
+          className="capitalize"
+        />
+        <FormRowSelect
           label="Equipment"
           name="equipment"
-          options={["test equipment"]}
-          // options={assets.categories.retail.system.security.map((a) => ({
-          //   label: a.equipment,
-          //   value: a.equipment,
-          // }))}
+          // options={["test equipment"]}
+          options={equipmentOptions}
           // control={control}
           placeholder="Select Equipment"
           register={register}
           error={errors.equipment}
         />
         <FormRowSelect
-          label="Location"
-          name="location"
-          options={stores}
-          // control={control}
-          placeholder="Select Store"
+          label="Asset ID"
+          name="assetID"
+          // options={["test equipment"]}
+          options={assetIdOptions}
+          placeholder="Select Asset ID"
           register={register}
-          error={errors.location}
-          className="capitalize"
+          error={errors.assetID}
         />
         <FormRowSelect
           label="Request Type"
