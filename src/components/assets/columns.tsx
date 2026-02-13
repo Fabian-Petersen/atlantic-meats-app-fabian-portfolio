@@ -27,7 +27,6 @@ function getConditionClasses(condition: EquipmentCondition) {
 
 export const getAssetColumns = (
   setShowUpdateAssetDialog: (v: boolean) => void,
-  // setShowDeleteDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (
     selectedRowId: string,
@@ -54,6 +53,16 @@ export const getAssetColumns = (
     maxSize: 160,
   },
   {
+    accessorKey: "location",
+    header: "Location",
+    enableColumnFilter: true,
+  },
+  {
+    accessorKey: "area",
+    header: "Area",
+    enableColumnFilter: true,
+  },
+  {
     accessorKey: "equipment",
     header: "Equipment",
     enableColumnFilter: true,
@@ -64,11 +73,6 @@ export const getAssetColumns = (
     size: 140,
     minSize: 120,
     maxSize: 160,
-    enableColumnFilter: true,
-  },
-  {
-    accessorKey: "location",
-    header: "Location",
     enableColumnFilter: true,
   },
   {

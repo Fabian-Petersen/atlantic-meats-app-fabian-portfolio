@@ -35,25 +35,22 @@ const AssetsOverviewPage = () => {
   const navigate = useNavigate();
 
   const ASSETS_REQUESTS_KEY = ["assetRequests"];
-  const { data, isLoading, isError, refetch } = useGetAll<AssetTableRow>(
+  const { data, isPending, isError, refetch } = useGetAll<AssetTableRow>(
     "asset",
     ASSETS_REQUESTS_KEY,
   );
+
+  console.log("Assets data:", data);
 
   const [sorting, setSorting] = useState<SortingState>([
     { id: "createdAt", desc: true },
   ]);
 
-  const {
-    setShowUpdateAssetDialog,
-    // setShowDeleteDialog,
-    setSelectedRowId,
-    openDeleteDialog,
-  } = useGlobalContext();
+  const { setShowUpdateAssetDialog, setSelectedRowId, openDeleteDialog } =
+    useGlobalContext();
 
   const columns = getAssetColumns(
     setShowUpdateAssetDialog,
-    // setShowDeleteDialog,
     setSelectedRowId,
     openDeleteDialog,
   );
@@ -71,7 +68,7 @@ const AssetsOverviewPage = () => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  if (isLoading) return <PageLoadingSpinner />;
+  if (isPending) return <PageLoadingSpinner />;
   if (isError)
     return (
       <ErrorPage

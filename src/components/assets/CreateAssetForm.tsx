@@ -76,7 +76,7 @@ const CreateAssetForm = () => {
   } = useForm<AssetFormValues>({
     defaultValues: {
       business_unit: "",
-      category: "",
+      area: "",
       equipment: "",
       assetID: "",
       condition: "",
@@ -139,53 +139,6 @@ const CreateAssetForm = () => {
     }
   };
 
-  // const onSubmit = async (data: AssetFormValues) => {
-  //   console.log("Create new asset:", data);
-  //   try {
-  //     // $ 1. Build API payload (metadata only)
-  //     const payload: CreateAssetPayload = {
-  //       ...data,
-  //       images: (data.images ?? []).map((file) => ({
-  //         filename: file.name,
-  //         content_type: file.type,
-  //       })),
-  //     };
-  //     console.log("Payload for API:", payload);
-
-  //     // $ 2. Create maintenance request (DynamoDB + presigned URLs)
-  //     const response = await mutateAsync(payload);
-  //     console.log("API Response:", response);
-
-  //     const { presigned_urls } = response;
-  //     console.log("Presigned URLs:", presigned_urls);
-
-  //     // $ 3. Upload files directly to S3
-  //     await Promise.all(
-  //       presigned_urls.map((item: PresignedUrlResponse[number]) => {
-  //         const file = (data.images ?? []).find(
-  //           (f) => f.name === item.filename
-  //         );
-
-  //         if (!file) return Promise.resolve();
-
-  //         return fetch(item.url, {
-  //           method: "PUT",
-  //           headers: {
-  //             "Content-Type": item.content_type,
-  //           },
-  //           body: file,
-  //         });
-  //       })
-  //     );
-  //     toast.success("Asset successfully created!", {
-  //       duration: 1000,
-  //     });
-  //     // navigate("/asset");
-  //   } catch (err) {
-  //     console.error("Failed to create asset", err);
-  //   }
-  // };
-
   return (
     <form
       className="flex flex-col rounded-lg lg:w-full text-(--clr-font) dark:bg-[#1d2739]"
@@ -205,9 +158,9 @@ const CreateAssetForm = () => {
           required
         />
         <FormRowSelect
-          name="category"
-          label="Category"
-          placeholder="Select category"
+          name="area"
+          label="Area"
+          placeholder="Select Area"
           register={register}
           options={categoryOptions}
           onChange={([value]) => setCategory(value)}

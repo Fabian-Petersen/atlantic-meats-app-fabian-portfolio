@@ -126,8 +126,8 @@ export const actionJobSchema = z.object({
 export const assetSchema = z.object({
   id: z.string().optional(),
   createdAt: z.string().optional(),
-  business_unit: z.string().min(1, { message: "Business Unit Required" }),
-  category: z.string().min(1, { message: "Asset Category Required" }),
+  business_unit: z.string().min(1, { message: "Business unit required" }),
+  area: z.string().min(1, { message: "Area is required" }),
   equipment: z.string().min(1, { message: "Please select a equipment" }),
   assetID: z.string().min(1, {
     message: "Please enter asset id",

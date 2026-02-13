@@ -14,6 +14,34 @@ export const location: string[] = [
   "Golden Acre",
 ];
 
+export const areaOptions: string[] = [
+  "Processing",
+  "Point of Sale",
+  "Cold Storage",
+  "Handling",
+  "Utilities",
+  "Shop Floor",
+  "Managers Office",
+  "Deli Area",
+  "Deliveries",
+  "Compressor Room",
+  "Workshop",
+];
+
+// Sales Floor
+// Deli Area
+// Back Counter Area
+// Staff Qaurters
+// Groceries Room
+// Locker Room
+// Receiving Area
+// Cold Room 1
+// Cold Room 2
+// DB Room
+// Processing Room
+// Point of Sales
+// Managers Office
+
 // $ The data options for the "Create Asset Form"
 export const CeateAssetFormOptionsData = {
   business_unit: {
