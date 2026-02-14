@@ -16,6 +16,6 @@ export async function compressImagesToWebp(files: File[]) {
       return new File([compressed], file.name.replace(/\.\w+$/, ".webp"), {
         type: "image/webp",
       });
-    })
+    }),
   );
 }

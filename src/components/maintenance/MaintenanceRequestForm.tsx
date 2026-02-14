@@ -73,6 +73,11 @@ const MaintenanceRequestForm = () => {
     name: "location",
   });
 
+  const selectedArea = useWatch({
+    control,
+    name: "area",
+  });
+
   const selectedEquipment = useWatch({
     control,
     name: "equipment",
@@ -83,14 +88,14 @@ const MaintenanceRequestForm = () => {
     name: "assetID",
   });
 
-  const { equipmentOptions, assetIdOptions, locationOptions } = useAssetFilters(
-    {
+  const { equipmentOptions, assetIdOptions, locationOptions, areaOptions } =
+    useAssetFilters({
       location: selectedLocation,
       equipment: selectedEquipment,
       assetID: selectedAssetID,
+      area: selectedArea,
       setValue,
-    },
-  );
+    });
 
   const onSubmit = async (data: CreateJobFormValues) => {
     try {
@@ -156,6 +161,7 @@ const MaintenanceRequestForm = () => {
           rows={1}
           label="Description"
           className="lg:col-span-2"
+          error={errors.description}
         />
         <FormRowSelect
           label="Location"
@@ -167,9 +173,16 @@ const MaintenanceRequestForm = () => {
           className="capitalize"
         />
         <FormRowSelect
+          label="Area"
+          name="area"
+          options={areaOptions}
+          placeholder="Select Area"
+          register={register}
+          error={errors.area}
+        />
+        <FormRowSelect
           label="Equipment"
           name="equipment"
-          // options={["test equipment"]}
           options={equipmentOptions}
           // control={control}
           placeholder="Select Equipment"
@@ -179,7 +192,6 @@ const MaintenanceRequestForm = () => {
         <FormRowSelect
           label="Asset ID"
           name="assetID"
-          // options={["test equipment"]}
           options={assetIdOptions}
           placeholder="Select Asset ID"
           register={register}

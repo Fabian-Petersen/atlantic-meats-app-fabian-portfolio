@@ -12,7 +12,7 @@ import FormRowInput from "../../../customComponents/FormRowInput";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
 
 // $ Import image compression hook
-import { compressImagesToWebp } from "@/utils/compressImagesToWebp";
+import { compressImagesToWebp } from "../../utils/compressImagesToWebp";
 
 // $ Import schemas
 import type {
@@ -76,7 +76,7 @@ const CreateAssetForm = () => {
   } = useForm<AssetFormValues>({
     defaultValues: {
       business_unit: "",
-      category: "",
+      area: "",
       equipment: "",
       assetID: "",
       condition: "",
@@ -205,9 +205,9 @@ const CreateAssetForm = () => {
           required
         />
         <FormRowSelect
-          name="category"
-          label="Category"
-          placeholder="Select category"
+          name="area"
+          label="Area"
+          placeholder="Select Area"
           register={register}
           options={categoryOptions}
           onChange={([value]) => setCategory(value)}

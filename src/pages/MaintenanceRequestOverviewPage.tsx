@@ -89,7 +89,7 @@ const MaintenanceRequestOverviewPage = () => {
           <FilterContainer table={table} className="" />
           <div className="py-2 hidden md:inline-block ml-auto">
             <label className="text-sm md:text-md text-transparent">
-              Create Asset
+              Create Job
             </label>
             <AddNewItemButton
               title="Add Job"

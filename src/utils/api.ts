@@ -64,14 +64,16 @@ type WithImages = {
 export const useById = <T>(options: {
   id: string;
   queryKey: readonly unknown[];
-  endpoint: string;
+  resourcePath: Resource;
 }) => {
-  const { id, queryKey, endpoint } = options;
-
+  // console.log("🔥 useById called with options:", options);
+  const { id, queryKey, resourcePath } = options;
   return useQuery<T & WithImages>({
     queryKey: [...queryKey, id],
     queryFn: async () => {
-      const { data } = await apiClient.get<T & WithImages>(`${endpoint}/${id}`);
+      const { data } = await apiClient.get<T & WithImages>(
+        `${resourcePath}/${id}`,
+      );
       return data;
     },
     enabled: !!id,

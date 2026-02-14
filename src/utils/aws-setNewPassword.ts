@@ -3,7 +3,7 @@ import { signIn, confirmSignIn } from "aws-amplify/auth";
 
 export async function awsCognitoSetNewPassword(
   userName: string,
-  newPassword: string
+  newPassword: string,
 ) {
   try {
     // $ Attempt Sign In of User
@@ -22,7 +22,7 @@ export async function awsCognitoSetNewPassword(
       // User is now signed in with their new password
       console.log(
         "Signed in successfully with new password",
-        confirmSignInResult
+        confirmSignInResult,
       );
       return confirmSignInResult;
     }

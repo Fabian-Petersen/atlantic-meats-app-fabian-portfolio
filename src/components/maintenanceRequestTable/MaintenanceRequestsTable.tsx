@@ -3,6 +3,7 @@ import EmptyTablePlaceholder from "../features/EmptyTablePlaceholder";
 
 import { useNavigate } from "react-router-dom";
 import type { MaintenanceTableRow } from "@/schemas";
+import useGlobalContext from "@/context/useGlobalContext";
 
 type Props = {
   table: Table<MaintenanceTableRow>;
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export function MaintenanceRequestsTable({ table, className }: Props) {
+  const { setSelectedRowId } = useGlobalContext();
   const navigate = useNavigate();
 
   return (
@@ -48,6 +50,7 @@ export function MaintenanceRequestsTable({ table, className }: Props) {
                 <tr
                   key={row.id}
                   onClick={() => {
+                    setSelectedRowId(row.original.id);
                     navigate(`/maintenance-request/${row.original.id}`);
                   }}
                   className="cursor-pointer hover:bg-primary/20 dark:bg-[#1d2739]"

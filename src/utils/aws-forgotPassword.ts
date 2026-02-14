@@ -29,7 +29,7 @@ export function useForgotPassword() {
   const confirmNewPassword = async (
     email: string,
     code: string,
-    newPassword: string
+    newPassword: string,
   ) => {
     setIsLoading(true);
     setError(null);

@@ -28,7 +28,7 @@ const AssetsSingleItemPage = () => {
   const { data: item, isPending } = useById<AssetFormValues & WithImages>({
     id: id || "",
     queryKey: ASSETS_KEY,
-    endpoint: "/asset",
+    resourcePath: "asset",
   });
 
   if (!id || !item) {

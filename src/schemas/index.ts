@@ -61,13 +61,15 @@ export const changePasswordSchema = z
     message: "Passwords do not match",
   });
 
+// $ Schema to create a maintenance request
 export const createJobSchema = z.object({
   id: z.string().optional(), // used by the mobile accordion list
   createdAt: z.string().optional(), // used by the mobile accordion list
   description: z
     .string()
-    .min(1, { message: "Give a brief description of works request" }),
+    .min(1, { message: "Give a brief description of the works required" }),
   location: z.string().min(1, { message: "Please select a location" }),
+  area: z.string().min(1, { message: "Please select area" }),
   equipment: z.string().min(1, { message: "Please select equipment" }),
   assetID: z.string().optional(),
   type: z.string().min(1, { message: "Please select maintenance type" }),
@@ -127,7 +129,7 @@ export const assetSchema = z.object({
   id: z.string().optional(),
   createdAt: z.string().optional(),
   business_unit: z.string().min(1, { message: "Business Unit Required" }),
-  category: z.string().min(1, { message: "Asset Category Required" }),
+  area: z.string().min(1, { message: "Area is required" }),
   equipment: z.string().min(1, { message: "Please select a equipment" }),
   assetID: z.string().min(1, {
     message: "Please enter asset id",

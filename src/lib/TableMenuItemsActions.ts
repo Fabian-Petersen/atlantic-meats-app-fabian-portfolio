@@ -17,18 +17,6 @@ export type TableMenuItemActions = {
 };
 
 import type { Resource } from "@/utils/api";
-// import type { AppContextType } from "@/context/app-types";
-
-// export type TableMenuProps = {
-//   label: string;
-//   openModal?: (v: boolean) => void;
-//   id: string;
-//   icon: LucideIcon;
-//   url?: string;
-//   downloadItem?: (id: string) => Promise<void>;
-//   deleteItem?: (id: string) => Promise<void>;
-//   updateItem?: (id: string) => Promise<void>;
-// };
 
 export const getAssetTableMenuItems = (
   rowId: string,

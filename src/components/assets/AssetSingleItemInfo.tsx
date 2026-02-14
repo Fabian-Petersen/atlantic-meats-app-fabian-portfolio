@@ -27,8 +27,8 @@ function AssetSingleItemInfo({ item }: Props) {
           <span>{item.business_unit}</span>
         </li>
         <li className="capitalize flex gap-2">
-          <span className="">Category : </span>
-          <span>{item.category}</span>
+          <span className="">Area : </span>
+          <span>{item.area}</span>
         </li>
         <li className="capitalize flex gap-2">
           <span>Condition : </span>

@@ -7,11 +7,11 @@ type FormErrors = {
 
 export const useValidateFormZod = (
   formData: Record<string, unknown>,
-  formSchema: ZodSchema
+  formSchema: ZodSchema,
 ) => {
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [formStatus, setFormStatus] = useState<"idle" | "error" | "success">(
-    "idle"
+    "idle",
   );
 
   const validateForm = () => {

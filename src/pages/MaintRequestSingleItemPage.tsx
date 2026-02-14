@@ -25,7 +25,7 @@ const MaintRequestSingleItemPage = () => {
   const { data: item, isPending } = useById<CreateJobFormValues & WithImages>({
     id: id || "",
     queryKey: MAINTENANCE_REQUESTS_KEY,
-    endpoint: "/maintenance-request",
+    resourcePath: "maintenance-request",
   });
 
   if (!id || !item) {
@@ -46,7 +46,7 @@ const MaintRequestSingleItemPage = () => {
           <AssetSingleItemImages imageUrls={imageUrls ?? []} />
         </div>
         <div>
-          <MaintenanceSingleItemInfo item={item} />
+          <MaintenanceSingleItemInfo />
         </div>
       </div>
     </div>

@@ -41,7 +41,7 @@ const ASSETS_KEY = ["assets"];
 const UpdateAssetForm = () => {
   const navigate = useNavigate();
   const { setShowUpdateAssetDialog, selectedRowId: id } = useGlobalContext();
-  console.log("selectedRowId:", id);
+  // console.log("selectedRowId:", id);
 
   const [businessUnit, setBusinessUnit] = useState<BusinessUnit | null>(null);
   const [category, setCategory] = useState<string | null>(null);
@@ -50,7 +50,7 @@ const UpdateAssetForm = () => {
   const { data: item, isPending } = useById<AssetFormValues & WithImages>({
     id: id ?? "",
     queryKey: ASSETS_KEY,
-    endpoint: "/asset",
+    resourcePath: "asset",
   });
 
   // $ Update hook
@@ -79,7 +79,7 @@ const UpdateAssetForm = () => {
       : undefined,
   });
 
-  console.log("item in form:", item);
+  // console.log("item in form:", item);
 
   if (!id || isPending || !item) {
     return <PageLoadingSpinner />;
@@ -165,9 +165,9 @@ const UpdateAssetForm = () => {
           required
         />
         <FormRowSelect
-          name="category"
-          label="Category"
-          placeholder="Select category"
+          name="area"
+          label="Area"
+          placeholder="Select Area"
           register={register}
           options={categoryOptions}
           onChange={([value]) => setCategory(value)}
