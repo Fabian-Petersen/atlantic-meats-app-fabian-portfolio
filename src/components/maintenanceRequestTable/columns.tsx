@@ -44,7 +44,7 @@ export const getMaintenanceColumns = (
   },
   {
     accessorKey: "assetID",
-    header: "assetID",
+    header: "AssetID",
     enableColumnFilter: true,
   },
   {

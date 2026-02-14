@@ -34,3 +34,10 @@ dist-ssr
 .DS_Store
 *.pem
 
+# Python virtual environments
+venv/
+.env/
+.venv/
+env/
+*.xlsx
+
