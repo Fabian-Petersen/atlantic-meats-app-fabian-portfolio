@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { MaintenanceTableRow } from "@/schemas";
+import type { JobAPIResponse } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getMaintenanceTableMenuItems } from "@/lib/TableMenuItemsActions";
 import type { Resource } from "@/utils/api";
@@ -13,7 +13,7 @@ export const getMaintenanceColumns = (
     selectedRowId: string,
     config: { resourcePath: Resource; queryKey: readonly unknown[] },
   ) => void,
-): ColumnDef<MaintenanceTableRow>[] => [
+): ColumnDef<JobAPIResponse>[] => [
   {
     accessorKey: "jobCreated",
     header: "Date Created",

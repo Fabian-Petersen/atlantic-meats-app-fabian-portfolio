@@ -13,6 +13,7 @@ import {
   useReactTable,
   type SortingState,
 } from "@tanstack/react-table";
+
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { MobileMaintenanceRequestsTable } from "@/components/mobile/MobileMaintenanceRequestsTable";
 import useGlobalContext from "@/context/useGlobalContext";
@@ -32,7 +33,7 @@ const MaintenanceRequestOverviewPage = () => {
 
   const navigate = useNavigate();
   const [sorting, setSorting] = useState<SortingState>([
-    { id: "createdAt", desc: true },
+    { id: "jobCreated", desc: true },
   ]);
 
   const { mutateAsync: downloadItem } = useDownloadPdf({

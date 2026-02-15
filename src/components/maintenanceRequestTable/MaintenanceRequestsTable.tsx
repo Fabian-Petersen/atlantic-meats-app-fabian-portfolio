@@ -2,11 +2,11 @@ import { flexRender, type Table } from "@tanstack/react-table";
 import EmptyTablePlaceholder from "../features/EmptyTablePlaceholder";
 
 import { useNavigate } from "react-router-dom";
-import type { MaintenanceTableRow } from "@/schemas";
+import type { JobAPIResponse } from "@/schemas";
 import useGlobalContext from "@/context/useGlobalContext";
 
 type Props = {
-  table: Table<MaintenanceTableRow>;
+  table: Table<JobAPIResponse>;
   className?: string;
 };
 
