@@ -40,18 +40,22 @@ function MaintenanceSingleItemInfo() {
   }
 
   return (
-    <div className="flex gap flex-col gap-2 text-font dark:text-gray-100 rounded-md p-4 md:p-2 dark:border-gray-700/50">
-      <h1 className="text-lg md:text-2xl">Asset : {item?.equipment}</h1>
-      <Separator width="100%" className="mt-2 mb-4" />
-      <ul className="flex flex-col gap-4 md:text-md text-sm">
-        <li className="capitalize flex gap-2">
-          <span className="">Jobcard No : </span>
-          <span>{item?.jobcardNumber}</span>
-        </li>
-        <li className="capitalize flex gap-2">
-          <span className="">Asset ID : </span>
+    <div className="flex gap flex-col gap-2 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-md md:text-xl capitalize">
+          Request No : {item?.jobcardNumber}
+        </h1>
+        <div className="capitalize flex gap-2">
+          <span className="">Asset : </span>
+          <span>{item?.equipment}</span>
+        </div>
+        <div className="capitalize flex gap-2">
+          <span className="">Asset No : </span>
           <span>{item?.assetID}</span>
-        </li>
+        </div>
+      </div>
+      <Separator width="100%" className="mt-2 mb-4" />
+      <ul className="flex flex-col gap-4 md:text-sm text-sm">
         <li className="capitalize flex gap-2">
           <span>Location : </span>
           <span>{item?.location}</span>
@@ -72,8 +76,8 @@ function MaintenanceSingleItemInfo() {
           <span>Priority : </span>
           <span>{item?.priority}</span>
         </li>
-        <li className="capitalize flex gap-2">
-          <span>Additional Notes : </span>
+        <li className="flex gap-2">
+          <span>Comments: </span>
           <span>{item?.jobComments}</span>
         </li>
       </ul>

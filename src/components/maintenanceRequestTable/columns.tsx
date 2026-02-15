@@ -15,7 +15,7 @@ export const getMaintenanceColumns = (
   ) => void,
 ): ColumnDef<MaintenanceTableRow>[] => [
   {
-    accessorKey: "createdAt",
+    accessorKey: "jobCreated",
     header: "Date Created",
     cell: ({ getValue }) =>
       new Date(getValue<string>()).toLocaleString("en-GB", {

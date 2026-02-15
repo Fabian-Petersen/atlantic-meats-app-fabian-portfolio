@@ -12,7 +12,10 @@ type Props = {
 
 export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
   const navigate = useNavigate();
-  const { setGenericData, setShowDeleteDialog } = useGlobalContext();
+  const { setGenericData, setShowDeleteDialog, genericData } =
+    useGlobalContext();
+
+  console.log(genericData);
   return (
     <div
       className="hover:cursor-pointer dark:border rounded-md p-3 mb-2 bg-gray-100 dark:bg-bgdark"
@@ -24,9 +27,12 @@ export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
           className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
         />
       </div>
+      <div className="mt-auto">
+        <p className="font-medium text-md">{row.original.status}</p>
+      </div>
 
       <div className="flex justify-between text-xs mt-2 text-gray-500">
-        <span>{row.original.createdAt}</span>
+        <span>{row.original.jobCreated}</span>
         <span>{row.original.priority}</span>
       </div>
 
@@ -34,8 +40,7 @@ export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
         <div className="mt-3 text-sm grid gap-2">
           <div className="flex gap-2 text-xs text-gray-500 w-full justify-between">
             <span className="capitalize">{row.original.equipment}</span>
-            <span>RT-0234</span>
-            {/* <span>{row.original.assetID}</span> */}
+            <span>{row.original.assetID}</span>
           </div>
           <div className="flex gap-2 text-sm my-2">
             <span>{row.original.jobComments}</span>

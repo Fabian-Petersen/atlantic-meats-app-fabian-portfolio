@@ -19,7 +19,7 @@ export const jobRequestSchema = z.object({
 // $ Schema for the API Response from the database when fetching the maintenance requests
 export const jobResponseSchema = jobRequestSchema.extend({
   id: z.string(),
-  createdAt: z.string(),
+  jobCreated: z.string(),
   jobcardNumber: z.string(),
   status: z.string(),
 });

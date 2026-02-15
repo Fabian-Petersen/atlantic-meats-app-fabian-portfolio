@@ -9,19 +9,22 @@ import {
 } from "@/components/ui/dialog";
 
 import MaintenanceActionForm from "../maintenance/MaintenanceActionForm";
-import { useGetJobDetails } from "@/customHooks/useGetJobDetails";
+// import { useGetJobDetails } from "@/customHooks/useGetJobDetails";
 
 import useGlobalContext from "@/context/useGlobalContext";
 import FormHeading from "../../../customComponents/FormHeading";
+import { useById } from "@/utils/api";
+import type { JobAPIResponse } from "@/schemas";
 
 function ActionRequestDialog() {
   const { showActionDialog, setShowActionDialog, selectedRowId } =
     useGlobalContext();
 
-  const { jobData } = useGetJobDetails(selectedRowId!);
-  if (jobData) {
-    console.log("Job Data in ActionRequestDialog:", jobData.jobcardNumber);
-  }
+  const { data: job } = useById<JobAPIResponse>({
+    id: selectedRowId!,
+    resourcePath: "maintenance-request",
+    queryKey: ["Maintenance-Request-Item"],
+  });
 
   return (
     <Dialog open={showActionDialog} onOpenChange={setShowActionDialog}>
@@ -33,12 +36,11 @@ function ActionRequestDialog() {
           />
           <div>
             <span className="text-xs font-medium flex gap-2 flex-col">
-              Job Number: Job-VTR-202602-0012
+              {`Job Number: ${job?.jobcardNumber}`}
             </span>
             <span className="text-xs font-medium"> Requested By: Fabian</span>
           </div>
         </DialogTitle>
-        {/* <span className="text-xs font-medium">{jobData?.jobCardNumber}</span> */}
         <div className="overflow-y-auto flex-1 no-scrollbar">
           <MaintenanceActionForm onCancel={() => setShowActionDialog(false)} />
         </div>
