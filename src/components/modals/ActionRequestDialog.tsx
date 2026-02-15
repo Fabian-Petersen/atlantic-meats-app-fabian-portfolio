@@ -20,7 +20,7 @@ function ActionRequestDialog() {
 
   const { jobData } = useGetJobDetails(selectedRowId!);
   if (jobData) {
-    console.log("Job Data in ActionRequestDialog:", jobData.jobCardNumber);
+    console.log("Job Data in ActionRequestDialog:", jobData.jobcardNumber);
   }
 
   return (

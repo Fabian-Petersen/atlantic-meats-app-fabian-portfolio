@@ -5,7 +5,7 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "@/utils/api";
 import { AssetSingleItemImages } from "@/components/assets/AssetSingleItemImages";
 import AssetSingleItemInfo from "@/components/assets/AssetSingleItemInfo";
-import type { AssetFormValues } from "@/schemas";
+import type { AssetRequestFormValues } from "@/schemas";
 
 export type PresignedUrlResponse = {
   key: string;
@@ -25,7 +25,9 @@ const AssetsSingleItemPage = () => {
   //   const { data: item, isLoading } = useMaintenanceRequestById(id || "");
   // id "Testing from mobile: 4e9a8b44-f9e2-4fc0-ad8e-640fd23c7211"
 
-  const { data: item, isPending } = useById<AssetFormValues & WithImages>({
+  const { data: item, isPending } = useById<
+    AssetRequestFormValues & WithImages
+  >({
     id: id || "",
     queryKey: ASSETS_KEY,
     resourcePath: "asset",

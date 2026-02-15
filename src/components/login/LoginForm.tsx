@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 
 // $ React-Hook-Form, zod & schema
-import { LoginSchema } from "../../schemas/index";
+import { loginSchema } from "../../schemas/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 // import { Mail } from "lucide-react";
@@ -26,7 +26,7 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
     // control,
     formState: { errors },
   } = useForm<LoginFormValues>({
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(loginSchema),
   });
 
   // $ Manange the Password Visibility

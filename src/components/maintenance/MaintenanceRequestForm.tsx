@@ -13,15 +13,17 @@ import {
 } from "react-hook-form";
 
 // $ Import image compression hook
-import { compressImagesToWebp } from "@/utils/compressImagesToWebp";
+import { compressImagesToWebpv1 } from "@/utils/compressImagesToWebpv1";
 
 // $ Zod Schema and Types
 import type {
-  CreateJobFormValues,
+  JobRequestFormValues,
   CreateJobPayload,
   PresignedUrlResponse,
+  AssetRequestFormValues,
 } from "../../schemas/index";
-import { createJobSchema } from "../../schemas/index";
+
+import { jobRequestSchema } from "../../schemas/index";
 
 import FormRowSelect from "../../../customComponents/FormRowSelect";
 
@@ -35,12 +37,19 @@ import { toast } from "sonner";
 // $ Import api & custom hooks
 import { useCreateMaintenanceRequest } from "@/utils/api";
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
+import { useGetAll } from "@/utils/api";
 
 // import useGlobalContext from "@/context/useGlobalContext";
 
 const MaintenanceRequestForm = () => {
   const { mutateAsync, isError } = useCreateMaintenanceRequest();
 
+  const { data } = useGetAll<AssetRequestFormValues[]>("asset", [
+    "getAllAssets",
+  ]);
+
+  // data looks like { assets: Array(107) }
+  const assetsArray: AssetRequestFormValues[] = Array.isArray(data) ? data : [];
   // $ Custom hook that manages the select input options based on asset data
 
   const navigate = useNavigate();
@@ -52,20 +61,22 @@ const MaintenanceRequestForm = () => {
     register,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<CreateJobFormValues>({
+  } = useForm<JobRequestFormValues>({
     defaultValues: {
-      equipment: "",
-      assetID: "",
       location: "",
       type: "",
-      impact: "",
       priority: "",
-      additional_notes: "",
+      equipment: "",
+      impact: "",
+      jobComments: "",
+      description: "",
+      area: "",
+      assetID: "",
       images: [],
     },
     resolver: zodResolver(
-      createJobSchema,
-    ) as unknown as Resolver<CreateJobFormValues>,
+      jobRequestSchema,
+    ) as unknown as Resolver<JobRequestFormValues>,
   });
 
   const selectedLocation = useWatch({
@@ -88,8 +99,10 @@ const MaintenanceRequestForm = () => {
     name: "assetID",
   });
 
+  console.log(assetsArray);
   const { equipmentOptions, assetIdOptions, locationOptions, areaOptions } =
     useAssetFilters({
+      assets: assetsArray,
       location: selectedLocation,
       equipment: selectedEquipment,
       assetID: selectedAssetID,
@@ -97,11 +110,11 @@ const MaintenanceRequestForm = () => {
       setValue,
     });
 
-  const onSubmit = async (data: CreateJobFormValues) => {
+  const onSubmit = async (data: JobRequestFormValues) => {
     try {
       // $ 1️⃣ Compress images in browser
       const originalFiles = data.images ?? [];
-      const compressedFiles = await compressImagesToWebp(originalFiles);
+      const compressedFiles = await compressImagesToWebpv1(originalFiles);
 
       // $ 2️⃣ Build API payload (metadata only)
       const payload: CreateJobPayload = {
@@ -226,16 +239,16 @@ const MaintenanceRequestForm = () => {
         />
         <FileInput
           label=""
-          control={control as unknown as Control<CreateJobFormValues>}
+          control={control as unknown as Control<JobRequestFormValues>}
           name="images"
           multiple={true}
         />
         <TextAreaInput
-          name="additional_notes"
+          name="jobComments"
           register={register}
           // control={control}
           rows={4}
-          label="Additional Notes"
+          label="Comments"
           className="lg:col-span-2"
         />
       </div>

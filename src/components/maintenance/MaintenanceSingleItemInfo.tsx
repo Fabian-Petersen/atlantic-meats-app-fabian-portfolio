@@ -1,7 +1,7 @@
 //$ This component display detailed information of the the maintenance request created and actioned data.
 
 import Separator from "@/components/dashboardSidebar/Seperator";
-import type { CreateJobFormValues } from "@/schemas";
+import type { JobAPIResponse } from "@/schemas";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
@@ -11,18 +11,18 @@ import { ErrorPage } from "../features/Error";
 import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 // type Props = {
-//   item: CreateJobFormValues;
+//   item: JobRequestFormValues;
 // };
 
 function MaintenanceSingleItemInfo() {
   const { selectedRowId } = useGlobalContext();
 
-  const { data: item, isPending } = useById<CreateJobFormValues>({
+  const { data: item, isPending } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
     queryKey: ["MAINTENANCE-REQUEST-ITEM"],
     resourcePath: "maintenance-request",
   });
-  console.log("resource", selectedRowId);
+  // console.log("resource", selectedRowId);
   const navigate = useNavigate();
 
   if (isPending) {
@@ -45,8 +45,8 @@ function MaintenanceSingleItemInfo() {
       <Separator width="100%" className="mt-2 mb-4" />
       <ul className="flex flex-col gap-4 md:text-md text-sm">
         <li className="capitalize flex gap-2">
-          <span className="">Jobcard ID : </span>
-          <span>{item?.id}</span>
+          <span className="">Jobcard No : </span>
+          <span>{item?.jobcardNumber}</span>
         </li>
         <li className="capitalize flex gap-2">
           <span className="">Asset ID : </span>
@@ -74,7 +74,7 @@ function MaintenanceSingleItemInfo() {
         </li>
         <li className="capitalize flex gap-2">
           <span>Additional Notes : </span>
-          <span>{item?.additional_notes}</span>
+          <span>{item?.jobComments}</span>
         </li>
       </ul>
       <div className="flex w-full justify-end pt-6">

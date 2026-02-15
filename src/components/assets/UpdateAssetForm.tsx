@@ -8,9 +8,9 @@ import { toast } from "sonner";
 import { useById, useUpdateItem } from "@/utils/api";
 
 // $ Schema & types
-import { assetSchema } from "@/schemas";
+import { assetRequestSchema } from "@/schemas";
 import type {
-  AssetFormValues,
+  AssetRequestFormValues,
   CreateAssetPayload,
   PresignedUrlResponse,
 } from "@/schemas";
@@ -47,7 +47,9 @@ const UpdateAssetForm = () => {
   const [category, setCategory] = useState<string | null>(null);
 
   // $ Fetch asset
-  const { data: item, isPending } = useById<AssetFormValues & WithImages>({
+  const { data: item, isPending } = useById<
+    AssetRequestFormValues & WithImages
+  >({
     id: id ?? "",
     queryKey: ASSETS_KEY,
     resourcePath: "asset",
@@ -68,9 +70,11 @@ const UpdateAssetForm = () => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<AssetFormValues>({
+  } = useForm<AssetRequestFormValues>({
     defaultValues: item,
-    resolver: zodResolver(assetSchema) as unknown as Resolver<AssetFormValues>,
+    resolver: zodResolver(
+      assetRequestSchema,
+    ) as unknown as Resolver<AssetRequestFormValues>,
     values: item
       ? {
           ...item,
@@ -103,7 +107,7 @@ const UpdateAssetForm = () => {
   const sortedLocations = [...location].sort((a, b) => a.localeCompare(b));
 
   // $ Submit
-  const onSubmit = async (data: AssetFormValues) => {
+  const onSubmit = async (data: AssetRequestFormValues) => {
     try {
       const payload: CreateAssetPayload = {
         ...data,

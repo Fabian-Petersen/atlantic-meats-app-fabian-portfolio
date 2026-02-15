@@ -1,12 +1,12 @@
 //$ This is a similar function to the MaintenanceRequestTable, on mobile it is an accordion instead of a table in desktop.
 
-import type { AssetFormValues } from "@/schemas";
+import type { AssetTableRow } from "@/schemas";
 import { useState } from "react";
 import { MobileAssetViewRow } from "./MobileAssetViewRow";
 import type { Row } from "@tanstack/react-table";
 
 type Props = {
-  data: Row<AssetFormValues>[];
+  data: Row<AssetTableRow>[];
   className?: string;
 };
 

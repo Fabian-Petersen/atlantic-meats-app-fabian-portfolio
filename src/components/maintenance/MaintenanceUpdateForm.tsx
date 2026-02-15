@@ -1,7 +1,7 @@
 //$ This component is used to create a maintenace job, the data is submitted to the database (dynamoDB) via API Gateway and Lambda on aws.
 
 // $ React-Hook-Form, zod & schema
-import { createJobSchema } from "../../schemas/index";
+import { jobRequestSchema } from "../../schemas/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -14,7 +14,7 @@ import { Button } from "../ui/button";
 import useGlobalContext from "@/context/useGlobalContext";
 
 // $ Import schemas
-import type { CreateJobFormValues } from "../../schemas/index";
+import type { JobRequestFormValues } from "../../schemas/index";
 
 import { priority, type, impact } from "@/data/maintenanceRequestFormData";
 import { stores } from "@/data/stores";
@@ -35,11 +35,11 @@ const MaintenanceUpdateForm = () => {
     control,
     formState: { errors, isSubmitting },
   } = useForm({
-    defaultValues: initialData as CreateJobFormValues,
-    resolver: zodResolver(createJobSchema),
+    defaultValues: initialData as JobRequestFormValues,
+    resolver: zodResolver(jobRequestSchema),
   });
 
-  const onSubmit = async (data: CreateJobFormValues) => {
+  const onSubmit = async (data: JobRequestFormValues) => {
     try {
       const base64Images = await Promise.all(
         (data.images || []).map(
@@ -69,11 +69,11 @@ const MaintenanceUpdateForm = () => {
         <FormRowInput
           label="Additional Notes"
           type="text"
-          name="additional_notes"
+          name="jobComments"
           // control={control}
           placeholder="Enter additional notes"
           register={register}
-          error={errors.additional_notes}
+          error={errors.jobComments}
         />
         <FormRowSelect
           name="location"

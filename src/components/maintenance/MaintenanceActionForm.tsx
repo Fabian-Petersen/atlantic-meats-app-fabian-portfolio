@@ -15,9 +15,9 @@ import FormRowSelect from "../../../customComponents/FormRowSelect";
 
 // $ Import schemas
 import {
-  actionJobSchema,
-  type ActionJobFormValues,
-  type CreateActionPayload,
+  actionRequestSchema,
+  type ActionRequestFormValues,
+  type ActionRequestPayload,
   type PresignedUrlResponse,
 } from "../../schemas/index";
 
@@ -25,7 +25,7 @@ import {
 import { useCreateActionRequest } from "@/utils/api";
 
 // $ Import image compression hook
-import { compressImagesToWebp } from "@/utils/compressImagesToWebp";
+import { compressImagesToWebpv1 } from "@/utils/compressImagesToWebpv1";
 
 import { ROOT_CAUSES, status } from "@/data/maintenanceAction";
 import TextAreaInput from "../../../customComponents/TextAreaInput";
@@ -70,7 +70,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<ActionJobFormValues>({
+  } = useForm<ActionRequestFormValues>({
     // defaultValues: {
     // start_time: toDateTimeLocal(now),
     // end_time: toDateTimeLocal(now),
@@ -85,18 +85,18 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
     // },
 
     resolver: zodResolver(
-      actionJobSchema,
-    ) as unknown as Resolver<ActionJobFormValues>,
+      actionRequestSchema,
+    ) as unknown as Resolver<ActionRequestFormValues>,
   });
 
-  const onSubmit = async (data: ActionJobFormValues) => {
+  const onSubmit = async (data: ActionRequestFormValues) => {
     // $ 1. 1️⃣ Compress images in browser
     const originalFiles = data.images ?? [];
-    const compressedFiles = await compressImagesToWebp(originalFiles);
+    const compressedFiles = await compressImagesToWebpv1(originalFiles);
 
     try {
       // $ 2. Prepare payload with compressed images and signature
-      const payload: CreateActionPayload = {
+      const payload: ActionRequestPayload = {
         ...data,
         images: compressedFiles.map((file) => ({
           filename: file.name,
@@ -185,10 +185,10 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
           <FormRowInput
             label="Works Order Number"
             type="text"
-            name="works_order_number"
+            name="work_order_number"
             placeholder="Works Order Number"
             register={register}
-            error={errors.works_order_number}
+            error={errors.work_order_number}
           />
         </div>
         <div className="col-span-2 lg:col-span-1">
@@ -236,7 +236,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
       </div>
       <FileInput
         label=""
-        control={control as unknown as Control<ActionJobFormValues>}
+        control={control as unknown as Control<ActionRequestFormValues>}
         name="images"
         multiple={true}
         className="col-span-2 mt-2"

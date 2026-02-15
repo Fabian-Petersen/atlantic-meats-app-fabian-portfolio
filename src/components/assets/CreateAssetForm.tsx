@@ -12,15 +12,15 @@ import FormRowInput from "../../../customComponents/FormRowInput";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
 
 // $ Import image compression hook
-import { compressImagesToWebp } from "../../utils/compressImagesToWebp";
+import { compressImagesToWebpv1 } from "../../utils/compressImagesToWebpv1";
 
 // $ Import schemas
 import type {
-  AssetFormValues,
+  AssetRequestFormValues,
   CreateAssetPayload,
   PresignedUrlResponse,
 } from "../../schemas/index";
-import { assetSchema } from "../../schemas/index";
+import { assetRequestSchema } from "../../schemas/index";
 
 // $ Import API interaction Functions
 import {
@@ -73,7 +73,7 @@ const CreateAssetForm = () => {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<AssetFormValues>({
+  } = useForm<AssetRequestFormValues>({
     defaultValues: {
       business_unit: "",
       area: "",
@@ -85,20 +85,22 @@ const CreateAssetForm = () => {
       additional_notes: "",
       images: [],
     },
-    resolver: zodResolver(assetSchema) as unknown as Resolver<AssetFormValues>,
+    resolver: zodResolver(
+      assetRequestSchema,
+    ) as unknown as Resolver<AssetRequestFormValues>,
   });
 
   // $ sort the locations in alphabetical order
   const sortedLocations = [...location].sort((a, b) => a.localeCompare(b));
 
   // $ Form and Images Submit with Image Compression
-  const onSubmit = async (data: AssetFormValues) => {
+  const onSubmit = async (data: AssetRequestFormValues) => {
     // console.log("Create new asset:", data);
 
     try {
       // $ 1️⃣ Compress images in browser
       const originalFiles = data.images ?? [];
-      const compressedFiles = await compressImagesToWebp(originalFiles);
+      const compressedFiles = await compressImagesToWebpv1(originalFiles);
 
       // $ 2️⃣ Build API payload (metadata only)
       const payload: CreateAssetPayload = {

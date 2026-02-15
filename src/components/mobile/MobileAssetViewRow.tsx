@@ -1,11 +1,11 @@
-import type { AssetFormValues } from "@/schemas";
+import type { AssetAPIResponse } from "@/schemas";
 import { ChevronDown } from "lucide-react";
 import type { Row } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
 
 type Props = {
-  row: Row<AssetFormValues>;
+  row: Row<AssetAPIResponse>;
   isOpen: boolean;
   onToggle: () => void;
 };

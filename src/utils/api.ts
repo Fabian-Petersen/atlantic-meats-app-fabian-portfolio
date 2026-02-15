@@ -3,12 +3,13 @@ import { apiClient } from "./apiClient";
 
 // $ Types
 import type {
-  AssetFormValues,
+  AssetRequestFormValues,
   CreateAssetPayload,
-  CreateJobFormValues,
+  JobRequestFormValues,
   CreateJobPayload,
   PresignedUrlResponse,
-  CreateActionPayload,
+  ActionRequestPayload,
+  AssetAPIResponse,
 } from "@/schemas";
 
 export type Resource =
@@ -18,7 +19,10 @@ export type Resource =
   | "maintenance-jobcard";
 
 // $ Combine the types into a union type for the generic functions
-export type EntityType = AssetFormValues | CreateJobFormValues;
+export type EntityType =
+  | AssetRequestFormValues
+  | JobRequestFormValues
+  | AssetAPIResponse;
 
 // $ Format the data according to API requirements
 // const formatData = <T extends EntityType>(item: T): Omit<T, "id"> => {
@@ -38,16 +42,16 @@ const ASSETS_REQUESTS_KEY = ["assetRequests"];
 // $ =========================
 
 // $ Generic: GET All
-export const useGetAll = <T extends EntityType>(
+export const useGetAll = <T>(
   resourcePath: Resource,
   queryKey: readonly unknown[] = [resourcePath],
 ) => {
-  return useQuery<T[]>({
+  return useQuery<T>({
     queryKey,
     queryFn: async () => {
       try {
         const response = await apiClient.get(`/${resourcePath}`);
-        return response.data as T[];
+        return response.data as T;
       } catch (error) {
         console.error(`Error fetching ${resourcePath}:`, error);
         throw error;
@@ -101,10 +105,10 @@ export const useDeleteItem = (options: {
 // % ========================================================================
 
 export const useMaintenanceRequests = () => {
-  return useQuery<CreateJobFormValues[]>({
+  return useQuery<JobRequestFormValues[]>({
     queryKey: MAINTENANCE_REQUESTS_KEY,
     queryFn: async () => {
-      const { data } = await apiClient.get<CreateJobFormValues[]>(
+      const { data } = await apiClient.get<JobRequestFormValues[]>(
         "/maintenance-request",
       );
       return data;
@@ -113,10 +117,10 @@ export const useMaintenanceRequests = () => {
 };
 
 export const useAssetsList = () => {
-  return useQuery<AssetFormValues[]>({
+  return useQuery<AssetRequestFormValues[]>({
     queryKey: ASSETS_REQUESTS_KEY,
     queryFn: async () => {
-      const { data } = await apiClient.get<AssetFormValues[]>("/asset");
+      const { data } = await apiClient.get<AssetRequestFormValues[]>("/asset");
       return data;
     },
   });
@@ -124,10 +128,10 @@ export const useAssetsList = () => {
 
 // $ GET by ID
 export const useMaintenanceRequestById = (id: string) => {
-  return useQuery<CreateJobFormValues>({
+  return useQuery<JobRequestFormValues>({
     queryKey: [...MAINTENANCE_REQUESTS_KEY, id],
     queryFn: async () => {
-      const { data } = await apiClient.get<CreateJobFormValues>(
+      const { data } = await apiClient.get<JobRequestFormValues>(
         `/maintenance-request/${id}`,
       );
       return data;
@@ -178,7 +182,7 @@ export const useCreateActionRequest = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: CreateActionPayload) => {
+    mutationFn: async (payload: ActionRequestPayload) => {
       const { data } = await apiClient.post("/maintenance-action", payload, {
         headers: { "Content-Type": "application/json" },
       });
@@ -202,9 +206,9 @@ export const useUpdateMaintenanceRequest = () => {
       payload,
     }: {
       id: string;
-      payload: Partial<CreateJobFormValues>;
+      payload: Partial<JobRequestFormValues>;
     }) => {
-      const { data } = await apiClient.put<CreateJobFormValues>(
+      const { data } = await apiClient.put<JobRequestFormValues>(
         `/maintenance-request/${id}`,
         payload,
       );

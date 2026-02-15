@@ -1,7 +1,7 @@
 // utils/compressToWebp.ts
 import imageCompression from "browser-image-compression";
 
-export async function compressImagesToWebp(files: File[]) {
+export async function compressImagesToWebpv1(files: File[]) {
   const options = {
     maxSizeMB: 0.5, // target size per image
     maxWidthOrHeight: 1920, // prevent huge images

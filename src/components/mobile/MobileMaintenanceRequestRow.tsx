@@ -1,11 +1,11 @@
-import type { CreateJobFormValues } from "@/schemas";
+import type { JobAPIResponse } from "@/schemas";
 import { ChevronDown } from "lucide-react";
 import type { Row } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
 
 type Props = {
-  row: Row<CreateJobFormValues>;
+  row: Row<JobAPIResponse>;
   isOpen: boolean;
   onToggle: () => void;
 };
@@ -38,7 +38,7 @@ export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
             {/* <span>{row.original.assetID}</span> */}
           </div>
           <div className="flex gap-2 text-sm my-2">
-            <span>{row.original.additional_notes}</span>
+            <span>{row.original.jobComments}</span>
           </div>
           <div className="w-full flex gap-12 justify-between mt-auto">
             <button
@@ -77,19 +77,6 @@ export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
               Delete
             </button>
           </div>
-          {/* <button
-            type="button"
-            className="bg-primary w-full rounded-sm py-2 text-white hover:cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log(row.original.id);
-              navigate(`/maintenance-action/${row.original.id}`);
-              setGenericData(row.original);
-              //   console.log(actionData);
-            }}
-          >
-            Action
-          </button> */}
         </div>
       )}
     </div>

@@ -35,7 +35,7 @@ const AssetsOverviewPage = () => {
   const navigate = useNavigate();
 
   const ASSETS_REQUESTS_KEY = ["assetRequests"];
-  const { data, isPending, isError, refetch } = useGetAll<AssetTableRow>(
+  const { data, isPending, isError, refetch } = useGetAll<AssetTableRow[]>(
     "asset",
     ASSETS_REQUESTS_KEY,
   );

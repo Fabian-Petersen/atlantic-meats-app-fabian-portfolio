@@ -1,8 +1,7 @@
-import { z } from "zod";
-import { LoginSchema } from "../schemas";
+import { type LoginFormValues } from "../schemas";
 import axios from "axios";
 
-const login = async (values: z.infer<typeof LoginSchema>) => {
+const login = async (values: LoginFormValues) => {
   const { email, password } = values;
 
   const response = await axios.post(
@@ -13,7 +12,7 @@ const login = async (values: z.infer<typeof LoginSchema>) => {
       headers: {
         "Content-Type": "application/json",
       },
-    }
+    },
   );
   const data = response.data;
   return data;

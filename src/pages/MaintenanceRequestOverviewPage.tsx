@@ -19,16 +19,17 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { getMaintenanceColumns } from "@/components/maintenanceRequestTable/columns";
 import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
-import type { MaintenanceTableRow } from "@/schemas";
+import type { JobAPIResponse } from "@/schemas";
 import FilterContainer from "@/components/features/FilterContainer";
 import AddNewItemButton from "@/components/features/AddNewItemButton";
 
 const MaintenanceRequestOverviewPage = () => {
   const MAINTENANCE_REQUESTS_KEY = ["allMaintenanceRequests"];
-  const { data, isPending, isError, refetch } = useGetAll<MaintenanceTableRow>(
+  const { data, isPending, isError, refetch } = useGetAll<JobAPIResponse[]>(
     "maintenance-request",
     MAINTENANCE_REQUESTS_KEY,
   );
+
   const navigate = useNavigate();
   const [sorting, setSorting] = useState<SortingState>([
     { id: "createdAt", desc: true },

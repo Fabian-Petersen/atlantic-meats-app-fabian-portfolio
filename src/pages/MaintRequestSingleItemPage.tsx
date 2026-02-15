@@ -3,7 +3,7 @@
 import { useParams } from "react-router-dom";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../utils/api";
-import { type CreateJobFormValues } from "@/schemas";
+import { type JobRequestFormValues } from "@/schemas";
 import { AssetSingleItemImages } from "@/components/assets/AssetSingleItemImages";
 import MaintenanceSingleItemInfo from "@/components/maintenance/MaintenanceSingleItemInfo";
 
@@ -22,7 +22,7 @@ const MaintRequestSingleItemPage = () => {
 
   const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
 
-  const { data: item, isPending } = useById<CreateJobFormValues & WithImages>({
+  const { data: item, isPending } = useById<JobRequestFormValues & WithImages>({
     id: id || "",
     queryKey: MAINTENANCE_REQUESTS_KEY,
     resourcePath: "maintenance-request",

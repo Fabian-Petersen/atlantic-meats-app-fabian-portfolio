@@ -1,12 +1,12 @@
 import Separator from "@/components/dashboardSidebar/Seperator";
-import type { AssetFormValues } from "@/schemas";
+import type { AssetRequestFormValues } from "@/schemas";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
 import UpdateAssetDialog from "../modals/UpdateAssetDialog";
 
 type Props = {
-  item: AssetFormValues;
+  item: AssetRequestFormValues;
 };
 
 function AssetSingleItemInfo({ item }: Props) {

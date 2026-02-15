@@ -1,12 +1,12 @@
 //$ This is a similar function to the MaintenanceRequestTable, on mobile it is an accordion instead of a table in desktop.
 
-import type { CreateJobFormValues } from "@/schemas";
+import type { JobAPIResponse } from "@/schemas";
 import { useState } from "react";
 import { MobileMaintenanceRequestRow } from "./MobileMaintenanceRequestRow";
 import type { Row } from "@tanstack/react-table";
 
 type Props = {
-  data: Row<CreateJobFormValues>[];
+  data: Row<JobAPIResponse>[];
   className?: string;
 };
 
