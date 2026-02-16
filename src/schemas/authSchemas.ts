@@ -20,13 +20,10 @@ export const loginSchema = z.object({
   password: z
     .string()
     .min(1, { message: "Please enter a valid password" })
-    .refine(
-      (value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value),
-      {
-        message:
-          "Password must be 8 characters with one uppercase letter, one lowercase letter and one number",
-      },
-    ),
+    .refine((value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(value), {
+      message:
+        "Password must be 8 characters with one uppercase letter, one lowercase letter and one number",
+    }),
 });
 
 // $ Schema for the Forgot Password Form
