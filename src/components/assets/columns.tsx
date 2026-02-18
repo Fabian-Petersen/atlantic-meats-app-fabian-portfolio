@@ -14,6 +14,8 @@ function getConditionClasses(condition: EquipmentCondition) {
   switch (condition.toLowerCase()) {
     case "operational":
       return "text-green-700 bg-green-300/60";
+    case "not operational":
+      return "text-orange-700 bg-orange-300/60";
     case "new":
       return "text-blue-700 bg-blue-300/60";
     case "poor":
@@ -21,7 +23,7 @@ function getConditionClasses(condition: EquipmentCondition) {
     case "broken":
       return "text-red-700 bg-red-300/60";
     default:
-      return "text-gray-700 bg-gray-200";
+      return "text-gray-400 bg-gray-200";
   }
 }
 
@@ -87,7 +89,7 @@ export const getAssetColumns = (
       const value = getValue<string>();
       return (
         <p
-          className={`capitalize px-1.5 py-2 text-center rounded-full ${getConditionClasses(
+          className={`capitalize max-w-fit px-2 py-2.5 text-center rounded-full ${getConditionClasses(
             value as EquipmentCondition,
           )}`}
         >

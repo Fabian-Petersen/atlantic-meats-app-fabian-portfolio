@@ -44,7 +44,7 @@ import { useGetAll } from "@/utils/api";
 const MaintenanceRequestForm = () => {
   const { mutateAsync, isError } = useCreateMaintenanceRequest();
 
-  const { data } = useGetAll<AssetRequestFormValues[]>("asset", [
+  const { data } = useGetAll<AssetRequestFormValues[]>("assets-list", [
     "getAllAssets",
   ]);
 
@@ -99,7 +99,7 @@ const MaintenanceRequestForm = () => {
     name: "assetID",
   });
 
-  console.log(assetsArray);
+  // console.log(assetsArray);
   const { equipmentOptions, assetIdOptions, locationOptions, areaOptions } =
     useAssetFilters({
       assets: assetsArray,
@@ -257,7 +257,7 @@ const MaintenanceRequestForm = () => {
           <Button
             type="button"
             onClick={() => {
-              navigate("/maintenance-list");
+              navigate("/maintenance-requests-list");
             }}
             variant="cancel"
             size="lg"

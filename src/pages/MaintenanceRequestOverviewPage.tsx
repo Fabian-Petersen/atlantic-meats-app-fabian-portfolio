@@ -27,7 +27,7 @@ import AddNewItemButton from "@/components/features/AddNewItemButton";
 const MaintenanceRequestOverviewPage = () => {
   const MAINTENANCE_REQUESTS_KEY = ["allMaintenanceRequests"];
   const { data, isPending, isError, refetch } = useGetAll<JobAPIResponse[]>(
-    "maintenance-request",
+    "maintenance-requests-list",
     MAINTENANCE_REQUESTS_KEY,
   );
 

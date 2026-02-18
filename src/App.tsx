@@ -44,7 +44,7 @@ function App() {
             element={<MaintenanceRequestPage />}
           />
           <Route
-            path="/maintenance-list"
+            path="/maintenance-requests-list"
             element={<MaintenanceRequestOverviewPage />}
           />
           <Route
@@ -56,9 +56,12 @@ function App() {
             element={<MaintRequestActionItemPage />}
           />
           {/* // $ ======================= Asset Routes ======================= */}
-          <Route path="/asset" element={<AssetsOverviewPage />} />
-          <Route path="/create-asset" element={<CreateAssetPage />} />
-          <Route path="/asset/:id" element={<AssetsSingleItemPage />} />
+          {/*GET: All assets returned*/}
+          <Route path="/assets-list" element={<AssetsOverviewPage />} />
+          {/*POST: Create an asset*/}
+          <Route path="/asset" element={<CreateAssetPage />} />{" "}
+          {/*PUT, DELETE, GET: a single asset*/}
+          <Route path="/asset/:id" element={<AssetsSingleItemPage />} />{" "}
           {/* // $ ======================= Settings Routes ======================= */}
           <Route path="/user-profile" element={<UserProfilePage />} />
         </Route>

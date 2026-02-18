@@ -36,7 +36,7 @@ const AssetsOverviewPage = () => {
 
   const ASSETS_REQUESTS_KEY = ["assetRequests"];
   const { data, isPending, isError, refetch } = useGetAll<AssetTableRow[]>(
-    "asset",
+    "assets-list",
     ASSETS_REQUESTS_KEY,
   );
 
@@ -88,7 +88,7 @@ const AssetsOverviewPage = () => {
   }
 
   const handleSubmit = () => {
-    navigate("/create-asset");
+    navigate("/asset");
   };
 
   return (

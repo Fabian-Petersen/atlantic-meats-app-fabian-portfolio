@@ -1,12 +1,12 @@
 import { fetchAuthSession } from "aws-amplify/auth";
 
-export const getAccessToken = async (): Promise<string> => {
+export const getIdToken = async (): Promise<string> => {
   const session = await fetchAuthSession();
 
-  const accessToken = session.tokens?.accessToken?.toString();
-  if (!accessToken) {
+  const idToken = session.tokens?.idToken?.toString();
+  if (!idToken) {
     throw new Error("User not authenticated");
   }
 
-  return accessToken;
+  return idToken;
 };

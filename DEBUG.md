@@ -164,3 +164,52 @@ add the policy:
 ```
 
 The file was correctly added to the s3 bucket.
+
+# 4 Changing the development Env to User Authenticated Routes
+
+- The code was changed to send the idToken of the user from the frontend.
+- In the DevTools "Authorisatio : Bearer jwtr" token can be seen still "error from cloudfront"
+- The website can also load, login howver the routes via API Gateway was not authenticated.
+- Changed Cloudfront Distribution:
+  - origin_request_policy_id = "216adef6-5c7f-47e4-b989-5492eafa07d3" changed from cors_s3_origin - - ="88a5eaf4-2fd4-4709-b370-b4c650ea3fcf"
+    apply Terraform changes
+
+- Updated the terraform code to include OPTIONS method with Authorisation set to "NONE" such that Authorisation is not applied to all routes including OPTIONS where the token is not send with the request resulting in a error
+
+Sendign the request straight to the api worked, however through Cloudfront there is an error.
+
+```bash
+ curl -v -X OPTIONS https://46sniim2bd.execute-api.af-south-1.amazonaws.com/dev/maintenance-requests-list -H "Origin: http://localhost:5173"
+```
+
+### Solution:
+
+#### Apply the headers to the OPTIONS method in 'API Gateway'
+
+method.response.header.Access-Control-Allow-Credentials = 'true'
+method.response.header.Access-Control-Allow-Headers ='Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'
+method.response.header.Access-Control-Allow-Methods = 'GET,OPTIONS'
+method.response.header.Access-Control-Allow-Origin = 'http://localhost:5173'
+
+#### Set Cloudfront with these AWS Managed Policies
+
+- caching_disabled = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
+- allViewerExceptHostHeader = "b689b0a8-53d0-40ab-baf2-68738e2966ac"
+- CORSwithPreflightSecurityHeadersPolicy = "eaab4381-ed33-4a86-88ca-d9558dc6cd63"
+
+#### Edit the custom responses for api gateway
+
+```terraform
+resource "aws_api_gateway_gateway_response" "default_4xx" {
+  rest_api_id   = aws_api_gateway_rest_api.project_apigateway.id
+  response_type = "DEFAULT_4XX"
+
+  response_parameters = {
+    "gatewayresponse.header.Access-Control-Allow-Origin"  = "'http://localhost:5173'"
+    "gatewayresponse.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    "gatewayresponse.header.Access-Control-Allow-Methods" = "'GET,POST,OPTIONS'"
+  }
+}
+```
+
+NB: When you use an authorizer, the OPTIONS route in Network tab must have matching repsonse and request origin headers. Set the CORS in the OPTIONS route in api gateway to be either "http:localhost or the domain in production.

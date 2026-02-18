@@ -13,10 +13,13 @@ import type {
 } from "@/schemas";
 
 export type Resource =
-  | "asset"
-  | "maintenance-request"
-  | "maintenance-list"
-  | "maintenance-jobcard";
+  | "asset" // POST & DELETE, PUT, GET assetById
+  | "assets-list" // GET all assets
+  | "maintenance-action" // POST & DELETE, GET
+  | "maintenance-actions-list" // GET all actions
+  | "maintenance-jobcard" // GET jobcardById
+  | "maintenance-request" // POST & DELETE, GET requestsById
+  | "maintenance-requests-list"; // GET all maintenance requests
 
 // $ Combine the types into a union type for the generic functions
 export type EntityType =

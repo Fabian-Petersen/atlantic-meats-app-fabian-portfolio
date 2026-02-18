@@ -50,12 +50,18 @@ export const mainLinks: NavlinkProps[] = [
 
 export const maintenanceLinks: NavlinkProps[] = [
   { name: "create request", icon: Wrench, url: "/maintenance-request" },
-  { name: "view requests", icon: File, url: "/maintenance-list" },
+  { name: "view requests", icon: File, url: "/maintenance-requests-list" },
+  // { name: "my requests", icon: File, url: "/maintenance-requests-list" }, Use this link with the user sub to filter our requests based on user sign in.
+] as const;
+
+export const actionLinks: NavlinkProps[] = [
+  { name: "create asset", icon: File, url: "/asset" },
+  { name: "my actions", icon: Library, url: "/maintenance-actions-list" }, // return all actions
 ] as const;
 
 export const assetLinks: NavlinkProps[] = [
-  { name: "create asset", icon: File, url: "/create-asset" },
-  { name: "asset register", icon: Library, url: "/asset" },
+  { name: "create asset", icon: File, url: "/asset" },
+  { name: "asset register", icon: Library, url: "/assets-list" },
 ] as const;
 
 export const profileLinks: NavlinkProps[] = [

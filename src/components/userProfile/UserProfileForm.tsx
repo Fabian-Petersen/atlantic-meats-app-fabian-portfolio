@@ -1,4 +1,4 @@
-import type { UserAttributes } from "@/schemas";
+// import type { UserAttributes } from "@/schemas";
 import FormRowInput from "../../../customComponents/FormRowInput";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,17 +7,21 @@ import FormHeading from "../../../customComponents/FormHeading";
 import FormRowInputEditable from "../../../customComponents/FormRowInputEditable";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
+import { useUserAttributes } from "../../utils/aws-userAttributes";
 
-type UserProfileProps = {
-  user: UserAttributes | null;
-};
+// type UserProfileProps = {
+//   user: UserAttributes | null;
+// };
 
-function UserProfileForm({ user }: UserProfileProps) {
+function UserProfileForm() {
   // todo: Add the additional user attributes to Cognito
+  const { data: user } = useUserAttributes();
+  // console.log(user);
+
   const userTest = {
-    name: "fabian",
-    email: "fpetersen2tech@gmail.com",
-    surname: "petersen",
+    name: user?.name ?? "",
+    email: user?.email,
+    surname: user?.family_name,
     role: "admin",
     mobile: "0713860827",
     branch: "distribution",
