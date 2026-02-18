@@ -1,0 +1,17 @@
+{
+  "aud": "tavdi4dfs1ufjvpumdb48d3r7",
+  "auth_time": "1771318931",
+  "cognito:username": "614cb208-f061-7028-5eb8-b504e1357d64",
+  "email": "cristalfk@gmail.com",
+  "email_verified": "true",
+  "event_id": "a4ea9a19-8f87-4362-9416-b71a1924e7c2",
+  "exp": "Tue Feb 17 15:02:32 UTC 2026",
+  "family_name": "petersen",
+  "iat": "Tue Feb 17 14:02:32 UTC 2026",
+  "iss": "https://cognito-idp.af-south-1.amazonaws.com/af-south-1_J651TfCsW",
+  "jti": "58b64ee3-1031-47e8-a37e-3063bddf3fa0",
+  "name": "chrystal",
+  "origin_jti": "af6c5691-fd4c-4a1a-ac45-358184b6c381",
+  "sub": "614cb208-f061-7028-5eb8-b504e1357d64",
+  "token_use": "id"
+}
