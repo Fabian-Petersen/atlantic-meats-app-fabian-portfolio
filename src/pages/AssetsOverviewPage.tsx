@@ -102,7 +102,7 @@ const AssetsOverviewPage = () => {
               Create Asset
             </label>
             <AddNewItemButton
-              title="Add Asset"
+              title="Asset"
               className=""
               onClick={handleSubmit}
             />

@@ -93,11 +93,7 @@ const MaintenanceRequestOverviewPage = () => {
             <label className="text-sm md:text-md text-transparent">
               Create Job
             </label>
-            <AddNewItemButton
-              title="Add Job"
-              className=""
-              onClick={handleSubmit}
-            />
+            <AddNewItemButton title="Job" className="" onClick={handleSubmit} />
           </div>
         </div>
         <MaintenanceRequestsTable

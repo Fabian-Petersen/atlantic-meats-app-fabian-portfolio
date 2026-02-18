@@ -22,6 +22,7 @@ export const jobResponseSchema = jobRequestSchema.extend({
   jobCreated: z.string(),
   jobcardNumber: z.string(),
   status: z.string(),
+  requested_by: z.string(),
 });
 
 // $ Schema for the Maintenance Table Menu

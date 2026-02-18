@@ -148,7 +148,7 @@ const MaintenanceRequestForm = () => {
       toast.success("Maintenance request created successfully!", {
         duration: 1000,
       });
-      navigate("/maintenance-list");
+      navigate("/maintenance-requests-list");
     } catch (err) {
       console.error("Failed to create maintenance request", err);
       toast.error(

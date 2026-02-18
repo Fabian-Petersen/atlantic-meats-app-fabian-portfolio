@@ -22,7 +22,7 @@ function MaintenanceSingleItemInfo() {
     queryKey: ["MAINTENANCE-REQUEST-ITEM"],
     resourcePath: "maintenance-request",
   });
-  // console.log("resource", selectedRowId);
+  console.log("data", item);
   const navigate = useNavigate();
 
   if (isPending) {
@@ -56,6 +56,10 @@ function MaintenanceSingleItemInfo() {
       </div>
       <Separator width="100%" className="mt-2 mb-4" />
       <ul className="flex flex-col gap-4 md:text-sm text-sm">
+        <li className="capitalize flex gap-2">
+          <span>Requested By : </span>
+          <span>{item?.requested_by}</span>
+        </li>
         <li className="capitalize flex gap-2">
           <span>Location : </span>
           <span>{item?.location}</span>
