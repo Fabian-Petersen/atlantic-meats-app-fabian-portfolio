@@ -4,7 +4,7 @@ import * as z from "zod";
 export const userAttributesSchema = z.object({
   email: z.email({ message: "Please enter a valid email" }).optional(),
   name: z.string().min(1, { message: "Your name is required" }).optional(),
-  surname: z
+  family_name: z
     .string()
     .min(1, { message: "Your surname is required" })
     .optional(),

@@ -90,7 +90,7 @@ function MaintenanceSingleItemInfo() {
           <Button
             type="button"
             onClick={() => {
-              navigate("/maintenance-list");
+              navigate("/maintenance-requests-list");
             }}
             variant="cancel"
             size="xl"

@@ -89,10 +89,7 @@ const MaintenanceRequestOverviewPage = () => {
         />
         <div className="flex gap-4 items-end w-full">
           <FilterContainer table={table} className="" />
-          <div className="py-2 hidden md:inline-block ml-auto">
-            <label className="text-sm md:text-md text-transparent">
-              Create Job
-            </label>
+          <div className="hidden md:inline-block ml-auto">
             <AddNewItemButton title="Job" className="" onClick={handleSubmit} />
           </div>
         </div>

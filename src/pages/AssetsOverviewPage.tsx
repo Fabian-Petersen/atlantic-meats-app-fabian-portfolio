@@ -97,10 +97,10 @@ const AssetsOverviewPage = () => {
         <FormHeading className="mx-auto" heading="Assets Register" />
         <div className="flex gap-4 items-end w-full">
           <FilterContainer table={table} className="" />
-          <div className="py-2 hidden md:inline-block ml-auto">
-            <label className="text-sm md:text-md text-transparent">
+          <div className="hidden md:inline-block ml-auto">
+            {/* <label className="text-sm md:text-md text-transparent">
               Create Asset
-            </label>
+            </label> */}
             <AddNewItemButton
               title="Asset"
               className=""

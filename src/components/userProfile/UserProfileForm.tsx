@@ -7,33 +7,34 @@ import FormHeading from "../../../customComponents/FormHeading";
 import FormRowInputEditable from "../../../customComponents/FormRowInputEditable";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import { useUserAttributes } from "../../utils/aws-userAttributes";
+import type { UserAttributes } from "@/schemas";
+// import { useUserAttributes } from "../../utils/aws-userAttributes";
 
-// type UserProfileProps = {
-//   user: UserAttributes | null;
-// };
+type UserProfileProps = {
+  user: UserAttributes | null;
+};
 
-function UserProfileForm() {
+function UserProfileForm({ user }: UserProfileProps) {
   // todo: Add the additional user attributes to Cognito
-  const { data: user } = useUserAttributes();
+  // const { data: user } = useUserAttributes();
   // console.log(user);
 
-  const userTest = {
-    name: user?.name ?? "",
-    email: user?.email,
-    surname: user?.family_name,
-    role: "admin",
-    mobile: "0713860827",
-    branch: "distribution",
-    division: "central services",
-  };
+  // const userTest = {
+  //   name: user?.name ?? "",
+  //   email: user?.email,
+  //   surname: user?.family_name,
+  //   role: "admin",
+  //   mobile: "0713860827",
+  //   branch: "distribution",
+  //   division: "central services",
+  // };
 
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<UserAttributesFormValues>({
-    defaultValues: userTest,
+    defaultValues: user ?? undefined,
     resolver: zodResolver(
       userAttributesSchema,
     ) as unknown as Resolver<UserAttributesFormValues>,
@@ -71,7 +72,7 @@ function UserProfileForm() {
       /> */}
         <FormRowInput
           label="Surname"
-          name="surname"
+          name="family_name"
           readOnly={true}
           register={register}
           className="capitalize"
