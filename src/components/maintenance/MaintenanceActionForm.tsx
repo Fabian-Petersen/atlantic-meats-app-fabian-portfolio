@@ -183,10 +183,10 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
         </div>
         <div className="col-span-2 lg:col-span-1">
           <FormRowInput
-            label="Works Order Number"
+            label="Work Order Number"
             type="text"
             name="work_order_number"
-            placeholder="Works Order Number"
+            placeholder="Work Order Number"
             register={register}
             error={errors.work_order_number}
           />

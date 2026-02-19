@@ -40,7 +40,7 @@ const AssetsOverviewPage = () => {
     ASSETS_REQUESTS_KEY,
   );
 
-  console.log("Assets data:", data);
+  // console.log("Assets data:", data);
 
   const [sorting, setSorting] = useState<SortingState>([
     { id: "createdAt", desc: true },

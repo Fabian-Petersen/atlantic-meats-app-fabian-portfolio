@@ -27,6 +27,7 @@ import {
   useCreateNewAsset,
   // useCreateNewItem,
 } from "@/utils/api";
+import { useApiError } from "@/customHooks/useApiError";
 
 //$ Import Select Options Data
 import {
@@ -45,6 +46,8 @@ type BusinessUnit = keyof typeof CeateAssetFormOptionsData.business_unit;
 //   keyof (typeof CeateAssetFormOptionsData.business_unit)[B]["category"];
 
 const CreateAssetForm = () => {
+  const { handleError } = useApiError(); // This function takes an Axios Error and display a toast to the user from the backend
+
   // $ Use cascading (dependent) select inputs driven directly from the data structure.
   const [businessUnit, setBusinessUnit] = useState<BusinessUnit | null>(null);
   const [category, setCategory] = useState<string | null>(null);
@@ -135,9 +138,9 @@ const CreateAssetForm = () => {
       );
 
       toast.success("Asset successfully created!", { duration: 1000 });
-      // navigate("/asset"); // $ temporary disabled navigation
+      navigate("/assets-list"); // $ temporary disabled navigation
     } catch (err) {
-      console.error("Failed to create asset", err);
+      handleError(err);
     }
   };
 
