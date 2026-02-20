@@ -19,6 +19,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isActive, setIsActive] = useState<boolean>(false);
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
+  // $ State for the Comments Sidebar behavior
+  const [openChatSidebar, setOpenChatSidebar] = useState<boolean>(false);
+
   // $ State for the dialogs (modals)
   const [showUpdateMaintenanceDialog, setShowUpdateMaintenanceDialog] =
     useState<boolean>(false);
@@ -92,6 +95,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setDeleteConfig,
         openDeleteDialog,
         closeDeleteDialog,
+        openChatSidebar,
+        setOpenChatSidebar,
       }}
     >
       {children}

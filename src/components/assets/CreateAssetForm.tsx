@@ -42,7 +42,7 @@ import TextAreaInput from "../../../customComponents/TextAreaInput";
 
 type BusinessUnit = keyof typeof CeateAssetFormOptionsData.business_unit;
 
-// type Category<B extends BusinessUnit> =
+// type Category<B extends BusinessUnit>
 //   keyof (typeof CeateAssetFormOptionsData.business_unit)[B]["category"];
 
 const CreateAssetForm = () => {

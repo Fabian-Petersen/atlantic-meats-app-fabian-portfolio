@@ -4,6 +4,7 @@ import {
   Pencil,
   Trash2Icon,
   Wrench,
+  MessageSquare,
   type LucideIcon,
   DownloadIcon,
 } from "lucide-react";
@@ -56,13 +57,14 @@ export const getMaintenanceTableMenuItems = (
   rowId: string,
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
   setShowActionDialog: (v: boolean) => void,
-  // setShowDeleteDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   downloadItem: (id: string) => Promise<void>,
   openDeleteDialog: (
     id: string,
     config: { resourcePath: Resource; queryKey: readonly unknown[] },
   ) => void,
+  setOpenChatSidebar: (v: boolean) => void,
+  openChatSidebar: boolean,
 ): TableMenuItemActions[] => [
   {
     id: "1",
@@ -70,7 +72,6 @@ export const getMaintenanceTableMenuItems = (
     label: "Edit",
     icon: Pencil,
     onClick: () => {
-      // console.log("update-maintenance-id:", rowId);
       setShowUpdateMaintenanceDialog(true);
       setSelectedRowId(rowId);
     },
@@ -104,6 +105,18 @@ export const getMaintenanceTableMenuItems = (
     icon: DownloadIcon,
     onClick: () => {
       downloadItem(rowId);
+    },
+  },
+  {
+    id: "5",
+    label: "Comments",
+    url: `/maintenance-request/${rowId}/comments`,
+    icon: MessageSquare,
+    onClick: () => {
+      console.log("comments-row", rowId);
+      console.log("comments-btn-clicked:", openChatSidebar);
+      setOpenChatSidebar(true);
+      setSelectedRowId(rowId);
     },
   },
 ];

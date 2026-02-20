@@ -28,6 +28,10 @@ export type AppContextType = {
   activeItem: string | null;
   setActiveItem: Dispatch<SetStateAction<string | null>>;
 
+  // $ Comments Sidebar State
+  openChatSidebar: boolean;
+  setOpenChatSidebar: Dispatch<SetStateAction<boolean>>;
+
   // $ Modals and Dialog
   showUpdateMaintenanceDialog: boolean;
   setShowUpdateMaintenanceDialog: (v: boolean) => void;

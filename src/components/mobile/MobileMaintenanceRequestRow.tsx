@@ -12,10 +12,8 @@ type Props = {
 
 export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
   const navigate = useNavigate();
-  const { setGenericData, setShowDeleteDialog, genericData } =
-    useGlobalContext();
+  const { setGenericData, setShowDeleteDialog } = useGlobalContext();
 
-  console.log(genericData);
   return (
     <div
       className="hover:cursor-pointer dark:border rounded-md p-3 mb-2 bg-gray-100 dark:bg-bgdark"
