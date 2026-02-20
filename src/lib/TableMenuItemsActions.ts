@@ -64,7 +64,6 @@ export const getMaintenanceTableMenuItems = (
     config: { resourcePath: Resource; queryKey: readonly unknown[] },
   ) => void,
   setOpenChatSidebar: (v: boolean) => void,
-  openChatSidebar: boolean,
 ): TableMenuItemActions[] => [
   {
     id: "1",
@@ -113,10 +112,10 @@ export const getMaintenanceTableMenuItems = (
     url: `/maintenance-request/${rowId}/comments`,
     icon: MessageSquare,
     onClick: () => {
-      console.log("comments-row", rowId);
-      console.log("comments-btn-clicked:", openChatSidebar);
       setOpenChatSidebar(true);
       setSelectedRowId(rowId);
+      // console.log("comments-row", rowId);
+      // console.log("comments-btn-clicked:", openChatSidebar);
     },
   },
 ];

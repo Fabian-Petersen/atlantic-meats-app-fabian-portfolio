@@ -47,7 +47,6 @@ const MaintenanceRequestOverviewPage = () => {
     setSelectedRowId,
     openDeleteDialog,
     setOpenChatSidebar,
-    openChatSidebar,
   } = useGlobalContext();
 
   // $ Pass the props to the function generating the columns to be used in the table
@@ -58,7 +57,6 @@ const MaintenanceRequestOverviewPage = () => {
     downloadItem,
     openDeleteDialog,
     setOpenChatSidebar,
-    openChatSidebar,
   );
 
   const table = useReactTable({
@@ -86,7 +84,7 @@ const MaintenanceRequestOverviewPage = () => {
   };
 
   return (
-    <div className="flex w-full p-4 h-auto border border-red-500 relative">
+    <div className="flex w-full p-4 h-auto">
       <ChatSidebar />
       <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto">
         <FormHeading

@@ -43,11 +43,11 @@ export function DropdownMenuButtonDialog({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="w-28 bg-white dark:bg-bgdark dark:text-gray-100 shadow-lg border border-gray-500 text-font p-1"
+          className="w-36 bg-white border-gray-50 dark:bg-bgdark dark:text-gray-100 shadow-lg text-font p-1"
           align="end"
         >
           {/* <DropdownMenuLabel className="text-sm">Action</DropdownMenuLabel> */}
-          <DropdownMenuGroup className="space-y-2">
+          <DropdownMenuGroup className="space-y-2 border-none">
             {menuItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -56,7 +56,7 @@ export function DropdownMenuButtonDialog({
                   className="py-1.5"
                   onClick={item.onClick}
                 >
-                  <div className="text-font text-xs px-1 flex gap-2 w-full justify-center items-center hover:cursor-pointer">
+                  <div className="text-font text-xs px-1 flex gap-4 w-full justify-center items-center hover:cursor-pointer">
                     <span className="flex h-full p-0">
                       <Icon />
                     </span>

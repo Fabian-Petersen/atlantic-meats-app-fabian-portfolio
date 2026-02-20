@@ -14,7 +14,6 @@ export const getMaintenanceColumns = (
     config: { resourcePath: Resource; queryKey: readonly unknown[] },
   ) => void,
   setOpenChatSidebar: (v: boolean) => void,
-  openChatSidebar: boolean,
 ): ColumnDef<JobAPIResponse>[] => [
   {
     accessorKey: "jobCreated",
@@ -95,7 +94,6 @@ export const getMaintenanceColumns = (
         downloadItem,
         openDeleteDialog,
         setOpenChatSidebar,
-        openChatSidebar,
       );
       return (
         <div className="tex-center" onClick={(e) => e.stopPropagation()}>
