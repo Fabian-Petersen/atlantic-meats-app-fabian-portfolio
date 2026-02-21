@@ -22,7 +22,6 @@ function MaintenanceSingleItemInfo() {
     queryKey: ["MAINTENANCE-REQUEST-ITEM"],
     resourcePath: "maintenance-request",
   });
-  console.log("data", item);
   const navigate = useNavigate();
 
   if (isPending) {

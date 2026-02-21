@@ -1,14 +1,21 @@
 import useGlobalContext from "@/context/useGlobalContext";
 import { X } from "lucide-react";
-import { Textarea } from "../ui/textarea";
-// import { useById } from "@/utils/api";
-// import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
-// import type { JobAPIResponse } from "@/schemas";
+import CommentForm from "./CommentForm";
+import type { CommentAPIResponse } from "@/schemas";
+import CommentItem from "./CommentItem";
+import { useById } from "@/utils/api";
+
 // import { ErrorPage } from "../features/Error";
-import { SendHorizonal } from "lucide-react";
 
 const ChatSidebar = () => {
-  const { openChatSidebar, setOpenChatSidebar } = useGlobalContext();
+  const { openChatSidebar, setOpenChatSidebar, selectedRowId } =
+    useGlobalContext();
+
+  const { data: comments = [] } = useById<CommentAPIResponse[]>({
+    id: selectedRowId ?? "",
+    queryKey: ["CommentsKey"],
+    resourcePath: "comment",
+  });
 
   // console.log(selectedRowId);
   // const { data: item } = useById<JobAPIResponse>({
@@ -28,8 +35,6 @@ const ChatSidebar = () => {
   //   return <ErrorPage title="Error loading comments!!" message="" />;
   // }
 
-  const handleSubmit = () => {};
-
   return (
     <div
       className={`right-0 z-1000 w-96 fixed top-16 lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-l border-l-gray-200 dark:border-r-[rgba(55,65,81,0.5)]
@@ -45,46 +50,16 @@ const ChatSidebar = () => {
         >
           <X />
         </button>
-        {/* Add a comment section */}
-        <div className="bg-white w-full p-2 mt-10 rounded-md h-auto gap-4 flex-col flex">
-          <p className="text-gray-500 text-md">Add a comment</p>
-          <Textarea
-            rows={1}
-            className="border-gray-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-400 focus-visible:ring-offset-0 text-gray-500"
-          />
-          <div className="w-full flex justify-end">
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className="hover:cursor-pointer rounded-full bg-primary py-2 px-1 min-w-24 justify-center max-w-32 text-white flex gap-2 items-center"
-            >
-              <span className="text-md">Send</span>
-              <SendHorizonal size={16} />
-            </button>
-          </div>
+        {selectedRowId && <CommentForm selectedRowId={selectedRowId} />}
+        <div className="bg-gray-50 min-h-full overflow-y-scroll flex flex-col gap-2 no-scrollbar p-2 rounded-lg">
+          {comments.map((comment, index) => (
+            <CommentItem
+              key={comment.id}
+              comment={comment}
+              align={index % 2 === 0 ? "left" : "right"}
+            />
+          ))}
         </div>
-        {/* Comments */}
-        <div className="flex flex-col gap-4 p-2">
-          <div className="flex flex-col gap-2 bg-gray-100 rounded-md min-h-16 h-auto p-2">
-            <div className="flex gap-2">
-              <p className="text-xs text-gray-500">Fabian Petersen</p>
-              <p className="text-gray-500 text-[0.65rem]">2026-02-19 15:00</p>
-            </div>
-            <p className="text-xs text-gray-600">
-              Can you please let me know if the contractor is on site already?
-            </p>
-          </div>
-          <div className="flex flex-col gap-2 bg-gray-100 rounded-md min-h-16 h-auto p-2">
-            <div className="flex gap-2">
-              <p className="text-xs text-gray-500">Fabian Petersen</p>
-              <p className="text-gray-400 text-[0.65rem]">2026-02-19 15:00</p>
-            </div>
-            <p className="text-xs text-gray-600">
-              Can you please let me know if the contractor is on site already?
-            </p>
-          </div>
-        </div>
-        {/* Content */}
       </div>
     </div>
   );

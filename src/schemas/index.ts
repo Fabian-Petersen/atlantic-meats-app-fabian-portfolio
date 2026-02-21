@@ -9,6 +9,7 @@ import {
 import { jobRequestSchema } from "./maintenanceJobSchemas";
 import { actionRequestSchema } from "./maintenanceActionSchemas";
 import { assetRequestSchema } from "./assetSchemas";
+import { commentRequestSchema, commentResponseSchema } from "./commentSchemas";
 
 // #  Export Schemas
 export {
@@ -20,6 +21,8 @@ export {
   userAttributesSchema,
   verifyPinSchema,
   forgotPasswordSchema,
+  commentRequestSchema,
+  commentResponseSchema,
 };
 
 // ! Types
@@ -56,6 +59,13 @@ import type {
   AssetAPIResponse,
 } from "./assetSchemas";
 
+// % Comment Types
+import type {
+  CommentRequestFormValues,
+  CommentPayload,
+  CommentAPIResponse,
+} from "./commentSchemas";
+
 export type {
   // Auth Types
   LoginFormValues,
@@ -78,6 +88,10 @@ export type {
   AssetTableRow,
   CreateAssetPayload,
   AssetAPIResponse,
+  // Comment
+  CommentAPIResponse,
+  CommentRequestFormValues,
+  CommentPayload,
 };
 
 // GlobalContext.ts

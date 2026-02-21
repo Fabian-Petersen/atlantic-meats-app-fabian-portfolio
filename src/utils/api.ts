@@ -11,6 +11,7 @@ import type {
   ActionRequestPayload,
   AssetAPIResponse,
 } from "@/schemas";
+import type { CommentRequestFormValues } from "@/schemas/commentSchemas";
 
 export type Resource =
   | "asset" // POST & DELETE, PUT, GET assetById
@@ -19,12 +20,14 @@ export type Resource =
   | "maintenance-actions-list" // GET all actions
   | "maintenance-jobcard" // GET jobcardById
   | "maintenance-request" // POST & DELETE, GET requestsById
-  | "maintenance-requests-list"; // GET all maintenance requests
+  | "maintenance-requests-list" // GET all maintenance requests
+  | "comment"; // POST a comment
 
 // $ Combine the types into a union type for the generic functions
 export type EntityType =
   | AssetRequestFormValues
   | JobRequestFormValues
+  | CommentRequestFormValues
   | AssetAPIResponse;
 
 // $ Format the data according to API requirements
@@ -39,6 +42,7 @@ export type EntityType =
 // $ =========================
 const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
 const ASSETS_REQUESTS_KEY = ["assetRequests"];
+// const POST_KEYS = ["commentsRequests"];
 
 // $ =========================
 // $ Hooks
@@ -144,6 +148,28 @@ export const useMaintenanceRequestById = (id: string) => {
 };
 
 // $ CREATE "Create a Generic POST Request funtion that can be used across different resources (e.g., maintenance requests, assets, etc.)"
+
+export const usePOST = (options: {
+  resourcePath: Resource;
+  queryKey: readonly unknown[];
+}) => {
+  const queryClient = useQueryClient();
+  const { resourcePath, queryKey } = options;
+
+  return useMutation({
+    mutationFn: async (payload: EntityType) => {
+      const { data } = await apiClient.post(`${resourcePath}`, payload, {
+        headers: { "Content-Type": "application/json" },
+      });
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKey,
+      });
+    },
+  });
+};
 
 export const useCreateMaintenanceRequest = () => {
   const queryClient = useQueryClient();
