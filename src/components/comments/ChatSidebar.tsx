@@ -1,5 +1,5 @@
 import useGlobalContext from "@/context/useGlobalContext";
-import { X } from "lucide-react";
+// import { X } from "lucide-react";
 import CommentForm from "./CommentForm";
 import type { CommentAPIResponse } from "@/schemas";
 import CommentItem from "./CommentItem";
@@ -37,20 +37,25 @@ const ChatSidebar = () => {
 
   return (
     <div
-      className={`right-0 z-1000 w-96 fixed top-16 lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-l border-l-gray-200 dark:border-r-[rgba(55,65,81,0.5)]
+      className={`overflow-y-scroll right-0 z-1000 w-96 fixed top-16 lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-l border-l-gray-200 dark:border-r-[rgba(55,65,81,0.5)]
       bg-white dark:bg-bgdark transform transition-transform duration-200 ease-in translate-x-0
     ${openChatSidebar ? "translate-x-0" : "translate-x-full ease-out"}`}
     >
-      <div className="flex flex-col h-full gap-4 mt-6 p-1">
-        <button
+      <div className="flex flex-col h-full gap-4 p-1">
+        {/* <button
           className="hover:cursor-pointer hover:bg-gray-200 rounded-full p-2 absolute text-xl top-5 right-5 z-2000"
           type="button"
           aria-label="close button"
           onClick={() => setOpenChatSidebar(false)}
         >
           <X />
-        </button>
-        {selectedRowId && <CommentForm selectedRowId={selectedRowId} />}
+        </button> */}
+        {selectedRowId && (
+          <CommentForm
+            selectedRowId={selectedRowId}
+            setOpenChatSidebar={setOpenChatSidebar}
+          />
+        )}
         <div className="bg-gray-50 min-h-full overflow-y-scroll flex flex-col gap-2 no-scrollbar p-2 rounded-lg">
           {comments.map((comment, index) => (
             <CommentItem

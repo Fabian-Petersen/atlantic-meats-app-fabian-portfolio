@@ -42,6 +42,7 @@ export type EntityType =
 // $ =========================
 const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
 const ASSETS_REQUESTS_KEY = ["assetRequests"];
+// const POST_COMMENT = ["CommentsKey"];
 // const POST_KEYS = ["commentsRequests"];
 
 // $ =========================
@@ -164,12 +165,16 @@ export const usePOST = (options: {
       return data;
     },
     onSuccess: () => {
+      console.log("commentsKey:", queryKey);
       queryClient.invalidateQueries({
         queryKey: queryKey,
       });
     },
   });
 };
+
+//  await queryClient.invalidateQueries({ queryKey: COMMENTS_KEY });
+// await queryClient.refetchQueries({ queryKey: COMMENTS_KEY, type: "active" });
 
 export const useCreateMaintenanceRequest = () => {
   const queryClient = useQueryClient();

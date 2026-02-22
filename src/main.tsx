@@ -22,10 +22,10 @@ import configureAmplify from "../aws/amplifyConfig.ts";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 60, // Data will not be considered stale for 1 hour
-      refetchOnWindowFocus: false, // Prevent refetching when the window is focused
-      refetchOnReconnect: false, // Prevent refetching when the connection is restored
-      refetchOnMount: false, // Prevent refetching when a component mounts } },
+      // staleTime: 1000 * 60 * 60, // Data will not be considered stale for 1 hour
+      // refetchOnWindowFocus: false, // Prevent refetching when the window is focused
+      // refetchOnReconnect: false, // Prevent refetching when the connection is restored
+      // refetchOnMount: false, // Prevent refetching when a component mounts } },
     },
   },
 });
@@ -45,5 +45,5 @@ createRoot(document.getElementById("root")!).render(
       </AuthProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-  </StrictMode>
+  </StrictMode>,
 );
