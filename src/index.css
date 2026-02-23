@@ -91,3 +91,13 @@ html {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+/* These styles remove the outline around the graphs when in focus */
+.recharts-wrapper:focus,
+.recharts-surface:focus {
+  outline: none;
+}
+
+.recharts-wrapper *:focus {
+  outline: none !important;
+}

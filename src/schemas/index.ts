@@ -104,6 +104,10 @@ export type PresignedUrlResponse = {
   content_type: string;
 }[];
 
+export type JobcardPresignedUrlResponse = {
+  jobcard_url: string;
+};
+
 // $ Type handling the table menu actions (delete, update, edit, download)
 export type PendingTableAction = {
   id: string;

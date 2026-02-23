@@ -8,6 +8,13 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+// type Props = {
+//   payload: {
+//     name: string;
+//     value: number;
+//   };
+// };
+
 function MaintenanceRequestsChart() {
   const revenueData = [
     { name: "Jan", value: 4000 },
@@ -24,19 +31,39 @@ function MaintenanceRequestsChart() {
     { name: "Dec", value: 2390 },
   ];
 
+  // const handleBarClick = (data: Props) => {
+  //   console.log("Month:", data.name);
+  //   console.log("index:", data.payload);
+  // };
+
   return (
-    <>
+    <div className="h-[300px] outline-none focus:outline-none focus:ring-0">
       <ChartHeading title="Monthly Maintenance Requests" />
       <ResponsiveContainer width="100%" height="90%">
-        <BarChart data={revenueData} barSize={10}>
+        <BarChart data={revenueData} barSize={20}>
           <XAxis dataKey="name" style={{ fontSize: "15px" }} />
           <YAxis style={{ fontSize: "15px" }} />
-          <Tooltip />
-          <Bar dataKey="value" fill="#3182CE" />
+          <Tooltip cursor={{ fill: "#fcb53b40" }} />
+          {/* CHnage this color to change the hover shade */}
+          <Bar
+            dataKey="value"
+            fill="#fcb53b"
+            activeBar={{
+              fill: "#fcb53b",
+              stroke: "none",
+              strokeWidth: 0,
+            }}
+            style={{ cursor: "pointer" }}
+            //   onClick={(revenueData, index) => {
+            //     // invoke your function
+            //     handleBarClick(revenueData, index);
+            //   }}
+            //
+          />
         </BarChart>
       </ResponsiveContainer>
-    </>
+    </div>
   );
 }
-
+// hover:bg-primary/20
 export default MaintenanceRequestsChart;
