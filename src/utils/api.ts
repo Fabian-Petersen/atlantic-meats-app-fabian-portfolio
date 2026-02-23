@@ -10,6 +10,7 @@ import type {
   PresignedUrlResponse,
   ActionRequestPayload,
   AssetAPIResponse,
+  JobAPIResponse,
 } from "@/schemas";
 import type { CommentRequestFormValues } from "@/schemas/commentSchemas";
 
@@ -24,11 +25,13 @@ export type Resource =
   | "comment"; // POST a comment
 
 // $ Combine the types into a union type for the generic functions
-export type EntityType =
+export type RequestType =
   | AssetRequestFormValues
   | JobRequestFormValues
   | CommentRequestFormValues
   | AssetAPIResponse;
+
+export type ResponseType = AssetAPIResponse | JobAPIResponse;
 
 // $ Format the data according to API requirements
 // const formatData = <T extends EntityType>(item: T): Omit<T, "id"> => {
@@ -50,16 +53,16 @@ const ASSETS_REQUESTS_KEY = ["assetRequests"];
 // $ =========================
 
 // $ Generic: GET All
-export const useGetAll = <T>(
+export const useGetAll = <ResponseType>(
   resourcePath: Resource,
   queryKey: readonly unknown[] = [resourcePath],
 ) => {
-  return useQuery<T>({
+  return useQuery<ResponseType>({
     queryKey,
     queryFn: async () => {
       try {
         const response = await apiClient.get(`/${resourcePath}`);
-        return response.data as T;
+        return response.data as ResponseType;
       } catch (error) {
         console.error(`Error fetching ${resourcePath}:`, error);
         throw error;
@@ -158,14 +161,14 @@ export const usePOST = (options: {
   const { resourcePath, queryKey } = options;
 
   return useMutation({
-    mutationFn: async (payload: EntityType) => {
+    mutationFn: async (payload: RequestType) => {
       const { data } = await apiClient.post(`${resourcePath}`, payload, {
         headers: { "Content-Type": "application/json" },
       });
       return data;
     },
     onSuccess: () => {
-      console.log("commentsKey:", queryKey);
+      // console.log("commentsKey:", queryKey);
       queryClient.invalidateQueries({
         queryKey: queryKey,
       });
@@ -292,8 +295,8 @@ export const useDownloadPdf = (options: { resourcePath: Resource }) => {
   const { resourcePath } = options;
   return useMutation({
     mutationFn: async (id: string) => {
-      console.log("request_id:", id);
-      console.log("resource_path:", resourcePath);
+      // console.log("request_id:", id);
+      // console.log("resource_path:", resourcePath);
       const response = await apiClient.get(`${resourcePath}/${id}`, {
         responseType: "blob",
       });
@@ -308,7 +311,6 @@ export const useDownloadPdf = (options: { resourcePath: Resource }) => {
       link.href = url;
       link.download = "document.pdf";
       link.click();
-
       window.URL.revokeObjectURL(url);
     },
   });

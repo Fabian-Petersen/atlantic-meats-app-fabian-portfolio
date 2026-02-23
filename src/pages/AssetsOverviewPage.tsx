@@ -25,7 +25,7 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import type { AssetTableRow } from "@/schemas";
+import type { AssetAPIResponse } from "@/schemas";
 import { ErrorPage } from "@/components/features/Error";
 import AddNewItemButton from "@/components/features/AddNewItemButton";
 
@@ -35,7 +35,7 @@ const AssetsOverviewPage = () => {
   const navigate = useNavigate();
 
   const ASSETS_REQUESTS_KEY = ["assetRequests"];
-  const { data, isPending, isError, refetch } = useGetAll<AssetTableRow[]>(
+  const { data, isPending, isError, refetch } = useGetAll<AssetAPIResponse[]>(
     "assets-list",
     ASSETS_REQUESTS_KEY,
   );
