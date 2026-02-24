@@ -96,62 +96,6 @@ export const useById = <T>(options: {
   });
 };
 
-// $ Generic: DELETE
-export const useDeleteItem = (options: {
-  resourcePath: Resource;
-  queryKey: readonly unknown[];
-}) => {
-  const queryClient = useQueryClient();
-  const { resourcePath, queryKey } = options;
-
-  return useMutation({
-    mutationFn: async (id: string): Promise<void> => {
-      await apiClient.delete(`${resourcePath}/${id}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey });
-    },
-  });
-};
-
-// % ========================================================================
-
-export const useMaintenanceRequests = () => {
-  return useQuery<JobRequestFormValues[]>({
-    queryKey: MAINTENANCE_REQUESTS_KEY,
-    queryFn: async () => {
-      const { data } = await apiClient.get<JobRequestFormValues[]>(
-        "/maintenance-request",
-      );
-      return data;
-    },
-  });
-};
-
-export const useAssetsList = () => {
-  return useQuery<AssetRequestFormValues[]>({
-    queryKey: ASSETS_REQUESTS_KEY,
-    queryFn: async () => {
-      const { data } = await apiClient.get<AssetRequestFormValues[]>("/asset");
-      return data;
-    },
-  });
-};
-
-// $ GET by ID
-export const useMaintenanceRequestById = (id: string) => {
-  return useQuery<JobRequestFormValues>({
-    queryKey: [...MAINTENANCE_REQUESTS_KEY, id],
-    queryFn: async () => {
-      const { data } = await apiClient.get<JobRequestFormValues>(
-        `/maintenance-request/${id}`,
-      );
-      return data;
-    },
-    enabled: !!id,
-  });
-};
-
 // $ Generic: POST
 export const usePOST = (options: {
   resourcePath: Resource;
@@ -172,6 +116,85 @@ export const usePOST = (options: {
       queryClient.invalidateQueries({
         queryKey: queryKey,
       });
+    },
+  });
+};
+
+// $ Generic: UPDATE/PUT
+type UpdateArgs<TPayload> = {
+  id: string;
+  payload: TPayload;
+};
+
+export const useUpdateItem = <TPayload, TResponse>({
+  resourcePath,
+  queryKey,
+}: {
+  resourcePath: string;
+  queryKey: readonly unknown[];
+}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      payload,
+    }: UpdateArgs<TPayload>): Promise<TResponse> => {
+      // console.log("request_id:", id);
+      // console.log("resource_path:", resourcePath);
+      const { data } = await apiClient.put<TResponse>(
+        `/${resourcePath}/${id}`,
+        payload,
+      );
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
+};
+
+// $ Generic: DELETE
+export const useDeleteItem = (options: {
+  resourcePath: Resource;
+  queryKey: readonly unknown[];
+}) => {
+  const queryClient = useQueryClient();
+  const { resourcePath, queryKey } = options;
+
+  return useMutation({
+    mutationFn: async (id: string): Promise<void> => {
+      await apiClient.delete(`${resourcePath}/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
+};
+
+// $ Download maintenance jobcard pdf
+// type JobcardPresignedUrlResponse = {
+//   jobcard_url: string;
+// };
+
+export const useDownloadPdf = (options: { resourcePath: Resource }) => {
+  const { resourcePath } = options;
+
+  return useMutation({
+    mutationFn: async (id: string): Promise<JobcardPresignedUrlResponse> => {
+      const { data } = await apiClient.get<JobcardPresignedUrlResponse>(
+        `${resourcePath}/${id}`,
+      );
+      return data;
+    },
+
+    onSuccess: (data) => {
+      // console.log("jobcard_url:", jobcard_url);
+      // $ Option 1: trigger a download in the same tab
+      window.location.href = data.jobcard_url;
+
+      // $ Option 2 (alternative): open in new tab
+      // window.open(jobcard_url, "_blank", "noopener,noreferrer");
     },
   });
 };
@@ -259,63 +282,40 @@ export const useUpdateMaintenanceRequest = () => {
   });
 };
 
-// $ Generic: UPDATE/PUT
-type UpdateArgs<TPayload> = {
-  id: string;
-  payload: TPayload;
-};
+// % ========================================================================
 
-export const useUpdateItem = <TPayload, TResponse>({
-  resourcePath,
-  queryKey,
-}: {
-  resourcePath: string;
-  queryKey: readonly unknown[];
-}) => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({
-      id,
-      payload,
-    }: UpdateArgs<TPayload>): Promise<TResponse> => {
-      // console.log("request_id:", id);
-      // console.log("resource_path:", resourcePath);
-      const { data } = await apiClient.put<TResponse>(
-        `/${resourcePath}/${id}`,
-        payload,
+export const useMaintenanceRequests = () => {
+  return useQuery<JobRequestFormValues[]>({
+    queryKey: MAINTENANCE_REQUESTS_KEY,
+    queryFn: async () => {
+      const { data } = await apiClient.get<JobRequestFormValues[]>(
+        "/maintenance-request",
       );
       return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey });
     },
   });
 };
 
-// $ Download maintenance jobcard pdf
-// type JobcardPresignedUrlResponse = {
-//   jobcard_url: string;
-// };
+export const useAssetsList = () => {
+  return useQuery<AssetRequestFormValues[]>({
+    queryKey: ASSETS_REQUESTS_KEY,
+    queryFn: async () => {
+      const { data } = await apiClient.get<AssetRequestFormValues[]>("/asset");
+      return data;
+    },
+  });
+};
 
-export const useDownloadPdf = (options: { resourcePath: Resource }) => {
-  const { resourcePath } = options;
-
-  return useMutation({
-    mutationFn: async (id: string): Promise<JobcardPresignedUrlResponse> => {
-      const { data } = await apiClient.get<JobcardPresignedUrlResponse>(
-        `${resourcePath}/${id}`,
+// $ GET by ID
+export const useMaintenanceRequestById = (id: string) => {
+  return useQuery<JobRequestFormValues>({
+    queryKey: [...MAINTENANCE_REQUESTS_KEY, id],
+    queryFn: async () => {
+      const { data } = await apiClient.get<JobRequestFormValues>(
+        `/maintenance-request/${id}`,
       );
       return data;
     },
-
-    onSuccess: (data) => {
-      // console.log("jobcard_url:", jobcard_url);
-      // $ Option 1: trigger a download in the same tab
-      window.location.href = data.jobcard_url;
-
-      // $ Option 2 (alternative): open in new tab
-      // window.open(jobcard_url, "_blank", "noopener,noreferrer");
-    },
+    enabled: !!id,
   });
 };
