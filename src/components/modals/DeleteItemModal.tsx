@@ -19,7 +19,7 @@ const DeleteItemModal = () => {
 
   const config = deleteConfig ?? {
     resourcePath: "asset" as Resource,
-    queryKey: [] as const,
+    queryKey: ["assetRequests"] as const,
   };
 
   const { mutateAsync: deleteItem, isPending } = useDeleteItem(config);
@@ -35,11 +35,11 @@ const DeleteItemModal = () => {
     } catch (error) {
       console.log(error);
       console.error("Delete failed:", error);
+
       if (axios.isAxiosError<{ message: string }>(error)) {
         // The error returned is AxiosError hence to access response the type must be handled as such
         toast.error(error?.response?.data?.message); // Pass the message from the backend to the user to inform user what must be done
-        toast.error("Failed to delete item");
-      }
+      } else toast.error("Failed to delete item");
     }
   };
 

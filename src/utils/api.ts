@@ -152,8 +152,7 @@ export const useMaintenanceRequestById = (id: string) => {
   });
 };
 
-// $ CREATE "Create a Generic POST Request funtion that can be used across different resources (e.g., maintenance requests, assets, etc.)"
-
+// $ Generic: POST
 export const usePOST = (options: {
   resourcePath: Resource;
   queryKey: readonly unknown[];
@@ -260,7 +259,7 @@ export const useUpdateMaintenanceRequest = () => {
   });
 };
 
-// $ UPDATE ITEM
+// $ Generic: UPDATE/PUT
 type UpdateArgs<TPayload> = {
   id: string;
   payload: TPayload;
@@ -276,7 +275,10 @@ export const useUpdateItem = <TPayload, TResponse>({
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, payload }: UpdateArgs<TPayload>) => {
+    mutationFn: async ({
+      id,
+      payload,
+    }: UpdateArgs<TPayload>): Promise<TResponse> => {
       // console.log("request_id:", id);
       // console.log("resource_path:", resourcePath);
       const { data } = await apiClient.put<TResponse>(
@@ -300,43 +302,20 @@ export const useDownloadPdf = (options: { resourcePath: Resource }) => {
   const { resourcePath } = options;
 
   return useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async (id: string): Promise<JobcardPresignedUrlResponse> => {
       const { data } = await apiClient.get<JobcardPresignedUrlResponse>(
         `${resourcePath}/${id}`,
       );
-      return data.jobcard_url;
+      return data;
     },
 
-    onSuccess: (jobcard_url) => {
+    onSuccess: (data) => {
       // console.log("jobcard_url:", jobcard_url);
       // $ Option 1: trigger a download in the same tab
-      window.location.href = jobcard_url;
+      window.location.href = data.jobcard_url;
 
       // $ Option 2 (alternative): open in new tab
       // window.open(jobcard_url, "_blank", "noopener,noreferrer");
     },
   });
 };
-
-// export const useDownloadPdf = (options: { resourcePath: Resource }) => {
-//   const { resourcePath } = options;
-//   return useMutation({
-//     mutationFn: async (id: string) => {
-//       const response = await apiClient.get(`${resourcePath}/${id}`, {
-//         responseType: "blob",
-//       });
-//       return response.data;
-//     },
-//     onSuccess: (blob) => {
-//       const url = window.URL.createObjectURL(
-//         new Blob([blob], { type: "application/pdf" }),
-//       );
-
-//       const link = document.createElement("a");
-//       link.href = url;
-//       link.download = "document.pdf";
-//       link.click();
-//       window.URL.revokeObjectURL(url);
-//     },
-//   });
-// };

@@ -18,6 +18,7 @@ export type TableMenuItemActions = {
 };
 
 import type { Resource } from "@/utils/api";
+import type { JobcardPresignedUrlResponse } from "@/schemas";
 
 export const getAssetTableMenuItems = (
   rowId: string,
@@ -58,7 +59,7 @@ export const getMaintenanceTableMenuItems = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
   setShowActionDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
-  downloadItem: (id: string) => Promise<void>,
+  downloadItem: (id: string) => Promise<JobcardPresignedUrlResponse>,
   openDeleteDialog: (
     id: string,
     config: { resourcePath: Resource; queryKey: readonly unknown[] },

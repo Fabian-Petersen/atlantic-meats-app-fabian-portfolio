@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { JobAPIResponse } from "@/schemas";
+import type { JobAPIResponse, JobcardPresignedUrlResponse } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getMaintenanceTableMenuItems } from "@/lib/TableMenuItemsActions";
 import type { Resource } from "@/utils/api";
@@ -8,7 +8,7 @@ export const getMaintenanceColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
   setShowActionDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
-  downloadItem: (id: string) => Promise<void>,
+  downloadItem: (id: string) => Promise<JobcardPresignedUrlResponse>,
   openDeleteDialog: (
     selectedRowId: string,
     config: { resourcePath: Resource; queryKey: readonly unknown[] },
