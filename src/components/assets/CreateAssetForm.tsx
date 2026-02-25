@@ -122,12 +122,12 @@ const CreateAssetForm = () => {
 
       // $ 4️⃣ Upload compressed images to S3
       await Promise.all(
-        presigned_urls.map((item: PresignedUrlResponse[number]) => {
-          const file = compressedFiles.find((f) => f.name === item.filename);
+        presigned_urls.map((image: PresignedUrlResponse[number]) => {
+          const file = compressedFiles.find((f) => f.name === image.filename);
 
           if (!file) return Promise.resolve();
 
-          return fetch(item.url, {
+          return fetch(image.url, {
             method: "PUT",
             headers: {
               "Content-Type": "image/webp",

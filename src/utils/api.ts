@@ -7,7 +7,7 @@ import type {
   CreateAssetPayload,
   JobRequestFormValues,
   CreateJobPayload,
-  PresignedUrlResponse,
+  // PresignedUrlResponse,
   JobcardPresignedUrlResponse,
   ActionRequestPayload,
   AssetAPIResponse,
@@ -58,11 +58,11 @@ export const useGetAll = <ResponseType>(
   resourcePath: Resource,
   queryKey: readonly unknown[] = [resourcePath],
 ) => {
-  return useQuery<ResponseType>({
+  return useQuery({
     queryKey,
-    queryFn: async () => {
+    queryFn: async (): Promise<ResponseType> => {
       try {
-        const response = await apiClient.get(`/${resourcePath}`);
+        const response = await apiClient.get<ResponseType>(`/${resourcePath}`);
         return response.data as ResponseType;
       } catch (error) {
         console.error(`Error fetching ${resourcePath}:`, error);
@@ -72,22 +72,18 @@ export const useGetAll = <ResponseType>(
   });
 };
 
-type WithImages = {
-  presignedURLs?: PresignedUrlResponse[];
-};
-
 // $ Generic: GET by ID
-export const useById = <T>(options: {
+export const useById = <ResponseType>(options: {
   id: string;
   queryKey: readonly unknown[];
   resourcePath: Resource;
 }) => {
   // console.log("🔥 useById called with options:", options);
   const { id, queryKey, resourcePath } = options;
-  return useQuery<T & WithImages>({
+  return useQuery<ResponseType>({
     queryKey: [...queryKey, id],
-    queryFn: async () => {
-      const { data } = await apiClient.get<T & WithImages>(
+    queryFn: async (): Promise<ResponseType> => {
+      const { data } = await apiClient.get<ResponseType>(
         `${resourcePath}/${id}`,
       );
       return data;
@@ -97,7 +93,7 @@ export const useById = <T>(options: {
 };
 
 // $ Generic: POST
-export const usePOST = (options: {
+export const usePOST = <RequestType, ResponseType>(options: {
   resourcePath: Resource;
   queryKey: readonly unknown[];
 }) => {
@@ -105,14 +101,18 @@ export const usePOST = (options: {
   const { resourcePath, queryKey } = options;
 
   return useMutation({
-    mutationFn: async (payload: RequestType) => {
-      const { data } = await apiClient.post(`${resourcePath}`, payload, {
-        headers: { "Content-Type": "application/json" },
-      });
+    mutationFn: async (payload: RequestType): Promise<ResponseType> => {
+      const { data } = await apiClient.post<ResponseType>(
+        `${resourcePath}`,
+        payload,
+        {
+          headers: { "Content-Type": "application/json" },
+        },
+      );
       return data;
     },
     onSuccess: () => {
-      // console.log("commentsKey:", queryKey);
+      // queryKey must be the same as the queryKey for the GET function
       queryClient.invalidateQueries({
         queryKey: queryKey,
       });

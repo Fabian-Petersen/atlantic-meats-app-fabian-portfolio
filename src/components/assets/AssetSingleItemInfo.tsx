@@ -1,17 +1,17 @@
 import Separator from "@/components/dashboardSidebar/Seperator";
-import type { AssetRequestFormValues } from "@/schemas";
+import type { AssetAPIResponse } from "@/schemas";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
 import UpdateAssetDialog from "../modals/UpdateAssetDialog";
 
 type Props = {
-  item: AssetRequestFormValues;
+  item: AssetAPIResponse;
 };
 
 function AssetSingleItemInfo({ item }: Props) {
   const navigate = useNavigate();
-  const { setGenericData, setShowUpdateAssetDialog } = useGlobalContext();
+  const { setShowUpdateAssetDialog, setSelectedRowId } = useGlobalContext();
   return (
     <div className="flex gap flex-col text-font dark:text-gray-100 rounded-md p-4 md:p-2 dark:border-gray-700/50">
       <UpdateAssetDialog />
@@ -52,7 +52,7 @@ function AssetSingleItemInfo({ item }: Props) {
           <Button
             type="button"
             onClick={() => {
-              navigate("/asset");
+              navigate("/assets-list");
             }}
             variant="cancel"
             size="xl"
@@ -66,7 +66,7 @@ function AssetSingleItemInfo({ item }: Props) {
             size="xl"
             className="flex-1"
             onClick={() => {
-              setGenericData(item);
+              setSelectedRowId(item.id);
               setShowUpdateAssetDialog(true);
             }}
           >

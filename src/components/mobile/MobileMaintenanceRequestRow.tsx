@@ -12,7 +12,7 @@ type Props = {
 
 export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
   const navigate = useNavigate();
-  const { setGenericData, setShowDeleteDialog } = useGlobalContext();
+  const { setShowDeleteDialog, setSelectedRowId } = useGlobalContext();
 
   return (
     <div
@@ -49,9 +49,9 @@ export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
               className="py-1 dark:text-gray-200 text-green-700 hover:cursor-pointer hover:text-green-700 bg-green-200/90 flex-1 rounded-full"
               onClick={(e) => {
                 e.stopPropagation();
-                console.log(row.original.id);
+                // console.log(row.original.id);
                 navigate(`/maintenance-list/${row.original.id}`);
-                setGenericData(row.original);
+                setSelectedRowId(row.original.id);
                 //   console.log(actionData);
               }}
             >
@@ -74,7 +74,7 @@ export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
               onClick={(e) => {
                 e.stopPropagation();
                 setShowDeleteDialog(true);
-                setGenericData(row.original);
+                setSelectedRowId(row.original.id);
               }}
             >
               Delete

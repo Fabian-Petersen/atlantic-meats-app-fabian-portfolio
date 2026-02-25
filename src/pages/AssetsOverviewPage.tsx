@@ -22,10 +22,10 @@ import {
 import { getAssetColumns } from "../components/assets/columns";
 // import { getAssetTableMenuItems } from "@/lib/TableMenuItemsActions";
 import useGlobalContext from "@/context/useGlobalContext";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
-import type { AssetAPIResponse } from "@/schemas";
+import type { AssetAPIResponse, AssetTableRow } from "@/schemas";
 import { ErrorPage } from "@/components/features/Error";
 import AddNewItemButton from "@/components/features/AddNewItemButton";
 
@@ -49,6 +49,22 @@ const AssetsOverviewPage = () => {
   const { setShowUpdateAssetDialog, setSelectedRowId, openDeleteDialog } =
     useGlobalContext();
 
+  // $ Map through the data returned to match the TableRow Data Schema
+  const rows: AssetTableRow[] = useMemo(
+    () =>
+      (data ?? []).map((asset) => ({
+        id: asset.id,
+        createdAt: asset.createdAt,
+        location: asset.location,
+        area: asset.area,
+        equipment: asset.equipment,
+        assetID: asset.assetID,
+        serialNumber: asset.serialNumber,
+        condition: asset.condition,
+      })),
+    [data],
+  );
+
   const columns = getAssetColumns(
     setShowUpdateAssetDialog,
     setSelectedRowId,
@@ -56,7 +72,7 @@ const AssetsOverviewPage = () => {
   );
 
   const table = useReactTable({
-    data: data ?? [],
+    data: rows ?? [],
     columns: columns,
     columnResizeMode: "onChange",
     state: { sorting },

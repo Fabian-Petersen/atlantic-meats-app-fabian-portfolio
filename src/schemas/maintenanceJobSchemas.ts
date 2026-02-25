@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { presignedURLSchema } from "./assetSchemas"; //manage the schema in assets since it is the same
 
 // $ Schema to create a maintenance request
 export const jobRequestSchema = z.object({
@@ -13,25 +14,26 @@ export const jobRequestSchema = z.object({
     .min(1, { message: "Give a brief description of the works required" }),
   area: z.string().optional(),
   assetID: z.string().optional(),
+  // NEW uploads only
   images: z.array(z.instanceof(File)).default([]).optional(),
 });
+export type JobRequestFormValues = z.infer<typeof jobRequestSchema>;
 
 // $ Schema for the API Response from the database when fetching the maintenance requests
-export const jobResponseSchema = jobRequestSchema.extend({
-  id: z.string(),
-  jobCreated: z.string(),
-  jobcardNumber: z.string(),
-  status: z.string(),
-  requested_by: z.string(),
-});
+export const jobApiResponseSchema = jobRequestSchema
+  .omit({
+    images: true,
+  })
+  .extend({
+    id: z.string(),
+    jobCreated: z.string(),
+    jobcardNumber: z.string(),
+    status: z.string(),
+    requested_by: z.string(),
+    images: z.array(presignedURLSchema).default([]), // existing images (urls/keys)
+  });
 
-// $ Schema for the Maintenance Table Menu
-export const maintenanceTableRowSchema = jobRequestSchema.extend({
-  id: z.string(),
-  createdAt: z.string(),
-  jobcardNumber: z.string(),
-  status: z.string(),
-});
+export type JobAPIResponse = z.infer<typeof jobApiResponseSchema>;
 
 // $ Type for sending the images to the backend
 export type CreateJobPayload = Omit<JobRequestFormValues, "images"> & {
@@ -41,6 +43,15 @@ export type CreateJobPayload = Omit<JobRequestFormValues, "images"> & {
   }[];
 };
 
-export type JobRequestFormValues = z.infer<typeof jobRequestSchema>;
-export type JobAPIResponse = z.infer<typeof jobResponseSchema>;
+// $ Schema for the Maintenance Table Menu
+export const maintenanceTableRowSchema = jobApiResponseSchema
+  .omit({
+    images: true,
+  })
+  .extend({
+    id: z.string(),
+    createdAt: z.string(),
+    jobcardNumber: z.string(),
+    status: z.string(),
+  });
 export type MaintenanceTableRow = z.infer<typeof maintenanceTableRowSchema>;

@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { ChevronLeftCircle, ChevronRightCircle } from "lucide-react";
 // import {} from "../../../public/images/20251124_150123.jpg";
-import type { PresignedUrlResponse } from "@/pages/MaintRequestSingleItemPage";
+import type { PresignedURL } from "@/schemas/assetSchemas";
 import NoImagePlaceholder from "../features/NoImagePlaceholder";
 
 import FullscreenImageModal from "../modals/FullscreenImageModal";
 
 type Props = {
-  imageUrls: PresignedUrlResponse[];
+  images: PresignedURL[];
   className?: string;
 };
 
-export const AssetSingleItemImages = ({ imageUrls, className }: Props) => {
+export const AssetSingleItemImages = ({ images, className }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const MAX_VISIBLE = 3;
@@ -19,15 +19,15 @@ export const AssetSingleItemImages = ({ imageUrls, className }: Props) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [startIndex, setStartIndex] = useState(0);
 
-  const visibleImages = (imageUrls ?? []).slice(
+  const visibleImages = (images ?? []).slice(
     startIndex,
-    startIndex + MAX_VISIBLE
+    startIndex + MAX_VISIBLE,
   );
 
   const canScrollLeft = startIndex > 0;
-  const canScrollRight = startIndex + MAX_VISIBLE < imageUrls.length;
+  const canScrollRight = startIndex + MAX_VISIBLE < images.length;
 
-  if (!imageUrls || imageUrls.length === 0) {
+  if (!images || images.length === 0) {
     return (
       <div
         className={`${className} bg-white p-2 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full`}
@@ -51,14 +51,14 @@ export const AssetSingleItemImages = ({ imageUrls, className }: Props) => {
         }}
       >
         <img
-          src={imageUrls[activeIndex]?.url}
+          src={images[activeIndex]?.url}
           className="object-cover h-full w-full"
-          alt={imageUrls[activeIndex]?.filename}
+          alt={images[activeIndex]?.filename}
         />
       </button>
       {isOpen && (
         <FullscreenImageModal
-          images={imageUrls.map((img) => img.url)}
+          images={images.map((img) => img.url)}
           setIsOpen={setIsOpen}
           activeIndex={activeIndex}
         />

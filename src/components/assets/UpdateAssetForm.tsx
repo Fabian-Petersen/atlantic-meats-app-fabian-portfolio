@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,11 +10,11 @@ import { useById, useUpdateItem } from "@/utils/api";
 // $ Schema & types
 import { assetRequestSchema } from "@/schemas";
 import type {
+  AssetAPIResponse,
   AssetRequestFormValues,
   CreateAssetPayload,
   PresignedUrlResponse,
 } from "@/schemas";
-import type { WithImages } from "@/pages/AssetsSingleItemPage";
 
 // $ Select options
 import {
@@ -36,7 +36,7 @@ import useGlobalContext from "@/context/useGlobalContext";
 
 type BusinessUnit = keyof typeof CeateAssetFormOptionsData.business_unit;
 
-const ASSETS_KEY = ["assets"];
+const ASSETS_KEY = ["assetRequests"];
 
 const UpdateAssetForm = () => {
   const navigate = useNavigate();
@@ -47,9 +47,7 @@ const UpdateAssetForm = () => {
   const [category, setCategory] = useState<string | null>(null);
 
   // $ Fetch asset
-  const { data: item, isPending } = useById<
-    AssetRequestFormValues & WithImages
-  >({
+  const { data: item, isPending } = useById<AssetAPIResponse>({
     id: id ?? "",
     queryKey: ASSETS_KEY,
     resourcePath: "asset",
@@ -67,11 +65,22 @@ const UpdateAssetForm = () => {
   // $ Form
   const {
     register,
+    reset,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<AssetRequestFormValues>({
-    defaultValues: item,
+    defaultValues: {
+      business_unit: "",
+      area: "",
+      equipment: "",
+      assetID: "",
+      condition: "",
+      location: "",
+      serialNumber: "",
+      additional_notes: "",
+      images: [],
+    },
     resolver: zodResolver(
       assetRequestSchema,
     ) as unknown as Resolver<AssetRequestFormValues>,
@@ -82,6 +91,22 @@ const UpdateAssetForm = () => {
         }
       : undefined,
   });
+
+  useEffect(() => {
+    if (!item) return;
+
+    reset({
+      business_unit: item.business_unit,
+      area: item.area,
+      equipment: item.equipment,
+      assetID: item.assetID,
+      condition: item.condition,
+      location: item.location,
+      serialNumber: item.serialNumber,
+      additional_notes: item.additional_notes,
+      images: [], // File[] cannot be hydrated
+    });
+  }, [item, reset]);
 
   // console.log("item in form:", item);
 

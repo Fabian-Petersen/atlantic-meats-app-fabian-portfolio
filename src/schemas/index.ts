@@ -57,6 +57,7 @@ import type {
   AssetTableRow,
   CreateAssetPayload,
   AssetAPIResponse,
+  PresignedURL,
 } from "./assetSchemas";
 
 // % Comment Types
@@ -92,6 +93,8 @@ export type {
   CommentAPIResponse,
   CommentRequestFormValues,
   CommentPayload,
+  //Images
+  PresignedURL,
 };
 
 // GlobalContext.ts

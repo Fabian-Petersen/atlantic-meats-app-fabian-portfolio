@@ -3,7 +3,7 @@
 import { MoreVertical } from "lucide-react";
 // import useGlobalContext from "@/context/useGlobalContext";
 import type { TableMenuItemActions } from "@/lib/TableMenuItemsActions";
-import type { GlobalData } from "@/schemas";
+import type { AssetTableRow } from "@/schemas";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,7 +26,7 @@ type DropdownMenuDialogProps<GlobalData> = {
 export function DropdownMenuButtonDialog({
   // data,
   menuItems,
-}: DropdownMenuDialogProps<GlobalData>) {
+}: DropdownMenuDialogProps<AssetTableRow>) {
   // const { setGenericData, setPendingTableAction } = useGlobalContext();
   // const rowId = data.id;
   return (

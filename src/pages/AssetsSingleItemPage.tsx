@@ -5,19 +5,14 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "@/utils/api";
 import { AssetSingleItemImages } from "@/components/assets/AssetSingleItemImages";
 import AssetSingleItemInfo from "@/components/assets/AssetSingleItemInfo";
-import type { AssetRequestFormValues } from "@/schemas";
+import type { AssetAPIResponse } from "@/schemas";
 
-export type PresignedUrlResponse = {
-  key: string;
-  filename?: string;
-  url: string;
-};
+// $ The Images urls send back from the backend
+// export type WithImages = {
+//   imageUrls?: PresignedUrlResponse[];
+// };
 
-export type WithImages = {
-  imageUrls?: PresignedUrlResponse[];
-};
-
-const ASSETS_KEY = ["assets"];
+const ASSETS_KEY = ["assetRequests"];
 
 const AssetsSingleItemPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,9 +20,7 @@ const AssetsSingleItemPage = () => {
   //   const { data: item, isLoading } = useMaintenanceRequestById(id || "");
   // id "Testing from mobile: 4e9a8b44-f9e2-4fc0-ad8e-640fd23c7211"
 
-  const { data: item, isPending } = useById<
-    AssetRequestFormValues & WithImages
-  >({
+  const { data: item, isPending } = useById<AssetAPIResponse>({
     id: id || "",
     queryKey: ASSETS_KEY,
     resourcePath: "asset",
@@ -41,13 +34,13 @@ const AssetsSingleItemPage = () => {
     return <PageLoadingSpinner />;
   }
 
-  const imageUrls = item.imageUrls;
+  const images = item.images;
 
   return (
     <div className="p-2">
       <div className="min-h-(var(--minheight-page)) bg-white dark:bg-[#1d2739] border-gray-700/70 rounded-md grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800">
         <div className="order-2 md:order-1">
-          <AssetSingleItemImages imageUrls={imageUrls ?? []} />
+          <AssetSingleItemImages images={images ?? []} />
         </div>
         <div className="order-1 md:order-2">
           <AssetSingleItemInfo item={item} />
