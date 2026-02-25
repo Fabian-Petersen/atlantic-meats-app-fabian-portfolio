@@ -6,7 +6,7 @@
 // import Sidebar from "@/components/dashboardSidebar/Sidebar";
 import OpenRequestsPieChart from "@/components/dashboard/charts/OpenRequestsPieChart";
 import CardContainer from "../components/dashboard/CardContainer";
-import MaintenanceRequestsChart from "@/components/dashboard/charts/MaintenanceRequestsChart";
+import MaintenanceRequestsChart from "@/components/dashboard/charts/JobRequestsChart";
 import ChartHeading from "@/components/dashboard/ChartHeading";
 
 const Dashboard = () => {

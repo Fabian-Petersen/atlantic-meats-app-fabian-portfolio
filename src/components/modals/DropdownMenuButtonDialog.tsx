@@ -1,9 +1,7 @@
 // $ This model is to open a modal from a button using ShadCN Dropdown and Dialog components
 
 import { MoreVertical } from "lucide-react";
-// import useGlobalContext from "@/context/useGlobalContext";
-import type { TableMenuItemActions } from "@/lib/TableMenuItemsActions";
-import type { AssetTableRow } from "@/schemas";
+import type { TableActionLinks } from "@/lib/JobTableActionLinks";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,24 +9,16 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  //   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-// import type { AssetFormValues, CreateJobFormValues } from "@/schemas";
-// import Separator from "../dashboardSidebar/Seperator";
-
-type DropdownMenuDialogProps<GlobalData> = {
-  data: GlobalData;
-  menuItems: TableMenuItemActions[];
+type DropdownMenuDialogProps = {
+  menuItems: TableActionLinks[];
 };
 
 export function DropdownMenuButtonDialog({
-  // data,
   menuItems,
-}: DropdownMenuDialogProps<AssetTableRow>) {
-  // const { setGenericData, setPendingTableAction } = useGlobalContext();
-  // const rowId = data.id;
+}: DropdownMenuDialogProps) {
   return (
     <>
       <DropdownMenu modal={false}>

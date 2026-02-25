@@ -7,19 +7,19 @@ import { PublicOnlyRoute } from "./routes/PublicOnlyRoute";
 
 //$ Protected Routes
 import DashboardPage from "./pages/Dashboard";
-import MaintenanceRequestPage from "./pages/MaintenanceRequestPage";
+import JobRequestPage from "./pages/JobRequestPage";
 import AssetsOverviewPage from "./pages/AssetsOverviewPage";
 
 //$ Page Layouts
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 // import { PublicLayout } from "./routes/PublicLayout";
 import { AppLayout } from "./routes/AppLayout";
-import MaintenanceRequestOverviewPage from "./pages/MaintenanceRequestOverviewPage";
-import MaintRequestSingleItemPage from "./pages/MaintRequestSingleItemPage";
+import JobsListPage from "./pages/JobsListPage";
+import JobItemPage from "./pages/JobItemPage";
 import AssetsSingleItemPage from "./pages/AssetsSingleItemPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import CreateAssetPage from "./pages/CreateAssetPage";
-import MaintRequestActionItemPage from "./pages/MaintRequestActionItemPage";
+import JobActionItemPage from "./pages/JobActionPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 function App() {
@@ -39,21 +39,12 @@ function App() {
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           {/* // $ ======================= Maintenance Routes ======================= */}{" "}
-          <Route
-            path="/maintenance-request"
-            element={<MaintenanceRequestPage />}
-          />
-          <Route
-            path="/maintenance-requests-list"
-            element={<MaintenanceRequestOverviewPage />}
-          />
-          <Route
-            path="/maintenance-request/:id"
-            element={<MaintRequestSingleItemPage />}
-          />
+          <Route path="/maintenance-request" element={<JobRequestPage />} />
+          <Route path="/maintenance-requests-list" element={<JobsListPage />} />
+          <Route path="/maintenance-request/:id" element={<JobItemPage />} />
           <Route
             path="/maintenance-action/:id"
-            element={<MaintRequestActionItemPage />}
+            element={<JobActionItemPage />}
           />
           {/* // $ ======================= Asset Routes ======================= */}
           {/*GET: All assets returned*/}

@@ -9,7 +9,7 @@ import {
   DownloadIcon,
 } from "lucide-react";
 
-export type TableMenuItemActions = {
+export type TableActionLinks = {
   label: string;
   id: string;
   icon: LucideIcon;
@@ -19,40 +19,6 @@ export type TableMenuItemActions = {
 
 import type { Resource } from "@/utils/api";
 import type { JobcardPresignedUrlResponse } from "@/schemas";
-
-export const getAssetTableMenuItems = (
-  rowId: string,
-  setSelectedRowId: (id: string) => void,
-  setShowUpdateAssetDialog: (v: boolean) => void,
-  // setShowDeleteDialog: (v: boolean) => void,
-  // openDeleteDialog: AppContextType["openDeleteDialog"],
-  openDeleteDialog: (
-    id: string,
-    config: { resourcePath: Resource; queryKey: readonly unknown[] },
-  ) => void,
-): TableMenuItemActions[] => [
-  {
-    id: "1",
-    label: "Edit",
-    icon: Pencil,
-    onClick: () => {
-      setShowUpdateAssetDialog(true);
-      setSelectedRowId(rowId);
-    },
-  },
-  {
-    id: "2",
-    label: "Delete",
-    icon: Trash2Icon,
-    onClick: () => {
-      openDeleteDialog(rowId, {
-        resourcePath: "asset",
-        queryKey: ["ASSETS_DELETE_KEY"] as const,
-      });
-      // console.log("delete-asset-id:", rowId);
-    },
-  },
-];
 
 export const getMaintenanceTableMenuItems = (
   rowId: string,
@@ -65,7 +31,7 @@ export const getMaintenanceTableMenuItems = (
     config: { resourcePath: Resource; queryKey: readonly unknown[] },
   ) => void,
   setOpenChatSidebar: (v: boolean) => void,
-): TableMenuItemActions[] => [
+): TableActionLinks[] => [
   {
     id: "1",
     url: "/update-request",

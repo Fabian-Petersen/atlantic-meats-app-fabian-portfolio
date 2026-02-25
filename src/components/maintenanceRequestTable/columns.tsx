@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { JobAPIResponse, JobcardPresignedUrlResponse } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
-import { getMaintenanceTableMenuItems } from "@/lib/TableMenuItemsActions";
+import { getMaintenanceTableMenuItems } from "@/lib/JobTableActionLinks";
 import type { Resource } from "@/utils/api";
 
 export const getMaintenanceColumns = (
@@ -97,7 +97,7 @@ export const getMaintenanceColumns = (
       );
       return (
         <div className="tex-center" onClick={(e) => e.stopPropagation()}>
-          <DropdownMenuButtonDialog data={row.original} menuItems={menuItems} />
+          <DropdownMenuButtonDialog menuItems={menuItems} />
         </div>
       );
     },

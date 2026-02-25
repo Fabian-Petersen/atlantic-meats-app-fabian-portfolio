@@ -1,10 +1,10 @@
 // $ This is the maintence request page with the maintenance request form. The user can create a maintenance job/action from this page. The Page is used on mobile and a dialog on desktop.
 
 import FormHeading from "../../customComponents/FormHeading";
-import MaintenanceActionForm from "@/components/maintenance/MaintenanceActionForm";
+import JobActionForm from "@/components/jobs/JobActionForm";
 import { useNavigate } from "react-router-dom";
 
-const MaintRequestActionPage = () => {
+const JobActionPage = () => {
   const navigate = useNavigate();
 
   return (
@@ -14,10 +14,10 @@ const MaintRequestActionPage = () => {
           heading="Action Maintenance Request"
           className="text-center w-full"
         />
-        <MaintenanceActionForm onCancel={() => navigate("/maintenance-list")} />
+        <JobActionForm onCancel={() => navigate("/maintenance-list")} />
       </div>
     </div>
   );
 };
 
-export default MaintRequestActionPage;
+export default JobActionPage;

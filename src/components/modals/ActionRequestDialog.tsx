@@ -8,7 +8,7 @@ import {
   // DialogFooter,
 } from "@/components/ui/dialog";
 
-import MaintenanceActionForm from "../maintenance/MaintenanceActionForm";
+import MaintenanceActionForm from "../jobs/JobActionForm";
 // import { useGetJobDetails } from "@/customHooks/useGetJobDetails";
 
 import useGlobalContext from "@/context/useGlobalContext";

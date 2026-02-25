@@ -6,7 +6,7 @@ import {
   // DialogFooter,
 } from "@/components/ui/dialog";
 
-import MaintenanceUpdateForm from "../maintenance/MaintenanceUpdateForm";
+import MaintenanceUpdateForm from "../jobs/JobUpdateForm";
 
 import useGlobalContext from "@/context/useGlobalContext";
 import FormHeading from "../../../customComponents/FormHeading";

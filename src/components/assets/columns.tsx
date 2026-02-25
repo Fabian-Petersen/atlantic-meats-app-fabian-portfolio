@@ -3,7 +3,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { AssetTableRow } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
-import { getAssetTableMenuItems } from "@/lib/TableMenuItemsActions";
+import { getAssetTableMenuItems } from "@/lib/AssetTableActionLinks";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -89,7 +89,7 @@ export const getAssetColumns = (
       const value = getValue<string>();
       return (
         <p
-          className={`capitalize max-w-fit px-2 py-2.5 text-center rounded-full ${getConditionClasses(
+          className={`capitalize text-xs min-w-fit px-2 py-2.5 text-center rounded-full ${getConditionClasses(
             value as EquipmentCondition,
           )}`}
         >
@@ -117,7 +117,7 @@ export const getAssetColumns = (
 
       return (
         <div className="text-center" onClick={(e) => e.stopPropagation()}>
-          <DropdownMenuButtonDialog data={row.original} menuItems={menuItems} />
+          <DropdownMenuButtonDialog menuItems={menuItems} />
         </div>
       );
     },

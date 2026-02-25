@@ -62,8 +62,8 @@ function UserProfileUpdateForm() {
       <FormActionButtons
         disabled={isSubmitting}
         handleCancel={() => setShowUserProfileDialog(false)}
-        redirectText="cancel"
-        actionText="update"
+        cancelText="cancel"
+        submitText="update"
       />
     </form>
   );

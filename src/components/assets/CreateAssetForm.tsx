@@ -238,7 +238,7 @@ const CreateAssetForm = () => {
         <Button
           type="button"
           onClick={() => {
-            navigate("/asset");
+            navigate("/assets-list");
           }}
           variant="cancel"
           size="lg"

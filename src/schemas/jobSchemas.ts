@@ -44,7 +44,7 @@ export type CreateJobPayload = Omit<JobRequestFormValues, "images"> & {
 };
 
 // $ Schema for the Maintenance Table Menu
-export const maintenanceTableRowSchema = jobApiResponseSchema
+export const jobTableRowSchema = jobApiResponseSchema
   .omit({
     images: true,
   })
@@ -54,4 +54,4 @@ export const maintenanceTableRowSchema = jobApiResponseSchema
     jobcardNumber: z.string(),
     status: z.string(),
   });
-export type MaintenanceTableRow = z.infer<typeof maintenanceTableRowSchema>;
+export type MaintenanceTableRow = z.infer<typeof jobTableRowSchema>;

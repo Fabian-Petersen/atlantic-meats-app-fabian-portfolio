@@ -15,7 +15,7 @@ import {
 //   };
 // };
 
-function MaintenanceRequestsChart() {
+function JobRequestsChart() {
   const revenueData = [
     { name: "Jan", value: 4000 },
     { name: "Feb", value: 3000 },
@@ -66,4 +66,4 @@ function MaintenanceRequestsChart() {
   );
 }
 // hover:bg-primary/20
-export default MaintenanceRequestsChart;
+export default JobRequestsChart;

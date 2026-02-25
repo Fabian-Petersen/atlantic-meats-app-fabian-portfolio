@@ -54,7 +54,7 @@ function MaintenanceSingleItemInfo() {
         </div>
       </div>
       <Separator width="100%" className="mt-2 mb-4" />
-      <ul className="flex flex-col gap-4 md:text-sm text-sm">
+      <ul className="flex flex-col gap-4 md:text-sm text-xs">
         <li className="capitalize flex gap-2">
           <span>Requested By : </span>
           <span>{item?.requested_by}</span>

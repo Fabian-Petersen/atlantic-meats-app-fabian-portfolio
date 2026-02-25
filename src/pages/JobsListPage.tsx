@@ -25,7 +25,7 @@ import FilterContainer from "@/components/features/FilterContainer";
 import AddNewItemButton from "@/components/features/AddNewItemButton";
 import ChatSidebar from "@/components/comments/ChatSidebar";
 
-const MaintenanceRequestOverviewPage = () => {
+const JobsListPage = () => {
   const MAINTENANCE_REQUESTS_KEY = ["allMaintenanceRequests"];
   const { data, isPending, isError, refetch } = useGetAll<JobAPIResponse[]>(
     "maintenance-requests-list",
@@ -110,4 +110,4 @@ const MaintenanceRequestOverviewPage = () => {
   );
 };
 
-export default MaintenanceRequestOverviewPage;
+export default JobsListPage;

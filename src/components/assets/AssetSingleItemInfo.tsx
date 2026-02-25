@@ -17,7 +17,7 @@ function AssetSingleItemInfo({ item }: Props) {
       <UpdateAssetDialog />
       <h1 className="text-lg md:text-2xl">Asset : {item.equipment}</h1>
       <Separator width="100%" className="mt-2 mb-4" />
-      <ul className="flex flex-col gap-4 md:text-md text-sm">
+      <ul className="flex flex-col gap-4 md:text-sm text-xs">
         <li className="capitalize flex gap-2">
           <span className="">Asset ID : </span>
           <span>{item.assetID}</span>

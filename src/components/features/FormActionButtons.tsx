@@ -4,16 +4,16 @@ type Props = {
   redirect?: string;
   handleCancel?: () => void;
   action?: () => void;
-  redirectText: string;
-  actionText: string;
+  cancelText: string;
+  submitText: string;
   disabled?: boolean;
 };
 
 function FormActionButtons({
-  redirectText,
+  cancelText,
   action,
   disabled,
-  actionText,
+  submitText,
   handleCancel,
 }: Props) {
   return (
@@ -25,7 +25,7 @@ function FormActionButtons({
         size="lg"
         className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white capitalize"
       >
-        {redirectText}
+        {cancelText}
       </Button>
       <Button
         disabled={disabled}
@@ -35,7 +35,7 @@ function FormActionButtons({
         className="flex-1 capitalize"
         onClick={action}
       >
-        {actionText}
+        {submitText}
       </Button>
     </div>
   );

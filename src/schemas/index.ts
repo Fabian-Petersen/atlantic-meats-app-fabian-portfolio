@@ -6,8 +6,8 @@ import {
   verifyPinSchema,
   forgotPasswordSchema,
 } from "./authSchemas";
-import { jobRequestSchema } from "./maintenanceJobSchemas";
-import { actionRequestSchema } from "./maintenanceActionSchemas";
+import { jobRequestSchema } from "./jobSchemas";
+import { actionRequestSchema } from "./jobActionSchemas";
 import { assetRequestSchema } from "./assetSchemas";
 import { commentRequestSchema, commentResponseSchema } from "./commentSchemas";
 
@@ -42,14 +42,14 @@ import type {
   CreateJobPayload,
   JobAPIResponse,
   MaintenanceTableRow,
-} from "./maintenanceJobSchemas";
+} from "./jobSchemas";
 
 // % Action Maintenance Request Types
 import type {
   ActionRequestPayload,
   ActionAPIResponse,
   ActionRequestFormValues,
-} from "./maintenanceActionSchemas";
+} from "./jobActionSchemas";
 
 // % Assets Types
 import type {

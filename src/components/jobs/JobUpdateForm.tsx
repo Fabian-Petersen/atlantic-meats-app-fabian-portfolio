@@ -22,7 +22,7 @@ import { stores } from "@/data/stores";
 // import assets from "@/data/assets.json";
 // import { useCreateMaintenanceRequest } from "@/utils/maintenanceRequests";
 
-const MaintenanceUpdateForm = () => {
+const JobUpdateForm = () => {
   // const { mutateAsync } = useCreateMaintenanceRequest();
   const { genericData: initialData, setShowUpdateMaintenanceDialog } =
     useGlobalContext();
@@ -151,7 +151,7 @@ const MaintenanceUpdateForm = () => {
   );
 };
 
-export default MaintenanceUpdateForm;
+export default JobUpdateForm;
 
 // <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72">
 //       <Button
