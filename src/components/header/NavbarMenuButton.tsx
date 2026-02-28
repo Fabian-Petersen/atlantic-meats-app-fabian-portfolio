@@ -8,16 +8,21 @@ type Props = {
 const NavbarMenuButton = ({ className }: Props) => {
   const { setIsOpen, isOpen } = useGlobalContext();
   return (
-    <button
-      aria-label="Open sidebar"
-      onClick={() => {
-        setIsOpen(!isOpen);
-      }}
-      className={`${className} bg-menu-btn/40 p-2 items-center justify-center rounded-md flex hover:cursor-pointer text-gray-800 lg:invisible
-        hover:text-gray-700`}
+    <div
+      className="p-2 items-center flex justify-center hover:cursor-pointer text-gray-800 lg:invisible
+      hover:text-gray-700"
     >
-      <FiMenu size={20} />
-    </button>
+      <button
+        type="button"
+        aria-label="Open sidebar"
+        onClick={() => {
+          setIsOpen(!isOpen);
+        }}
+        className={`${className} bg-menu-btn/40 p-2 rounded-md`}
+      >
+        <FiMenu size={24} />
+      </button>
+    </div>
   );
 };
 

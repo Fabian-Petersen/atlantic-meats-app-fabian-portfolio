@@ -54,4 +54,4 @@ export const jobTableRowSchema = jobApiResponseSchema
     jobcardNumber: z.string(),
     status: z.string(),
   });
-export type MaintenanceTableRow = z.infer<typeof jobTableRowSchema>;
+export type JobTableRow = z.infer<typeof jobTableRowSchema>;

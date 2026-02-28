@@ -6,10 +6,26 @@
 // import Sidebar from "@/components/dashboardSidebar/Sidebar";
 import OpenRequestsPieChart from "@/components/dashboard/charts/OpenRequestsPieChart";
 import CardContainer from "../components/dashboard/CardContainer";
-import MaintenanceRequestsChart from "@/components/dashboard/charts/JobRequestsChart";
+import JobRequestsChart from "@/components/dashboard/charts/JobRequestsChart";
 import ChartHeading from "@/components/dashboard/ChartHeading";
+import { getDashboardJobColumns } from "@/components/maintenanceRequestTable/columns";
+import { useGetAll } from "@/utils/api";
+import type { JobAPIResponse } from "@/schemas";
+import { GenericTable } from "@/components/dashboard/GenericTable";
 
 const Dashboard = () => {
+  const columns = getDashboardJobColumns();
+  const MAINTENANCE_REQUESTS_KEY = ["allMaintenanceRequests"];
+
+  const { data } = useGetAll<JobAPIResponse[]>(
+    "maintenance-requests-list",
+    MAINTENANCE_REQUESTS_KEY,
+  );
+  // $ Only show the pending requests
+  const pendingRequests = data?.filter(
+    (item) => item.status === "Pending" || item.status === "pending",
+  );
+
   return (
     <main className="w-full bg-gray-100 dark:bg-bgdark h-full md:p-4 p-2">
       {/* <NotificationSidebar /> */}
@@ -22,11 +38,15 @@ const Dashboard = () => {
         {/* Revenue & Expense Chart */}
 
         <section
-          className="col-span-2 xl:col-span-3 h-[300px] rounded-md bg-white dark:bg-[#1d2739]
+          className="flex flex-col gap-4 col-span-2 xl:col-span-3 h-[300px] rounded-md bg-white dark:bg-[#1d2739]
           border border-white dark:border-gray-700/50 p-2 shadow-sm
             text-gray-600 dark:text-gray-100"
         >
-          <MaintenanceRequestsChart />
+          <ChartHeading
+            title="Job Requests YTD"
+            className="font-normal text-black"
+          />
+          <JobRequestsChart />
         </section>
         <section
           className="col-span-2 xl:col-span-1 h-[300px] rounded-md bg-white dark:bg-dark_bg
@@ -35,10 +55,10 @@ const Dashboard = () => {
         >
           <OpenRequestsPieChart />
         </section>
-
         <div
           className="
-            col-span-2 lg:col-span-2 xl:col-span-3
+          flex flex-col gap-4
+            col-span-full lg:col-span-full xl:col-span-full
             self-start
             w-full min-w-0
             h-full
@@ -50,14 +70,8 @@ const Dashboard = () => {
             shadow-sm
           "
         >
-          <div
-            className="h-54 rounded-md bg-white dark:bg-[#1d2739]
-          border border-white dark:border-gray-700/50 p-2 shadow-sm
-            text-gray-600 dark:text-gray-100"
-          >
-            <ChartHeading title="Placeholder" />
-          </div>
-          {/* <ProjectSummaryTable /> */}
+          <ChartHeading title="Pending Requests" className="" />
+          <GenericTable data={pendingRequests ?? []} columns={columns ?? []} />
         </div>
       </div>
     </main>

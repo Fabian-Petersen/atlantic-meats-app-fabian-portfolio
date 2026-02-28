@@ -41,7 +41,7 @@ import type {
   JobRequestFormValues,
   CreateJobPayload,
   JobAPIResponse,
-  MaintenanceTableRow,
+  JobTableRow,
 } from "./jobSchemas";
 
 // % Action Maintenance Request Types
@@ -79,7 +79,7 @@ export type {
   JobRequestFormValues,
   CreateJobPayload,
   JobAPIResponse,
-  MaintenanceTableRow,
+  JobTableRow,
   // Maintenance Action Types
   ActionRequestFormValues,
   ActionAPIResponse,
@@ -110,6 +110,10 @@ export type PresignedUrlResponse = {
 export type JobcardPresignedUrlResponse = {
   jobcard_url: string;
 };
+
+// $ Generic Table schema for the Rows and Columns
+export type TableRows = AssetTableRow | JobTableRow;
+export type APIData = JobAPIResponse | AssetAPIResponse;
 
 // $ Type handling the table menu actions (delete, update, edit, download)
 export type PendingTableAction = {

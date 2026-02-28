@@ -6,6 +6,8 @@ import {
   User2,
   Library,
   Wrench,
+  // MoveHorizontal,
+  Truck,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -49,19 +51,24 @@ export const mainLinks: NavlinkProps[] = [
 ] as const;
 
 export const maintenanceLinks: NavlinkProps[] = [
-  { name: "create request", icon: Wrench, url: "/maintenance-request" },
-  { name: "view requests", icon: File, url: "/maintenance-requests-list" },
-  // { name: "my requests", icon: File, url: "/maintenance-requests-list" }, Use this link with the user sub to filter our requests based on user sign in.
+  { name: "create new request", icon: Wrench, url: "/maintenance-request" },
+  { name: "pending requests", icon: File, url: "/maintenance-requests-list" },
+  { name: "my requests", icon: File, url: "/maintenance-requests-list" },
 ] as const;
 
 export const actionLinks: NavlinkProps[] = [
-  { name: "create asset", icon: File, url: "/asset" },
+  { name: "create new", icon: File, url: "/asset" },
   { name: "my actions", icon: Library, url: "/maintenance-actions-list" }, // return all actions
 ] as const;
 
 export const assetLinks: NavlinkProps[] = [
-  { name: "create asset", icon: File, url: "/asset" },
-  { name: "asset register", icon: Library, url: "/assets-list" },
+  { name: "create new", icon: File, url: "/asset" },
+  {
+    name: "transfer",
+    icon: Truck,
+    url: "/asset-transfer-request",
+  },
+  { name: "register", icon: Library, url: "/assets-list" },
 ] as const;
 
 export const profileLinks: NavlinkProps[] = [
