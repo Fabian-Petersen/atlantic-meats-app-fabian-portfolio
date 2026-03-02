@@ -6,6 +6,7 @@ import {
   User2,
   Library,
   Wrench,
+  Clock,
   // MoveHorizontal,
   Truck,
 } from "lucide-react";
@@ -51,9 +52,10 @@ export const mainLinks: NavlinkProps[] = [
 ] as const;
 
 export const maintenanceLinks: NavlinkProps[] = [
-  { name: "create new request", icon: Wrench, url: "/maintenance-request" },
+  { name: "create request", icon: Wrench, url: "/maintenance-request" },
   { name: "pending requests", icon: File, url: "/maintenance-requests-list" },
   { name: "my requests", icon: File, url: "/maintenance-requests-list" },
+  { name: "schedule task", icon: Clock, url: "/schedule-task" },
 ] as const;
 
 export const actionLinks: NavlinkProps[] = [

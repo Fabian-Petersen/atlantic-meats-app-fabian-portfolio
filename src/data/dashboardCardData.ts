@@ -1,15 +1,9 @@
 import { Wallet, FileCheck2, Users2, FileBarChart } from "lucide-react";
-// const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042"];
-// const COLORS = [
-//   "rgba(136, 132, 216, 0.7)", // #8884d8
-//   "rgba(130, 202, 157, 0.7)", // #82ca9d
-//   "rgba(255, 198, 88, 0.7)", // #ffc658
-//   "rgba(255, 128, 66, 0.7)", // #ff8042
-// ];
+
 export const dashboardCardData = [
   {
     id: "1",
-    title: "total revenue",
+    title: "total requests",
     value: 30000,
     valueChange: 70,
     icon: Wallet,
@@ -18,7 +12,7 @@ export const dashboardCardData = [
   },
   {
     id: "2",
-    title: "open tasks",
+    title: "open requests",
     value: 5,
     valueChange: -40,
     icon: FileCheck2,

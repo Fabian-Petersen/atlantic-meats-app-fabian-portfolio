@@ -1,14 +1,32 @@
 import React from "react";
+import { useMemo } from "react";
 import { dashboardCardData } from "@/data/dashboardCardData";
 import { TrendingDown, TrendingUp } from "lucide-react";
+import type { JobAPIResponse } from "@/schemas";
+import { useGetAll } from "@/utils/api";
+import { getDashboardCardValues } from "@/utils/getDashboardCardValues";
 
 const CardItem = () => {
+  const { data: requests = [], isPending } = useGetAll<JobAPIResponse[]>(
+    "maintenance-requests-list",
+    ["maintenanceRequests"],
+  );
+
+  const metrics = useMemo(() => getDashboardCardValues(requests), [requests]);
+
+  // console.log(metrics);
+
+  if (isPending) return <div>Loading...</div>;
+
   return (
     <>
-      {dashboardCardData.map((card) => (
-        <div key={card.id} className="w-full relative">
-          <div
-            className="
+      {dashboardCardData.map((card) => {
+        const metric = metrics[card.title];
+
+        return (
+          <div key={card.id} className="w-full relative">
+            <div
+              className="
               flex flex-col justify-between
               gap-2 xl:gap-3 w-full
               rounded-md shadow-md
@@ -17,52 +35,52 @@ const CardItem = () => {
               p-[0.325rem] xl:p-2
               bordee border-white dark:border-[rgba(55,65,81,0.5)]
             "
-          >
-            {/* Card Title & Value */}
-            <div>
-              <p className="capitalize text-[0.9rem] xl:text-base">
-                {card.title}
-              </p>
-              <p className="text-[1.7rem] xl:text-2xl">
-                {card.title === "total revenue" && (
-                  <span className="mr-1">R</span>
-                )}
-                {card.value}
-              </p>
-            </div>
+            >
+              {/* Card Title & Value */}
+              <div>
+                <p className="capitalize text-[0.9rem] xl:text-base">
+                  {card.title}
+                </p>
+                <p className="text-[1.7rem] xl:text-2xl">
+                  {card.title === "total revenue" && (
+                    <span className="mr-1">R</span>
+                  )}
+                  {metric.value}
+                </p>
+              </div>
 
-            {/* Card Trend Indicator */}
-            <div
-              className={`
+              {/* Card Trend Indicator */}
+              <div
+                className={`
                 flex items-center gap-2 self-end w-full
                 text-[0.625rem] xl:text-[0.825rem]
                 ${card.valueChange > 0 ? "text-green-500" : "text-red-500"}
               `}
+              >
+                {card.valueChange > 0 ? (
+                  <TrendingUp size={16} />
+                ) : (
+                  <TrendingDown size={16} />
+                )}
+                <span>
+                  {card.valueChange}%{" "}
+                  <span className="opacity-80">from last month</span>
+                </span>
+              </div>
+            </div>
+            {/* Card Icon */}
+            <div
+              className="absolute top-1/2 right-[5%] -translate-y-1/2 rounded-full p-2 xl:p-3 border border-white"
+              style={{
+                color: card.color,
+                backgroundColor: card.bgColor,
+              }}
             >
-              {card.valueChange > 0 ? (
-                <TrendingUp size={16} />
-              ) : (
-                <TrendingDown size={16} />
-              )}
-              <span>
-                {card.valueChange}%{" "}
-                <span className="opacity-80">from last month</span>
-              </span>
+              {React.createElement(card.icon)}
             </div>
           </div>
-
-          {/* Card Icon */}
-          <div
-            className="absolute top-1/2 right-[5%] -translate-y-1/2 rounded-full p-2 xl:p-3 border border-white"
-            style={{
-              color: card.color,
-              backgroundColor: card.bgColor,
-            }}
-          >
-            {React.createElement(card.icon)}
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </>
   );
 };
