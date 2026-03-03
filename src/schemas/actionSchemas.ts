@@ -36,9 +36,10 @@ export const actionRequestSchema = z.object({
 // % Schema expected from the backend
 export const actionResponseSchema = actionRequestSchema.extend({
   id: z.string(),
-  action_createdAt: z.string(),
+  actionCreated: z.string(),
   request_id: z.string(),
   action_id: z.string().optional(),
+  completed_at: z.string().optional(),
 });
 
 // $ Type for sending the Action to the backend excluding the images (the images is not included with the initial request). Backend will send a presignURL for the images

@@ -7,7 +7,7 @@ import {
   forgotPasswordSchema,
 } from "./authSchemas";
 import { jobRequestSchema } from "./jobSchemas";
-import { actionRequestSchema } from "./jobActionSchemas";
+import { actionRequestSchema } from "./actionSchemas";
 import { assetRequestSchema } from "./assetSchemas";
 import { commentRequestSchema, commentResponseSchema } from "./commentSchemas";
 
@@ -49,7 +49,7 @@ import type {
   ActionRequestPayload,
   ActionAPIResponse,
   ActionRequestFormValues,
-} from "./jobActionSchemas";
+} from "./actionSchemas";
 
 // % Assets Types
 import type {
@@ -66,6 +66,16 @@ import type {
   CommentPayload,
   CommentAPIResponse,
 } from "./commentSchemas";
+
+// % Dashboard Types
+import type {
+  JobCardItem,
+  ActionCardItem,
+  AssetCardItem,
+  JobMetrics,
+  AssetMetrics,
+  ActionMetrics,
+} from "./dashboardSchema";
 
 export type {
   // Auth Types
@@ -84,6 +94,8 @@ export type {
   ActionRequestFormValues,
   ActionAPIResponse,
   ActionRequestPayload,
+  ActionMetrics,
+  ActionCardItem,
   //Asset Types
   AssetRequestFormValues,
   AssetTableRow,
@@ -95,6 +107,11 @@ export type {
   CommentPayload,
   //Images
   PresignedURL,
+  //Dashboard
+  JobCardItem,
+  AssetCardItem,
+  JobMetrics,
+  AssetMetrics,
 };
 
 // GlobalContext.ts

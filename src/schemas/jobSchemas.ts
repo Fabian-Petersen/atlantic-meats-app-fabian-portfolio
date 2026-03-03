@@ -27,6 +27,7 @@ export const jobApiResponseSchema = jobRequestSchema
   .extend({
     id: z.string(),
     jobCreated: z.string(),
+    completed_at: z.string(),
     jobcardNumber: z.string(),
     status: z.string(),
     requested_by: z.string(),

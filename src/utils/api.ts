@@ -12,6 +12,7 @@ import type {
   ActionRequestPayload,
   AssetAPIResponse,
   JobAPIResponse,
+  ActionAPIResponse,
 } from "@/schemas";
 import type { CommentRequestFormValues } from "@/schemas/commentSchemas";
 
@@ -32,7 +33,10 @@ export type RequestType =
   | CommentRequestFormValues
   | AssetAPIResponse;
 
-export type ResponseType = AssetAPIResponse | JobAPIResponse;
+export type ResponseType =
+  | AssetAPIResponse
+  | JobAPIResponse
+  | ActionAPIResponse;
 
 // $ Format the data according to API requirements
 // const formatData = <T extends EntityType>(item: T): Omit<T, "id"> => {
@@ -46,6 +50,7 @@ export type ResponseType = AssetAPIResponse | JobAPIResponse;
 // $ =========================
 const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
 const ASSETS_REQUESTS_KEY = ["assetRequests"];
+// const ACTION_REQUESTS_KEY = ["actionRequests"];
 // const POST_COMMENT = ["CommentsKey"];
 // const POST_KEYS = ["commentsRequests"];
 

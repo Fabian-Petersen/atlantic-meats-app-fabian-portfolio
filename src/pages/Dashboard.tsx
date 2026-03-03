@@ -1,5 +1,5 @@
 // import RevenueExpenseChart from "../charts/RevenueExpenseChart";
-// // import ProjectSummaryTable from "../charts/ProjectSummaryTable";
+// import ProjectSummaryTable from "../charts/ProjectSummaryTable";
 // import TaskContainer from "../tasks/TasksContainer";
 // import NotificationSidebar from "../notifications/NotificationBar";
 
@@ -30,13 +30,11 @@ const Dashboard = () => {
     <main className="w-full bg-gray-100 dark:bg-bgdark h-full md:p-4 p-2">
       {/* <NotificationSidebar /> */}
       <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 xl:grid-cols-4 overflow-x-hidden h-auto px-2">
-        {/* Cards */}
+        {/* $ Cards */}
         <section className="col-span-2 lg:col-span-3 xl:col-span-4 dark:border-gray-700/50">
           <CardContainer />
         </section>
-
         {/* Revenue & Expense Chart */}
-
         <section
           className="flex flex-col gap-4 col-span-2 xl:col-span-3 h-[300px] rounded-md bg-white dark:bg-[#1d2739]
           border border-white dark:border-gray-700/50 p-2 shadow-sm

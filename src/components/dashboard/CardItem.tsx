@@ -1,10 +1,20 @@
 import React from "react";
 import { useMemo } from "react";
-import { dashboardCardData } from "@/data/dashboardCardData";
+import {
+  assetsCardData,
+  jobsCardData,
+  actionCardData,
+} from "@/data/dashboardCardData";
 import { TrendingDown, TrendingUp } from "lucide-react";
-import type { JobAPIResponse } from "@/schemas";
+import type {
+  JobAPIResponse,
+  AssetAPIResponse,
+  ActionAPIResponse,
+} from "@/schemas";
 import { useGetAll } from "@/utils/api";
-import { getDashboardCardValues } from "@/utils/getDashboardCardValues";
+import { getJobsCardValues } from "@/utils/getJobsCardValues";
+import { getAssetCardValues } from "@/utils/getAssetCardValues";
+import { getActionCardValues } from "@/utils/getActionCardValues";
 
 const CardItem = () => {
   const { data: requests = [], isPending } = useGetAll<JobAPIResponse[]>(
@@ -12,17 +22,31 @@ const CardItem = () => {
     ["maintenanceRequests"],
   );
 
-  const metrics = useMemo(() => getDashboardCardValues(requests), [requests]);
+  // const location = requests[0].location;
+  const { data: assets = [] } = useGetAll<AssetAPIResponse[]>("assets-list", [
+    "assetRequests",
+  ]);
 
-  // console.log(metrics);
+  const { data: actions = [] } = useGetAll<ActionAPIResponse[]>(
+    "maintenance-actions-list",
+    ["actionRequests"],
+  );
+
+  // $ Get the job metrics from the data returned from the database
+  const jobMetrics = useMemo(() => getJobsCardValues(requests), [requests]);
+
+  // $ Get the asset metrics from the data returned from the database
+  const assetsMetrics = useMemo(() => getAssetCardValues(assets), [assets]);
+
+  // $ Get the action metrics from the data returned from the database
+  const actionMetrics = useMemo(() => getActionCardValues(actions), [actions]);
 
   if (isPending) return <div>Loading...</div>;
 
   return (
     <>
-      {dashboardCardData.map((card) => {
-        const metric = metrics[card.title];
-
+      {jobsCardData.map((card) => {
+        const metric = jobMetrics[card.id];
         return (
           <div key={card.id} className="w-full relative">
             <div
@@ -37,15 +61,65 @@ const CardItem = () => {
             "
             >
               {/* Card Title & Value */}
-              <div>
-                <p className="capitalize text-[0.9rem] xl:text-base">
-                  {card.title}
-                </p>
-                <p className="text-[1.7rem] xl:text-2xl">
-                  {card.title === "total revenue" && (
-                    <span className="mr-1">R</span>
-                  )}
-                  {metric.value}
+              <div className="p-1">
+                <p className="capitalize text-sm xl:text-md">{card.title}</p>
+                <p className="text-[2rem] md:text-[3rem]">{metric.value}</p>
+              </div>
+
+              {/* Card Trend Indicator */}
+              <div
+                className={`
+                flex items-center gap-2 self-end w-full
+                text-[0.725rem] xl:text-[0.825rem]
+                ${metric.valueChange > 0 ? "text-green-500" : "text-red-500"}
+              `}
+              >
+                {metric.valueChange > 0 ? (
+                  <TrendingUp size={16} />
+                ) : (
+                  <TrendingDown size={16} />
+                )}
+                <span>
+                  {metric.valueChange}%{" "}
+                  <span className="opacity-80">from last month</span>
+                </span>
+              </div>
+            </div>
+            {/* Card Icon */}
+            <div
+              className={`flex items-center justify-center absolute size-24 top-1/2 right-[5%] -translate-y-1/2 rounded-full p-2 xl:p-3`}
+              style={{
+                color: card.color,
+                backgroundColor: card.bgColor,
+              }}
+            >
+              {React.createElement(card.icon, { size: 40 })}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* // $ ========================================== Action ===================================== */}
+      {actionCardData.map((action) => {
+        const actionMetric = actionMetrics[action.id];
+        return (
+          <div key={action.id} className="w-full relative">
+            <div
+              className="
+              flex flex-col justify-between
+              gap-2 xl:gap-3 w-full
+              rounded-md shadow-md
+              bg-white dark:bg-[#1d2739]
+              text-gray-600 dark:text-white
+              p-[0.325rem] xl:p-2
+              bordee border-white dark:border-[rgba(55,65,81,0.5)]
+            "
+            >
+              {/* Card Title & Value */}
+              <div className="p-1">
+                <p className="capitalize text-sm lg:text-md">{action.title}</p>
+                <p className="text-[2rem] md:text-[3rem]">
+                  {actionMetric.value}
                 </p>
               </div>
 
@@ -54,29 +128,85 @@ const CardItem = () => {
                 className={`
                 flex items-center gap-2 self-end w-full
                 text-[0.625rem] xl:text-[0.825rem]
-                ${card.valueChange > 0 ? "text-green-500" : "text-red-500"}
+                ${actionMetric.valueChange > 0 ? "text-green-500" : "text-red-500"}
               `}
               >
-                {card.valueChange > 0 ? (
+                {actionMetric.valueChange > 0 ? (
                   <TrendingUp size={16} />
                 ) : (
                   <TrendingDown size={16} />
                 )}
                 <span>
-                  {card.valueChange}%{" "}
+                  {actionMetric.valueChange}%{" "}
                   <span className="opacity-80">from last month</span>
                 </span>
               </div>
             </div>
             {/* Card Icon */}
             <div
-              className="absolute top-1/2 right-[5%] -translate-y-1/2 rounded-full p-2 xl:p-3 border border-white"
+              className={`flex items-center justify-center absolute size-24 top-1/2 right-[5%] -translate-y-1/2 rounded-full p-2 xl:p-3 border border-white`}
               style={{
-                color: card.color,
-                backgroundColor: card.bgColor,
+                color: action.color,
+                backgroundColor: action.bgColor,
               }}
             >
-              {React.createElement(card.icon)}
+              {React.createElement(action.icon, { size: 40 })}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* // $ ========================================== Assets ===================================== */}
+      {assetsCardData.map((asset) => {
+        const metric = assetsMetrics[asset.id];
+        console.log("asset metric:", metric);
+        return (
+          <div key={asset.id} className="w-full relative">
+            <div
+              className="
+              flex flex-col justify-between
+              gap-2 xl:gap-3 w-full
+              rounded-md shadow-md
+              bg-white dark:bg-[#1d2739]
+              text-gray-600 dark:text-white
+              p-[0.325rem] xl:p-2
+              bordee border-white dark:border-[rgba(55,65,81,0.5)]
+            "
+            >
+              {/* Card Title & Value */}
+              <div className="p-1">
+                <p className="capitalize text-sm lg:text-md">{asset.title}</p>
+                <p className="text-[2rem] md:text-[3rem]">{metric.value}</p>
+              </div>
+
+              {/* Card Trend Indicator */}
+              <div
+                className={`
+                flex items-center gap-2 self-end w-full
+                text-[0.625rem] xl:text-[0.825rem]
+                ${metric.valueChange > 0 ? "text-green-500" : "text-red-500"}
+              `}
+              >
+                {metric.valueChange > 0 ? (
+                  <TrendingUp size={16} />
+                ) : (
+                  <TrendingDown size={16} />
+                )}
+                <span>
+                  {metric.valueChange}%{" "}
+                  <span className="opacity-80">from last month</span>
+                </span>
+              </div>
+            </div>
+            {/* Card Icon */}
+            <div
+              className={`flex items-center justify-center absolute size-24 top-1/2 right-[5%] -translate-y-1/2 rounded-full p-2 xl:p-3 border border-white`}
+              style={{
+                color: asset.color,
+                backgroundColor: asset.bgColor,
+              }}
+            >
+              {React.createElement(asset.icon, { size: 40 })}
             </div>
           </div>
         );
