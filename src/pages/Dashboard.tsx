@@ -15,7 +15,7 @@ import { GenericTable } from "@/components/dashboard/GenericTable";
 
 const Dashboard = () => {
   const columns = getDashboardJobColumns();
-  const MAINTENANCE_REQUESTS_KEY = ["allMaintenanceRequests"];
+  const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
 
   const { data } = useGetAll<JobAPIResponse[]>(
     "maintenance-requests-list",

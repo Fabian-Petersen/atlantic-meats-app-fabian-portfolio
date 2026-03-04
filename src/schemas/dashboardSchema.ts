@@ -9,13 +9,25 @@ export const cardItemSchema = z.object({
   bgColor: z.string(),
 });
 
-type Metrics<T extends string> = Record<
-  T,
-  {
-    value: number;
-    valueChange: number;
-  }
->;
+export type MetricItem = {
+  value: number;
+  valueChange: number;
+};
+
+type Metrics<T extends string> = Record<T, MetricItem>;
+
+export type CardData<T extends string> = {
+  id: T;
+  title: string;
+  color: string;
+  bgColor: string;
+  icon: LucideIcon;
+};
+
+export type CardItem<T extends string> = {
+  cardData: CardData<T>[];
+  metrics: Metrics<T>;
+};
 
 // $ Metrics Key for each job card
 export type JobsMetricKey = "totalRequests" | "openRequests";

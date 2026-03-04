@@ -35,14 +35,19 @@ import TextAreaInput from "../../../customComponents/TextAreaInput";
 import { toast } from "sonner";
 
 // $ Import api & custom hooks
-import { useCreateMaintenanceRequest } from "@/utils/api";
+import { usePOST } from "@/utils/api";
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
 import { useGetAll } from "@/utils/api";
 
-// import useGlobalContext from "@/context/useGlobalContext";
-
 const MaintenanceRequestForm = () => {
-  const { mutateAsync, isError } = useCreateMaintenanceRequest();
+  // $ Calling the usePOST hook to fetch the data
+  const { mutateAsync, isError } = usePOST<
+    CreateJobPayload,
+    { presigned_urls: PresignedUrlResponse }
+  >({
+    resourcePath: "maintenance-request",
+    queryKey: ["maintenanceRequests"],
+  });
 
   const { data } = useGetAll<AssetRequestFormValues[]>("assets-list", [
     "getAllAssets",
@@ -63,15 +68,15 @@ const MaintenanceRequestForm = () => {
     formState: { errors, isSubmitting },
   } = useForm<JobRequestFormValues>({
     defaultValues: {
-      location: "",
-      type: "",
-      priority: "",
-      equipment: "",
-      impact: "",
+      location: "Maitland",
+      type: "corrective",
+      priority: "high",
+      equipment: "band saw",
+      impact: "production",
       jobComments: "",
-      description: "",
-      area: "",
-      assetID: "",
+      description: "Testing Tanstack Querie Invalidations",
+      area: "processing room",
+      assetID: "RT-0015",
       images: [],
     },
     resolver: zodResolver(

@@ -94,7 +94,6 @@ export type {
   ActionRequestFormValues,
   ActionAPIResponse,
   ActionRequestPayload,
-  ActionMetrics,
   ActionCardItem,
   //Asset Types
   AssetRequestFormValues,
@@ -111,6 +110,7 @@ export type {
   JobCardItem,
   AssetCardItem,
   JobMetrics,
+  ActionMetrics,
   AssetMetrics,
 };
 

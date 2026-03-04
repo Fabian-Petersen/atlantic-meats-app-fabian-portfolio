@@ -1,5 +1,7 @@
 // import Separator from "./Seperator";
 import { Separator } from "../ui/separator";
+import { getUserGroups } from "@/auth/getUserGroups";
+import type { UserGroup } from "../../data/navbarLinks";
 
 import {
   maintenanceLinks,
@@ -11,9 +13,21 @@ import {
 import SidebarSection from "./SidebarSection";
 
 import useGlobalContext from "../../context/useGlobalContext";
+import { useState, useEffect } from "react";
 
 const Sidebar = () => {
   const { isOpen } = useGlobalContext();
+  // $ Get the groups to display what the user is allowed to see
+  const [userGroups, setUserGroups] = useState<UserGroup[]>([]);
+
+  useEffect(() => {
+    const loadGroups = async () => {
+      const groups = await getUserGroups();
+      setUserGroups(groups);
+    };
+
+    loadGroups();
+  }, []);
 
   return (
     <div
@@ -23,13 +37,29 @@ const Sidebar = () => {
     >
       <div className="flex flex-col h-full gap-2 mt-6">
         {/* Content */}
-        <SidebarSection data={mainLinks} heading="Main" />
+        <SidebarSection
+          data={mainLinks}
+          heading="Main"
+          userGroups={userGroups}
+        />
         <Separator />
-        <SidebarSection data={maintenanceLinks} heading="Maintenance" />
+        <SidebarSection
+          data={maintenanceLinks}
+          heading="Maintenance"
+          userGroups={userGroups}
+        />
         <Separator />
-        <SidebarSection data={assetLinks} heading="Assets" />
+        <SidebarSection
+          data={assetLinks}
+          heading="Assets"
+          userGroups={userGroups}
+        />
         <Separator />
-        <SidebarSection data={profileLinks} heading="Profile" />
+        <SidebarSection
+          data={profileLinks}
+          heading="Profile"
+          userGroups={userGroups}
+        />
       </div>
     </div>
   );

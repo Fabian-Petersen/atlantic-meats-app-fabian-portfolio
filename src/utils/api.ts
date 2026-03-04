@@ -7,12 +7,13 @@ import type {
   CreateAssetPayload,
   JobRequestFormValues,
   CreateJobPayload,
-  // PresignedUrlResponse,
+  PresignedUrlResponse,
   JobcardPresignedUrlResponse,
   ActionRequestPayload,
   AssetAPIResponse,
   JobAPIResponse,
   ActionAPIResponse,
+  // PresignedURL,
 } from "@/schemas";
 import type { CommentRequestFormValues } from "@/schemas/commentSchemas";
 
@@ -36,7 +37,8 @@ export type RequestType =
 export type ResponseType =
   | AssetAPIResponse
   | JobAPIResponse
-  | ActionAPIResponse;
+  | ActionAPIResponse
+  | PresignedUrlResponse;
 
 // $ Format the data according to API requirements
 // const formatData = <T extends EntityType>(item: T): Omit<T, "id"> => {

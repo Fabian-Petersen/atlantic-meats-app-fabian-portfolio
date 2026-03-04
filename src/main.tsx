@@ -22,10 +22,10 @@ import configureAmplify from "../aws/amplifyConfig.ts";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // staleTime: 1000 * 60 * 60, // Data will not be considered stale for 1 hour
-      // refetchOnWindowFocus: false, // Prevent refetching when the window is focused
-      // refetchOnReconnect: false, // Prevent refetching when the connection is restored
-      // refetchOnMount: false, // Prevent refetching when a component mounts } },
+      // staleTime: 1000 * 60 * 10, // Data will be considered stale for 10 min
+      refetchOnWindowFocus: false, // Prevent refetching when the window is focused
+      refetchOnReconnect: false, // Prevent refetching when the connection is restored
+      refetchOnMount: true, // Prevent refetching when a component mounts } },
     },
   },
 });

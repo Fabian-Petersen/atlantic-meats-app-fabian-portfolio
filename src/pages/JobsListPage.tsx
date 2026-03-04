@@ -26,11 +26,12 @@ import AddNewItemButton from "@/components/features/AddNewItemButton";
 import ChatSidebar from "@/components/comments/ChatSidebar";
 
 const JobsListPage = () => {
-  const MAINTENANCE_REQUESTS_KEY = ["allMaintenanceRequests"];
   const { data, isPending, isError, refetch } = useGetAll<JobAPIResponse[]>(
     "maintenance-requests-list",
-    MAINTENANCE_REQUESTS_KEY,
+    ["maintenanceRequests"],
   );
+
+  console.log("requests:", data);
 
   const navigate = useNavigate();
   const [sorting, setSorting] = useState<SortingState>([
