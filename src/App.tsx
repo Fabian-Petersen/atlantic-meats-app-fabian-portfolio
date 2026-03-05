@@ -22,6 +22,7 @@ import CreateAssetPage from "./pages/CreateAssetPage";
 import JobActionItemPage from "./pages/JobActionPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import RoleGaurdRoute from "./routes/RoleGaurdRoute";
+import ActionsListPage from "./pages/ActionsListPage";
 
 function App() {
   return (
@@ -70,12 +71,22 @@ function App() {
           </Route>
           {/* // $ ======================= Maintenance Routes ======================= */}
           {/* //% Contractor Routes */}
-        </Route>
-        <Route element={<RoleGaurdRoute allowedGroups={["contractor"]} />}>
           <Route
-            path="/maintenance-action/:id"
-            element={<JobActionItemPage />}
-          />
+            element={
+              <RoleGaurdRoute
+                allowedGroups={["contractor", "technician", "admin"]}
+              />
+            }
+          >
+            <Route
+              path="/maintenance-action/:id"
+              element={<JobActionItemPage />}
+            />
+            <Route
+              path="/maintenance-actions-list"
+              element={<ActionsListPage />}
+            />
+          </Route>
         </Route>
       </Route>
     </Routes>

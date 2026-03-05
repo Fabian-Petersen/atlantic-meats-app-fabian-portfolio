@@ -18,7 +18,7 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { MobileMaintenanceRequestsTable } from "@/components/mobile/MobileMaintenanceRequestsTable";
 import useGlobalContext from "@/context/useGlobalContext";
 import { getMaintenanceColumns } from "@/components/maintenanceRequestTable/columns";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { ErrorPage } from "@/components/features/Error";
 import type { JobAPIResponse } from "@/schemas";
 import FilterContainer from "@/components/features/FilterContainer";
@@ -31,8 +31,9 @@ const JobsListPage = () => {
     ["maintenanceRequests"],
   );
 
-  console.log("requests:", data);
-
+  const onlyPendingData = useMemo(() => {
+    return data ? data.filter((item) => item.status === "Pending") : [];
+  }, [data]);
   const navigate = useNavigate();
   const [sorting, setSorting] = useState<SortingState>([
     { id: "jobCreated", desc: true },
@@ -61,7 +62,7 @@ const JobsListPage = () => {
   );
 
   const table = useReactTable({
-    data: data ?? [],
+    data: onlyPendingData ?? [],
     columns: columns,
     state: { sorting },
     onSortingChange: setSorting,

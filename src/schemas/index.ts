@@ -49,6 +49,7 @@ import type {
   ActionRequestPayload,
   ActionAPIResponse,
   ActionRequestFormValues,
+  ActionTableRow,
 } from "./actionSchemas";
 
 // % Assets Types
@@ -95,6 +96,7 @@ export type {
   ActionAPIResponse,
   ActionRequestPayload,
   ActionCardItem,
+  ActionTableRow,
   //Asset Types
   AssetRequestFormValues,
   AssetTableRow,

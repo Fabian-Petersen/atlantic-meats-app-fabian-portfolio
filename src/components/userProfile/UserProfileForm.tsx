@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import type { UserAttributes } from "@/schemas";
 // import { useUserAttributes } from "../../utils/aws-userAttributes";
+import { getUserGroups } from "@/auth/getUserGroups";
+import { useEffect } from "react";
 
 type UserProfileProps = {
   user: UserAttributes | null;
@@ -16,8 +18,15 @@ type UserProfileProps = {
 
 function UserProfileForm({ user }: UserProfileProps) {
   // todo: Add the additional user attributes to Cognito
-  // const { data: user } = useUserAttributes();
-  // console.log(user);
+
+  useEffect(() => {
+    const loadGroups = async () => {
+      const groups = await getUserGroups();
+      console.log(groups);
+      return groups;
+    };
+    loadGroups();
+  }, []);
 
   // const userTest = {
   //   name: user?.name ?? "",
@@ -28,7 +37,6 @@ function UserProfileForm({ user }: UserProfileProps) {
   //   branch: "distribution",
   //   division: "central services",
   // };
-
   const {
     register,
     handleSubmit,
@@ -40,6 +48,14 @@ function UserProfileForm({ user }: UserProfileProps) {
     ) as unknown as Resolver<UserAttributesFormValues>,
   });
 
+  // const defaultValues = {
+  //   name: "",
+  //   surname: "",
+  //   branch: "",
+  //   role: "",
+  //   email: "",
+  //   division: "",
+  // };
   const navigate = useNavigate();
 
   if (!user) return null;

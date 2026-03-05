@@ -1,3 +1,5 @@
+// $ This component shows the pending requests to be approved.
+
 import { flexRender, type Table } from "@tanstack/react-table";
 import EmptyTablePlaceholder from "../features/EmptyTablePlaceholder";
 

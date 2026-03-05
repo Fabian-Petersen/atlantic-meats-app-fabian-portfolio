@@ -14,6 +14,13 @@ type Props = {
   userGroups: UserGroup[];
 };
 
+const toLabel = (item: NavlinkProps, userGroups: UserGroup[]) =>
+  typeof item.name === "function"
+    ? item.name({ groups: userGroups })
+    : item.name;
+
+const toTitleCase = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
 const SidebarSection = ({ data, heading, userGroups }: Props) => {
   const { activeItem, setActiveItem, setIsOpen } = useGlobalContext();
 
@@ -38,20 +45,24 @@ const SidebarSection = ({ data, heading, userGroups }: Props) => {
     <section className="flex h-auto flex-col gap-4 lg:py-4 p-2">
       <SectionHeading heading={heading} className="text-xs" />
       <ul className="flex flex-col gap-3">
-        {visibleLinks.map((item) => (
-          <li key={item.name} className="w-full">
-            <Link to={item.url}>
-              <SidebarNavItem
-                icon={item.icon}
-                url={item.url}
-                isActive={activeItem === item.name}
-                onClick={() => handleSidebarLinkClick(item.name)}
-              >
-                {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
-              </SidebarNavItem>
-            </Link>
-          </li>
-        ))}
+        {visibleLinks.map((item) => {
+          const label = toLabel(item, userGroups);
+          const itemKey = item.url; // stable key + active identifier
+          return (
+            <li key={itemKey} className="w-full">
+              <Link to={item.url}>
+                <SidebarNavItem
+                  icon={item.icon}
+                  url={item.url}
+                  isActive={activeItem === item.name}
+                  onClick={() => handleSidebarLinkClick(itemKey)}
+                >
+                  {toTitleCase(label)}
+                </SidebarNavItem>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </section>
   );

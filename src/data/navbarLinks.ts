@@ -20,7 +20,7 @@ export type UserGroup =
   | "contractor";
 
 export type NavlinkProps = {
-  name: string;
+  name: string | ((args: { groups: UserGroup[] }) => string);
   icon: LucideIcon;
   url: string;
   allowedGroups?: UserGroup[]; // omit = visible to all
@@ -44,13 +44,13 @@ export const maintenanceLinks: NavlinkProps[] = [
     allowedGroups: ["admin"],
   },
   {
-    name: "my tasks",
+    name: ({ groups }) => (groups.includes("admin") ? "All Tasks" : "My Tasks"),
     icon: File,
-    url: "#",
-    allowedGroups: ["admin", "user", "technician", "manager", "contractor"],
+    url: "/maintenance-actions-list",
+    allowedGroups: ["admin", "technician", "manager", "contractor"],
   },
   {
-    name: "task list",
+    name: "open requests",
     icon: File,
     url: "/approval-requests-list",
     allowedGroups: ["admin", "user", "technician", "manager"],

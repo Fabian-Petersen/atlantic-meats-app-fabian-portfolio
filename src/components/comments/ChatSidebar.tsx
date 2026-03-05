@@ -11,29 +11,17 @@ const ChatSidebar = () => {
   const { openChatSidebar, setOpenChatSidebar, selectedRowId } =
     useGlobalContext();
 
-  const { data: comments = [] } = useById<CommentAPIResponse[]>({
+  const { data: comments = [], isPending } = useById<CommentAPIResponse[]>({
     id: selectedRowId ?? "",
     queryKey: ["CommentsKey"],
     resourcePath: "comment",
   });
 
-  // console.log(selectedRowId);
-  // const { data: item } = useById<JobAPIResponse>({
-  //   id: selectedRowId ?? "",
-  //   queryKey: ["MAINTENANCE-REQUEST-ITEM"],
-  //   resourcePath: "maintenance-request",
-  // });
-
-  // console.log(item);
-
-  // if (isPending) {
-  //   return <PageLoadingSpinner />;
-  // }
-
-  // // fallback UI if timeout reached
-  // if (!item) {
-  //   return <ErrorPage title="Error loading comments!!" message="" />;
-  // }
+  console.log("comments:", comments);
+  // [INFO] Change to something nice
+  if (isPending) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div
@@ -56,7 +44,7 @@ const ChatSidebar = () => {
             setOpenChatSidebar={setOpenChatSidebar}
           />
         )}
-        <div className="bg-gray-50 min-h-full overflow-y-scroll flex flex-col gap-2 no-scrollbar p-2 rounded-lg">
+        <div className="bg-gray-50 min-h-full overflow-y-scroll flex flex-col gap-4 no-scrollbar p-2 rounded-lg">
           {comments.map((comment, index) => (
             <CommentItem
               key={comment.id}

@@ -1,4 +1,5 @@
 import type { CommentAPIResponse } from "@/schemas/commentSchemas";
+import CommentAvatar from "./CommentAvatar";
 
 type CommentItemProps = {
   comment: CommentAPIResponse;
@@ -8,17 +9,20 @@ type CommentItemProps = {
 const CommentItem = ({ comment, align }: CommentItemProps) => {
   const isRight = align === "right";
   return (
-    <div className={`flex ${isRight ? "justify-end" : "justify-start"}`}>
+    <div
+      className={`flex gap-2 ${isRight ? "justify-end items-center" : "justify-start items-center"}`}
+    >
+      <CommentAvatar comment_by={comment.comment_by} />
       <div
         className={`flex flex-col gap-2 ${isRight ? "bg-primary/30" : "bg-gray-200"} rounded-md min-h-16 h-auto p-2`}
       >
-        <div className="flex gap-2">
-          <p className="text-xs text-gray-500 capitalize">
+        <div className="flex gap-4">
+          <p className="text-xs text-gray-800 capitalize">
             {comment.comment_by}
           </p>
           <p className="text-gray-500 text-[0.65rem]">{comment.createdAt}</p>
         </div>
-        <p className="text-xs text-gray-600">{comment.comment}</p>
+        <p className="text-xs text-gray-800">{comment.comment}</p>
       </div>
     </div>
   );

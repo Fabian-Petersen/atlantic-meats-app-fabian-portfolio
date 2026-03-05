@@ -37,9 +37,13 @@ export const actionRequestSchema = z.object({
 export const actionResponseSchema = actionRequestSchema.extend({
   id: z.string(),
   actionCreated: z.string(),
+  actioned_by: z.string(),
   request_id: z.string(),
   action_id: z.string().optional(),
   completed_at: z.string().optional(),
+  location: z.string(),
+  requested_by: z.string(),
+  jobcardNumber: z.string(),
 });
 
 // $ Type for sending the Action to the backend excluding the images (the images is not included with the initial request). Backend will send a presignURL for the images
@@ -53,5 +57,25 @@ export type ActionRequestPayload = Omit<ActionRequestFormValues, "images"> & {
   jobCardNumber?: string; // ID of the maintenance request being actioned
 };
 
+// $ Schema for the Asset Table Menu
+export const actionTableRowSchema = actionResponseSchema
+  .omit({
+    signtuture: true,
+    findings: true,
+    images: true,
+    root_cause: true,
+    work_completed: true,
+    request_id: true,
+  })
+  .extend({
+    id: z.string(),
+    actioned_by: z.string(),
+    actionCreated: z.string(),
+    location: z.string(),
+    requested_by: z.string(),
+    jobcardNumber: z.string(),
+  });
+
+export type ActionTableRow = z.infer<typeof actionTableRowSchema>;
 export type ActionRequestFormValues = z.infer<typeof actionRequestSchema>;
 export type ActionAPIResponse = z.infer<typeof actionResponseSchema>;
