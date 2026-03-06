@@ -5,7 +5,6 @@ import type { ColumnDef } from "@tanstack/react-table";
 import EmptyTablePlaceholder from "../features/EmptyTablePlaceholder";
 
 import { useNavigate, useLocation } from "react-router-dom";
-// import type { APIData, TableRows } from "@/schemas";
 import { useState } from "react";
 import useGlobalContext from "@/context/useGlobalContext";
 
@@ -21,10 +20,11 @@ import FilterContainer from "../features/FilterContainer";
 
 type Props<T extends { id: string }> = {
   data: T[];
-  tableHeading: string;
   columns: ColumnDef<T>[];
+  tableHeading?: string;
   className?: string;
-  path: string;
+  path?: string;
+  initialSorting?: SortingState;
 };
 
 export function GenericTable<T extends { id: string }>({
@@ -33,13 +33,16 @@ export function GenericTable<T extends { id: string }>({
   columns,
   className,
   path,
+  initialSorting = [],
 }: Props<T>) {
   const navigate = useNavigate();
   const { setSelectedRowId } = useGlobalContext();
 
-  const [sorting, setSorting] = useState<SortingState>([
-    { id: "actionCreated", desc: true }, // primary sort
-  ]);
+  const [sorting, setSorting] = useState<SortingState>(initialSorting);
+
+  // const [sorting, setSorting] = useState<SortingState>([
+  //   { id: "actionCreated", desc: true }, // primary sort
+  // ]);
 
   const location = useLocation();
 
@@ -56,7 +59,9 @@ export function GenericTable<T extends { id: string }>({
   return (
     <div className="w-full md:p-4 min-h-0">
       {/* <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 border-dashed min-h-0"> */}
-      <FormHeading className="mx-auto" heading={tableHeading} />
+      {tableHeading && (
+        <FormHeading className="mx-auto" heading={tableHeading} />
+      )}
       {location.pathname === "/dashboard" ? undefined : (
         <div className="flex gap-4 items-end w-full">
           <FilterContainer table={table} className="" />

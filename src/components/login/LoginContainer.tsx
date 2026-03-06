@@ -89,7 +89,7 @@ export default function LoginContainer() {
   };
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-100 max-h-92 h-92 bg-white rounded-xl shadow-lg p-4 dark:border-gray-700/50 dark:bg-[#1d2739]">
+    <div className="flex flex-col gap-8 w-full max-w-100 max-h-92 h-88 bg-white rounded-xl shadow-lg p-4 dark:border-gray-700/50 dark:bg-[#1d2739]">
       {step === "LOGIN" && (
         <div className="h-full flex flex-col gap-4">
           <FormHeading

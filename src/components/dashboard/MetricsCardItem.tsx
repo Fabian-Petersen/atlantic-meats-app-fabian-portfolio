@@ -33,10 +33,11 @@ export const MetricCardItem = <T extends string>({
                 className={`
                   flex items-center gap-2 self-end w-full
                   text-[0.625rem] xl:text-[0.825rem]
-                  ${metric.valueChange > 0 ? "text-green-500" : "text-red-500"}
+                  ${metric.valueChange === 0 ? "text-blue-600" : metric.valueChange > 0 ? "text-green-500" : "text-red-500"}
                 `}
               >
-                {metric.valueChange > 0 ? (
+                {metric.valueChange === 0 ? undefined : metric.valueChange >
+                  0 ? (
                   <TrendingUp size={16} />
                 ) : (
                   <TrendingDown size={16} />
@@ -44,7 +45,7 @@ export const MetricCardItem = <T extends string>({
 
                 <span>
                   {metric.valueChange}%{" "}
-                  <span className="opacity-80">from last month</span>
+                  <span className="opacity-80">Change from last month</span>
                 </span>
               </div>
             </div>

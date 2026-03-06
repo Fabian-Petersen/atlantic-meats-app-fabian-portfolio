@@ -50,7 +50,7 @@ export function MaintenanceRequestsTable({ table, className }: Props) {
                   key={row.id}
                   onClick={() => {
                     setSelectedRowId(row.original.id);
-                    navigate(`/maintenance-request/${row.original.id}`);
+                    navigate(`/approval-request/${row.original.id}`);
                   }}
                   className="cursor-pointer hover:bg-primary/20 dark:bg-[#1d2739]"
                 >

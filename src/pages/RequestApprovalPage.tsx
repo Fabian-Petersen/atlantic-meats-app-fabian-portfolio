@@ -5,7 +5,7 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../utils/api";
 import { type JobAPIResponse } from "@/schemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
-import MaintenanceSingleItemInfo from "@/components/jobs/JobSingleItemInfo";
+import RequestApproval from "@/components/requests/RequestApproval";
 
 export type PresignedUrlResponse = {
   key: string;
@@ -13,11 +13,7 @@ export type PresignedUrlResponse = {
   url: string;
 };
 
-// type WithImages = {
-//   imageUrls?: PresignedUrlResponse[];
-// };
-
-const JobItemPage = () => {
+const RequestApprovalPage = () => {
   const { id } = useParams<{ id: string }>();
 
   const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
@@ -38,7 +34,6 @@ const JobItemPage = () => {
 
   const images = item.images;
 
-  // console.log("Item Data with Presigned URLS:", item);
   return (
     <div className="p-4">
       <div className="h-auto bg-white dark:bg-[#1d2739] border-gray-700/70 rounded-md grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800">
@@ -46,11 +41,11 @@ const JobItemPage = () => {
           <ImageGallery images={images ?? []} />
         </div>
         <div>
-          <MaintenanceSingleItemInfo />
+          <RequestApproval />
         </div>
       </div>
     </div>
   );
 };
 
-export default JobItemPage;
+export default RequestApprovalPage;

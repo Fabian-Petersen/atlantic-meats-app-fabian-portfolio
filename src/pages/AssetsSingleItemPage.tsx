@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 // import { useMaintenanceRequestById } from "../utils/maintenanceRequests";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "@/utils/api";
-import { AssetSingleItemImages } from "@/components/assets/AssetSingleItemImages";
+import { ImageGallery } from "@/components/features/ImageGallery";
 import AssetSingleItemInfo from "@/components/assets/AssetSingleItemInfo";
 import type { AssetAPIResponse } from "@/schemas";
 
@@ -40,7 +40,7 @@ const AssetsSingleItemPage = () => {
     <div className="p-2">
       <div className="min-h-(var(--minheight-page)) bg-white dark:bg-[#1d2739] border-gray-700/70 rounded-md grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800">
         <div className="order-2 md:order-1">
-          <AssetSingleItemImages images={images ?? []} />
+          <ImageGallery images={images ?? []} />
         </div>
         <div className="order-1 md:order-2">
           <AssetSingleItemInfo item={item} />

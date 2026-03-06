@@ -31,6 +31,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [showUpdateAssetDialog, setShowUpdateAssetDialog] =
     useState<boolean>(false);
 
+  // $ Delete Modal
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteConfig, setDeleteConfig] = useState<DeleteConfig | null>(null);
   const openDeleteDialog = (id: string, config: DeleteConfig) => {
@@ -45,6 +46,14 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setDeleteConfig(null);
   };
 
+  // $ Reject Modal
+  // const [showRejectRequestDialog, setShowRejectRequestDialog] = useState(false);
+  // const [rejectConfig, setRejectConfig] = useState<RejectConfig | null>(null);
+  // const openRejectRequestDialog = (id: string, config: RejectConfig) => {
+  //   setSelectedRowId(id);
+  //   setRejectConfig(config);
+  //   setShowRejectRequestDialog(true);
+  // };
   // $ State for the TableMenuItems
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   // $ State for the data to update/delete an items

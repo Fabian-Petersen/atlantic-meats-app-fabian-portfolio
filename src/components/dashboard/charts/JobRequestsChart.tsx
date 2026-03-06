@@ -36,7 +36,7 @@ function JobRequestsChart() {
   // };
 
   return (
-    <div className="h-[300px] outline-none focus:outline-none focus:ring-0">
+    <div className="h-[300px] w-full outline-none focus:outline-none focus:ring-0">
       <ResponsiveContainer width="100%" height="90%">
         <BarChart data={revenueData} barSize={20}>
           <XAxis dataKey="name" style={{ fontSize: "15px" }} />

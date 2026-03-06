@@ -13,6 +13,7 @@ import { usePasswordVisibility } from "@/utils/usePasswordVisibility";
 
 // $ Import schemas
 import type { LoginFormValues } from "../../schemas/index";
+import { Spinner } from "../ui/spinner";
 type Props = {
   onSubmit: (data: LoginFormValues) => void;
   loading: boolean;
@@ -43,11 +44,9 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
             label="Email"
             type="email"
             name="email"
-            // control={control}
             placeholder="Enter your email"
             register={register}
             error={errors.email}
-            // Icon={Mail}
           />
           <FormRowInput
             label="Password"
@@ -55,11 +54,9 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
             togglePassword={showPassword.toggle} // comes from the usePasswordVisibility hook
             isVisible={showPassword.isVisible} // comes from the usePasswordVisibility hook
             name="password"
-            // control={control}
             placeholder="Enter your password"
             register={register}
             error={errors.password}
-            // Icon={Lock}
           />
         </div>
         <div className="flex justify-end">
@@ -78,7 +75,14 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
         type="submit"
         disabled={loading}
       >
-        {loading ? "Signing in..." : "Sign In"}
+        {loading ? (
+          <div className="flex gap-4 items-center">
+            <Spinner data-icon="inline-start" className="size-8" />
+            <span className="text-md">signing in...</span>
+          </div>
+        ) : (
+          "Sign In"
+        )}
       </Button>
     </form>
   );

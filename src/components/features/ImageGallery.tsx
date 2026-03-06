@@ -11,7 +11,7 @@ type Props = {
   className?: string;
 };
 
-export const AssetSingleItemImages = ({ images, className }: Props) => {
+export const ImageGallery = ({ images, className }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const MAX_VISIBLE = 3;

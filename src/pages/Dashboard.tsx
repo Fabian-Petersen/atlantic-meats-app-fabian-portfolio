@@ -69,7 +69,11 @@ const Dashboard = () => {
           "
         >
           <ChartHeading title="Pending Requests" className="" />
-          <GenericTable data={pendingRequests ?? []} columns={columns ?? []} />
+          <GenericTable
+            data={pendingRequests ?? []}
+            columns={columns ?? []}
+            initialSorting={[{ id: "jobCreated", desc: true }]}
+          />
         </div>
       </div>
     </main>

@@ -23,6 +23,7 @@ import JobActionItemPage from "./pages/JobActionPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import RoleGaurdRoute from "./routes/RoleGaurdRoute";
 import ActionsListPage from "./pages/ActionsListPage";
+import RequestApprovalPage from "./pages/RequestApprovalPage";
 
 function App() {
   return (
@@ -66,7 +67,10 @@ function App() {
             <Route path="/assets-list" element={<AssetsOverviewPage />} />
             <Route path="/asset/:id" element={<AssetsSingleItemPage />} />
             <Route path="/approval-request-list" element={""} />
-            <Route path="/approval-request/:id" element={""} />
+            <Route
+              path="/approval-request/:id"
+              element={<RequestApprovalPage />}
+            />
             <Route path="/asset" element={<CreateAssetPage />} />
           </Route>
           {/* // $ ======================= Maintenance Routes ======================= */}
