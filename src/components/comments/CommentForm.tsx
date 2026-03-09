@@ -49,7 +49,6 @@ const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
     // console.log(data);
     try {
       const payload: CommentPayload = { ...data, request_id: selectedRowId };
-      // console.log("payload:", payload);
       const response = await mutateAsync(payload);
       reset();
 

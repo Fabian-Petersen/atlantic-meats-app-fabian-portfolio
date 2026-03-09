@@ -5,20 +5,22 @@ import type { JobAPIResponse } from "@/schemas";
 // import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
-import { useById } from "@/utils/api";
-// import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
+import { useById, usePOST } from "@/utils/api";
 import { ErrorPage } from "../features/Error";
 import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
+
+import { toast } from "sonner";
 
 // icons
 import { X, Check } from "lucide-react";
 
-// type Props = {
-//   item: JobRequestFormValues;
-// };
-
 function RequestApproval() {
-  const { selectedRowId } = useGlobalContext();
+  const { selectedRowId, setShowRejectRequestDialog } = useGlobalContext();
+
+  const { mutateAsync: approveRequest, isPending: isApproved } = usePOST({
+    resourcePath: "job-request-approved",
+    queryKey: ["maintenanceRequest"],
+  });
 
   const { data: item, isPending } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
@@ -26,7 +28,6 @@ function RequestApproval() {
     resourcePath: "maintenance-request",
   });
   const navigate = useNavigate();
-
   if (isPending) {
     return <PageLoadingSpinner />;
   }
@@ -40,6 +41,22 @@ function RequestApproval() {
       />
     );
   }
+
+  const handleApprove = async () => {
+    const payload = {
+      selectedRowId: selectedRowId,
+      status: "In Progress",
+    };
+
+    try {
+      const response = await approveRequest(payload);
+      console.log("approve-request:", response);
+      toast.success("The itemm was sucessfully rejected");
+      navigate("/maintenance-request-list");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex gap flex-col gap-2 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50">
@@ -92,7 +109,7 @@ function RequestApproval() {
           <button
             type="button"
             onClick={() => {
-              navigate("/maintenance-requests-list");
+              setShowRejectRequestDialog(true);
             }}
             // variant="cancel"
             // size="lg"
@@ -103,11 +120,12 @@ function RequestApproval() {
           </button>
           <button
             type="submit"
+            disabled={isApproved}
             // variant="submit"
             // size="lg"
             className="flex items-center gap-4 py-2 bg-green-500/90 hover:cursor-pointer justify-center rounded-lg text-white flex-1 px-4"
             onClick={() => {
-              navigate(`/maintenance-requests-list`);
+              handleApprove();
             }}
           >
             <Check w-24 h-24 />

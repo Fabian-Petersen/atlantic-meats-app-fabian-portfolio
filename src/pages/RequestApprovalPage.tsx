@@ -5,7 +5,7 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../utils/api";
 import { type JobAPIResponse } from "@/schemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
-import RequestApproval from "@/components/requests/RequestApproval";
+import RequestApproval from "@/components/requests_approvals/RequestApproval";
 
 export type PresignedUrlResponse = {
   key: string;

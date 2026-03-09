@@ -31,23 +31,36 @@ const TextAreaInput = <T extends FieldValues>({
   isValid,
   className,
 }: FormRowTextAreaProps<T>) => {
+  const registered = register(name);
   return (
     <div className={`relative w-full mb-2 group ${className}`}>
       <textarea
-        {...register(name)}
+        {...registered}
         id={String(name)}
         rows={rows}
         placeholder={placeholder}
         disabled={disabled}
         className={clsx(
           "text-sm py-3 px-2 peer w-full rounded-md outline-none resize-none text-gray-700",
-          "placeholder-transparent",
+          `${placeholder ? "placeholder-shown:" : "placeholder-transparent"}`,
           "border border-gray-300",
+          "resize-none overflow-hidden", // this removes the scrollbar when the textarea grows
           "focus:border-rose-600 focus:dark:bg-gray-600",
           "dark:bg-gray-900/20 dark:border-gray-700/50 dark:text-gray-100/50",
           isValid && "border-green-500",
           error && "border-red-300",
         )}
+        onInput={(e) => {
+          const target = e.currentTarget;
+          target.style.height = "auto";
+          target.style.height = `${target.scrollHeight}px`;
+        }}
+        onChange={(e) => {
+          registered.onChange(e);
+          const target = e.currentTarget;
+          target.style.height = "auto";
+          target.style.height = `${target.scrollHeight}px`;
+        }}
       />
 
       {label && (

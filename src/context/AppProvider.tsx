@@ -47,7 +47,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // $ Reject Modal
-  // const [showRejectRequestDialog, setShowRejectRequestDialog] = useState(false);
+  const [showRejectRequestDialog, setShowRejectRequestDialog] = useState(false);
   // const [rejectConfig, setRejectConfig] = useState<RejectConfig | null>(null);
   // const openRejectRequestDialog = (id: string, config: RejectConfig) => {
   //   setSelectedRowId(id);
@@ -106,6 +106,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         closeDeleteDialog,
         openChatSidebar,
         setOpenChatSidebar,
+        showRejectRequestDialog,
+        setShowRejectRequestDialog,
       }}
     >
       {children}

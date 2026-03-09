@@ -53,8 +53,8 @@ export type AppContextType = {
   deleteConfig: DeleteConfig | null;
 
   // $ Reject Request Modal
-  // showRejectRequestDialog: boolean;
-  // setShowRejectRequestDialog: (v: boolean) => void;
+  showRejectRequestDialog: boolean;
+  setShowRejectRequestDialog: (v: boolean) => void;
 
   openDeleteDialog: (id: string, config: DeleteConfig) => void;
   closeDeleteDialog: () => void;

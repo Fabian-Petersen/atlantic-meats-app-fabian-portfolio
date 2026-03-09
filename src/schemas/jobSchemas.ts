@@ -31,7 +31,14 @@ export const jobApiResponseSchema = jobRequestSchema
     jobcardNumber: z.string(),
     status: z.string(),
     requested_by: z.string(),
+    // $ These fields are added when a request was rejected
+    reject_message: z.string().optional(),
+    rejected_at: z.string().optional(),
+    rejected_by: z.string().optional(),
     images: z.array(presignedURLSchema).default([]), // existing images (urls/keys)
+    // $ The fields are added when a request was approved
+    approved_at: z.string().optional(),
+    approved_by: z.string().optional(),
   });
 
 export type JobAPIResponse = z.infer<typeof jobApiResponseSchema>;

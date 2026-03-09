@@ -17,7 +17,7 @@ const ChatSidebar = () => {
     resourcePath: "comment",
   });
 
-  console.log("comments:", comments);
+  // console.log("comments:", comments);
   // [INFO] Change to something nice
   if (isPending) {
     return <p>Loading...</p>;

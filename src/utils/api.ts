@@ -25,7 +25,9 @@ export type Resource =
   | "maintenance-jobcard" // GET jobcardById
   | "maintenance-request" // POST & DELETE, GET requestsById
   | "maintenance-requests-list" // GET all maintenance requests
-  | "comment"; // POST a comment
+  | "comment" // POST a comment
+  | "job-request-rejected"
+  | "job-request-approved";
 
 // $ Combine the types into a union type for the generic functions
 export type RequestType =
