@@ -20,14 +20,17 @@ import { Spinner } from "../ui/spinner";
 
 // $ Context
 import useGlobalContext from "@/context/useGlobalContext";
+import { useNavigate } from "react-router-dom";
 
 const RequestRejectedForm = () => {
   const { setShowRejectRequestDialog, selectedRowId, showRejectRequestDialog } =
     useGlobalContext();
+  const navigate = useNavigate();
 
   // $ Form Schema
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<JobRejectRequestFormValues>({
@@ -54,9 +57,22 @@ const RequestRejectedForm = () => {
         status: "Rejected",
         selectedRowId: selectedRowId,
       };
-      const response = await rejectItem(payload);
-      console.log("reject-response:", response);
+      // $ Send payload to the backend
+      await rejectItem(payload);
+
+      // $ Reset the form
+      reset();
+
+      // $ Close the modal
+      setShowRejectRequestDialog(false);
+
+      // $ Inform the user of successful submission
       toast.success("The itemm was sucessfully rejected");
+
+      // $ Navigate back to the requests list page after successfull submit
+      setTimeout(() => {
+        navigate("/maintenance-requests-list");
+      }, 1500);
     } catch (error) {
       console.log(error);
       console.error("Reject Request failed:", error);
@@ -101,9 +117,8 @@ const RequestRejectedForm = () => {
             className="w-full rounded-full bg-primary/90 px-6 py-2 text-white transition hover:bg-primary hover:cursor-pointer disabled:opacity-50 lg:w-32"
           >
             {isPending ? (
-              <div className="flex gap-4 items-center">
+              <div className="flex gap-4 items-center justify-center">
                 <Spinner data-icon="inline-start" className="size-6" />
-                <span className="text-md">submitting...</span>
               </div>
             ) : (
               "Submit"

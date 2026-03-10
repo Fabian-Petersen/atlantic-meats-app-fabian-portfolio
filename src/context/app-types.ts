@@ -56,6 +56,10 @@ export type AppContextType = {
   showRejectRequestDialog: boolean;
   setShowRejectRequestDialog: (v: boolean) => void;
 
+  // $ Approve Request Modal
+  showApproveRequestDialog: boolean;
+  setShowApproveRequestDialog: (v: boolean) => void;
+
   openDeleteDialog: (id: string, config: DeleteConfig) => void;
   closeDeleteDialog: () => void;
 

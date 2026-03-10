@@ -20,7 +20,7 @@ const ChatSidebar = () => {
   // console.log("comments:", comments);
   // [INFO] Change to something nice
   if (isPending) {
-    return <p>Loading...</p>;
+    // return <p>Loading...</p>;
   }
 
   return (

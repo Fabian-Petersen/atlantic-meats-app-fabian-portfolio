@@ -66,6 +66,7 @@ const ASSETS_REQUESTS_KEY = ["assetRequests"];
 export const useGetAll = <ResponseType>(
   resourcePath: Resource,
   queryKey: readonly unknown[] = [resourcePath],
+  // enabled: boolean = true,
 ) => {
   return useQuery({
     queryKey,
@@ -78,6 +79,7 @@ export const useGetAll = <ResponseType>(
         throw error;
       }
     },
+    // enabled: enabled && !!resourcePath,
   });
 };
 

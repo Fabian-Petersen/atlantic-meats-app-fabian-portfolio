@@ -2,28 +2,28 @@ import { Dialog, DialogTitle, DialogContent } from "@/components/ui/dialog";
 
 import useGlobalContext from "@/context/useGlobalContext";
 import FormHeading from "../../../customComponents/FormHeading";
-import RejectRequestForm from "@/components/requests_approvals/RejectRequestForm";
+import ApproveRequestForm from "@/components/requests_approvals/ApproveRequestForm";
 
-function RejectRequestDialog() {
-  const { showRejectRequestDialog, setShowRejectRequestDialog } =
+function ApproveRequestDialog() {
+  const { showApproveRequestDialog, setShowApproveRequestDialog } =
     useGlobalContext();
   return (
     <Dialog
-      open={showRejectRequestDialog}
-      onOpenChange={setShowRejectRequestDialog}
+      open={showApproveRequestDialog}
+      onOpenChange={setShowApproveRequestDialog}
     >
       <DialogContent className="sm:max-w-[625px] bg-white z-3000 dark:bg-[#1d2739] border-none dark:text-gray-100 dark:border-gray-700/50">
         <DialogTitle className="">
           <FormHeading
-            arial-label="Reject Job Request"
+            arial-label="Approve Job Request"
             className="font-normal"
-            heading="Reject Job Request"
+            heading="Approve Job Request"
           />
         </DialogTitle>
-        <RejectRequestForm />
+        <ApproveRequestForm />
       </DialogContent>
     </Dialog>
   );
 }
 
-export default RejectRequestDialog;
+export default ApproveRequestDialog;

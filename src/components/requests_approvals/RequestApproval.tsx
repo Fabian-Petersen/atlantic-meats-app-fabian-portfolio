@@ -15,7 +15,11 @@ import { toast } from "sonner";
 import { X, Check } from "lucide-react";
 
 function RequestApproval() {
-  const { selectedRowId, setShowRejectRequestDialog } = useGlobalContext();
+  const {
+    selectedRowId,
+    setShowRejectRequestDialog,
+    setShowApproveRequestDialog,
+  } = useGlobalContext();
 
   const { mutateAsync: approveRequest, isPending: isApproved } = usePOST({
     resourcePath: "job-request-approved",
@@ -43,6 +47,7 @@ function RequestApproval() {
   }
 
   const handleApprove = async () => {
+    setShowApproveRequestDialog(true);
     const payload = {
       selectedRowId: selectedRowId,
       status: "In Progress",

@@ -46,14 +46,13 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setDeleteConfig(null);
   };
 
-  // $ Reject Modal
+  // $ Reject Request Modal
   const [showRejectRequestDialog, setShowRejectRequestDialog] = useState(false);
-  // const [rejectConfig, setRejectConfig] = useState<RejectConfig | null>(null);
-  // const openRejectRequestDialog = (id: string, config: RejectConfig) => {
-  //   setSelectedRowId(id);
-  //   setRejectConfig(config);
-  //   setShowRejectRequestDialog(true);
-  // };
+
+  // $ Approve Request Modal
+  const [showApproveRequestDialog, setShowApproveRequestDialog] =
+    useState(false);
+
   // $ State for the TableMenuItems
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   // $ State for the data to update/delete an items
@@ -108,6 +107,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setOpenChatSidebar,
         showRejectRequestDialog,
         setShowRejectRequestDialog,
+        showApproveRequestDialog,
+        setShowApproveRequestDialog,
       }}
     >
       {children}

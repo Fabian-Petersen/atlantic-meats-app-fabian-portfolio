@@ -18,14 +18,26 @@ export type JobRejectRequestPayload = z.infer<
 >;
 
 // $ Schema to create an approve request
-export const jobApprovedRequestSchema = z.object({
-  status: z.string(),
-  selectedRowId: z.string(),
+export const approveRequestSchema = z.object({
+  assignToGroup: z
+    .string()
+    .min(1, { message: "Select either contractor or technician" }),
+  targetDate: z
+    .string()
+    .min(1, { message: "Please select a reasonable completion date" }),
+  assign_to_name: z
+    .string()
+    .min(1, { message: "Please assign work to a technician" }),
 });
 
-export type JobApprovedRequestFormValues = z.infer<
-  typeof jobApprovedRequestSchema
->;
+export const approveRequestPayloadSchema = approveRequestSchema.extend({
+  status: z.string(),
+  selectedRowId: z.string(),
+  assign_to_sub: z.string(),
+});
+
+export type ApproveRequestFormValues = z.infer<typeof approveRequestSchema>;
+export type ApproveRequestPayload = z.infer<typeof approveRequestPayloadSchema>;
 
 // $ Schema for the API Response from the database when fetching the maintenance requests
 export const jobRejectedApiResponseSchema = jobRejectRequestSchema.extend({
