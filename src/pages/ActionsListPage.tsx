@@ -76,7 +76,7 @@ const ActionsListPage = () => {
         data={rows}
         columns={columns}
         path={"action"}
-        tableHeading="Jobs Overview"
+        tableHeading="Maintenance Actions List"
       />
       {/* <MobileActionOverviewTable
           className="flex lg:hidden"

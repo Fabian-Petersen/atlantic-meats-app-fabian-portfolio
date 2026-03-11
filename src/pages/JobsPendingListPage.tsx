@@ -1,5 +1,5 @@
-// $ This component renders the page for the maintenance requests in a table format.
-// $ The list is from a Get request to the getMaintenanceRequest.py lambda function.
+// $ This component renders the page for the maintenance requests to be approved in a table format.
+// $ The list is from a Get request to the getJobsList.py lambda function.
 
 import FormHeading from "../../customComponents/FormHeading";
 import { MaintenanceRequestsTable } from "@/components/maintenanceRequestTable/MaintenanceRequestsTable";
@@ -18,22 +18,22 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { MobileMaintenanceRequestsTable } from "@/components/mobile/MobileMaintenanceRequestsTable";
 import useGlobalContext from "@/context/useGlobalContext";
 import { getMaintenanceColumns } from "@/components/maintenanceRequestTable/columns";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
 import type { JobAPIResponse } from "@/schemas";
 import FilterContainer from "@/components/features/FilterContainer";
 import AddNewItemButton from "@/components/features/AddNewItemButton";
 import ChatSidebar from "@/components/comments/ChatSidebar";
 
-const JobsListPage = () => {
-  const { data, isPending, isError, refetch } = useGetAll<JobAPIResponse[]>(
-    "maintenance-requests-list",
+const JobsPendingListPage = () => {
+  const { data, isError, refetch, isPending } = useGetAll<JobAPIResponse[]>(
+    "jobs-list-pending",
     ["maintenanceRequests"],
   );
 
-  const onlyPendingData = useMemo(() => {
-    return data ? data.filter((item) => item.status === "Pending") : [];
-  }, [data]);
+  // const onlyPendingData = useMemo(() => {
+  //   return data ? data.filter((item) => item.status === "Pending") : [];
+  // }, [data]);
   const navigate = useNavigate();
   const [sorting, setSorting] = useState<SortingState>([
     { id: "jobCreated", desc: true },
@@ -62,7 +62,7 @@ const JobsListPage = () => {
   );
 
   const table = useReactTable({
-    data: onlyPendingData ?? [],
+    data: data ?? [],
     columns: columns,
     state: { sorting },
     onSortingChange: setSorting,
@@ -112,4 +112,4 @@ const JobsListPage = () => {
   );
 };
 
-export default JobsListPage;
+export default JobsPendingListPage;

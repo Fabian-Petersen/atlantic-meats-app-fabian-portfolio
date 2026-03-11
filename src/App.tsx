@@ -14,7 +14,6 @@ import AssetsOverviewPage from "./pages/AssetsOverviewPage";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 // import { PublicLayout } from "./routes/PublicLayout";
 import { AppLayout } from "./routes/AppLayout";
-import JobsListPage from "./pages/JobsListPage";
 import JobItemPage from "./pages/JobItemPage";
 import AssetsSingleItemPage from "./pages/AssetsSingleItemPage";
 import UserProfilePage from "./pages/UserProfilePage";
@@ -24,6 +23,8 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import RoleGaurdRoute from "./routes/RoleGaurdRoute";
 import ActionsListPage from "./pages/ActionsListPage";
 import RequestApprovalPage from "./pages/RequestApprovalPage";
+import JobsPendingListPage from "./pages/JobsPendingListPage";
+import JobsApprovedListPage from "./pages/JobsApprovedListPage";
 
 function App() {
   return (
@@ -54,21 +55,24 @@ function App() {
             <Route path="/maintenance-request" element={<JobRequestPage />} />
             <Route path="/maintenance-request/:id" element={<JobItemPage />} />
             <Route
-              path="/maintenance-action/:id"
-              element={<JobActionItemPage />}
+              path="/jobs-list-approved"
+              element={<JobsApprovedListPage />}
             />
             <Route
-              path="/maintenance-requests-list"
-              element={<JobsListPage />}
+              path="/maintenance-action/:id"
+              element={<JobActionItemPage />}
             />
           </Route>
           {/* // % Admin only Routes */}
           <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>
+            <Route
+              path="/jobs-list-pending"
+              element={<JobsPendingListPage />}
+            />
             <Route path="/assets-list" element={<AssetsOverviewPage />} />
             <Route path="/asset/:id" element={<AssetsSingleItemPage />} />
-            <Route path="/approval-request-list" element={""} />
             <Route
-              path="/approval-request/:id"
+              path="/jobs-list-pending/:id"
               element={<RequestApprovalPage />}
             />
             <Route path="/asset" element={<CreateAssetPage />} />

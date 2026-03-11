@@ -57,7 +57,7 @@ function RequestApproval() {
       const response = await approveRequest(payload);
       console.log("approve-request:", response);
       toast.success("The itemm was sucessfully rejected");
-      navigate("/maintenance-request-list");
+      navigate("/jobs-list-approved");
     } catch (error) {
       console.log(error);
     }

@@ -21,7 +21,7 @@ const RequestApprovalPage = () => {
   const { data: item, isPending } = useById<JobAPIResponse>({
     id: id || "",
     queryKey: MAINTENANCE_REQUESTS_KEY,
-    resourcePath: "maintenance-request",
+    resourcePath: "jobs-list-pending",
   });
 
   if (!id || !item) {
