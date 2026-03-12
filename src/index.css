@@ -12,6 +12,8 @@
   --sm-sidebarHeight: calc(100dvh - var(--sm-navbarHeight));
   --lg-sidebarHeight: calc(100dvh - var(--lg-navbarHeight));
   --clr-primary: #fcb53b;
+  --clr-check: "#4CAF50";
+  --clr-bgCheck: "#C8E6C9";
   --clr-activeLink: #c97e00;
   --clr-font: #001433;
   --clr-primary-light: #1b64f1;

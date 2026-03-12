@@ -6,9 +6,9 @@ import JobRequestForm from "@/components/jobs/JobRequestForm";
 import useGlobalContext from "@/context/useGlobalContext";
 
 const JobRequestPage = () => {
-  const { hasError } = useGlobalContext();
+  const { showError } = useGlobalContext();
 
-  if (hasError) {
+  if (showError) {
     <ErrorPage />;
   }
 

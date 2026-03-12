@@ -1,11 +1,10 @@
-// $ This page renders the full details of a maintenance request information with the supporting pictures
-
+// $ This page renders the full details of an approved request with information and pictures
 import { useParams } from "react-router-dom";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../utils/api";
-import { type JobAPIResponse } from "@/schemas";
+import { type JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
-import RequestApproval from "@/components/requests_approvals/RequestApproval";
+import JobApprovedItemInfo from "@/components/jobs/JobApprovedItemInfo";
 
 export type PresignedUrlResponse = {
   key: string;
@@ -13,15 +12,19 @@ export type PresignedUrlResponse = {
   url: string;
 };
 
-const RequestApprovalPage = () => {
+// type WithImages = {
+//   imageUrls?: PresignedUrlResponse[];
+// };
+
+const JobApprovedItemPage = () => {
   const { id } = useParams<{ id: string }>();
 
   const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
 
-  const { data: item, isPending } = useById<JobAPIResponse>({
+  const { data: item, isPending } = useById<JobApprovedAPIResponse>({
     id: id || "",
     queryKey: MAINTENANCE_REQUESTS_KEY,
-    resourcePath: "jobs-list-pending",
+    resourcePath: "jobs-list-approved",
   });
 
   if (!id || !item) {
@@ -34,6 +37,7 @@ const RequestApprovalPage = () => {
 
   const images = item.images;
 
+  // console.log("Item Data with Presigned URLS:", item);
   return (
     <div className="p-4">
       <div className="h-auto bg-white dark:bg-[#1d2739] border-gray-700/70 rounded-md grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800">
@@ -41,11 +45,11 @@ const RequestApprovalPage = () => {
           <ImageGallery images={images ?? []} />
         </div>
         <div>
-          <RequestApproval />
+          <JobApprovedItemInfo />
         </div>
       </div>
     </div>
   );
 };
 
-export default RequestApprovalPage;
+export default JobApprovedItemPage;

@@ -14,7 +14,7 @@ import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 //   item: JobRequestFormValues;
 // };
 
-function MaintenanceSingleItemInfo() {
+function JobPendingSingleItemInfo() {
   const { selectedRowId } = useGlobalContext();
 
   const { data: item, isPending } = useById<JobAPIResponse>({
@@ -89,7 +89,7 @@ function MaintenanceSingleItemInfo() {
           <Button
             type="button"
             onClick={() => {
-              navigate("/maintenance-requests-list");
+              navigate("/jobs-list-pending");
             }}
             variant="cancel"
             size="xl"
@@ -114,4 +114,4 @@ function MaintenanceSingleItemInfo() {
   );
 }
 
-export default MaintenanceSingleItemInfo;
+export default JobPendingSingleItemInfo;

@@ -37,11 +37,30 @@ export const jobApiResponseSchema = jobRequestSchema
     rejected_by: z.string().optional(),
     images: z.array(presignedURLSchema).default([]), // existing images (urls/keys)
     // $ The fields are added when a request was approved
+  });
+
+export const jobApprovedAPIResponseSchema = jobRequestSchema
+  .omit({
+    images: true,
+  })
+  .extend({
+    id: z.string(),
+    jobCreated: z.string(),
+    jobcardNumber: z.string(),
+    status: z.string(),
+    targetDate: z.string(),
+    assign_to_group: z.string(),
+    assign_to_name: z.string(),
+    requested_by: z.string().optional(),
     approved_at: z.string().optional(),
     approved_by: z.string().optional(),
+    images: z.array(presignedURLSchema).default([]),
   });
 
 export type JobAPIResponse = z.infer<typeof jobApiResponseSchema>;
+export type JobApprovedAPIResponse = z.infer<
+  typeof jobApprovedAPIResponseSchema
+>;
 
 // $ Type for sending the images to the backend
 export type CreateJobPayload = Omit<JobRequestFormValues, "images"> & {

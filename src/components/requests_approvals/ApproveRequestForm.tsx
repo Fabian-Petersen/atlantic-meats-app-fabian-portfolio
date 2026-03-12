@@ -25,16 +25,15 @@ import { Spinner } from "../ui/spinner";
 
 // $ Context
 import useGlobalContext from "@/context/useGlobalContext";
-import { useNavigate } from "react-router-dom";
 import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 const ApproveRequestForm = () => {
   const {
     setShowApproveRequestDialog,
     selectedRowId,
+    setShowSuccess,
     showApproveRequestDialog,
   } = useGlobalContext();
-  const navigate = useNavigate();
 
   const { data: technicians = [], isPending: isLoading } = useGetTechnicians();
 
@@ -91,14 +90,9 @@ const ApproveRequestForm = () => {
 
       // $ Close the modal
       setShowApproveRequestDialog(false);
+      setShowSuccess(true);
 
-      // $ Inform the user of successful submission
-      toast.success("The item was sucessfully assigned");
-
-      // $ Navigate back to the requests list page after successfull submit
-      setTimeout(() => {
-        navigate("/maintenance-requests-list");
-      }, 1500);
+      // toast.success("The item was sucessfully assigned");
     } catch (error) {
       console.log(error);
       console.error("Approve Request failed:", error);

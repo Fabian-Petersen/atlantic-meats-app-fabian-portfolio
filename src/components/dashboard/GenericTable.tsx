@@ -23,7 +23,7 @@ type Props<T extends { id: string }> = {
   columns: ColumnDef<T>[];
   tableHeading?: string;
   className?: string;
-  path?: string;
+  rowPath?: string;
   initialSorting?: SortingState;
 };
 
@@ -32,7 +32,7 @@ export function GenericTable<T extends { id: string }>({
   tableHeading,
   columns,
   className,
-  path,
+  rowPath,
   initialSorting = [],
 }: Props<T>) {
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ export function GenericTable<T extends { id: string }>({
         </div>
       )}
 
-      <div className={`${className}dark:bg-[#1d2739] dark:text-gray-200`}>
+      <div className={`${className}dark:bg-[#1d2739] dark:text-gray-200 py-4`}>
         <div className="lg:overflow-hidden overflow-x-scroll rounded-lg w-full border border-gray-200 dark:border-gray-700/50 text-xs">
           <table className="w-full">
             <thead className="bg-[#fcb53b90]  dark:bg-bgdark dark:text-fontlight">
@@ -101,7 +101,7 @@ export function GenericTable<T extends { id: string }>({
                     key={row.id}
                     onClick={() => {
                       setSelectedRowId(row.original.id);
-                      navigate(`/${path}/${row.original.id}`);
+                      navigate(`${rowPath}/${row.original.id}`);
                     }}
                     className="cursor-pointer hover:bg-primary/20 dark:bg-[#1d2739]"
                   >

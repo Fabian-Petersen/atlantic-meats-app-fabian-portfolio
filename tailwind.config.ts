@@ -5,8 +5,11 @@ const config: Config = {
   content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx,css}", "./src/**/*.css"],
   theme: {
     extend: {
+      // colors must be added to the index.css as a variable before becoming available
       colors: {
         primary: "#fcb53b",
+        bgCheck: "#C8E6C9",
+        check: "#4CAF50",
         activelink: "#c97e00",
         secondary: "#06B6D4",
         accent: "#F59E0B",
