@@ -18,7 +18,7 @@ const Dashboard = () => {
   const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
 
   const { data } = useGetAll<JobAPIResponse[]>(
-    "maintenance-requests-list",
+    "jobs-list",
     MAINTENANCE_REQUESTS_KEY,
   );
   // $ Only show the pending requests

@@ -76,10 +76,6 @@ export const actionTableRowSchema = actionResponseSchema
     jobcardNumber: z.string(),
   });
 
-// const [sorting, setSorting] = useState<SortingState>([
-//   { id: "actionCreated", desc: true }, // primary sort
-// ]);
-
 export type ActionTableRow = z.infer<typeof actionTableRowSchema>;
 export type ActionRequestFormValues = z.infer<typeof actionRequestSchema>;
 export type ActionAPIResponse = z.infer<typeof actionResponseSchema>;

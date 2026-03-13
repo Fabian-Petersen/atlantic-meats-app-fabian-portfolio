@@ -17,6 +17,7 @@ import {
 } from "@tanstack/react-table";
 import FormHeading from "@/../customComponents/FormHeading";
 import FilterContainer from "../features/FilterContainer";
+import AddNewItemButton from "../features/AddNewItemButton";
 
 type Props<T extends { id: string }> = {
   data: T[];
@@ -25,6 +26,8 @@ type Props<T extends { id: string }> = {
   className?: string;
   rowPath?: string;
   initialSorting?: SortingState;
+  addButton?: boolean;
+  addButtonPath?: string;
 };
 
 export function GenericTable<T extends { id: string }>({
@@ -34,6 +37,8 @@ export function GenericTable<T extends { id: string }>({
   className,
   rowPath,
   initialSorting = [],
+  addButton,
+  addButtonPath,
 }: Props<T>) {
   const navigate = useNavigate();
   const { setSelectedRowId } = useGlobalContext();
@@ -56,6 +61,10 @@ export function GenericTable<T extends { id: string }>({
     getSortedRowModel: getSortedRowModel(),
   });
 
+  const handleSubmit = () => {
+    if (addButtonPath) navigate(`${addButtonPath}`);
+  };
+
   return (
     <div className="w-full md:p-4 min-h-0">
       {/* <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 border-dashed min-h-0"> */}
@@ -65,6 +74,15 @@ export function GenericTable<T extends { id: string }>({
       {location.pathname === "/dashboard" ? undefined : (
         <div className="flex gap-4 items-end w-full">
           <FilterContainer table={table} className="" />
+          {addButton && (
+            <div className="hidden md:inline-block ml-auto">
+              <AddNewItemButton
+                title="Job"
+                className=""
+                onClick={handleSubmit}
+              />
+            </div>
+          )}
         </div>
       )}
 

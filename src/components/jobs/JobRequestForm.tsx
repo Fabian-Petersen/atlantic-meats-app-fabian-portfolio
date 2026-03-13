@@ -262,7 +262,7 @@ const MaintenanceRequestForm = () => {
           <Button
             type="button"
             onClick={() => {
-              navigate("/maintenance-requests-list");
+              navigate("/jobs-list-pending");
             }}
             variant="cancel"
             size="lg"

@@ -1,12 +1,12 @@
 // $ This component renders the page for the actions list in a table format.
 // $ The list display the items created by a user and all items for the admin
 
-import { useGetAll } from "@/utils/api";
+import { useDownloadPdf, useGetAll } from "@/utils/api";
 import { useMemo } from "react";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 // import { MobileAssetsOverviewTable } from "@/components/mobile/MolbileAssetsOverviewTable";
 
-import { getActionColumns } from "../components/actions/columns";
+// import { getActionColumns } from "../components/actions/columns";
 // import { getAssetTableMenuItems } from "@/lib/TableMenuItemsActions";
 import useGlobalContext from "@/context/useGlobalContext";
 
@@ -14,16 +14,23 @@ import type { ActionAPIResponse } from "@/schemas";
 import { ErrorPage } from "@/components/features/Error";
 import type { ActionTableRow } from "@/schemas/actionSchemas";
 import { GenericTable } from "@/components/dashboard/GenericTable";
+import FormHeading from "@/../customComponents/FormHeading";
+import { getJobActionColumns } from "@/components/tableColumns/ActionColumns";
+import ChatSidebar from "@/components/comments/ChatSidebar";
 
 const ActionsListPage = () => {
   const ACTIONS_REQUESTS_KEY = ["actionRequests"];
+
   const { data, isPending, isError, refetch } = useGetAll<ActionAPIResponse[]>(
     "maintenance-actions-list",
     ACTIONS_REQUESTS_KEY,
   );
 
-  const { setShowUpdateAssetDialog, setSelectedRowId, openDeleteDialog } =
-    useGlobalContext();
+  const { mutateAsync: downloadItem } = useDownloadPdf({
+    resourcePath: "maintenance-jobcard",
+  });
+
+  const { setSelectedRowId, setOpenChatSidebar } = useGlobalContext();
 
   // $ Map through the data returned to match the TableRow Data Schema
   const rows: ActionTableRow[] = useMemo(
@@ -45,10 +52,16 @@ const ActionsListPage = () => {
     [data],
   );
 
-  const columns = getActionColumns(
-    setShowUpdateAssetDialog,
+  // const columns = getActionColumns(
+  //   setShowUpdateAssetDialog,
+  //   setSelectedRowId,
+  //   openDeleteDialog,
+  // );
+
+  const columns = getJobActionColumns(
     setSelectedRowId,
-    openDeleteDialog,
+    downloadItem,
+    setOpenChatSidebar,
   );
 
   if (isPending) return <PageLoadingSpinner />;
@@ -72,16 +85,18 @@ const ActionsListPage = () => {
 
   return (
     <div className="flex w-full md:p-4 min-h-0">
-      <GenericTable
-        data={rows}
-        columns={columns}
-        path={"action"}
-        tableHeading="Maintenance Actions List"
-      />
-      {/* <MobileActionOverviewTable
+      <ChatSidebar />
+      <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto">
+        <FormHeading
+          className="mx-auto dark:text-gray-100"
+          heading="Completed Jobs List"
+        />
+        <GenericTable data={rows} columns={columns} rowPath={"action"} />
+        {/* <MobileActionOverviewTable
           className="flex lg:hidden"
           data={table.getRowModel().rows}
         /> */}
+      </div>
     </div>
   );
 };

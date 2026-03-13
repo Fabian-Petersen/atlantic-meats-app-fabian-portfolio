@@ -6,7 +6,7 @@ import type { Resource } from "@/utils/api";
 import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 type Priority = "critical" | "high" | "medium" | "low";
 
-export const getjobApprovedColumns = (
+export const getJobApprovedColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
   setShowActionDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
@@ -75,10 +75,18 @@ export const getjobApprovedColumns = (
   {
     accessorKey: "assign_to_name",
     header: "Assigned To",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
   },
   {
     accessorKey: "assign_to_group",
     header: "Assigned Group",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
   },
   // {
   //   accessorKey: "type",
@@ -127,16 +135,6 @@ export const getjobApprovedColumns = (
           },
         },
       });
-
-      // const menuItems = getMaintenanceTableMenuItems(
-      //   selectedRowId,
-      //   setShowUpdateMaintenanceDialog,
-      //   setShowActionDialog,
-      //   setSelectedRowId,
-      //   // downloadItem,
-      //   openDeleteDialog,
-      //   setOpenChatSidebar,
-      // );
 
       return (
         <div className="tex-center" onClick={(e) => e.stopPropagation()}>

@@ -15,17 +15,15 @@ import {
 } from "@tanstack/react-table";
 
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-// import { MobileMaintenanceRequestsTable } from "@/components/mobile/MobileMaintenanceRequestsTable";
 import useGlobalContext from "@/context/useGlobalContext";
-import { getjobApprovedColumns } from "@/components/jobsApprovedTable/ApprovedColumns";
+import { getJobApprovedColumns } from "@/components/tableColumns/ApprovedColumns";
 import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
 import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
-// import FilterContainer from "@/components/features/FilterContainer";
-// import AddNewItemButton from "@/components/features/AddNewItemButton";
 import ChatSidebar from "@/components/comments/ChatSidebar";
 import { GenericTable } from "@/components/dashboard/GenericTable";
 import { MobileJobsApprovedTable } from "@/components/mobile/MobileJobsApprovedTable";
+import FormHeading from "@/../customComponents/FormHeading";
 
 const JobsApprovedListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<
@@ -49,7 +47,7 @@ const JobsApprovedListPage = () => {
   } = useGlobalContext();
 
   // $ Pass the props to the function generating the columns to be used in the table
-  const columns = getjobApprovedColumns(
+  const columns = getJobApprovedColumns(
     setShowUpdateMaintenanceDialog,
     setShowActionDialog,
     setSelectedRowId,
@@ -81,20 +79,13 @@ const JobsApprovedListPage = () => {
     <div className="flex w-full p-4 h-auto">
       <ChatSidebar />
       <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto">
-        {/* <FormHeading
+        <FormHeading
           className="mx-auto dark:text-gray-100"
           heading="Approved Open Jobs"
-        /> */}
-        {/* <div className="flex gap-4 items-end w-full">
-          <FilterContainer table={table} className="" />
-        </div> */}
-        {/* <div className="hidden md:inline-block ml-auto">
-          <AddNewItemButton title="Job" className="" onClick={handleSubmit} />
-        </div> */}
+        />
         <GenericTable
           data={data}
           columns={columns}
-          tableHeading="Open Jobs"
           rowPath="/jobs-list-approved"
           className="hidden md:flex flex-col gap-2"
         />

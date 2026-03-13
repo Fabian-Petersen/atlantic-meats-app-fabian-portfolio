@@ -33,6 +33,10 @@ function FilterContainer<T extends Record<string, unknown>>({
 
   if (!filterableColumns.length) return null;
 
+  // <div className="flex gap-4 items-end w-full">
+  //   <FilterContainer table={table} className="" />
+  // </div>;
+
   return (
     <div className={`${className} flex gap-2 shadow-sm py-1 p-2 rounded-md`}>
       {filterableColumns.map((column) => (
