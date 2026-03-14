@@ -24,8 +24,11 @@ export type Resource =
   | "maintenance-actions-list" // GET all actions
   | "maintenance-jobcard" // GET jobcardById
   | "maintenance-request" // POST & DELETE, GET requestsById
-  | "maintenance-requests-list" // GET all maintenance requests
+  | "jobs-list" // GET all maintenance requests
+  | "jobs-list-pending" // GET all pending approval requests
+  | "jobs-list-approved" // GET all approved requests
   | "comment" // POST a comment
+  | "technician-list" // Get the list of technicians
   | "job-request-rejected"
   | "job-request-approved";
 

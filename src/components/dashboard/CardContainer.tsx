@@ -19,7 +19,7 @@ import { MetricCardItem } from "./MetricsCardItem";
 const Cards = () => {
   // $ Jobs Data
   const { data: requests = [], isPending } = useGetAll<JobAPIResponse[]>(
-    "maintenance-requests-list",
+    "jobs-list",
     ["maintenanceRequests"],
   );
 

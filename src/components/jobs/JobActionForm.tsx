@@ -41,7 +41,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
   const { mutateAsync, isError } = useCreateActionRequest();
 
   const [signature, setSignature] = useState<string | null>(null);
-  const { setHasError, selectedRowId, setShowActionDialog } =
+  const { setShowError, selectedRowId, setShowActionDialog } =
     useGlobalContext();
   const navigate = useNavigate();
 
@@ -58,11 +58,11 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
   // $ Ensure signature is captured before allowing submission
   useEffect(() => {
     if (signature === null) {
-      setHasError(true);
+      setShowError(true);
     } else {
-      setHasError(false);
+      setShowError(false);
     }
-  }, [signature, setHasError]);
+  }, [signature, setShowError]);
 
   // $ Form Schema
   const {
@@ -133,7 +133,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
         duration: 1000,
       });
       setShowActionDialog(false);
-      navigate("/maintenance-requests-list");
+      navigate("/jobs-approved-list");
     } catch (err) {
       console.error("Failed to create maintenance request", err);
     }
@@ -141,9 +141,9 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
 
   useEffect(() => {
     if (isError) {
-      setHasError(true);
+      setShowError(true);
     }
-  }, [isError, setHasError]);
+  }, [isError, setShowError]);
 
   return (
     <form

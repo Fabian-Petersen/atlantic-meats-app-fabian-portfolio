@@ -10,28 +10,36 @@ import DashboardPage from "./pages/Dashboard";
 import JobRequestPage from "./pages/JobRequestPage";
 import AssetsOverviewPage from "./pages/AssetsOverviewPage";
 
-//$ Page Layouts
-import { ProtectedRoute } from "./routes/ProtectedRoute";
-// import { PublicLayout } from "./routes/PublicLayout";
 import { AppLayout } from "./routes/AppLayout";
-import JobsListPage from "./pages/JobsListPage";
-import JobItemPage from "./pages/JobItemPage";
-import AssetsSingleItemPage from "./pages/AssetsSingleItemPage";
-import UserProfilePage from "./pages/UserProfilePage";
-import CreateAssetPage from "./pages/CreateAssetPage";
-import JobActionItemPage from "./pages/JobActionPage";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+
+// $ Gaurd Routes
+import { ProtectedRoute } from "./routes/ProtectedRoute";
 import RoleGaurdRoute from "./routes/RoleGaurdRoute";
+
+//$ Page Layouts
+// import JobItemPage from "./pages/JobApprovedItemPage";
+import JobActionItemPage from "./pages/JobActionPage";
+
+// $ Assets Pages
+import CreateAssetPage from "./pages/CreateAssetPage";
 import ActionsListPage from "./pages/ActionsListPage";
-import RequestApprovalPage from "./pages/RequestApprovalPage";
+import AssetsSingleItemPage from "./pages/AssetsSingleItemPage";
+
+// $ User Management Pages
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import UserProfilePage from "./pages/UserProfilePage";
+
+// $ Job Management Pages for single items
+import JobPendingPage from "./pages/JobPendingPage";
+import JobApprovedItemPage from "./pages/JobApprovedItemPage";
+
+// $ Pages display the list of items in a table
+import JobsPendingListPage from "./pages/JobsPendingListPage";
+import JobsApprovedListPage from "./pages/JobsApprovedListPage";
 
 function App() {
   return (
     <Routes>
-      {/* <Route element={<PublicLayout />}>
-          <Route path="/" element={<Login />} />
-        </Route> */}
-
       {/* Login Route Only: Authenticated users must logout to direct to logout */}
       <Route element={<PublicOnlyRoute />}>
         <Route path="/" element={<Login />} />
@@ -52,25 +60,29 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/user-profile" element={<UserProfilePage />} />
             <Route path="/maintenance-request" element={<JobRequestPage />} />
-            <Route path="/maintenance-request/:id" element={<JobItemPage />} />
+            {/* <Route path="/maintenance-request/:id" element={<JobItemPage />} /> */}
+            <Route
+              path="/jobs-list-approved/:id"
+              element={<JobApprovedItemPage />}
+            />
+            <Route
+              path="/jobs-list-approved"
+              element={<JobsApprovedListPage />}
+            />
             <Route
               path="/maintenance-action/:id"
               element={<JobActionItemPage />}
             />
-            <Route
-              path="/maintenance-requests-list"
-              element={<JobsListPage />}
-            />
           </Route>
           {/* // % Admin only Routes */}
           <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>
+            <Route
+              path="/jobs-list-pending"
+              element={<JobsPendingListPage />}
+            />
             <Route path="/assets-list" element={<AssetsOverviewPage />} />
             <Route path="/asset/:id" element={<AssetsSingleItemPage />} />
-            <Route path="/approval-request-list" element={""} />
-            <Route
-              path="/approval-request/:id"
-              element={<RequestApprovalPage />}
-            />
+            <Route path="/jobs-list-pending/:id" element={<JobPendingPage />} />
             <Route path="/asset" element={<CreateAssetPage />} />
           </Route>
           {/* // $ ======================= Maintenance Routes ======================= */}

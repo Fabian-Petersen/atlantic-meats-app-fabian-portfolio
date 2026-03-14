@@ -11,8 +11,12 @@ export type DeleteConfig = {
 
 export type AppContextType = {
   //$ Error State
-  hasError: boolean;
-  setHasError: Dispatch<SetStateAction<boolean>>;
+  showError: boolean;
+  setShowError: Dispatch<SetStateAction<boolean>>;
+
+  //$ Success State
+  showSuccess: boolean;
+  setShowSuccess: Dispatch<SetStateAction<boolean>>;
 
   //$ Theme State
   theme: "light" | "dark";

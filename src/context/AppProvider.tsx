@@ -6,8 +6,9 @@ import type { DeleteConfig } from "./app-types";
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   // $ [Step 3]: Create the state and set the initial state value
 
-  // $ Error State to show the Error Page
-  const [hasError, setHasError] = useState<boolean>(false);
+  // $ State for the Error and Success Components
+  const [showError, setShowError] = useState<boolean>(false);
+  const [showSuccess, setShowSuccess] = useState<boolean>(false);
 
   // $ State for the theme mode
   // ? The isDarkTheme is used to set the theme in the 'useSetDarkTheme' hook.
@@ -93,8 +94,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setShowUserProfileDialog,
         genericData,
         setGenericData,
-        hasError,
-        setHasError,
+        showError,
+        setShowError,
+        showSuccess,
+        setShowSuccess,
         pendingTableAction,
         setPendingTableAction,
         selectedRowId,

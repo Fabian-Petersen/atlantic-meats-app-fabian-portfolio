@@ -38,22 +38,23 @@ export const maintenanceLinks: NavlinkProps[] = [
     allowedGroups: ["admin", "user", "technician", "manager"],
   },
   {
-    name: "approval requests",
+    name: "pending approval",
     icon: File,
-    url: "/maintenance-requests-list",
+    url: "/jobs-list-pending",
     allowedGroups: ["admin"],
-  },
-  {
-    name: ({ groups }) => (groups.includes("admin") ? "All Tasks" : "My Tasks"),
-    icon: File,
-    url: "/maintenance-actions-list",
-    allowedGroups: ["admin", "technician", "manager", "contractor"],
   },
   {
     name: "open requests",
     icon: File,
-    url: "/approval-requests-list",
+    url: "/jobs-list-approved",
     allowedGroups: ["admin", "user", "technician", "manager"],
+  },
+  {
+    name: ({ groups }) =>
+      groups.includes("admin") ? "Completed Jobs" : "My Jobs",
+    icon: File,
+    url: "/maintenance-actions-list",
+    allowedGroups: ["admin", "technician", "manager", "contractor"],
   },
   {
     name: "schedule task",

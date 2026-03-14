@@ -17,14 +17,17 @@ import {
 } from "@tanstack/react-table";
 import FormHeading from "@/../customComponents/FormHeading";
 import FilterContainer from "../features/FilterContainer";
+import AddNewItemButton from "../features/AddNewItemButton";
 
 type Props<T extends { id: string }> = {
   data: T[];
   columns: ColumnDef<T>[];
   tableHeading?: string;
   className?: string;
-  path?: string;
+  rowPath?: string;
   initialSorting?: SortingState;
+  addButton?: boolean;
+  addButtonPath?: string;
 };
 
 export function GenericTable<T extends { id: string }>({
@@ -32,8 +35,10 @@ export function GenericTable<T extends { id: string }>({
   tableHeading,
   columns,
   className,
-  path,
+  rowPath,
   initialSorting = [],
+  addButton,
+  addButtonPath,
 }: Props<T>) {
   const navigate = useNavigate();
   const { setSelectedRowId } = useGlobalContext();
@@ -56,6 +61,10 @@ export function GenericTable<T extends { id: string }>({
     getSortedRowModel: getSortedRowModel(),
   });
 
+  const handleSubmit = () => {
+    if (addButtonPath) navigate(`${addButtonPath}`);
+  };
+
   return (
     <div className="w-full md:p-4 min-h-0">
       {/* <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 border-dashed min-h-0"> */}
@@ -65,10 +74,19 @@ export function GenericTable<T extends { id: string }>({
       {location.pathname === "/dashboard" ? undefined : (
         <div className="flex gap-4 items-end w-full">
           <FilterContainer table={table} className="" />
+          {addButton && (
+            <div className="hidden md:inline-block ml-auto">
+              <AddNewItemButton
+                title="Job"
+                className=""
+                onClick={handleSubmit}
+              />
+            </div>
+          )}
         </div>
       )}
 
-      <div className={`${className}dark:bg-[#1d2739] dark:text-gray-200`}>
+      <div className={`${className}dark:bg-[#1d2739] dark:text-gray-200 py-4`}>
         <div className="lg:overflow-hidden overflow-x-scroll rounded-lg w-full border border-gray-200 dark:border-gray-700/50 text-xs">
           <table className="w-full">
             <thead className="bg-[#fcb53b90]  dark:bg-bgdark dark:text-fontlight">
@@ -101,7 +119,7 @@ export function GenericTable<T extends { id: string }>({
                     key={row.id}
                     onClick={() => {
                       setSelectedRowId(row.original.id);
-                      navigate(`/${path}/${row.original.id}`);
+                      navigate(`${rowPath}/${row.original.id}`);
                     }}
                     className="cursor-pointer hover:bg-primary/20 dark:bg-[#1d2739]"
                   >

@@ -6,7 +6,8 @@ import { useForm, type Resolver } from "react-hook-form";
 import { usePOST, type Resource } from "@/utils/api";
 
 // $ Utils
-import { technicians, assignToGroup } from "@/data/technicians";
+import { assignToGroup } from "@/data/technicians";
+import { useGetTechnicians } from "@/utils/getTechniciansList";
 
 // $ Schema & types
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,15 +25,17 @@ import { Spinner } from "../ui/spinner";
 
 // $ Context
 import useGlobalContext from "@/context/useGlobalContext";
-import { useNavigate } from "react-router-dom";
+import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
-const RequestRejectedForm = () => {
+const ApproveRequestForm = () => {
   const {
     setShowApproveRequestDialog,
     selectedRowId,
+    setShowSuccess,
     showApproveRequestDialog,
   } = useGlobalContext();
-  const navigate = useNavigate();
+
+  const { data: technicians = [], isPending: isLoading } = useGetTechnicians();
 
   // $ Form Schema
   const {
@@ -42,9 +45,9 @@ const RequestRejectedForm = () => {
     formState: { errors },
   } = useForm<ApproveRequestFormValues>({
     defaultValues: {
-      assignToGroup: "",
+      assign_to_group: "",
       targetDate: "",
-      assign_to_name: "",
+      assign_to_sub: "",
     },
 
     resolver: zodResolver(
@@ -59,32 +62,37 @@ const RequestRejectedForm = () => {
 
   if (!showApproveRequestDialog || !selectedRowId) return null;
 
-  const assign_to_sub = ""; //This must be collected from the list of technicians returned from the database
+  if (isLoading) {
+    return <PageLoadingSpinner />;
+  }
 
+  console.log("technicians:", technicians);
   const onSubmit = async (data: ApproveRequestFormValues) => {
     try {
+      const selectedTechnician = technicians.find(
+        (tech) => tech.sub === data.assign_to_sub,
+      );
+
+      const technicianName = selectedTechnician?.name ?? "";
       const payload: ApproveRequestPayload = {
         ...data,
-        status: "In Progress",
+        status: "Approved",
         selectedRowId: selectedRowId,
-        assign_to_sub: assign_to_sub,
+        assign_to_name: technicianName,
       };
       // $ Send payload to the backend
       await approveItem(payload);
+      // console.log("payload:", payload);
+      // console.log(approveItem);
 
       // $ Reset the form
       reset();
 
       // $ Close the modal
       setShowApproveRequestDialog(false);
+      setShowSuccess(true);
 
-      // $ Inform the user of successful submission
-      toast.success("The item was sucessfully assigned");
-
-      // $ Navigate back to the requests list page after successfull submit
-      setTimeout(() => {
-        navigate("/maintenance-requests-list");
-      }, 1500);
+      // toast.success("The item was sucessfully assigned");
     } catch (error) {
       console.log(error);
       console.error("Approve Request failed:", error);
@@ -104,21 +112,21 @@ const RequestRejectedForm = () => {
       <div className="grid gap-6 w-full py-4">
         <FormRowSelect
           register={register}
-          name="assignToGroup"
+          name="assign_to_group"
           options={assignToGroup}
           label="Select a Group"
-          error={errors.assignToGroup}
+          error={errors.assign_to_group}
           // placeholder="Select Group"
         />
+
         <FormRowSelect
           register={register}
-          name="assign_to_name"
-          options={technicians}
+          name="assign_to_sub"
+          options={technicians ?? []}
           label="Assign To"
-          error={errors.assign_to_name}
+          error={errors.assign_to_sub}
           // placeholder={"Assign to technician"}
         />
-
         <FormRowInput
           register={register}
           type="date"
@@ -156,4 +164,4 @@ const RequestRejectedForm = () => {
   );
 };
 
-export default RequestRejectedForm;
+export default ApproveRequestForm;

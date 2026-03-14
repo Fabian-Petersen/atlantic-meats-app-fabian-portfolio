@@ -1,37 +1,29 @@
 //$ This component display detailed information of the the maintenance request created and actioned data.
 
 import Separator from "@/components/dashboardSidebar/Seperator";
-import type { JobAPIResponse } from "@/schemas";
-// import { Button } from "../ui/button";
+import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
+import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
-import { useById, usePOST } from "@/utils/api";
+import { useById } from "@/utils/api";
+// import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 import { ErrorPage } from "../features/Error";
 import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
-import { toast } from "sonner";
+// type Props = {
+//   item: JobRequestFormValues;
+// };
 
-// icons
-import { X, Check } from "lucide-react";
+function JobApprovedItemInfo() {
+  const { selectedRowId } = useGlobalContext();
 
-function RequestApproval() {
-  const {
-    selectedRowId,
-    setShowRejectRequestDialog,
-    setShowApproveRequestDialog,
-  } = useGlobalContext();
-
-  const { mutateAsync: approveRequest, isPending: isApproved } = usePOST({
-    resourcePath: "job-request-approved",
-    queryKey: ["maintenanceRequest"],
-  });
-
-  const { data: item, isPending } = useById<JobAPIResponse>({
+  const { data: item, isPending } = useById<JobApprovedAPIResponse>({
     id: selectedRowId ?? "",
-    queryKey: ["MAINTENANCE-REQUEST-ITEM"],
-    resourcePath: "maintenance-request",
+    queryKey: ["maintenanceRequests"],
+    resourcePath: "jobs-list-approved",
   });
   const navigate = useNavigate();
+
   if (isPending) {
     return <PageLoadingSpinner />;
   }
@@ -45,23 +37,6 @@ function RequestApproval() {
       />
     );
   }
-
-  const handleApprove = async () => {
-    setShowApproveRequestDialog(true);
-    const payload = {
-      selectedRowId: selectedRowId,
-      status: "In Progress",
-    };
-
-    try {
-      const response = await approveRequest(payload);
-      console.log("approve-request:", response);
-      toast.success("The itemm was sucessfully rejected");
-      navigate("/jobs-list-approved");
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <div className="flex gap flex-col gap-2 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50">
@@ -109,37 +84,34 @@ function RequestApproval() {
           <span>{item?.jobComments}</span>
         </li>
       </ul>
-      <div className="flex w-full justify-end pt-6 bg-red-500/0">
-        <div className="flex gap-4 w-[18rem] bg-black/0 justify-end">
-          <button
+      <div className="flex w-full justify-end pt-6">
+        <div className="flex gap-4 w-1/2">
+          <Button
             type="button"
             onClick={() => {
-              setShowRejectRequestDialog(true);
+              navigate("/jobs-list-approved");
             }}
-            // variant="cancel"
-            // size="lg"
-            className="flex items-center gap-4 py-2 hover:bg-red-500 hover:cursor-pointer hover:text-white bg-red-500 justify-center rounded-lg text-white flex-1 px-4"
+            variant="cancel"
+            size="xl"
+            className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
           >
-            <X w-24 h-24 />
-            <span>Reject</span>
-          </button>
-          <button
-            type="submit"
-            disabled={isApproved}
-            // variant="submit"
-            // size="lg"
-            className="flex items-center gap-4 py-2 bg-green-500/90 hover:cursor-pointer justify-center rounded-lg text-white flex-1 px-4"
+            Back
+          </Button>
+          <Button
+            type="button"
+            variant="submit"
+            size="xl"
+            className="flex-1"
             onClick={() => {
-              handleApprove();
+              navigate(`/maintenance-action/${item?.id}`);
             }}
           >
-            <Check w-24 h-24 />
-            Approve
-          </button>
+            Action
+          </Button>
         </div>
       </div>
     </div>
   );
 }
 
-export default RequestApproval;
+export default JobApprovedItemInfo;

@@ -19,21 +19,21 @@ export type JobRejectRequestPayload = z.infer<
 
 // $ Schema to create an approve request
 export const approveRequestSchema = z.object({
-  assignToGroup: z
+  assign_to_group: z
     .string()
     .min(1, { message: "Select either contractor or technician" }),
   targetDate: z
     .string()
     .min(1, { message: "Please select a reasonable completion date" }),
-  assign_to_name: z
+  assign_to_sub: z
     .string()
-    .min(1, { message: "Please assign work to a technician" }),
+    .min(1, { message: "Please assign work to a technician" }), // The label will display the name and the value the sub
 });
 
 export const approveRequestPayloadSchema = approveRequestSchema.extend({
   status: z.string(),
   selectedRowId: z.string(),
-  assign_to_sub: z.string(),
+  assign_to_name: z.string(),
 });
 
 export type ApproveRequestFormValues = z.infer<typeof approveRequestSchema>;

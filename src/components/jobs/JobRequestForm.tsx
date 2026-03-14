@@ -153,7 +153,7 @@ const MaintenanceRequestForm = () => {
       toast.success("Maintenance request created successfully!", {
         duration: 1000,
       });
-      navigate("/maintenance-requests-list");
+      navigate("/jobs-list-pending");
     } catch (err) {
       console.error("Failed to create maintenance request", err);
       toast.error(
@@ -262,7 +262,7 @@ const MaintenanceRequestForm = () => {
           <Button
             type="button"
             onClick={() => {
-              navigate("/maintenance-requests-list");
+              navigate("/jobs-list-pending");
             }}
             variant="cancel"
             size="lg"
