@@ -71,6 +71,10 @@ export const getJobApprovedColumns = (
     accessorKey: "priority",
     header: "Priority",
     enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
   },
   {
     accessorKey: "assign_to_name",
@@ -88,10 +92,10 @@ export const getJobApprovedColumns = (
       return <p className="capitalize">{value}</p>;
     },
   },
-  // {
-  //   accessorKey: "type",
-  //   header: "Type",
-  // },
+  {
+    accessorKey: "targetDate",
+    header: "Target Date",
+  },
   {
     id: "actions",
     header: "Actions",

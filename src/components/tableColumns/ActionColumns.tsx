@@ -135,7 +135,7 @@ export const getJobActionColumns = (
         rowId: row.original.id,
         setSelectedRowId,
         download: {
-          url: "/update-request",
+          url: "/maintenance-jobcard",
           onDownload: () => {
             downloadItem(rowId);
           },

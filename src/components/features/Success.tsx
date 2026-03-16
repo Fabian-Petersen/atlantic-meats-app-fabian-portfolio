@@ -39,7 +39,7 @@ export const Success = ({
     <AnimatePresence>
       {showSuccess && (
         <motion.div
-          className="fixed z-1000 h-screen top-0 left-0 w-full flex items-center justify-center px-4 bg-black/50"
+          className="fixed z-1000 h-screen top-0 left-0 w-full flex items-center justify-center px-4 bg-black/50 border-0 outline-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
