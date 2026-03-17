@@ -5,19 +5,19 @@ import { useNavigate } from "react-router-dom";
 
 // $ Animation
 import { motion, AnimatePresence } from "motion/react";
-type Success = {
-  title?: string;
-  message?: string;
-  redirectPath?: string;
-};
+import type { Resource } from "@/utils/api";
 
-export const Success = ({
-  title = "Your request was successful!",
-  message = "Your request was successfully",
-  redirectPath,
-}: Success) => {
-  const { showSuccess, setShowSuccess } = useGlobalContext();
+export const Success = () => {
+  const { showSuccess, setShowSuccess, successConfig } = useGlobalContext();
   const navigate = useNavigate();
+
+  const DEFAULT_SUCCESS_CONFIG = {
+    title: "Success",
+    message: "Your request was completed successfully.",
+    resourcePath: null as Resource | null,
+  };
+
+  const config = successConfig ?? DEFAULT_SUCCESS_CONFIG;
 
   // $ Show the Success Component when the request was successful
   useEffect(() => {
@@ -25,13 +25,13 @@ export const Success = ({
 
     const timer = setTimeout(() => {
       setShowSuccess(false);
-      if (redirectPath) {
-        navigate(redirectPath);
+      if (config.resourcePath) {
+        navigate(`/${config.resourcePath}`);
       }
-    }, 3000);
+    }, 1500);
 
     return () => clearTimeout(timer);
-  }, [showSuccess, redirectPath, navigate, setShowSuccess]);
+  }, [showSuccess, config.resourcePath, navigate, setShowSuccess]);
 
   if (!showSuccess) return null;
 
@@ -66,10 +66,10 @@ export const Success = ({
               transition={{ delay: 0.15, duration: 0.2 }}
             >
               <h1 className="mb-2 text-2xl tracking-wide font-semibold text-gray-700 dark:text-gray-200">
-                {title}
+                {config.title}
               </h1>
               <p className="mb-6 text-md tracking-wide text-gray-600">
-                {message}
+                {config.message}
               </p>
             </motion.div>
           </motion.div>

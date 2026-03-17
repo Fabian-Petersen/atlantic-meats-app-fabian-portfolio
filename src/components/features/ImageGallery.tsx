@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { ChevronLeftCircle, ChevronRightCircle } from "lucide-react";
 // import {} from "../../../public/images/20251124_150123.jpg";
-import type { PresignedURL } from "@/schemas/assetSchemas";
+import type { PresignedUrls } from "@/schemas/jobSchemas";
 import NoImagePlaceholder from "../features/NoImagePlaceholder";
 
 import FullscreenImageModal from "../modals/FullscreenImageModal";
 
 type Props = {
-  images: PresignedURL[];
+  images: PresignedUrls[];
   className?: string;
 };
 

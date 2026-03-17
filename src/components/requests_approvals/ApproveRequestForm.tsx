@@ -33,6 +33,7 @@ const ApproveRequestForm = () => {
     selectedRowId,
     setShowSuccess,
     showApproveRequestDialog,
+    setSuccessConfig,
   } = useGlobalContext();
 
   const { data: technicians = [], isPending: isLoading } = useGetTechnicians();
@@ -66,7 +67,7 @@ const ApproveRequestForm = () => {
     return <PageLoadingSpinner />;
   }
 
-  console.log("technicians:", technicians);
+  // console.log("technicians:", technicians);
   const onSubmit = async (data: ApproveRequestFormValues) => {
     try {
       const selectedTechnician = technicians.find(
@@ -90,6 +91,11 @@ const ApproveRequestForm = () => {
 
       // $ Close the modal
       setShowApproveRequestDialog(false);
+      setSuccessConfig({
+        title: "Success",
+        message: "The Request was Successfully Approved!!!",
+        resourcePath: "jobs-list-approved",
+      });
       setShowSuccess(true);
 
       // toast.success("The item was sucessfully assigned");

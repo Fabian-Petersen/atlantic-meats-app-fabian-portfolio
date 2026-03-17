@@ -124,7 +124,7 @@ export const getJobPendingColumns = (
         delete: {
           config: {
             resourcePath: "maintenance-request",
-            queryKey: ["maintenanceApprovedRequests"],
+            queryKey: ["maintenanceRequests"],
           },
           onDelete: openDeleteDialog,
         },

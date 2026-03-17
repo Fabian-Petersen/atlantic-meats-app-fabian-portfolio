@@ -7,11 +7,6 @@ import { ImageGallery } from "@/components/features/ImageGallery";
 import AssetSingleItemInfo from "@/components/assets/AssetSingleItemInfo";
 import type { AssetAPIResponse } from "@/schemas";
 
-// $ The Images urls send back from the backend
-// export type WithImages = {
-//   imageUrls?: PresignedUrlResponse[];
-// };
-
 const ASSETS_KEY = ["assetRequests"];
 
 const AssetsSingleItemPage = () => {

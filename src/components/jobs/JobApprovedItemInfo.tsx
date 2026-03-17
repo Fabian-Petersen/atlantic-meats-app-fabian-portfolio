@@ -4,31 +4,19 @@ import Separator from "@/components/dashboardSidebar/Seperator";
 import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
-import useGlobalContext from "@/context/useGlobalContext";
-import { useById } from "@/utils/api";
+// import useGlobalContext from "@/context/useGlobalContext";
+// import { useById } from "@/utils/api";
 // import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 import { ErrorPage } from "../features/Error";
-import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
+// import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
-// type Props = {
-//   item: JobRequestFormValues;
-// };
+type Props = {
+  item: JobApprovedAPIResponse;
+};
 
-function JobApprovedItemInfo() {
-  const { selectedRowId } = useGlobalContext();
-
-  const { data: item, isPending } = useById<JobApprovedAPIResponse>({
-    id: selectedRowId ?? "",
-    queryKey: ["maintenanceRequests"],
-    resourcePath: "jobs-list-approved",
-  });
+function JobApprovedItemInfo({ item }: Props) {
   const navigate = useNavigate();
 
-  if (isPending) {
-    return <PageLoadingSpinner />;
-  }
-
-  // fallback UI if timeout reached
   if (!item) {
     return (
       <ErrorPage

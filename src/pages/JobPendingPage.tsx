@@ -39,13 +39,7 @@ const JobPendingPage = () => {
 
   return (
     <div className="p-4">
-      {showSuccess ? (
-        <Success
-          title="Success"
-          message="The item was successfully assigned"
-          redirectPath="/jobs-list-approved"
-        />
-      ) : undefined}
+      {showSuccess ? <Success /> : undefined}
       <div className="h-auto bg-white dark:bg-[#1d2739] border-gray-700/70 rounded-md grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800">
         <div>
           <ImageGallery images={images ?? []} />

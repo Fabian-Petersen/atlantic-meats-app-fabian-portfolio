@@ -9,6 +9,12 @@ export type DeleteConfig = {
   queryKey: readonly unknown[];
 } | null;
 
+export type SuccessConfig = {
+  title: string;
+  message: string;
+  resourcePath: Resource;
+} | null;
+
 export type AppContextType = {
   //$ Error State
   showError: boolean;
@@ -17,6 +23,8 @@ export type AppContextType = {
   //$ Success State
   showSuccess: boolean;
   setShowSuccess: Dispatch<SetStateAction<boolean>>;
+  setSuccessConfig: (config: SuccessConfig) => void;
+  successConfig: SuccessConfig | null;
 
   //$ Theme State
   theme: "light" | "dark";

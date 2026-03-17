@@ -6,16 +6,6 @@ import { type JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
 import JobApprovedItemInfo from "@/components/jobs/JobApprovedItemInfo";
 
-export type PresignedUrlResponse = {
-  key: string;
-  filename?: string;
-  url: string;
-};
-
-// type WithImages = {
-//   imageUrls?: PresignedUrlResponse[];
-// };
-
 const JobApprovedItemPage = () => {
   const { id } = useParams<{ id: string }>();
 
@@ -45,7 +35,7 @@ const JobApprovedItemPage = () => {
           <ImageGallery images={images ?? []} />
         </div>
         <div>
-          <JobApprovedItemInfo />
+          <JobApprovedItemInfo item={item} />
         </div>
       </div>
     </div>

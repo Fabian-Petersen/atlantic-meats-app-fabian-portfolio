@@ -23,8 +23,13 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { useNavigate } from "react-router-dom";
 
 const RequestRejectedForm = () => {
-  const { setShowRejectRequestDialog, selectedRowId, showRejectRequestDialog } =
-    useGlobalContext();
+  const {
+    setShowRejectRequestDialog,
+    selectedRowId,
+    showRejectRequestDialog,
+    setShowSuccess,
+    setSuccessConfig,
+  } = useGlobalContext();
   const navigate = useNavigate();
 
   // $ Form Schema
@@ -65,13 +70,16 @@ const RequestRejectedForm = () => {
 
       // $ Close the modal
       setShowRejectRequestDialog(false);
-
-      // $ Inform the user of successful submission
-      toast.success("The itemm was sucessfully rejected");
+      setSuccessConfig({
+        title: "Success",
+        message: "The Request was Rejected!!!",
+        resourcePath: "jobs-list-pending",
+      });
+      setShowSuccess(true);
 
       // $ Navigate back to the requests list page after successfull submit
       setTimeout(() => {
-        navigate("/maintenance-requests-list");
+        navigate("/jobs-list-pending");
       }, 1500);
     } catch (error) {
       console.log(error);

@@ -1,5 +1,11 @@
 import * as z from "zod";
-import { presignedURLSchema } from "./assetSchemas"; //manage the schema in assets since it is the same
+
+export const presignedURLSchema = z.object({
+  key: z.string(),
+  url: z.string(),
+  filename: z.string(),
+});
+export type PresignedUrls = z.infer<typeof presignedURLSchema>;
 
 // $ Schema to create a maintenance request
 export const jobRequestSchema = z.object({
