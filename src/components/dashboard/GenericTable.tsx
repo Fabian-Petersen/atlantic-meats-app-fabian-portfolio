@@ -68,7 +68,7 @@ export function GenericTable<T extends { id: string }>({
   };
 
   return (
-    <div className="w-full md:p-4 min-h-0">
+    <div className="w-full lg:p-4 min-h-0 hidden lg:block">
       {/* <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 border-dashed min-h-0"> */}
       {tableHeading && (
         <FormHeading className="mx-auto" heading={tableHeading} />

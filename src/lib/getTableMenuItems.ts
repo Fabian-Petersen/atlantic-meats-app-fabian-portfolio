@@ -27,6 +27,7 @@ type DeleteConfig = {
 
 type GetTableMenuItemsProps = {
   rowId: string;
+  request_id?: string;
   setSelectedRowId: (id: string) => void;
 
   edit?: {
@@ -65,6 +66,7 @@ type GetTableMenuItemsProps = {
 
 export const getTableMenuItems = ({
   rowId,
+  request_id,
   setSelectedRowId,
   edit,
   action,
@@ -131,7 +133,9 @@ export const getTableMenuItems = ({
       icon: MessageSquare,
       url: comments.url,
       onClick: () => {
-        setSelectedRowId(rowId);
+        if (request_id)
+          setSelectedRowId(request_id); // the actions rowId is not eq to requestId for the comments
+        else setSelectedRowId(rowId);
         comments.onOpen();
       },
     });

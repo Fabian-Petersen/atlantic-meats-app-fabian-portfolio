@@ -4,11 +4,13 @@ import { Outlet } from "react-router-dom";
 import Navbar from "@/components/header/Navbar";
 import Sidebar from "@/components/dashboardSidebar/Sidebar";
 import ModalManager from "@/components/modals/ModalManager";
+import ChatSidebar from "@/components/comments/ChatSidebar";
 
 // AppLayout.tsx
 export const AppLayout = () => (
-  <div className="min-h-screen grid grid-cols-1 lg:grid-rows-[4rem_1fr] lg:grid-cols-[15rem_1fr] grid-rows-[4rem_1fr] bg-gray-100 dark:bg-bgdark">
+  <div className="min-h-screen w-full grid grid-cols-1 lg:grid-rows-[4rem_1fr] lg:grid-cols-[15rem_1fr] grid-rows-[4rem_1fr] bg-gray-100 dark:bg-bgdark">
     <Navbar className="col-span-full row-start-1 row-end-1 h-16" />
+    <ChatSidebar />
     <aside className="lg:block row-start-2 col-start-1">
       <Sidebar />
     </aside>

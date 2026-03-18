@@ -8,6 +8,7 @@ import { ImageGallery } from "@/components/features/ImageGallery";
 import RequestApproval from "@/components/requests_approvals/RequestApproval";
 import { Success } from "@/components/features/Success";
 import useGlobalContext from "@/context/useGlobalContext";
+import MobileRequestApproval from "@/components/mobile/MobileRequestApproval";
 
 export type PresignedUrlResponse = {
   key: string;
@@ -38,9 +39,9 @@ const JobPendingPage = () => {
   const images = item.images;
 
   return (
-    <div className="p-4">
+    <div className="">
       {showSuccess ? <Success /> : undefined}
-      <div className="h-auto bg-white dark:bg-[#1d2739] border-gray-700/70 rounded-md grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800">
+      <div className="hidden h-auto bg-white dark:bg-[#1d2739] border-gray-700/70 rounded-md lg:grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800 p-4">
         <div>
           <ImageGallery images={images ?? []} />
         </div>
@@ -48,6 +49,7 @@ const JobPendingPage = () => {
           <RequestApproval />
         </div>
       </div>
+      <MobileRequestApproval item={item} />
     </div>
   );
 };
