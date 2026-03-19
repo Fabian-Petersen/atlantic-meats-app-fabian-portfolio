@@ -121,8 +121,8 @@ export default function MobileRequestApproval({
     };
 
     try {
-      const response = await approveRequest(payload);
-      console.log("approve-request:", response);
+      await approveRequest(payload);
+      // console.log("approve-request:", response);
       toast.success("The itemm was sucessfully rejected");
       navigate("/jobs-list-approved");
     } catch (error) {

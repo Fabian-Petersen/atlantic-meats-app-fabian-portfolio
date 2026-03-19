@@ -62,7 +62,7 @@ export function MobileJobsApprovedRow({ row, isOpen, onToggle }: Props) {
               className="py-2 dark:text-gray-200 text-yellow-600 hover:cursor-pointer hover:text-primary bg-primary/40 flex-1 rounded-full"
               onClick={(e) => {
                 e.stopPropagation();
-                console.log(row.original.id);
+                // console.log(row.original.id);
                 navigate(`/maintenance-action/${row.original.id}`);
               }}
             >

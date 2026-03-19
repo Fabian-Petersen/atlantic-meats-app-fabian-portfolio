@@ -59,7 +59,7 @@ const VerifyPassword = ({ isLoading, onNext }: VerifyPasswordProps) => {
 
   const onSubmit = async (data: VerifyPinFormValues) => {
     try {
-      console.log(data.pin);
+      // console.log(data.pin);
       setTimeout(() => {
         alert(`pin: ${data.pin}`);
         reset();

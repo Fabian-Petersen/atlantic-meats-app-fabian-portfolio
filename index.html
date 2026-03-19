@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -15,7 +15,7 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx">
       const theme = localStorage.getItem("theme");
-      console.log("systemTheme:",theme)
+      // console.log("systemTheme:",theme)
        if (theme === "dark") {
          document.documentElement.classList.add("dark");
        } else {

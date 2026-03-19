@@ -30,7 +30,7 @@ const JobsApprovedListPage = () => {
     JobApprovedAPIResponse[]
   >("jobs-list-approved", ["maintenanceRequests"]);
 
-  console.log("data:", data);
+  // console.log("data:", data);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "jobCreated", desc: false },
   ]);
