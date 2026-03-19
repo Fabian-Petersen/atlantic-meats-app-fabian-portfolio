@@ -65,7 +65,6 @@ export const actionTableRowSchema = actionResponseSchema
     images: true,
     root_cause: true,
     work_completed: true,
-    request_id: true,
   })
   .extend({
     id: z.string(),

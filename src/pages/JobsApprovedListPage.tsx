@@ -20,18 +20,19 @@ import { getJobApprovedColumns } from "@/components/tableColumns/ApprovedColumns
 import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
 import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
-import ChatSidebar from "@/components/comments/ChatSidebar";
 import { GenericTable } from "@/components/dashboard/GenericTable";
 import { MobileJobsApprovedTable } from "@/components/mobile/MobileJobsApprovedTable";
 import FormHeading from "@/../customComponents/FormHeading";
+import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
 
 const JobsApprovedListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<
     JobApprovedAPIResponse[]
   >("jobs-list-approved", ["maintenanceRequests"]);
 
+  console.log("data:", data);
   const [sorting, setSorting] = useState<SortingState>([
-    { id: "jobCreated", desc: true },
+    { id: "jobCreated", desc: false },
   ]);
 
   // const { mutateAsync: downloadItem } = useDownloadPdf({
@@ -77,7 +78,6 @@ const JobsApprovedListPage = () => {
 
   return (
     <div className="flex w-full p-4 h-auto">
-      <ChatSidebar />
       <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto">
         <FormHeading
           className="mx-auto dark:text-gray-100"
@@ -88,7 +88,13 @@ const JobsApprovedListPage = () => {
           columns={columns}
           rowPath="/jobs-list-approved"
           className="hidden md:flex flex-col gap-2"
+          rowClassName={(row) => {
+            return isTargetDateOverdue(row.targetDate)
+              ? "text-red-500"
+              : "text-gray-700";
+          }}
         />
+
         <MobileJobsApprovedTable
           className="flex md:hidden"
           data={table.getRowModel().rows}

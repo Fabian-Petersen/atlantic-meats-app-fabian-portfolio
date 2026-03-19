@@ -33,6 +33,7 @@ const ApproveRequestForm = () => {
     selectedRowId,
     setShowSuccess,
     showApproveRequestDialog,
+    setSuccessConfig,
   } = useGlobalContext();
 
   const { data: technicians = [], isPending: isLoading } = useGetTechnicians();
@@ -66,7 +67,7 @@ const ApproveRequestForm = () => {
     return <PageLoadingSpinner />;
   }
 
-  console.log("technicians:", technicians);
+  // console.log("technicians:", technicians);
   const onSubmit = async (data: ApproveRequestFormValues) => {
     try {
       const selectedTechnician = technicians.find(
@@ -90,6 +91,11 @@ const ApproveRequestForm = () => {
 
       // $ Close the modal
       setShowApproveRequestDialog(false);
+      setSuccessConfig({
+        title: "Success",
+        message: "The Request was Successfully Approved!!!",
+        resourcePath: "jobs-list-approved",
+      });
       setShowSuccess(true);
 
       // toast.success("The item was sucessfully assigned");
@@ -141,14 +147,14 @@ const ApproveRequestForm = () => {
             type="button"
             disabled={isPending}
             onClick={() => setShowApproveRequestDialog(false)}
-            className="w-full rounded-full bg-red-500 px-6 py-2 transition hover:bg-red-500/90 hover:cursor-pointer text-white disabled:opacity-50 dark:text-gray-200 lg:w-32"
+            className="text-sm w-full rounded-full bg-red-500 px-6 py-2 transition hover:bg-red-500/90 hover:cursor-pointer text-white disabled:opacity-50 dark:text-gray-200 lg:w-32"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isPending}
-            className="w-full rounded-full bg-primary/90 px-6 py-2 text-white transition hover:bg-primary hover:cursor-pointer disabled:opacity-50 lg:w-32"
+            className="text-sm w-full rounded-full bg-primary/90 px-6 py-2 text-white transition hover:bg-primary hover:cursor-pointer disabled:opacity-50 lg:w-32"
           >
             {isPending ? (
               <div className="flex gap-4 items-center justify-center">

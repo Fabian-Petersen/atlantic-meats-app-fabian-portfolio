@@ -133,7 +133,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
         duration: 1000,
       });
       setShowActionDialog(false);
-      navigate("/jobs-approved-list");
+      navigate("/maintenance-actions-list");
     } catch (err) {
       console.error("Failed to create maintenance request", err);
     }

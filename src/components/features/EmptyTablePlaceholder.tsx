@@ -1,4 +1,4 @@
-import { Inbox } from "lucide-react";
+import { EmptyStateContent } from "./EmptyStateContent";
 
 type Props = {
   colSpan: number;
@@ -10,15 +10,9 @@ const EmptyTablePlaceholder = ({
   message = "No items found",
 }: Props) => {
   return (
-    <tr>
+    <tr className="">
       <td colSpan={colSpan}>
-        <div
-          className="flex flex-col items-center justify-center py-12 text-gray-500 
-          dark:text-gray-400"
-        >
-          <Inbox size={40} className="mb-3 opacity-70" />
-          <p className="text-md font-medium">{message}</p>
-        </div>
+        <EmptyStateContent message={message} />
       </td>
     </tr>
   );

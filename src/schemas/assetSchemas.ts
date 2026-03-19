@@ -21,6 +21,7 @@ export type AssetRequestFormValues = z.infer<typeof assetRequestSchema>;
 
 // $ Schema for the PresignedURL's
 export const presignedURLSchema = z.object({
+  bucket: z.string(),
   filename: z.string(),
   url: z.string(),
   key: z.string(),

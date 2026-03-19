@@ -130,18 +130,20 @@ export const getJobActionColumns = (
     enableHiding: false,
     cell: ({ row }) => {
       const rowId = row.original.id;
+      const request_id = row.original.request_id;
 
       const menuItems = getTableMenuItems({
         rowId: row.original.id,
+        request_id: row.original.request_id,
         setSelectedRowId,
         download: {
-          url: "/update-request",
+          url: "/maintenance-jobcard",
           onDownload: () => {
             downloadItem(rowId);
           },
         },
         comments: {
-          url: `/maintenance-request/${rowId}/comments`,
+          url: `/maintenance-request/${request_id}/comments`,
           onOpen: () => {
             setOpenChatSidebar(true);
           },

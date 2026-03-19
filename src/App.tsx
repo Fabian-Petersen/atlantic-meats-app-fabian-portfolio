@@ -86,7 +86,7 @@ function App() {
             <Route path="/asset" element={<CreateAssetPage />} />
           </Route>
           {/* // $ ======================= Maintenance Routes ======================= */}
-          {/* //% Contractor Routes */}
+          {/* //% admin, technician, contractor Routes */}
           <Route
             element={
               <RoleGaurdRoute

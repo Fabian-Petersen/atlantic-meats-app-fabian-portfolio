@@ -28,6 +28,7 @@ type Props<T extends { id: string }> = {
   initialSorting?: SortingState;
   addButton?: boolean;
   addButtonPath?: string;
+  rowClassName?: (row: T) => string;
 };
 
 export function GenericTable<T extends { id: string }>({
@@ -39,6 +40,7 @@ export function GenericTable<T extends { id: string }>({
   initialSorting = [],
   addButton,
   addButtonPath,
+  rowClassName,
 }: Props<T>) {
   const navigate = useNavigate();
   const { setSelectedRowId } = useGlobalContext();
@@ -66,7 +68,7 @@ export function GenericTable<T extends { id: string }>({
   };
 
   return (
-    <div className="w-full md:p-4 min-h-0">
+    <div className="w-full lg:p-4 min-h-0 hidden lg:block">
       {/* <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 border-dashed min-h-0"> */}
       {tableHeading && (
         <FormHeading className="mx-auto" heading={tableHeading} />
@@ -114,31 +116,35 @@ export function GenericTable<T extends { id: string }>({
                   message="No Maintenance requests yet"
                 />
               ) : (
-                table.getRowModel().rows.map((row) => (
-                  <tr
-                    key={row.id}
-                    onClick={() => {
-                      setSelectedRowId(row.original.id);
-                      navigate(`${rowPath}/${row.original.id}`);
-                    }}
-                    className="cursor-pointer hover:bg-primary/20 dark:bg-[#1d2739]"
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id} className="px-4 py-3 text-gray-700">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))
+                table.getRowModel().rows.map((row) => {
+                  const customRowClass = rowClassName
+                    ? rowClassName(row.original)
+                    : "";
+                  return (
+                    <tr
+                      key={row.id}
+                      onClick={() => {
+                        setSelectedRowId(row.original.id);
+                        navigate(`${rowPath}/${row.original.id}`);
+                      }}
+                      className={`cursor-pointer hover:bg-primary/20 dark:bg-[#1d2739] ${customRowClass}`}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <td key={cell.id} className="px-4 py-3">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
         </div>
       </div>
     </div>
-    // </div>
   );
 }

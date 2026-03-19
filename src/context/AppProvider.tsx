@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AppContext } from "./app-context";
 import type { GlobalData, PendingTableAction } from "../schemas";
-import type { DeleteConfig } from "./app-types";
+import type { DeleteConfig, SuccessConfig } from "./app-types";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   // $ [Step 3]: Create the state and set the initial state value
@@ -9,6 +9,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   // $ State for the Error and Success Components
   const [showError, setShowError] = useState<boolean>(false);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
+  const [successConfig, setSuccessConfig] = useState<SuccessConfig | null>(
+    null,
+  );
 
   // $ State for the theme mode
   // ? The isDarkTheme is used to set the theme in the 'useSetDarkTheme' hook.
@@ -112,6 +115,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setShowRejectRequestDialog,
         showApproveRequestDialog,
         setShowApproveRequestDialog,
+        successConfig,
+        setSuccessConfig,
       }}
     >
       {children}

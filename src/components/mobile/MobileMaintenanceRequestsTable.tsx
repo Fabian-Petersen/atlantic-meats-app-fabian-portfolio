@@ -2,7 +2,7 @@
 
 import type { JobAPIResponse } from "@/schemas";
 import { useState } from "react";
-import { MobileMaintenanceRequestRow } from "./MobileMaintenanceRequestRow";
+import MobileMaintenanceRequestRow from "./MobileMaintenanceRequestRow";
 import type { Row } from "@tanstack/react-table";
 
 type Props = {

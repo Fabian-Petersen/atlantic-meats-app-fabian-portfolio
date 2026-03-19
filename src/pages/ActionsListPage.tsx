@@ -16,7 +16,6 @@ import type { ActionTableRow } from "@/schemas/actionSchemas";
 import { GenericTable } from "@/components/dashboard/GenericTable";
 import FormHeading from "@/../customComponents/FormHeading";
 import { getJobActionColumns } from "@/components/tableColumns/ActionColumns";
-import ChatSidebar from "@/components/comments/ChatSidebar";
 
 const ActionsListPage = () => {
   const ACTIONS_REQUESTS_KEY = ["actionRequests"];
@@ -47,16 +46,11 @@ const ActionsListPage = () => {
         work_completed: action.work_completed,
         jobcardNumber: action.jobcardNumber,
         requested_by: action.requested_by,
+        request_id: action.request_id,
         status: action.status,
       })),
     [data],
   );
-
-  // const columns = getActionColumns(
-  //   setShowUpdateAssetDialog,
-  //   setSelectedRowId,
-  //   openDeleteDialog,
-  // );
 
   const columns = getJobActionColumns(
     setSelectedRowId,
@@ -85,7 +79,6 @@ const ActionsListPage = () => {
 
   return (
     <div className="flex w-full md:p-4 min-h-0">
-      <ChatSidebar />
       <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto">
         <FormHeading
           className="mx-auto dark:text-gray-100"

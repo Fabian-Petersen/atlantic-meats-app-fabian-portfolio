@@ -29,7 +29,7 @@ export const getJobApprovedColumns = (
         minute: "2-digit",
         hour12: false,
       }),
-    sortingFn: "datetime",
+    // sortingFn: "datetime",
   },
   {
     accessorKey: "location",
@@ -68,9 +68,17 @@ export const getJobApprovedColumns = (
     },
   },
   {
+    accessorKey: "jobcardNumber",
+    header: "Jobcard Number",
+  },
+  {
     accessorKey: "priority",
     header: "Priority",
     enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
   },
   {
     accessorKey: "assign_to_name",
@@ -82,16 +90,20 @@ export const getJobApprovedColumns = (
   },
   {
     accessorKey: "assign_to_group",
-    header: "Assigned Group",
+    header: "Group",
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;
     },
   },
-  // {
-  //   accessorKey: "type",
-  //   header: "Type",
-  // },
+  {
+    accessorKey: "targetDate",
+    header: "Target Date",
+    // cell: ({ getValue }) => {
+    //   const value = getValue<string>();
+    //   return <p className={getTargetDateClasses(value)}>{value}</p>;
+    // },
+  },
   {
     id: "actions",
     header: "Actions",

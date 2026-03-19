@@ -18,9 +18,9 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
 import type { JobAPIResponse } from "@/schemas";
-import ChatSidebar from "@/components/comments/ChatSidebar";
 import { GenericTable } from "@/components/dashboard/GenericTable";
 import { getJobPendingColumns } from "@/components/tableColumns/PendingColumns";
+import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 
 const JobsPendingListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<JobAPIResponse[]>(
@@ -68,12 +68,12 @@ const JobsPendingListPage = () => {
     );
 
   return (
-    <div className="flex w-full p-4 h-auto">
-      <ChatSidebar />
-      <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto">
+    <div className="flex w-full lg:p-4 h-auto">
+      {/* // $ Desktop View */}
+      <div className="bg-white dark:bg-[#1d2739] lg:flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto hidden">
         <FormHeading
           className="mx-auto dark:text-gray-100"
-          heading="Pending Approval"
+          heading="Pending Review and Approve"
         />
         <GenericTable
           data={data}
@@ -82,10 +82,17 @@ const JobsPendingListPage = () => {
           addButton={true}
           addButtonPath="/maintenance-request"
         />
-        <MobileMaintenanceRequestsTable
-          className="flex md:hidden"
-          data={table.getRowModel().rows}
-        />
+      </div>
+      {/* // $ Mobile View */}
+      <div className="grid lg:hidden w-full">
+        {table.getRowModel().rows.length === 0 ? (
+          <EmptyMobilePlaceholder message="No Maintenance requests yet" />
+        ) : (
+          <MobileMaintenanceRequestsTable
+            className="flex md:hidden"
+            data={table.getRowModel().rows}
+          />
+        )}
       </div>
     </div>
   );

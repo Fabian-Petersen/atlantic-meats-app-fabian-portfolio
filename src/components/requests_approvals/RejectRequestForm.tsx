@@ -23,8 +23,13 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { useNavigate } from "react-router-dom";
 
 const RequestRejectedForm = () => {
-  const { setShowRejectRequestDialog, selectedRowId, showRejectRequestDialog } =
-    useGlobalContext();
+  const {
+    setShowRejectRequestDialog,
+    selectedRowId,
+    showRejectRequestDialog,
+    setShowSuccess,
+    setSuccessConfig,
+  } = useGlobalContext();
   const navigate = useNavigate();
 
   // $ Form Schema
@@ -65,13 +70,16 @@ const RequestRejectedForm = () => {
 
       // $ Close the modal
       setShowRejectRequestDialog(false);
-
-      // $ Inform the user of successful submission
-      toast.success("The itemm was sucessfully rejected");
+      setSuccessConfig({
+        title: "Success",
+        message: "The Request was Rejected!!!",
+        resourcePath: "jobs-list-pending",
+      });
+      setShowSuccess(true);
 
       // $ Navigate back to the requests list page after successfull submit
       setTimeout(() => {
-        navigate("/maintenance-requests-list");
+        navigate("/jobs-list-pending");
       }, 1500);
     } catch (error) {
       console.log(error);
@@ -90,9 +98,9 @@ const RequestRejectedForm = () => {
       className="flex flex-col rounded-lg lg:w-full text-(--clr-font) dark:bg-[#1d2739]"
     >
       <div className="grid gap-4 w-full lg:py-2">
-        <p className="text-sm md:text-md text-gray-600 dark:text-gray-300">
-          Are you sure you want to reject this item? This action cannot be
-          undone.
+        <p className="text-xs md:text-md text-gray-600 dark:text-gray-300">
+          Are you sure you want to reject this item? <br />
+          This action cannot be undone.
         </p>
         <TextAreaInput
           register={register}
@@ -100,21 +108,21 @@ const RequestRejectedForm = () => {
           rows={1}
           name="reject_message"
           error={errors.reject_message}
-          className="placeholder-black resize-none overflow-hidden no-scrollbar"
+          className="placeholder-black resize-none overflow-hidden no-scrollbar placeholder:text-xs"
         />
         <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 bg-white mt-auto">
           <button
             type="button"
             disabled={isPending}
             onClick={() => setShowRejectRequestDialog(false)}
-            className="w-full rounded-full bg-red-500 px-6 py-2 transition hover:bg-red-500/90 hover:cursor-pointer text-white disabled:opacity-50 dark:text-gray-200 lg:w-32"
+            className="text-sm w-full rounded-full bg-red-500 px-6 py-2 transition hover:bg-red-500/90 hover:cursor-pointer text-white disabled:opacity-50 dark:text-gray-200 lg:w-32"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isPending}
-            className="w-full rounded-full bg-primary/90 px-6 py-2 text-white transition hover:bg-primary hover:cursor-pointer disabled:opacity-50 lg:w-32"
+            className="text-sm w-full rounded-full bg-primary/90 px-6 py-2 text-white transition hover:bg-primary hover:cursor-pointer disabled:opacity-50 lg:w-32"
           >
             {isPending ? (
               <div className="flex gap-4 items-center justify-center">

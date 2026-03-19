@@ -31,6 +31,7 @@ function RequestApproval() {
     queryKey: ["MAINTENANCE-REQUEST-ITEM"],
     resourcePath: "maintenance-request",
   });
+
   const navigate = useNavigate();
   if (isPending) {
     return <PageLoadingSpinner />;
@@ -64,7 +65,7 @@ function RequestApproval() {
   };
 
   return (
-    <div className="flex gap flex-col gap-2 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50">
+    <div className="hidden lg:flex gap flex-col gap-2 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50">
       <div className="flex flex-col gap-2">
         <h1 className="text-md md:text-xl capitalize">
           Request No : {item?.jobcardNumber}
