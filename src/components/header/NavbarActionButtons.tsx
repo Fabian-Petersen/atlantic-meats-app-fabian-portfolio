@@ -4,7 +4,7 @@ import Avatar from "./Avatar";
 
 const NavbarActionButtons = () => {
   return (
-    <div className="flex items-center justify-center gap-6">
+    <div className="flex items-center justify-center gap-2 lg:gap-6">
       <ThemeToggleButton />
       <LogoutButton />
       <Avatar />

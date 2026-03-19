@@ -94,6 +94,7 @@ const JobsApprovedListPage = () => {
               : "text-gray-700";
           }}
         />
+
         <MobileJobsApprovedTable
           className="flex md:hidden"
           data={table.getRowModel().rows}

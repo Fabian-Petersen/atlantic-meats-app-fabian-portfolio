@@ -26,9 +26,19 @@ export const MetricCardItem = <T extends string>({
             >
               <div className="p-1">
                 <p className="capitalize text-xs md:text-sm">{card.title}</p>
-                <p className="text-[2rem] md:text-[2.5rem]">{metric.value}</p>
+                <div className="flex justify-between items-center">
+                  <p className="text-[2rem] md:text-[2.5rem]">{metric.value}</p>
+                  <div
+                    className="flex items-center justify-center size-8 lg:size-18 rounded-full p-2 xl:p-3 border border-white dark:border-none"
+                    style={{
+                      color: card.color,
+                      backgroundColor: card.bgColor,
+                    }}
+                  >
+                    {React.createElement(card.icon, { size: 28 })}
+                  </div>
+                </div>
               </div>
-
               <div
                 className={`
                   flex items-center gap-2 self-end w-full
@@ -43,21 +53,13 @@ export const MetricCardItem = <T extends string>({
                   <TrendingDown size={16} />
                 )}
 
-                <span>
+                <span className="text-[0.6rem] lg:text-sm">
                   {metric.valueChange}%{" "}
-                  <span className="opacity-80">Change from last month</span>
+                  <span className=" lg:text-sm opacity-80">
+                    from last month
+                  </span>
                 </span>
               </div>
-            </div>
-
-            <div
-              className="flex items-center justify-center absolute size-18 top-1/2 right-[5%] -translate-y-1/2 rounded-full p-2 xl:p-3 border border-white"
-              style={{
-                color: card.color,
-                backgroundColor: card.bgColor,
-              }}
-            >
-              {React.createElement(card.icon, { size: 28 })}
             </div>
           </div>
         );

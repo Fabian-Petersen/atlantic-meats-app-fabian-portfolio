@@ -4,8 +4,9 @@ import type { JobAPIResponse } from "@/schemas";
 import type { Row } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
 import { usePOST } from "@/utils/api";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import useGlobalContext from "@/context/useGlobalContext";
+import { toast } from "sonner";
 
 const priorityConfig: Record<string, { label: string; className: string }> = {
   high: {
@@ -28,26 +29,24 @@ interface MaintenanceRequestCardProps {
   row: Row<JobAPIResponse>;
   isOpen: boolean;
   onToggle: () => void;
-  setSelectedRowId: (id: string) => void;
-  setShowDeleteDialog: (show: boolean) => void;
-  setShowRejectRequestDialog: (show: boolean) => void;
-  setShowApproveRequestDialog: (show: boolean) => void;
 }
 
 export default function MobileMaintenanceRequestRow({
   row,
   isOpen,
   onToggle,
-  setSelectedRowId,
-  setShowRejectRequestDialog,
-  setShowApproveRequestDialog,
 }: MaintenanceRequestCardProps) {
   const priority =
     priorityConfig[row.original.priority?.toLowerCase()] ??
     priorityConfig.medium;
 
   const navigate = useNavigate();
-  const { selectedRowId } = useGlobalContext();
+  const {
+    selectedRowId,
+    setSelectedRowId,
+    setShowRejectRequestDialog,
+    setShowApproveRequestDialog,
+  } = useGlobalContext();
 
   const { mutateAsync: approveRequest, isPending } = usePOST({
     resourcePath: "job-request-approved",
@@ -165,7 +164,7 @@ export default function MobileMaintenanceRequestRow({
             <button
               type="button"
               disabled={isPending}
-              className="flex-1 py-2 text-xs font-medium rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+              className="flex-1 py-2 text-xs font-medium rounded-lg bg-primary hover:bg-primary/90 hover:shadow-md text-white transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
                 handleSubmit();

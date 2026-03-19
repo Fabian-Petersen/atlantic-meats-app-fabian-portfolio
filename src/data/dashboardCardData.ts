@@ -31,7 +31,7 @@ export const assetsCardData: AssetCardItem[] = [
 export const actionCardData: ActionCardItem[] = [
   {
     id: "totalCompleted",
-    title: "Completed Requests",
+    title: "Completed Jobs",
     icon: FileBarChart,
     color: "#ffc658",
     bgColor: "rgba(255, 198, 88, 0.1)",

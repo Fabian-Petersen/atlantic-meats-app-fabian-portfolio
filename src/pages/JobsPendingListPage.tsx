@@ -20,6 +20,7 @@ import { ErrorPage } from "@/components/features/Error";
 import type { JobAPIResponse } from "@/schemas";
 import { GenericTable } from "@/components/dashboard/GenericTable";
 import { getJobPendingColumns } from "@/components/tableColumns/PendingColumns";
+import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 
 const JobsPendingListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<JobAPIResponse[]>(
@@ -84,14 +85,14 @@ const JobsPendingListPage = () => {
       </div>
       {/* // $ Mobile View */}
       <div className="grid lg:hidden w-full">
-        <div className="bg-white p-2">
-          <FormHeading heading="Maintenance Requests" className="text-md" />
-          <p className="text-sm">Review & approve</p>
-        </div>
-        <MobileMaintenanceRequestsTable
-          className="flex md:hidden"
-          data={table.getRowModel().rows}
-        />
+        {table.getRowModel().rows.length === 0 ? (
+          <EmptyMobilePlaceholder message="No Maintenance requests yet" />
+        ) : (
+          <MobileMaintenanceRequestsTable
+            className="flex md:hidden"
+            data={table.getRowModel().rows}
+          />
+        )}
       </div>
     </div>
   );

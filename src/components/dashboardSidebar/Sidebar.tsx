@@ -3,6 +3,9 @@ import { Separator } from "../ui/separator";
 import { getUserGroups } from "@/auth/getUserGroups";
 import type { UserGroup } from "../../data/navbarLinks";
 
+// $ Animation
+import { motion, AnimatePresence } from "framer-motion";
+
 import {
   maintenanceLinks,
   assetLinks,
@@ -30,38 +33,46 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <div
-      className={`z-200 w-60 fixed top-16 lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-r border-r-gray-200 dark:border-r-[rgba(55,65,81,0.5)]
-      bg-white dark:bg-bgdark transform transition-transform duration-75 ease-in lg:translate-x-0
-    ${isOpen ? "translate-x-0" : "-translate-x-full ease-out"}`}
-    >
-      <div className="flex flex-col h-full gap-2 mt-6">
-        {/* Content */}
-        <SidebarSection
-          data={mainLinks}
-          heading="Main"
-          userGroups={userGroups}
-        />
-        <Separator />
-        <SidebarSection
-          data={maintenanceLinks}
-          heading="Maintenance"
-          userGroups={userGroups}
-        />
-        <Separator />
-        <SidebarSection
-          data={assetLinks}
-          heading="Assets"
-          userGroups={userGroups}
-        />
-        <Separator />
-        <SidebarSection
-          data={profileLinks}
-          heading="Profile"
-          userGroups={userGroups}
-        />
-      </div>
-    </div>
+    <AnimatePresence initial={false}>
+      {(isOpen ||
+        (typeof window !== "undefined" && window.innerWidth >= 1024)) && (
+        <motion.div
+          key="sidebar"
+          initial={{ x: "-100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "-100%" }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
+          className="z-200 w-60 fixed top-16 lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-r border-r-gray-200 dark:border-r-[rgba(55,65,81,0.5)] bg-white dark:bg-bgdark lg:translate-x-0"
+        >
+          <div className="flex flex-col h-full gap-2 mt-6">
+            {/* Content */}
+            <SidebarSection
+              data={mainLinks}
+              heading="Main"
+              userGroups={userGroups}
+            />
+            <Separator />
+            <SidebarSection
+              data={maintenanceLinks}
+              heading="Maintenance"
+              userGroups={userGroups}
+            />
+            <Separator />
+            <SidebarSection
+              data={assetLinks}
+              heading="Assets"
+              userGroups={userGroups}
+            />
+            <Separator />
+            <SidebarSection
+              data={profileLinks}
+              heading="Profile"
+              userGroups={userGroups}
+            />
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

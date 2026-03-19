@@ -34,8 +34,8 @@ const SidebarNavItem = ({
           "bg-primary/70 tracking-wide hover:bg-primary/70 hover:dark:text-white hover:text-gray-600"
         }`}
       >
-        <Icon size={22} />
-        <span className="lg:text-sm text-sm capitalize">{children}</span>
+        <Icon size={18} />
+        <span className="text-xs lg:text-sm capitalize">{children}</span>
       </button>
     </div>
   );
