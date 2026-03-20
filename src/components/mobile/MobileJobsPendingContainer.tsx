@@ -1,21 +1,21 @@
 //$ This is a similar function to the MaintenanceRequestTable, on mobile it is an accordion instead of a table in desktop.
 
-import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
+import type { JobAPIResponse } from "@/schemas";
 import { useState } from "react";
+import MobileJobsPendingCard from "./MobileJobsPendingCard";
 import type { Row } from "@tanstack/react-table";
-import { MobileJobsApprovedRow } from "./MobileJobsApprovedRow";
 
 type Props = {
-  data: Row<JobApprovedAPIResponse>[];
+  data: Row<JobAPIResponse>[];
   className?: string;
 };
 
-export function MobileJobsApprovedTable({ className, data }: Props) {
+export function MobileJobsPendingContainer({ className, data }: Props) {
   const [openRowId, setOpenRowId] = useState<string | null>(null);
   return (
-    <div className={`${className} flex flex-col gap-2 w-full p-2`}>
+    <div className={`${className} flex flex-col gap-2 w-full`}>
       {data.map((row) => (
-        <MobileJobsApprovedRow
+        <MobileJobsPendingCard
           key={row.id}
           row={row}
           isOpen={openRowId === row.id}

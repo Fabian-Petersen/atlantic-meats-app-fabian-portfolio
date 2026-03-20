@@ -42,7 +42,7 @@ const Sidebar = () => {
           animate={{ x: 0 }}
           exit={{ x: "-100%" }}
           transition={{ duration: 0.25, ease: "easeInOut" }}
-          className="z-200 w-60 fixed top-16 lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-r border-r-gray-200 dark:border-r-[rgba(55,65,81,0.5)] bg-white dark:bg-bgdark lg:translate-x-0"
+          className="z-200 w-60 fixed top-16 lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) overflow-auto no-scrollbar border-r border-r-gray-200 dark:border-r-gray-700 bg-white dark:bg-(--clr-bgItem) lg:translate-x-0"
         >
           <div className="flex flex-col h-full gap-2 mt-6">
             {/* Content */}

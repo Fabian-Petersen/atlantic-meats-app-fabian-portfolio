@@ -7,40 +7,24 @@ import { usePOST } from "@/utils/api";
 // import { toast } from "sonner";
 import useGlobalContext from "@/context/useGlobalContext";
 import { toast } from "sonner";
+import { priorityConfig } from "@/lib/priorityConfig";
 
-const priorityConfig: Record<string, { label: string; className: string }> = {
-  high: {
-    label: "High",
-    className: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400",
-  },
-  medium: {
-    label: "Medium",
-    className:
-      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400",
-  },
-  low: {
-    label: "Low",
-    className:
-      "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400",
-  },
-};
-
-interface MaintenanceRequestCardProps {
+type MaintenanceRequestCardProps = {
   row: Row<JobAPIResponse>;
   isOpen: boolean;
   onToggle: () => void;
-}
+};
 
-export default function MobileMaintenanceRequestRow({
+export default function MobileJobsPendingCard({
   row,
   isOpen,
   onToggle,
 }: MaintenanceRequestCardProps) {
   const priority =
-    priorityConfig[row.original.priority?.toLowerCase()] ??
-    priorityConfig.medium;
+    priorityConfig[row.original.priority?.toLowerCase()] ?? priorityConfig.low;
 
   const navigate = useNavigate();
+
   const {
     selectedRowId,
     setSelectedRowId,
@@ -71,7 +55,7 @@ export default function MobileMaintenanceRequestRow({
   };
 
   return (
-    <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-bgdark mb-2 overflow-hidden transition-shadow hover:shadow-sm">
+    <div className="rounded-md border border-gray-200 dark:border-(--clr-borderDark) bg-white dark:bg-(--clr-bgItem) mb-2 overflow-hidden transition-shadow hover:shadow-sm">
       {/* Always-visible header — tap to expand */}
       <button
         type="button"
@@ -119,7 +103,7 @@ export default function MobileMaintenanceRequestRow({
               <span className="text-sm text-gray-800 dark:text-gray-200 capitalize font-medium">
                 {row.original.equipment}
               </span>
-              <span className="text-xs text-gray-400 font-mono shrink-0">
+              <span className="text-xs text-gray-500 font-mono shrink-0 dark:text-green-500">
                 #{row.original.assetID}
               </span>
             </div>
@@ -144,13 +128,13 @@ export default function MobileMaintenanceRequestRow({
                 setSelectedRowId(row.original.id);
               }}
             >
-              View details
+              View Details
             </button>
 
             {/* Reject */}
             <button
               type="button"
-              className="flex-1 py-2 text-xs font-medium rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
+              className="flex-1 py-2 text-xs font-medium rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors border dark:border-(--clr-borderDarkRed)"
               onClick={(e) => {
                 e.stopPropagation();
                 setShowRejectRequestDialog(true);
@@ -164,7 +148,7 @@ export default function MobileMaintenanceRequestRow({
             <button
               type="button"
               disabled={isPending}
-              className="flex-1 py-2 text-xs font-medium rounded-lg bg-primary hover:bg-primary/90 hover:shadow-md text-white transition-colors"
+              className="flex-1 py-2 text-xs font-medium rounded-lg dark:bg-green/20 bg-green-500/10 border-green/20 hover:bg-green-500/90 hover:shadow-md text-green-500 border dark:border-green/30 transition-colors "
               onClick={(e) => {
                 e.stopPropagation();
                 handleSubmit();
@@ -193,7 +177,7 @@ export default function MobileMaintenanceRequestRow({
 //   onToggle: () => void;
 // };
 
-// export function MobileMaintenanceRequestRow({ row, isOpen, onToggle }: Props) {
+// export function MobileJobsPendingCard({ row, isOpen, onToggle }: Props) {
 //   const navigate = useNavigate();
 //   const { setShowDeleteDialog, setSelectedRowId } = useGlobalContext();
 

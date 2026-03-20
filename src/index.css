@@ -8,16 +8,33 @@
 :root {
   --sm-navbarHeight: 3rem;
   --radius: 10px;
+
+  /* Layout  */
   --lg-navbarHeight: 4rem;
   --sm-sidebarHeight: calc(100dvh - var(--sm-navbarHeight));
   --lg-sidebarHeight: calc(100dvh - var(--lg-navbarHeight));
-  --clr-primary: #fcb53b;
-  --clr-check: "#4CAF50";
-  --clr-bgCheck: "#C8E6C9";
-  --clr-activeLink: #c97e00;
-  --clr-font: #001433;
+  --minheight-page: calc(100vh-var(--sm-navbarHeight));
+  --minheight-mobile: calc(100dvh-var(--lg-navbarHeight));
+
+  /* Theme colors */
   --clr-primary-light: #1b64f1;
+  --clr-primary: #fcb53b;
   --clr-primary-dark: #1b64f1;
+  /* --clr-bgDark: #030712; */
+  --clr-bgDark: #101827;
+  --clr-bgItem: #101828; /*bg color of a container*/
+  --clr-borderDark: #364153;
+  --clr-borderDarkRed: #9f0712;
+
+  /* Text Colors */
+  --clr-font: #001433;
+  --clr-textDark: #f3f4f6;
+  --clr-textLight: #001433;
+
+  /*  */
+  --clr-check: #4caf50;
+  --clr-bgCheck: #c8e6c9;
+  --clr-activeLink: #c97e00;
   --all-pages-spacing: 1.5rem;
   --all-pages-spacing-small: 1rem;
   --tw-enter-translate-x: -5%;
@@ -26,7 +43,6 @@
   --chevron: #fcb53b;
   --size-5: 1.5rem;
   --font-size: 0.9rem;
-  --minheight-page: calc(100vh-var(--sm-navbarHeight));
 }
 
 /* $ ======================== Dark Mode Styles as per user preference ====================== */

@@ -6,7 +6,7 @@ type Props = {
 
 const EmptyMobilePlaceholder = ({ message = "No items found" }: Props) => {
   return (
-    <div className="w-full h-[calc(100dvh-var(--lg-navbarHeight))] flex justify-center items-center">
+    <div className="w-full h-[calc(100dvh-var(--lg-navbarHeight))] flex justify-center">
       <EmptyStateContent message={message} />
     </div>
   );

@@ -8,7 +8,7 @@ type Props = {
 
 export const EmptyStateContent = ({ message = "No items found" }: Props) => {
   return (
-    <div className="flex flex-col items-center justify-center py-12 text-gray-500 dark:text-gray-400">
+    <div className="flex flex-col items-center justify-start lg:justify-center py-12 text-gray-500 dark:text-gray-400">
       <Inbox size={40} className="mb-3 opacity-70" />
       <p className="text-sm lg:text-md font-medium">{message}</p>
     </div>

@@ -7,21 +7,29 @@ const config: Config = {
     extend: {
       // colors must be added to the index.css as a variable before becoming available
       colors: {
+        // $ Theme Colors
         primary: "#fcb53b",
         bgCheck: "#C8E6C9",
+        lightBg: "#F9FAFB",
+        dark_bg: "#1d2739",
+        bgdark: "#030712",
+        // bgDark: "#101827",
+        bgItem: "#101828",
+        bglight: "#f2f2f2",
+
         check: "#4CAF50",
         activelink: "#c97e00",
         secondary: "#06B6D4",
         accent: "#F59E0B",
-        lightBg: "#F9FAFB",
-        dark_bg: "#1d2739",
-        bgdark: "#0F172A",
-        bglight: "#f2f2f2",
         fontlight: "#f3f4f6",
-        borderdark: "",
         font: "#001433",
         fontDark: "#1F2937",
-        menuBtn: "#fef9c2 ",
+        menuBtn: "#fef9c2",
+        // $ borders
+        borderDark: "#364153",
+        // $ Text Colors
+        textDark: "#f3f4f6",
+        textLight: "#001433",
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],

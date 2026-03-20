@@ -13,7 +13,7 @@ import {
 } from "@tanstack/react-table";
 
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-import { MobileMaintenanceRequestsTable } from "@/components/mobile/MobileMaintenanceRequestsTable";
+import { MobileJobsPendingContainer } from "@/components/mobile/MobileJobsPendingContainer";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
@@ -21,6 +21,7 @@ import type { JobAPIResponse } from "@/schemas";
 import { GenericTable } from "@/components/dashboard/GenericTable";
 import { getJobPendingColumns } from "@/components/tableColumns/PendingColumns";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
+import { SearchInput } from "@/components/features/SearchInput";
 
 const JobsPendingListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<JobAPIResponse[]>(
@@ -31,6 +32,8 @@ const JobsPendingListPage = () => {
   const [sorting, setSorting] = useState<SortingState>([
     { id: "jobCreated", desc: true },
   ]);
+
+  const [globalFilter, setGlobalFilter] = useState("");
 
   const {
     setShowUpdateMaintenanceDialog,
@@ -50,11 +53,12 @@ const JobsPendingListPage = () => {
   const table = useReactTable({
     data: data ?? [],
     columns: columns,
-    state: { sorting },
+    state: { sorting, globalFilter },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    globalFilterFn: "includesString",
   });
 
   if (isPending) return <PageLoadingSpinner />;
@@ -84,14 +88,29 @@ const JobsPendingListPage = () => {
         />
       </div>
       {/* // $ Mobile View */}
-      <div className="grid lg:hidden w-full">
-        {table.getRowModel().rows.length === 0 ? (
+      <div className="grid lg:hidden gap-2 w-full p-2">
+        <SearchInput
+          value={globalFilter}
+          onChange={setGlobalFilter}
+          placeholder="Search Requests"
+        />
+        {data.length === 0 ? (
           <EmptyMobilePlaceholder message="No Maintenance requests yet" />
-        ) : (
-          <MobileMaintenanceRequestsTable
-            className="flex md:hidden"
-            data={table.getRowModel().rows}
+        ) : table.getRowModel().rows.length === 0 ? (
+          <EmptyMobilePlaceholder
+            message={`No results for "${globalFilter}"`}
           />
+        ) : (
+          <div className="grid gap-2">
+            <FormHeading
+              className="mx-auto dark:text-gray-100"
+              heading="Pending Requests"
+            />
+            <MobileJobsPendingContainer
+              className="flex md:hidden"
+              data={table.getRowModel().rows}
+            />
+          </div>
         )}
       </div>
     </div>

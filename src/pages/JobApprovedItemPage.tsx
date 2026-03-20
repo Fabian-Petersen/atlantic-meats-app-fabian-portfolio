@@ -29,8 +29,8 @@ const JobApprovedItemPage = () => {
 
   // console.log("Item Data with Presigned URLS:", item);
   return (
-    <div className="p-4">
-      <div className="h-auto bg-white dark:bg-[#1d2739] border-gray-700/70 rounded-md grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800">
+    <div className="p-8">
+      <div className="h-auto p-8 bg-white dark:bg-(--clr-bgDark) border-(--clr-borderDark) rounded-md grid md:grid-cols-2 gap-2 text-(--clr-textLight) dark:(--clr-textDark)">
         <div>
           <ImageGallery images={images ?? []} />
         </div>

@@ -42,14 +42,14 @@ const Dashboard = () => {
         >
           <ChartHeading
             title="Job Requests YTD"
-            className="font-normal text-black"
+            className="font-normal dark:text-(--clr-textDark) text-(--clr-textLight)"
           />
           <JobRequestsChart />
         </section>
         <section
           className="col-span-2 xl:col-span-1 h-[300px] rounded-md bg-white dark:bg-dark_bg
           border border-white dark:border-gray-700/50 p-2 shadow-sm 
-            text-white dark:text-gray-100"
+            dark:text-(--clr-textDark) text-(--clr-textLight)"
         >
           <OpenRequestsPieChart />
         </section>
@@ -68,7 +68,10 @@ const Dashboard = () => {
             shadow-sm
           "
         >
-          <ChartHeading title="Pending Requests" className="" />
+          <ChartHeading
+            title="Pending Requests"
+            className="dark:text-(--clr-textDark) text-(--clr-textLight)"
+          />
           <GenericTable
             data={pendingRequests ?? []}
             columns={columns ?? []}
