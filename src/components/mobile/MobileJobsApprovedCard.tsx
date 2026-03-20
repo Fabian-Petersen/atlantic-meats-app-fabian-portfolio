@@ -3,9 +3,18 @@ import type { Row } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
 import { priorityConfig } from "@/lib/priorityConfig";
-import { ChevronDown, MapPin, Calendar, Wrench, FileClock } from "lucide-react";
+import {
+  ChevronDown,
+  MapPin,
+  Calendar,
+  Wrench,
+  FileClock,
+  User,
+  Clock2Icon,
+} from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
 
 type Props = {
   row: Row<JobApprovedAPIResponse>;
@@ -19,7 +28,7 @@ export function MobileJobsApprovedCard({ row, isOpen, onToggle }: Props) {
 
   const navigate = useNavigate();
 
-  const { setShowDeleteDialog, setSelectedRowId } = useGlobalContext();
+  const { setSelectedRowId } = useGlobalContext();
 
   return (
     <div
@@ -53,10 +62,12 @@ export function MobileJobsApprovedCard({ row, isOpen, onToggle }: Props) {
                 {row.original.jobcardNumber}
               </span>
             </div>
-            <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+            <div
+              className={`flex items-center gap-3 text-xs ${isTargetDateOverdue(row.original.targetDate) ? "text-red-500" : "dark:text-gray-500"}`}
+            >
               <span className="flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
-                {row.original.jobCreated}
+                {row.original.targetDate}
               </span>
             </div>
           </div>
@@ -84,6 +95,21 @@ export function MobileJobsApprovedCard({ row, isOpen, onToggle }: Props) {
               </span>
             </div>
           </div>
+          {/* Target Date &Technician */}
+          <div className="flex items-start gap-2">
+            <User className="w-3.5 h-3.5 text-gray-400 mt-0.5 shrink-0" />
+            <div className="flex-1 flex items-center justify-between gap-2">
+              <span className="capitalize text-xs text-gray-500 font-mono shrink-0 dark:text-gray-200">
+                {row.original.assign_to_name}
+              </span>
+              <div className="flex gap-1 dark:text-gray-500">
+                <Clock2Icon className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                <span className="text-xs  capitalize font-medium">
+                  {row.original.jobCreated}
+                </span>
+              </div>
+            </div>
+          </div>
 
           {/* Description */}
           {row.original.jobComments && (
@@ -92,41 +118,28 @@ export function MobileJobsApprovedCard({ row, isOpen, onToggle }: Props) {
             </p>
           )}
 
-          <div className="w-full flex gap-12 justify-between mt-auto">
+          {/* // $ -------------------- Action Buttons -------------------------- */}
+          <div className="flex gap-2 pt-1">
             <button
               type="button"
-              className="py-1 dark:text-gray-200 text-green-700 hover:cursor-pointer hover:text-green-700 bg-green-200/90 flex-1 rounded-full"
+              className="flex-1 py-2 text-xs font-medium rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
-                // console.log(row.original.id);
-                navigate(`/maintenance-list/${row.original.id}`);
+                navigate(`/jobs-list-approved/${row.original.id}`);
                 setSelectedRowId(row.original.id);
-                //   console.log(actionData);
               }}
             >
-              Edit
+              View Details
             </button>
             <button
               type="button"
-              className="py-2 dark:text-gray-200 text-yellow-600 hover:cursor-pointer hover:text-primary bg-primary/40 flex-1 rounded-full"
+              className="flex-1 py-2 text-xs font-medium rounded-lg dark:bg-green/20 bg-green-500/10 border-green/20 hover:bg-green-500/90 hover:shadow-md text-green-500 border dark:border-green/30 transition-colors "
               onClick={(e) => {
                 e.stopPropagation();
-                // console.log(row.original.id);
                 navigate(`/maintenance-action/${row.original.id}`);
               }}
             >
               Action
-            </button>
-            <button
-              type="button"
-              className="py-2 dark:text-gray-200 text-red-500 hover:cursor-pointer hover:text-red-500 bg-red-200/90 flex-1 rounded-full"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowDeleteDialog(true);
-                setSelectedRowId(row.original.id);
-              }}
-            >
-              Delete
             </button>
           </div>
         </div>
