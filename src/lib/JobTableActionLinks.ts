@@ -58,7 +58,7 @@ export const getMaintenanceTableMenuItems = (
     icon: Trash2Icon,
     onClick: () => {
       openDeleteDialog(rowId, {
-        resourcePath: "maintenance-request",
+        resourcePath: "jobs-list-pending",
         queryKey: ["MAINTENANCE_DELETE_KEY"] as const,
       });
       setSelectedRowId(rowId);
@@ -76,7 +76,7 @@ export const getMaintenanceTableMenuItems = (
   {
     id: "5",
     label: "Comments",
-    url: `/maintenance-request/${rowId}/comments`,
+    url: `/jobs-list-pending/${rowId}/comments`,
     icon: MessageSquare,
     onClick: () => {
       setOpenChatSidebar(true);

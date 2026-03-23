@@ -60,7 +60,6 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/user-profile" element={<UserProfilePage />} />
             <Route path="/maintenance-request" element={<JobRequestPage />} />
-            {/* <Route path="/maintenance-request/:id" element={<JobItemPage />} /> */}
             <Route
               path="/jobs-list-approved/:id"
               element={<JobApprovedItemPage />}

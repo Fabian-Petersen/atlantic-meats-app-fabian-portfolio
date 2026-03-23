@@ -19,8 +19,8 @@ function JobPendingSingleItemInfo() {
 
   const { data: item, isPending } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
-    queryKey: ["MAINTENANCE-REQUEST-ITEM"],
-    resourcePath: "maintenance-request",
+    queryKey: ["maintenanceRequests"],
+    resourcePath: "jobs-list-pending",
   });
   const navigate = useNavigate();
 

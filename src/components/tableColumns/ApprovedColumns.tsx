@@ -136,14 +136,14 @@ export const getJobApprovedColumns = (
 
         delete: {
           config: {
-            resourcePath: "maintenance-request",
+            resourcePath: "jobs-list-pending",
             queryKey: ["maintenanceApprovedRequests"],
           },
           onDelete: openDeleteDialog,
         },
 
         comments: {
-          url: `/maintenance-request/${rowId}/comments`,
+          url: `/jobs-list-pending/${rowId}/comments`,
           onOpen: () => {
             setOpenChatSidebar(true);
           },
