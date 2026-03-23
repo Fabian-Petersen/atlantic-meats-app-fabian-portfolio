@@ -30,7 +30,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import UserProfilePage from "./pages/UserProfilePage";
 
 // $ Job Management Pages for single items
-import JobPendingPage from "./pages/JobPendingPage";
+import JobPendingItemPage from "./pages/JobPendingItemPage";
 import JobApprovedItemPage from "./pages/JobApprovedItemPage";
 
 // $ Pages display the list of items in a table
@@ -82,7 +82,10 @@ function App() {
             />
             <Route path="/assets-list" element={<AssetsOverviewPage />} />
             <Route path="/asset/:id" element={<AssetsSingleItemPage />} />
-            <Route path="/jobs-list-pending/:id" element={<JobPendingPage />} />
+            <Route
+              path="/jobs-list-pending/:id"
+              element={<JobPendingItemPage />}
+            />
             <Route path="/asset" element={<CreateAssetPage />} />
           </Route>
           {/* // $ ======================= Maintenance Routes ======================= */}

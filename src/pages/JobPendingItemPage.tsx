@@ -16,7 +16,7 @@ export type PresignedUrlResponse = {
   url: string;
 };
 
-const JobPendingPage = () => {
+const JobPendingItemPage = () => {
   const { id } = useParams<{ id: string }>();
   const { showSuccess } = useGlobalContext();
 
@@ -27,6 +27,8 @@ const JobPendingPage = () => {
     queryKey: MAINTENANCE_REQUESTS_KEY,
     resourcePath: "jobs-list-pending",
   });
+
+  console.log("item:", item);
 
   if (!id || !item) {
     return <PageLoadingSpinner />;
@@ -54,4 +56,4 @@ const JobPendingPage = () => {
   );
 };
 
-export default JobPendingPage;
+export default JobPendingItemPage;
