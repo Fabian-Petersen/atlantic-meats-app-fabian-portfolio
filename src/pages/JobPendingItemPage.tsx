@@ -1,6 +1,6 @@
 // $ This page renders the full details of a maintenance request for approval with the information and the supporting pictures.
 
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../utils/api";
 import { type JobAPIResponse } from "@/schemas";
@@ -17,20 +17,18 @@ export type PresignedUrlResponse = {
 };
 
 const JobPendingItemPage = () => {
-  const { id } = useParams<{ id: string }>();
-  const { showSuccess } = useGlobalContext();
-
-  const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
+  // const { id } = useParams<{ id: string }>();
+  const { showSuccess, selectedRowId } = useGlobalContext();
 
   const { data: item, isPending } = useById<JobAPIResponse>({
-    id: id || "",
-    queryKey: MAINTENANCE_REQUESTS_KEY,
+    id: selectedRowId ?? "",
+    queryKey: ["maintenanceRequests"],
     resourcePath: "jobs-list-pending",
   });
 
   console.log("item:", item);
 
-  if (!id || !item) {
+  if (!selectedRowId || !item) {
     return <PageLoadingSpinner />;
   }
 
