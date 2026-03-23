@@ -37,8 +37,6 @@ const JobsApprovedListPage = () => {
     { id: "jobCreated", desc: false },
   ]);
 
-  const [globalFilter, setGlobalFilter] = useState("");
-
   // const { mutateAsync: downloadItem } = useDownloadPdf({
   //   resourcePath: "maintenance-jobcard",
   // });
@@ -49,6 +47,8 @@ const JobsApprovedListPage = () => {
     setSelectedRowId,
     openDeleteDialog,
     setOpenChatSidebar,
+    globalFilter,
+    setGlobalFilter,
   } = useGlobalContext();
 
   // $ Pass the props to the function generating the columns to be used in the table
@@ -84,7 +84,7 @@ const JobsApprovedListPage = () => {
 
   return (
     <div className="flex w-full lg:p-4 h-auto">
-      <div className="bg-white dark:bg-[#1d2739] lg:flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto hidden">
+      <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto hidden">
         <FormHeading
           className="mx-auto dark:text-gray-100"
           heading="Approved Open Jobs"
@@ -94,10 +94,11 @@ const JobsApprovedListPage = () => {
           columns={columns}
           rowPath="/jobs-list-approved"
           className="hidden md:flex flex-col gap-2"
+          searchPlaceholder="search jobs"
           rowClassName={(row) => {
             return isTargetDateOverdue(row.targetDate)
               ? "text-red-500"
-              : "text-gray-700";
+              : "text-(--clr-textDark)";
           }}
         />
       </div>

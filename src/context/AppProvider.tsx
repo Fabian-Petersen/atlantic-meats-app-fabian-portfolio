@@ -68,6 +68,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [pendingTableAction, setPendingTableAction] =
     useState<PendingTableAction | null>(null);
 
+  const [globalFilter, setGlobalFilter] = useState("");
+
   // const [assetsData, setAssetsData] = useState<AssetFormValues | undefined>(
   //   undefined
   // ); // Set the data for Assets
@@ -117,6 +119,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setShowApproveRequestDialog,
         successConfig,
         setSuccessConfig,
+        globalFilter,
+        setGlobalFilter,
       }}
     >
       {children}

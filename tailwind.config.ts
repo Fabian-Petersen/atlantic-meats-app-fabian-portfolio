@@ -14,7 +14,8 @@ const config: Config = {
         dark_bg: "#1d2739",
         bgdark: "#030712",
         // bgDark: "#101827",
-        bgItem: "#101828",
+        primary_dark: "#101828",
+        secondary_dark: "#1b64f1",
         bglight: "#f2f2f2",
 
         check: "#4CAF50",

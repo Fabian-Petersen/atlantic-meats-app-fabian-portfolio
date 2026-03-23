@@ -74,7 +74,7 @@ const JobsPendingListPage = () => {
   return (
     <div className="flex w-full lg:p-4 h-auto">
       {/* // $ Desktop View */}
-      <div className="bg-white dark:bg-[#1d2739] lg:flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto hidden">
+      <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto hidden">
         <FormHeading
           className="mx-auto dark:text-gray-100"
           heading="Pending Review and Approve"

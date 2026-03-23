@@ -18,7 +18,7 @@ export const MetricCardItem = <T extends string>({
                 flex flex-col justify-between
                 gap-2 xl:gap-3 w-full
                 rounded-md shadow-md
-                bg-white dark:bg-[#1d2739]
+                bg-white dark:bg-(--bg-primary_dark)
                 text-gray-600 dark:text-white
                 p-[0.325rem] xl:p-2
                 border border-white dark:border-[rgba(55,65,81,0.5)]

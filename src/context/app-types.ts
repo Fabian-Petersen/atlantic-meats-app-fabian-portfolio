@@ -82,6 +82,10 @@ export type AppContextType = {
   genericData: GlobalData | undefined;
   setGenericData<T extends GlobalData>(data: T): void;
 
+  // $ Table Search State
+  globalFilter: string;
+  setGlobalFilter: Dispatch<SetStateAction<string>>;
+
   // $ State for the Maintennace and Assets Table Ations (delete, update and edit item)
   pendingTableAction: PendingTableAction;
   setPendingTableAction: Dispatch<SetStateAction<PendingTableAction | null>>;

@@ -46,7 +46,7 @@ const TextAreaInput = <T extends FieldValues>({
           "border border-gray-300",
           "resize-none overflow-hidden", // this removes the scrollbar when the textarea grows
           "focus:border-rose-600 focus:dark:bg-gray-600",
-          "dark:bg-gray-900/20 dark:border-gray-700/50 dark:text-gray-100/50",
+          "dark:bg-(--bg-secondary_dark) dark:border-(--clr-borderDark) dark:text-(--clr-textDark)",
           isValid && "border-green-500",
           error && "border-red-300",
         )}

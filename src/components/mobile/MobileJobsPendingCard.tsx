@@ -55,7 +55,7 @@ export default function MobileJobsPendingCard({
   };
 
   return (
-    <div className="rounded-md border border-gray-200 dark:border-(--clr-borderDark) bg-white dark:bg-(--clr-bgItem) mb-2 overflow-hidden transition-shadow hover:shadow-sm">
+    <div className="rounded-md border border-gray-200 dark:border-(--clr-borderDark) bg-white dark:bg-(--bg-primary_dark) mb-2 overflow-hidden transition-shadow hover:shadow-sm">
       {/* Always-visible header — tap to expand */}
       <button
         type="button"

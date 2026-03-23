@@ -22,7 +22,8 @@
   --clr-primary-dark: #1b64f1;
   /* --clr-bgDark: #030712; */
   --clr-bgDark: #101827;
-  --clr-bgItem: #101828; /*bg color of a container*/
+  --bg-primary_dark: #101828; /*bg color of a container*/
+  --bg-secondary_dark: #1d2739; /*#1b64f1*/
   --clr-borderDark: #364153;
   --clr-borderDarkRed: #9f0712;
 

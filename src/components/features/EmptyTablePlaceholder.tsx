@@ -10,7 +10,7 @@ const EmptyTablePlaceholder = ({
   message = "No items found",
 }: Props) => {
   return (
-    <tr className="">
+    <tr className="dark:bg-(--bg-secondary_dark) dark:text-(--clr-textDark)">
       <td colSpan={colSpan}>
         <EmptyStateContent message={message} />
       </td>

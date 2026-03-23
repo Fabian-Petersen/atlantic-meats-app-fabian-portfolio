@@ -60,7 +60,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
   return (
     <div className="relative w-full mb-2 group">
       {Icon && (
-        <span className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-gray-400">
+        <span className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-gray-400 dark:text-(--clr-textDark)">
           <Icon size={16} />
         </span>
       )}
@@ -73,7 +73,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
           `${className}`,
           "text-xs py-3 px-2 peer w-full rounded-md outline-none placeholder-transparent text-gray-700",
           "border border-gray-300 dark:border-gray-700/50 placeholder:dark:text-gray-700 placeholder:text-xs focus:border-rose-600 focus:dark:bg-gray-600",
-          "dark:bg-gray-900/20 dark:text-gray-100/50",
+          "dark:bg-(--bg-secondary_dark) dark:border-(--clr-borderDark) dark:text-(--clr-textDark)",
 
           // isValid && "border-green-500",
           error && "border-red-300",

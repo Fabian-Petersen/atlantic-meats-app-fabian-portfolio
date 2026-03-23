@@ -36,7 +36,7 @@ const Dashboard = () => {
         </section>
         {/* Revenue & Expense Chart */}
         <section
-          className="flex flex-col gap-4 col-span-2 xl:col-span-3 h-[300px] rounded-md bg-white dark:bg-[#1d2739]
+          className="flex flex-col gap-4 col-span-2 xl:col-span-3 h-[300px] rounded-md bg-white dark:bg-(--bg-primary_dark)
           border border-white dark:border-gray-700/50 p-2 shadow-sm
             text-gray-600 dark:text-gray-100"
         >
@@ -47,7 +47,7 @@ const Dashboard = () => {
           <JobRequestsChart />
         </section>
         <section
-          className="col-span-2 xl:col-span-1 h-[300px] rounded-md bg-white dark:bg-dark_bg
+          className="col-span-2 xl:col-span-1 h-[300px] rounded-md bg-white dark:bg-(--bg-primary_dark)
           border border-white dark:border-gray-700/50 p-2 shadow-sm 
             dark:text-(--clr-textDark) text-(--clr-textLight)"
         >
@@ -62,7 +62,7 @@ const Dashboard = () => {
             h-full
             overflow-y-auto
             rounded-md
-            bg-white dark:bg-[#1d2739]
+            bg-white dark:bg-(--bg-primary_dark)
             border border-white dark:border-gray-700/50
             p-4
             shadow-sm
