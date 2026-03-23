@@ -20,7 +20,7 @@ const JobPendingItemPage = () => {
   // const { id } = useParams<{ id: string }>();
   const { showSuccess, selectedRowId } = useGlobalContext();
 
-  const { data: item, isPending } = useById<JobAPIResponse>({
+  const { data: item } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
     queryKey: ["maintenanceRequests"],
     resourcePath: "jobs-list-pending",
@@ -32,9 +32,9 @@ const JobPendingItemPage = () => {
     return <PageLoadingSpinner />;
   }
 
-  if (isPending) {
-    return <PageLoadingSpinner />;
-  }
+  // if (isPending) {
+  //   return <PageLoadingSpinner />;
+  // }
 
   const images = item.images;
 

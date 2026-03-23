@@ -19,7 +19,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const session = await fetchAuthSession();
       setIsAuthenticated(!!session.tokens?.idToken);
-    } catch {
+    } catch (error) {
+      console.error("❌ refreshAuth error:", error);
       setIsAuthenticated(false);
     } finally {
       setLoading(false);

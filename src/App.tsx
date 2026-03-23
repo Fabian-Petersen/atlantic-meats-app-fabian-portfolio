@@ -36,8 +36,15 @@ import JobApprovedItemPage from "./pages/JobApprovedItemPage";
 // $ Pages display the list of items in a table
 import JobsPendingListPage from "./pages/JobsPendingListPage";
 import JobsApprovedListPage from "./pages/JobsApprovedListPage";
+import { PageLoadingSpinner } from "./components/features/PageLoadingSpinner";
+import { useAuth } from "./auth/useAuth";
 
 function App() {
+  const { loading } = useAuth();
+
+  // Don't render routes (and trigger API calls) until Amplify has rehydrated
+  if (loading) return <PageLoadingSpinner />;
+
   return (
     <Routes>
       {/* Login Route Only: Authenticated users must logout to direct to logout */}
