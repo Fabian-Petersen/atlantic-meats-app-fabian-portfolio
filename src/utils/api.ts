@@ -98,7 +98,7 @@ export const useById = <ResponseType>(options: {
     queryKey: [...queryKey, id],
     queryFn: async (): Promise<ResponseType> => {
       const { data } = await apiClient.get<ResponseType>(
-        `${resourcePath}/${id}`,
+        `/${resourcePath}/${id}`,
       );
       return data;
     },
