@@ -59,7 +59,7 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
             error={errors.password}
           />
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-end pb-4">
           <a
             href="/forgot-password"
             className="text-blue-400 hover:text-blue-500 text-xs mt-auto"
@@ -78,7 +78,7 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
         {loading ? (
           <div className="flex gap-4 items-center">
             <Spinner data-icon="inline-start" className="size-8" />
-            <span className="text-md">signing in...</span>
+            <span className="text-xs lg:text-sm">signing in...</span>
           </div>
         ) : (
           "Sign In"

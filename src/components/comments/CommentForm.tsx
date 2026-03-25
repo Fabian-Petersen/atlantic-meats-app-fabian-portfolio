@@ -46,7 +46,7 @@ const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
 
   // $ Submit the data to the backend
   const onSubmit = async (data: CommentRequestFormValues) => {
-    // console.log(data);
+    console.log(data);
     try {
       const payload: CommentPayload = { ...data, request_id: selectedRowId };
       const response = await mutateAsync(payload);

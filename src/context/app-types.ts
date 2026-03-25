@@ -10,9 +10,9 @@ export type DeleteConfig = {
 } | null;
 
 export type SuccessConfig = {
-  title: string;
-  message: string;
-  resourcePath: Resource;
+  title?: string;
+  message?: string;
+  resourcePath?: Resource;
 } | null;
 
 export type AppContextType = {

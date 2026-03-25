@@ -4,16 +4,21 @@ import { useLocation, useNavigate } from "react-router-dom";
 type Props = {
   className?: string;
 };
+// Routes where logo should be visible on mobile
+const LOGO_ROUTES = ["/", "/forgot-password", "/change-password"];
+
 const Logo = ({ className }: Props) => {
   const { pathname } = useLocation();
-  const isRoot = pathname === "/";
   const navigate = useNavigate();
+
+  // Only show logo if current route is in allowed routes
+  const isVisible = LOGO_ROUTES.includes(pathname);
   return (
     <div
       className={clsx(
         className,
         "hover:cursor-pointer h-16 max-h-24",
-        isRoot ? "lg:block" : "hidden lg:block" // This only display the logo when on "/" and when in desktop view
+        isVisible ? "md:block" : "hidden md:block", // This only display the logo when on "/" and when in desktop view
       )}
       onClick={() => navigate("https://www.atlanticmeat.co.za")}
     >

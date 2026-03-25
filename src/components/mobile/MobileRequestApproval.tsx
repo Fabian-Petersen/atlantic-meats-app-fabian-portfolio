@@ -117,7 +117,7 @@ export default function MobileRequestApproval({
     setShowApproveRequestDialog(true);
     const payload = {
       selectedRowId: selectedRowId,
-      status: "In Progress",
+      status: "Approved",
     };
 
     try {
