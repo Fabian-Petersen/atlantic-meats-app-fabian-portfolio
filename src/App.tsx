@@ -37,6 +37,7 @@ import JobApprovedItemPage from "./pages/JobApprovedItemPage";
 import JobsPendingListPage from "./pages/JobsPendingListPage";
 import JobsApprovedListPage from "./pages/JobsApprovedListPage";
 import { PageLoadingSpinner } from "./components/features/PageLoadingSpinner";
+import UsersListPage from "./pages/UsersListPage";
 import { useAuth } from "./auth/useAuth";
 
 function App() {
@@ -93,6 +94,7 @@ function App() {
               element={<JobPendingItemPage />}
             />
             <Route path="/asset" element={<CreateAssetPage />} />
+            <Route path="/admin/users" element={<UsersListPage />} />
           </Route>
           {/* // $ ======================= Maintenance Routes ======================= */}
           {/* //% admin, technician, contractor Routes */}

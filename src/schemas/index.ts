@@ -10,6 +10,7 @@ import { jobRequestSchema } from "./jobSchemas";
 import { actionRequestSchema } from "./actionSchemas";
 import { assetRequestSchema } from "./assetSchemas";
 import { commentRequestSchema, commentResponseSchema } from "./commentSchemas";
+import { usersResponseSchema, usersRequestSchema } from "./usersSchema";
 
 // #  Export Schemas
 export {
@@ -23,6 +24,8 @@ export {
   forgotPasswordSchema,
   commentRequestSchema,
   commentResponseSchema,
+  usersResponseSchema,
+  usersRequestSchema,
 };
 
 // ! Types
@@ -78,6 +81,9 @@ import type {
   ActionMetrics,
 } from "./dashboardSchema";
 
+// % Dashboard Types
+import type { UsersAPIResponse, UsersRequestFormValues } from "./usersSchema";
+
 export type {
   // Auth Types
   LoginFormValues,
@@ -114,6 +120,9 @@ export type {
   JobMetrics,
   ActionMetrics,
   AssetMetrics,
+  // Users
+  UsersAPIResponse,
+  UsersRequestFormValues,
 };
 
 // GlobalContext.ts

@@ -6,6 +6,7 @@ import {
   Wrench,
   MessageSquare,
   DownloadIcon,
+  User,
   type LucideIcon,
 } from "lucide-react";
 
@@ -31,6 +32,12 @@ type GetTableMenuItemsProps = {
   setSelectedRowId: (id: string) => void;
 
   edit?: {
+    label?: string;
+    url?: string;
+    onOpen: () => void;
+  };
+
+  create?: {
     label?: string;
     url?: string;
     onOpen: () => void;
@@ -70,6 +77,7 @@ export const getTableMenuItems = ({
   setSelectedRowId,
   edit,
   action,
+  create,
   delete: deleteAction,
   download,
   comments,
@@ -85,6 +93,19 @@ export const getTableMenuItems = ({
       onClick: () => {
         setSelectedRowId(rowId);
         edit.onOpen();
+      },
+    });
+  }
+
+  if (create) {
+    items.push({
+      id: "create",
+      label: create.label ?? "Create",
+      icon: User,
+      url: create.url,
+      onClick: () => {
+        setSelectedRowId(rowId);
+        create.onOpen();
       },
     });
   }

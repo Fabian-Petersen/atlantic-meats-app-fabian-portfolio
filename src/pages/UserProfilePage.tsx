@@ -1,6 +1,6 @@
 import FormHeading from "../../customComponents/FormHeading";
 import { useUserAttributes } from "@/utils/aws-userAttributes";
-import UserProfileForm from "@/components/userProfile/UserProfileForm";
+import UserProfileForm from "@/components/users/UserProfileForm";
 // import FormActionButtons from "@/components/features/FormActionButtons";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { ErrorPage } from "@/components/features/Error";

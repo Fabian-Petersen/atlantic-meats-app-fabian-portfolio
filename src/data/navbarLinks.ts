@@ -9,6 +9,7 @@ import {
   Clock,
   // MoveHorizontal,
   Truck,
+  Users2,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -96,6 +97,12 @@ export const assetLinks: NavlinkProps[] = [
 
 export const profileLinks: NavlinkProps[] = [
   // { name: "Settings", icon: Settings, url: "/settings" },
+  {
+    name: "User List",
+    icon: Users2,
+    url: "/admin/users",
+    allowedGroups: ["admin"],
+  },
   {
     name: "User Profile",
     icon: User2,
