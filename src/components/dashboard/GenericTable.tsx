@@ -32,7 +32,9 @@ type Props<T extends { id: string }> = {
   addButton?: boolean;
   addButtonPath?: string;
   rowClassName?: (row: T) => string;
-  searchPlaceholder?: string;
+  searchPlaceholderText?: string;
+  openDialog?: (v: boolean) => void;
+  emptyTablePlaceholderText?: string;
 };
 
 export function GenericTable<T extends { id: string }>({
@@ -44,7 +46,9 @@ export function GenericTable<T extends { id: string }>({
   initialSorting = [],
   addButton,
   addButtonPath,
-  searchPlaceholder,
+  searchPlaceholderText,
+  emptyTablePlaceholderText,
+  openDialog,
   rowClassName,
 }: Props<T>) {
   const navigate = useNavigate();
@@ -71,7 +75,8 @@ export function GenericTable<T extends { id: string }>({
   });
 
   const handleSubmit = () => {
-    if (addButtonPath) navigate(`${addButtonPath}`);
+    if (addButtonPath) return navigate(addButtonPath);
+    openDialog?.(true);
   };
 
   return (
@@ -86,7 +91,7 @@ export function GenericTable<T extends { id: string }>({
           <SearchInput
             value={globalFilter}
             onChange={setGlobalFilter}
-            placeholder={searchPlaceholder}
+            placeholder={searchPlaceholderText}
           />
           {addButton && (
             <div className="hidden md:inline-block ml-auto">
@@ -124,7 +129,7 @@ export function GenericTable<T extends { id: string }>({
             <tbody className="text-xs dark:text-(--clr-textDark)">
               {data.length === 0 ? (
                 <EmptyTablePlaceholder
-                  message="No Maintenance requests yet"
+                  message={emptyTablePlaceholderText}
                   colSpan={table.getAllColumns().length}
                 />
               ) : table.getRowModel().rows.length === 0 ? (

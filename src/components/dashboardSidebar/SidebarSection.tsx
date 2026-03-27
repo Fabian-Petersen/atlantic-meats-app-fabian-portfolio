@@ -15,7 +15,7 @@ import SectionHeading from "./SectionHeading";
 import type { NavlinkProps } from "@/data/navbarLinks";
 
 // $ Data
-import type { UserGroup } from "@/data/navbarLinks";
+import type { UserGroup } from "@/schemas/usersSchema";
 
 // $ Global Context
 import useGlobalContext from "@/context/useGlobalContext";

@@ -97,7 +97,11 @@ function FormRowSelect<T extends FieldValues>({
           {label}
         </label>
       )}
-      {error && <span className="text-xs text-red-600">{error.message}</span>}
+      {error && (
+        <span className="text-xs text-red-600 dark:text-red-500">
+          {error.message}
+        </span>
+      )}
     </div>
   );
 }

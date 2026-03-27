@@ -3,13 +3,18 @@ import type { UsersAPIResponse } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { Resource } from "@/utils/api";
+import { Badge } from "../ui/badge";
 
 export const getUserColumns = (
-  setShowActionDialog: (v: boolean) => void,
+  setShowCreateUserDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (
     selectedRowId: string,
-    config: { resourcePath: Resource; queryKey: readonly unknown[] },
+    config: {
+      resourcePath: Resource;
+      queryKey: readonly unknown[];
+      resourceName?: string;
+    },
   ) => void,
 ): ColumnDef<UsersAPIResponse>[] => [
   {
@@ -52,28 +57,52 @@ export const getUserColumns = (
     },
   },
   {
-    accessorKey: "group",
+    accessorKey: "groups",
     header: "Group",
     enableColumnFilter: false,
     cell: ({ getValue }) => {
       const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
+      return <p className="">{value}</p>;
     },
   },
   {
-    accessorKey: "username",
+    accessorKey: "email",
     header: "Email",
     cell: ({ getValue }) => {
       const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
+      return <p className="">{value}</p>;
     },
   },
   {
     accessorKey: "email_verified",
     header: "Email Verified",
     cell: ({ getValue }) => {
+      const value = getValue<boolean>();
+      return (
+        <Badge
+          className={`px-2 py-1 rounded-full text-sm font-medium ${
+            value ? "bg-green-100 text-green-800" : "bg-red-100 text-red-600"
+          }`}
+        >
+          {value ? "True" : "False"}
+        </Badge>
+      );
+    },
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ getValue }) => {
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
+    accessorKey: "updatedAt",
+    header: "Last Updated",
+    cell: ({ getValue }) => {
+      const value = getValue<boolean>();
+      return <p className="">{value}</p>;
     },
   },
   {
@@ -89,24 +118,24 @@ export const getUserColumns = (
         setSelectedRowId,
 
         create: {
-          url: "/admin",
+          url: "/admin/users",
           onOpen: () => {
-            setShowActionDialog(true);
-            setSelectedRowId(rowId);
+            setShowCreateUserDialog(true);
           },
         },
         edit: {
-          url: "/admin",
+          url: "/admin/users",
           onOpen: () => {
-            // setShowUpdateMaintenanceDialog(true);
+            // setShowUpdateUserDialog(true);
             setSelectedRowId(rowId);
           },
         },
 
         delete: {
           config: {
-            resourcePath: "admin",
+            resourcePath: "admin/users",
             queryKey: ["userRequests"],
+            resourceName: "user",
           },
           onDelete: openDeleteDialog,
         },

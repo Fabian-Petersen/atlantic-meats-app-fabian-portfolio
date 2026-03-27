@@ -7,6 +7,17 @@ export const stores: string[] = [
   "Golden Acre",
 ];
 
+export const allLocations: string[] = [
+  "Phillipi",
+  "Bellville",
+  "Khayelitsha",
+  "Wynberg",
+  "Maitland",
+  "Golden Acre",
+  "Central Services",
+  "Distribution Centre",
+];
+
 export const locations = {
   Phillipi: "PHP",
   Bellville: "BTX",

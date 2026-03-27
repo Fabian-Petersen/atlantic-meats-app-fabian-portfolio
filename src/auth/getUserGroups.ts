@@ -1,7 +1,7 @@
 // $ Get the user groups from cognito
 
 import { fetchAuthSession } from "aws-amplify/auth";
-import type { UserGroup } from "@/data/navbarLinks";
+import type { UserGroup } from "@/schemas/usersSchema";
 
 const validGroups: UserGroup[] = ["admin", "technician", "manager", "user"];
 

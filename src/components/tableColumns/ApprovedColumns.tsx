@@ -138,6 +138,7 @@ export const getJobApprovedColumns = (
           config: {
             resourcePath: "jobs-list-pending",
             queryKey: ["maintenanceApprovedRequests"],
+            resourceName: "request",
           },
           onDelete: openDeleteDialog,
         },

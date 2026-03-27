@@ -1,14 +1,16 @@
 type FormHeadingProps = {
   heading: string;
   className?: string;
+  h3?: boolean;
+  h2?: boolean;
 };
 
-const FormHeading = ({ heading, className }: FormHeadingProps) => {
+const FormHeading = ({ heading, className, h3, h2 }: FormHeadingProps) => {
   return (
     <div
-      className={`text-lg lg:text-2xl ${className} capitalize w-full text-left dark:text-gray-100`}
+      className={`text-2xl ${className} capitalize w-full text-left dark:text-gray-100`}
     >
-      <h2>{heading}</h2>
+      {h2 ? <h2>{heading}</h2> : h3 ? <h3>{heading}</h3> : <h1>{heading}</h1>}
     </div>
   );
 };

@@ -57,6 +57,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [showApproveRequestDialog, setShowApproveRequestDialog] =
     useState(false);
 
+  // $ Create User Modal
+  const [showCreateUserDialog, setShowCreateUserDialog] = useState(false);
+
   // $ State for the TableMenuItems
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   // $ State for the data to update/delete an items
@@ -121,6 +124,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setSuccessConfig,
         globalFilter,
         setGlobalFilter,
+        showCreateUserDialog,
+        setShowCreateUserDialog,
       }}
     >
       {children}

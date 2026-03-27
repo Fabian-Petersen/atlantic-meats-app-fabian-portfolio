@@ -1,11 +1,24 @@
 import * as z from "zod";
 
+export type UserGroup =
+  | "admin"
+  | "technician"
+  | "manager"
+  | "user"
+  | "contractor";
+
 export const usersRequestSchema = z.object({
-  email: z.email().min(1, "email is required"),
-  group: z.string().min(1, "user group is required"),
-  family_name: z.string().min(1, { message: "surname is required" }),
-  name: z.string().min(1, { message: "name is required" }),
-  location: z.string().min(1, { message: "the user location is required" }),
+  email: z.email().min(1, "Email is required"),
+  group: z.string().min(1, "User group is required"), // admin, technician, contractor, manager, user
+  family_name: z.string().min(1, { message: "Surname is required" }),
+  name: z.string().min(1, { message: "Name is required" }),
+  location: z.string().min(1, { message: "User location is required" }),
+  mobile: z
+    .string()
+    .min(1, { message: "Mobile number is required" })
+    .regex(/^0[6-8][0-9]{8}$/, {
+      message: "Invalid south african mobile number",
+    }),
 });
 
 // item = {

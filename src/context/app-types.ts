@@ -7,7 +7,8 @@ import type { Resource } from "@/utils/api";
 export type DeleteConfig = {
   resourcePath: Resource;
   queryKey: readonly unknown[];
-} | null;
+  resourceName?: string;
+};
 
 export type SuccessConfig = {
   title?: string;
@@ -53,6 +54,10 @@ export type AppContextType = {
   showUpdateAssetDialog: boolean;
   showUserProfileDialog: boolean;
   setShowUserProfileDialog: (v: boolean) => void;
+
+  // $ Create User Dialog
+  showCreateUserDialog: boolean;
+  setShowCreateUserDialog: (v: boolean) => void;
 
   // $ TableMenuItems
   setSelectedRowId: (v: string) => void;

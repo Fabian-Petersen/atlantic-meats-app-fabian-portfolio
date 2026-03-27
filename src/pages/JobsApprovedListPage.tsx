@@ -98,7 +98,7 @@ const JobsApprovedListPage = () => {
           rowClassName={(row) => {
             return isTargetDateOverdue(row.targetDate)
               ? "text-red-500"
-              : "text-(--clr-textDark)";
+              : "text-(--clr-textLight) dark:text-(--clr-textDark)";
           }}
         />
       </div>

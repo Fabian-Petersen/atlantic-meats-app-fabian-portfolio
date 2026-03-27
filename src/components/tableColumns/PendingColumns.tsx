@@ -125,6 +125,7 @@ export const getJobPendingColumns = (
           config: {
             resourcePath: "jobs-list-pending",
             queryKey: ["maintenanceRequests"],
+            resourceName: "request",
           },
           onDelete: openDeleteDialog,
         },

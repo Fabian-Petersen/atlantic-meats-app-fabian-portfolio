@@ -33,9 +33,10 @@ const UsersListPage = () => {
     refetch,
     isPending,
   } = useGetAll<UsersAPIResponse[]>("admin/users", ["userRequests"]);
+  // console.log("users:", users);
 
   const [sorting, setSorting] = useState<SortingState>([
-    { id: "jobCreated", desc: false },
+    { id: "userCreated", desc: false },
   ]);
 
   const {
@@ -44,6 +45,7 @@ const UsersListPage = () => {
     openDeleteDialog,
     globalFilter,
     setGlobalFilter,
+    setShowCreateUserDialog,
   } = useGlobalContext();
 
   // $ Pass the props to the function generating the columns to be used in the table
@@ -72,7 +74,7 @@ const UsersListPage = () => {
         title="Failed to load users"
         message="Please check your connection and try again."
         onRetry={refetch}
-        redirect="/admin"
+        redirect="/admin/users"
       />
     );
 
@@ -83,9 +85,12 @@ const UsersListPage = () => {
         <GenericTable
           data={users}
           columns={columns}
-          rowPath="/user-profile"
+          rowPath={`/admin/users`}
           className="hidden md:flex flex-col gap-2"
-          searchPlaceholder="search users"
+          searchPlaceholderText="search users"
+          emptyTablePlaceholderText="No users listed"
+          addButton={true}
+          openDialog={setShowCreateUserDialog}
         />
       </div>
       {/* // $ Mobile View */}
@@ -96,7 +101,7 @@ const UsersListPage = () => {
           placeholder="Search Users"
         />
         {users.length === 0 ? (
-          <EmptyMobilePlaceholder message="No users yet" />
+          <EmptyMobilePlaceholder message="No users listed" />
         ) : table.getRowModel().rows.length === 0 ? (
           <EmptyMobilePlaceholder
             message={`No results for "${globalFilter}"`}
