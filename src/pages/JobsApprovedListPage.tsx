@@ -94,7 +94,7 @@ const JobsApprovedListPage = () => {
           columns={columns}
           rowPath="/jobs-list-approved"
           className="hidden md:flex flex-col gap-2"
-          searchPlaceholder="search jobs"
+          searchPlaceholderText="search jobs"
           rowClassName={(row) => {
             return isTargetDateOverdue(row.targetDate)
               ? "text-red-500"

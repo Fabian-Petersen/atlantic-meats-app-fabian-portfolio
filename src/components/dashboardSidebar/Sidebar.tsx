@@ -1,7 +1,7 @@
 // import Separator from "./Seperator";
 import { Separator } from "../ui/separator";
 import { getUserGroups } from "@/auth/getUserGroups";
-import type { UserGroup } from "../../data/navbarLinks";
+import type { UserGroup } from "@/schemas/usersSchema";
 
 // $ Animation
 import { motion, AnimatePresence } from "framer-motion";
