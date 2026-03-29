@@ -30,14 +30,22 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import UserProfilePage from "./pages/UserProfilePage";
 
 // $ Job Management Pages for single items
-import JobPendingPage from "./pages/JobPendingPage";
+import JobPendingItemPage from "./pages/JobPendingItemPage";
 import JobApprovedItemPage from "./pages/JobApprovedItemPage";
 
 // $ Pages display the list of items in a table
 import JobsPendingListPage from "./pages/JobsPendingListPage";
 import JobsApprovedListPage from "./pages/JobsApprovedListPage";
+import { PageLoadingSpinner } from "./components/features/PageLoadingSpinner";
+import UsersListPage from "./pages/UsersListPage";
+import { useAuth } from "./auth/useAuth";
 
 function App() {
+  const { loading } = useAuth();
+
+  // Don't render routes (and trigger API calls) until Amplify has rehydrated
+  if (loading) return <PageLoadingSpinner />;
+
   return (
     <Routes>
       {/* Login Route Only: Authenticated users must logout to direct to logout */}
@@ -60,7 +68,6 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/user-profile" element={<UserProfilePage />} />
             <Route path="/maintenance-request" element={<JobRequestPage />} />
-            {/* <Route path="/maintenance-request/:id" element={<JobItemPage />} /> */}
             <Route
               path="/jobs-list-approved/:id"
               element={<JobApprovedItemPage />}
@@ -82,8 +89,12 @@ function App() {
             />
             <Route path="/assets-list" element={<AssetsOverviewPage />} />
             <Route path="/asset/:id" element={<AssetsSingleItemPage />} />
-            <Route path="/jobs-list-pending/:id" element={<JobPendingPage />} />
+            <Route
+              path="/jobs-list-pending/:id"
+              element={<JobPendingItemPage />}
+            />
             <Route path="/asset" element={<CreateAssetPage />} />
+            <Route path="/admin/users" element={<UsersListPage />} />
           </Route>
           {/* // $ ======================= Maintenance Routes ======================= */}
           {/* //% admin, technician, contractor Routes */}

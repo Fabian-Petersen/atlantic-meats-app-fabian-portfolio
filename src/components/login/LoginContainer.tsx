@@ -18,6 +18,7 @@ import type {
   LoginFormValues,
   ChangePasswordFormValues,
 } from "../../schemas/index";
+import useGlobalContext from "@/context/useGlobalContext";
 
 type Step = "LOGIN" | "NEW_PASSWORD";
 
@@ -26,6 +27,7 @@ export default function LoginContainer() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { refreshAuth, isAuthenticated } = useAuth();
+  const { setShowSuccess, setSuccessConfig } = useGlobalContext();
 
   // $ Hook to request the user data from Cognito
 
@@ -81,7 +83,11 @@ export default function LoginContainer() {
       navigate("/login");
 
       setStep("LOGIN");
-      alert("Password updated. Please sign in.");
+      setSuccessConfig({
+        title: "Success",
+        message: "Password Successfully Updated!!",
+      });
+      setShowSuccess(true);
     } finally {
       navigate("/dashboard");
       setLoading(false);
@@ -89,9 +95,9 @@ export default function LoginContainer() {
   };
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-100 max-h-92 h-88 bg-white rounded-xl shadow-lg p-4 dark:border-gray-700/50 dark:bg-[#1d2739]">
+    <div className="flex flex-col gap-8 w-full max-w-md bg-white rounded-xl shadow-lg p-6 border border-white dark:border-border-dark/20 dark:bg-(--bg-primary_dark)">
       {step === "LOGIN" && (
-        <div className="h-full flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           <FormHeading
             heading="Login to your Account"
             className="text-center pb-4 pt-2"
@@ -101,8 +107,11 @@ export default function LoginContainer() {
       )}
 
       {step === "NEW_PASSWORD" && (
-        <div>
-          <FormHeading heading="Set New Password" className="text-center" />
+        <div className="flex flex-col gap-4">
+          <FormHeading
+            heading="Set New Password"
+            className="text-center pb-4 pt-2"
+          />
           <ChangePasswordForm
             onSubmit={handleChangePassword}
             loading={loading}

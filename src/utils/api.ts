@@ -13,6 +13,7 @@ import type {
   AssetAPIResponse,
   JobAPIResponse,
   ActionAPIResponse,
+  UsersAPIResponse,
   // PresignedURL,
 } from "@/schemas";
 import type { CommentRequestFormValues } from "@/schemas/commentSchemas";
@@ -30,7 +31,8 @@ export type Resource =
   | "comment" // POST a comment
   | "technician-list" // Get the list of technicians
   | "job-request-rejected"
-  | "job-request-approved";
+  | "job-request-approved"
+  | "admin/users";
 
 // $ Combine the types into a union type for the generic functions
 export type RequestType =
@@ -43,7 +45,8 @@ export type ResponseType =
   | AssetAPIResponse
   | JobAPIResponse
   | ActionAPIResponse
-  | PresignedUrlResponse;
+  | PresignedUrlResponse
+  | UsersAPIResponse;
 
 // $ Format the data according to API requirements
 // const formatData = <T extends EntityType>(item: T): Omit<T, "id"> => {
@@ -98,7 +101,7 @@ export const useById = <ResponseType>(options: {
     queryKey: [...queryKey, id],
     queryFn: async (): Promise<ResponseType> => {
       const { data } = await apiClient.get<ResponseType>(
-        `${resourcePath}/${id}`,
+        `/${resourcePath}/${id}`,
       );
       return data;
     },

@@ -117,12 +117,12 @@ export default function MobileRequestApproval({
     setShowApproveRequestDialog(true);
     const payload = {
       selectedRowId: selectedRowId,
-      status: "In Progress",
+      status: "Approved",
     };
 
     try {
-      const response = await approveRequest(payload);
-      console.log("approve-request:", response);
+      await approveRequest(payload);
+      // console.log("approve-request:", response);
       toast.success("The itemm was sucessfully rejected");
       navigate("/jobs-list-approved");
     } catch (error) {
@@ -274,7 +274,7 @@ export default function MobileRequestApproval({
           <button
             type="button"
             onClick={() => setShowRejectRequestDialog(true)}
-            className="flex-1 py-2 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-xs font-medium text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors flex items-center justify-center gap-2"
+            className="flex-1 py-2 rounded-lg bg-red-100 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-xs font-medium dark:text-red-200 text-red-400 dark:(--clr-red-600) hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors flex items-center justify-center gap-2"
           >
             <X className="w-4 h-4" />
             Reject

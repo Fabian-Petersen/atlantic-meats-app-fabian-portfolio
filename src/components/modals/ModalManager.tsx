@@ -6,6 +6,7 @@ import UpdateUserDialog from "./UpdateUserDialog";
 import ActionRequestDialog from "./ActionRequestDialog";
 import RequestRejectedDialog from "./RequestRejectedDialog";
 import ApproveRequestDialog from "./ApproveRequestDialog";
+import CreateUserDialog from "./CreateUserDialog";
 
 const ModalManager = () => {
   const {
@@ -16,6 +17,7 @@ const ModalManager = () => {
     showUserProfileDialog,
     showRejectRequestDialog,
     showApproveRequestDialog,
+    showCreateUserDialog,
   } = useGlobalContext();
   // console.log(showUpdateAssetDialog);
   const isAnyModalOpen =
@@ -25,7 +27,8 @@ const ModalManager = () => {
     showUserProfileDialog ||
     showActionDialog ||
     showRejectRequestDialog ||
-    showApproveRequestDialog;
+    showApproveRequestDialog ||
+    showCreateUserDialog;
   // console.log("ModalManager state:", {
   //   showUpdateMaintenanceDialog,
   //   showDeleteDialog,
@@ -37,7 +40,7 @@ const ModalManager = () => {
   if (!isAnyModalOpen) return null;
 
   return (
-    <div className="fixed inset-0 w-full h-screen p-4 z-2000 bg-black/40 flex items-center justify-center overflow-y-auto">
+    <div className="fixed inset-0 w-full h-screen p-4 z-2000 bg-black/40 dark:bg-black/5 flex items-center justify-center overflow-y-auto">
       <div className="min-h-dvh flex items-start justify-center p-4">
         {showUpdateMaintenanceDialog && <UpdateRequestDialog />}
         {showDeleteDialog && <DeleteItemModal />}
@@ -46,6 +49,7 @@ const ModalManager = () => {
         {showActionDialog && <ActionRequestDialog />}
         {showRejectRequestDialog && <RequestRejectedDialog />}
         {showApproveRequestDialog && <ApproveRequestDialog />}
+        {showCreateUserDialog && <CreateUserDialog />}
       </div>
     </div>
   );

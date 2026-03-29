@@ -2,7 +2,7 @@ import { Dialog, DialogTitle, DialogContent } from "@/components/ui/dialog";
 
 import useGlobalContext from "@/context/useGlobalContext";
 import FormHeading from "../../../customComponents/FormHeading";
-import UserProfileUpdateForm from "../userProfile/UserProfileUpdateForm";
+import UserProfileUpdateForm from "../users/UserProfileUpdateForm";
 import { DialogDescription } from "@radix-ui/react-dialog";
 
 function UpdateUserDialog() {

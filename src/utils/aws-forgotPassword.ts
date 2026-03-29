@@ -15,6 +15,7 @@ export function useForgotPassword() {
     setError(null);
 
     try {
+      console.log("email:", email);
       await resetPassword({ username: email });
       setStep("CONFIRM");
     } catch (err) {

@@ -51,7 +51,7 @@ function FormRowSelect<T extends FieldValues>({
         className={clsx(
           "text-xs py-3 px-2 peer w-full rounded-md outline-none text-gray-700",
           "border border-gray-300 focus:border-rose-600 capitalize",
-          "dark:bg-gray-900/20 dark:border-gray-700/50 dark:text-gray-200",
+          "dark:bg-(--bg-secondary_dark) dark:border-(--clr-borderDark) dark:text-(--clr-textDark)",
           // isValid && "border-green-500",
           error && "border-red-400",
         )}
@@ -97,7 +97,11 @@ function FormRowSelect<T extends FieldValues>({
           {label}
         </label>
       )}
-      {error && <span className="text-xs text-red-600">{error.message}</span>}
+      {error && (
+        <span className="text-xs text-red-600 dark:text-red-500">
+          {error.message}
+        </span>
+      )}
     </div>
   );
 }

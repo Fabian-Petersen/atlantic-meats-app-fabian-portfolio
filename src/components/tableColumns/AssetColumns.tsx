@@ -3,7 +3,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { AssetTableRow } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
-import { getAssetTableMenuItems } from "@/lib/AssetTableActionLinks";
+import { getTableMenuItems } from "@/lib/getTableMenuItems";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -32,7 +32,11 @@ export const getAssetColumns = (
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (
     selectedRowId: string,
-    config: { resourcePath: Resource; queryKey: readonly unknown[] },
+    config: {
+      resourcePath: Resource;
+      queryKey: readonly unknown[];
+      resourceName?: string;
+    },
   ) => void,
 ): ColumnDef<AssetTableRow>[] => [
   {
@@ -108,12 +112,25 @@ export const getAssetColumns = (
     cell: ({ row }) => {
       const rowId = row.original.id;
 
-      const menuItems = getAssetTableMenuItems(
-        rowId,
+      const menuItems = getTableMenuItems({
+        rowId: row.original.id,
         setSelectedRowId,
-        setShowUpdateAssetDialog,
-        openDeleteDialog,
-      );
+        edit: {
+          url: "/asset",
+          onOpen: () => {
+            setShowUpdateAssetDialog(true);
+            setSelectedRowId(rowId);
+          },
+        },
+        delete: {
+          config: {
+            resourcePath: "asset",
+            queryKey: ["assetRequests"],
+            resourceName: "asset",
+          },
+          onDelete: openDeleteDialog,
+        },
+      });
 
       return (
         <div className="text-center" onClick={(e) => e.stopPropagation()}>

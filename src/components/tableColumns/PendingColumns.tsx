@@ -123,14 +123,15 @@ export const getJobPendingColumns = (
 
         delete: {
           config: {
-            resourcePath: "maintenance-request",
+            resourcePath: "jobs-list-pending",
             queryKey: ["maintenanceRequests"],
+            resourceName: "request",
           },
           onDelete: openDeleteDialog,
         },
 
         comments: {
-          url: `/maintenance-request/${rowId}/comments`,
+          url: `/jobs-list-pending/${rowId}/comments`,
           onOpen: () => {
             setOpenChatSidebar(true);
           },

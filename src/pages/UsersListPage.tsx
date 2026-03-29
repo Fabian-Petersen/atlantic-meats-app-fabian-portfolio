@@ -1,7 +1,9 @@
-// $ This component renders the page for the maintenance requests to be approved in a table format.
-// $ The list is from a Get request to the getJobsList.py lambda function.
+// $ This component renders the page for the list of users using a generic table.
+// $ The list is from a Get request to the getUsersList.py lambda function.
 
-import FormHeading from "../../customComponents/FormHeading";
+// import FormHeading from "../../customComponents/FormHeading";
+// import { MaintenanceRequestsTable } from "@/components/maintenanceRequestTable/MaintenanceRequestsTable";
+// import { useDownloadPdf, useGetAll } from "@/utils/api";
 import { useGetAll } from "@/utils/api";
 
 import {
@@ -13,46 +15,50 @@ import {
 } from "@tanstack/react-table";
 
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-import { MobileJobsPendingContainer } from "@/components/mobile/MobileJobsPendingContainer";
 import useGlobalContext from "@/context/useGlobalContext";
+import { getUserColumns } from "@/components/tableColumns/UserColulmns";
 import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
-import type { JobAPIResponse } from "@/schemas";
+import type { UsersAPIResponse } from "@/schemas";
 import { GenericTable } from "@/components/dashboard/GenericTable";
-import { getJobPendingColumns } from "@/components/tableColumns/PendingColumns";
+import FormHeading from "@/../customComponents/FormHeading";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { SearchInput } from "@/components/features/SearchInput";
+import { MobileUsersContainer } from "@/components/mobile/MobileUsersContainer";
 
-const JobsPendingListPage = () => {
-  const { data, isError, refetch, isPending } = useGetAll<JobAPIResponse[]>(
-    "jobs-list-pending",
-    ["maintenanceRequests"],
-  );
+const UsersListPage = () => {
+  const {
+    data: users = [],
+    isError,
+    refetch,
+    isPending,
+  } = useGetAll<UsersAPIResponse[]>("admin/users", ["userRequests"]);
+  // console.log("users:", users);
 
   const [sorting, setSorting] = useState<SortingState>([
-    { id: "jobCreated", desc: true },
+    { id: "userCreated", desc: false },
   ]);
 
-  const [globalFilter, setGlobalFilter] = useState("");
-
   const {
-    setShowUpdateMaintenanceDialog,
+    setShowActionDialog,
     setSelectedRowId,
     openDeleteDialog,
-    setOpenChatSidebar,
+    globalFilter,
+    setGlobalFilter,
+    setShowCreateUserDialog,
   } = useGlobalContext();
 
   // $ Pass the props to the function generating the columns to be used in the table
-  const columns = getJobPendingColumns(
-    setShowUpdateMaintenanceDialog,
+  const columns = getUserColumns(
+    setShowActionDialog,
     setSelectedRowId,
     openDeleteDialog,
-    setOpenChatSidebar,
   );
 
   const table = useReactTable({
-    data: data ?? [],
+    data: users ?? [],
     columns: columns,
+    onGlobalFilterChange: setGlobalFilter,
     state: { sorting, globalFilter },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
@@ -65,26 +71,26 @@ const JobsPendingListPage = () => {
   if (isError)
     return (
       <ErrorPage
-        title="Failed to load maintenance requests"
+        title="Failed to load users"
         message="Please check your connection and try again."
         onRetry={refetch}
+        redirect="/admin/users"
       />
     );
 
   return (
     <div className="flex w-full lg:p-4 h-auto">
-      {/* // $ Desktop View */}
-      <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto hidden">
-        <FormHeading
-          className="mx-auto dark:text-gray-100"
-          heading="Pending Review and Approve"
-        />
+      <div className="bg-white dark:bg-(--clr-bgDark) lg:flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto hidden">
+        <FormHeading className="mx-auto dark:text-gray-100" heading="Users" />
         <GenericTable
-          data={data}
+          data={users}
           columns={columns}
-          rowPath="/jobs-list-pending"
+          rowPath={`/admin/users`}
+          className="hidden md:flex flex-col gap-2"
+          searchPlaceholderText="search users"
+          emptyTablePlaceholderText="No users listed"
           addButton={true}
-          addButtonPath="/maintenance-request"
+          openDialog={setShowCreateUserDialog}
         />
       </div>
       {/* // $ Mobile View */}
@@ -92,10 +98,10 @@ const JobsPendingListPage = () => {
         <SearchInput
           value={globalFilter}
           onChange={setGlobalFilter}
-          placeholder="Search Requests"
+          placeholder="Search Users"
         />
-        {data.length === 0 ? (
-          <EmptyMobilePlaceholder message="No Maintenance requests yet" />
+        {users.length === 0 ? (
+          <EmptyMobilePlaceholder message="No users listed" />
         ) : table.getRowModel().rows.length === 0 ? (
           <EmptyMobilePlaceholder
             message={`No results for "${globalFilter}"`}
@@ -104,9 +110,9 @@ const JobsPendingListPage = () => {
           <div className="grid gap-2">
             <FormHeading
               className="mx-auto dark:text-gray-100"
-              heading="Pending Requests"
+              heading="Users"
             />
-            <MobileJobsPendingContainer
+            <MobileUsersContainer
               className="flex md:hidden"
               data={table.getRowModel().rows}
             />
@@ -117,4 +123,4 @@ const JobsPendingListPage = () => {
   );
 };
 
-export default JobsPendingListPage;
+export default UsersListPage;

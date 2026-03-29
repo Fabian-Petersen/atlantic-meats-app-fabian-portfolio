@@ -70,6 +70,7 @@ export const getJobApprovedColumns = (
   {
     accessorKey: "jobcardNumber",
     header: "Jobcard Number",
+    enableColumnFilter: true,
   },
   {
     accessorKey: "priority",
@@ -83,6 +84,7 @@ export const getJobApprovedColumns = (
   {
     accessorKey: "assign_to_name",
     header: "Assigned To",
+    enableColumnFilter: true,
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;
@@ -134,14 +136,15 @@ export const getJobApprovedColumns = (
 
         delete: {
           config: {
-            resourcePath: "maintenance-request",
+            resourcePath: "jobs-list-pending",
             queryKey: ["maintenanceApprovedRequests"],
+            resourceName: "request",
           },
           onDelete: openDeleteDialog,
         },
 
         comments: {
-          url: `/maintenance-request/${rowId}/comments`,
+          url: `/jobs-list-pending/${rowId}/comments`,
           onOpen: () => {
             setOpenChatSidebar(true);
           },

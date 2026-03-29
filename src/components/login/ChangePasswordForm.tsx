@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { changePasswordSchema } from "../../schemas/index";
 
 import type { ChangePasswordFormValues } from "../../schemas/index";
+import { Spinner } from "../ui/spinner";
 
 const ChangePasswordForm = ({
   onSubmit,
@@ -43,7 +44,6 @@ const ChangePasswordForm = ({
           label="Password"
           type="password"
           name="newPassword"
-          // control={control}
           placeholder="Enter your password"
           register={register}
           error={errors.newPassword}
@@ -52,7 +52,6 @@ const ChangePasswordForm = ({
           label="Confirm Password"
           type="password"
           name="confirmPassword"
-          // control={control}
           placeholder="Confirm your password"
           register={register}
           error={errors.confirmPassword}
@@ -62,7 +61,13 @@ const ChangePasswordForm = ({
           type="submit"
           disabled={loading}
         >
-          {loading ? "Updating..." : "Update Password"}
+          {loading ? (
+            <div className="flex gap-4 items-center">
+              <Spinner data-icon="inline-start" className="size-8" />
+            </div>
+          ) : (
+            "Update Password"
+          )}
         </Button>
       </div>
     </form>

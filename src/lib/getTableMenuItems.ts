@@ -6,11 +6,13 @@ import {
   Wrench,
   MessageSquare,
   DownloadIcon,
+  User,
   type LucideIcon,
 } from "lucide-react";
 
 import type { Resource } from "@/utils/api";
 import type { JobcardPresignedUrlResponse } from "@/schemas";
+import type { DeleteConfig } from "@/context/app-types";
 
 export type TableActionLinks = {
   id: string;
@@ -20,17 +22,17 @@ export type TableActionLinks = {
   onClick: () => void | Promise<void>;
 };
 
-type DeleteConfig = {
-  resourcePath: Resource;
-  queryKey: readonly unknown[];
-};
+// type DeleteConfig = {
+//   resourcePath: Resource;
+//   queryKey: readonly unknown[];
+// };
 
 type GetTableMenuItemsProps = {
   rowId: string;
   request_id?: string;
   setSelectedRowId: (id: string) => void;
 
-  edit?: {
+  create?: {
     label?: string;
     url?: string;
     onOpen: () => void;
@@ -42,11 +44,21 @@ type GetTableMenuItemsProps = {
     onOpen: () => void;
   };
 
+  edit?: {
+    label?: string;
+    url?: string;
+    onOpen: () => void;
+  };
+
   delete?: {
     label?: string;
     onDelete: (
       id: string,
-      config: { resourcePath: Resource; queryKey: readonly unknown[] },
+      config: {
+        resourcePath: Resource;
+        queryKey: readonly unknown[];
+        resourceName?: string;
+      },
     ) => void;
     config: DeleteConfig;
   };
@@ -70,21 +82,22 @@ export const getTableMenuItems = ({
   setSelectedRowId,
   edit,
   action,
+  create,
   delete: deleteAction,
   download,
   comments,
 }: GetTableMenuItemsProps): TableActionLinks[] => {
   const items: TableActionLinks[] = [];
 
-  if (edit) {
+  if (create) {
     items.push({
-      id: "edit",
-      label: edit.label ?? "Edit",
-      icon: Pencil,
-      url: edit.url,
+      id: "create",
+      label: create.label ?? "Create",
+      icon: User,
+      url: create.url,
       onClick: () => {
         setSelectedRowId(rowId);
-        edit.onOpen();
+        create.onOpen();
       },
     });
   }
@@ -98,6 +111,19 @@ export const getTableMenuItems = ({
       onClick: () => {
         setSelectedRowId(rowId);
         action.onOpen();
+      },
+    });
+  }
+
+  if (edit) {
+    items.push({
+      id: "edit",
+      label: edit.label ?? "Edit",
+      icon: Pencil,
+      url: edit.url,
+      onClick: () => {
+        setSelectedRowId(rowId);
+        edit.onOpen();
       },
     });
   }

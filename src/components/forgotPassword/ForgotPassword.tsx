@@ -1,9 +1,11 @@
-import FormRowInput from "../../../customComponents/FormRowInput";
+// $ React Hooks
+import { useNavigate } from "react-router-dom";
 
-// $ React-Hook-Form, zod & schema
+// $ React-Hook-Form, zod schema
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+// $ Hooks
 import { useForgotPassword } from "@/utils/aws-forgotPassword";
 
 // $ Import schemas
@@ -11,15 +13,20 @@ import {
   forgotPasswordSchema,
   type ForgotFormValues,
 } from "../../schemas/index";
+
+// $ Components
 import FormHeading from "../../../customComponents/FormHeading";
+import FormRowInput from "../../../customComponents/FormRowInput";
 import { Button } from "../ui/button";
+import { ChevronLeft } from "lucide-react";
+import { Spinner } from "../ui/spinner";
 
 const ForgotPassword = () => {
   // $ Form Schema
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<ForgotFormValues>({
     defaultValues: {
       email: "",
@@ -27,26 +34,41 @@ const ForgotPassword = () => {
     resolver: zodResolver(forgotPasswordSchema),
   });
 
-  const { isLoading, sendResetCode } = useForgotPassword();
+  const navigate = useNavigate();
+  const { sendResetCode } = useForgotPassword();
 
   const onSubmit = async (data: ForgotFormValues) => {
     const { email } = data;
-    console.log(data);
+    // console.log(data);
     const response = await sendResetCode(email);
     console.log(response);
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md rounded-lg bg-white p-4 shadow flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-bgdark px-4">
+      <div className="w-full max-w-md rounded-xl bg-white dark:bg-(--bg-primary_dark) p-8 shadow-md flex flex-col gap-8 border dark:border-border-dark/20 border-gray-100 min-h-[300px]">
+        {/* Header */}
+        <div className="flex flex-col gap-1.5">
+          <button
+            aria-label="Go back"
+            type="button"
+            className="flex items-center gap-1 text-sm text-gray-500 dark:text-(--clr-textDark) hover:text-(--clr-primary) transition-colors duration-150 w-fit hover:cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            <ChevronLeft size={15} />
+            Back
+          </button>
           <FormHeading heading="Forgot Password" />
-          <p className="mb-6 text-left text-sm text-gray-600">
-            Enter your email for a reset link.
+          <p className="text-left text-xs md:text-sm text-gray-500 dark:text-(--clr-textDark)">
+            Enter your registered email.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+        {/* Form */}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col flex-1 justify-between gap-4"
+        >
           <FormRowInput
             label="Email"
             type="email"
@@ -55,16 +77,21 @@ const ForgotPassword = () => {
             register={register}
             error={errors.email}
           />
+
           <Button
-            className={` ${
-              isLoading
-                ? "bg-yellow-400 text-black"
-                : "bg-(--clr-primary) text-white"
-            }   w-full leading-2 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider py-6`}
+            className={`
+          w-full py-3 md:py-6 uppercase tracking-wider text-sm font-medium
+          transition-colors duration-150 hover:cursor-pointer
+          ${
+            isSubmitting
+              ? "bg-yellow-400 text-black"
+              : "bg-(--clr-primary) hover:bg-(--clr-primary)/90 text-white"
+          }
+        `}
             type="submit"
-            disabled={isLoading}
+            disabled={isSubmitting}
           >
-            {isLoading ? "Sending..." : "Reset Password"}
+            {isSubmitting ? <Spinner className="w-8 h-8 mx-auto" /> : "Submit"}
           </Button>
         </form>
       </div>

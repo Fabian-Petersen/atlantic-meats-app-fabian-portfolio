@@ -97,7 +97,7 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
               className={clsx(
                 "inline-flex cursor-pointer items-center rounded-md border text-xs py-3 px-2",
                 "bg-white hover:bg-gray-50 border-gray-300 w-full",
-                "dark:bg-[#2b3a5c] dark:hover:bg-[#34466e] dark:text-gray-100",
+                "dark:bg-(--bg-secondary_dark) dark:border-(--clr-borderDark) dark:text-(--clr-textDark) not-[]:dark:bg-[#2b3a5c] dark:hover:bg-[#34466e]",
                 (error || localError) && "border-red-500",
               )}
             >

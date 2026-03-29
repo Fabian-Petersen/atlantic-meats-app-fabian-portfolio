@@ -1,6 +1,6 @@
 // $ This page renders the full details of a maintenance request for approval with the information and the supporting pictures.
 
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../utils/api";
 import { type JobAPIResponse } from "@/schemas";
@@ -16,25 +16,25 @@ export type PresignedUrlResponse = {
   url: string;
 };
 
-const JobPendingPage = () => {
-  const { id } = useParams<{ id: string }>();
-  const { showSuccess } = useGlobalContext();
+const JobPendingItemPage = () => {
+  // const { id } = useParams<{ id: string }>();
+  const { showSuccess, selectedRowId } = useGlobalContext();
 
-  const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
-
-  const { data: item, isPending } = useById<JobAPIResponse>({
-    id: id || "",
-    queryKey: MAINTENANCE_REQUESTS_KEY,
+  const { data: item } = useById<JobAPIResponse>({
+    id: selectedRowId ?? "",
+    queryKey: ["maintenanceRequests"],
     resourcePath: "jobs-list-pending",
   });
 
-  if (!id || !item) {
+  // console.log("item:", item);
+
+  if (!selectedRowId || !item) {
     return <PageLoadingSpinner />;
   }
 
-  if (isPending) {
-    return <PageLoadingSpinner />;
-  }
+  // if (isPending) {
+  //   return <PageLoadingSpinner />;
+  // }
 
   const images = item.images;
 
@@ -54,4 +54,4 @@ const JobPendingPage = () => {
   );
 };
 
-export default JobPendingPage;
+export default JobPendingItemPage;

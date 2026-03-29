@@ -19,7 +19,7 @@ import {
   // type PaginationState,
 } from "@tanstack/react-table";
 
-import { getAssetColumns } from "../components/assets/columns";
+import { getAssetColumns } from "../components/tableColumns/AssetColumns";
 // import { getAssetTableMenuItems } from "@/lib/TableMenuItemsActions";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState, useMemo } from "react";

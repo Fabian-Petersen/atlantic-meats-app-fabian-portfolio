@@ -7,12 +7,13 @@ import type { Resource } from "@/utils/api";
 export type DeleteConfig = {
   resourcePath: Resource;
   queryKey: readonly unknown[];
-} | null;
+  resourceName?: string;
+};
 
 export type SuccessConfig = {
-  title: string;
-  message: string;
-  resourcePath: Resource;
+  title?: string;
+  message?: string;
+  resourcePath?: Resource;
 } | null;
 
 export type AppContextType = {
@@ -54,6 +55,10 @@ export type AppContextType = {
   showUserProfileDialog: boolean;
   setShowUserProfileDialog: (v: boolean) => void;
 
+  // $ Create User Dialog
+  showCreateUserDialog: boolean;
+  setShowCreateUserDialog: (v: boolean) => void;
+
   // $ TableMenuItems
   setSelectedRowId: (v: string) => void;
   selectedRowId: string | null;
@@ -81,6 +86,10 @@ export type AppContextType = {
   // $ Data
   genericData: GlobalData | undefined;
   setGenericData<T extends GlobalData>(data: T): void;
+
+  // $ Table Search State
+  globalFilter: string;
+  setGlobalFilter: Dispatch<SetStateAction<string>>;
 
   // $ State for the Maintennace and Assets Table Ations (delete, update and edit item)
   pendingTableAction: PendingTableAction;

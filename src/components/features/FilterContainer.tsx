@@ -38,7 +38,9 @@ function FilterContainer<T extends Record<string, unknown>>({
   // </div>;
 
   return (
-    <div className={`${className} flex gap-2 shadow-sm py-1 p-2 rounded-md`}>
+    <div
+      className={`${className} flex gap-2 shadow-sm py-1 p-2 rounded-md dark:bg-(--bg-secondary_dark)`}
+    >
       {filterableColumns.map((column) => (
         <div key={column.id} className="py-2 flex-1 capitalize">
           <label className="text-xs text-gray-500">

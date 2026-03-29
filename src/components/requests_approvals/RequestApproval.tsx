@@ -28,8 +28,8 @@ function RequestApproval() {
 
   const { data: item, isPending } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
-    queryKey: ["MAINTENANCE-REQUEST-ITEM"],
-    resourcePath: "maintenance-request",
+    queryKey: ["MaintenanceRequests"],
+    resourcePath: "jobs-list-pending",
   });
 
   const navigate = useNavigate();

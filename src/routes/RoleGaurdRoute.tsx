@@ -2,7 +2,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getUserGroups } from "@/auth/getUserGroups";
-import type { UserGroup } from "@/data/navbarLinks";
+import type { UserGroup } from "@/schemas/usersSchema";
 
 type Props = {
   allowedGroups: UserGroup[];

@@ -11,7 +11,7 @@ const ChatSidebar = () => {
   const { openChatSidebar, setOpenChatSidebar, selectedRowId } =
     useGlobalContext();
 
-  const { data: comments = [], isPending } = useById<CommentAPIResponse[]>({
+  const { data: comments, isPending } = useById<CommentAPIResponse[]>({
     id: selectedRowId ?? "",
     queryKey: ["CommentsKey"],
     resourcePath: "comment",
@@ -24,33 +24,26 @@ const ChatSidebar = () => {
 
   return (
     <div
-      className={`overflow-y-scroll right-0 z-1000 w-96 fixed top-16 lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-l border-l-gray-200 dark:border-r-[rgba(55,65,81,0.5)]
+      className={`overflow-y-scroll right-0 z-1000 w-80 lg:w-96 fixed top-16 lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-l border-l-gray-200 dark:border-l-[rgba(55,65,81,0.5)]
       bg-white dark:bg-bgdark transform transition-transform duration-200 ease-in translate-x-0
     ${openChatSidebar ? "translate-x-0" : "translate-x-full ease-out"}`}
     >
-      <div className="flex flex-col h-full gap-4 p-1">
-        {/* <button
-          className="hover:cursor-pointer hover:bg-gray-200 rounded-full p-2 absolute text-xl top-5 right-5 z-2000"
-          type="button"
-          aria-label="close button"
-          onClick={() => setOpenChatSidebar(false)}
-        >
-          <X />
-        </button> */}
+      <div className="flex flex-col h-full gap-4 lg:p-1 p-2">
         {selectedRowId && (
           <CommentForm
             selectedRowId={selectedRowId}
             setOpenChatSidebar={setOpenChatSidebar}
           />
         )}
-        <div className="bg-gray-50 min-h-full overflow-y-scroll flex flex-col gap-4 no-scrollbar p-2 rounded-lg">
-          {comments.map((comment, index) => (
-            <CommentItem
-              key={comment.id}
-              comment={comment}
-              align={index % 2 === 0 ? "left" : "right"}
-            />
-          ))}
+        <div className="bg-gray-50 dark:bg-(--clr-bgItem) min-h-full overflow-y-scroll flex flex-col gap-4 no-scrollbar p-2 rounded-lg">
+          {Array.isArray(comments) &&
+            comments.map((comment, index) => (
+              <CommentItem
+                key={comment.id}
+                comment={comment}
+                align={index % 2 === 0 ? "left" : "right"}
+              />
+            ))}
         </div>
       </div>
     </div>

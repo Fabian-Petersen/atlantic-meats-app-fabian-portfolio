@@ -3,19 +3,19 @@
 import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 import { useState } from "react";
 import type { Row } from "@tanstack/react-table";
-import { MobileJobsApprovedRow } from "./MobileJobsApprovedRow";
+import { MobileJobsApprovedCard } from "./MobileJobsApprovedCard";
 
 type Props = {
   data: Row<JobApprovedAPIResponse>[];
   className?: string;
 };
 
-export function MobileJobsApprovedTable({ className, data }: Props) {
+export function MobileJobsApprovedContainer({ className, data }: Props) {
   const [openRowId, setOpenRowId] = useState<string | null>(null);
   return (
-    <div className={`${className} flex flex-col gap-2 w-full p-2`}>
+    <div className={`${className} flex flex-col gap-2 w-full`}>
       {data.map((row) => (
-        <MobileJobsApprovedRow
+        <MobileJobsApprovedCard
           key={row.id}
           row={row}
           isOpen={openRowId === row.id}

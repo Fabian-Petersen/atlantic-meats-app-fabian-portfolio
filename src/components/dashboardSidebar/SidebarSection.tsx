@@ -15,7 +15,7 @@ import SectionHeading from "./SectionHeading";
 import type { NavlinkProps } from "@/data/navbarLinks";
 
 // $ Data
-import type { UserGroup } from "@/data/navbarLinks";
+import type { UserGroup } from "@/schemas/usersSchema";
 
 // $ Global Context
 import useGlobalContext from "@/context/useGlobalContext";
@@ -73,7 +73,7 @@ const SidebarSection = ({
           animate={{ rotate: isExpanded ? 0 : -90 }}
           transition={{ duration: 0.2, ease: "easeInOut" }}
         >
-          <ChevronDown className="w-4 h-4 text-muted-foreground group-hover:text-foreground" />
+          <ChevronDown className="w-4 h-4 text-muted-foreground group-hover:text-foreground dark:text-white" />
         </motion.div>
       </button>
       <AnimatePresence initial={false}>

@@ -57,6 +57,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [showApproveRequestDialog, setShowApproveRequestDialog] =
     useState(false);
 
+  // $ Create User Modal
+  const [showCreateUserDialog, setShowCreateUserDialog] = useState(false);
+
   // $ State for the TableMenuItems
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   // $ State for the data to update/delete an items
@@ -67,6 +70,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   // $ State handling the actions for the tables (delete, update, edit)
   const [pendingTableAction, setPendingTableAction] =
     useState<PendingTableAction | null>(null);
+
+  const [globalFilter, setGlobalFilter] = useState("");
 
   // const [assetsData, setAssetsData] = useState<AssetFormValues | undefined>(
   //   undefined
@@ -117,6 +122,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setShowApproveRequestDialog,
         successConfig,
         setSuccessConfig,
+        globalFilter,
+        setGlobalFilter,
+        showCreateUserDialog,
+        setShowCreateUserDialog,
       }}
     >
       {children}
