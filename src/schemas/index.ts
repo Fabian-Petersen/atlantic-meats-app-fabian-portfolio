@@ -73,10 +73,10 @@ import type {
 
 // % Dashboard Types
 import type {
-  JobCardItem,
-  ActionCardItem,
+  PendingJobCardItem,
+  ApprovedJobCardItem,
+  OverdueJobCardItem,
   AssetCardItem,
-  JobMetrics,
   AssetMetrics,
   ActionMetrics,
 } from "./dashboardSchema";
@@ -101,7 +101,6 @@ export type {
   ActionRequestFormValues,
   ActionAPIResponse,
   ActionRequestPayload,
-  ActionCardItem,
   ActionTableRow,
   //Asset Types
   AssetRequestFormValues,
@@ -115,9 +114,10 @@ export type {
   //Images
   PresignedURL,
   //Dashboard
-  JobCardItem,
   AssetCardItem,
-  JobMetrics,
+  PendingJobCardItem,
+  ApprovedJobCardItem,
+  OverdueJobCardItem,
   ActionMetrics,
   AssetMetrics,
   // Users

@@ -30,7 +30,10 @@ import { SearchInput } from "@/components/features/SearchInput";
 const JobsApprovedListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<
     JobApprovedAPIResponse[]
-  >("jobs-list-approved", ["maintenanceRequests"]);
+  >({
+    resourcePath: "jobs-list-approved",
+    queryKey: ["maintenanceRequests", "approved"],
+  });
 
   // console.log("data:", data);
   const [sorting, setSorting] = useState<SortingState>([

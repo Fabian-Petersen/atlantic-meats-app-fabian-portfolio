@@ -24,10 +24,10 @@ import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder
 import { SearchInput } from "@/components/features/SearchInput";
 
 const JobsPendingListPage = () => {
-  const { data, isError, refetch, isPending } = useGetAll<JobAPIResponse[]>(
-    "jobs-list-pending",
-    ["maintenanceRequests"],
-  );
+  const { data, isError, refetch, isPending } = useGetAll<JobAPIResponse[]>({
+    resourcePath: "jobs-list-pending",
+    queryKey: ["maintenanceRequests", "pending"],
+  });
 
   const [sorting, setSorting] = useState<SortingState>([
     { id: "jobCreated", desc: true },
@@ -77,7 +77,7 @@ const JobsPendingListPage = () => {
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto hidden">
         <FormHeading
           className="mx-auto dark:text-gray-100"
-          heading="Pending Review and Approve"
+          heading="Pending Requests"
         />
         <GenericTable
           data={data}

@@ -3,10 +3,10 @@ import { useGetAll } from "@/utils/api";
 import { type AssetRequestFormValues } from "../schemas";
 
 export const useGetAssetList = () => {
-  const { data, isPending, isError } = useGetAll<AssetRequestFormValues>(
-    "asset",
-    ["getAllAssets"],
-  );
+  const { data, isPending, isError } = useGetAll<AssetRequestFormValues>({
+    resourcePath: "asset",
+    queryKey: ["getAllAssets"],
+  });
 
   return { data, isPending, isError };
 };

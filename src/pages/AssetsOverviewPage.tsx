@@ -35,10 +35,10 @@ const AssetsOverviewPage = () => {
   const navigate = useNavigate();
 
   const ASSETS_REQUESTS_KEY = ["assetRequests"];
-  const { data, isPending, isError, refetch } = useGetAll<AssetAPIResponse[]>(
-    "assets-list",
-    ASSETS_REQUESTS_KEY,
-  );
+  const { data, isPending, isError, refetch } = useGetAll<AssetAPIResponse[]>({
+    resourcePath: "assets-list",
+    queryKey: ASSETS_REQUESTS_KEY,
+  });
 
   // console.log("Assets data:", data);
 

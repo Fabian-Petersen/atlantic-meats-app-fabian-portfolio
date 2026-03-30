@@ -32,7 +32,10 @@ const UsersListPage = () => {
     isError,
     refetch,
     isPending,
-  } = useGetAll<UsersAPIResponse[]>("admin/users", ["userRequests"]);
+  } = useGetAll<UsersAPIResponse[]>({
+    resourcePath: "admin/users",
+    queryKey: ["userRequests"],
+  });
   // console.log("users:", users);
 
   const [sorting, setSorting] = useState<SortingState>([

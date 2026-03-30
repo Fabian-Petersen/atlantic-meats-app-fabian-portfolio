@@ -60,6 +60,7 @@ export type ResponseType =
 // $ =========================
 const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
 const ASSETS_REQUESTS_KEY = ["assetRequests"];
+// const USERS = ["userRequests"];
 // const ACTION_REQUESTS_KEY = ["actionRequests"];
 // const POST_COMMENT = ["CommentsKey"];
 // const POST_KEYS = ["commentsRequests"];
@@ -70,10 +71,13 @@ const ASSETS_REQUESTS_KEY = ["assetRequests"];
 
 // $ Generic: GET All
 export const useGetAll = <ResponseType>(
-  resourcePath: Resource,
-  queryKey: readonly unknown[] = [resourcePath],
+  options: {
+    resourcePath: Resource;
+    queryKey: readonly unknown[];
+  },
   // enabled: boolean = true,
 ) => {
+  const { resourcePath, queryKey } = options;
   return useQuery({
     queryKey,
     queryFn: async (): Promise<ResponseType> => {

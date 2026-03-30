@@ -9,7 +9,7 @@ const NavbarMenuButton = ({ className }: Props) => {
   const { setIsOpen, isOpen } = useGlobalContext();
   return (
     <div
-      className="p-2 items-center flex justify-center hover:cursor-pointer text-gray-800 lg:invisible
+      className="items-center flex justify-center hover:cursor-pointer text-gray-900 lg:invisible
       hover:text-gray-700"
     >
       <button
@@ -18,7 +18,7 @@ const NavbarMenuButton = ({ className }: Props) => {
         onClick={() => {
           setIsOpen(!isOpen);
         }}
-        className={`${className} bg-menu-btn/40 p-2 rounded-md`}
+        className={`${className} hover:cursor-pointer `}
       >
         <FiMenu size={24} />
       </button>

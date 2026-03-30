@@ -13,6 +13,7 @@ const LogoutButton = ({ className }: Props) => {
     <>
       <button
         onClick={handleLogout}
+        type="button"
         className={`
         ${className}
         w-full
@@ -24,9 +25,9 @@ const LogoutButton = ({ className }: Props) => {
         text-gray-200
         cursor-pointer
         rounded-full
-        bg-red-500/90
+        bg-red-500
         tracking-wide
-        hover:bg-red-500
+        hover:bg-red-400
         hover:shadow
         hidden
         capitalize
@@ -37,8 +38,9 @@ const LogoutButton = ({ className }: Props) => {
       {/* // Mobile Button */}
       <button
         aria-label="logout button"
+        type="button"
         onClick={handleLogout}
-        className="lg:hidden bg-menu-btn/40 p-2 items-center justify-center rounded-md flex hover:cursor-pointer text-red-500 hover:text-red-500/90"
+        className="lg:hidden p-2 items-center justify-center rounded-md flex hover:cursor-pointer text-red-600 hover:text-red-500/90"
       >
         <Power size={24} />
       </button>

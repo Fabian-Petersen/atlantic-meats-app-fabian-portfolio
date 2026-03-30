@@ -12,19 +12,19 @@ import { getDashboardJobColumns } from "@/components/maintenanceRequestTable/col
 import { useGetAll } from "@/utils/api";
 import type { JobAPIResponse } from "@/schemas";
 import { GenericTable } from "@/components/dashboard/GenericTable";
+// import { Spinner } from "@/components/ui/spinner";
+import { SkeletonTable } from "@/components/dashboard/SkeletonTable";
+import { PieChartSkeleton } from "@/components/dashboard/charts/PieChartSkeleton";
+import { JobRequestsChartSkeleton } from "@/components/dashboard/charts/JobRequestsChartSkeleton";
 
 const Dashboard = () => {
   const columns = getDashboardJobColumns();
-  const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
+  const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests", "pending"];
 
-  const { data } = useGetAll<JobAPIResponse[]>(
-    "jobs-list",
-    MAINTENANCE_REQUESTS_KEY,
-  );
-  // $ Only show the pending requests
-  const pendingRequests = data?.filter(
-    (item) => item.status === "Pending" || item.status === "pending",
-  );
+  const { data: pendingRequests, isPending } = useGetAll<JobAPIResponse[]>({
+    resourcePath: "jobs-list-pending",
+    queryKey: MAINTENANCE_REQUESTS_KEY,
+  });
 
   return (
     <main className="w-full bg-gray-100 dark:bg-bgdark h-full md:p-4 p-2">
@@ -40,18 +40,24 @@ const Dashboard = () => {
           border border-white dark:border-gray-700/50 p-2 shadow-sm
             text-gray-600 dark:text-gray-100"
         >
-          <ChartHeading
-            title="Job Requests YTD"
-            className="font-normal dark:text-(--clr-textDark) text-(--clr-textLight)"
-          />
-          <JobRequestsChart />
+          {isPending ? (
+            <JobRequestsChartSkeleton />
+          ) : (
+            <>
+              <ChartHeading
+                title="Job Requests YTD"
+                className="font-normal dark:text-(--clr-textDark) text-(--clr-textLight)"
+              />
+              <JobRequestsChart />
+            </>
+          )}
         </section>
         <section
           className="col-span-2 xl:col-span-1 h-[300px] rounded-md bg-white dark:bg-(--bg-primary_dark)
           border border-white dark:border-gray-700/50 p-2 shadow-sm 
             dark:text-(--clr-textDark) text-(--clr-textLight)"
         >
-          <OpenRequestsPieChart />
+          {isPending ? <PieChartSkeleton /> : <OpenRequestsPieChart />}
         </section>
         <div
           className="
@@ -72,11 +78,17 @@ const Dashboard = () => {
             title="Pending Requests"
             className="dark:text-(--clr-textDark) text-(--clr-textLight)"
           />
-          <GenericTable
-            data={pendingRequests ?? []}
-            columns={columns ?? []}
-            initialSorting={[{ id: "jobCreated", desc: true }]}
-          />
+          {isPending ? (
+            <div className="grid col-span-full place-items-center">
+              <SkeletonTable />
+            </div>
+          ) : (
+            <GenericTable
+              data={pendingRequests ?? []}
+              columns={columns ?? []}
+              initialSorting={[{ id: "jobCreated", desc: true }]}
+            />
+          )}
         </div>
       </div>
     </main>

@@ -1,7 +1,7 @@
 // $ This function calculates the variance for the requests of last month vs requests this month and return the value from the input data (jobs from API)
 import type { JobAPIResponse } from "@/schemas";
 
-export const getMonthlyPendingRequests = (jobs: JobAPIResponse[]) => {
+export const getMonthlyPendingRequestsChange = (jobs: JobAPIResponse[]) => {
   const now = new Date();
 
   const pendingRequests = jobs.filter(

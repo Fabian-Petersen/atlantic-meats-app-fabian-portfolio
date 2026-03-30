@@ -20,10 +20,10 @@ import { getJobActionColumns } from "@/components/tableColumns/ActionColumns";
 const ActionsListPage = () => {
   const ACTIONS_REQUESTS_KEY = ["actionRequests"];
 
-  const { data, isPending, isError, refetch } = useGetAll<ActionAPIResponse[]>(
-    "maintenance-actions-list",
-    ACTIONS_REQUESTS_KEY,
-  );
+  const { data, isPending, isError, refetch } = useGetAll<ActionAPIResponse[]>({
+    resourcePath: "maintenance-actions-list",
+    queryKey: ACTIONS_REQUESTS_KEY,
+  });
 
   const { mutateAsync: downloadItem } = useDownloadPdf({
     resourcePath: "maintenance-jobcard",

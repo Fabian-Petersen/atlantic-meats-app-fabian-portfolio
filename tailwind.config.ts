@@ -21,7 +21,7 @@ const config: Config = {
         check: "#4CAF50",
         activelink: "#c97e00",
         secondary: "#06B6D4",
-        accent: "#F59E0B",
+        accent: "#E5E7EB",
         fontlight: "#f3f4f6",
         font: "#001433",
         fontDark: "#1F2937",

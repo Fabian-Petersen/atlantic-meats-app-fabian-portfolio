@@ -45,6 +45,10 @@ export type AppContextType = {
   openChatSidebar: boolean;
   setOpenChatSidebar: Dispatch<SetStateAction<boolean>>;
 
+  // $ Notifications Sidebar State
+  openNotificationSidebar: boolean;
+  setOpenNotificationSidebar: Dispatch<SetStateAction<boolean>>;
+
   // $ Modals and Dialog
   showUpdateMaintenanceDialog: boolean;
   setShowUpdateMaintenanceDialog: (v: boolean) => void;

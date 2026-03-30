@@ -20,7 +20,7 @@ const ThemeToggleButton = ({ className }: Props) => {
   };
 
   return (
-    <div className="bg-menu-btn/40 p-2 flex items-center justify-center rounded-md text-gray-800 hover:cursor-pointer">
+    <div className="p-2 flex items-center justify-center rounded-md text-gray-900 hover:cursor-pointer">
       {isDarkTheme ? (
         <Button
           type="button"

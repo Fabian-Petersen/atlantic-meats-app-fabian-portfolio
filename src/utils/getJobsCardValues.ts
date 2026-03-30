@@ -1,25 +1,59 @@
-import type { JobAPIResponse, JobMetrics } from "@/schemas";
-import { getMonthlyJobChange } from "./getMonthlyJobChange";
-import { getMonthlyPendingRequests } from "./getMonthlyPendingRequestsChange";
+// $ This function that takes the array of (pending jobs) data and return the amount of jobs in the array and how the value changed from the previous month.
+// $ The value change is a function that returns the % change for the item passed.
 
-export const getJobsCardValues = (jobs: JobAPIResponse[]): JobMetrics => {
-  const totalRequests = jobs.length;
+import type { JobAPIResponse } from "@/schemas";
+import { getMonthlyApprovedJobChange } from "./getMonthlyApprovedJobChange";
+import { getMonthlyPendingRequestsChange } from "./getMonthlyPendingRequestsChange";
+import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
+import type {
+  ApprovedJobMetrics,
+  OverdueJobMetrics,
+  PendingJobMetrics,
+} from "@/schemas/dashboardSchema";
+import { getMonthlyOverdueJobChange } from "./getMonthlyOverdueJobChange";
 
-  const openRequests = jobs.filter(
-    (item) => item.status === "Pending" || item.status === "In Progress",
-  ).length;
+export const getPendingJobsCardValues = (
+  pending: JobAPIResponse[],
+): PendingJobMetrics => {
+  const totalRequests = pending.length;
 
-  const { totalRequestsChange } = getMonthlyJobChange(jobs);
-  const { totalPendingRequestsChange } = getMonthlyPendingRequests(jobs);
+  const { totalPendingRequestsChange } =
+    getMonthlyPendingRequestsChange(pending);
 
   return {
-    totalRequests: {
+    pendingRequests: {
       value: totalRequests,
+      valueChange: totalPendingRequestsChange,
+    },
+  };
+};
+
+export const getApprovedJobsCardValues = (
+  approved: JobApprovedAPIResponse[],
+): ApprovedJobMetrics => {
+  const totalApprovedRequests = approved.length;
+
+  const { totalRequestsChange } = getMonthlyApprovedJobChange(approved);
+
+  return {
+    approvedRequests: {
+      value: totalApprovedRequests,
       valueChange: totalRequestsChange,
     },
-    openRequests: {
-      value: openRequests,
-      valueChange: totalPendingRequestsChange,
+  };
+};
+
+export const getOverdueJobsCardValues = (
+  overdue: JobApprovedAPIResponse[],
+): OverdueJobMetrics => {
+  const totalOverdueRequests = overdue.length;
+
+  const { percentageChange } = getMonthlyOverdueJobChange(overdue);
+
+  return {
+    overdueRequests: {
+      value: totalOverdueRequests,
+      valueChange: percentageChange,
     },
   };
 };

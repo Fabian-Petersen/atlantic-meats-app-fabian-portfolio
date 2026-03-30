@@ -28,6 +28,7 @@ import AssetsSingleItemPage from "./pages/AssetsSingleItemPage";
 // $ User Management Pages
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import UserProfilePage from "./pages/UserProfilePage";
+import StoreProfilePage from "./pages/StoreProfilePage";
 
 // $ Job Management Pages for single items
 import JobPendingItemPage from "./pages/JobPendingItemPage";
@@ -95,6 +96,7 @@ function App() {
             />
             <Route path="/asset" element={<CreateAssetPage />} />
             <Route path="/admin/users" element={<UsersListPage />} />
+            <Route path="/admin/users/:id" element={<StoreProfilePage />} />
           </Route>
           {/* // $ ======================= Maintenance Routes ======================= */}
           {/* //% admin, technician, contractor Routes */}

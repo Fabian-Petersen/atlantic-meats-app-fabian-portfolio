@@ -1,16 +1,31 @@
-import { Wallet, FileCheck2, Users2, FileBarChart } from "lucide-react";
-import type { JobCardItem, AssetCardItem, ActionCardItem } from "@/schemas";
+import {
+  Wallet,
+  FileCheck2,
+  Users2,
+  FileBarChart,
+  AlertTriangle,
+} from "lucide-react";
+import type {
+  AssetCardItem,
+  OverdueJobCardItem,
+  PendingJobCardItem,
+  ApprovedJobCardItem,
+} from "@/schemas";
+import type { ActionCardItem } from "@/schemas/dashboardSchema";
 
-export const jobsCardData: JobCardItem[] = [
+export const jobsPendingCardData: PendingJobCardItem[] = [
   {
-    id: "totalRequests",
-    title: "Total Requests",
+    id: "pendingRequests",
+    title: "Pending Requests",
     icon: Wallet,
     color: "#8884d8",
     bgColor: "rgba(136, 132, 216, 0.1)",
   },
+];
+
+export const jobsApprovedCardData: ApprovedJobCardItem[] = [
   {
-    id: "openRequests",
+    id: "approvedRequests",
     title: "Open Requests",
     icon: FileCheck2,
     color: "#82ca9d",
@@ -35,5 +50,15 @@ export const actionCardData: ActionCardItem[] = [
     icon: FileBarChart,
     color: "#ffc658",
     bgColor: "rgba(255, 198, 88, 0.1)",
+  },
+];
+
+export const jobsOverdueCardData: OverdueJobCardItem[] = [
+  {
+    id: "overdueRequests",
+    title: "Overdue Requests",
+    icon: AlertTriangle,
+    color: "#ef4444", // Tailwind red-500
+    bgColor: "rgba(239, 68, 68, 0.1)", // soft red background
   },
 ];

@@ -1,50 +1,83 @@
 // import CardItem from "./CardItem";
 import { useMemo } from "react";
 import {
-  assetsCardData,
-  jobsCardData,
+  // assetsCardData,
+  jobsPendingCardData,
+  jobsApprovedCardData,
   actionCardData,
+  jobsOverdueCardData,
 } from "@/data/dashboardCardData";
 import type {
   JobAPIResponse,
-  AssetAPIResponse,
+  // AssetAPIResponse,
   ActionAPIResponse,
 } from "@/schemas";
 import { useGetAll } from "@/utils/api";
-import { getJobsCardValues } from "@/utils/getJobsCardValues";
-import { getAssetCardValues } from "@/utils/getAssetCardValues";
+import {
+  getApprovedJobsCardValues,
+  getOverdueJobsCardValues,
+  getPendingJobsCardValues,
+} from "@/utils/getJobsCardValues";
+// import { getAssetCardValues } from "@/utils/getAssetCardValues";
 import { getActionCardValues } from "@/utils/getActionCardValues";
 import { MetricCardItem } from "./MetricsCardItem";
+import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
+// import { Spinner } from "../ui/spinner";
 
 const Cards = () => {
-  // $ Jobs Data
-  const { data: requests = [], isPending } = useGetAll<JobAPIResponse[]>(
-    "jobs-list",
-    ["maintenanceRequests"],
-  );
+  // % ===================================================================================
+  // % Fetch Card Data
+  // % ===================================================================================
 
-  // const location = requests[0].location;
+  // $ Pending Requests Data
+  const { data: pendingJobs = [], isPending } = useGetAll<JobAPIResponse[]>({
+    resourcePath: "jobs-list-pending",
+    queryKey: ["maintenanceRequests", "pending"],
+  });
+
+  // $ Approved Requests Data
+  const { data: approvedJobs = [] } = useGetAll<JobApprovedAPIResponse[]>({
+    resourcePath: "jobs-list-approved",
+    queryKey: ["maintenanceRequests", "approved"],
+  });
+
   // $ Assets Data
-  const { data: assets = [] } = useGetAll<AssetAPIResponse[]>("assets-list", [
-    "assetRequests",
-  ]);
+  // const { data: assets = [] } = useGetAll<AssetAPIResponse[]>({
+  //   resourcePath: "assets-list",
+  //   queryKey: ["assetRequests"],
+  // });
 
   // $ Actions Data
-  const { data: actions = [] } = useGetAll<ActionAPIResponse[]>(
-    "maintenance-actions-list",
-    ["actionRequests"],
-  );
+  const { data: actions = [] } = useGetAll<ActionAPIResponse[]>({
+    resourcePath: "maintenance-actions-list",
+    queryKey: ["actionRequests"],
+  });
 
   // $ Get the job metrics from the data returned from the database
-  const jobMetrics = useMemo(() => getJobsCardValues(requests), [requests]);
+  const pendingJobMetrics = useMemo(
+    () => getPendingJobsCardValues(pendingJobs),
+    [pendingJobs],
+  );
+
+  // const pendingJobMetrics = pendingJobs.length;
+
+  // $ Get the job metrics from the data returned from the database
+  const approvedJobMetrics = useMemo(
+    () => getApprovedJobsCardValues(approvedJobs),
+    [approvedJobs],
+  );
+
+  // $ Get the overdue job metrics from the data returned from the database
+  const overdueJobMetrics = useMemo(
+    () => getOverdueJobsCardValues(approvedJobs),
+    [approvedJobs],
+  );
 
   // $ Get the asset metrics from the data returned from the database
-  const assetsMetrics = useMemo(() => getAssetCardValues(assets), [assets]);
+  // const assetsMetrics = useMemo(() => getAssetCardValues(assets), [assets]);
 
   // $ Get the action metrics from the data returned from the database
   const actionMetrics = useMemo(() => getActionCardValues(actions), [actions]);
-
-  if (isPending) return <div>Loading...</div>;
 
   return (
     <div
@@ -52,9 +85,35 @@ const Cards = () => {
         grid w-full
         grid-cols-2 lg:grid-cols-4 gap-2"
     >
-      <MetricCardItem cardData={jobsCardData} metrics={jobMetrics} />
-      <MetricCardItem cardData={actionCardData} metrics={actionMetrics} />
-      <MetricCardItem cardData={assetsCardData} metrics={assetsMetrics} />
+      {/* {isPending ? (
+        <div className="col-span-full place-items-center">
+          <Spinner className="size-18 text-primary  " />
+        </div>
+      ) : ( */}
+      <>
+        <MetricCardItem
+          cardData={jobsPendingCardData}
+          metrics={pendingJobMetrics}
+          isPending={isPending}
+        />
+        <MetricCardItem
+          cardData={jobsApprovedCardData}
+          metrics={approvedJobMetrics}
+          isPending={isPending}
+        />
+        <MetricCardItem
+          cardData={actionCardData}
+          metrics={actionMetrics}
+          isPending={isPending}
+        />
+        <MetricCardItem
+          cardData={jobsOverdueCardData}
+          metrics={overdueJobMetrics}
+          isPending={isPending}
+        />
+        {/* <MetricCardItem cardData={assetsCardData} metrics={assetsMetrics} /> */}
+      </>
+      {/* )} */}
     </div>
   );
 };

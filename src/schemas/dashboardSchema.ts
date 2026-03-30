@@ -29,9 +29,17 @@ export type CardItem<T extends string> = {
   metrics: Metrics<T>;
 };
 
-// $ Metrics Key for each job card
-export type JobsMetricKey = "totalRequests" | "openRequests";
-export type JobMetrics = Metrics<JobsMetricKey>;
+// $ Metrics Key for pending jobs card
+export type PendingJobsMetricKey = "pendingRequests";
+export type PendingJobMetrics = Metrics<PendingJobsMetricKey>;
+
+// $ Metrics Key for approved jobs card
+export type ApprovedJobsMetricKey = "approvedRequests";
+export type ApprovedJobMetrics = Metrics<ApprovedJobsMetricKey>;
+
+// $ Metrics Key for approved jobs card
+export type OverdueJobsMetricKey = "overdueRequests";
+export type OverdueJobMetrics = Metrics<OverdueJobsMetricKey>;
 
 // $ Metrics Key for each asset card
 export type AssetMetricKey = "totalAssets";
@@ -41,8 +49,18 @@ export type AssetMetrics = Metrics<AssetMetricKey>;
 export type ActionMetricKey = "totalCompleted";
 export type ActionMetrics = Metrics<ActionMetricKey>;
 
-export type JobCardItem = z.infer<typeof cardItemSchema> & {
-  id: JobsMetricKey;
+export type PendingJobCardItem = z.infer<typeof cardItemSchema> & {
+  id: PendingJobsMetricKey;
+  icon: LucideIcon;
+};
+
+export type ApprovedJobCardItem = z.infer<typeof cardItemSchema> & {
+  id: ApprovedJobsMetricKey;
+  icon: LucideIcon;
+};
+
+export type OverdueJobCardItem = z.infer<typeof cardItemSchema> & {
+  id: OverdueJobsMetricKey;
   icon: LucideIcon;
 };
 

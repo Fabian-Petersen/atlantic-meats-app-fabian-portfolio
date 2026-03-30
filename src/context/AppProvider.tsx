@@ -26,6 +26,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   // $ State for the Comments Sidebar behavior
   const [openChatSidebar, setOpenChatSidebar] = useState<boolean>(false);
 
+  // $ State for the Notifications Sidebar behavior
+  const [openNotificationSidebar, setOpenNotificationSidebar] =
+    useState<boolean>(false);
+
   // $ State for the dialogs (modals)
   const [showUpdateMaintenanceDialog, setShowUpdateMaintenanceDialog] =
     useState<boolean>(false);
@@ -126,6 +130,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setGlobalFilter,
         showCreateUserDialog,
         setShowCreateUserDialog,
+        openNotificationSidebar,
+        setOpenNotificationSidebar,
       }}
     >
       {children}
