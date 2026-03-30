@@ -49,9 +49,10 @@ const MaintenanceRequestForm = () => {
     queryKey: ["maintenanceRequests"],
   });
 
-  const { data } = useGetAll<AssetRequestFormValues[]>("assets-list", [
-    "getAllAssets",
-  ]);
+  const { data } = useGetAll<AssetRequestFormValues[]>({
+    resourcePath: "assets-list",
+    queryKey: ["getAllAssets"],
+  });
 
   // data looks like { assets: Array(107) }
   const assetsArray: AssetRequestFormValues[] = Array.isArray(data) ? data : [];
