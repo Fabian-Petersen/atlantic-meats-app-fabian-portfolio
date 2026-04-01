@@ -4,6 +4,7 @@ import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { Resource } from "@/utils/api";
 import { Badge } from "../ui/badge";
+import type { SuccessConfig } from "@/context/app-types";
 
 export const getUserColumns = (
   setShowCreateUserDialog: (v: boolean) => void,
@@ -16,6 +17,9 @@ export const getUserColumns = (
       resourceName?: string;
     },
   ) => void,
+  resend: (email: string) => Promise<void>,
+  setShowSuccess: (v: boolean) => void,
+  setSuccessConfig: (v: SuccessConfig) => void,
 ): ColumnDef<UsersAPIResponse>[] => [
   {
     accessorKey: "userCreated",
@@ -112,10 +116,10 @@ export const getUserColumns = (
     enableHiding: false,
     cell: ({ row }) => {
       const rowId = row.original.id;
-
       const menuItems = getTableMenuItems({
         rowId: row.original.id,
         setSelectedRowId,
+        userStatus: row.original.status,
 
         create: {
           url: "/admin/users",
@@ -139,8 +143,16 @@ export const getUserColumns = (
           },
           onDelete: openDeleteDialog,
         },
+        resend: {
+          onResend: async (rowId) => {
+            await resend(rowId);
+            setShowSuccess(true);
+            setSuccessConfig({
+              message: `Successfully resend password to user ${row.original.name}`,
+            });
+          },
+        },
       });
-
       return (
         <div className="tex-center" onClick={(e) => e.stopPropagation()}>
           <DropdownMenuButtonDialog menuItems={menuItems} />

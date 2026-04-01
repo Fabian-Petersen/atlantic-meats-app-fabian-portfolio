@@ -16,15 +16,17 @@ import {
 
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import useGlobalContext from "@/context/useGlobalContext";
-import { getUserColumns } from "@/components/tableColumns/UserColulmns";
+import { getUserColumns } from "@/components/tableColumns/UserColumns";
 import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
 import type { UsersAPIResponse } from "@/schemas";
+
 import { GenericTable } from "@/components/dashboard/GenericTable";
 import FormHeading from "@/../customComponents/FormHeading";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { SearchInput } from "@/components/features/SearchInput";
 import { MobileUsersContainer } from "@/components/mobile/MobileUsersContainer";
+import { useResendTemporaryPassword } from "@/utils/useResendTemporaryPassword";
 
 const UsersListPage = () => {
   const {
@@ -49,13 +51,22 @@ const UsersListPage = () => {
     globalFilter,
     setGlobalFilter,
     setShowCreateUserDialog,
+    setShowSuccess,
+    setSuccessConfig,
+    selectedRowId,
   } = useGlobalContext();
+
+  const { resend, isPending: pendingResendPassword } =
+    useResendTemporaryPassword(selectedRowId ?? "");
 
   // $ Pass the props to the function generating the columns to be used in the table
   const columns = getUserColumns(
     setShowActionDialog,
     setSelectedRowId,
     openDeleteDialog,
+    resend,
+    setShowSuccess,
+    setSuccessConfig,
   );
 
   const table = useReactTable({
@@ -70,6 +81,7 @@ const UsersListPage = () => {
     globalFilterFn: "includesString",
   });
 
+  if (pendingResendPassword) return <PageLoadingSpinner />;
   if (isPending) return <PageLoadingSpinner />;
   if (isError)
     return (

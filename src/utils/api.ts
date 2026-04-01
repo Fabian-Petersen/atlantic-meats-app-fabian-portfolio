@@ -32,7 +32,8 @@ export type Resource =
   | "technician-list" // Get the list of technicians
   | "job-request-rejected"
   | "job-request-approved"
-  | "admin/users";
+  | "admin/users"
+  | `admin/users/resend-temp-password/${string}`;
 
 // $ Combine the types into a union type for the generic functions
 export type RequestType =

@@ -28,6 +28,7 @@ const DeleteItemModal = () => {
 
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("selectedRowId:", selectedRowId);
     try {
       await deleteItem(selectedRowId);
       closeDeleteDialog();
@@ -77,11 +78,15 @@ const DeleteItemModal = () => {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full rounded-full bg-primary/90 px-6 py-2 text-gray-700 transition hover:bg-primary hover:cursor-pointer disabled:opacity-50 lg:w-32"
+            className="w-full rounded-full bg-primary/90 px-6 py-2 text-white transition hover:bg-primary hover:cursor-pointer disabled:opacity-50 lg:w-32"
           >
-            <span className="text-white">
-              {isPending ? <Spinner /> : "Delete"}
-            </span>
+            {isPending ? (
+              <div className="w-full flex items-center justify-center text-white">
+                <Spinner className="size-8" />
+              </div>
+            ) : (
+              "Delete"
+            )}
           </button>
         </div>
       </div>

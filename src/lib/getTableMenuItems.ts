@@ -4,6 +4,7 @@ import {
   Pencil,
   Trash2Icon,
   Wrench,
+  Mail,
   MessageSquare,
   DownloadIcon,
   User,
@@ -30,6 +31,7 @@ export type TableActionLinks = {
 type GetTableMenuItemsProps = {
   rowId: string;
   request_id?: string;
+  userStatus?: string;
   setSelectedRowId: (id: string) => void;
 
   create?: {
@@ -74,6 +76,12 @@ type GetTableMenuItemsProps = {
     url?: string;
     onOpen: () => void;
   };
+
+  resend?: {
+    label?: string;
+    url?: string;
+    onResend: (id: string) => Promise<void> | void;
+  };
 };
 
 export const getTableMenuItems = ({
@@ -86,6 +94,8 @@ export const getTableMenuItems = ({
   delete: deleteAction,
   download,
   comments,
+  resend,
+  userStatus,
 }: GetTableMenuItemsProps): TableActionLinks[] => {
   const items: TableActionLinks[] = [];
 
@@ -163,6 +173,19 @@ export const getTableMenuItems = ({
           setSelectedRowId(request_id); // the actions rowId is not eq to requestId for the comments
         else setSelectedRowId(rowId);
         comments.onOpen();
+      },
+    });
+  }
+
+  if (resend && userStatus === "FORCE_CHANGE_PASSWORD") {
+    items.push({
+      id: "resend",
+      label: resend.label ?? "Resend Password",
+      icon: Mail,
+      url: resend.url,
+      onClick: () => {
+        setSelectedRowId(rowId);
+        resend.onResend(rowId);
       },
     });
   }
