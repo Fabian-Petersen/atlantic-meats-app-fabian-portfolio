@@ -151,9 +151,9 @@ function CreateUserForm() {
           type="submit"
           variant="submit"
           size="lg"
-          className="flex-1 capitalize"
+          className={`flex-1 capitalize ${isPending ? "bg-primary/60" : ""}`}
         >
-          {isPending ? <Spinner /> : "Submit"}
+          {isPending ? <Spinner className="size-8" /> : "Submit"}
         </Button>
       </div>
     </form>

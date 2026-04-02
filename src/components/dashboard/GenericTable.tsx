@@ -1,9 +1,4 @@
 // $ Custom Table component that can render an Asset or Jobs Table
-
-import { flexRender } from "@tanstack/react-table";
-import type { ColumnDef } from "@tanstack/react-table";
-// import EmptyTablePlaceholder from "../features/EmptyTablePlaceholder";
-
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import useGlobalContext from "@/context/useGlobalContext";
@@ -12,14 +7,16 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
+  flexRender,
   useReactTable,
+  type ColumnDef,
   type SortingState,
+  type ColumnResizeMode,
 } from "@tanstack/react-table";
+
 import FormHeading from "@/../customComponents/FormHeading";
-// import FilterContainer from "../features/FilterContainer";
 import AddNewItemButton from "../features/AddNewItemButton";
 import { SearchInput } from "../features/SearchInput";
-// import EmptyMobilePlaceholder from "../features/EmptyMobilePlaceholder";
 import EmptyTablePlaceholder from "../features/EmptyTablePlaceholder";
 
 type Props<T extends { id: string }> = {
@@ -56,10 +53,7 @@ export function GenericTable<T extends { id: string }>({
     useGlobalContext();
 
   const [sorting, setSorting] = useState<SortingState>(initialSorting);
-
-  // const [sorting, setSorting] = useState<SortingState>([
-  //   { id: "actionCreated", desc: true }, // primary sort
-  // ]);
+  const [columnResizeMode] = useState<ColumnResizeMode>("onChange");
 
   const location = useLocation();
 
@@ -72,6 +66,14 @@ export function GenericTable<T extends { id: string }>({
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     globalFilterFn: "includesString",
+
+    // ----- Resizing ------
+    columnResizeMode,
+    enableColumnResizing: true,
+    defaultColumn: {
+      minSize: 60,
+      maxSize: 800,
+    },
   });
 
   const handleSubmit = () => {
@@ -81,13 +83,11 @@ export function GenericTable<T extends { id: string }>({
 
   return (
     <div className="w-full lg:p-4 min-h-0 hidden lg:block">
-      {/* <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 border-dashed min-h-0"> */}
       {tableHeading && (
         <FormHeading className="mx-auto" heading={tableHeading} />
       )}
       {location.pathname === "/dashboard" ? undefined : (
         <div className="flex gap-4 items-end w-full">
-          {/* <FilterContainer table={table} className="" /> */}
           <SearchInput
             value={globalFilter}
             onChange={setGlobalFilter}
@@ -106,19 +106,54 @@ export function GenericTable<T extends { id: string }>({
       )}
 
       <div className={`${className} dark:text-gray-200 py-4`}>
-        <div className="lg:overflow-hidden overflow-x-scroll rounded-lg w-full border border-gray-200 dark:border-gray-700/50 text-xs">
-          <table className="w-full">
+        {/*
+         * overflow-x-auto lets the table scroll horizontally when columns
+         * are resized wider than the container.
+         */}
+        <div className="overflow-x-auto rounded-lg w-full border border-gray-200 dark:border-gray-700/50 text-xs">
+          {/*
+           * table-fixed + explicit column widths (via colgroup) is required
+           * so TanStack's pixel-based sizing is respected by the browser.
+           */}
+          <table className="w-full min-w-full">
             <thead className="bg-[#fcb53b90]  dark:bg-primary">
               {table.getHeaderGroups().map((hg) => (
                 <tr key={hg.id}>
                   {hg.headers.map((header) => (
                     <th
                       key={header.id}
-                      className="px-4 py-3 text-left tracking-wider dark:text-white"
+                      className="relative px-4 py-3 text-left tracking-wider dark:text-white text-cxs select-none"
+                      style={{
+                        width: `${header.getSize()}px`,
+                        minWidth: `${header.column.columnDef.minSize ?? 60}px`,
+                      }}
                     >
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext(),
+                      )}
+                      {/* ── Resize handle ───────────────────────────────── */}
+                      {header.column.getCanResize() && (
+                        <div
+                          onMouseDown={header.getResizeHandler()}
+                          onTouchStart={header.getResizeHandler()}
+                          onClick={(e) => e.stopPropagation()}
+                          className={[
+                            // Wide enough to grab easily — centred on the border
+                            "absolute top-0 right-0 h-full w-4 flex items-center justify-center",
+                            "cursor-col-resize touch-none select-none z-10 group",
+                          ].join(" ")}
+                        >
+                          {/* Visual indicator — a thin bar that widens on hover/drag */}
+                          <span
+                            className={[
+                              "block h-2/3 w-[3px] rounded-full transition-all duration-150",
+                              header.column.getIsResizing()
+                                ? "bg-amber-500 dark:bg-amber-400 w-[4px] h-full opacity-100"
+                                : "bg-gray-300 dark:bg-gray-600 opacity-0 group-hover:opacity-100",
+                            ].join(" ")}
+                          />
+                        </div>
                       )}
                     </th>
                   ))}
@@ -126,7 +161,7 @@ export function GenericTable<T extends { id: string }>({
               ))}
             </thead>
 
-            <tbody className="text-xs dark:text-(--clr-textDark)">
+            <tbody className="dark:text-(--clr-textDark)">
               {data.length === 0 ? (
                 <EmptyTablePlaceholder
                   message={emptyTablePlaceholderText}
@@ -149,7 +184,7 @@ export function GenericTable<T extends { id: string }>({
                         setSelectedRowId(row.original.id);
                         navigate(`${rowPath}/${row.original.id}`);
                       }}
-                      className={`cursor-pointer hover:bg-primary/20 dark:bg-(--bg-primary_dark) ${customRowClass}`}
+                      className={`text-cxs cursor-pointer hover:bg-primary/20 dark:bg-(--bg-primary_dark) ${customRowClass}`}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <td key={cell.id} className="px-4 py-3">

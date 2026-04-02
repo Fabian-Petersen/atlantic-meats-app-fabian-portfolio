@@ -4,7 +4,7 @@ on:
     branches: [main]
 
 env:
-  VITE_PUBLIC_API_URL: ${{ secrets.VITE_PUBLIC_API_URL }}
+  VITE_PUBLIC_API_URL: ${{ secrets.API_GATEWAY_URL }}
   VITE_COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
   VITE_COGNITO_USERPOOL_ID: ${{ secrets.COGNITO_USERPOOL_ID }}
 
@@ -24,7 +24,7 @@ jobs:
 
       - name: Build
         env:
-          VITE_PUBLIC_API_URL: ${{ secrets.VITE_PUBLIC_API_URL }}
+          VITE_PUBLIC_API_URL: ${{ secrets.API_GATEWAY_URL }}
         run: |
           echo "VITE_PUBLIC_API_URL=$VITE_PUBLIC_API_URL"
           npm run build

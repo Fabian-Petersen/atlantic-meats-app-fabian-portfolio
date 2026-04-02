@@ -84,7 +84,7 @@ export const getUserColumns = (
       const value = getValue<boolean>();
       return (
         <Badge
-          className={`px-2 py-1 rounded-full text-sm font-medium ${
+          className={`px-2 py-1 rounded-full text-cxs font-medium ${
             value ? "bg-green-100 text-green-800" : "bg-red-100 text-red-600"
           }`}
         >

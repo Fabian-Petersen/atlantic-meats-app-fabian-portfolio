@@ -33,7 +33,8 @@ export type Resource =
   | "job-request-rejected"
   | "job-request-approved"
   | "admin/users"
-  | `admin/users/resend-temp-password/${string}`;
+  | `admin/users/resend-temp-password/${string}`
+  | "admin/users/confirm_user_signup"; // handle the user status update after initial login. Trigger PostConfirmationTrigger lambda
 
 // $ Combine the types into a union type for the generic functions
 export type RequestType =

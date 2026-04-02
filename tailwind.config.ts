@@ -38,6 +38,7 @@ const config: Config = {
       },
       text: {
         md: "1rem",
+        cxs: "0.65rem",
       },
     },
   },

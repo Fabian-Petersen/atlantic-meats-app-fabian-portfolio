@@ -16,6 +16,8 @@ import { GenericTable } from "@/components/dashboard/GenericTable";
 import { SkeletonTable } from "@/components/dashboard/SkeletonTable";
 import { PieChartSkeleton } from "@/components/dashboard/charts/PieChartSkeleton";
 import { JobRequestsChartSkeleton } from "@/components/dashboard/charts/JobRequestsChartSkeleton";
+import { getUserGroups } from "@/auth/getUserGroups";
+import { useEffect } from "react";
 
 const Dashboard = () => {
   const columns = getDashboardJobColumns();
@@ -25,6 +27,14 @@ const Dashboard = () => {
     resourcePath: "jobs-list-pending",
     queryKey: MAINTENANCE_REQUESTS_KEY,
   });
+
+  useEffect(() => {
+    const loadGroups = async () => {
+      const groups = await getUserGroups();
+      console.log(groups);
+    };
+    loadGroups();
+  }, []);
 
   return (
     <main className="w-full bg-gray-100 dark:bg-bgdark h-full md:p-4 p-2">
