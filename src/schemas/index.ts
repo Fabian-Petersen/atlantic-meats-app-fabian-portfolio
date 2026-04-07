@@ -82,7 +82,11 @@ import type {
 } from "./dashboardSchema";
 
 // % Dashboard Types
-import type { UsersAPIResponse, UsersRequestFormValues } from "./usersSchema";
+import type {
+  UsersAPIResponse,
+  UsersRequestFormValues,
+  UserUpdateRequest,
+} from "./usersSchema";
 
 export type {
   // Auth Types
@@ -123,6 +127,7 @@ export type {
   // Users
   UsersAPIResponse,
   UsersRequestFormValues,
+  UserUpdateRequest,
 };
 
 // GlobalContext.ts

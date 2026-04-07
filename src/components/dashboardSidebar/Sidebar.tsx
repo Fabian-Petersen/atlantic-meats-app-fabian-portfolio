@@ -27,7 +27,7 @@ const Sidebar = () => {
     const loadGroups = async () => {
       const groups = await getUserGroups();
       setUserGroups(groups);
-      console.log(groups);
+      // console.log(groups);
     };
     loadGroups();
   }, []);

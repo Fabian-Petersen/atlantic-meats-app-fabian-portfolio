@@ -46,7 +46,7 @@ export const Success = () => {
           transition={{ duration: 0.2 }}
         >
           <motion.div
-            className="flex flex-col items-center justify-center gap-10 w-full max-w-lg rounded-2xl h-100 dark:border-[rgba(55,65,81,0.5)] border border-gray-100 dark:bg-(--bg-primary_dark) bg-white py-10 px-8 text-center shadow-sm"
+            className="flex flex-col items-center justify-center gap-8 w-full max-w-md rounded-2xl h-80 md:h-90 dark:border-[rgba(55,65,81,0.5)] border border-gray-100 dark:bg-(--bg-primary_dark) bg-white p-4 text-center shadow-sm"
             initial={{ opacity: 0, scale: 0.96, y: 8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: 4 }}
@@ -68,7 +68,7 @@ export const Success = () => {
               <h1 className="mb-2 text-2xl tracking-wide font-semibold text-(--clr-textLight) dark:text-(--clr-textDark)">
                 {config.title}
               </h1>
-              <p className="mb-6 text-md tracking-wide text-(--clr-textLight) dark:text-(--clr-textDark)">
+              <p className="mb-2 md:mb-4 text-sm md:text-md tracking-wide text-(--clr-textLight) dark:text-(--clr-textDark)">
                 {config.message}
               </p>
             </motion.div>

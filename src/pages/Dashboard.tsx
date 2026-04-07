@@ -30,8 +30,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const loadGroups = async () => {
-      const groups = await getUserGroups();
-      console.log(groups);
+      await getUserGroups();
     };
     loadGroups();
   }, []);

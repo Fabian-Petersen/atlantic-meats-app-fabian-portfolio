@@ -77,6 +77,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [globalFilter, setGlobalFilter] = useState("");
 
+  // $ State for the User
+  const [userId, setUserId] = useState<string | null>(null);
+
   // const [assetsData, setAssetsData] = useState<AssetFormValues | undefined>(
   //   undefined
   // ); // Set the data for Assets
@@ -132,6 +135,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setShowCreateUserDialog,
         openNotificationSidebar,
         setOpenNotificationSidebar,
+        userId,
+        setUserId,
       }}
     >
       {children}

@@ -1,17 +1,25 @@
 // components/Avatar.tsx
-import React from "react";
+import React, { useEffect } from "react";
 import { getInitialsElement } from "@/utils/getInitials";
 import { useUserAttributes } from "../../utils/aws-userAttributes";
 import { useNavigate } from "react-router-dom";
-
+import useGlobalContext from "@/context/useGlobalContext";
+import UserDetails from "./UserDetails";
 interface AvatarProps {
   imageUrl?: string | null;
   size?: number; // optional, default 40px
 }
 
 const Avatar: React.FC<AvatarProps> = ({ imageUrl, size = 40 }) => {
-  const { data: user } = useUserAttributes();
   const navigate = useNavigate();
+  const { data: userData } = useUserAttributes(); // user from Cognito
+  const { setUserId } = useGlobalContext();
+  useEffect(() => {
+    if (userData?.sub) {
+      setUserId(userData.sub);
+    }
+  }, [userData, setUserId]);
+
   return (
     <div className="flex gap-1">
       <button
@@ -28,17 +36,14 @@ const Avatar: React.FC<AvatarProps> = ({ imageUrl, size = 40 }) => {
           />
         ) : (
           getInitialsElement({
-            name: user?.name ?? "",
-            surname: user?.family_name ?? "",
+            name: userData?.name ?? "",
+            surname: userData?.family_name ?? "",
             className:
-              "flex items-center justify-center text-gray-600 dark:text-white font-medium text-md lg:text-[1rem] h-12 w-12 rounded-full bg-menu-btn/40 text-gray-600",
+              "flex items-center justify-center text-gray-600 dark:text-white font-medium text-md lg:text-[1rem] h-10 w-10 rounded-full bg-menu-btn/40",
           })
         )}
       </button>
-      {/* <div className="flex flex-col justify-end">
-        <span className="capitalize text-xs">{user?.name ?? ""}</span>
-        <span className="capitalize text-xs">{user?.group ?? "admin"}</span>
-      </div> */}
+      <UserDetails />
     </div>
   );
 };

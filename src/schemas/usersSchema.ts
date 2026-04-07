@@ -21,20 +21,6 @@ export const usersRequestSchema = z.object({
     }),
 });
 
-// item = {
-//     "id": user_attrs["sub"],
-//     "email": user_attrs.get("email", ""),
-//     "name": user_attrs.get("name", ""),
-//     "family_name": user_attrs.get("family_name", ""),
-//     "username": event.get("userName", user_attrs["sub"]),
-//     "email_verified": user_attrs.get("email_verified", "false").lower() == "true",
-//     "status": "CONFIRMED",
-//     "groups": [],
-//     "location": "",
-//     "createdAt": to_human_date(now),
-//     "updatedAt": to_human_date(now),
-// }
-
 // % Schema expected from the backend
 export const usersResponseSchema = z.object({
   id: z.string(),
@@ -63,3 +49,4 @@ export type ActionRequestPayload = Omit<UsersRequestFormValues, "images"> & {
 
 export type UsersRequestFormValues = z.infer<typeof usersRequestSchema>;
 export type UsersAPIResponse = z.infer<typeof usersResponseSchema>;
+export type UserUpdateRequest = Partial<Record<string, string>>;

@@ -64,7 +64,6 @@ export default function LoginContainer() {
       if (userData.data?.name) {
         toast.success(`Welcome ${capitalize(userData.data.name)}`);
       }
-
       navigate("/dashboard");
     } catch (error: unknown) {
       toast.error(getAuthErrorMessage(error));

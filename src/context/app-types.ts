@@ -98,6 +98,10 @@ export type AppContextType = {
   // $ State for the Maintennace and Assets Table Ations (delete, update and edit item)
   pendingTableAction: PendingTableAction;
   setPendingTableAction: Dispatch<SetStateAction<PendingTableAction | null>>;
+
+  // $ User
+  setUserId: (v: string) => void;
+  userId: string | null;
 };
 
 export type DeleteModalPayload = {
