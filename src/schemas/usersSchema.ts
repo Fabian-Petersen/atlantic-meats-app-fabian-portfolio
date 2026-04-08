@@ -34,6 +34,7 @@ export const usersResponseSchema = z.object({
   location: z.string(),
   userCreated: z.string(),
   updatedAt: z.string(),
+  mobile: z.string(),
 });
 
 // $ Type for sending the Action to the backend excluding the images (the images is not included with the initial request). Backend will send a presignURL for the images

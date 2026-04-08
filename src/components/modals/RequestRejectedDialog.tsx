@@ -12,11 +12,12 @@ function RejectRequestDialog() {
       open={showRejectRequestDialog}
       onOpenChange={setShowRejectRequestDialog}
     >
-      <DialogContent className="sm:max-w-[625px] bg-white z-3000 dark:bg-[#1d2739] border-none dark:text-gray-100 dark:border-gray-700/50">
-        <DialogTitle className="">
+      <DialogContent className="sm:max-w-[625px] bg-white z-3000 dark:bg-(--bg-primary_dark) dark:text-gray-100 dark:border-gray-700/50">
+        <DialogTitle>
           <FormHeading
             arial-label="Reject Job Request"
-            className="font-normal"
+            h2={true}
+            className="font-normal text-md md:text-lg text-center"
             heading="Reject Job Request"
           />
         </DialogTitle>

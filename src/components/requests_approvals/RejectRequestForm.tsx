@@ -95,7 +95,7 @@ const RequestRejectedForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col rounded-lg lg:w-full text-(--clr-font) dark:bg-[#1d2739]"
+      className="flex flex-col rounded-lg lg:w-full dark:bg-(--bg-primary_dark) dark:text-gray-100 dark:border-gray-700/50"
     >
       <div className="grid gap-4 w-full lg:py-2">
         <p className="text-xs md:text-md text-gray-600 dark:text-gray-300">
@@ -108,21 +108,21 @@ const RequestRejectedForm = () => {
           rows={1}
           name="reject_message"
           error={errors.reject_message}
-          className="placeholder-black resize-none overflow-hidden no-scrollbar placeholder:text-xs"
+          className="placeholder-black resize-none overflow-hidden no-scrollbar placeholder:text-lg"
         />
-        <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 bg-white mt-auto">
+        <div className="flex w-full lg:w-1/2 ml-auto gap-2 max-w-72 mt-auto">
           <button
             type="button"
             disabled={isPending}
             onClick={() => setShowRejectRequestDialog(false)}
-            className="text-sm w-full rounded-full bg-red-500 px-6 py-2 transition hover:bg-red-500/90 hover:cursor-pointer text-white disabled:opacity-50 dark:text-gray-200 lg:w-32"
+            className="flex-1 py-2 text-xs font-medium rounded-lg border border-red-200 dark:border-red-500 text-red-600 dark:bg-red-300/20 dark:text-red-300 hover:bg-gray-50 dark:hover:bg-red/5 transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isPending}
-            className="text-sm w-full rounded-full bg-primary/90 px-6 py-2 text-white transition hover:bg-primary hover:cursor-pointer disabled:opacity-50 lg:w-32"
+            className="flex-1 py-2 text-xs font-medium rounded-lg border border-primary dark:border-primary text-primary dark:bg-primary/20 dark:text-primary-300 hover:bg-gray-50 dark:hover:bg-red/5 transition-colors"
           >
             {isPending ? (
               <div className="flex gap-4 items-center justify-center">

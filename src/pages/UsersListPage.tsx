@@ -27,6 +27,7 @@ import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder
 import { SearchInput } from "@/components/features/SearchInput";
 import { MobileUsersContainer } from "@/components/mobile/MobileUsersContainer";
 import { useResendTemporaryPassword } from "@/utils/useResendTemporaryPassword";
+import { PlusCircle } from "lucide-react";
 
 const UsersListPage = () => {
   const {
@@ -94,7 +95,7 @@ const UsersListPage = () => {
     );
 
   return (
-    <div className="flex w-full lg:p-4 h-auto">
+    <div className="flex w-full lg:p-4 h-auto border-2 border-red-500 border-dashed">
       <div className="bg-white dark:bg-(--clr-bgDark) lg:flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto hidden">
         <FormHeading className="mx-auto dark:text-gray-100" heading="Users" />
         <GenericTable
@@ -123,10 +124,20 @@ const UsersListPage = () => {
           />
         ) : (
           <div className="grid gap-2">
-            <FormHeading
-              className="mx-auto dark:text-gray-100"
-              heading="Users"
-            />
+            <div className="flex justify-between items-center text-primary w-full">
+              <FormHeading
+                className="mx-auto dark:text-gray-100"
+                heading="Users"
+              />
+              <button
+                type="button"
+                aria-label="create new user"
+                onClick={() => setShowCreateUserDialog(true)}
+              >
+                <PlusCircle />
+              </button>
+            </div>
+
             <MobileUsersContainer
               className="flex md:hidden"
               data={table.getRowModel().rows}

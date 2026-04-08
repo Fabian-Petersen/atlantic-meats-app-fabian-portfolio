@@ -6,7 +6,7 @@ import NotificationButton from "../notifications/NotificationButton";
 
 const NavbarActionButtons = () => {
   return (
-    <div className="flex items-center justify-center gap-2 lg:gap-3 px-2">
+    <div className="flex items-center justify-center gap-2 px-2">
       <LogoutButton />
       <ThemeToggleButton />
       <NotificationButton />

@@ -61,7 +61,7 @@ export const getUserColumns = (
     },
   },
   {
-    accessorKey: "groups",
+    accessorKey: "group",
     header: "Group",
     enableColumnFilter: false,
     cell: ({ getValue }) => {
@@ -77,22 +77,14 @@ export const getUserColumns = (
       return <p className="">{value}</p>;
     },
   },
-  // {
-  //   accessorKey: "email_verified",
-  //   header: "Email Verified",
-  //   cell: ({ getValue }) => {
-  //     const value = getValue<boolean>();
-  //     return (
-  //       <Badge
-  //         className={`px-2 py-1 rounded-full text-cxs font-medium ${
-  //           value ? "bg-green-100 text-green-800" : "bg-red-100 text-red-600"
-  //         }`}
-  //       >
-  //         {value ? "True" : "False"}
-  //       </Badge>
-  //     );
-  //   },
-  // },
+  {
+    accessorKey: "mobile",
+    header: "mobile",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="">{value}</p>;
+    },
+  },
   {
     accessorKey: "status",
     header: "Status",

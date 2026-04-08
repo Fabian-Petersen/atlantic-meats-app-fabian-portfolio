@@ -14,18 +14,18 @@ const LogoutButton = ({ className }: Props) => {
       <button
         onClick={handleLogout}
         type="button"
-        className={`${className} px-4 py-2 lg:flex text-sm items-center justify-center text-(--clr-textLight) cursor-pointer rounded-full tracking-wide hover:bg-red-400 hover:shadow hidden  capitalize`}
+        className={`${className} px-4 py-2 lg:flex text-sm items-center justify-center text-(--clr-textLight) cursor-pointer rounded-md tracking-wide bg-red-500/30 border border-red-500 hover:bg-red-500 hover:shadow hidden capitalize`}
       >
-        sign out
+        logout
       </button>
       {/* // Mobile Button */}
       <button
         aria-label="logout button"
         type="button"
         onClick={handleLogout}
-        className="lg:hidden p-2 items-center justify-center rounded-md flex hover:cursor-pointer text-red-600 hover:text-red-500/90"
+        className="flex justify-center items-center lg:hidden hover:cursor-pointer rounded-full bg-white/30 p-1.5 text-red-500"
       >
-        <Power size={24} />
+        <Power size={18} />
       </button>
     </>
   );

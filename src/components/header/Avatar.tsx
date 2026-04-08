@@ -26,7 +26,7 @@ const Avatar: React.FC<AvatarProps> = ({ imageUrl, size = 40 }) => {
         type="button"
         aria-label="avatar-button"
         onClick={() => navigate("/user-profile")}
-        className={`size-${size} flex items-center justify-center rounded-full p-2 text-white font-semibold hover:cursor-pointer`}
+        className={`size-${size} flex items-center justify-center rounded-full p-1.5 text-white font-semibold hover:cursor-pointer`}
       >
         {imageUrl ? (
           <img
@@ -39,7 +39,7 @@ const Avatar: React.FC<AvatarProps> = ({ imageUrl, size = 40 }) => {
             name: userData?.name ?? "",
             surname: userData?.family_name ?? "",
             className:
-              "flex items-center justify-center text-gray-600 dark:text-white font-medium text-md lg:text-[1rem] h-10 w-10 rounded-full bg-menu-btn/40",
+              "flex items-center justify-center font-sans font-semibold text-(--clr-textLight) font-medium text-md lg:text-[1rem] h-8 w-8 rounded-full bg-white/30",
           })
         )}
       </button>

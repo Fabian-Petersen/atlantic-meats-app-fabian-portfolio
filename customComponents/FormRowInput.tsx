@@ -71,6 +71,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
         type={type}
         className={clsx(
           `${className}`,
+          `${placeholder ? "placeholder-shown:" : "placeholder-transparent "}`,
           "text-xs py-3 px-2 peer w-full rounded-md outline-none placeholder-transparent text-gray-700",
           "border border-gray-300 dark:border-gray-700/50 placeholder:dark:text-gray-700 placeholder:text-xs focus:border-rose-600 focus:dark:bg-gray-600",
           "dark:bg-(--bg-secondary_dark) dark:border-(--clr-borderDark) dark:text-(--clr-textDark)",
@@ -95,7 +96,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
         <label
           htmlFor={String(name)}
           className={clsx(
-            "absolute text-xs -top-5 left-0 px-2 mb-0 transition-all duration-400 text-gray-700 tracking-wider",
+            "placeholder-transparent absolute text-xs -top-5 left-0 px-2 mb-0 transition-all duration-400 text-gray-700 tracking-wider",
             "peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-600 peer-focus:-top-5  peer-focus:text-gray-600 peer-focus:text-sm dark:peer-focus:text-gray-400 dark:peer-placeholder-shown:text-fontLight dark:text-gray-100/50",
             Icon ? "left-8 peer-focus:left-3 peer-placeholder-shown:top-0" : "",
           )}

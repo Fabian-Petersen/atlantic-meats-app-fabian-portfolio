@@ -47,30 +47,35 @@ const DeleteItemModal = () => {
   return (
     <form
       onSubmit={handleDelete}
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center px-2"
     >
-      <div className="w-full max-w-lg rounded-md bg-white p-6 shadow-xl backdrop-blur-xl dark:bg-[#1d2739]">
+      <div className="max-w-lg rounded-md bg-white px-4 py-6 md:p-6 shadow-xl backdrop-blur-xl dark:bg-(--bg-primary_dark) dark:border-gray-700/60 dark:border">
         {/* Header */}
-        <div className="flex items-center gap-3">
-          <div className="rounded-md p-2 text-red-500">
+        <div className="flex flex-col items-center gap-3 justify-center w-full">
+          <div className="rounded-full p-4 text-red-500 bg-red-500/20">
             <AlertTriangle size={36} />
           </div>
-          <FormHeading heading="Confirm Delete" />
+          <div className="text-center">
+            <FormHeading
+              heading="Confirm Delete"
+              className="text-md md:text-lg"
+            />
+          </div>
         </div>
 
         {/* Body */}
-        <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-          {`Are you sure you want to delete the ${config.resourceName}? This action cannot be
-          undone.`}
+        <p className="mt-2 text-xs md:text-sm text-gray-600 dark:text-gray-300 text-center">
+          {`Are you sure you want to delete the ${config.resourceName}?
+          This action cannot be undone.`}
         </p>
 
         {/* Actions */}
-        <div className="mt-6 flex flex-col gap-4 lg:flex-row justify-end">
+        <div className="mt-6 flex gap-4 lg:flex-row justify-end">
           <button
             type="button"
             // disabled={isPending}
             onClick={() => setShowDeleteDialog(false)}
-            className="w-full rounded-full bg-red-500 px-6 py-2 transition hover:bg-red-500/90 hover:cursor-pointer text-white disabled:opacity-50 dark:text-gray-200 lg:w-32"
+            className="flex-1 py-2 text-xs font-medium rounded-lg dark:bg-green/20 bg-orange-500/10 border-green/20 hover:bg-orange-500/90 hover:shadow-md text-orange-500 border dark:border-green/30 transition-colors"
           >
             Cancel
           </button>
@@ -78,11 +83,11 @@ const DeleteItemModal = () => {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full rounded-full bg-primary/90 px-6 py-2 text-white transition hover:bg-primary hover:cursor-pointer disabled:opacity-50 lg:w-32"
+            className="flex-1 py-2 text-xs font-medium rounded-lg border border-red-400 dark:border-red-500 text-red-600 bg-red-500/20 dark:bg-red-300/20 dark:text-red-300 hover:bg-gray-50 dark:hover:bg-red/5 transition-colors"
           >
             {isPending ? (
               <div className="w-full flex items-center justify-center text-white">
-                <Spinner className="size-8" />
+                <Spinner className="size-6 md:size-8 text-red-500" />
               </div>
             ) : (
               "Delete"

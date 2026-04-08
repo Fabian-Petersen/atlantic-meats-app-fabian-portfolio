@@ -25,7 +25,7 @@ import { Spinner } from "../ui/spinner";
 
 // $ Context
 import useGlobalContext from "@/context/useGlobalContext";
-import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
+// import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 const ApproveRequestForm = () => {
   const {
@@ -36,7 +36,7 @@ const ApproveRequestForm = () => {
     setSuccessConfig,
   } = useGlobalContext();
 
-  const { data: technicians = [], isPending: isLoading } = useGetTechnicians();
+  const { data: technicians = [] } = useGetTechnicians();
 
   // $ Form Schema
   const {
@@ -63,9 +63,9 @@ const ApproveRequestForm = () => {
 
   if (!showApproveRequestDialog || !selectedRowId) return null;
 
-  if (isLoading) {
-    return <PageLoadingSpinner />;
-  }
+  // if (isLoading) {
+  //   return <PageLoadingSpinner />;
+  // }
 
   // console.log("technicians:", technicians);
   const onSubmit = async (data: ApproveRequestFormValues) => {
@@ -113,14 +113,14 @@ const ApproveRequestForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-4 rounded-lg lg:w-full text-(--clr-font) dark:bg-[#1d2739]"
+      className="flex flex-col rounded-lg lg:w-full text-(--clr-textLight) dark:text-(--clr-textDark) dark:bg-(--bg-primary_dark) dark:border-gray-700/50"
     >
       <div className="grid gap-6 w-full py-4">
         <FormRowSelect
           register={register}
           name="assign_to_group"
           options={assignToGroup}
-          label="Select a Group"
+          placeholder="Select a Group"
           error={errors.assign_to_group}
           // placeholder="Select Group"
         />
@@ -129,32 +129,31 @@ const ApproveRequestForm = () => {
           register={register}
           name="assign_to_sub"
           options={technicians ?? []}
-          label="Assign To"
+          placeholder="Assign To"
           error={errors.assign_to_sub}
           // placeholder={"Assign to technician"}
         />
         <FormRowInput
           register={register}
           type="date"
-          label="Target Date"
-          // placeholder="Select a Target Date"
+          placeholder="Target Date"
           name="targetDate"
           error={errors.targetDate}
           className=""
         />
-        <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 bg-white mt-auto">
+        <div className="flex justify-between w-full gap-2 mt-auto">
           <button
             type="button"
             disabled={isPending}
             onClick={() => setShowApproveRequestDialog(false)}
-            className="text-sm w-full rounded-full bg-red-500 px-6 py-2 transition hover:bg-red-500/90 hover:cursor-pointer text-white disabled:opacity-50 dark:text-gray-200 lg:w-32"
+            className="flex-1 py-2 text-xs font-medium rounded-lg border border-red-200 dark:border-red-500 text-red-600 dark:bg-red-300/20 dark:text-red-300 hover:bg-gray-50 dark:hover:bg-red/5 transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isPending}
-            className="text-sm w-full rounded-full bg-primary/90 px-6 py-2 text-white transition hover:bg-primary hover:cursor-pointer disabled:opacity-50 lg:w-32"
+            className="flex-1 py-2 text-xs font-medium rounded-lg border border-primary bg-primary/20 dark:border-primary text-primary dark:bg-primary/20 dark:text-primary hover:bg-primary/50 dark:hover:bg-primary/5 transition-colors"
           >
             {isPending ? (
               <div className="flex gap-4 items-center justify-center">

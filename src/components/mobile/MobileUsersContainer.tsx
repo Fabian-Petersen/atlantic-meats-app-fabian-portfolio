@@ -19,6 +19,7 @@ export function MobileUsersContainer({ className, data }: Props) {
           key={row.id}
           row={row}
           isOpen={openRowId === row.id}
+          setOpen={setOpenRowId}
           onToggle={() => setOpenRowId(openRowId === row.id ? null : row.id)}
         />
       ))}

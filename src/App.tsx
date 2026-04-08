@@ -67,7 +67,8 @@ function App() {
             }
           >
             <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/user-profile" element={<UserProfilePage />} />
+            {/* // $ Route will show the current signed in user profile page */}
+            <Route path="/admin/user" element={<UserProfilePage />} />
             <Route path="/maintenance-request" element={<JobRequestPage />} />
             <Route
               path="/jobs-list-approved/:id"
@@ -89,13 +90,16 @@ function App() {
               element={<JobsPendingListPage />}
             />
             <Route path="/assets-list" element={<AssetsOverviewPage />} />
+            {/* // $ Page to list an asset by id */}
             <Route path="/asset/:id" element={<AssetsSingleItemPage />} />
             <Route
               path="/jobs-list-pending/:id"
               element={<JobPendingItemPage />}
             />
             <Route path="/asset" element={<CreateAssetPage />} />
+            {/* // $ Page to list all the users */}
             <Route path="/admin/users" element={<UsersListPage />} />
+            {/* // $ Page to show the profile of a user or store */}
             <Route path="/admin/users/:id" element={<StoreProfilePage />} />
           </Route>
           {/* // $ ======================= Maintenance Routes ======================= */}

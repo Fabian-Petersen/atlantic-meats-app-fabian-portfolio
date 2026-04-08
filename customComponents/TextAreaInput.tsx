@@ -41,8 +41,8 @@ const TextAreaInput = <T extends FieldValues>({
         placeholder={placeholder}
         disabled={disabled}
         className={clsx(
-          "text-sm py-3 px-2 peer w-full rounded-md outline-none resize-none text-gray-700",
-          `${placeholder ? "placeholder-shown:" : "placeholder-transparent"}`,
+          "text-xs py-3 px-2 peer w-full rounded-md outline-none resize-none text-gray-700",
+          `${placeholder ? "placeholder-shown:" : "placeholder-transparent "}`,
           "border border-gray-300",
           "resize-none overflow-hidden", // this removes the scrollbar when the textarea grows
           "focus:border-rose-600 focus:dark:bg-gray-600",
@@ -71,6 +71,7 @@ const TextAreaInput = <T extends FieldValues>({
             "text-gray-700 dark:text-gray-100/50 tracking-wider",
             "peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-600",
             "peer-focus:-top-5 peer-focus:text-sm peer-focus:text-gray-600",
+            "placeholder-transparent",
           )}
         >
           {label}

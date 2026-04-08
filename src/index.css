@@ -11,6 +11,7 @@
 
   /* Layout  */
   --lg-navbarHeight: 4rem;
+  --sidebarWidth: 15rem;
   --sm-sidebarHeight: calc(100dvh - var(--sm-navbarHeight));
   --lg-sidebarHeight: calc(100dvh - var(--lg-navbarHeight));
   --minheight-page: calc(100vh-var(--sm-navbarHeight));

@@ -25,17 +25,17 @@ const ThemeToggleButton = ({ className }: Props) => {
         <Button
           type="button"
           onClick={handleClick}
-          className={`${className} hover:cursor-pointer`}
+          className={`${className} hover:cursor-pointer rounded-full bg-white/30 p-1.5`}
         >
-          <Sun size={24} />
+          <Sun size={18} />
         </Button>
       ) : (
         <Button
           type="button"
           onClick={handleClick}
-          className={`${className} hover:cursor-pointer`}
+          className={`${className} hover:cursor-pointer rounded-full bg-white/30 p-1.5`}
         >
-          <Moon size={24} />
+          <Moon size={18} />
         </Button>
       )}
     </div>
