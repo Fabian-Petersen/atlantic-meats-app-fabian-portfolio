@@ -7,9 +7,7 @@ type Priority = "critical" | "high" | "medium" | "low";
 
 export const getJobPendingColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
-  // setShowActionDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
-  // downloadItem: (id: string) => Promise<JobcardPresignedUrlResponse>, // $ not required
   openDeleteDialog: (
     selectedRowId: string,
     config: { resourcePath: Resource; queryKey: readonly unknown[] },
@@ -53,15 +51,15 @@ export const getJobPendingColumns = (
     header: "AssetID",
     enableColumnFilter: true,
   },
-  {
-    accessorKey: "area",
-    header: "Area",
-    enableColumnFilter: true,
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-  },
+  // {
+  //   accessorKey: "area",
+  //   header: "Area",
+  //   enableColumnFilter: true,
+  //   cell: ({ getValue }) => {
+  //     const value = getValue<string>();
+  //     return <p className="capitalize">{value}</p>;
+  //   },
+  // },
   {
     accessorKey: "requested_by",
     header: "Requested By",
@@ -92,26 +90,34 @@ export const getJobPendingColumns = (
     accessorKey: "priority",
     header: "Priority",
     enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return (
+        <p
+          className={`capitalize text-xs ${getConditionClasses(
+            value as Priority,
+          )}`}
+        >
+          {value}
+        </p>
+      );
+    },
   },
   {
     id: "actions",
     header: "Actions",
     enableSorting: false,
     enableHiding: false,
+    size: 20,
+    minSize: 20,
+    maxSize: 100,
+
     cell: ({ row }) => {
       const rowId = row.original.id;
 
       const menuItems = getTableMenuItems({
         rowId: row.original.id,
         setSelectedRowId,
-
-        // action: {
-        //   url: "/maintenance-action",
-        //   onOpen: () => {
-        //     setShowActionDialog(true);
-        //     setSelectedRowId(rowId);
-        //   },
-        // },
 
         edit: {
           url: "/update-request",
@@ -123,7 +129,7 @@ export const getJobPendingColumns = (
 
         delete: {
           config: {
-            resourcePath: "jobs-list-pending",
+            resourcePath: "jobs/pending",
             queryKey: ["maintenanceRequests"],
             resourceName: "request",
           },
@@ -131,7 +137,7 @@ export const getJobPendingColumns = (
         },
 
         comments: {
-          url: `/jobs-list-pending/${rowId}/comments`,
+          url: `/jobs/pending/${rowId}/comments`,
           onOpen: () => {
             setOpenChatSidebar(true);
           },
@@ -147,18 +153,20 @@ export const getJobPendingColumns = (
   },
 ];
 
+// border-red-200 dark:border-red-500 text-red-600 dark:bg-red-300/20 dark:text-red-300
+
 function getConditionClasses(priority: Priority) {
   switch (priority.toLocaleLowerCase()) {
     case "critical":
-      return "text-red-500";
+      return "text-red-600 border-red-300 bg-red-300/30 dark:border-red-500 dark:bg-red-300/20 dark:text-red-300 border min-w-fit w-fit rounded-full text-xs p-[0.135rem] text-center px-[0.40rem]";
     case "high":
-      return "text-purple-500";
+      return "text-purple-600 border-purple-300 bg-purple-300/30 dark:border-purple-500 dark:bg-blue-300/20 dark:text-blue-300 border min-w-fit rounded-full w-fit p-[0.135rem] text-xs text-center";
     case "medium":
-      return "text-blue-500";
+      return "text-blue-600 bg-blue-300 bg-blue-300/30 border dark:border-blue-500 dark:bg-blue-300/20 dark:text-blue-300 max-w-fit rounded-full w-fit p-[0.135rem] text-xs text-center";
     case "low":
-      return "text-green-500";
+      return "text-green-500 bg-green-100 border border-green-500 w-12 rounded-full min-w-fit p-[0.135rem] text-xs text-center";
     default:
-      return "text-gray-400";
+      return "text-gray-400 bg-gray-100 border border-gray-500 max-w-fit rounded-full w-fit p-0.5 text-xs text-center";
   }
 }
 

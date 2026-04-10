@@ -29,26 +29,26 @@ export const maintenanceLinks: NavlinkProps[] = [
   {
     name: "create request",
     icon: Wrench,
-    url: "/maintenance-request",
+    url: "/jobs/requests",
     allowedGroups: ["admin", "user", "technician", "manager"],
   },
   {
     name: "pending approval",
     icon: File,
-    url: "/jobs-list-pending",
+    url: "/jobs/pending",
     allowedGroups: ["admin"],
   },
   {
     name: "open requests",
     icon: File,
-    url: "/jobs-list-approved",
+    url: "/jobs/approved",
     allowedGroups: ["admin", "user", "technician", "manager"],
   },
   {
     name: ({ groups }) =>
       groups.includes("admin") ? "Completed Jobs" : "My Jobs",
     icon: File,
-    url: "/maintenance-actions-list",
+    url: "/jobs/actioned",
     allowedGroups: ["admin", "technician", "manager", "contractor"],
   },
   {
@@ -63,7 +63,7 @@ export const actionLinks: NavlinkProps[] = [
   {
     name: "task history",
     icon: Library,
-    url: "/maintenance-actions-list",
+    url: "/jobs/actioned",
     allowedGroups: ["admin", "technician", "contractor"],
   },
 ] as const;
@@ -72,7 +72,7 @@ export const assetLinks: NavlinkProps[] = [
   {
     name: "create new",
     icon: File,
-    url: "/asset",
+    url: "/assets/create-new-asset", // frontend routes only, POST: /assets for backend
     allowedGroups: ["admin"],
   },
   {
@@ -84,7 +84,7 @@ export const assetLinks: NavlinkProps[] = [
   {
     name: "assets register",
     icon: Library,
-    url: "/assets-list",
+    url: "/assets/list", // frontend routes only, GET: /assets for backend
     allowedGroups: ["admin"],
   },
 ] as const;
@@ -94,13 +94,13 @@ export const profileLinks: NavlinkProps[] = [
   {
     name: "User List",
     icon: Users2,
-    url: "/admin/users",
+    url: "/users",
     allowedGroups: ["admin"],
   },
   {
     name: "User Profile",
     icon: User2,
-    url: "/user-profile",
+    url: "/users/profile",
     allowedGroups: ["admin", "user", "technician", "manager", "contractor"],
   },
 ];

@@ -73,7 +73,7 @@ export function AssetsOverviewTable({ table, className }: Props) {
                   key={row.id}
                   onClick={() => {
                     // console.log("Navigating to ID:", row.original.id);
-                    navigate(`/asset/${row.original.id}`);
+                    navigate(`/assets/${row.original.id}`);
                   }}
                   className="cursor-pointer hover:bg-primary/20 dark:bg-[#1d2739] dark:text-gray-200"
                 >

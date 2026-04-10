@@ -36,7 +36,7 @@ const UsersListPage = () => {
     refetch,
     isPending,
   } = useGetAll<UsersAPIResponse[]>({
-    resourcePath: "admin/users",
+    resourcePath: "users",
     queryKey: ["userRequests"],
   });
   // console.log("users:", users);
@@ -90,18 +90,18 @@ const UsersListPage = () => {
         title="Failed to load users"
         message="Please check your connection and try again."
         onRetry={refetch}
-        redirect="/admin/users"
+        redirect="/users"
       />
     );
 
   return (
-    <div className="flex w-full lg:p-4 h-auto border-2 border-red-500 border-dashed">
+    <div className="flex w-full lg:p-4 h-auto">
       <div className="bg-white dark:bg-(--clr-bgDark) lg:flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto hidden">
         <FormHeading className="mx-auto dark:text-gray-100" heading="Users" />
         <GenericTable
           data={users}
           columns={columns}
-          rowPath={`/admin/users`}
+          rowPath={`/users`}
           className="hidden md:flex flex-col gap-2"
           searchPlaceholderText="search users"
           emptyTablePlaceholderText="No users listed"

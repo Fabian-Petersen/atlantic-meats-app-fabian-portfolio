@@ -18,7 +18,7 @@ function StoreProfilePage() {
   } = useById<UsersAPIResponse>({
     id: selectedRowId ?? "",
     queryKey: ["userRequests", "user"],
-    resourcePath: "admin/users",
+    resourcePath: "users",
   });
 
   if (isPending) {

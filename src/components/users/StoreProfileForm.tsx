@@ -37,7 +37,7 @@ function StoreProfileForm({ user }: UserProfileProps) {
   }, []);
 
   const { mutateAsync: updateItem, isPending } = useUpdateItem({
-    resourcePath: "admin/users",
+    resourcePath: "users",
     queryKey: ["userRequests", "user"],
   });
 
@@ -68,7 +68,7 @@ function StoreProfileForm({ user }: UserProfileProps) {
 
     setSuccessConfig({ message: `Sucessfully updated user ${user.name}` });
     setShowSuccess(true);
-    navigate("/admin/users");
+    navigate("/users");
     try {
       await updateItem({ id: user.id ?? "", payload: payload });
     } catch (error) {
@@ -136,7 +136,7 @@ function StoreProfileForm({ user }: UserProfileProps) {
         <Button
           className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white capitalize"
           type="button"
-          onClick={() => navigate("/admin/users")}
+          onClick={() => navigate("/users")}
           variant="cancel"
           size="lg"
         >

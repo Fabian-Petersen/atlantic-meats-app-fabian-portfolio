@@ -22,14 +22,14 @@ function RequestApproval() {
   } = useGlobalContext();
 
   const { mutateAsync: approveRequest, isPending: isApproved } = usePOST({
-    resourcePath: "job-request-approved",
-    queryKey: ["maintenanceRequest"],
+    resourcePath: "jobs/requests/approved",
+    queryKey: ["maintenanceRequest", "approved"],
   });
 
   const { data: item, isPending } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
     queryKey: ["MaintenanceRequests"],
-    resourcePath: "jobs-list-pending",
+    resourcePath: "jobs/pending",
   });
 
   const navigate = useNavigate();
@@ -58,7 +58,7 @@ function RequestApproval() {
       const response = await approveRequest(payload);
       console.log("approve-request:", response);
       toast.success("The itemm was sucessfully rejected");
-      navigate("/jobs-list-approved");
+      navigate("/jobs/approved");
     } catch (error) {
       console.log(error);
     }

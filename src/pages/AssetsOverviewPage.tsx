@@ -36,7 +36,7 @@ const AssetsOverviewPage = () => {
 
   const ASSETS_REQUESTS_KEY = ["assetRequests"];
   const { data, isPending, isError, refetch } = useGetAll<AssetAPIResponse[]>({
-    resourcePath: "assets-list",
+    resourcePath: "assets",
     queryKey: ASSETS_REQUESTS_KEY,
   });
 

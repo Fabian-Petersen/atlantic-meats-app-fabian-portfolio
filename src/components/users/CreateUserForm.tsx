@@ -37,7 +37,7 @@ function CreateUserForm() {
 
   // $ Calling the usePOST hook to fetch the data
   const { mutateAsync, isError, isPending } = usePOST({
-    resourcePath: "admin/users",
+    resourcePath: "users",
     queryKey: ["userRequests"],
   });
 

@@ -109,8 +109,8 @@ export default function MobileRequestApproval({
   const navigate = useNavigate();
 
   const { mutateAsync: approveRequest, isPending } = usePOST({
-    resourcePath: "job-request-approved",
-    queryKey: ["maintenanceRequest"],
+    resourcePath: "jobs/requests/approved",
+    queryKey: ["maintenanceRequest", "approved"],
   });
 
   const handleSubmit = async () => {
@@ -124,7 +124,7 @@ export default function MobileRequestApproval({
       await approveRequest(payload);
       // console.log("approve-request:", response);
       toast.success("The itemm was sucessfully rejected");
-      navigate("/jobs-list-approved");
+      navigate("/jobs/approved");
     } catch (error) {
       console.log(error);
     }
@@ -136,7 +136,7 @@ export default function MobileRequestApproval({
       <div className="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700/60 px-4 py-3 flex items-center justify-between gap-3">
         <button
           type="button"
-          onClick={() => navigate("/jobs-list-pending")}
+          onClick={() => navigate("/jobs/pending")}
           className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
@@ -266,7 +266,7 @@ export default function MobileRequestApproval({
         <div className="flex gap-2">
           <button
             type="button"
-            onClick={() => navigate("/jobs-list-pending")}
+            onClick={() => navigate("/jobs/pending")}
             className="flex-1 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
           >
             Cancel

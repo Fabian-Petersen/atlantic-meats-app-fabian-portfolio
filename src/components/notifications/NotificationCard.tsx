@@ -26,7 +26,7 @@ export default function NotificationCard({ row }: MaintenanceRequestCardProps) {
       <button
         type="button"
         className="hover:cursor-pointer w-full text-left px-4 py-3 flex flex-col gap-3 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
-        onClick={() => navigate(`/jobs-list-pending/${row.id}`)}
+        onClick={() => navigate(`/jobs/pending/${row.id}`)}
       >
         {/* Location + meta row */}
         <div className="flex justify-between min-w-0">

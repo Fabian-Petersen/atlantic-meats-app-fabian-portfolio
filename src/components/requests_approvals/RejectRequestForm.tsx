@@ -49,7 +49,7 @@ const RequestRejectedForm = () => {
   });
 
   const { mutateAsync: rejectItem, isPending } = usePOST({
-    resourcePath: `job-request-rejected` as Resource,
+    resourcePath: `jobs/requests/rejected` as Resource,
     queryKey: ["maintenanceRequests"] as const,
   });
 
@@ -73,13 +73,13 @@ const RequestRejectedForm = () => {
       setSuccessConfig({
         title: "Success",
         message: "The Request was Rejected!!!",
-        resourcePath: "jobs-list-pending",
+        resourcePath: "jobs/pending",
       });
       setShowSuccess(true);
 
       // $ Navigate back to the requests list page after successfull submit
       setTimeout(() => {
-        navigate("/jobs-list-pending");
+        navigate("/jobs/pending");
       }, 1500);
     } catch (error) {
       console.log(error);

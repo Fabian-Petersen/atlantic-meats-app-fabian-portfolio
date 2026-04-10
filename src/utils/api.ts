@@ -19,24 +19,30 @@ import type {
 import type { CommentRequestFormValues } from "@/schemas/commentSchemas";
 
 export type Resource =
-  | "asset" // POST & DELETE, PUT, GET assetById
-  | "assets-list" // GET all assets
-  | "maintenance-action" // POST & DELETE, GET
-  | "maintenance-actions-list" // GET all actions
-  | "maintenance-jobcard" // GET jobcardById
-  | "maintenance-request" // POST & DELETE, GET requestsById
-  | "jobs-list" // GET all maintenance requests
-  | "jobs-list-pending" // GET all pending approval requests
-  | "jobs-list-approved" // GET all approved requests
-  | "comment" // POST a comment
-  | "technician-list" // Get the list of technicians
-  | "job-request-rejected"
-  | "job-request-approved"
-  | "admin/users"
-  | `admin/users/resend-temp-password/${string}`
-  | "admin/users/confirm_user_signup" // handle the user status update after initial login. Trigger PostConfirmationTrigger lambda
-  | `admin/users/${string}`
-  | "admin/user"; // Get user details by id
+  // $Jobs ROUTES
+  | "jobs" // "jobs-list" GET all maintenance requests
+  | "jobs/requests" // "maintenance-request" POST a maintenance request
+  | "jobs/requests/approved" // "job-request-approved"
+  | "jobs/requests/rejected" // job-request-rejected
+  | "jobs/pending" // "jobs-list-pending" :  GET all pending approval requests
+  | "jobs/approved" //"jobs-list-approved" : GET all approved requests
+  | "jobs/actioned" // "maintenance-actions-list" GET all actions "maintenance-action" POST & DELETE, GET
+  | "jobs/completed" // "NOT in use"
+  | "jobs/jobcard" // "maintenance-jobcard" GET jobcardById
+  // $ Assets ROUTES
+  | "assets" // "assets-list" GET all assets assets/{assetId} to DELETE, PUT, GET assetById
+  | "assets/location" // NOT in use : Get all assets by location
+  // $ Users ROUTES
+  | "users/get-current-user" // Get user details by id
+  | "users" // "admin/users" GET all users
+  | "users/technicians" // "technician-list" Get the list of technicians
+  | "users/contractors" // Not in use: Get the list of technicians
+  // $ Users ROUTES
+  | "comments" // POST a comment
+  // $ admin ROUTES
+  | "admin/confirm_user_signup" // handle the user status update after initial login. Trigger PostConfirmationTrigger lambda
+  | `admin/resend-temp-password/${string}`
+  | `admin/${string}`;
 
 // $ Combine the types into a union type for the generic functions
 export type RequestType =
@@ -250,7 +256,7 @@ export const useCreateNewAsset = () => {
 
   return useMutation({
     mutationFn: async (payload: CreateAssetPayload) => {
-      const { data } = await apiClient.post("/asset", payload, {
+      const { data } = await apiClient.post("/assets", payload, {
         headers: { "Content-Type": "application/json" },
       });
       return data;

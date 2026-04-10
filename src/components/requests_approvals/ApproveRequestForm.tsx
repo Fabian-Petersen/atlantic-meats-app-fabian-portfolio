@@ -57,8 +57,8 @@ const ApproveRequestForm = () => {
   });
 
   const { mutateAsync: approveItem, isPending } = usePOST({
-    resourcePath: `job-request-approved` as Resource,
-    queryKey: ["maintenanceRequests"] as const,
+    resourcePath: `jobs/requests/approved` as Resource,
+    queryKey: ["maintenanceRequests", "approved"] as const,
   });
 
   if (!showApproveRequestDialog || !selectedRowId) return null;
@@ -94,7 +94,7 @@ const ApproveRequestForm = () => {
       setSuccessConfig({
         title: "Success",
         message: "The Request was Successfully Approved!!!",
-        resourcePath: "jobs-list-approved",
+        resourcePath: "jobs/approved",
       });
       setShowSuccess(true);
 

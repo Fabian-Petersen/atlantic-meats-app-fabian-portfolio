@@ -9,7 +9,7 @@ function UserProfilePage() {
   const { data: user, isPending, isError } = useGetUser();
   const { showUserProfileDialog } = useGlobalContext();
 
-  console.log("user:", user);
+  // console.log("user:", user);
 
   if (isPending) return <PageLoadingSpinner />;
   if (isError)

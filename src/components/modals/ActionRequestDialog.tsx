@@ -22,7 +22,7 @@ function ActionRequestDialog() {
 
   const { data: job } = useById<JobAPIResponse>({
     id: selectedRowId!,
-    resourcePath: "jobs-list-pending",
+    resourcePath: "jobs/pending",
     queryKey: ["MaintenanceRequests"],
   });
 

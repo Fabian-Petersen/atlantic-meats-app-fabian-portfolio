@@ -44,7 +44,7 @@ export const getMaintenanceTableMenuItems = (
   },
   {
     id: "2",
-    url: "/maintenance-action",
+    url: "/jobs/actioned",
     label: "Action",
     icon: Wrench,
     onClick: () => {
@@ -58,7 +58,7 @@ export const getMaintenanceTableMenuItems = (
     icon: Trash2Icon,
     onClick: () => {
       openDeleteDialog(rowId, {
-        resourcePath: "jobs-list-pending",
+        resourcePath: "jobs/pending",
         queryKey: ["MAINTENANCE_DELETE_KEY"] as const,
       });
       setSelectedRowId(rowId);
@@ -67,7 +67,7 @@ export const getMaintenanceTableMenuItems = (
   {
     id: "4",
     label: "Download",
-    url: "/maintenance-jobcard",
+    url: "/jobs/jobcard",
     icon: DownloadIcon,
     onClick: () => {
       downloadItem(rowId);
@@ -76,7 +76,7 @@ export const getMaintenanceTableMenuItems = (
   {
     id: "5",
     label: "Comments",
-    url: `/jobs-list-pending/${rowId}/comments`,
+    url: `/jobs/pending/${rowId}/comments`,
     icon: MessageSquare,
     onClick: () => {
       setOpenChatSidebar(true);

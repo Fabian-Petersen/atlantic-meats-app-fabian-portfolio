@@ -45,12 +45,12 @@ const MaintenanceRequestForm = () => {
     CreateJobPayload,
     { presigned_urls: PresignedUrlResponse }
   >({
-    resourcePath: "maintenance-request",
+    resourcePath: "jobs/requests",
     queryKey: ["maintenanceRequests"],
   });
 
   const { data } = useGetAll<AssetRequestFormValues[]>({
-    resourcePath: "assets-list",
+    resourcePath: "assets",
     queryKey: ["getAllAssets"],
   });
 
@@ -154,7 +154,7 @@ const MaintenanceRequestForm = () => {
       toast.success("Maintenance request created successfully!", {
         duration: 1000,
       });
-      navigate("/jobs-list-pending");
+      navigate("/jobs/pending");
     } catch (err) {
       console.error("Failed to create maintenance request", err);
       toast.error(
@@ -263,7 +263,7 @@ const MaintenanceRequestForm = () => {
           <Button
             type="button"
             onClick={() => {
-              navigate("/jobs-list-pending");
+              navigate("/jobs/pending");
             }}
             variant="cancel"
             size="lg"

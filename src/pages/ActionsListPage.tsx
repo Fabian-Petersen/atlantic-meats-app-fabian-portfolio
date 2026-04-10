@@ -21,12 +21,12 @@ const ActionsListPage = () => {
   const ACTIONS_REQUESTS_KEY = ["actionRequests"];
 
   const { data, isPending, isError, refetch } = useGetAll<ActionAPIResponse[]>({
-    resourcePath: "maintenance-actions-list",
+    resourcePath: "jobs/actioned",
     queryKey: ACTIONS_REQUESTS_KEY,
   });
 
   const { mutateAsync: downloadItem } = useDownloadPdf({
-    resourcePath: "maintenance-jobcard",
+    resourcePath: "jobs/jobcard",
   });
 
   const { setSelectedRowId, setOpenChatSidebar } = useGlobalContext();

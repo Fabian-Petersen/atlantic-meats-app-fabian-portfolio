@@ -138,7 +138,7 @@ const CreateAssetForm = () => {
       );
 
       toast.success("Asset successfully created!", { duration: 1000 });
-      navigate("/assets-list"); // $ temporary disabled navigation
+      navigate("/assets/list"); // $ temporary disabled navigation
     } catch (err) {
       handleError(err);
     }
@@ -238,7 +238,7 @@ const CreateAssetForm = () => {
         <Button
           type="button"
           onClick={() => {
-            navigate("/assets-list");
+            navigate("/assets");
           }}
           variant="cancel"
           size="lg"

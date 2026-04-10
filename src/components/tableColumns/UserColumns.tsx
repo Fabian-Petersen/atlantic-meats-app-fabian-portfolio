@@ -114,13 +114,13 @@ export const getUserColumns = (
         userStatus: row.original.status,
 
         create: {
-          url: "/admin/users",
+          url: "/users",
           onOpen: () => {
             setShowCreateUserDialog(true);
           },
         },
         edit: {
-          url: `/admin/users/${rowId}`,
+          url: `/users/${rowId}`,
           onOpen: () => {
             // setShowUpdateUserDialog(true);
             setSelectedRowId(rowId);
@@ -129,7 +129,7 @@ export const getUserColumns = (
 
         delete: {
           config: {
-            resourcePath: "admin/users",
+            resourcePath: "users",
             queryKey: ["userRequests"],
             resourceName: "user",
           },

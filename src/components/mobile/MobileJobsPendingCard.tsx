@@ -33,8 +33,8 @@ export default function MobileJobsPendingCard({
   } = useGlobalContext();
 
   const { mutateAsync: approveRequest, isPending } = usePOST({
-    resourcePath: "job-request-approved",
-    queryKey: ["maintenanceRequest"],
+    resourcePath: "jobs/requests/approved",
+    queryKey: ["maintenanceRequest", "approved"],
   });
 
   const handleSubmit = async () => {
@@ -48,7 +48,7 @@ export default function MobileJobsPendingCard({
       await approveRequest(payload);
       // console.log("approve-request:", response);
       toast.success("The itemm was sucessfully rejected");
-      navigate("/jobs-list-approved");
+      navigate("/jobs/approved");
     } catch (error) {
       console.log(error);
     }
@@ -124,7 +124,7 @@ export default function MobileJobsPendingCard({
               className="flex-1 py-2 text-xs font-medium rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/jobs-list-pending/${row.original.id}`);
+                navigate(`/jobs/pending/${row.original.id}`);
                 setSelectedRowId(row.original.id);
               }}
             >

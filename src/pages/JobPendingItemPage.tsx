@@ -23,7 +23,7 @@ const JobPendingItemPage = () => {
   const { data: item } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
     queryKey: ["maintenanceRequests"],
-    resourcePath: "jobs-list-pending",
+    resourcePath: "jobs/pending",
   });
 
   // console.log("item:", item);
@@ -39,7 +39,7 @@ const JobPendingItemPage = () => {
   const images = item.images;
 
   return (
-    <div className="">
+    <div className="p-4">
       {showSuccess ? <Success /> : undefined}
       <div className="hidden h-auto bg-white dark:bg-[#1d2739] border-gray-700/70 rounded-md lg:grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800 p-4">
         <div>

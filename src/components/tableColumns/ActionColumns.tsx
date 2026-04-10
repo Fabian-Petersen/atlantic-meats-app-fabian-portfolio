@@ -137,13 +137,13 @@ export const getJobActionColumns = (
         request_id: row.original.request_id,
         setSelectedRowId,
         download: {
-          url: "/maintenance-jobcard",
+          url: "/jobs/jobcard",
           onDownload: () => {
             downloadItem(rowId);
           },
         },
         comments: {
-          url: `/maintenance-request/${request_id}/comments`,
+          url: `/comments/${request_id}`,
           onOpen: () => {
             setOpenChatSidebar(true);
           },

@@ -52,7 +52,7 @@ function AssetSingleItemInfo({ item }: Props) {
           <Button
             type="button"
             onClick={() => {
-              navigate("/assets-list");
+              navigate("/assets");
             }}
             variant="cancel"
             size="xl"

@@ -25,7 +25,7 @@ import { SearchInput } from "@/components/features/SearchInput";
 
 const JobsPendingListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<JobAPIResponse[]>({
-    resourcePath: "jobs-list-pending",
+    resourcePath: "jobs/pending",
     queryKey: ["maintenanceRequests", "pending"],
   });
 
@@ -82,9 +82,9 @@ const JobsPendingListPage = () => {
         <GenericTable
           data={data}
           columns={columns}
-          rowPath="/jobs-list-pending"
+          rowPath="/jobs/pending"
           addButton={true}
-          addButtonPath="/maintenance-request"
+          addButtonPath="/jobs/requests"
         />
       </div>
       {/* // $ Mobile View */}

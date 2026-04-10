@@ -124,7 +124,7 @@ export function MobileUsersCard({ row, isOpen, setOpen, onToggle }: Props) {
               onClick={(e) => {
                 e.stopPropagation();
                 setDeleteConfig({
-                  resourcePath: `admin/users`,
+                  resourcePath: `users`,
                   queryKey: ["userRequests"],
                   resourceName: "user",
                 });
@@ -140,7 +140,7 @@ export function MobileUsersCard({ row, isOpen, setOpen, onToggle }: Props) {
               onClick={(e) => {
                 e.stopPropagation();
                 setSelectedRowId(row.original.id);
-                navigate(`/admin/users/${row.original.id}`);
+                navigate(`/users/${row.original.id}`);
               }}
             >
               Update

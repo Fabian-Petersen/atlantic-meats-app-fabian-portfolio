@@ -31,7 +31,7 @@ export default function LoginContainer() {
   const { refetch } = useUserAttributes();
 
   const { mutateAsync: confirmUserSignup } = usePOST<void, void>({
-    resourcePath: "admin/users/confirm_user_signup",
+    resourcePath: "admin/confirm_user_signup",
     queryKey: ["userRequests", "status_update"],
   });
 

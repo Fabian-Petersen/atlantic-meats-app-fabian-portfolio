@@ -49,7 +49,7 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
               onClick={(e) => {
                 e.stopPropagation();
                 // console.log(row.original.id);
-                navigate(`/asset/${row.original.id}`);
+                navigate(`/assets/${row.original.id}`);
                 setSelectedRowId(row.original.id);
               }}
             >
@@ -61,7 +61,7 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
               onClick={(e) => {
                 e.stopPropagation();
                 console.log(row.original.id);
-                navigate(`/asset/${row.original.id}`);
+                navigate(`/assets/${row.original.id}`);
                 setSelectedRowId(row.original.id);
                 //   console.log(actionData);
               }}
@@ -74,7 +74,7 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
               onClick={(e) => {
                 e.stopPropagation();
                 console.log(row.original.id);
-                navigate(`/asset/${row.original.id}`);
+                navigate(`/assets/${row.original.id}`);
                 setSelectedRowId(row.original.id);
               }}
             >

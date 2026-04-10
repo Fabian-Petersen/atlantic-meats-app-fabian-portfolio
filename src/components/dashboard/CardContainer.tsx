@@ -31,13 +31,13 @@ const Cards = () => {
 
   // $ Pending Requests Data
   const { data: pendingJobs = [], isPending } = useGetAll<JobAPIResponse[]>({
-    resourcePath: "jobs-list-pending",
+    resourcePath: "jobs/pending",
     queryKey: ["maintenanceRequests", "pending"],
   });
 
   // $ Approved Requests Data
   const { data: approvedJobs = [] } = useGetAll<JobApprovedAPIResponse[]>({
-    resourcePath: "jobs-list-approved",
+    resourcePath: "jobs/approved",
     queryKey: ["maintenanceRequests", "approved"],
   });
 
@@ -49,7 +49,7 @@ const Cards = () => {
 
   // $ Actions Data
   const { data: actions = [] } = useGetAll<ActionAPIResponse[]>({
-    resourcePath: "maintenance-actions-list",
+    resourcePath: "jobs/actioned",
     queryKey: ["actionRequests"],
   });
 
@@ -83,7 +83,7 @@ const Cards = () => {
     <div
       className="
         grid w-full
-        grid-cols-2 lg:grid-cols-4 gap-2"
+        grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4"
     >
       {/* {isPending ? (
         <div className="col-span-full place-items-center">

@@ -68,39 +68,30 @@ function App() {
           >
             <Route path="/dashboard" element={<DashboardPage />} />
             {/* // $ Route will show the current signed in user profile page */}
-            <Route path="/admin/user" element={<UserProfilePage />} />
-            <Route path="/maintenance-request" element={<JobRequestPage />} />
+            <Route path="/users/profile" element={<UserProfilePage />} />
+            <Route path="/jobs/requests" element={<JobRequestPage />} />
             <Route
-              path="/jobs-list-approved/:id"
+              path="/jobs/approved/:id"
               element={<JobApprovedItemPage />}
             />
-            <Route
-              path="/jobs-list-approved"
-              element={<JobsApprovedListPage />}
-            />
-            <Route
-              path="/maintenance-action/:id"
-              element={<JobActionItemPage />}
-            />
+            <Route path="/jobs/approved" element={<JobsApprovedListPage />} />
+            <Route path="/jobs/actioned/:id" element={<JobActionItemPage />} />
           </Route>
           {/* // % Admin only Routes */}
           <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>
-            <Route
-              path="/jobs-list-pending"
-              element={<JobsPendingListPage />}
-            />
-            <Route path="/assets-list" element={<AssetsOverviewPage />} />
+            <Route path="jobs/pending" element={<JobsPendingListPage />} />
+            <Route path="/assets/list" element={<AssetsOverviewPage />} />
             {/* // $ Page to list an asset by id */}
-            <Route path="/asset/:id" element={<AssetsSingleItemPage />} />
+            <Route path="/assets/:id" element={<AssetsSingleItemPage />} />
+            <Route path="/jobs/pending/:id" element={<JobPendingItemPage />} />
             <Route
-              path="/jobs-list-pending/:id"
-              element={<JobPendingItemPage />}
+              path="/assets/create-new-asset"
+              element={<CreateAssetPage />}
             />
-            <Route path="/asset" element={<CreateAssetPage />} />
             {/* // $ Page to list all the users */}
-            <Route path="/admin/users" element={<UsersListPage />} />
+            <Route path="/users" element={<UsersListPage />} />
             {/* // $ Page to show the profile of a user or store */}
-            <Route path="/admin/users/:id" element={<StoreProfilePage />} />
+            <Route path="/users/:id" element={<StoreProfilePage />} />
           </Route>
           {/* // $ ======================= Maintenance Routes ======================= */}
           {/* //% admin, technician, contractor Routes */}
@@ -111,14 +102,8 @@ function App() {
               />
             }
           >
-            <Route
-              path="/maintenance-action/:id"
-              element={<JobActionItemPage />}
-            />
-            <Route
-              path="/maintenance-actions-list"
-              element={<ActionsListPage />}
-            />
+            <Route path="/jobs/actioned/:id" element={<JobActionItemPage />} />
+            <Route path="/jobs/actioned" element={<ActionsListPage />} />
           </Route>
         </Route>
       </Route>

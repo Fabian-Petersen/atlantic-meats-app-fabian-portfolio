@@ -4,7 +4,7 @@ import { type AssetRequestFormValues } from "../schemas";
 
 export const useGetAssetList = () => {
   const { data, isPending, isError } = useGetAll<AssetRequestFormValues>({
-    resourcePath: "asset",
+    resourcePath: "assets",
     queryKey: ["getAllAssets"],
   });
 

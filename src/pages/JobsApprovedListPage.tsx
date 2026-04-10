@@ -31,7 +31,7 @@ const JobsApprovedListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<
     JobApprovedAPIResponse[]
   >({
-    resourcePath: "jobs-list-approved",
+    resourcePath: "jobs/approved",
     queryKey: ["maintenanceRequests", "approved"],
   });
 
@@ -95,7 +95,7 @@ const JobsApprovedListPage = () => {
         <GenericTable
           data={data}
           columns={columns}
-          rowPath="/jobs-list-approved"
+          rowPath="/jobs/approved"
           className="hidden md:flex flex-col gap-2"
           searchPlaceholderText="search jobs"
           rowClassName={(row) => {

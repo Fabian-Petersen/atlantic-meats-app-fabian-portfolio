@@ -125,7 +125,7 @@ export function MobileJobsApprovedCard({ row, isOpen, onToggle }: Props) {
               className="flex-1 py-2 text-xs font-medium rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/jobs-list-approved/${row.original.id}`);
+                navigate(`/jobs/approved/${row.original.id}`);
                 setSelectedRowId(row.original.id);
               }}
             >
@@ -136,7 +136,7 @@ export function MobileJobsApprovedCard({ row, isOpen, onToggle }: Props) {
               className="flex-1 py-2 text-xs font-medium rounded-lg dark:bg-green/20 bg-green-500/10 border-green/20 hover:bg-green-500/90 hover:shadow-md text-green-500 border dark:border-green/30 transition-colors "
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/maintenance-action/${row.original.id}`);
+                navigate(`/jobs/actioned/${row.original.id}`);
               }}
             >
               Action

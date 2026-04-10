@@ -20,7 +20,7 @@ function JobPendingSingleItemInfo() {
   const { data: item, isPending } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
     queryKey: ["maintenanceRequests"],
-    resourcePath: "jobs-list-pending",
+    resourcePath: "jobs/pending",
   });
   const navigate = useNavigate();
 
@@ -89,7 +89,7 @@ function JobPendingSingleItemInfo() {
           <Button
             type="button"
             onClick={() => {
-              navigate("/jobs-list-pending");
+              navigate("/jobs/pending");
             }}
             variant="cancel"
             size="xl"
@@ -103,7 +103,7 @@ function JobPendingSingleItemInfo() {
             size="xl"
             className="flex-1"
             onClick={() => {
-              navigate(`/maintenance-action/${item?.id}`);
+              navigate(`/jobs/actioned/${item?.id}`);
             }}
           >
             Action

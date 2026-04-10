@@ -119,7 +119,7 @@ export const getJobApprovedColumns = (
         setSelectedRowId,
 
         action: {
-          url: "/maintenance-action",
+          url: "/jobs/actioned",
           onOpen: () => {
             setShowActionDialog(true);
             setSelectedRowId(rowId);
@@ -136,7 +136,7 @@ export const getJobApprovedColumns = (
 
         delete: {
           config: {
-            resourcePath: "jobs-list-pending",
+            resourcePath: "jobs/pending",
             queryKey: ["maintenanceApprovedRequests"],
             resourceName: "request",
           },
@@ -144,7 +144,7 @@ export const getJobApprovedColumns = (
         },
 
         comments: {
-          url: `/jobs-list-pending/${rowId}/comments`,
+          url: `/jobs/pending/${rowId}/comments`,
           onOpen: () => {
             setOpenChatSidebar(true);
           },
