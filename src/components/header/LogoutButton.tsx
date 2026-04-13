@@ -14,7 +14,7 @@ const LogoutButton = ({ className }: Props) => {
       <button
         onClick={handleLogout}
         type="button"
-        className={`${className} px-4 py-2 lg:flex text-sm items-center justify-center text-(--clr-textLight) cursor-pointer rounded-md tracking-wide bg-red-500/30 border border-red-500 hover:bg-red-500 hover:shadow hidden capitalize`}
+        className={`${className} px-4 py-2 lg:flex text-sm items-center justify-center text-(--clr-textLight) cursor-pointer rounded-md tracking-wide bg-red-500/30 border border-red-500 hover:bg-red-500/55 hover:shadow hidden capitalize`}
       >
         logout
       </button>

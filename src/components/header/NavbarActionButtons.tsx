@@ -2,15 +2,16 @@ import ThemeToggleButton from "@/components/header/ThemeToggleButton";
 import LogoutButton from "./LogoutButton";
 import Avatar from "./Avatar";
 import NotificationButton from "../notifications/NotificationButton";
-// import UserDetails from "./UserDetails";
+import UserDetails from "./UserDetails";
 
 const NavbarActionButtons = () => {
   return (
     <div className="flex items-center justify-center gap-2 px-2">
-      <LogoutButton />
+      <UserDetails />
       <ThemeToggleButton />
       <NotificationButton />
       <Avatar />
+      <LogoutButton />
     </div>
   );
 };

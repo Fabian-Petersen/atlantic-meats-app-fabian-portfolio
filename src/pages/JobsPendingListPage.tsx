@@ -50,6 +50,7 @@ const JobsPendingListPage = () => {
     setOpenChatSidebar,
   );
 
+  // $ This data is passed into the mobile component
   const table = useReactTable({
     data: data ?? [],
     columns: columns,

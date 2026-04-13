@@ -50,9 +50,8 @@ function FormRowSelect<T extends FieldValues>({
         multiple={multiple}
         className={clsx(
           "text-xs py-3 px-2 peer w-full rounded-md outline-none text-gray-700",
-          "border border-gray-300 focus:border-rose-600 capitalize",
+          "border border-gray-300 focus:border-rose-500 capitalize",
           "dark:bg-(--bg-secondary_dark) dark:border-(--clr-borderDark) dark:text-(--clr-textDark)",
-          // isValid && "border-green-500",
           error && "border-red-400",
         )}
         defaultValue={multiple ? defaultValues || [] : ""}
@@ -68,7 +67,7 @@ function FormRowSelect<T extends FieldValues>({
         required={required}
       >
         {!multiple && (
-          <option value="" disabled>
+          <option value="" disabled hidden>
             {placeholder}
           </option>
         )}
@@ -77,7 +76,7 @@ function FormRowSelect<T extends FieldValues>({
           const label = typeof option === "string" ? option : option.label;
 
           return (
-            <option key={value} value={value}>
+            <option key={value} value={value} className="hover:cursor-pointer">
               {label}
             </option>
           );
@@ -87,11 +86,10 @@ function FormRowSelect<T extends FieldValues>({
         <label
           htmlFor={String(name)}
           className={clsx(
-            "absolute text-xs -top-5 left-0 transition-all duration-400 text-gray-400 dark:text-gray-100/20",
-            "peer-placeholder-shown:top-3 px-2 mb-0 peer-placeholder-shown:text-gray-600",
-            "dark:peer-placeholder-shown:text-gray-100",
+            "absolute text-xs -top-5 left-0 transition-all duration-400 text-gray-400 dark:text-gray-100/20 px-2 mb-0",
             "peer-focus:-top-5 peer-focus:text-gray-600 peer-focus:text-xs tracking-wider",
             "dark:peer-focus:text-blue-300 dark:text-gray-100/30",
+            "placeholder-transparent",
           )}
         >
           {label}

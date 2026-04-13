@@ -69,7 +69,7 @@ export type ResponseType =
 // $ Query Keys
 // $ =========================
 const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
-const ASSETS_REQUESTS_KEY = ["assetRequests"];
+const ASSETS_REQUESTS_KEY = ["getAssetsList", "assets"];
 // const USERS = ["userRequests"];
 // const ACTION_REQUESTS_KEY = ["actionRequests"];
 // const POST_COMMENT = ["CommentsKey"];

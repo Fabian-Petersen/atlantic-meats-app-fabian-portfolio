@@ -38,10 +38,11 @@ import { toast } from "sonner";
 import { usePOST } from "@/utils/api";
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
 import { useGetAll } from "@/utils/api";
+import { Spinner } from "../ui/spinner";
 
 const MaintenanceRequestForm = () => {
   // $ Calling the usePOST hook to fetch the data
-  const { mutateAsync, isError } = usePOST<
+  const { mutateAsync, isError, isPending } = usePOST<
     CreateJobPayload,
     { presigned_urls: PresignedUrlResponse }
   >({
@@ -68,18 +69,18 @@ const MaintenanceRequestForm = () => {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<JobRequestFormValues>({
-    defaultValues: {
-      location: "Maitland",
-      type: "corrective",
-      priority: "high",
-      equipment: "band saw",
-      impact: "production",
-      jobComments: "Testing request comments - band saw not switching on",
-      description: "Testing workflow 20260331",
-      area: "processing room",
-      assetID: "RT-0015",
-      images: [],
-    },
+    // defaultValues: {
+    //   location: "Maitland",
+    //   type: "corrective",
+    //   priority: "High",
+    //   equipment: "band saw",
+    //   impact: "production",
+    //   jobComments: "Testing request comments - band saw not switching on",
+    //   description: "Testing workflow 20260331",
+    //   area: "processing room",
+    //   assetID: "RT-0015",
+    //   images: [],
+    // },
     resolver: zodResolver(
       jobRequestSchema,
     ) as unknown as Resolver<JobRequestFormValues>,
@@ -172,18 +173,19 @@ const MaintenanceRequestForm = () => {
       className="flex flex-col rounded-lg lg:w-full text-(--clr-textLight) dark:bg-(--bg-primary_dark)"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-4 w-full lg:py-4">
         <TextAreaInput
           name="description"
           register={register}
+          placeholder="Enter a job description"
           // control={control}
           rows={1}
-          label="Description"
+          // label="Description"
           className="lg:col-span-2"
           error={errors.description}
         />
         <FormRowSelect
-          label="Location"
+          // label="Location"
           name="location"
           options={locationOptions}
           placeholder="Select Location"
@@ -192,7 +194,7 @@ const MaintenanceRequestForm = () => {
           className="capitalize"
         />
         <FormRowSelect
-          label="Area"
+          // label="Area"
           name="area"
           options={areaOptions}
           placeholder="Select Area"
@@ -200,7 +202,7 @@ const MaintenanceRequestForm = () => {
           error={errors.area}
         />
         <FormRowSelect
-          label="Equipment"
+          // label="Equipment"
           name="equipment"
           options={equipmentOptions}
           // control={control}
@@ -209,7 +211,7 @@ const MaintenanceRequestForm = () => {
           error={errors.equipment}
         />
         <FormRowSelect
-          label="Asset ID"
+          // label="Asset ID"
           name="assetID"
           options={assetIdOptions}
           placeholder="Select Asset ID"
@@ -217,7 +219,7 @@ const MaintenanceRequestForm = () => {
           error={errors.assetID}
         />
         <FormRowSelect
-          label="Request Type"
+          // label="Request Type"
           name="type"
           options={type}
           // control={control}
@@ -226,7 +228,7 @@ const MaintenanceRequestForm = () => {
           error={errors.type}
         />
         <FormRowSelect
-          label="Impact"
+          // label="Impact"
           name="impact"
           options={impact}
           // control={control}
@@ -235,7 +237,7 @@ const MaintenanceRequestForm = () => {
           error={errors.impact}
         />
         <FormRowSelect
-          label="Priority"
+          // label="Priority"
           name="priority"
           options={priority}
           // control={control}
@@ -252,9 +254,10 @@ const MaintenanceRequestForm = () => {
         <TextAreaInput
           name="jobComments"
           register={register}
+          placeholder="Comments"
           // control={control}
           rows={4}
-          label="Comments"
+          // label="Comments"
           className="lg:col-span-2"
         />
       </div>
@@ -278,7 +281,7 @@ const MaintenanceRequestForm = () => {
             size="lg"
             className="flex-1"
           >
-            {isSubmitting ? "Sending..." : "Submit"}
+            {isPending ? <Spinner className="size-8" /> : "Submit"}
           </Button>
         </div>
       </div>

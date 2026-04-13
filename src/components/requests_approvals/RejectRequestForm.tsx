@@ -83,7 +83,7 @@ const RequestRejectedForm = () => {
       }, 1500);
     } catch (error) {
       console.log(error);
-      console.error("Reject Request failed:", error);
+      // console.error("Reject Request failed:", error);
 
       if (axios.isAxiosError<{ message: string }>(error)) {
         // The error returned is AxiosError hence to access response the type must be handled as such
@@ -98,9 +98,9 @@ const RequestRejectedForm = () => {
       className="flex flex-col rounded-lg lg:w-full dark:bg-(--bg-primary_dark) dark:text-gray-100 dark:border-gray-700/50"
     >
       <div className="grid gap-4 w-full lg:py-2">
-        <p className="text-xs md:text-md text-gray-600 dark:text-gray-300">
-          Are you sure you want to reject this item? <br />
-          This action cannot be undone.
+        <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300">
+          Are you sure you want to reject this item? This action cannot be
+          undone.
         </p>
         <TextAreaInput
           register={register}
@@ -115,7 +115,7 @@ const RequestRejectedForm = () => {
             type="button"
             disabled={isPending}
             onClick={() => setShowRejectRequestDialog(false)}
-            className="flex-1 py-2 text-xs font-medium rounded-lg border border-red-200 dark:border-red-500 text-red-600 dark:bg-red-300/20 dark:text-red-300 hover:bg-gray-50 dark:hover:bg-red/5 transition-colors"
+            className="flex-1 py-2 text-xs font-medium rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors border dark:border-(--clr-borderDarkRed) hover:cursor-pointer"
           >
             Cancel
           </button>

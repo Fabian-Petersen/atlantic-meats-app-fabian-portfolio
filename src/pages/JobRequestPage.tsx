@@ -15,7 +15,7 @@ const JobRequestPage = () => {
   return (
     <div className="flex items-center justify-center w-full h-full p-4 dark:bg-bgdark bg-gray-100">
       <div className="bg-white flex flex-col gap-4 w-full lg:max-w-3xl h-auto rounded-xl shadow-lg p-4 dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) dark:border-gray-700/50 dark:border">
-        <FormHeading className="py-4" heading="Maintenance Request" />
+        <FormHeading className="py-4" heading="Create Job Request" />
         <JobRequestForm />
       </div>
     </div>

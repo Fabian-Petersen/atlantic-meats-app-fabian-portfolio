@@ -4,7 +4,7 @@ import { getInitialsElement } from "@/utils/getInitials";
 import { useUserAttributes } from "../../utils/aws-userAttributes";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
-import UserDetails from "./UserDetails";
+// import UserDetails from "./UserDetails";
 interface AvatarProps {
   imageUrl?: string | null;
   size?: number; // optional, default 40px
@@ -43,7 +43,7 @@ const Avatar: React.FC<AvatarProps> = ({ imageUrl, size = 40 }) => {
           })
         )}
       </button>
-      <UserDetails />
+      {/* <UserDetails /> */}
     </div>
   );
 };

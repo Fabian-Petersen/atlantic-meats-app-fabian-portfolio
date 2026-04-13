@@ -9,15 +9,19 @@ import {
   getSortedRowModel,
   flexRender,
   useReactTable,
+  getPaginationRowModel,
   type ColumnDef,
   type SortingState,
   type ColumnResizeMode,
+  type PaginationState,
 } from "@tanstack/react-table";
 
 import FormHeading from "@/../customComponents/FormHeading";
 import AddNewItemButton from "../features/AddNewItemButton";
 import { SearchInput } from "../features/SearchInput";
 import EmptyTablePlaceholder from "../features/EmptyTablePlaceholder";
+import TablePaginationControls from "../features/TablePaginationControls";
+import TablePageSizeSelector from "../features/TablePageSizeSelector";
 
 type Props<T extends { id: string }> = {
   data: T[];
@@ -32,6 +36,9 @@ type Props<T extends { id: string }> = {
   searchPlaceholderText?: string;
   openDialog?: (v: boolean) => void;
   emptyTablePlaceholderText?: string;
+  pageSize?: number;
+  addPagination?: boolean;
+  addPageSelector?: boolean;
 };
 
 export function GenericTable<T extends { id: string }>({
@@ -47,6 +54,9 @@ export function GenericTable<T extends { id: string }>({
   emptyTablePlaceholderText,
   openDialog,
   rowClassName,
+  pageSize,
+  addPagination,
+  addPageSelector,
 }: Props<T>) {
   const navigate = useNavigate();
   const { setSelectedRowId, globalFilter, setGlobalFilter } =
@@ -55,17 +65,24 @@ export function GenericTable<T extends { id: string }>({
   const [sorting, setSorting] = useState<SortingState>(initialSorting);
   const [columnResizeMode] = useState<ColumnResizeMode>("onChange");
 
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: pageSize ?? 10, // 👈 this controls "10 items per page"
+  });
+
   const location = useLocation();
 
   const table = useReactTable({
     data: data ?? [],
     columns: columns ?? [],
-    state: { sorting, globalFilter },
+    state: { sorting, globalFilter, pagination },
     onSortingChange: setSorting,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     globalFilterFn: "includesString",
+    getPaginationRowModel: getPaginationRowModel(),
 
     // ----- Resizing ------
     columnResizeMode,
@@ -93,6 +110,9 @@ export function GenericTable<T extends { id: string }>({
             onChange={setGlobalFilter}
             placeholder={searchPlaceholderText}
           />
+          {addPageSelector ? (
+            <TablePageSizeSelector table={table} />
+          ) : undefined}
           {addButton && (
             <div className="hidden md:inline-block ml-auto">
               <AddNewItemButton
@@ -149,7 +169,7 @@ export function GenericTable<T extends { id: string }>({
                             className={[
                               "block h-2/3 w-[3px] rounded-full transition-all duration-150",
                               header.column.getIsResizing()
-                                ? "bg-amber-500 dark:bg-amber-400 w-[4px] h-full opacity-100"
+                                ? "bg-amber-500 dark:bg-amber-400 w-1 h-full opacity-100"
                                 : "bg-gray-300 dark:bg-gray-600 opacity-0 group-hover:opacity-100",
                             ].join(" ")}
                           />
@@ -201,6 +221,7 @@ export function GenericTable<T extends { id: string }>({
             </tbody>
           </table>
         </div>
+        {addPagination ? <TablePaginationControls table={table} /> : undefined}
       </div>
     </div>
   );

@@ -2,11 +2,9 @@
 // $ The list is from a Get request to the getAssetsRegister.py lambda function.
 
 import FormHeading from "../../customComponents/FormHeading";
-import { AssetsOverviewTable } from "@/components/assets/AssetsOverviewTable";
 import { useGetAll } from "@/utils/api";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { MobileAssetsOverviewTable } from "@/components/mobile/MolbileAssetsOverviewTable";
-import FilterContainer from "@/components/features/FilterContainer";
 
 // $ Import Tanstack Table
 import {
@@ -16,35 +14,32 @@ import {
   useReactTable,
   getPaginationRowModel,
   type SortingState,
-  // type PaginationState,
+  type PaginationState,
 } from "@tanstack/react-table";
 
 import { getAssetColumns } from "../components/tableColumns/AssetColumns";
-// import { getAssetTableMenuItems } from "@/lib/TableMenuItemsActions";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-
 import type { AssetAPIResponse, AssetTableRow } from "@/schemas";
 import { ErrorPage } from "@/components/features/Error";
-import AddNewItemButton from "@/components/features/AddNewItemButton";
-
-// import type { AssetFormValues } from "@/schemas";
+import { GenericTable } from "@/components/dashboard/GenericTable";
 
 const AssetsOverviewPage = () => {
-  const navigate = useNavigate();
-
-  const ASSETS_REQUESTS_KEY = ["assetRequests"];
   const { data, isPending, isError, refetch } = useGetAll<AssetAPIResponse[]>({
     resourcePath: "assets",
-    queryKey: ASSETS_REQUESTS_KEY,
+    queryKey: ["getAssetsList", "assetsList"],
   });
 
-  // console.log("Assets data:", data);
+  console.log("Assets data:", data);
 
   const [sorting, setSorting] = useState<SortingState>([
     { id: "createdAt", desc: true },
   ]);
+
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10, // 👈 this controls "10 items per page"
+  });
 
   const { setShowUpdateAssetDialog, setSelectedRowId, openDeleteDialog } =
     useGlobalContext();
@@ -70,14 +65,14 @@ const AssetsOverviewPage = () => {
     setSelectedRowId,
     openDeleteDialog,
   );
-
+  // $ This data is passed into the mobile component
   const table = useReactTable({
     data: rows ?? [],
     columns: columns,
     columnResizeMode: "onChange",
-    state: { sorting },
+    state: { sorting, pagination },
     onSortingChange: setSorting,
-    // onPaginationChange: setPagination,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -103,31 +98,19 @@ const AssetsOverviewPage = () => {
     );
   }
 
-  const handleSubmit = () => {
-    navigate("/asset");
-  };
-
   return (
     <div className="flex w-full md:p-4 min-h-0">
       <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 border-dashed min-h-0">
         <FormHeading className="mx-auto" heading="Assets Register" />
-        <div className="flex gap-4 items-end w-full">
-          <FilterContainer table={table} className="" />
-          <div className="hidden md:inline-block ml-auto">
-            {/* <label className="text-sm md:text-md text-transparent">
-              Create Asset
-            </label> */}
-            <AddNewItemButton
-              title="Asset"
-              className=""
-              onClick={handleSubmit}
-            />
-          </div>
-        </div>
-
-        <AssetsOverviewTable
-          className="hidden lg:flex table-fixed"
-          table={table}
+        <GenericTable
+          data={data}
+          columns={columns}
+          rowPath="/assets"
+          addButton={true}
+          addButtonPath="/assets"
+          pageSize={15}
+          addPagination={true}
+          addPageSelector={true}
         />
         <MobileAssetsOverviewTable
           className="flex lg:hidden"

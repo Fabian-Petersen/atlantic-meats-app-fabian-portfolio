@@ -17,7 +17,7 @@ function RejectRequestDialog() {
           <FormHeading
             arial-label="Reject Job Request"
             h2={true}
-            className="font-normal text-md md:text-lg text-center"
+            className="font-normal text-md md:text-2xl text-center"
             heading="Reject Job Request"
           />
         </DialogTitle>

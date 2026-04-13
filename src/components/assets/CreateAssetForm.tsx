@@ -149,10 +149,10 @@ const CreateAssetForm = () => {
       className="flex flex-col rounded-lg lg:w-full text-(--clr-font) dark:bg-(--bg-primary_dark)"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 w-full lg:py-4">
         <FormRowSelect
           name="business_unit"
-          label="Business Unit"
+          // label="Business Unit"
           placeholder="Select business unit"
           register={register}
           options={businessUnitOptions}
@@ -164,7 +164,7 @@ const CreateAssetForm = () => {
         />
         <FormRowSelect
           name="area"
-          label="Area"
+          // label="Area"
           placeholder="Select Area"
           register={register}
           options={categoryOptions}
@@ -172,7 +172,7 @@ const CreateAssetForm = () => {
           required
         />
         <FormRowSelect
-          label="Equipment"
+          // label="Equipment"
           name="equipment"
           options={itemOptions}
           // control={control}
@@ -181,7 +181,7 @@ const CreateAssetForm = () => {
           error={errors.equipment}
         />
         <FormRowInput
-          label="Asset ID"
+          // label="Asset ID"
           type="text"
           name="assetID"
           // control={control}
@@ -190,7 +190,7 @@ const CreateAssetForm = () => {
           error={errors.assetID}
         />
         <FormRowSelect
-          label="Location"
+          // label="Location"
           name="location"
           options={sortedLocations}
           // control={control}
@@ -200,7 +200,7 @@ const CreateAssetForm = () => {
           className="capitalize"
         />
         <FormRowSelect
-          label="Condition"
+          // label="Condition"
           name="condition"
           options={condition}
           // control={control}
@@ -209,7 +209,7 @@ const CreateAssetForm = () => {
           error={errors.condition}
         />
         <FormRowInput
-          label="Serial Number"
+          // label="Serial Number"
           type="text"
           name="serialNumber"
           // control={control}
@@ -226,7 +226,7 @@ const CreateAssetForm = () => {
           />
         </Activity>
         <TextAreaInput
-          label="Comments"
+          // label="Comments"
           name="additional_notes"
           placeholder="Comments"
           register={register}

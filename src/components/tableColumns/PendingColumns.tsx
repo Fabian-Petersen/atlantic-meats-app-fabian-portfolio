@@ -90,11 +90,14 @@ export const getJobPendingColumns = (
     accessorKey: "priority",
     header: "Priority",
     enableColumnFilter: true,
+    size: 30,
+    minSize: 20,
+    maxSize: 100,
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return (
         <p
-          className={`capitalize text-xs ${getConditionClasses(
+          className={`capitalize text-cxs ${getConditionClasses(
             value as Priority,
           )}`}
         >
@@ -111,7 +114,6 @@ export const getJobPendingColumns = (
     size: 20,
     minSize: 20,
     maxSize: 100,
-
     cell: ({ row }) => {
       const rowId = row.original.id;
 
@@ -156,17 +158,19 @@ export const getJobPendingColumns = (
 // border-red-200 dark:border-red-500 text-red-600 dark:bg-red-300/20 dark:text-red-300
 
 function getConditionClasses(priority: Priority) {
+  const generalStyles =
+    "border min-w-12 w-fit rounded-full max-w-fit text-xs p-[0.135rem] text-center px-[0.40rem]";
   switch (priority.toLocaleLowerCase()) {
     case "critical":
-      return "text-red-600 border-red-300 bg-red-300/30 dark:border-red-500 dark:bg-red-300/20 dark:text-red-300 border min-w-fit w-fit rounded-full text-xs p-[0.135rem] text-center px-[0.40rem]";
+      return `text-red-600 bg-red-300/30 border-red-300 dark:border-red-500 dark:bg-red-300/20 dark:text-red-300 ${generalStyles}`;
     case "high":
-      return "text-purple-600 border-purple-300 bg-purple-300/30 dark:border-purple-500 dark:bg-blue-300/20 dark:text-blue-300 border min-w-fit rounded-full w-fit p-[0.135rem] text-xs text-center";
+      return `text-orange-600 bg-orange-300/30 border-orange-300  dark:border-orange-500 dark:bg-orange-300/20 dark:text-orange-300 ${generalStyles}`;
     case "medium":
-      return "text-blue-600 bg-blue-300 bg-blue-300/30 border dark:border-blue-500 dark:bg-blue-300/20 dark:text-blue-300 max-w-fit rounded-full w-fit p-[0.135rem] text-xs text-center";
+      return `text-blue-600 bg-blue-300/30 border-blue-300 dark:border-blue-500 dark:bg-blue-300/20 dark:text-blue-300 ${generalStyles}`;
     case "low":
-      return "text-green-500 bg-green-100 border border-green-500 w-12 rounded-full min-w-fit p-[0.135rem] text-xs text-center";
+      return `text-green-600 bg-green-300/30 border-green-300 dark:border-green-500 dark:bg-green-300/20 dark:text-green-300 ${generalStyles}`;
     default:
-      return "text-gray-400 bg-gray-100 border border-gray-500 max-w-fit rounded-full w-fit p-0.5 text-xs text-center";
+      return `text-gray-400 bg-gray-100 border border-gray-500 ${generalStyles}`;
   }
 }
 

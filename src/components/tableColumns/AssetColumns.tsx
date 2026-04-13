@@ -8,22 +8,25 @@ import { getTableMenuItems } from "@/lib/getTableMenuItems";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 type EquipmentCondition = "operational" | "new" | "poor" | "broken";
+
 import type { Resource } from "@/utils/api";
 
 function getConditionClasses(condition: EquipmentCondition) {
+  const generalStyles =
+    "border min-w-16 w-fit rounded-full max-w-fit py-[0.25rem] text-center px-[0.40rem]";
   switch (condition.toLowerCase()) {
     case "operational":
-      return "text-green-700 bg-green-300/60";
+      return `text-green-600 bg-green-300/30 border-green-300 dark:border-green-500 dark:bg-green-300/20 dark:text-green-300 ${generalStyles}`;
     case "not operational":
-      return "text-orange-700 bg-orange-300/60";
+      return `text-orange-600 bg-orange-300/30 border-orange-300  dark:border-orange-500 dark:bg-orange-300/20 dark:text-orange-300 ${generalStyles}`;
     case "new":
-      return "text-blue-700 bg-blue-300/60";
+      return `text-blue-600 bg-blue-300/30 border-blue-300 dark:border-blue-500 dark:bg-blue-300/20 dark:text-blue-300 ${generalStyles}`;
     case "poor":
-      return "text-orange-700 bg-orange-300/60";
+      return `text-orange-600 bg-orange-300/30 border-orange-300  dark:border-orange-500 dark:bg-orange-300/20 dark:text-orange-300 ${generalStyles}`;
     case "broken":
-      return "text-red-700 bg-red-300/60";
+      return `text-red-600 bg-red-300/30 border-red-300 dark:border-red-500 dark:bg-red-300/20 dark:text-red-300 ${generalStyles}`;
     default:
-      return "text-gray-400 bg-gray-200";
+      return `text-gray-400 bg-gray-100 border border-gray-500 ${generalStyles}`;
   }
 }
 
@@ -42,18 +45,7 @@ export const getAssetColumns = (
   {
     accessorKey: "createdAt",
     header: "Date Created",
-    cell: ({ getValue }) => (
-      <p className="">
-        {new Date(getValue<string>()).toLocaleString("en-GB", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        })}
-      </p>
-    ),
+    cell: ({ getValue }) => <p>{getValue<string>()}</p>,
     size: 140,
     minSize: 120,
     maxSize: 160,
@@ -76,24 +68,27 @@ export const getAssetColumns = (
   {
     accessorKey: "assetID",
     header: "Asset ID",
-    size: 140,
-    minSize: 120,
-    maxSize: 160,
+    size: 120,
+    minSize: 100,
+    maxSize: 140,
     enableColumnFilter: true,
   },
-  {
-    accessorKey: "serialNumber",
-    header: "Serial Number",
-  },
+  // {
+  //   accessorKey: "serialNumber",
+  //   header: "Serial Number",
+  // },
   {
     accessorKey: "condition",
     header: "Condition",
     enableColumnFilter: true,
+    size: 150,
+    minSize: 100,
+    maxSize: 160,
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return (
         <p
-          className={`capitalize text-xs min-w-fit px-2 py-2.5 text-center rounded-full ${getConditionClasses(
+          className={`capitalize text-cxs ${getConditionClasses(
             value as EquipmentCondition,
           )}`}
         >
@@ -124,7 +119,7 @@ export const getAssetColumns = (
         },
         delete: {
           config: {
-            resourcePath: "asset",
+            resourcePath: "assets",
             queryKey: ["assetRequests"],
             resourceName: "asset",
           },
