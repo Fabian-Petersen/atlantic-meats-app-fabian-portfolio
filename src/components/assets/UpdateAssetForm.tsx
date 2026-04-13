@@ -50,7 +50,7 @@ const UpdateAssetForm = () => {
   const { data: item, isPending } = useById<AssetAPIResponse>({
     id: id ?? "",
     queryKey: ASSETS_KEY,
-    resourcePath: "asset",
+    resourcePath: "assets",
   });
 
   // $ Update hook
@@ -58,7 +58,7 @@ const UpdateAssetForm = () => {
     CreateAssetPayload,
     { presigned_urls?: PresignedUrlResponse }
   >({
-    resourcePath: "asset",
+    resourcePath: "assets",
     queryKey: ASSETS_KEY,
   });
 

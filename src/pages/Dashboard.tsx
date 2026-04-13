@@ -24,7 +24,7 @@ const Dashboard = () => {
   const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests", "pending"];
 
   const { data: pendingRequests, isPending } = useGetAll<JobAPIResponse[]>({
-    resourcePath: "jobs-list-pending",
+    resourcePath: "jobs/pending",
     queryKey: MAINTENANCE_REQUESTS_KEY,
   });
 

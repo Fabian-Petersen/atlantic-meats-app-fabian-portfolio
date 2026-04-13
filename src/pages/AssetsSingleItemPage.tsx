@@ -18,7 +18,7 @@ const AssetsSingleItemPage = () => {
   const { data: item, isPending } = useById<AssetAPIResponse>({
     id: id || "",
     queryKey: ASSETS_KEY,
-    resourcePath: "asset",
+    resourcePath: "assets",
   });
 
   if (!id || !item) {
