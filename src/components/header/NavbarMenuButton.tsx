@@ -6,16 +6,17 @@ type Props = {
 };
 
 const NavbarMenuButton = ({ className }: Props) => {
-  const { setIsOpen, isOpen } = useGlobalContext();
+  const { setIsOpen, isOpen, setOpenNotificationSidebar } = useGlobalContext();
   return (
     <div
-      className="items-center flex justify-center hover:cursor-pointer text-gray-900 lg:invisible
+      className="items-center flex justify-center hover:cursor-pointer text-(--clr-textLight)lg:invisible
       hover:text-gray-700"
     >
       <button
         type="button"
         aria-label="Open sidebar"
         onClick={() => {
+          setOpenNotificationSidebar(false);
           setIsOpen(!isOpen);
         }}
         className={`${className} hover:cursor-pointer `}

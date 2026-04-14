@@ -10,8 +10,8 @@ import NotificationSidebar from "@/components/notifications/NotificationSidebar"
 
 // AppLayout.tsx
 export const AppLayout = () => (
-  <div className="min-h-screen w-full grid grid-cols-1 lg:grid-rows-[var(--lg-navbarHeight)_1fr] lg:grid-cols-[15rem_1fr] grid-rows-[var(--lg-navbarHeight)_1fr] bg-gray-100 dark:bg-bgdark">
-    <Navbar className="col-span-full row-start-1 row-end-1 h-(--lg-navbarHeight)" />
+  <div className="min-h-screen w-full grid grid-cols-1 lg:grid-rows-[var(--lg-navbarHeight)_1fr] lg:grid-cols-[15rem_1fr] grid-rows-[var(--sm-navbarHeight)_1fr] bg-gray-100 dark:bg-bgdark">
+    <Navbar className="col-span-full row-start-1 row-end-1 md:h-(--lg-navbarHeight) h-(--sm-navbarHeight)" />
     <ChatSidebar />
     <NotificationSidebar />
     <Success />

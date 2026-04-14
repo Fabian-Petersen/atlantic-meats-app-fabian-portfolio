@@ -6,10 +6,10 @@
 @import "tailwindcss";
 
 :root {
-  --sm-navbarHeight: 3rem;
   --radius: 10px;
 
   /* Layout  */
+  --sm-navbarHeight: 5rem;
   --lg-navbarHeight: 4rem;
   --sidebarWidth: 15rem;
   --sm-sidebarHeight: calc(100dvh - var(--sm-navbarHeight));
@@ -20,6 +20,7 @@
   /* Theme colors */
   --clr-primary-light: #1b64f1;
   --clr-primary: #fcb53b;
+  --clr-primary_red: #ff3737;
   --clr-primary-dark: #1b64f1;
   /* --clr-bgDark: #030712; */
   --clr-bgDark: #101827;

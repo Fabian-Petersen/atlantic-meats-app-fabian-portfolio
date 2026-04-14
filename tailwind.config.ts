@@ -9,6 +9,7 @@ const config: Config = {
       colors: {
         // $ Theme Colors
         primary: "#fcb53b",
+        primary_red: "#FF3737",
         bgCheck: "#C8E6C9",
         lightBg: "#F9FAFB",
         dark_bg: "#1d2739",

@@ -21,7 +21,7 @@ const NotificationSidebar = () => {
 
   return (
     <div
-      className={`overflow-y-scroll right-0 z-1000 w-80 lg:w-96 fixed top-16 lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-l border-l-gray-200 dark:border-l-[rgba(55,65,81,0.5)]
+      className={`overflow-y-scroll right-0 z-1000 w-80 lg:w-96 fixed top-(--sm-navbarHeight) md:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) md:h-(--lg-sidebarHeight) border-l border-l-gray-200 dark:border-l-[rgba(55,65,81,0.5)]
       bg-white dark:bg-(--bg-primary_dark) transform transition-transform duration-200 ease-in translate-x-0
     ${openNotificationSidebar ? "translate-x-0" : "translate-x-full ease-out"}`}
     >

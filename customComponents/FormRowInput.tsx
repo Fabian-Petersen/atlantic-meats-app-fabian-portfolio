@@ -71,7 +71,9 @@ function FormRowInput<TFieldValues extends FieldValues>({
         type={type}
         className={clsx(
           `${className}`,
-          `${placeholder ? "placeholder-shown:" : "placeholder-transparent "}`,
+          placeholder
+            ? "placeholder:text-(--clr-textLight) dark:placeholder:text-(--clr-textDark)"
+            : "placeholder-transparent ",
           "text-xs py-3 px-2 peer w-full rounded-md outline-none placeholder-transparent text-gray-700",
           "border border-gray-300 dark:border-gray-700/50 placeholder:dark:text-gray-700 placeholder:text-xs focus:border-rose-600 focus:dark:bg-gray-600",
           "dark:bg-(--bg-secondary_dark) dark:border-(--clr-borderDark) dark:text-(--clr-textDark)",
@@ -92,7 +94,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
           onToggle={togglePassword}
         />
       )}
-      {label && (
+      {label && !placeholder && (
         <label
           htmlFor={String(name)}
           className={clsx(

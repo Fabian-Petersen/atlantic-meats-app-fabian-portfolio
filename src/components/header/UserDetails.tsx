@@ -6,11 +6,11 @@ const UserDetails = () => {
   const { data: user, isPending } = useGetUser(); // user from database
 
   return isPending ? (
-    <div className="flex justify-center items-center text-primary">
-      <Spinner className="w-8 h-8" />
+    <div className="flex justify-center items-center text-primary w-36">
+      <Spinner className="w-6 h-6" />
     </div>
   ) : (
-    <div className="capitalize text-xs font-sans font-semibold flex flex-col md:flex-row gap-2 md:gap-4 items-start justify-center text-(--clr-textLight)">
+    <div className="capitalize md:text-xs text-cxs font-sans font-semibold flex flex-row gap-2 md:gap-4 items-center justify-center text-(--clr-textLight)">
       <div className="flex gap-0.5 items-center">
         <User className="size-4" />
         <span>{user?.group ?? "admin"}</span>

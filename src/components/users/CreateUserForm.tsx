@@ -22,6 +22,7 @@ import FormRowSelect from "@/../customComponents/FormRowSelect";
 import { Spinner } from "../ui/spinner";
 import { usePOST } from "@/utils/api";
 import { toast } from "sonner";
+import clsx from "clsx";
 
 function CreateUserForm() {
   const {
@@ -74,17 +75,17 @@ function CreateUserForm() {
 
   return (
     <form
-      className="flex flex-col lg:w-full text-(--clr-textLight) dark:bg-(--bg-primary_dark) border border-red-500 border-dashed"
+      className="flex flex-col lg:w-full gap-4 text-(--clr-textLight) dark:bg-(--bg-primary_dark)"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4 md:gap-y-8 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4 md:gap-y-6 w-full">
         <FormHeading
           heading="Profile Information"
           h3={true}
           className="col-span-full text-sm"
         />
         <FormRowInput
-          label=""
+          // label=""
           name="name"
           placeholder="Name"
           className="capitalize"
@@ -92,7 +93,7 @@ function CreateUserForm() {
           error={errors.name}
         />
         <FormRowInput
-          label=""
+          // label=""
           name="family_name"
           placeholder="surname"
           register={register}
@@ -100,7 +101,7 @@ function CreateUserForm() {
           error={errors.family_name}
         />
         <FormRowSelect
-          label=""
+          // label=""
           name="location"
           placeholder="Location"
           options={allLocations}
@@ -109,7 +110,7 @@ function CreateUserForm() {
           error={errors.location}
         />
         <FormRowSelect
-          label=""
+          // label=""
           name="group"
           placeholder="Role"
           options={userRoles}
@@ -121,10 +122,10 @@ function CreateUserForm() {
         <FormHeading
           heading="Contact Information"
           h3={true}
-          className="col-span-full text-sm md:mt-2 md:pb-4"
+          className="col-span-full text-sm"
         />
         <FormRowInput
-          label=""
+          // label=""
           type="email"
           name="email"
           placeholder="email"
@@ -132,7 +133,7 @@ function CreateUserForm() {
           error={errors.email}
         />
         <FormRowInput
-          label=""
+          // label=""
           type="text"
           name="mobile"
           placeholder="mobile number"
@@ -142,9 +143,13 @@ function CreateUserForm() {
         />
       </div>
 
-      <div className="flex justify-between w-full gap-2 mt-auto">
+      <div className="flex items-center md:items-end w-full md:w-1/2 md:max-w-72 md:ml-auto md:justify-end gap-2">
         <Button
-          className="flex-1 py-2 text-xs font-medium rounded-lg border border-red-200 dark:border-red-500 text-red-600 dark:bg-red-300/20 dark:text-red-300 hover:bg-gray-50 dark:hover:bg-red/5 transition-colors"
+          className={clsx(
+            "flex-1 py-2 text-xs font-medium rounded-lg border border-red-500 text-red-600 transition-colors bg-red-300/70",
+            " dark:border-red-500 dark:bg-red-300/30 dark:text-red-500",
+            "dark:hover:bg-red-300/20 hover:bg-red-400/50",
+          )}
           type="button"
           onClick={() => setShowCreateUserDialog(false)}
           variant="cancel"

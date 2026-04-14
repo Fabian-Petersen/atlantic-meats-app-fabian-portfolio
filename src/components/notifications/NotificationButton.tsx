@@ -9,14 +9,17 @@ type Props = {
 };
 
 const NotificationButton = ({ className }: Props) => {
-  const { setOpenNotificationSidebar } = useGlobalContext();
+  const { setOpenNotificationSidebar, setIsOpen } = useGlobalContext();
   const count = 2;
 
   return (
     <div className="p-2 flex items-center justify-center text-gray-900 hover:cursor-pointer relative">
       <Button
         type="button"
-        onClick={() => setOpenNotificationSidebar((prev) => !prev)}
+        onClick={() => {
+          setIsOpen(false);
+          setOpenNotificationSidebar((prev) => !prev);
+        }}
         className={`${className} hover:cursor-pointer rounded-full bg-white/30 p-1.5`}
       >
         <LucideBell size={18} />

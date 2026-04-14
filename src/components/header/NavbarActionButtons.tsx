@@ -6,8 +6,11 @@ import UserDetails from "./UserDetails";
 
 const NavbarActionButtons = () => {
   return (
-    <div className="flex items-center justify-center gap-2 px-2">
-      <UserDetails />
+    <div className="flex items-center justify-end gap-0.5">
+      {/* UserDetails only visible on desktop inside the action bar */}
+      <div className="hidden lg:flex">
+        <UserDetails />
+      </div>
       <ThemeToggleButton />
       <NotificationButton />
       <Avatar />
