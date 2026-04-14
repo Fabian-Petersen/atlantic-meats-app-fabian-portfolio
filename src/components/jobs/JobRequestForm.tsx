@@ -51,7 +51,7 @@ const MaintenanceRequestForm = () => {
   });
 
   const { data } = useGetAll<AssetRequestFormValues[]>({
-    resourcePath: "assets",
+    resourcePath: "assets-data",
     queryKey: ["getAllAssets"],
   });
 

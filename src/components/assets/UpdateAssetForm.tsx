@@ -50,7 +50,7 @@ const UpdateAssetForm = () => {
   const { data: item, isPending } = useById<AssetAPIResponse>({
     id: id ?? "",
     queryKey: ASSETS_KEY,
-    resourcePath: "assets",
+    resourcePath: "assets-data",
   });
 
   // $ Update hook

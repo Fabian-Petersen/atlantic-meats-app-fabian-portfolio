@@ -30,8 +30,8 @@ export type Resource =
   | "jobs/completed" // "NOT in use"
   | "jobs/jobcard" // "maintenance-jobcard" GET jobcardById
   // $ Assets ROUTES
-  | "assets" // "assets-list" GET all assets assets/{assetId} to DELETE, PUT, GET assetById
-  | "assets/location" // NOT in use : Get all assets by location
+  | "assets-data" // "assets-list" GET all assets assets/{assetId} to DELETE, PUT, GET assetById
+  | "assets-data/location" // NOT in use : Get all assets by location
   // $ Users ROUTES
   | "users/get-current-user" // Get user details by id
   | "users" // "admin/users" GET all users

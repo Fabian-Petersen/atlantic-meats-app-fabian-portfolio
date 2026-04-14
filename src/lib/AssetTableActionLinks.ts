@@ -37,7 +37,7 @@ export const getAssetTableMenuItems = (
     icon: Trash2Icon,
     onClick: () => {
       openDeleteDialog(rowId, {
-        resourcePath: "assets",
+        resourcePath: "assets-data",
         queryKey: ["getAssetsList", "deleteAsset"] as const,
       });
     },

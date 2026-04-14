@@ -119,7 +119,7 @@ export const getAssetColumns = (
         },
         delete: {
           config: {
-            resourcePath: "assets",
+            resourcePath: "assets-data",
             queryKey: ["assetRequests"],
             resourceName: "asset",
           },

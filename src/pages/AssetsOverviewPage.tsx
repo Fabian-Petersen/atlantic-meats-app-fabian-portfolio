@@ -26,7 +26,7 @@ import { GenericTable } from "@/components/dashboard/GenericTable";
 
 const AssetsOverviewPage = () => {
   const { data, isPending, isError, refetch } = useGetAll<AssetAPIResponse[]>({
-    resourcePath: "assets",
+    resourcePath: "assets-data",
     queryKey: ["getAssetsList", "assetsList"],
   });
 
