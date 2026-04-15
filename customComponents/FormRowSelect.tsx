@@ -71,12 +71,16 @@ function FormRowSelect<T extends FieldValues>({
             {placeholder}
           </option>
         )}
-        {options.map((option) => {
+        {options.map((option, index) => {
           const value = typeof option === "string" ? option : option.value;
           const label = typeof option === "string" ? option : option.label;
 
           return (
-            <option key={value} value={value} className="hover:cursor-pointer">
+            <option
+              key={`${value}-${index}`}
+              value={value}
+              className="hover:cursor-pointer"
+            >
               {label}
             </option>
           );

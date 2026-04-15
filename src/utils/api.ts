@@ -134,7 +134,7 @@ export const usePOST = <RequestType, ResponseType>(options: {
   return useMutation({
     mutationFn: async (payload: RequestType): Promise<ResponseType> => {
       const { data } = await apiClient.post<ResponseType>(
-        `${resourcePath}`,
+        `/${resourcePath}`,
         payload,
         {
           headers: { "Content-Type": "application/json" },
