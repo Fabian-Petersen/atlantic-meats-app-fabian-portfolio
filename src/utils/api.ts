@@ -195,7 +195,7 @@ export const useDeleteItem = (options: {
 
   return useMutation({
     mutationFn: async (id: string): Promise<void> => {
-      await apiClient.delete(`${resourcePath}/${id}`);
+      await apiClient.delete(`/${resourcePath}/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
@@ -214,7 +214,7 @@ export const useDownloadPdf = (options: { resourcePath: Resource }) => {
   return useMutation({
     mutationFn: async (id: string): Promise<JobcardPresignedUrlResponse> => {
       const { data } = await apiClient.get<JobcardPresignedUrlResponse>(
-        `${resourcePath}/${id}`,
+        `/${resourcePath}/${id}`,
       );
       return data;
     },
