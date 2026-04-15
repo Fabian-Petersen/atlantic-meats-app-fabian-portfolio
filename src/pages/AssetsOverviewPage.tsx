@@ -23,6 +23,8 @@ import { useState, useMemo } from "react";
 import type { AssetAPIResponse, AssetTableRow } from "@/schemas";
 import { ErrorPage } from "@/components/features/Error";
 import { GenericTable } from "@/components/dashboard/GenericTable";
+import { SearchInput } from "@/components/features/SearchInput";
+import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 
 const AssetsOverviewPage = () => {
   const { data, isPending, isError, refetch } = useGetAll<AssetAPIResponse[]>({
@@ -40,6 +42,8 @@ const AssetsOverviewPage = () => {
     pageIndex: 0,
     pageSize: 10, // 👈 this controls "10 items per page"
   });
+
+  const [globalFilter, setGlobalFilter] = useState("");
 
   const { setShowUpdateAssetDialog, setSelectedRowId, openDeleteDialog } =
     useGlobalContext();
@@ -77,6 +81,7 @@ const AssetsOverviewPage = () => {
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    globalFilterFn: "includesString",
   });
 
   if (isPending) return <PageLoadingSpinner />;
@@ -99,23 +104,45 @@ const AssetsOverviewPage = () => {
   }
 
   return (
-    <div className="flex w-full md:p-4 min-h-0">
-      <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 border-dashed min-h-0">
-        <FormHeading className="mx-auto" heading="Assets Register" />
+    <div className="flex w-full md:p-4 h-auto">
+      <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
+        <FormHeading heading="Assets Register" />
         <GenericTable
           data={data}
           columns={columns}
           rowPath="/assets"
           addButton={true}
           addButtonPath="/assets"
-          pageSize={15}
+          pageSize={10}
           addPagination={true}
           addPageSelector={true}
         />
-        <MobileAssetsOverviewTable
-          className="flex lg:hidden"
-          data={table.getRowModel().rows}
-        />
+      </div>
+      {/* // $ Mobile View */}
+      <div className="grid lg:hidden gap-2 w-full p-2">
+        <SearchInput
+          value={globalFilter}
+          onChange={setGlobalFilter}
+          placeholder="Search Assets"
+        />{" "}
+        {data.length === 0 ? (
+          <EmptyMobilePlaceholder message="No Assets available yet" />
+        ) : table.getRowModel().rows.length === 0 ? (
+          <EmptyMobilePlaceholder
+            message={`No results for "${globalFilter}"`}
+          />
+        ) : (
+          <div className="grid gap-2">
+            <FormHeading
+              className="mx-auto dark:text-gray-100"
+              heading="Assets Register"
+            />
+            <MobileAssetsOverviewTable
+              className="flex lg:hidden"
+              data={table.getRowModel().rows}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -13,11 +13,10 @@ const config: Config = {
         bgCheck: "#C8E6C9",
         lightBg: "#F9FAFB",
         dark_bg: "#1d2739",
-        bgdark: "#030712",
-        // bgDark: "#101827",
-        primary_dark: "#101828",
+        pageDark: "#030712", // page: dark bg color
+        pageLight: "#fff", // page: light bg color
+        primary_dark: "#101828", // container: bg color of parent container
         secondary_dark: "#1b64f1",
-        bglight: "#f2f2f2",
 
         check: "#4CAF50",
         activelink: "#c97e00",

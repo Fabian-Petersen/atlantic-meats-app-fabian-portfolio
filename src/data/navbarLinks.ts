@@ -48,7 +48,7 @@ export const maintenanceLinks: NavlinkProps[] = [
     name: ({ groups }) =>
       groups.includes("admin") ? "Completed Jobs" : "My Jobs",
     icon: File,
-    url: "/jobs/actioned",
+    url: "/jobs/completed",
     allowedGroups: ["admin", "technician", "manager", "contractor"],
   },
   {

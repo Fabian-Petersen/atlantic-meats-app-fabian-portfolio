@@ -28,6 +28,8 @@ import { SearchInput } from "@/components/features/SearchInput";
 import { MobileUsersContainer } from "@/components/mobile/MobileUsersContainer";
 import { useResendTemporaryPassword } from "@/utils/useResendTemporaryPassword";
 import { PlusCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
 const UsersListPage = () => {
   const {
@@ -95,9 +97,13 @@ const UsersListPage = () => {
     );
 
   return (
-    <div className="flex w-full lg:p-4 h-auto">
-      <div className="bg-white dark:bg-(--clr-bgDark) lg:flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto hidden">
-        <FormHeading className="mx-auto dark:text-gray-100" heading="Users" />
+    <div className="flex w-full md:p-4 min-h-0">
+      {/* // $ Desktop View */}
+      <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
+        <FormHeading
+          className={cn(sharedStyles.TableHeading)}
+          heading="Users"
+        />
         <GenericTable
           data={users}
           columns={columns}

@@ -31,6 +31,7 @@ export const actionRequestSchema = z.object({
   findings: z.string().optional(),
   images: z.array(z.instanceof(File)).default([]).optional(),
   signtuture: z.string().optional(),
+  signedBy: z.string().min(1, { message: "Please enter name of signatory" }),
 });
 
 // % Schema expected from the backend
@@ -44,6 +45,7 @@ export const actionResponseSchema = actionRequestSchema.extend({
   location: z.string(),
   requested_by: z.string(),
   jobcardNumber: z.string(),
+  signedBy: z.string(),
 });
 
 // $ Type for sending the Action to the backend excluding the images (the images is not included with the initial request). Backend will send a presignURL for the images

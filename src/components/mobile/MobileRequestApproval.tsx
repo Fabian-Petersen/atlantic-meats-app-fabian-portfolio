@@ -16,6 +16,11 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+
+// $ ─── Styles ───────────────────────────────────────────────────────────────────
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
+
 // import { Separator } from "@/components/ui/separator";
 
 // $ ─── Types ────────────────────────────────────────────────────────────────────
@@ -131,9 +136,9 @@ export default function MobileRequestApproval({
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950 lg:hidden w-full">
+    <div className={cn(sharedStyles.cardParent)}>
       {/* ── Sticky top bar ── */}
-      <div className="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700/60 px-4 py-3 flex items-center justify-between gap-3">
+      <div className={cn(sharedStyles.cardTopBar)}>
         <button
           type="button"
           onClick={() => navigate("/jobs/pending")}
@@ -164,7 +169,7 @@ export default function MobileRequestApproval({
       {/* ── Scrollable content ── */}
       <div className="flex-1 overflow-y-auto pb-32">
         {/* Header card */}
-        <div className="mx-4 mt-4 bg-white dark:bg-gray-900 rounded-md border border-gray-200 dark:border-gray-700/60 p-4">
+        <div className={cn(sharedStyles.cardChild)}>
           <div className="mb-3">
             <div className="flex justify-between items-center min-w-0">
               <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">
@@ -184,7 +189,12 @@ export default function MobileRequestApproval({
         </div>
 
         {/* Details card */}
-        <div className="mx-4 mt-3 bg-white dark:bg-gray-900 rounded-md border border-gray-200 dark:border-gray-700/60 divide-y divide-gray-100 dark:divide-gray-700/60 px-4">
+        <div
+          className={cn(
+            sharedStyles.cardChild,
+            "divide-y divide-gray-100 dark:divide-gray-700/60",
+          )}
+        >
           <DetailRow
             icon={User}
             label="Requested by"
@@ -202,7 +212,7 @@ export default function MobileRequestApproval({
 
         {/* Description card */}
         {item?.description && (
-          <div className="mx-4 mt-3 bg-white dark:bg-gray-900 rounded-md border border-gray-200 dark:border-gray-700/60 p-4">
+          <div className={cn(sharedStyles.cardChild)}>
             <div className="flex items-center gap-2 mb-2">
               <FileText className="w-4 h-4 text-gray-400 dark:text-gray-500" />
               <p className="text-xs text-gray-400 dark:text-gray-500">
@@ -217,7 +227,7 @@ export default function MobileRequestApproval({
 
         {/* Comments card */}
         {item?.jobComments && (
-          <div className="mx-4 mt-3 bg-white dark:bg-gray-900 rounded-md border border-gray-200 dark:border-gray-700/60 p-4">
+          <div className={cn(sharedStyles.cardChild)}>
             <div className="flex items-center gap-2 mb-2">
               <MessageSquare className="w-4 h-4 text-gray-400 dark:text-gray-500" />
               <p className="text-xs text-gray-400 dark:text-gray-500">
@@ -231,7 +241,7 @@ export default function MobileRequestApproval({
         )}
 
         {/* Images */}
-        <div className="mx-4 mt-3 bg-white dark:bg-gray-900 rounded-md border border-gray-200 dark:border-gray-700/60 p-4">
+        <div className={cn(sharedStyles.cardChild)}>
           <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">
             Attached photos {hasImages ? `(${item.images!.length})` : ""}
           </p>

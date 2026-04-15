@@ -22,6 +22,8 @@ import { SearchInput } from "../features/SearchInput";
 import EmptyTablePlaceholder from "../features/EmptyTablePlaceholder";
 import TablePaginationControls from "../features/TablePaginationControls";
 import TablePageSizeSelector from "../features/TablePageSizeSelector";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
 
 type Props<T extends { id: string }> = {
   data: T[];
@@ -99,10 +101,8 @@ export function GenericTable<T extends { id: string }>({
   };
 
   return (
-    <div className="w-full lg:p-4 min-h-0 hidden lg:block">
-      {tableHeading && (
-        <FormHeading className="mx-auto" heading={tableHeading} />
-      )}
+    <div className={cn(sharedStyles.table)}>
+      {tableHeading && <FormHeading heading={tableHeading} />}
       {location.pathname === "/dashboard" ? undefined : (
         <div className="flex gap-4 items-end w-full">
           <SearchInput
@@ -125,7 +125,7 @@ export function GenericTable<T extends { id: string }>({
         </div>
       )}
 
-      <div className={`${className} dark:text-gray-200 py-4`}>
+      <div className={`${className} dark:text-gray-200 py-4 md:py-8`}>
         {/*
          * overflow-x-auto lets the table scroll horizontally when columns
          * are resized wider than the container.
@@ -181,7 +181,7 @@ export function GenericTable<T extends { id: string }>({
               ))}
             </thead>
 
-            <tbody className="dark:text-(--clr-textDark)">
+            <tbody className="dark:text-(--clr-textDark) text-(--clr-textLight)">
               {data.length === 0 ? (
                 <EmptyTablePlaceholder
                   message={emptyTablePlaceholderText}
@@ -204,7 +204,7 @@ export function GenericTable<T extends { id: string }>({
                         setSelectedRowId(row.original.id);
                         navigate(`${rowPath}/${row.original.id}`);
                       }}
-                      className={`text-cxs cursor-pointer hover:bg-primary/20 dark:bg-(--bg-primary_dark) ${customRowClass}`}
+                      className={`text-cxs cursor-pointer hover:bg-primary/20 dark:bg-(--bg-secondary_dark) bg-gray-50/90 ${customRowClass}`}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <td key={cell.id} className="px-4 py-3">

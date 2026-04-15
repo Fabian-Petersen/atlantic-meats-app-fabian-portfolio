@@ -24,8 +24,8 @@ const ChatSidebar = () => {
 
   return (
     <div
-      className={`overflow-y-scroll right-0 z-1000 w-80 lg:w-96 fixed top-16 lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-l border-l-gray-200 dark:border-l-[rgba(55,65,81,0.5)]
-      bg-white dark:bg-bgdark transform transition-transform duration-200 ease-in translate-x-0
+      className={`overflow-y-scroll right-0 z-1000 w-80 lg:w-96 fixed top-(--sm-navbarHeight) lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-l border-l-gray-200 dark:border-l-[rgba(55,65,81,0.5)]
+      bg-white dark:bg-(--bg-primary_dark) transform transition-transform duration-200 ease-in translate-x-0
     ${openChatSidebar ? "translate-x-0" : "translate-x-full ease-out"}`}
     >
       <div className="flex flex-col h-full gap-4 lg:p-1 p-2">

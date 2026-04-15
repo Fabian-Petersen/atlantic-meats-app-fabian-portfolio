@@ -102,8 +102,11 @@ function App() {
               />
             }
           >
-            <Route path="/jobs/actioned/:id" element={<JobActionItemPage />} />
-            <Route path="/jobs/actioned" element={<ActionsListPage />} />
+            <Route
+              path="/jobs/completed/id/:id"
+              element={<JobActionItemPage />}
+            />
+            <Route path="/jobs/completed" element={<ActionsListPage />} />
           </Route>
         </Route>
       </Route>

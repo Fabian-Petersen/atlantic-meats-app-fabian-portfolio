@@ -39,6 +39,8 @@ import { usePOST } from "@/utils/api";
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
 import { useGetAll } from "@/utils/api";
 import { Spinner } from "../ui/spinner";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
 const MaintenanceRequestForm = () => {
   // $ Calling the usePOST hook to fetch the data
@@ -169,11 +171,8 @@ const MaintenanceRequestForm = () => {
   };
 
   return (
-    <form
-      className="flex flex-col rounded-lg lg:w-full text-(--clr-textLight) dark:bg-(--bg-primary_dark)"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-4 w-full lg:py-4">
+    <form className={cn(sharedStyles.form)} onSubmit={handleSubmit(onSubmit)}>
+      <div className={cn(sharedStyles.formParent)}>
         <TextAreaInput
           name="description"
           register={register}
@@ -262,7 +261,7 @@ const MaintenanceRequestForm = () => {
         />
       </div>
       <div className="flex w-full">
-        <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72">
+        <div className={cn(sharedStyles.btnParent)}>
           <Button
             type="button"
             onClick={() => {
@@ -270,7 +269,7 @@ const MaintenanceRequestForm = () => {
             }}
             variant="cancel"
             size="lg"
-            className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
+            className={cn(sharedStyles.btnCancel)}
           >
             Cancel
           </Button>
@@ -279,7 +278,7 @@ const MaintenanceRequestForm = () => {
             type="submit"
             variant="submit"
             size="lg"
-            className="flex-1"
+            className={cn(sharedStyles.btnSubmit)}
           >
             {isPending ? <Spinner className="size-8" /> : "Submit"}
           </Button>

@@ -2,7 +2,7 @@
 // $ The list display the items created by a user and all items for the admin
 
 import { useDownloadPdf, useGetAll } from "@/utils/api";
-import { useMemo } from "react";
+import { useState } from "react";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 // import { MobileAssetsOverviewTable } from "@/components/mobile/MolbileAssetsOverviewTable";
 
@@ -12,10 +12,22 @@ import useGlobalContext from "@/context/useGlobalContext";
 
 import type { ActionAPIResponse } from "@/schemas";
 import { ErrorPage } from "@/components/features/Error";
-import type { ActionTableRow } from "@/schemas/actionSchemas";
+// import type { ActionTableRow } from "@/schemas/actionSchemas";
 import { GenericTable } from "@/components/dashboard/GenericTable";
 import FormHeading from "@/../customComponents/FormHeading";
 import { getJobActionColumns } from "@/components/tableColumns/ActionColumns";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
+import { SearchInput } from "@/components/features/SearchInput";
+import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
+import {
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type SortingState,
+} from "@tanstack/react-table";
+import { MobileJobsActionedContainer } from "@/components/mobile/MobileJobsActionedContainer";
 
 const ActionsListPage = () => {
   const ACTIONS_REQUESTS_KEY = ["actionRequests"];
@@ -29,34 +41,52 @@ const ActionsListPage = () => {
     resourcePath: "jobs/jobcard",
   });
 
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "jobCreated", desc: true },
+  ]);
+
+  const [globalFilter, setGlobalFilter] = useState("");
+
   const { setSelectedRowId, setOpenChatSidebar } = useGlobalContext();
 
   // $ Map through the data returned to match the TableRow Data Schema
-  const rows: ActionTableRow[] = useMemo(
-    () =>
-      (data ?? []).map((action) => ({
-        id: action.id,
-        actionCreated: action.actionCreated,
-        actioned_by: action.actioned_by,
-        location: action.location,
-        start_time: action.start_time,
-        end_time: action.end_time,
-        total_km: action.total_km,
-        work_order_number: action.work_order_number,
-        work_completed: action.work_completed,
-        jobcardNumber: action.jobcardNumber,
-        requested_by: action.requested_by,
-        request_id: action.request_id,
-        status: action.status,
-      })),
-    [data],
-  );
+  // const rows: ActionAPIResponse[] = useMemo(
+  //   () =>
+  //     (data ?? []).map((action) => ({
+  //       id: action.id,
+  //       actionCreated: action.actionCreated,
+  //       actioned_by: action.actioned_by,
+  //       location: action.location,
+  //       start_time: action.start_time,
+  //       end_time: action.end_time,
+  //       total_km: action.total_km,
+  //       work_order_number: action.work_order_number,
+  //       work_completed: action.work_completed,
+  //       jobcardNumber: action.jobcardNumber,
+  //       requested_by: action.requested_by,
+  //       request_id: action.request_id,
+  //       status: action.status,
+  //     })),
+  //   [data],
+  // );
 
   const columns = getJobActionColumns(
     setSelectedRowId,
     downloadItem,
     setOpenChatSidebar,
   );
+
+  // $ This data is passed into the mobile component
+  const table = useReactTable({
+    data: data ?? [],
+    columns: columns,
+    state: { sorting, globalFilter },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    globalFilterFn: "includesString",
+  });
 
   if (isPending) return <PageLoadingSpinner />;
   if (isError)
@@ -79,16 +109,38 @@ const ActionsListPage = () => {
 
   return (
     <div className="flex w-full md:p-4 min-h-0">
-      <div className="bg-white dark:bg-[#1d2739] flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto">
+      <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
         <FormHeading
-          className="mx-auto dark:text-gray-100"
+          className={cn(sharedStyles.TableHeading)}
           heading="Completed Jobs List"
         />
-        <GenericTable data={rows} columns={columns} rowPath={"action"} />
-        {/* <MobileActionOverviewTable
-          className="flex lg:hidden"
-          data={table.getRowModel().rows}
-        /> */}
+        <GenericTable data={data} columns={columns} rowPath={"id"} />
+      </div>
+      {/* // $ Mobile View */}
+      <div className="grid lg:hidden gap-2 w-full p-2">
+        <SearchInput
+          value={globalFilter}
+          onChange={setGlobalFilter}
+          placeholder="Search Jobs"
+        />
+        {data.length === 0 ? (
+          <EmptyMobilePlaceholder message="No compleyed jobs yet" />
+        ) : table.getRowModel().rows.length === 0 ? (
+          <EmptyMobilePlaceholder
+            message={`No results for "${globalFilter}"`}
+          />
+        ) : (
+          <div className="grid gap-2">
+            <FormHeading
+              className="mx-auto dark:text-gray-100"
+              heading="Jobs Actioned"
+            />
+            <MobileJobsActionedContainer
+              className="flex md:hidden"
+              data={table.getRowModel().rows}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

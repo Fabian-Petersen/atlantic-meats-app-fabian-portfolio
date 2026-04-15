@@ -22,10 +22,16 @@
   --clr-primary: #fcb53b;
   --clr-primary_red: #ff3737;
   --clr-primary-dark: #1b64f1;
-  /* --clr-bgDark: #030712; */
+  /* Dark Mode Colors */
+  --pageDark: #030712; /* bg of the pages: tailwind bg-gray-950 */
+  --bg-primary_dark: #101828; /* bg color of a container */
+  --bg-secondary_dark: #1d2739; /*bg of the container content #1b64f1*/
+  /* Light Mode Colors */
+  --pageLight: #f9fafb;
+  --bg-primary-light: #fff; /* bg color of a container */
+  --bg-secondary_light: ##fafafa; /*bg of the container content #1b64f1*/
+
   --clr-bgDark: #101827;
-  --bg-primary_dark: #101828; /*bg color of a container*/
-  --bg-secondary_dark: #1d2739; /*#1b64f1*/
   --clr-borderDark: #364153;
   --clr-borderDarkRed: #9f0712;
 
@@ -64,15 +70,15 @@ html {
 }
 
 .resizer {
-  position: "absolute";
+  position: absolute;
   opacity: 0;
   top: 0;
   right: 0;
-  height: "100%";
-  width: "5px";
-  background-color: "#27bbff";
-  cursor: "col-resize";
-  border-radius: "6px";
+  height: 100%;
+  width: 5px;
+  background-color: #27bbff;
+  cursor: col-resize;
+  border-radius: 6px;
 }
 
 .isResizing {

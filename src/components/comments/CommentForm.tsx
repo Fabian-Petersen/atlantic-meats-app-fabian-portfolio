@@ -48,7 +48,6 @@ const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
 
   // $ Submit the data to the backend
   const onSubmit = async (data: CommentRequestFormValues) => {
-    console.log("comment-message", data);
     try {
       const payload: CommentPayload = { ...data, request_id: selectedRowId };
       console.log("comment-payload:", payload);
@@ -57,7 +56,7 @@ const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
 
       console.log("comment-response:", response);
     } catch (error) {
-      console.log(error);
+      console.log("comment-error:", error);
     }
   };
 
@@ -67,7 +66,7 @@ const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
       className="bg-gray-50 dark:bg-(--clr-bgItem) w-full p-2 rounded-md h-auto gap-4 flex-col flex"
     >
       <div className="flex gap-2 items-center justify-between w-full">
-        <p className="text-gray-500 dark:text-(--clr-textDark) text-sm text-md">
+        <p className="text-gray-500 dark:text-(--clr-textDark) text-sm md:text-md">
           Add a comment
         </p>
         <button
@@ -82,7 +81,7 @@ const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
       <Textarea
         rows={3}
         {...register("comment")}
-        className="min-h-0 h-10 border-gray-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-0 text-(--clr-textLight) dark:text-(--clr-textDark) text-[0.5rem]"
+        className="min-h-0 h-10 border-gray-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-0 text-(--clr-textLight) dark:text-(--clr-textDark) text-sm"
       />
       {errors.comment && (
         <p className="text-xs text-red-500">{errors.comment.message}</p>

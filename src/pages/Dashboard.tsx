@@ -36,7 +36,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <main className="w-full bg-gray-100 dark:bg-bgdark h-full md:p-4 p-2">
+    <main className="w-full h-full md:p-4 p-2">
       {/* <NotificationSidebar /> */}
       <div className="grid grid-cols-2 gap-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4 overflow-x-hidden h-auto px-2">
         {/* $ Cards */}

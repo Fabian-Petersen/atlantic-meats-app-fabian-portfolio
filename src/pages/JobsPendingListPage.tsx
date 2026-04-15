@@ -22,6 +22,8 @@ import { GenericTable } from "@/components/dashboard/GenericTable";
 import { getJobPendingColumns } from "@/components/tableColumns/PendingColumns";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { SearchInput } from "@/components/features/SearchInput";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
 const JobsPendingListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<JobAPIResponse[]>({
@@ -73,11 +75,11 @@ const JobsPendingListPage = () => {
     );
 
   return (
-    <div className="flex w-full lg:p-4 h-auto">
+    <div className="flex w-full md:p-4 min-h-0">
       {/* // $ Desktop View */}
-      <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto hidden">
+      <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
         <FormHeading
-          className="mx-auto dark:text-gray-100"
+          className={cn(sharedStyles.TableHeading)}
           heading="Pending Requests"
         />
         <GenericTable

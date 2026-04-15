@@ -32,6 +32,8 @@ import TextAreaInput from "../../../customComponents/TextAreaInput";
 import DigitalSignature from "./DigitalSignature";
 import FileInput from "../../../customComponents/FileInput";
 import useGlobalContext from "@/context/useGlobalContext";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
 type Props = {
   onCancel: () => void;
@@ -146,77 +148,67 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
   }, [isError, setShowError]);
 
   return (
-    <form
-      className="flex flex-col rounded-lg lg:w-full text-font dark:bg-[#1d2739] pt-6"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="grid lg:grid-cols-2 gap-6 lg:gap-6 w-full">
-        <div className="col-span-2 lg:col-span-1">
-          <FormRowInput
-            label="Start Date/Time"
-            type="datetime-local"
-            name="start_time"
-            placeholder="Start Time"
-            register={register}
-            error={errors.start_time}
-          />
-        </div>
-        <div className="col-span-2 lg:col-span-1 mt-2 lg:mt-0">
-          <FormRowInput
-            label="End Date/Time"
-            type="datetime-local"
-            name="end_time"
-            placeholder="End Time"
-            register={register}
-            error={errors.end_time}
-          />
-        </div>
-        <div className="col-span-2 lg:col-span-1">
-          <FormRowInput
-            label="Kilometers"
-            type="text"
-            name="total_km"
-            placeholder="Total Km's"
-            register={register}
-            error={errors.total_km}
-          />
-        </div>
-        <div className="col-span-2 lg:col-span-1">
-          <FormRowInput
-            label="Work Order Number"
-            type="text"
-            name="work_order_number"
-            placeholder="Work Order Number"
-            register={register}
-            error={errors.work_order_number}
-          />
-        </div>
-        <div className="col-span-2 lg:col-span-1">
-          <FormRowSelect
-            label="Root Cause"
-            name="root_cause"
-            options={ROOT_CAUSES.map((cause) => ({
-              label: cause,
-              value: cause,
-            }))}
-            placeholder="Select type"
-            register={register}
-            error={errors.root_cause}
-          />
-        </div>
-        <div className="col-span-2 lg:col-span-1">
-          <FormRowSelect
-            label="Status"
-            name="status"
-            options={status}
-            className="gap-2"
-            placeholder="Action Status"
-            register={register}
-            error={errors.status}
-          />
-        </div>
+    <form className={cn(sharedStyles.form)} onSubmit={handleSubmit(onSubmit)}>
+      <div className={cn(sharedStyles.formParent, "")}>
+        <FormRowInput
+          // label="Start Date/Time"
+          type="datetime-local"
+          name="start_time"
+          placeholder="Start Time"
+          register={register}
+          className="md:col-span-1"
+          error={errors.start_time}
+        />
+        <FormRowInput
+          // label="End Date/Time"
+          type="datetime-local"
+          name="end_time"
+          placeholder="End Time"
+          register={register}
+          className="md:col-span-1"
+          error={errors.end_time}
+        />
+        <FormRowInput
+          // label="Kilometers"
+          type="text"
+          name="total_km"
+          placeholder="Total Km's"
+          register={register}
+          className="col-span-2 md:col-span-1"
+          error={errors.total_km}
+        />
+        <FormRowInput
+          // label="Work Order Number"
+          type="text"
+          name="work_order_number"
+          placeholder="Work Order Number"
+          register={register}
+          className="col-span-2 md:col-span-1"
+          error={errors.work_order_number}
+        />
+        <FormRowSelect
+          // label="Root Cause"
+          name="root_cause"
+          options={ROOT_CAUSES.map((cause) => ({
+            label: cause,
+            value: cause,
+          }))}
+          placeholder="Select type"
+          register={register}
+          className="col-span-2 md:col-span-1"
+          error={errors.root_cause}
+        />
+        <FormRowSelect
+          // label="Status"
+          name="status"
+          options={status}
+          placeholder="Job Status"
+          register={register}
+          className="col-span-2 md:col-span-1"
+          error={errors.status}
+        />
         <TextAreaInput
-          label="Work Completed"
+          // label="Work Completed"
           name="work_completed"
           placeholder="Work Completed"
           register={register}
@@ -225,7 +217,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
           error={errors.work_completed}
         />
         <TextAreaInput
-          label="Findings"
+          // label="Findings"
           name="findings"
           placeholder="Findings"
           className="col-span-2"
@@ -233,34 +225,43 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
           rows={1}
           error={errors.findings}
         />
+        <FileInput
+          label=""
+          control={control as unknown as Control<ActionRequestFormValues>}
+          name="images"
+          multiple={true}
+          className="col-span-2"
+        />
+        <FormRowInput
+          name="signedBy"
+          placeholder="signed by"
+          className="col-span-2"
+          register={register}
+          error={errors.signedBy}
+        />
       </div>
-      <FileInput
-        label=""
-        control={control as unknown as Control<ActionRequestFormValues>}
-        name="images"
-        multiple={true}
-        className="col-span-2 mt-2"
-      />
-      <DigitalSignature onSave={setSignature} className="mt-6" />
-      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 bg-white mt-auto">
-        <Button
-          className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
-          variant="cancel"
-          size="lg"
-          type="button"
-          onClick={onCancel}
-        >
-          Cancel
-        </Button>
-        <Button
-          disabled={isSubmitting}
-          type="submit"
-          variant="submit"
-          size="lg"
-          className="flex-1"
-        >
-          {isSubmitting ? "Submitting..." : "Submit"}
-        </Button>
+      <DigitalSignature onSave={setSignature} className="mb-6" />
+      <div className="flex w-full">
+        <div className={cn(sharedStyles.btnParent)}>
+          <Button
+            className={cn(sharedStyles.btnCancel)}
+            variant="cancel"
+            size="lg"
+            type="button"
+            onClick={onCancel}
+          >
+            Cancel
+          </Button>
+          <Button
+            disabled={isSubmitting}
+            type="submit"
+            variant="submit"
+            size="lg"
+            className={cn(sharedStyles.btnSubmit)}
+          >
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </Button>
+        </div>
       </div>
     </form>
   );

@@ -1,7 +1,11 @@
 // $ This component renders the columns for the completed jobs
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { ActionTableRow, JobcardPresignedUrlResponse } from "@/schemas";
+import type {
+  // ActionTableRow,
+  JobcardPresignedUrlResponse,
+  ActionAPIResponse,
+} from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 
@@ -27,7 +31,7 @@ export const getJobActionColumns = (
   //   config: { resourcePath: Resource; queryKey: readonly unknown[] },
   // ) => void,
   setOpenChatSidebar: (v: boolean) => void,
-): ColumnDef<ActionTableRow>[] => [
+): ColumnDef<ActionAPIResponse>[] => [
   {
     accessorKey: "actionCreated",
     header: "Date Created",

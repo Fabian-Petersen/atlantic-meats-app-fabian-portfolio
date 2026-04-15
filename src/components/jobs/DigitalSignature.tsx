@@ -31,15 +31,18 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({
 
   return (
     <div className={`w-full mt-4 ${className}`}>
-      <p className="mb-2 text-xs ml-1">Customer Signature</p>
+      <p className="mb-2 text-xs ml-1 dark:text-(--clr-textDark)">
+        Customer Signature
+      </p>
 
-      <div className="border border-gray-300 rounded-md outline-none bg-white">
+      <div className="border border-gray-300 dark:border-gray-700/30 rounded-md outline-none bg-white dark:bg-(--bg-primary_dark)">
         <SignatureCanvas
           ref={sigRef}
           onEnd={handleEnd}
           penColor="black"
           canvasProps={{
-            className: "w-full h-40 touch-none",
+            className:
+              "w-full h-40 touch-none dark:text-(--clr-textDark) text-white",
           }}
         />
       </div>
@@ -48,7 +51,7 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({
         <button
           type="button"
           onClick={handleClear}
-          className="px-3 py-1 text-sm hover:text-red-500 border rounded-sm border-gray-300 hover:cursor-pointer tracking-wide"
+          className="px-3 py-1 text-sm hover:text-red-500 border rounded-sm border-gray-300 hover:cursor-pointer tracking-wide dark:text-(--clr-textDark)"
         >
           Clear
         </button>
