@@ -21,7 +21,7 @@ const Navbar = ({ className }: Props) => {
         {isAuthPage ? (
           <ThemeToggleButton />
         ) : (
-          <div className="flex justify-end w-full px-2 lg:px-4">
+          <div className="flex justify-end w-full px-2 lg:px-0">
             <NavbarActionButtons />
           </div>
         )}

@@ -54,7 +54,7 @@ const Dashboard = () => {
           ) : (
             <>
               <ChartHeading
-                title="Job Requests YTD"
+                title="Maintenance Cost YTD"
                 className="font-normal dark:text-(--clr-textDark) text-(--clr-textLight)"
               />
               <JobRequestsChart />

@@ -6,6 +6,8 @@ import FormHeading from "../../../customComponents/FormHeading";
 import { toast } from "sonner";
 import { useDeleteItem, type Resource } from "@/utils/api";
 import { Spinner } from "../ui/spinner";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
 const DeleteItemModal = () => {
   const {
@@ -45,37 +47,33 @@ const DeleteItemModal = () => {
   };
 
   return (
-    <form
-      onSubmit={handleDelete}
-      className="fixed inset-0 z-50 flex items-center justify-center px-2"
-    >
-      <div className="max-w-lg rounded-md bg-white px-4 py-6 md:p-6 shadow-xl backdrop-blur-xl dark:bg-(--bg-primary_dark) dark:border-gray-700/60 dark:border">
+    <form onSubmit={handleDelete} className={cn(sharedStyles.modalForm)}>
+      <div className={cn(sharedStyles.modalParent)}>
         {/* Header */}
-        <div className="flex flex-col items-center gap-3 justify-center w-full">
+        <div className="flex flex-col items-center md:gap-3 justify-center w-full">
           <div className="rounded-full p-4 text-red-500 bg-red-500/20">
-            <AlertTriangle size={36} />
+            <AlertTriangle className="size-12 md:size-16" />
           </div>
-          <div className="text-center">
-            <FormHeading
-              heading="Confirm Delete"
-              className="text-md md:text-lg"
-            />
-          </div>
+          <FormHeading
+            heading="Confirm Delete"
+            className={cn(sharedStyles.headingForm, "md:text-center")}
+          />
         </div>
 
         {/* Body */}
-        <p className="mt-2 text-xs md:text-sm text-gray-600 dark:text-gray-300 text-center">
-          {`Are you sure you want to delete the ${config.resourceName}?
-          This action cannot be undone.`}
+        <p className="w-3/4 md:mt-2 text-cxs md:text-xs text-gray-600 dark:text-gray-300 text-center mx-auto">
+          {`Are you sure you want to delete the ${config.resourceName}? This action cannot be undone.`}
         </p>
 
         {/* Actions */}
-        <div className="mt-6 flex gap-4 lg:flex-row justify-end">
+        <div
+          className={cn(sharedStyles.btnParent, sharedStyles.modalBtnParent)}
+        >
           <button
             type="button"
             // disabled={isPending}
             onClick={() => setShowDeleteDialog(false)}
-            className="flex-1 py-2 text-xs font-medium rounded-lg dark:bg-green/20 bg-orange-500/10 border-green/20 hover:bg-orange-500/90 hover:shadow-md text-orange-500 border dark:border-green/30 transition-colors"
+            className={cn(sharedStyles.btnCancel, sharedStyles.btn)}
           >
             Cancel
           </button>
@@ -83,11 +81,11 @@ const DeleteItemModal = () => {
           <button
             type="submit"
             disabled={isPending}
-            className="flex-1 py-2 text-xs font-medium rounded-lg border border-red-400 dark:border-red-500 text-red-600 bg-red-500/20 dark:bg-red-300/20 dark:text-red-300 hover:bg-gray-50 dark:hover:bg-red/5 transition-colors"
+            className={cn(sharedStyles.btnDelete, sharedStyles.btn, "py-1")}
           >
-            {isPending ? (
+            {!isPending ? (
               <div className="w-full flex items-center justify-center text-white">
-                <Spinner className="size-6 md:size-8 text-red-500" />
+                <Spinner className="size-6 md:size-6 text-red-500" />
               </div>
             ) : (
               "Delete"

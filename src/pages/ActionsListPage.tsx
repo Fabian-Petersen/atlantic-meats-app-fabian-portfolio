@@ -111,7 +111,7 @@ const ActionsListPage = () => {
     <div className="flex w-full md:p-4 min-h-0">
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
         <FormHeading
-          className={cn(sharedStyles.TableHeading)}
+          className={cn(sharedStyles.headingTable)}
           heading="Completed Jobs List"
         />
         <GenericTable data={data} columns={columns} rowPath={"id"} />

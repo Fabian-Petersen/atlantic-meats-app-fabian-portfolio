@@ -19,12 +19,12 @@ const LogoutButton = ({ className }: Props) => {
         logout
       </button>
       {/* // Mobile Button */}
-      <div className="p-2 flex items-center justify-center rounded-md text-gray-900 hover:cursor-pointer">
+      <div className="md:hidden p-2 flex items-center justify-center rounded-md text-gray-900 hover:cursor-pointer">
         <button
           aria-label="logout button"
           type="button"
           onClick={handleLogout}
-          className="md:hidden hover:cursor-pointer rounded-full bg-white/30 p-1.5"
+          className=" hover:cursor-pointer rounded-full bg-white/30 p-1.5"
         >
           <LogOutIcon size={18} />
         </button>

@@ -101,7 +101,7 @@ const UsersListPage = () => {
       {/* // $ Desktop View */}
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
         <FormHeading
-          className={cn(sharedStyles.TableHeading)}
+          className={cn(sharedStyles.headingTable)}
           heading="Users"
         />
         <GenericTable

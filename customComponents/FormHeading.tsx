@@ -13,8 +13,8 @@ const FormHeading = ({ heading, className, h3, h2 }: FormHeadingProps) => {
     <div
       className={cn(
         sharedStyles.heading,
-        sharedStyles.formHeading,
-        sharedStyles.TableHeading,
+        sharedStyles.headingForm,
+        sharedStyles.headingTable,
         className,
       )}
     >

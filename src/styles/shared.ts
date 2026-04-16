@@ -11,20 +11,25 @@ export const sharedStyles = {
     "mt-4 bg-white dark:bg-primary_dark rounded-md border border-gray-200 dark:border-gray-700/60 p-4 w-full",
   ),
   // $ Buttons
-  btn: cn(),
   btnParent: cn("flex w-full md:max-w-1/2 ml-auto gap-2 md:w-72"), // container for the buttons
-  btnCancel: cn(
-    "flex-1 py-2 text-xs font-medium rounded-md border transition-colors",
-    // light
-    "bg-red-500/10 border-red-500/40 text-red-700",
-    // dark
-    "dark:bg-red-500/15 dark:border-red-500/25 dark:text-red-300",
+  btn: cn(
+    // General Styles shared by all
+    "flex-1 py-2 text-xs font-medium border rounded-md transition-colors",
     // hover
-    "hover:bg-red-500/20 hover:border-red-500/60",
-    "dark:hover:bg-red-500/22 dark:hover:border-red-500/40",
+    "hover:cursor-pointer",
+  ), // button general styles
+  btnCancel: cn(
+    "",
+    // light
+    "bg-orange-500/10 border-orange-500/40 text-orange-700",
+    // dark
+    "dark:bg-orange-500/15 dark:border-orange-500/25 dark:text-orange-300",
+    // hover
+    "hover:bg-orange-500/20 hover:border-orange-500/60",
+    "dark:hover:bg-orange-500/22 dark:hover:border-orange-500/40",
   ),
   btnApprove: cn(
-    "flex-1 py-2 text-xs font-medium rounded-md border transition-colors",
+    "",
     // light
     "bg-green-500/10 border-green-500/40 text-green-700",
     // dark
@@ -34,7 +39,7 @@ export const sharedStyles = {
     "dark:hover:bg-green-500/22 dark:hover:border-green-500/40",
   ),
   btnView: cn(
-    "flex-1 py-2 text-xs font-medium rounded-md border transition-colors",
+    "",
     // light
     "bg-green-500/10 border-green-500/40 text-green-700",
     // dark
@@ -45,7 +50,7 @@ export const sharedStyles = {
   ),
   btnSubmit: cn(
     // general
-    "flex-1 py-2 text-xs font-medium rounded-md border transition-colors",
+    "",
     // light
     "bg-[#fcb53b]/15 border-[#fcb53b]/50 text-[#a06b00]",
     // dark
@@ -54,13 +59,20 @@ export const sharedStyles = {
     "hover:bg-[#fcb53b]/25 hover:border-[#fcb53b]/70",
     "dark:hover:bg-[#fcb53b]/22 dark:hover:border-[#fcb53b]/45",
   ),
-  btnReject: cn(
-    "flex-1 py-2 text-xs font-medium rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors border dark:border-(--clr-borderDarkRed)",
+  btnDelete: cn(
+    "",
+    // light
+    "bg-red-500/10 border-red-500/40 text-red-700",
+    // dark
+    "dark:bg-red-500/15 dark:border-red-500/30 dark:text-red-300",
+    // hover
+    "hover:bg-red-500/20 hover:border-red-500/60",
+    "dark:hover:bg-red-500/22 dark:hover:border-red-500/40",
   ),
   // $ headings:
   heading: cn("text-xl md:text-2xl capitalize w-full dark:text-gray-100"), // shared styles
-  formHeading: cn("text-center md:text-left md:px-0"), // form headings
-  TableHeading: cn("text-left p-4 md:py-0"), // table headings
+  headingForm: cn("text-center md:text-left md:px-0"), // form headings
+  headingTable: cn("text-left p-4 md:py-0"), // table headings
 
   // $ Forms:
   form: cn(
@@ -73,4 +85,11 @@ export const sharedStyles = {
   tableParent: cn(),
   tableRows: cn(),
   tableHeaders: cn(),
+
+  // $ Modals
+  modalForm: cn("fixed inset-0 z-50 flex items-center justify-center px-2"), // form housing the content
+  modalParent: cn(
+    "flex flex-col gap-2 max-w-md rounded-lg bg-white p-4 md:py-6 shadow-xl backdrop-blur-xl dark:bg-(--bg-secondary_dark)",
+  ), // Parent of the outermost div
+  modalBtnParent: cn("mt-4"),
 };

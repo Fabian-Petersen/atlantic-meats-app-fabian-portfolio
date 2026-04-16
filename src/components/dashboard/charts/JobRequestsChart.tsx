@@ -15,7 +15,7 @@ import {
 // };
 
 function JobRequestsChart() {
-  const revenueData = [
+  const jobRequestCostData = [
     { name: "Jan", value: 4000 },
     { name: "Feb", value: 3000 },
     { name: "Mar", value: 5000 },
@@ -38,7 +38,7 @@ function JobRequestsChart() {
   return (
     <div className="h-[300px] w-full outline-none focus:outline-none focus:ring-0">
       <ResponsiveContainer width="100%" height="90%">
-        <BarChart data={revenueData} barSize={20}>
+        <BarChart data={jobRequestCostData} barSize={20}>
           <XAxis dataKey="name" style={{ fontSize: "15px" }} />
           <YAxis style={{ fontSize: "15px" }} />
           <Tooltip cursor={{ fill: "#fcb53b40" }} />
@@ -52,9 +52,9 @@ function JobRequestsChart() {
               strokeWidth: 0,
             }}
             style={{ cursor: "pointer" }}
-            //   onClick={(revenueData, index) => {
+            //   onClick={(jobRequestCostData, index) => {
             //     // invoke your function
-            //     handleBarClick(revenueData, index);
+            //     handleBarClick(jobRequestCostData, index);
             //   }}
             //
           />

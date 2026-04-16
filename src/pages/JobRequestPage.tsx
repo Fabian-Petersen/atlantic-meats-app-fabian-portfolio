@@ -18,7 +18,7 @@ const JobRequestPage = () => {
     <div className="flex items-center justify-center w-full h-full p-4">
       <div className="bg-white flex flex-col gap-4 w-full lg:max-w-3xl h-auto rounded-xl shadow-lg p-4 dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) dark:border-gray-700/50 dark:border">
         <FormHeading
-          className={cn(sharedStyles.formHeading)}
+          className={cn(sharedStyles.headingForm)}
           heading="Create Job Request"
         />
         <JobRequestForm />
