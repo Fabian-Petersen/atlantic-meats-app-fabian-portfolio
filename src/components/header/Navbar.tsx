@@ -14,7 +14,7 @@ const Navbar = ({ className }: Props) => {
   const isAuthPage = pathname === "/" || pathname === "/forgot-password";
 
   return (
-    <nav className={`${className} fixed z-200 w-full`}>
+    <nav className={`${className} fixed z-20 w-full`}>
       {/* Row 1: Logo + action icons */}
       <div className="flex justify-between w-full items-center px-2 md:px-4 md:py-2 bg-primary">
         <Logo />

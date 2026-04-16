@@ -81,7 +81,6 @@ function CreateUserForm() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4 md:gap-y-6 w-full">
         <FormHeading
           heading="Profile Information"
-          h3={true}
           className="col-span-full text-sm"
         />
         <FormRowInput
@@ -121,7 +120,6 @@ function CreateUserForm() {
 
         <FormHeading
           heading="Contact Information"
-          h3={true}
           className="col-span-full text-sm"
         />
         <FormRowInput

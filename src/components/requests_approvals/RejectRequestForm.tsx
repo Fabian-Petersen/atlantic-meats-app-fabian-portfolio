@@ -21,6 +21,10 @@ import { Spinner } from "../ui/spinner";
 // $ Context
 import useGlobalContext from "@/context/useGlobalContext";
 import { useNavigate } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
+// import { OctagonX } from "lucide-react";
+// import FormHeading from "../../../customComponents/FormHeading";
 
 const RequestRejectedForm = () => {
   const {
@@ -95,45 +99,58 @@ const RequestRejectedForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col rounded-lg lg:w-full dark:bg-(--bg-primary_dark) dark:text-gray-100 dark:border-gray-700/50"
+      className={cn(sharedStyles.modalForm)}
     >
-      <div className="grid gap-4 w-full lg:py-2">
-        <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300">
+      {/* <div className={cn(sharedStyles.modalParent)}> */}
+      {/* Header */}
+      {/* <div className="flex flex-col items-center md:gap-3 justify-center w-full">
+          <div className="rounded-full p-4 text-red-500 bg-red-500/20">
+            <OctagonX className="size-12 md:size-16" />
+          </div>
+          <FormHeading
+            heading="Reject Request"
+            className={cn(sharedStyles.headingForm, "md:text-center")}
+          />
+        </div> */}
+      {/* Body */}
+      {/* <p className="text-cxs md:text-xs text-gray-600 dark:text-gray-300 text-center w-3/4 mx-auto">
           Are you sure you want to reject this item? This action cannot be
           undone.
-        </p>
-        <TextAreaInput
-          register={register}
-          placeholder="Enter reason for rejecting request"
-          rows={1}
-          name="reject_message"
-          error={errors.reject_message}
-          className="placeholder-black resize-none overflow-hidden no-scrollbar placeholder:text-lg"
-        />
-        <div className="flex w-full lg:w-1/2 ml-auto gap-2 max-w-72 mt-auto">
-          <button
-            type="button"
-            disabled={isPending}
-            onClick={() => setShowRejectRequestDialog(false)}
-            className="flex-1 py-2 text-xs font-medium rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors border dark:border-(--clr-borderDarkRed) hover:cursor-pointer"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={isPending}
-            className="flex-1 py-2 text-xs font-medium rounded-lg border border-primary dark:border-primary text-primary dark:bg-primary/20 dark:text-primary-300 hover:bg-gray-50 dark:hover:bg-red/5 transition-colors"
-          >
-            {isPending ? (
-              <div className="flex gap-4 items-center justify-center">
-                <Spinner data-icon="inline-start" className="size-6" />
-              </div>
-            ) : (
-              "Submit"
-            )}
-          </button>
-        </div>
+        </p> */}
+      {/* Form Input */}
+      <TextAreaInput
+        register={register}
+        placeholder="Enter reason for rejecting request"
+        rows={1}
+        name="reject_message"
+        error={errors.reject_message}
+        className="placeholder-black resize-none overflow-hidden no-scrollbar placeholder:text-lg"
+      />
+      {/* Actions */}
+      <div className={cn(sharedStyles.btnParent, sharedStyles.modalBtnParent)}>
+        <button
+          type="button"
+          disabled={isPending}
+          onClick={() => setShowRejectRequestDialog(false)}
+          className={cn(sharedStyles.btnCancel, sharedStyles.btn)}
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          disabled={isPending}
+          className={cn(sharedStyles.btnSubmit, sharedStyles.btn)}
+        >
+          {isPending ? (
+            <div className="flex gap-4 items-center justify-center">
+              <Spinner data-icon="inline-start" className="size-6" />
+            </div>
+          ) : (
+            "Submit"
+          )}
+        </button>
       </div>
+      {/* </div> */}
     </form>
   );
 };

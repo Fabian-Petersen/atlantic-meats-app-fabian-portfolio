@@ -87,9 +87,35 @@ export const sharedStyles = {
   tableHeaders: cn(),
 
   // $ Modals
-  modalForm: cn("fixed inset-0 z-50 flex items-center justify-center px-2"), // form housing the content
-  modalParent: cn(
-    "flex flex-col gap-2 max-w-md rounded-lg bg-white p-4 md:py-6 shadow-xl backdrop-blur-xl dark:bg-(--bg-secondary_dark)",
-  ), // Parent of the outermost div
+  modal: cn(
+    // Sizing
+    "max-w-80 md:max-w-lg",
+    // Layout
+    "flex flex-col",
+    // Appearance
+    "p-4 bg-white  rounded-lg",
+    //light
+    " bg-white text-(--clr-textLight)",
+    // Dark
+    "dark:bg-(--bg-secondary_dark) border-none dark:border-(--clr-borderDark) dark:text-(--clr-textDark)",
+  ),
+  modalLarge: cn(
+    // Position (below Navbar)
+    "max-h-[calc(100vh-var(--sm-navbarHeight)-2rem)]",
+    // Sizing
+    "max-w-80 md:max-w-lg",
+    // Layout
+    "flex flex-col",
+    // Appearance
+    "p-4 bg-white rounded-lg overflow-hidden",
+    //light
+    " bg-white text-(--clr-textLight)",
+    // Dark
+    "dark:bg-(--bg-secondary_dark) border-none dark:border-(--clr-borderDark) dark:text-(--clr-textDark)",
+    "overflow-y-auto",
+  ),
+  modalForm: cn("flex flex-col items-center justify-center px-2"), // form housing the content
+  modalParent: cn("flex flex-col gap-4 w-full rounded-lg"), // Parent of the outermost div
   modalBtnParent: cn("mt-4"),
+  modalOverlay: cn("bg-black/60 dark:bg-black/30 backdrop-blur-xs"),
 };

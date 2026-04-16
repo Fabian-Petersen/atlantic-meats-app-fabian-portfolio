@@ -15,6 +15,8 @@ import useGlobalContext from "@/context/useGlobalContext";
 import FormHeading from "../../../customComponents/FormHeading";
 import { useById } from "@/utils/api";
 import type { JobAPIResponse } from "@/schemas";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
 function ActionRequestDialog() {
   const { showActionDialog, setShowActionDialog, selectedRowId } =
@@ -28,20 +30,24 @@ function ActionRequestDialog() {
 
   return (
     <Dialog open={showActionDialog} onOpenChange={setShowActionDialog}>
-      <DialogContent className="sm:max-w-[625px] bg-white z-3000 border-none max-h-[90vh] flex flex-col">
-        <DialogTitle className="flex flex-col gap-4 py-4 shrink-0">
+      <DialogContent className={cn(sharedStyles.modalLarge)}>
+        <DialogTitle>
           <FormHeading
-            className="font-normal"
-            heading="Action Maintenance Request"
+            arial-label="create new user modal"
+            className={cn(
+              sharedStyles.headingForm,
+              "md:text-center font-normal",
+            )}
+            heading="Action Job Request"
           />
-          <div>
-            <span className="text-xs font-medium flex gap-2 flex-col">
+          <div className="flex gap-2 justify-center">
+            <span className="text-xs font-medium">
               {`Job Number: ${job?.jobcardNumber}`}
             </span>
             <span className="text-xs font-medium"> Requested By: Fabian</span>
           </div>
         </DialogTitle>
-        <div className="overflow-y-auto flex-1 no-scrollbar">
+        <div className="overflow-y-auto custom-scrollbar pr-2">
           <MaintenanceActionForm onCancel={() => setShowActionDialog(false)} />
         </div>
       </DialogContent>

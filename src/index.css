@@ -119,6 +119,36 @@ html {
   scrollbar-width: none; /* Firefox */
 }
 
+/* Custom Scrollbar */
+/* Chrome, Edge, Safari */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 3px;
+  padding: 0 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: color-mix(
+    in srgb,
+    var(--clr-primary) 60%,
+    white
+  ); /* gray-500 */
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: var(--clr-primary); /* darker */
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--clr-primary) 60%, white) transparent;
+}
+
 /* These styles remove the outline around the graphs when in focus */
 .recharts-wrapper:focus,
 .recharts-surface:focus {
