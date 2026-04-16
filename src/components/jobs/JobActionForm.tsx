@@ -34,13 +34,14 @@ import FileInput from "../../../customComponents/FileInput";
 import useGlobalContext from "@/context/useGlobalContext";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
+import { Spinner } from "../ui/spinner";
 
 type Props = {
   onCancel: () => void;
 };
 
 const MaintenanceActionForm = ({ onCancel }: Props) => {
-  const { mutateAsync, isError } = useCreateActionRequest();
+  const { mutateAsync, isError, isPending } = useCreateActionRequest();
 
   const [signature, setSignature] = useState<string | null>(null);
   const { setShowError, selectedRowId, setShowActionDialog } =
@@ -71,7 +72,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ActionRequestFormValues>({
     // defaultValues: {
     // start_time: toDateTimeLocal(now),
@@ -244,22 +245,22 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
       <div className="flex w-full">
         <div className={cn(sharedStyles.btnParent)}>
           <Button
-            className={cn(sharedStyles.btnCancel)}
+            className={cn(sharedStyles.btnCancel, sharedStyles.btn)}
             variant="cancel"
-            size="lg"
+            // size="lg"
             type="button"
             onClick={onCancel}
           >
             Cancel
           </Button>
           <Button
-            disabled={isSubmitting}
+            disabled={isPending}
             type="submit"
             variant="submit"
-            size="lg"
-            className={cn(sharedStyles.btnSubmit)}
+            // size="lg"
+            className={cn(sharedStyles.btnSubmit, sharedStyles.btn)}
           >
-            {isSubmitting ? "Submitting..." : "Submit"}
+            {isPending ? <Spinner className="size-8" /> : "Submit"}
           </Button>
         </div>
       </div>

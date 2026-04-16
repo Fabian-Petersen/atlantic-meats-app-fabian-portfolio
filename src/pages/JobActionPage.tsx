@@ -9,10 +9,10 @@ import { useNavigate } from "react-router-dom";
 const JobActionPage = () => {
   const navigate = useNavigate();
   return (
-    <div className="flex items-center justify-center w-full h-full p-4">
-      <div className="dark:bg-(--bg-primary_dark) bg-white flex flex-col gap-1 lg:gap-4 w-full max-w-xl lg:max-w-3xl h-auto rounded-xl shadow-lg p-4 dark:text-gray-100 dark:border-gray-700/50 dark:border">
+    <div className={cn(sharedStyles.pageContainer)}>
+      <div className={cn(sharedStyles.pageContent)}>
         <FormHeading
-          heading="Job Completed"
+          heading="Action Job"
           className={cn(sharedStyles.headingForm)}
         />
         <JobActionForm onCancel={() => navigate("/jobs/completed")} />

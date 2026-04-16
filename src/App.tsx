@@ -19,6 +19,7 @@ import RoleGaurdRoute from "./routes/RoleGaurdRoute";
 //$ Page Layouts
 // import JobItemPage from "./pages/JobApprovedItemPage";
 import JobActionItemPage from "./pages/JobActionPage";
+import JobActionPage from "./pages/JobActionPage";
 
 // $ Assets Pages
 import CreateAssetPage from "./pages/CreateAssetPage";
@@ -75,7 +76,7 @@ function App() {
               element={<JobApprovedItemPage />}
             />
             <Route path="/jobs/approved" element={<JobsApprovedListPage />} />
-            <Route path="/jobs/actioned/:id" element={<JobActionItemPage />} />
+            <Route path="/jobs/actioned/:id" element={<JobActionPage />} />
           </Route>
           {/* // % Admin only Routes */}
           <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>

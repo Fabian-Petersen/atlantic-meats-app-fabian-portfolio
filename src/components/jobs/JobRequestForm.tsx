@@ -260,29 +260,27 @@ const MaintenanceRequestForm = () => {
           className="lg:col-span-2"
         />
       </div>
-      <div className="flex w-full">
-        <div className={cn(sharedStyles.btnParent)}>
-          <Button
-            type="button"
-            onClick={() => {
-              navigate("/jobs/pending");
-            }}
-            variant="cancel"
-            size="lg"
-            className={cn(sharedStyles.btnCancel)}
-          >
-            Cancel
-          </Button>
-          <Button
-            disabled={isSubmitting}
-            type="submit"
-            variant="submit"
-            size="lg"
-            className={cn(sharedStyles.btnSubmit)}
-          >
-            {isPending ? <Spinner className="size-8" /> : "Submit"}
-          </Button>
-        </div>
+      <div className={cn(sharedStyles.btnParent)}>
+        <Button
+          type="button"
+          onClick={() => {
+            navigate("/jobs/pending");
+          }}
+          variant="cancel"
+          size="lg"
+          className={cn(sharedStyles.btnCancel, sharedStyles.btn)}
+        >
+          Cancel
+        </Button>
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          variant="submit"
+          size="lg"
+          className={cn(sharedStyles.btnSubmit, sharedStyles.btn)}
+        >
+          {isPending ? <Spinner className="size-8" /> : "Submit"}
+        </Button>
       </div>
     </form>
   );

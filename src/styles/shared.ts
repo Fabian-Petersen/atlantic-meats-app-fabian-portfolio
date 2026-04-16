@@ -2,6 +2,11 @@ import { cn } from "@/lib/utils";
 
 // $ Mobile Shared Styles
 export const sharedStyles = {
+  // $ Pages
+  pageContainer: cn("flex items-center justify-center w-full h-full p-4"),
+  pageContent: cn(
+    "bg-white flex flex-col gap-4 w-full lg:max-w-3xl h-auto rounded-xl shadow-lg p-4 dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) dark:border-gray-700/50 dark:border",
+  ),
   // $ Mobile Cards
   cardParent: cn("flex flex-col min-h-screen lg:hidden w-full bg-gray-50"),
   cardTopBar: cn(
@@ -29,7 +34,7 @@ export const sharedStyles = {
     "dark:hover:bg-orange-500/22 dark:hover:border-orange-500/40",
   ),
   btnApprove: cn(
-    "",
+    "flex-1",
     // light
     "bg-green-500/10 border-green-500/40 text-green-700",
     // dark
@@ -39,7 +44,7 @@ export const sharedStyles = {
     "dark:hover:bg-green-500/22 dark:hover:border-green-500/40",
   ),
   btnView: cn(
-    "",
+    "flex-1",
     // light
     "bg-green-500/10 border-green-500/40 text-green-700",
     // dark
@@ -50,7 +55,7 @@ export const sharedStyles = {
   ),
   btnSubmit: cn(
     // general
-    "",
+    "flex-1",
     // light
     "bg-[#fcb53b]/15 border-[#fcb53b]/50 text-[#a06b00]",
     // dark
@@ -60,7 +65,7 @@ export const sharedStyles = {
     "dark:hover:bg-[#fcb53b]/22 dark:hover:border-[#fcb53b]/45",
   ),
   btnDelete: cn(
-    "",
+    "flex-1",
     // light
     "bg-red-500/10 border-red-500/40 text-red-700",
     // dark
