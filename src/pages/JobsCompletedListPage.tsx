@@ -1,4 +1,4 @@
-// $ This component renders the page for the actions list in a table format.
+// $ This component renders the page for the completed jobs in a table format.
 // $ The list display the items created by a user and all items for the admin
 
 import { useDownloadPdf, useGetAll } from "@/utils/api";
@@ -29,12 +29,13 @@ import {
 } from "@tanstack/react-table";
 import { MobileJobsActionedContainer } from "@/components/mobile/MobileJobsActionedContainer";
 
-const ActionsListPage = () => {
-  const ACTIONS_REQUESTS_KEY = ["actionRequests"];
-
-  const { data, isPending, isError, refetch } = useGetAll<ActionAPIResponse[]>({
+const JobsCompletedListPage = () => {
+  const { data, isError, refetch, isPending } = useGetAll<ActionAPIResponse[]>({
     resourcePath: "jobs/actioned",
-    queryKey: ACTIONS_REQUESTS_KEY,
+    queryKey: ["jobs", "complete"],
+    // params: {
+    //   group: "",
+    // },
   });
 
   const { mutateAsync: downloadItem } = useDownloadPdf({
@@ -146,4 +147,4 @@ const ActionsListPage = () => {
   );
 };
 
-export default ActionsListPage;
+export default JobsCompletedListPage;

@@ -27,8 +27,11 @@ import { sharedStyles } from "@/styles/shared";
 
 const JobsPendingListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<JobAPIResponse[]>({
-    resourcePath: "jobs/pending",
-    queryKey: ["maintenanceRequests", "pending"],
+    resourcePath: "jobs",
+    queryKey: ["jobs", "pending"],
+    params: {
+      status: "Pending",
+    },
   });
 
   const [sorting, setSorting] = useState<SortingState>([

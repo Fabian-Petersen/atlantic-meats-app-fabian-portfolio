@@ -42,14 +42,14 @@ import { Spinner } from "../ui/spinner";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 
-const MaintenanceRequestForm = () => {
+const CreateJobForm = () => {
   // $ Calling the usePOST hook to fetch the data
   const { mutateAsync, isError, isPending } = usePOST<
     CreateJobPayload,
     { presigned_urls: PresignedUrlResponse }
   >({
-    resourcePath: "jobs/requests",
-    queryKey: ["maintenanceRequests"],
+    resourcePath: "jobs",
+    queryKey: ["jobs", "create"],
   });
 
   const { data } = useGetAll<AssetRequestFormValues[]>({
@@ -286,4 +286,4 @@ const MaintenanceRequestForm = () => {
   );
 };
 
-export default MaintenanceRequestForm;
+export default CreateJobForm;

@@ -59,7 +59,7 @@ export type ActionRequestPayload = Omit<ActionRequestFormValues, "images"> & {
   jobCardNumber?: string; // ID of the maintenance request being actioned
 };
 
-// $ Schema for the Asset Table Menu
+// $ Schema for the Jobs Completed Table Menu
 export const actionTableRowSchema = actionResponseSchema
   .omit({
     signtuture: true,

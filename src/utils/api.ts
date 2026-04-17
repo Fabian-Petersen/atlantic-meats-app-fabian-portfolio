@@ -79,29 +79,54 @@ const ASSETS_REQUESTS_KEY = ["getAssetsList", "assets"];
 // $ Hooks
 // $ =========================
 
-// $ Generic: GET All
-export const useGetAll = <ResponseType>(
-  options: {
-    resourcePath: Resource;
-    queryKey: readonly unknown[];
-  },
-  // enabled: boolean = true,
-) => {
-  const { resourcePath, queryKey } = options;
+// $ Generic: GET with query params (e.g., filter by location)
+export const useGetAll = <ResponseType>(options: {
+  resourcePath: Resource;
+  queryKey: readonly unknown[];
+  params?: Record<string, string | number | boolean>;
+}) => {
+  const { resourcePath, queryKey, params } = options;
+
   return useQuery({
     queryKey,
     queryFn: async (): Promise<ResponseType> => {
       try {
-        const response = await apiClient.get<ResponseType>(`/${resourcePath}`);
+        const response = await apiClient.get<ResponseType>(`/${resourcePath}`, {
+          params,
+        });
+
         return response.data as ResponseType;
       } catch (error) {
         console.error(`Error fetching ${resourcePath}:`, error);
         throw error;
       }
     },
-    // enabled: enabled && !!resourcePath,
   });
 };
+
+// $ Generic: GET All without query params
+// export const useGetAll = <ResponseType>(
+//   options: {
+//     resourcePath: Resource;
+//     queryKey: readonly unknown[];
+//   },
+//   // enabled: boolean = true,
+// ) => {
+//   const { resourcePath, queryKey } = options;
+//   return useQuery({
+//     queryKey,
+//     queryFn: async (): Promise<ResponseType> => {
+//       try {
+//         const response = await apiClient.get<ResponseType>(`/${resourcePath}`);
+//         return response.data as ResponseType;
+//       } catch (error) {
+//         console.error(`Error fetching ${resourcePath}:`, error);
+//         throw error;
+//       }
+//     },
+//     // enabled: enabled && !!resourcePath,
+//   });
+// };
 
 // $ Generic: GET by ID
 export const useById = <ResponseType>(options: {

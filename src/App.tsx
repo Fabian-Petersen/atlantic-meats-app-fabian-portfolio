@@ -7,7 +7,7 @@ import { PublicOnlyRoute } from "./routes/PublicOnlyRoute";
 
 //$ Protected Routes
 import DashboardPage from "./pages/Dashboard";
-import JobRequestPage from "./pages/JobRequestPage";
+import CreateJobPage from "./pages/CreateJobPage";
 import AssetsOverviewPage from "./pages/AssetsOverviewPage";
 
 import { AppLayout } from "./routes/AppLayout";
@@ -23,7 +23,6 @@ import JobActionPage from "./pages/JobActionPage";
 
 // $ Assets Pages
 import CreateAssetPage from "./pages/CreateAssetPage";
-import ActionsListPage from "./pages/ActionsListPage";
 import AssetsSingleItemPage from "./pages/AssetsSingleItemPage";
 
 // $ User Management Pages
@@ -34,10 +33,11 @@ import StoreProfilePage from "./pages/StoreProfilePage";
 // $ Job Management Pages for single items
 import JobPendingItemPage from "./pages/JobPendingItemPage";
 import JobApprovedItemPage from "./pages/JobApprovedItemPage";
+import JobsCompletedListPage from "./pages/JobsCompletedListPage";
 
 // $ Pages display the list of items in a table
 import JobsPendingListPage from "./pages/JobsPendingListPage";
-import JobsApprovedListPage from "./pages/JobsApprovedListPage";
+import JobsInProgressListPage from "./pages/JobsInProgressListPage";
 import { PageLoadingSpinner } from "./components/features/PageLoadingSpinner";
 import UsersListPage from "./pages/UsersListPage";
 import { useAuth } from "./auth/useAuth";
@@ -70,12 +70,15 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
             {/* // $ Route will show the current signed in user profile page */}
             <Route path="/users/profile" element={<UserProfilePage />} />
-            <Route path="/jobs/requests" element={<JobRequestPage />} />
+            <Route path="/jobs/create-job" element={<CreateJobPage />} />
             <Route
-              path="/jobs/approved/:id"
+              path="/jobs/in-progress/:id"
               element={<JobApprovedItemPage />}
             />
-            <Route path="/jobs/approved" element={<JobsApprovedListPage />} />
+            <Route
+              path="/jobs/in-progress"
+              element={<JobsInProgressListPage />}
+            />
             <Route path="/jobs/actioned/:id" element={<JobActionPage />} />
           </Route>
           {/* // % Admin only Routes */}
@@ -107,7 +110,7 @@ function App() {
               path="/jobs/completed/id/:id"
               element={<JobActionItemPage />}
             />
-            <Route path="/jobs/completed" element={<ActionsListPage />} />
+            <Route path="/jobs/completed" element={<JobsCompletedListPage />} />
           </Route>
         </Route>
       </Route>

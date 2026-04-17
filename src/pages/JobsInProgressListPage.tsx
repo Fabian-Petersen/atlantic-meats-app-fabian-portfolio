@@ -27,22 +27,21 @@ import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { SearchInput } from "@/components/features/SearchInput";
 
-const JobsApprovedListPage = () => {
+const JobsInProgressListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<
     JobApprovedAPIResponse[]
   >({
-    resourcePath: "jobs/approved",
-    queryKey: ["maintenanceRequests", "approved"],
+    resourcePath: "jobs/requests",
+    queryKey: ["jobs", "in_progress"],
+    params: {
+      status: "In Progress",
+    },
   });
 
   // console.log("data:", data);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "jobCreated", desc: false },
   ]);
-
-  // const { mutateAsync: downloadItem } = useDownloadPdf({
-  //   resourcePath: "maintenance-jobcard",
-  // });
 
   const {
     setShowUpdateMaintenanceDialog,
@@ -135,4 +134,4 @@ const JobsApprovedListPage = () => {
   );
 };
 
-export default JobsApprovedListPage;
+export default JobsInProgressListPage;

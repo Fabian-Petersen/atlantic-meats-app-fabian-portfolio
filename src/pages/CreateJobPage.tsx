@@ -2,12 +2,12 @@
 
 import FormHeading from "../../customComponents/FormHeading";
 import { ErrorPage } from "@/components/features/Error";
-import JobRequestForm from "@/components/jobs/JobRequestForm";
+import CreateJobForm from "@/components/jobs/CreateJobForm";
 import useGlobalContext from "@/context/useGlobalContext";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 
-const JobRequestPage = () => {
+const CreateJobPage = () => {
   const { showError } = useGlobalContext();
 
   if (showError) {
@@ -21,10 +21,10 @@ const JobRequestPage = () => {
           className={cn(sharedStyles.headingForm)}
           heading="Create Job Request"
         />
-        <JobRequestForm />
+        <CreateJobForm />
       </div>
     </div>
   );
 };
 
-export default JobRequestPage;
+export default CreateJobPage;

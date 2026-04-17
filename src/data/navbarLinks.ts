@@ -29,7 +29,7 @@ export const maintenanceLinks: NavlinkProps[] = [
   {
     name: "create request",
     icon: Wrench,
-    url: "/jobs/requests",
+    url: "/jobs/create-job",
     allowedGroups: ["admin", "user", "technician", "manager"],
   },
   {
@@ -41,7 +41,7 @@ export const maintenanceLinks: NavlinkProps[] = [
   {
     name: "open requests",
     icon: File,
-    url: "/jobs/approved",
+    url: "/jobs/in-progress",
     allowedGroups: ["admin", "user", "technician", "manager"],
   },
   {
