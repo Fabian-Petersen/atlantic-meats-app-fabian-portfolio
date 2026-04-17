@@ -31,7 +31,7 @@ import { MobileJobsActionedContainer } from "@/components/mobile/MobileJobsActio
 
 const JobsCompletedListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<ActionAPIResponse[]>({
-    resourcePath: "jobs/actioned",
+    resourcePath: "jobs/completed",
     queryKey: ["jobs", "complete"],
     // params: {
     //   group: "",

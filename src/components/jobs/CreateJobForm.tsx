@@ -48,7 +48,7 @@ const CreateJobForm = () => {
     CreateJobPayload,
     { presigned_urls: PresignedUrlResponse }
   >({
-    resourcePath: "jobs",
+    resourcePath: "jobs/requests",
     queryKey: ["jobs", "create"],
   });
 

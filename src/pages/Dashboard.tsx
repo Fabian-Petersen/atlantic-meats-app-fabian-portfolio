@@ -21,11 +21,13 @@ import { useEffect } from "react";
 
 const Dashboard = () => {
   const columns = getDashboardJobColumns();
-  const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests", "pending"];
 
   const { data: pendingRequests, isPending } = useGetAll<JobAPIResponse[]>({
-    resourcePath: "jobs/pending",
-    queryKey: MAINTENANCE_REQUESTS_KEY,
+    resourcePath: "jobs/requests",
+    queryKey: ["jobs", "pending"],
+    params: {
+      status: "Pending",
+    },
   });
 
   useEffect(() => {

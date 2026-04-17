@@ -25,7 +25,7 @@ const Avatar: React.FC<AvatarProps> = ({ imageUrl, size = 40 }) => {
       <button
         type="button"
         aria-label="avatar-button"
-        onClick={() => navigate("/user-profile")}
+        onClick={() => navigate("/users/profile")}
         className={`size-${size} flex items-center justify-center rounded-full p-1.5 text-white font-semibold hover:cursor-pointer`}
       >
         {imageUrl ? (
@@ -43,7 +43,6 @@ const Avatar: React.FC<AvatarProps> = ({ imageUrl, size = 40 }) => {
           })
         )}
       </button>
-      {/* <UserDetails /> */}
     </div>
   );
 };

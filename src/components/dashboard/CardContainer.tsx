@@ -31,14 +31,20 @@ const Cards = () => {
 
   // $ Pending Requests Data
   const { data: pendingJobs = [], isPending } = useGetAll<JobAPIResponse[]>({
-    resourcePath: "jobs/pending",
-    queryKey: ["maintenanceRequests", "pending"],
+    resourcePath: "jobs/requests",
+    queryKey: ["jobs", "pending"],
+    params: {
+      status: "Pending",
+    },
   });
 
   // $ Approved Requests Data
   const { data: approvedJobs = [] } = useGetAll<JobApprovedAPIResponse[]>({
-    resourcePath: "jobs/approved",
-    queryKey: ["maintenanceRequests", "approved"],
+    resourcePath: "jobs/requests",
+    queryKey: ["jobs", "inProgress"],
+    params: {
+      status: "In Progress",
+    },
   });
 
   // $ Assets Data
@@ -49,8 +55,8 @@ const Cards = () => {
 
   // $ Actions Data
   const { data: actions = [] } = useGetAll<ActionAPIResponse[]>({
-    resourcePath: "jobs/actioned",
-    queryKey: ["actionRequests"],
+    resourcePath: "jobs/completed",
+    queryKey: ["actions"],
   });
 
   // $ Get the job metrics from the data returned from the database
@@ -85,11 +91,6 @@ const Cards = () => {
         grid w-full
         grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4"
     >
-      {/* {isPending ? (
-        <div className="col-span-full place-items-center">
-          <Spinner className="size-18 text-primary  " />
-        </div>
-      ) : ( */}
       <>
         <MetricCardItem
           cardData={jobsPendingCardData}
@@ -111,9 +112,7 @@ const Cards = () => {
           metrics={overdueJobMetrics}
           isPending={isPending}
         />
-        {/* <MetricCardItem cardData={assetsCardData} metrics={assetsMetrics} /> */}
       </>
-      {/* )} */}
     </div>
   );
 };
