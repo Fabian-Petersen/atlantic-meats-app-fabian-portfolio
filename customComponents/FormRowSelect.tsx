@@ -25,8 +25,8 @@ type FormSelectProps<T extends FieldValues> = {
 };
 
 // import { useWatch } from "react-hook-form";
-import clsx from "clsx";
 import { cn } from "@/lib/utils";
+import { ChevronDownIcon } from "lucide-react";
 
 function FormRowSelect<T extends FieldValues>({
   name,
@@ -50,10 +50,17 @@ function FormRowSelect<T extends FieldValues>({
         {...restRegister}
         id={String(name)}
         multiple={multiple}
-        className={clsx(
-          "text-xs py-3 px-2 peer w-full rounded-md outline-none text-gray-700",
-          "border border-gray-300 focus:border-rose-500 capitalize",
+        className={cn(
+          "appearance-none", // Remove default arrow for better styling
+          // default styles
+          "text-xs py-3 px-2 peer w-full rounded-md text-gray-700 capitalize",
+          // focus & border styles
+          "border border-gray-300 focus:border-orange-500 outline-none focus:ring-0.5 focus:ring-orange-500",
+          // focus: dark styles
+          "dark:border-gray-700/50 focus:dark:border-rose-500 focus:dark:ring-0.5 focus:dark:ring-rose-500",
+          // dark mode styles
           "dark:bg-(--bg-secondary_dark) dark:border-(--clr-borderDark) dark:text-(--clr-textDark)",
+          //error styles
           error && "border-red-400",
         )}
         defaultValue={multiple ? defaultValues || [] : ""}
@@ -88,10 +95,13 @@ function FormRowSelect<T extends FieldValues>({
           );
         })}
       </select>
+      <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 dark:text-(--clr-textDark) text-(--clr-textLight)">
+        <ChevronDownIcon size={16} />
+      </span>
       {label && (
         <label
           htmlFor={String(name)}
-          className={clsx(
+          className={cn(
             "absolute text-xs -top-5 left-0 transition-all duration-400 text-gray-400 dark:text-gray-100/20 px-2 mb-0",
             "peer-focus:-top-5 peer-focus:text-gray-600 peer-focus:text-xs tracking-wider",
             "dark:peer-focus:text-blue-300 dark:text-gray-100/30",
