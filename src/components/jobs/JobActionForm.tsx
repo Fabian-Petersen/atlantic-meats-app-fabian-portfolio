@@ -54,7 +54,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
       toast.error("No maintenance request selected for actioning.", {
         duration: 1000,
       });
-      navigate("/maintenance-list");
+      navigate(`/jobs/actioned/${selectedRowId}`);
     }
   }, [selectedRowId, navigate]);
 
@@ -150,23 +150,23 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
 
   return (
     <form className={cn(sharedStyles.form)} onSubmit={handleSubmit(onSubmit)}>
-      <div className={cn(sharedStyles.formParent, "")}>
+      <div className={cn(sharedStyles.formParent)}>
         <FormRowInput
-          // label="Start Date/Time"
+          label="Start Date/Time"
           type="datetime-local"
           name="start_time"
-          placeholder="Start Time"
+          placeholder=""
           register={register}
-          className="md:col-span-1"
+          className="col-span-2 md:col-span-1 mt-1"
           error={errors.start_time}
         />
         <FormRowInput
-          // label="End Date/Time"
+          label="End Date/Time"
           type="datetime-local"
           name="end_time"
-          placeholder="End Time"
+          placeholder=""
           register={register}
-          className="md:col-span-1"
+          className="col-span-2 md:col-span-1 mt-2"
           error={errors.end_time}
         />
         <FormRowInput
@@ -194,7 +194,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
             label: cause,
             value: cause,
           }))}
-          placeholder="Select type"
+          placeholder="Root Cause"
           register={register}
           className="col-span-2 md:col-span-1"
           error={errors.root_cause}

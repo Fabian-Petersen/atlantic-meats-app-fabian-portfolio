@@ -26,6 +26,7 @@ type FormSelectProps<T extends FieldValues> = {
 
 // import { useWatch } from "react-hook-form";
 import clsx from "clsx";
+import { cn } from "@/lib/utils";
 
 function FormRowSelect<T extends FieldValues>({
   name,
@@ -38,12 +39,13 @@ function FormRowSelect<T extends FieldValues>({
   register,
   onChange,
   required,
+  className,
 }: FormSelectProps<T>) {
   const { onChange: rhfOnChange, ...restRegister } = register(name);
 
   // $ Added the rhfOnChange to the onChange event of the select input. This will update the react-hook-form state when the user selects an option. The onChange prop is optional and can be used to perform additional actions when the user selects an option.
   return (
-    <div className="relative w-full mb-2 group">
+    <div className={cn(className, "relative w-full mb-2 group")}>
       <select
         {...restRegister}
         id={String(name)}

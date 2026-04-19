@@ -90,7 +90,7 @@ const JobsPendingListPage = () => {
           columns={columns}
           rowPath="/jobs/pending"
           addButton={true}
-          addButtonPath="/jobs/requests"
+          addButtonPath="/jobs/create-job"
         />
       </div>
       {/* // $ Mobile View */}

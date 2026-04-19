@@ -51,7 +51,7 @@
   --chart-text: #364153;
   --chevron: #fcb53b;
   --size-5: 1.5rem;
-  --font-size: 0.9rem;
+  --font-size: 0.875rem;
 }
 
 /* $ ======================== Dark Mode Styles as per user preference ====================== */
@@ -95,7 +95,7 @@ html {
 
 /* Manage the toast styles */
 .toaster [data-title] {
-  font-size: var(--font-size) !important;
+  font-size: clamp(0.65rem, var(--font-size), 0.875rem) !important;
   font-weight: 400;
 }
 
@@ -108,6 +108,19 @@ html {
   width: calc(var(--font-size) * 1.5) !important;
   height: calc(var(--font-size) * 1.5) !important;
   padding-right: 0.25rem;
+}
+
+/* date time inputs */
+input[type="date"],
+input[type="datetime-local"] {
+  color: transparent;
+}
+
+input[type="date"]:focus,
+input[type="date"]:valid,
+input[type="datetime-local"]:focus,
+input[type="datetime-local"]:valid {
+  color: #374151; /* normal text */
 }
 
 /* Hide scrollbar but allow scroll */

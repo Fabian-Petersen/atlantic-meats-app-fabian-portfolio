@@ -81,9 +81,9 @@ export const sharedStyles = {
 
   // $ Forms:
   form: cn(
-    "flex flex-col rounded-lg lg:w-full text-(--clr-textLight) dark:bg-(--bg-primary_dark) bg-white",
+    "flex flex-col rounded-lg md:w-full text-(--clr-textLight) dark:bg-(--bg-primary_dark) bg-white",
   ),
-  formParent: cn("grid grid-cols-1 lg:grid-cols-2 gap-4 w-full md:py-2"),
+  formParent: cn("grid grid-cols-1 md:grid-cols-2 gap-4 w-full md:py-2"),
 
   // $ Tables
   table: cn("w-full lg:p-4 min-h-0 hidden lg:block"),
