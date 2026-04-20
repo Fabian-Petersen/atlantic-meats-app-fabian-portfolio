@@ -84,14 +84,14 @@ function App() {
           {/* // % Admin only Routes */}
           <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>
             <Route
-              path="jobs/pending-approval"
+              path="/jobs/pending-approval"
               element={<JobsPendingListPage />}
             />
             <Route path="/assets/list" element={<AssetsOverviewPage />} />
             {/* // $ Page to list an asset by id */}
             <Route path="/assets/:id" element={<AssetsSingleItemPage />} />
             <Route
-              path="/jobs/pending-approval/:id"
+              path="/jobs/:id/pending-approval"
               element={<JobPendingItemPage />}
             />
             <Route

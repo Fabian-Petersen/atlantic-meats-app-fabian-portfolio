@@ -23,9 +23,9 @@ function RequestApproval() {
 
   const { mutateAsync: approveRequest, isPending: isApproved } = usePOST({
     id: selectedRowId ?? "",
-    action: "approve",
     resourcePath: "jobs",
     queryKey: ["jobs", "approve-job"] as const,
+    action: "approve",
   });
 
   const { data: item, isPending } = useById<JobAPIResponse>({
@@ -63,7 +63,7 @@ function RequestApproval() {
       const response = await approveRequest(payload);
       console.log("approve-request:", response);
       toast.success("The itemm was sucessfully rejected");
-      navigate("/jobs/approved");
+      navigate("/jobs/pending-approval");
     } catch (error) {
       console.log(error);
     }

@@ -88,9 +88,10 @@ const JobsPendingListPage = () => {
         <GenericTable
           data={data}
           columns={columns}
-          rowPath="/jobs/pending-approval"
+          rowPath="jobs"
           addButton={true}
           addButtonPath="/jobs/create-job"
+          action="pending-approval"
         />
       </div>
       {/* // $ Mobile View */}

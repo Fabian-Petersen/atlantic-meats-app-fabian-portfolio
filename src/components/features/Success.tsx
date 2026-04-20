@@ -28,7 +28,7 @@ export const Success = () => {
       if (config.redirectPath) {
         navigate(`/${config.redirectPath}`);
       }
-    }, 2000);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, [showSuccess, config.redirectPath, navigate, setShowSuccess]);
