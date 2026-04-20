@@ -77,7 +77,7 @@ function JobApprovedItemInfo({ item }: Props) {
           <Button
             type="button"
             onClick={() => {
-              navigate("/jobs/approved");
+              navigate("/jobs/in-progress");
             }}
             variant="cancel"
             size="xl"
@@ -91,7 +91,7 @@ function JobApprovedItemInfo({ item }: Props) {
             size="xl"
             className="flex-1"
             onClick={() => {
-              navigate(`/jobs/actioned/${item?.id}`);
+              navigate(`/jobs/${item?.id}/action`);
             }}
           >
             Action

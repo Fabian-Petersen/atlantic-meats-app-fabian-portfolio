@@ -22,8 +22,11 @@ const JobPendingItemPage = () => {
 
   const { data: item } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
-    queryKey: ["maintenanceRequests"],
-    resourcePath: "jobs/pending",
+    queryKey: ["jobs", "pending-approval-job"],
+    resourcePath: `jobs`,
+    params: {
+      status: "Pending",
+    },
   });
 
   // console.log("item:", item);

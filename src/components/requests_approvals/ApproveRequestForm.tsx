@@ -57,15 +57,13 @@ const ApproveRequestForm = () => {
   });
 
   const { mutateAsync: approveItem, isPending } = usePOST({
-    resourcePath: `jobs/requests/approved` as Resource,
-    queryKey: ["maintenanceRequests", "approved"] as const,
+    id: selectedRowId ?? "",
+    action: "approve",
+    resourcePath: `jobs` as Resource,
+    queryKey: ["jobs", "approve-job"] as const,
   });
 
   if (!showApproveRequestDialog || !selectedRowId) return null;
-
-  // if (isLoading) {
-  //   return <PageLoadingSpinner />;
-  // }
 
   // console.log("technicians:", technicians);
   const onSubmit = async (data: ApproveRequestFormValues) => {
@@ -94,7 +92,7 @@ const ApproveRequestForm = () => {
       setSuccessConfig({
         title: "Success",
         message: "The Request was Successfully Approved!!!",
-        resourcePath: "jobs/approved",
+        redirectPath: "jobs/in-progress",
       });
       setShowSuccess(true);
 

@@ -69,7 +69,7 @@ const CreateJobForm = () => {
     control,
     register,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<JobRequestFormValues>({
     // defaultValues: {
     //   location: "Maitland",
@@ -267,7 +267,7 @@ const CreateJobForm = () => {
         <Button
           type="button"
           onClick={() => {
-            navigate("/jobs/pending");
+            navigate("/dashboard");
           }}
           variant="cancel"
           size="lg"
@@ -276,7 +276,7 @@ const CreateJobForm = () => {
           Cancel
         </Button>
         <Button
-          disabled={isSubmitting}
+          disabled={isPending}
           type="submit"
           variant="submit"
           size="lg"

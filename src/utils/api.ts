@@ -18,17 +18,18 @@ import type {
 } from "@/schemas";
 import type { CommentRequestFormValues } from "@/schemas/commentSchemas";
 
+// $ Backend Routing Paths
 export type Resource =
   // $Jobs ROUTES
-  | "jobs" // "jobs-list" GET all maintenance requests
-  | "jobs/requests" // "maintenance-request" POST a maintenance request
-  | "jobs/requests/approved" // "job-request-approved"
-  | "jobs/requests/rejected" // job-request-rejected
-  | "jobs/pending" // "jobs-list-pending" :  GET all pending approval requests
+  | "jobs" // parent route
+  | "jobs/requests" // "POST: Job request" | "GET: All jobs enum["pending", "approved", "in-progress", "completed"]"
+  | "jobs/actioned" // "GET: All actions enum["technicians", "contractors"]"
+  | `jobs/${string}/approve` // POST: Approve a pending job
+  | `jobs/${string}/reject` // POST: Reject a pending job
+  | `jobs/${string}/action` // POST: Job action by technician or contractor
+  | `jobs/${string}` // GET, PUT, DELETE a single job by id enum["pending", "approved", "in-progress", "completed", "actioned"]
   | "jobs/approved" //"jobs-list-approved" : GET all approved requests
-  | "jobs/actioned" // "maintenance-actions-list" GET all actions "maintenance-action" POST & DELETE, GET
-  | "jobs/completed" // "NOT in use"
-  | "jobs/jobcard" // "maintenance-jobcard" GET jobcardById
+  | `jobs/${string}/jobcard` // GET: Download jobcard from backend
   // $ Assets ROUTES
   | "assets-data" // "assets-list" GET all assets assets/{assetId} to DELETE, PUT, GET assetById
   | "assets-data/location" // NOT in use : Get all assets by location
@@ -43,6 +44,23 @@ export type Resource =
   | "admin/confirm_user_signup" // handle the user status update after initial login. Trigger PostConfirmationTrigger lambda
   | `admin/resend-temp-password/${string}`
   | `admin/${string}`;
+
+// $ Frontend Routing Paths (for redirection after actions)
+export type RedirectResource =
+  | "dashboard" // Main dashboard page with summary cards and charts
+  | "jobs/create-job" // Page with the form to create a new maintenance request
+  | "jobs/pending-approval" // Page showing all pending approval jobs
+  | `jobs/${string}/pending-approval` // Page showing the details of a pending approval job by id
+  | "jobs/in-progress" // Page showing al the in progress jobs
+  | `jobs/${string}/in-progress` // Get the details of an in-progress job by id
+  | "jobs/completed" // Page showing all completed jobs
+  | `jobs/${string}/completed` // Page showing the details of a completed job by id
+  | `jobs/${string}/action` // Page for actioning a job by id (technician/contractor)
+  | "assets/create-new-asset" // Page with the form to create a new asset
+  | "assets/list" // Page showing all assets
+  | `assets/${string}` // Page showing the details of an asset by id
+  | "users" // Page showing the list of all users (admin only)
+  | "users/profile"; // Page showing details of a user meta data
 
 // $ Combine the types into a union type for the generic functions
 export type RequestType =
@@ -68,10 +86,10 @@ export type ResponseType =
 // $ =========================
 // $ Query Keys
 // $ =========================
-const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
-const ASSETS_REQUESTS_KEY = ["getAssetsList", "assets"];
-// const USERS = ["userRequests"];
-// const ACTION_REQUESTS_KEY = ["actionRequests"];
+const MAINTENANCE_REQUESTS_KEY = ["jobs"];
+const ASSETS_REQUESTS_KEY = ["assets", "asset"];
+// const USERS = ["users"];
+// const ACTION_REQUESTS_KEY = ["actionJob"];
 // const POST_COMMENT = ["CommentsKey"];
 // const POST_KEYS = ["commentsRequests"];
 
@@ -133,14 +151,16 @@ export const useById = <ResponseType>(options: {
   id: string;
   queryKey: readonly unknown[];
   resourcePath: Resource;
+  params?: Record<string, string | number | boolean>;
 }) => {
   // console.log("🔥 useById called with options:", options);
-  const { id, queryKey, resourcePath } = options;
+  const { id, queryKey, resourcePath, params } = options;
   return useQuery<ResponseType>({
     queryKey: [...queryKey, id],
     queryFn: async (): Promise<ResponseType> => {
       const { data } = await apiClient.get<ResponseType>(
         `/${resourcePath}/${id}`,
+        { params },
       );
       return data;
     },
@@ -150,8 +170,10 @@ export const useById = <ResponseType>(options: {
 
 // $ Generic: POST
 export const usePOST = <RequestType, ResponseType>(options: {
+  id?: string;
   resourcePath: Resource;
   queryKey: readonly unknown[];
+  action?: "approve" | "reject" | "action";
 }) => {
   const queryClient = useQueryClient();
   const { resourcePath, queryKey } = options;
@@ -159,7 +181,7 @@ export const usePOST = <RequestType, ResponseType>(options: {
   return useMutation({
     mutationFn: async (payload: RequestType): Promise<ResponseType> => {
       const { data } = await apiClient.post<ResponseType>(
-        `/${resourcePath}`,
+        `/${resourcePath}/${options.id ?? ""}/${options.action ?? ""}`,
         payload,
         {
           headers: { "Content-Type": "application/json" },

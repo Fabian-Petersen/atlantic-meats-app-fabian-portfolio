@@ -41,6 +41,7 @@ type Props<T extends { id: string }> = {
   pageSize?: number;
   addPagination?: boolean;
   addPageSelector?: boolean;
+  action?: string; // e.g. "action" for the action page, "update" for the update page, etc. This is used to construct the path when a row is clicked, e.g. /jobs/123/action or /assets/123/update
 };
 
 export function GenericTable<T extends { id: string }>({
@@ -59,6 +60,7 @@ export function GenericTable<T extends { id: string }>({
   pageSize,
   addPagination,
   addPageSelector,
+  action,
 }: Props<T>) {
   const navigate = useNavigate();
   const { setSelectedRowId, globalFilter, setGlobalFilter } =
@@ -202,7 +204,9 @@ export function GenericTable<T extends { id: string }>({
                       key={row.id}
                       onClick={() => {
                         setSelectedRowId(row.original.id);
-                        navigate(`${rowPath}/${row.original.id}`);
+                        navigate(
+                          `/${rowPath}/${row.original.id}/${action ?? ""}`,
+                        );
                       }}
                       className={`text-cxs cursor-pointer hover:bg-primary/20 dark:bg-(--bg-secondary_dark) bg-gray-50/90 ${customRowClass}`}
                     >

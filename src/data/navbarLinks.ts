@@ -35,7 +35,7 @@ export const maintenanceLinks: NavlinkProps[] = [
   {
     name: "pending approval",
     icon: File,
-    url: "/jobs/pending",
+    url: "/jobs/pending-approval",
     allowedGroups: ["admin"],
   },
   {

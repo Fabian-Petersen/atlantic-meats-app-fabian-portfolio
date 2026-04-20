@@ -2,138 +2,132 @@
 import FormRowInput from "../../../customComponents/FormRowInput";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type UserAttributesFormValues, userAttributesSchema } from "@/schemas";
+import { type UsersRequestFormValues, userAttributesSchema } from "@/schemas";
 import FormHeading from "../../../customComponents/FormHeading";
 import FormRowInputEditable from "../../../customComponents/FormRowInputEditable";
-import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import type { UserAttributes } from "@/schemas";
-// import { useUserAttributes } from "../../utils/aws-userAttributes";
-import { getUserGroups } from "@/auth/getUserGroups";
-import { useEffect } from "react";
+import type { UsersAPIResponse } from "@/schemas";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
+import { Spinner } from "../ui/spinner";
+import { usePOST } from "@/utils/api";
+import useGlobalContext from "@/context/useGlobalContext";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 type UserProfileProps = {
-  user: UserAttributes | null;
+  user: UsersAPIResponse | null;
 };
 
 function UserProfileForm({ user }: UserProfileProps) {
-  // todo: Add the additional user attributes to Cognito
+  const { setSuccessConfig, setShowSuccess } = useGlobalContext();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const loadGroups = async () => {
-      const groups = await getUserGroups();
-      console.log(groups);
-      return groups;
-    };
-    loadGroups();
-  }, []);
-
-  // const userTest = {
-  //   name: user?.name ?? "",
-  //   email: user?.email,
-  //   surname: user?.family_name,
-  //   role: "admin",
-  //   mobile: "0713860827",
-  //   branch: "distribution",
-  //   division: "central services",
-  // };
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<UserAttributesFormValues>({
+    formState: { errors },
+  } = useForm<UsersRequestFormValues>({
     defaultValues: user ?? undefined,
     resolver: zodResolver(
       userAttributesSchema,
-    ) as unknown as Resolver<UserAttributesFormValues>,
+    ) as unknown as Resolver<UsersRequestFormValues>,
   });
 
-  // const defaultValues = {
-  //   name: "",
-  //   surname: "",
-  //   branch: "",
-  //   role: "",
-  //   email: "",
-  //   division: "",
-  // };
-  const navigate = useNavigate();
+  const { mutateAsync: editUser, isPending } = usePOST({
+    resourcePath: "users",
+    queryKey: ["users", "update-user"],
+  });
 
   if (!user) return null;
 
-  const onSubmit = (data: UserAttributesFormValues) => {
-    console.log(data);
+  const onSubmit = async (data: UsersRequestFormValues) => {
+    try {
+      const payload = {} as UsersRequestFormValues;
+      if (data.mobile !== user.mobile) payload.mobile = data.mobile;
+
+      await editUser(payload);
+      setSuccessConfig({
+        message: "Profile Updated",
+        redirectPath: "users/profile",
+      });
+      setShowSuccess(true);
+    } catch (error) {
+      console.log("Error updating user profile:", error);
+      toast.error("An error occurred while updating the profile");
+    }
   };
 
   return (
     <form
-      className="flex flex-col rounded-lg lg:w-full text-font dark:bg-[#1d2739] pt-4 h-auto"
+      className={cn(sharedStyles.form, "gap-4")}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-6 w-full lg:py-6">
+      <div className={cn(sharedStyles.formParent, "gap-6.5 md:gap-8")}>
         <FormHeading
           heading="Profile Information"
-          className="col-span-full text-md lg:text-md"
+          className={cn(
+            sharedStyles.headingForm,
+            "text-left text-sm p-0 font-medium",
+          )}
         />
-        <FormRowInputEditable
+        <FormRowInput
           label="Name"
           name="name"
+          // placeholder="Name"
           className="capitalize"
+          readOnly={true}
           register={register}
         />
-        {/* <FormRowInput
-        label="Name"
-        name="name"
-        className="capitalize"
-        register={register}
-      /> */}
         <FormRowInput
           label="Surname"
           name="family_name"
+          // placeholder="Surname"
           readOnly={true}
           register={register}
           className="capitalize"
         />
-        <FormRowInputEditable
-          label="Branch"
-          name="branch"
+        <FormRowInput
+          label="Location"
+          name="location"
+          readOnly={true}
           register={register}
           className="capitalize"
         />
-        <FormRowInputEditable
-          label="Division"
-          name="division"
-          register={register}
-          className="capitalize"
-        />
-        <FormRowInputEditable
-          label="Role"
-          name="role"
+        <FormRowInput
+          label="Group"
+          name="group"
+          // placeholder="Group"
+          readOnly={true}
           register={register}
           className="capitalize"
           // errors={error}
         />
         <FormHeading
           heading="Contact Information"
-          className="col-span-full text-md lg:text-md"
+          className={cn(sharedStyles.headingForm, "text-left text-sm p-0")}
         />
         <FormRowInput
           label="Email"
           type="email"
           name="email"
+          // placeholder="Email"
           readOnly={true}
           register={register}
         />
         <FormRowInputEditable
-          label="Mobile"
+          label="Mobile Number"
           type="text"
           name="mobile"
+          // placeholder="Mobile Number"
           register={register}
           className="capitalize"
+          error={errors.mobile}
         />
       </div>
-      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 bg-white pb-4">
+      <div className={cn(sharedStyles.btnParent)}>
         <Button
-          className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white capitalize"
+          className={cn(sharedStyles.btn, sharedStyles.btnCancel)}
           type="button"
           onClick={() => navigate("/dashboard")}
           variant="cancel"
@@ -142,13 +136,13 @@ function UserProfileForm({ user }: UserProfileProps) {
           Cancel
         </Button>
         <Button
-          disabled={isSubmitting}
+          disabled={isPending}
           type="submit"
           variant="submit"
           size="lg"
-          className="flex-1 capitalize"
+          className={cn(sharedStyles.btn, sharedStyles.btnSubmit)}
         >
-          {isSubmitting ? "Updating..." : "Update"}
+          {isPending ? <Spinner className="size-8" /> : "Update"}
         </Button>
       </div>
     </form>

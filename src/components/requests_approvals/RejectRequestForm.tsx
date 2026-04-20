@@ -53,8 +53,10 @@ const RequestRejectedForm = () => {
   });
 
   const { mutateAsync: rejectItem, isPending } = usePOST({
-    resourcePath: `jobs/requests/rejected` as Resource,
+    id: selectedRowId ?? "",
+    resourcePath: `jobs` as Resource,
     queryKey: ["maintenanceRequests"] as const,
+    action: "reject",
   });
 
   if (!showRejectRequestDialog || !selectedRowId) return null;
@@ -77,13 +79,13 @@ const RequestRejectedForm = () => {
       setSuccessConfig({
         title: "Success",
         message: "The Request was Rejected!!!",
-        resourcePath: "jobs/pending",
+        redirectPath: "jobs/pending-approval",
       });
       setShowSuccess(true);
 
       // $ Navigate back to the requests list page after successfull submit
       setTimeout(() => {
-        navigate("/jobs/pending");
+        navigate("/jobs/pending-approval");
       }, 1500);
     } catch (error) {
       console.log(error);
@@ -101,23 +103,6 @@ const RequestRejectedForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       className={cn(sharedStyles.modalForm)}
     >
-      {/* <div className={cn(sharedStyles.modalParent)}> */}
-      {/* Header */}
-      {/* <div className="flex flex-col items-center md:gap-3 justify-center w-full">
-          <div className="rounded-full p-4 text-red-500 bg-red-500/20">
-            <OctagonX className="size-12 md:size-16" />
-          </div>
-          <FormHeading
-            heading="Reject Request"
-            className={cn(sharedStyles.headingForm, "md:text-center")}
-          />
-        </div> */}
-      {/* Body */}
-      {/* <p className="text-cxs md:text-xs text-gray-600 dark:text-gray-300 text-center w-3/4 mx-auto">
-          Are you sure you want to reject this item? This action cannot be
-          undone.
-        </p> */}
-      {/* Form Input */}
       <TextAreaInput
         register={register}
         placeholder="Enter reason for rejecting request"

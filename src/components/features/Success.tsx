@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 // $ Animation
 import { motion, AnimatePresence } from "motion/react";
-import type { Resource } from "@/utils/api";
+import type { RedirectResource } from "@/utils/api";
 
 export const Success = () => {
   const { showSuccess, setShowSuccess, successConfig } = useGlobalContext();
@@ -14,7 +14,7 @@ export const Success = () => {
   const DEFAULT_SUCCESS_CONFIG = {
     title: "Success",
     message: "Your request was completed successfully.",
-    resourcePath: null as Resource | null,
+    redirectPath: null as RedirectResource | null,
   };
 
   const config = successConfig ?? DEFAULT_SUCCESS_CONFIG;
@@ -25,13 +25,13 @@ export const Success = () => {
 
     const timer = setTimeout(() => {
       setShowSuccess(false);
-      if (config.resourcePath) {
-        navigate(`/${config.resourcePath}`);
+      if (config.redirectPath) {
+        navigate(`/${config.redirectPath}`);
       }
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [showSuccess, config.resourcePath, navigate, setShowSuccess]);
+  }, [showSuccess, config.redirectPath, navigate, setShowSuccess]);
 
   if (!showSuccess) return null;
 

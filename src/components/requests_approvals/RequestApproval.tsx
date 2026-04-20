@@ -22,14 +22,19 @@ function RequestApproval() {
   } = useGlobalContext();
 
   const { mutateAsync: approveRequest, isPending: isApproved } = usePOST({
-    resourcePath: "jobs/requests/approved",
-    queryKey: ["maintenanceRequest", "approved"],
+    id: selectedRowId ?? "",
+    action: "approve",
+    resourcePath: "jobs",
+    queryKey: ["jobs", "approve-job"] as const,
   });
 
   const { data: item, isPending } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
-    queryKey: ["MaintenanceRequests"],
-    resourcePath: "jobs/pending",
+    queryKey: ["jobs", "pending-approval-job"],
+    resourcePath: "jobs",
+    params: {
+      status: "Pending",
+    },
   });
 
   const navigate = useNavigate();

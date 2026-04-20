@@ -48,12 +48,11 @@ const UsersListPage = () => {
   ]);
 
   const {
-    setShowActionDialog,
+    setShowCreateUserDialog,
     setSelectedRowId,
     openDeleteDialog,
     globalFilter,
     setGlobalFilter,
-    setShowCreateUserDialog,
     setShowSuccess,
     setSuccessConfig,
     selectedRowId,
@@ -64,7 +63,7 @@ const UsersListPage = () => {
 
   // $ Pass the props to the function generating the columns to be used in the table
   const columns = getUserColumns(
-    setShowActionDialog,
+    setShowCreateUserDialog,
     setSelectedRowId,
     openDeleteDialog,
     resend,

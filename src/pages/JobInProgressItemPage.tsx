@@ -1,23 +1,25 @@
 // $ This page renders the full details of an approved request with information and pictures
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../utils/api";
 import { type JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
 import JobApprovedItemInfo from "@/components/jobs/JobApprovedItemInfo";
+import useGlobalContext from "@/context/useGlobalContext";
 
-const JobApprovedItemPage = () => {
-  const { id } = useParams<{ id: string }>();
-
-  const MAINTENANCE_REQUESTS_KEY = ["maintenanceRequests"];
+const JobInProgressItemPage = () => {
+  // const { id } = useParams<{ id: string }>();
+  const { selectedRowId } = useGlobalContext();
+  // console.log("Selected Row ID:", selectedRowId);
 
   const { data: item, isPending } = useById<JobApprovedAPIResponse>({
-    id: id || "",
-    queryKey: MAINTENANCE_REQUESTS_KEY,
-    resourcePath: "jobs/approved",
+    id: selectedRowId ?? "",
+    queryKey: ["jobs", "in-progress"],
+    resourcePath: "jobs",
+    params: { status: "In Progress" },
   });
 
-  if (!id || !item) {
+  if (!selectedRowId || !item) {
     return <PageLoadingSpinner />;
   }
 
@@ -42,4 +44,4 @@ const JobApprovedItemPage = () => {
   );
 };
 
-export default JobApprovedItemPage;
+export default JobInProgressItemPage;

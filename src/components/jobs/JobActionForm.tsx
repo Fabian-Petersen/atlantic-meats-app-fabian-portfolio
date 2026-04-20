@@ -22,7 +22,7 @@ import {
 } from "../../schemas/index";
 
 // $ Import api & hooks
-import { useCreateActionRequest } from "@/utils/api";
+import { usePOST } from "@/utils/api";
 
 // $ Import image compression hook
 import { compressImagesToWebpv1 } from "@/utils/compressImagesToWebpv1";
@@ -41,12 +41,21 @@ type Props = {
 };
 
 const MaintenanceActionForm = ({ onCancel }: Props) => {
-  const { mutateAsync, isError, isPending } = useCreateActionRequest();
-
   const [signature, setSignature] = useState<string | null>(null);
   const { setShowError, selectedRowId, setShowActionDialog } =
     useGlobalContext();
   const navigate = useNavigate();
+
+  // $ Import POST hook for submitting the actioned maintenance request to the backend (DynamoDB + S3 for images)
+  const { mutateAsync, isError, isPending } = usePOST<
+    ActionRequestPayload,
+    PresignedUrlResponse
+  >({
+    id: selectedRowId ?? "",
+    resourcePath: "jobs",
+    queryKey: ["jobs", "action-job"],
+    action: "action",
+  });
 
   // $ Ensure selectedRowId is available
   useEffect(() => {
@@ -74,19 +83,6 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
     control,
     formState: { errors },
   } = useForm<ActionRequestFormValues>({
-    // defaultValues: {
-    // start_time: toDateTimeLocal(now),
-    // end_time: toDateTimeLocal(now),
-    // total_km: "",
-    // works_order_number: "",
-    // work_completed: "",
-    // status: "",
-    // root_cause: "",
-    // findings: "",
-    // images: [],
-    // signature: "",
-    // },
-
     resolver: zodResolver(
       actionRequestSchema,
     ) as unknown as Resolver<ActionRequestFormValues>,
@@ -112,8 +108,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
       // console.log("data from actioned request:", payload);
       // $ 3. Create maintenance request (DynamoDB + presigned URLs)
       const response = await mutateAsync(payload);
-
-      const { presigned_urls } = response;
+      const presigned_urls = response;
 
       // $ 4. Upload files directly to S3
       await Promise.all(
@@ -138,6 +133,9 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
       setShowActionDialog(false);
       navigate("/jobs/actioned");
     } catch (err) {
+      toast.error("Request unsuccessfull!!", {
+        duration: 1000,
+      });
       console.error("Failed to create maintenance request", err);
     }
   };

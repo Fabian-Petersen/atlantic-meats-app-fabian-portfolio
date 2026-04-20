@@ -11,16 +11,19 @@ import { ErrorPage } from "../features/Error";
 import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 // type Props = {
-//   item: JobRequestFormValues;
+//   job: JobRequestFormValues;
 // };
 
 function JobPendingSingleItemInfo() {
   const { selectedRowId } = useGlobalContext();
 
-  const { data: item, isPending } = useById<JobAPIResponse>({
+  const { data: job, isPending } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
-    queryKey: ["maintenanceRequests"],
-    resourcePath: "jobs/pending",
+    queryKey: ["jobs", "pending-approval-job"],
+    resourcePath: "jobs",
+    params: {
+      status: "Pending",
+    },
   });
   const navigate = useNavigate();
 
@@ -29,7 +32,7 @@ function JobPendingSingleItemInfo() {
   }
 
   // fallback UI if timeout reached
-  if (!item) {
+  if (!job) {
     return (
       <ErrorPage
         title="Error loading maintenance request!!"
@@ -42,46 +45,46 @@ function JobPendingSingleItemInfo() {
     <div className="flex gap flex-col gap-2 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50">
       <div className="flex flex-col gap-2">
         <h1 className="text-md md:text-xl capitalize">
-          Request No : {item?.jobcardNumber}
+          Request No : {job?.jobcardNumber}
         </h1>
         <div className="capitalize flex gap-2">
           <span className="">Asset : </span>
-          <span>{item?.equipment}</span>
+          <span>{job?.equipment}</span>
         </div>
         <div className="capitalize flex gap-2">
           <span className="">Asset No : </span>
-          <span>{item?.assetID}</span>
+          <span>{job?.assetID}</span>
         </div>
       </div>
       <Separator width="100%" className="mt-2 mb-4" />
       <ul className="flex flex-col gap-4 md:text-sm text-xs">
         <li className="capitalize flex gap-2">
           <span>Requested By : </span>
-          <span>{item?.requested_by}</span>
+          <span>{job?.requested_by}</span>
         </li>
         <li className="capitalize flex gap-2">
           <span>Location : </span>
-          <span>{item?.location}</span>
+          <span>{job?.location}</span>
         </li>
         <li className="capitalize flex gap-2">
           <span>Description : </span>
-          <span>{item?.description}</span>
+          <span>{job?.description}</span>
         </li>
         <li className="capitalize flex gap-2">
           <span>Type : </span>
-          <span>{item?.type}</span>
+          <span>{job?.type}</span>
         </li>
         <li className="capitalize flex gap-2">
           <span>Impact : </span>
-          <span>{item?.impact}</span>
+          <span>{job?.impact}</span>
         </li>
         <li className="capitalize flex gap-2">
           <span>Priority : </span>
-          <span>{item?.priority}</span>
+          <span>{job?.priority}</span>
         </li>
         <li className="flex gap-2">
           <span>Comments: </span>
-          <span>{item?.jobComments}</span>
+          <span>{job?.jobComments}</span>
         </li>
       </ul>
       <div className="flex w-full justify-end pt-6">
@@ -103,7 +106,7 @@ function JobPendingSingleItemInfo() {
             size="xl"
             className="flex-1"
             onClick={() => {
-              navigate(`/jobs/actioned/${item?.id}`);
+              navigate(`/jobs/actioned/${job?.id}`);
             }}
           >
             Action

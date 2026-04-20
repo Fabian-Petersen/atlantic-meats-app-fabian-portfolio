@@ -10,8 +10,11 @@ const NotificationSidebar = () => {
   const { openNotificationSidebar } = useGlobalContext();
 
   const { data: pendingJobs, isPending } = useGetAll<JobAPIResponse[]>({
-    queryKey: ["maintenanceRequests"],
-    resourcePath: "jobs/pending",
+    queryKey: ["jobs", "pending-jobs"],
+    resourcePath: "jobs/requests",
+    params: {
+      status: "Pending",
+    },
   });
 
   // [INFO] Change to something nice

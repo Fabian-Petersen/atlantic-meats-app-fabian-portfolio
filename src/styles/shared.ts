@@ -3,7 +3,9 @@ import { cn } from "@/lib/utils";
 // $ Mobile Shared Styles
 export const sharedStyles = {
   // $ Pages
-  pageContainer: cn("flex items-center justify-center w-full h-full p-4"),
+  pageContainer: cn(
+    "flex items-center justify-center w-full h-full p-2 h-[calc(h-screen - var(--lg-navbarHeight)]",
+  ),
   pageContent: cn(
     "bg-white flex flex-col gap-4 w-full lg:max-w-3xl h-auto rounded-xl shadow-lg p-4 dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) dark:border-gray-700/50 dark:border",
   ),
@@ -57,12 +59,12 @@ export const sharedStyles = {
     // general
     "flex-1",
     // light
-    "bg-[#fcb53b]/15 border-[#fcb53b]/50 text-[#a06b00]",
+    "bg-green-500/10 border-green-500/40 text-green-700",
     // dark
-    "dark:bg-[#fcb53b]/15 dark:border-[#fcb53b]/30 dark:text-[#fcb53b]",
+    "dark:bg-green-500/15 dark:border-green-500/25 dark:text-green-300",
     // hover
-    "hover:bg-[#fcb53b]/25 hover:border-[#fcb53b]/70",
-    "dark:hover:bg-[#fcb53b]/22 dark:hover:border-[#fcb53b]/45",
+    "hover:bg-green-500/20 hover:border-green-500/60",
+    "dark:hover:bg-green-500/22 dark:hover:border-green-500/40",
   ),
   btnDelete: cn(
     "flex-1",

@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { GlobalData, PendingTableAction } from "../schemas";
 
-import type { Resource } from "@/utils/api";
+import type { Resource, RedirectResource } from "@/utils/api";
 
 // $ The config passed to the modal to delete an asset or maintenance item.
 export type DeleteConfig = {
@@ -13,7 +13,7 @@ export type DeleteConfig = {
 export type SuccessConfig = {
   title?: string;
   message?: string;
-  resourcePath?: Resource;
+  redirectPath?: RedirectResource | null;
 } | null;
 
 export type AppContextType = {

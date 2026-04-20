@@ -75,6 +75,7 @@ const JobsInProgressListPage = () => {
   });
 
   if (isPending) return <PageLoadingSpinner />;
+
   if (isError)
     return (
       <ErrorPage
@@ -94,7 +95,8 @@ const JobsInProgressListPage = () => {
         <GenericTable
           data={data}
           columns={columns}
-          rowPath="/jobs/approved"
+          rowPath="jobs"
+          action="action"
           className="hidden md:flex flex-col gap-2"
           searchPlaceholderText="search jobs"
           rowClassName={(row) => {

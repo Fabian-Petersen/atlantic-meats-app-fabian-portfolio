@@ -8,6 +8,6 @@ import type { UsersAPIResponse } from "@/schemas/usersSchema";
 export const useGetUser = () => {
   return useGetAll<UsersAPIResponse>({
     resourcePath: `users/get-current-user`,
-    queryKey: ["userRequest", "user"],
+    queryKey: ["users", "current-user"],
   });
 };

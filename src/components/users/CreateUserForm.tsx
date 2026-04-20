@@ -22,7 +22,8 @@ import FormRowSelect from "@/../customComponents/FormRowSelect";
 import { Spinner } from "../ui/spinner";
 import { usePOST } from "@/utils/api";
 import { toast } from "sonner";
-import clsx from "clsx";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
 
 function CreateUserForm() {
   const {
@@ -111,7 +112,7 @@ function CreateUserForm() {
         <FormRowSelect
           // label=""
           name="group"
-          placeholder="Role"
+          placeholder="Group"
           options={userRoles}
           register={register}
           className="capitalize"
@@ -141,13 +142,9 @@ function CreateUserForm() {
         />
       </div>
 
-      <div className="flex items-center md:items-end w-full md:w-1/2 md:max-w-72 md:ml-auto md:justify-end gap-2">
+      <div className={cn(sharedStyles.btnParent)}>
         <Button
-          className={clsx(
-            "flex-1 py-2 text-xs font-medium rounded-lg border border-red-500 text-red-600 transition-colors bg-red-300/70",
-            " dark:border-red-500 dark:bg-red-300/30 dark:text-red-500",
-            "dark:hover:bg-red-300/20 hover:bg-red-400/50",
-          )}
+          className={cn(sharedStyles.btn, sharedStyles.btnCancel)}
           type="button"
           onClick={() => setShowCreateUserDialog(false)}
           variant="cancel"
@@ -160,12 +157,10 @@ function CreateUserForm() {
           type="submit"
           variant="submit"
           size="lg"
-          className="flex-1 py-2 text-xs font-medium rounded-lg border border-primary bg-primary/20 dark:border-primary text-primary dark:bg-primary/20 dark:text-primary hover:bg-primary/50 dark:hover:bg-primary/5 transition-colors"
+          className={cn(sharedStyles.btn, sharedStyles.btnSubmit)}
         >
           {isPending ? (
-            <div className="flex gap-4 items-center justify-center">
-              <Spinner data-icon="inline-start" className="size-6" />
-            </div>
+            <Spinner data-icon="inline-start" className="size-8" />
           ) : (
             "Submit"
           )}

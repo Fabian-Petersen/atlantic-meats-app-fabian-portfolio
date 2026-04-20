@@ -32,7 +32,7 @@ import StoreProfilePage from "./pages/StoreProfilePage";
 
 // $ Job Management Pages for single items
 import JobPendingItemPage from "./pages/JobPendingItemPage";
-import JobApprovedItemPage from "./pages/JobApprovedItemPage";
+import JobInProgressItemPage from "./pages/JobInProgressItemPage";
 import JobsCompletedListPage from "./pages/JobsCompletedListPage";
 
 // $ Pages display the list of items in a table
@@ -72,22 +72,28 @@ function App() {
             <Route path="/users/profile" element={<UserProfilePage />} />
             <Route path="/jobs/create-job" element={<CreateJobPage />} />
             <Route
-              path="/jobs/in-progress/:id"
-              element={<JobApprovedItemPage />}
+              path="/jobs/:id/in-progress"
+              element={<JobInProgressItemPage />}
             />
             <Route
               path="/jobs/in-progress"
               element={<JobsInProgressListPage />}
             />
-            <Route path="/jobs/actioned/:id" element={<JobActionPage />} />
+            <Route path="/jobs/:id/action" element={<JobActionPage />} />
           </Route>
           {/* // % Admin only Routes */}
           <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>
-            <Route path="jobs/pending" element={<JobsPendingListPage />} />
+            <Route
+              path="jobs/pending-approval"
+              element={<JobsPendingListPage />}
+            />
             <Route path="/assets/list" element={<AssetsOverviewPage />} />
             {/* // $ Page to list an asset by id */}
             <Route path="/assets/:id" element={<AssetsSingleItemPage />} />
-            <Route path="/jobs/pending/:id" element={<JobPendingItemPage />} />
+            <Route
+              path="/jobs/pending-approval/:id"
+              element={<JobPendingItemPage />}
+            />
             <Route
               path="/assets/create-new-asset"
               element={<CreateAssetPage />}
