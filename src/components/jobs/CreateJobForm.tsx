@@ -49,12 +49,12 @@ const CreateJobForm = () => {
     { presigned_urls: PresignedUrlResponse }
   >({
     resourcePath: "jobs/requests",
-    queryKey: ["jobs", "create"],
+    queryKey: ["jobs", "create-job"],
   });
 
   const { data } = useGetAll<AssetRequestFormValues[]>({
     resourcePath: "assets-data",
-    queryKey: ["getAllAssets"],
+    queryKey: ["assets", "create-job-form"],
   });
 
   // data looks like { assets: Array(107) }

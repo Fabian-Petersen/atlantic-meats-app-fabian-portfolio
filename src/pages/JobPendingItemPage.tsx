@@ -25,7 +25,7 @@ const JobPendingItemPage = () => {
     queryKey: ["jobs", "pending-approval-job"],
     resourcePath: `jobs`,
     params: {
-      status: "Pending",
+      status: "pending",
     },
   });
 

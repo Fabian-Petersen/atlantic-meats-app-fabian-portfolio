@@ -134,7 +134,7 @@ export type {
 export type GlobalData = JobRequestFormValues | AssetRequestFormValues;
 
 export type PresignedUrlResponse = {
-  filename?: string;
+  filename: string;
   url: string;
   key: string;
   content_type: string;

@@ -33,6 +33,7 @@ import StoreProfilePage from "./pages/StoreProfilePage";
 // $ Job Management Pages for single items
 import JobPendingItemPage from "./pages/JobPendingItemPage";
 import JobInProgressItemPage from "./pages/JobInProgressItemPage";
+import JobCompleteItemPage from "./pages/JobCompleteItemPage";
 import JobsCompletedListPage from "./pages/JobsCompletedListPage";
 
 // $ Pages display the list of items in a table
@@ -80,6 +81,10 @@ function App() {
               element={<JobsInProgressListPage />}
             />
             <Route path="/jobs/:id/action" element={<JobActionPage />} />
+            <Route
+              path="/jobs/:id/completed"
+              element={<JobCompleteItemPage />}
+            />
           </Route>
           {/* // % Admin only Routes */}
           <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>
@@ -91,7 +96,7 @@ function App() {
             {/* // $ Page to list an asset by id */}
             <Route path="/assets/:id" element={<AssetsSingleItemPage />} />
             <Route
-              path="/jobs/pending-approval/:id"
+              path="/jobs/:id/pending-approval"
               element={<JobPendingItemPage />}
             />
             <Route

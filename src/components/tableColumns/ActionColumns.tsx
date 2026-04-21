@@ -9,18 +9,18 @@ import type {
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 
-type StatusCondition = "in progess" | "complete";
+// type StatusCondition = "in progess" | "complete";
 
-function getConditionClasses(condition: StatusCondition) {
-  switch (condition.toLowerCase()) {
-    case "complete":
-      return "text-green-700 bg-green-300/60";
-    case "in progess":
-      return "text-red-700 bg-red-300/60";
-    default:
-      return "text-gray-400 bg-gray-200";
-  }
-}
+// function getConditionClasses(condition: StatusCondition) {
+//   switch (condition.toLowerCase()) {
+//     case "complete":
+//       return "text-green-700 bg-green-300/60";
+//     case "in progess":
+//       return "text-red-700 bg-red-300/60";
+//     default:
+//       return "text-gray-400 bg-gray-200";
+//   }
+// }
 export const getJobActionColumns = (
   // setShowUpdateMaintenanceDialog: (v: boolean) => void,
   // setShowActionDialog: (v: boolean) => void,
@@ -80,9 +80,9 @@ export const getJobActionColumns = (
   },
   {
     accessorKey: "jobcardNumber",
-    header: "Jobcard Number",
+    header: "Jobcard No.",
     size: 140,
-    minSize: 120,
+    minSize: 10,
     maxSize: 160,
     enableColumnFilter: true,
   },
@@ -110,23 +110,23 @@ export const getJobActionColumns = (
       return <p className="capitalize">{value}</p>;
     },
   },
-  {
-    accessorKey: "status",
-    header: "Status",
-    enableColumnFilter: true,
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return (
-        <p
-          className={`capitalize text-xs min-w-fit px-2 py-2.5 text-center rounded-full ${getConditionClasses(
-            value as StatusCondition,
-          )}`}
-        >
-          {value}
-        </p>
-      );
-    },
-  },
+  // {
+  //   accessorKey: "status",
+  //   header: "Status",
+  //   enableColumnFilter: true,
+  //   cell: ({ getValue }) => {
+  //     const value = getValue<string>();
+  //     return (
+  //       <p
+  //         className={`capitalize text-xs min-w-fit px-2 py-2.5 text-center rounded-full ${getConditionClasses(
+  //           value as StatusCondition,
+  //         )}`}
+  //       >
+  //         {value}
+  //       </p>
+  //     );
+  //   },
+  // },
   {
     id: "actions",
     header: "Actions",

@@ -1,5 +1,11 @@
 import * as z from "zod";
 
+/**
+ * presignedURLSchema :
+ * key: string; // S3 key for the image, used for deletion when a job is deleted or images are updated
+ * url: string; // The actual presigned URL to access the image in S3, used for displaying the image in the frontend
+ * filename: string; // Original filename of the uploaded image, used for display purposes and when uploading new images to maintain the original filename in S3
+ */
 export const presignedURLSchema = z.object({
   key: z.string(),
   url: z.string(),

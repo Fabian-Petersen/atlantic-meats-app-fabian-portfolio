@@ -6,9 +6,10 @@ import type { Resource } from "@/utils/api";
 import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 type Priority = "critical" | "high" | "medium" | "low";
 
-export const getJobApprovedColumns = (
+export const getInProgressColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
-  setShowActionDialog: (v: boolean) => void,
+  navigate: (path: string) => void,
+  // setShowActionDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   // downloadItem: (id: string) => Promise<JobcardPresignedUrlResponse>, // $ not required
   openDeleteDialog: (
@@ -119,9 +120,10 @@ export const getJobApprovedColumns = (
         setSelectedRowId,
 
         action: {
-          url: "/jobs/actioned",
+          url: `/jobs/${rowId}/action`,
           onOpen: () => {
-            setShowActionDialog(true);
+            // setShowActionDialog(true);
+            navigate(`/jobs/${rowId}/action`);
             setSelectedRowId(rowId);
           },
         },
@@ -136,9 +138,9 @@ export const getJobApprovedColumns = (
 
         delete: {
           config: {
-            resourcePath: "jobs/pending",
-            queryKey: ["maintenanceApprovedRequests"],
-            resourceName: "request",
+            resourcePath: "jobs",
+            queryKey: ["jobs", "delete-inProgess-job"],
+            resourceName: "job",
           },
           onDelete: openDeleteDialog,
         },

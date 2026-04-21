@@ -34,7 +34,7 @@ const JobsCompletedListPage = () => {
     resourcePath: "jobs/completed",
     queryKey: ["jobs", "complete"],
     // params: {
-    //   group: "",
+    //   group: "technician",
     // },
   });
 
@@ -43,7 +43,7 @@ const JobsCompletedListPage = () => {
   });
 
   const [sorting, setSorting] = useState<SortingState>([
-    { id: "jobCreated", desc: true },
+    { id: "actionCreated", desc: true },
   ]);
 
   const [globalFilter, setGlobalFilter] = useState("");
@@ -115,7 +115,12 @@ const JobsCompletedListPage = () => {
           className={cn(sharedStyles.headingTable)}
           heading="Completed Jobs List"
         />
-        <GenericTable data={data} columns={columns} rowPath={"id"} />
+        <GenericTable
+          data={data}
+          columns={columns}
+          rowPath={"jobs"}
+          action="completed"
+        />
       </div>
       {/* // $ Mobile View */}
       <div className="grid lg:hidden gap-2 w-full p-2">

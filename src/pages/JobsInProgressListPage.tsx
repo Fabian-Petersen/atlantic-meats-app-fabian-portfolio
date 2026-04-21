@@ -16,7 +16,7 @@ import {
 
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import useGlobalContext from "@/context/useGlobalContext";
-import { getJobApprovedColumns } from "@/components/tableColumns/ApprovedColumns";
+import { getInProgressColumns } from "@/components/tableColumns/InProgressColumns";
 import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
 import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
@@ -26,6 +26,8 @@ import FormHeading from "@/../customComponents/FormHeading";
 import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { SearchInput } from "@/components/features/SearchInput";
+
+import { useNavigate } from "react-router-dom";
 
 const JobsInProgressListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<
@@ -37,6 +39,7 @@ const JobsInProgressListPage = () => {
       status: "In Progress",
     },
   });
+  const navigate = useNavigate();
 
   // console.log("data:", data);
   const [sorting, setSorting] = useState<SortingState>([
@@ -45,7 +48,7 @@ const JobsInProgressListPage = () => {
 
   const {
     setShowUpdateMaintenanceDialog,
-    setShowActionDialog,
+    // setShowActionDialog,
     setSelectedRowId,
     openDeleteDialog,
     setOpenChatSidebar,
@@ -54,9 +57,10 @@ const JobsInProgressListPage = () => {
   } = useGlobalContext();
 
   // $ Pass the props to the function generating the columns to be used in the table
-  const columns = getJobApprovedColumns(
+  const columns = getInProgressColumns(
     setShowUpdateMaintenanceDialog,
-    setShowActionDialog,
+    navigate,
+    // setShowActionDialog,
     setSelectedRowId,
     openDeleteDialog,
     setOpenChatSidebar,

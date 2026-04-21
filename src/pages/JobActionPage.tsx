@@ -15,7 +15,7 @@ const JobActionPage = () => {
           heading="Action Job"
           className={cn(sharedStyles.headingForm)}
         />
-        <JobActionForm onCancel={() => navigate("/jobs/completed")} />
+        <JobActionForm onCancel={() => navigate("/jobs/in-progress")} />
       </div>
     </div>
   );

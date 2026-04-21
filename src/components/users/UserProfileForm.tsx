@@ -68,7 +68,7 @@ function UserProfileForm({ user }: UserProfileProps) {
           heading="Profile Information"
           className={cn(
             sharedStyles.headingForm,
-            "text-left text-sm p-0 font-medium",
+            "text-left text-xs md:text-sm p-0 col-span-full",
           )}
         />
         <FormRowInput
@@ -105,7 +105,10 @@ function UserProfileForm({ user }: UserProfileProps) {
         />
         <FormHeading
           heading="Contact Information"
-          className={cn(sharedStyles.headingForm, "text-left text-sm p-0")}
+          className={cn(
+            sharedStyles.headingForm,
+            "text-left text-xs md:text-sm p-0 col-span-full",
+          )}
         />
         <FormRowInput
           label="Email"

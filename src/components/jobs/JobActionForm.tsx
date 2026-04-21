@@ -16,6 +16,7 @@ import FormRowSelect from "../../../customComponents/FormRowSelect";
 // $ Import schemas
 import {
   actionRequestSchema,
+  type ActionAPIResponse,
   type ActionRequestFormValues,
   type ActionRequestPayload,
   type PresignedUrlResponse,
@@ -40,7 +41,7 @@ type Props = {
   onCancel: () => void;
 };
 
-const MaintenanceActionForm = ({ onCancel }: Props) => {
+const JobActionForm = ({ onCancel }: Props) => {
   const [signature, setSignature] = useState<string | null>(null);
   const { setShowError, selectedRowId, setShowActionDialog } =
     useGlobalContext();
@@ -49,7 +50,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
   // $ Import POST hook for submitting the actioned maintenance request to the backend (DynamoDB + S3 for images)
   const { mutateAsync, isError, isPending } = usePOST<
     ActionRequestPayload,
-    PresignedUrlResponse
+    ActionAPIResponse
   >({
     id: selectedRowId ?? "",
     resourcePath: "jobs",
@@ -105,10 +106,14 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
         selectedRowId: selectedRowId!,
       };
 
-      // console.log("data from actioned request:", payload);
       // $ 3. Create maintenance request (DynamoDB + presigned URLs)
       const response = await mutateAsync(payload);
-      const presigned_urls = response;
+      const presigned_urls = response.presigned_urls;
+
+      // type guard
+      if (!presigned_urls?.length) {
+        return;
+      }
 
       // $ 4. Upload files directly to S3
       await Promise.all(
@@ -131,7 +136,7 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
         duration: 1000,
       });
       setShowActionDialog(false);
-      navigate("/jobs/actioned");
+      navigate("/jobs/completed");
     } catch (err) {
       toast.error("Request unsuccessfull!!", {
         duration: 1000,
@@ -266,4 +271,4 @@ const MaintenanceActionForm = ({ onCancel }: Props) => {
   );
 };
 
-export default MaintenanceActionForm;
+export default JobActionForm;

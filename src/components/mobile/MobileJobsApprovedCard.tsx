@@ -136,7 +136,7 @@ export function MobileJobsApprovedCard({ row, isOpen, onToggle }: Props) {
               className="flex-1 py-2 text-xs font-medium rounded-lg dark:bg-green/20 bg-green-500/10 border-green/20 hover:bg-green-500/90 hover:shadow-md text-green-500 border dark:border-green/30 transition-colors "
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/jobs/actioned/${row.original.id}`);
+                navigate(`/jobs/${row.original.id}/action`);
               }}
             >
               Action

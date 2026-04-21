@@ -3,6 +3,15 @@ import * as z from "zod";
 //$ import types
 import { ROOT_CAUSES } from "@/data/maintenanceAction";
 
+export const presignedURLResponseSchema = z.object({
+  filename: z.string(),
+  url: z.string(),
+  key: z.string(),
+  content_type: z.string(),
+});
+
+export type PresignedUrlResponse = z.infer<typeof presignedURLResponseSchema>;
+
 export const actionRequestSchema = z.object({
   start_time: z
     .string()
@@ -45,7 +54,7 @@ export const actionResponseSchema = actionRequestSchema.extend({
   location: z.string(),
   requested_by: z.string(),
   jobcardNumber: z.string(),
-  signedBy: z.string(),
+  presigned_urls: presignedURLResponseSchema.array().optional(),
 });
 
 // $ Type for sending the Action to the backend excluding the images (the images is not included with the initial request). Backend will send a presignURL for the images

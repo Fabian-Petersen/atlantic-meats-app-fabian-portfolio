@@ -1,22 +1,20 @@
-// $ This page renders the full details of an approved request with information and pictures
+// $ This page renders the full details of an completed job with information and pictures
 // import { useParams } from "react-router-dom";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../utils/api";
 import { type JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
-import JobApprovedItemInfo from "@/components/jobs/JobApprovedItemInfo";
 import useGlobalContext from "@/context/useGlobalContext";
+import JobCompleteItemInfo from "@/components/jobs/JobCompleteItemInfo";
 
-const JobInProgressItemPage = () => {
-  // const { id } = useParams<{ id: string }>();
+const JobCompleteItemPage = () => {
   const { selectedRowId } = useGlobalContext();
-  // console.log("Selected Row ID:", selectedRowId);
 
   const { data: item, isPending } = useById<JobApprovedAPIResponse>({
     id: selectedRowId ?? "",
-    queryKey: ["jobs", "in-progress"],
+    queryKey: ["jobs", "completed"],
     resourcePath: "jobs",
-    params: { status: "in progress" },
+    params: { status: "Complete" },
   });
 
   if (!selectedRowId || !item) {
@@ -37,11 +35,11 @@ const JobInProgressItemPage = () => {
           <ImageGallery images={images ?? []} />
         </div>
         <div>
-          <JobApprovedItemInfo item={item} />
+          <JobCompleteItemInfo item={item} />
         </div>
       </div>
     </div>
   );
 };
 
-export default JobInProgressItemPage;
+export default JobCompleteItemPage;

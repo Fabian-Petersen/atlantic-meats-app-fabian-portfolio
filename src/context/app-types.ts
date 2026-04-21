@@ -4,15 +4,49 @@ import type { GlobalData, PendingTableAction } from "../schemas";
 import type { Resource, RedirectResource } from "@/utils/api";
 
 // $ The config passed to the modal to delete an asset or maintenance item.
+
+/**
+ * DeleteConfig: The config passed to the modal to delete an asset or maintenance item. It includes the resourcePath to specify the backend resource to send the delete request to, the queryKey to invalidate after deletion to ensure the UI is updated, and an optional resourceName to display in the modal text.
+ * resourcePath: backend resource path e.g. "asset" or "jobs" - used to construct the endpoint to send the delete request to the backend
+ *
+ * queryKey: to invalidate after deletion e.g. ["assets"] or ["maintenanceRequests", "pending"] - used to invalidate the relevant queries in the react-query cache to ensure the UI is updated after deletion
+ *
+ * resourceName: e.g. "asset" or "maintenance request" - used to display in the modal text
+ */
+
 export type DeleteConfig = {
+  /**
+   * resourcePath: backend resource path e.g. "asset" or "jobs" - used to construct the endpoint to send the delete request to the backend
+   *
+   */
   resourcePath: Resource;
+  /**
+   * queryKey: to invalidate after deletion e.g. ["assets"] or ["maintenanceRequests", "pending"] - used to invalidate the relevant queries in the react-query cache to ensure the UI is updated after deletion
+   *
+   */
+
   queryKey: readonly unknown[];
+  /** ResourceName: e.g. "asset" or "maintenance request" - used to display in the modal text*/
   resourceName?: string;
 };
 
+/**
+ * SuccessConfig: The config passed to the success toast after a successful action such as deletion, creation, update, approval or rejection of a maintenance request or asset. It includes an optional title and message to display in the toast, as well as an optional redirectPath to navigate the user to a relevant page after the action is completed.
+ *
+ * title: The title to display in the success toast after a successful action.
+ *
+ * message: The message to display in the success toast after a successful action.
+ *
+ * redirectPath: to redirect after successful action e.g. "assets/list" or "jobs/pending-approval" - used to navigate the user to a relevant page after a successful action, such as deletion, creation, update, approval or rejection of a maintenance request or asset.
+ *
+ *
+ */
 export type SuccessConfig = {
   title?: string;
   message?: string;
+  /**
+   * redirectPath: to redirect after successful action e.g. "assets/list" or "jobs/pending-approval" - used to navigate the user to a relevant page after a successful action, such as deletion, creation, update, approval or rejection of a maintenance request or asset.
+   */
   redirectPath?: RedirectResource | null;
 } | null;
 
