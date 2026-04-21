@@ -25,6 +25,8 @@ import { Spinner } from "../ui/spinner";
 
 // $ Context
 import useGlobalContext from "@/context/useGlobalContext";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
 // import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 const ApproveRequestForm = () => {
@@ -58,9 +60,9 @@ const ApproveRequestForm = () => {
 
   const { mutateAsync: approveItem, isPending } = usePOST({
     id: selectedRowId ?? "",
-    action: "approve",
-    resourcePath: `jobs` as Resource,
+    resourcePath: "jobs" as Resource,
     queryKey: ["jobs", "approve-job"] as const,
+    action: "approve",
   });
 
   if (!showApproveRequestDialog || !selectedRowId) return null;
@@ -133,25 +135,26 @@ const ApproveRequestForm = () => {
         />
         <FormRowInput
           register={register}
+          label="Target Date"
           type="date"
-          placeholder="Target Date"
+          // placeholder="Target Date"
           name="targetDate"
           error={errors.targetDate}
           className=""
         />
-        <div className="flex justify-between w-full gap-2 mt-auto">
+        <div className={cn(sharedStyles.btnParent)}>
           <button
             type="button"
             disabled={isPending}
             onClick={() => setShowApproveRequestDialog(false)}
-            className="flex-1 py-2 text-xs font-medium rounded-lg border border-red-200 dark:border-red-500 text-red-600 dark:bg-red-300/20 dark:text-red-300 hover:bg-gray-50 dark:hover:bg-red/5 transition-colors"
+            className={cn(sharedStyles.btnCancel, sharedStyles.btn)}
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isPending}
-            className="flex-1 py-2 text-xs font-medium rounded-lg border border-primary bg-primary/20 dark:border-primary text-primary dark:bg-primary/20 dark:text-primary hover:bg-primary/50 dark:hover:bg-primary/5 transition-colors"
+            className={cn(sharedStyles.btnSubmit, sharedStyles.btn)}
           >
             {isPending ? (
               <div className="flex gap-4 items-center justify-center">

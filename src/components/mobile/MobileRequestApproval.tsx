@@ -20,6 +20,7 @@ import { toast } from "sonner";
 // $ ─── Styles ───────────────────────────────────────────────────────────────────
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
+import { Spinner } from "../ui/spinner";
 
 // import { Separator } from "@/components/ui/separator";
 
@@ -114,22 +115,24 @@ export default function MobileRequestApproval({
   const navigate = useNavigate();
 
   const { mutateAsync: approveRequest, isPending } = usePOST({
-    resourcePath: "jobs/requests/approved",
-    queryKey: ["maintenanceRequest", "approved"],
+    id: selectedRowId ?? "",
+    resourcePath: "jobs",
+    queryKey: ["jobs", "approve-request"],
+    action: "approve",
   });
 
   const handleSubmit = async () => {
     setShowApproveRequestDialog(true);
     const payload = {
       selectedRowId: selectedRowId,
-      status: "Approved",
+      status: "approved",
     };
 
     try {
       await approveRequest(payload);
       // console.log("approve-request:", response);
       toast.success("The itemm was sucessfully rejected");
-      navigate("/jobs/approved");
+      navigate("/jobs/in-progress");
     } catch (error) {
       console.log(error);
     }
@@ -141,7 +144,7 @@ export default function MobileRequestApproval({
       <div className={cn(sharedStyles.cardTopBar)}>
         <button
           type="button"
-          onClick={() => navigate("/jobs/pending")}
+          onClick={() => navigate("/jobs/pending-approval")}
           className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
@@ -273,29 +276,41 @@ export default function MobileRequestApproval({
 
       {/* ── Sticky action bar ── */}
       <div className="fixed bottom-0 left-0 right-0 z-10 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700/60 px-4 pt-3 pb-6 safe-area-inset-bottom">
-        <div className="flex gap-2">
-          <button
+        <div className={cn(sharedStyles.btnParent)}>
+          {/* <button
             type="button"
-            onClick={() => navigate("/jobs/pending")}
+            onClick={() => navigate("/jobs/pending-approval")}
             className="flex-1 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
           >
             Cancel
-          </button>
+          </button> */}
           <button
             type="button"
             onClick={() => setShowRejectRequestDialog(true)}
-            className="flex-1 py-2 rounded-lg bg-red-100 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-xs font-medium dark:text-red-200 text-red-400 dark:(--clr-red-600) hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors flex items-center justify-center gap-2"
+            className={cn(
+              sharedStyles.btnCancel,
+              sharedStyles.btn,
+              "text-sm uppercase flex gap-6 justify-center items-center",
+            )}
           >
-            <X className="w-4 h-4" />
+            <X className="w-6 h-6" />
             Reject
           </button>
           <button
             type="button"
             disabled={isPending}
             onClick={handleSubmit}
-            className="flex-1 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-xs font-medium text-white transition-colors flex items-center justify-center gap-2"
+            className={cn(
+              sharedStyles.btnApprove,
+              sharedStyles.btn,
+              "text-sm uppercase flex gap-6 justify-center items-center",
+            )}
           >
-            <Check className="w-4 h-4" />
+            {isPending ? (
+              <Spinner className="size-6" />
+            ) : (
+              <Check className="w-6 h-6" />
+            )}
             Approve
           </button>
         </div>

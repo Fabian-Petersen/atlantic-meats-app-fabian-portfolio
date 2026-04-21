@@ -34,16 +34,16 @@ const Cards = () => {
     resourcePath: "jobs/requests",
     queryKey: ["jobs", "pending"],
     params: {
-      status: "Pending",
+      status: "pending",
     },
   });
 
   // $ Approved Requests Data
   const { data: approvedJobs = [] } = useGetAll<JobApprovedAPIResponse[]>({
     resourcePath: "jobs/requests",
-    queryKey: ["jobs", "inProgress"],
+    queryKey: ["jobs", "in-progress"],
     params: {
-      status: "In Progress",
+      status: "in progress",
     },
   });
 

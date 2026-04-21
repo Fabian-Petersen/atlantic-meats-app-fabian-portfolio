@@ -127,9 +127,10 @@ const RequestRejectedForm = () => {
           className={cn(sharedStyles.btnSubmit, sharedStyles.btn)}
         >
           {isPending ? (
-            <div className="flex gap-4 items-center justify-center">
-              <Spinner data-icon="inline-start" className="size-6" />
-            </div>
+            <Spinner
+              data-icon="inline-start"
+              className="flex items-center justify-center size-6 w-full"
+            />
           ) : (
             "Submit"
           )}

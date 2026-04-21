@@ -3,10 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import type { JobAPIResponse } from "@/schemas";
 import type { Row } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
-import { usePOST } from "@/utils/api";
+// import { usePOST } from "@/utils/api";
 // import { toast } from "sonner";
 import useGlobalContext from "@/context/useGlobalContext";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import { priorityConfig } from "@/lib/priorityConfig";
 
 type MaintenanceRequestCardProps = {
@@ -26,33 +26,35 @@ export default function MobileJobsPendingCard({
   const navigate = useNavigate();
 
   const {
-    selectedRowId,
+    // selectedRowId,
     setSelectedRowId,
     setShowRejectRequestDialog,
     setShowApproveRequestDialog,
   } = useGlobalContext();
 
-  const { mutateAsync: approveRequest, isPending } = usePOST({
-    resourcePath: "jobs/requests/approved",
-    queryKey: ["maintenanceRequest", "approved"],
-  });
+  // const { mutateAsync: approveRequest, isPending } = usePOST({
+  //   id: selectedRowId ?? "",
+  //   resourcePath: "jobs",
+  //   queryKey: ["jobs", "approve-request"],
+  //   action: "approve",
+  // });
 
-  const handleSubmit = async () => {
-    setShowApproveRequestDialog(true);
-    const payload = {
-      selectedRowId: selectedRowId,
-      status: "In Progress",
-    };
+  // const handleSubmit = async () => {
+  //   setShowApproveRequestDialog(true);
+  //   const payload = {
+  //     selectedRowId: selectedRowId,
+  //     status: "in progress",
+  //   };
 
-    try {
-      await approveRequest(payload);
-      // console.log("approve-request:", response);
-      toast.success("The itemm was sucessfully rejected");
-      navigate("/jobs/approved");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //   try {
+  //     await approveRequest(payload);
+  //     // console.log("approve-request:", response);
+  //     toast.success("The itemm was sucessfully rejected");
+  //     navigate("/jobs/in-progress");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div className="rounded-md border border-gray-200 dark:border-(--clr-borderDark) bg-white dark:bg-(--bg-primary_dark) mb-2 overflow-hidden transition-shadow hover:shadow-sm">
@@ -73,7 +75,7 @@ export default function MobileJobsPendingCard({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 mb-1">
             <MapPin className="w-3 h-3 text-gray-400 shrink-0" />
-            <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate capitalize">
               {row.original.location}
             </p>
           </div>
@@ -124,7 +126,7 @@ export default function MobileJobsPendingCard({
               className="flex-1 py-2 text-xs font-medium rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/jobs/pending/${row.original.id}`);
+                navigate(`/jobs/${row.original.id}/pending-approval`);
                 setSelectedRowId(row.original.id);
               }}
             >
@@ -147,11 +149,12 @@ export default function MobileJobsPendingCard({
             {/* Approve */}
             <button
               type="button"
-              disabled={isPending}
+              // disabled={isPending}
               className="flex-1 py-2 text-xs font-medium rounded-lg dark:bg-green/20 bg-green-500/10 border-green/20 hover:bg-green-500/90 hover:shadow-md text-green-500 border dark:border-green/30 transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
-                handleSubmit();
+                setSelectedRowId(row.original.id);
+                setShowApproveRequestDialog(true);
               }}
             >
               Approve

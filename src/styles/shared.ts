@@ -28,7 +28,7 @@ export const sharedStyles = {
   btnCancel: cn(
     "",
     // light
-    "bg-orange-500/10 border-orange-500/40 text-orange-700",
+    "bg-orange-500/15 border-orange-500/40 text-orange-700",
     // dark
     "dark:bg-orange-500/15 dark:border-orange-500/25 dark:text-orange-300",
     // hover
@@ -96,7 +96,7 @@ export const sharedStyles = {
   // $ Modals
   modal: cn(
     // Sizing
-    "max-w-80 md:max-w-lg",
+    "w-full md:max-w-lg",
     // Layout
     "flex flex-col",
     // Appearance
@@ -122,7 +122,7 @@ export const sharedStyles = {
     "overflow-y-auto",
   ),
   modalForm: cn("flex flex-col items-center justify-center px-2"), // form housing the content
-  modalParent: cn("flex flex-col gap-4 w-full rounded-lg"), // Parent of the outermost div
+  modalParent: cn("flex flex-col gap-2 md:gap-4 w-full rounded-lg"), // Parent of the outermost div
   modalBtnParent: cn("mt-4"),
   modalOverlay: cn("bg-black/60 dark:bg-black/30 backdrop-blur-xs"),
 };

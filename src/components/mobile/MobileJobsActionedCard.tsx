@@ -136,7 +136,7 @@ export default function MobileJobsActionedCard({
               onClick={(e) => {
                 e.stopPropagation();
                 setSelectedRowId(row.original.id);
-                navigate(`/jobs/pending/${row.original.id}`);
+                navigate(`/jobs/${row.original.id}/pending`);
               }}
             >
               Cancel
