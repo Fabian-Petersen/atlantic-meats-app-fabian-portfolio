@@ -41,6 +41,46 @@ type Props = {
   onCancel: () => void;
 };
 
+/**
+ * JobActionForm
+ *
+ * Purpose:
+ * - Handles the actioning and closeout of a maintenance job.
+ * - Collects job completion data, uploads supporting images, and captures a digital signature.
+ *
+ * Responsibilities:
+ * - Manages form state and validation using React Hook Form and Zod.
+ * - Compresses images before upload to optimise performance.
+ * - Submits structured job action data to the backend (DynamoDB).
+ * - Uploads images directly to S3 using presigned URLs.
+ * - Handles success and error feedback via toast notifications.
+ *
+ * Behavior:
+ * - Prevents submission if no maintenance request is selected.
+ * - Requires a digital signature before allowing submission.
+ * - Displays loading state during submission.
+ * - On success:
+ *   - Closes the action dialog.
+ *   - Redirects user to "/jobs/completed".
+ * - On error:
+ *   - Triggers global error state and displays feedback.
+ *
+ * Props:
+ * - onCancel: Callback triggered when the user cancels the form.
+ *
+ * Data Flow:
+ * - Reads selectedRowId and global UI state from context.
+ * - Sends action payload via usePOST hook.
+ * - Receives presigned URLs for direct S3 uploads.
+ *
+ * Dependencies:
+ * - React Hook Form + Zod (form state & validation)
+ * - usePOST (API interaction)
+ * - compressImagesToWebpv1 (client-side image optimisation)
+ * - Global context (state management)
+ * - Custom form components (inputs, selects, file upload, signature)
+ */
+
 const JobActionForm = ({ onCancel }: Props) => {
   const [signature, setSignature] = useState<string | null>(null);
   const { setShowError, selectedRowId, setShowActionDialog } =

@@ -52,6 +52,31 @@ function Badge({
 }
 
 // $ ─── Main Component ─────────────────────────────────────────────────────────────
+/**
+ *MobileInProgressPage
+ *Path: "/jobs/:id/in-progress"
+ *
+ *Purpose:
+ * - Enables users to view open maintenance job requests (Status === In Progress).
+ *
+ *Responsibilities:
+ * - Renders the page layout and heading.
+ * - Handles navigation on user action page "/jobs/:id/action".
+ *
+ *Layout Behavior:
+ * - Mobile: Rendered as a full standalone page.
+ * - Desktop: Rendered as a full standalone page.
+ *
+ *Navigation:
+ * - Back: Redirects user to "/jobs/in-progress".
+ * - Action:
+ *    - Redirect the user to the action page "/jobs/:id/action"
+ *
+ *Dependencies:
+ * - MobileImageModal (form logic and submission)
+ * - CardRow (Page Item)
+ * - Shared layout styles
+ */
 export default function MobileInProgressPage({
   item,
 }: MobileRequestApprovalProps) {
@@ -65,7 +90,7 @@ export default function MobileInProgressPage({
   return (
     <div className={cn(sharedStyles.cardParent)}>
       {/* // $ ─── Sticky Top Bar ──────────────────────────────────── */}
-      <div className={cn(sharedStyles.cardTopBar, "z-5")}>
+      <div className={cn(sharedStyles.cardTopBar, "z-5 py-4")}>
         <button
           type="button"
           onClick={() => navigate("/jobs/in-progress")}
@@ -76,9 +101,6 @@ export default function MobileInProgressPage({
         </button>
 
         <div className="flex-1 text-center">
-          <p className="text-xs text-gray-400 dark:text-gray-500 py-0.5">
-            Jobcard No.
-          </p>
           <p className="text-xs font-semibold text-gray-900 dark:text-gray-100 font-mono py-0.5">
             {item?.jobcardNumber}
           </p>
