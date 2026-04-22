@@ -157,7 +157,7 @@ const CreateJobForm = () => {
       toast.success("Maintenance request created successfully!", {
         duration: 1500,
       });
-      navigate("/jobs/pending");
+      navigate("/jobs/pending-approval");
     } catch (err) {
       console.error("Failed to create maintenance request", err);
       toast.error(
