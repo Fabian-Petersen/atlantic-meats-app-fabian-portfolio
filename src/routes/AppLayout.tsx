@@ -7,10 +7,12 @@ import ModalManager from "@/components/modals/ModalManager";
 import ChatSidebar from "@/components/comments/ChatSidebar";
 import { Success } from "@/components/features/Success";
 import NotificationSidebar from "@/components/notifications/NotificationSidebar";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
 // AppLayout.tsx
 export const AppLayout = () => (
-  <div className="min-h-screen w-full grid grid-cols-1 lg:grid-rows-[var(--lg-navbarHeight)_1fr] lg:grid-cols-[15rem_1fr] grid-rows-[var(--sm-navbarHeight)_1fr] bg-(--pageLight) dark:bg-page-dark">
+  <div className={cn(sharedStyles.appLayout)}>
     <Navbar className="col-span-full row-start-1 row-end-1 md:h-(--lg-navbarHeight) h-(--sm-navbarHeight)" />
     <ChatSidebar />
     <NotificationSidebar />

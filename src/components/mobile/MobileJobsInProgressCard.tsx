@@ -22,7 +22,7 @@ type Props = {
   onToggle: () => void;
 };
 
-export function MobileJobsApprovedCard({ row, isOpen, onToggle }: Props) {
+export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
   const priority =
     priorityConfig[row.original.priority?.toLowerCase()] ?? priorityConfig.low;
 

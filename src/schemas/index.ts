@@ -45,6 +45,7 @@ import type {
   CreateJobPayload,
   JobAPIResponse,
   JobTableRow,
+  JobApprovedAPIResponse,
 } from "./jobSchemas";
 
 // % Action Maintenance Request Types
@@ -101,6 +102,7 @@ export type {
   CreateJobPayload,
   JobAPIResponse,
   JobTableRow,
+  JobApprovedAPIResponse,
   // Maintenance Action Types
   ActionRequestFormValues,
   ActionAPIResponse,

@@ -27,7 +27,7 @@ import {
   useReactTable,
   type SortingState,
 } from "@tanstack/react-table";
-import { MobileJobsActionedContainer } from "@/components/mobile/MobileJobsActionedContainer";
+import { MobileJobsCompletedParent } from "@/components/mobile/MobileJobsCompletedParent";
 
 const JobsCompletedListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<ActionAPIResponse[]>({
@@ -138,10 +138,10 @@ const JobsCompletedListPage = () => {
         ) : (
           <div className="grid gap-2">
             <FormHeading
-              className="mx-auto dark:text-gray-100"
-              heading="Jobs Actioned"
+              className={cn(sharedStyles.headingForm)}
+              heading="Jobs Completed"
             />
-            <MobileJobsActionedContainer
+            <MobileJobsCompletedParent
               className="flex md:hidden"
               data={table.getRowModel().rows}
             />

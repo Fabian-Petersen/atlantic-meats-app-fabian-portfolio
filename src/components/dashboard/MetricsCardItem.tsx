@@ -3,6 +3,8 @@ import { TrendingDown, TrendingUp } from "lucide-react";
 import type { CardItem } from "@/schemas/dashboardSchema";
 import { SkeletonCard } from "./SkeletonCard";
 
+import { formatPercentage } from "@/utils/percentageFormatter";
+
 type Props = {
   isPending?: boolean;
 };
@@ -54,7 +56,7 @@ export const MetricCardItem = <T extends string>({
                     )}
 
                     <span className="text-[0.625rem] lg:text-[0.725rem]">
-                      {metric.valueChange}%{" "}
+                      {formatPercentage(metric.valueChange)}%{" "}
                       <span className="lg:text-[0.725rem] opacity-80">
                         from last month
                       </span>

@@ -56,7 +56,7 @@ const Sidebar = () => {
       </AnimatePresence>
 
       {/* Desktop sidebar - always visible, never animated away */}
-      <div className="hidden md:block z-10 w-(--sidebarWidth) fixed lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) overflow-auto no-scrollbar border-r border-r-gray-200 dark:border-r-gray-700 bg-white dark:bg-(--bg-primary_dark)">
+      <div className="hidden md:block z-1000 w-(--sidebarWidth) fixed lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) overflow-auto no-scrollbar border-r border-r-gray-200 dark:border-r-gray-700 bg-white dark:bg-(--bg-primary_dark)">
         <SidebarContent userGroups={userGroups} />
       </div>
     </>

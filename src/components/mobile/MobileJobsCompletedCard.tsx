@@ -3,7 +3,7 @@ import {
   MapPin,
   Calendar,
   // Wrench,
-  File,
+  // File,
   User,
   // Clock,
 } from "lucide-react";
@@ -16,6 +16,7 @@ import useGlobalContext from "@/context/useGlobalContext";
 // import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
+import { CardRow } from "./CardRow";
 
 type JobsActionedCardProps = {
   row: Row<ActionAPIResponse>;
@@ -23,7 +24,7 @@ type JobsActionedCardProps = {
   onToggle: () => void;
 };
 
-export default function MobileJobsActionedCard({
+export default function MobileJobsCompletedCard({
   row,
   isOpen,
   onToggle,
@@ -67,7 +68,7 @@ export default function MobileJobsActionedCard({
       {/* Always-visible header — tap to expand */}
       <button
         type="button"
-        className="w-full text-left px-4 py-3 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+        className="w-full text-left px-2 py-3 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
         onClick={onToggle}
       >
         {/* Chevron */}
@@ -78,27 +79,30 @@ export default function MobileJobsActionedCard({
         />
 
         {/* Location + meta row */}
-        <div className="flex-1 min-w-0">
-          <div className="flex gap-1 justify-between">
-            <div className="flex items-center gap-1.5 mb-1">
-              <MapPin className="w-3 h-3 text-gray-400 shrink-0" />
-              <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                {row.original.location}
-              </p>
-            </div>
-            {/* Jobcard Number */}
-            <div className="flex items-center gap-1.5 mb-1">
-              <File className="w-3 h-3 text-gray-400 shrink-0" />
-              <p className="text-cxs font-medium text-gray-900 dark:text-gray-100 truncate">
-                {row.original.jobcardNumber}
-              </p>
-            </div>
+        <div className="flex flex-col w-full gap-0.5 min-w-0">
+          <div className="flex justify-between items-center py-0">
+            <CardRow
+              icon={MapPin}
+              value={row.original.location}
+              className="capitalize dark:text-(--clr-textDark) text-(--clr-textLight) py-0"
+              valueStyles="text-md"
+              iconStyles="dark:text-green-300 text-green-500"
+            />
+            <CardRow
+              value={row.original.jobcardNumber}
+              className="py-0"
+              valueStyles="text-cxs"
+            />
           </div>
-          <div className="flex items-center gap-3 text-cxs text-gray-500 dark:text-gray-400">
-            <span className="flex items-center gap-1">
-              <Calendar className="w-3 h-3" />
-              {row.original.actionCreated}
-            </span>
+          <div className="flex flex-col gap-3">
+            <CardRow
+              label="Date Completed"
+              icon={Calendar}
+              value={row.original.completed_at}
+              className="w-full"
+              labelStyles=""
+              valueStyles=""
+            />
           </div>
         </div>
       </button>
@@ -107,52 +111,57 @@ export default function MobileJobsActionedCard({
       {isOpen && (
         <div className="border-t border-gray-100 dark:border-gray-700/60 px-4 py-3 flex flex-col gap-3">
           {/* Technician */}
-          <div className="flex items-start gap-2">
-            <User className="w-3.5 h-3.5 text-gray-400 mt-0.5 shrink-0" />
-            <div className="flex-1 flex items-center justify-between gap-2">
-              <span className="text-xs text-gray-800 dark:text-gray-200 capitalize font-medium">
-                {row.original.actioned_by}
-              </span>
-            </div>
+          <div className="flex justify-between items-center">
+            <CardRow
+              label="Actioned By"
+              className="py-0"
+              valueStyles="hidden"
+            />
+            <CardRow
+              icon={User}
+              className="py-0"
+              value={row.original.actioned_by}
+              iconStyles="dark:text-blue-500"
+            />
           </div>
-          {/* Description */}
+          {/* Findings */}
+
           {row.original.findings && (
-            <div>
-              <p className="text-xs text-(--clr-textLight) dark:text-text-dark">
-                Findings:
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3">
-                {row.original.findings}
-              </p>
+            <div className="flex flex-col">
+              <CardRow
+                label="findings"
+                labelStyles="text-sm"
+                valueStyles="hidden"
+                className="py-0"
+              />
+              <CardRow value={row.original.findings} className="py-1" />
+            </div>
+          )}
+
+          {row.original.work_completed && (
+            <div className="flex flex-col border-t border-gray-100 dark:border-gray-700/60 pt-2">
+              <CardRow
+                label="Work Completed"
+                labelStyles="text-sm"
+                valueStyles="hidden"
+                className="py-0"
+              />
+              <CardRow value={row.original.work_completed} className="py-1" />
             </div>
           )}
 
           {/* Actions */}
-          <div className="flex gap-2 pt-1">
-            {/* View full details */}
+          <div className={cn(sharedStyles.btnParent)}>
             <button
               type="button"
-              className={cn(sharedStyles.btnCancel)}
+              className={cn(sharedStyles.btnSubmit, sharedStyles.btn)}
               onClick={(e) => {
                 e.stopPropagation();
                 setSelectedRowId(row.original.id);
-                navigate(`/jobs/${row.original.id}/pending`);
+                navigate(`/jobs/${row.original.id}/completed`);
               }}
             >
-              Cancel
-            </button>
-
-            {/* View Details */}
-            <button
-              type="button"
-              className={cn(sharedStyles.btnView)}
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedRowId(row.original.id);
-                navigate(`/jobs/actioned/${row.original.id}`);
-              }}
-            >
-              View Details
+              View Job Details
             </button>
           </div>
         </div>

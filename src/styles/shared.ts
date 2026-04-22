@@ -3,19 +3,39 @@ import { cn } from "@/lib/utils";
 // $ Mobile Shared Styles
 export const sharedStyles = {
   // $ Pages
+  appLayout: cn(
+    "min-h-screen w-full grid grid-cols-1 lg:grid-rows-[var(--lg-navbarHeight)_1fr] lg:grid-cols-[15rem_1fr] grid-rows-[var(--sm-navbarHeight)_1fr] bg-(--pageLight) dark:bg-page-dark",
+  ),
   pageContainer: cn(
     "flex items-center justify-center w-full h-full p-2 h-[calc(h-screen - var(--lg-navbarHeight)]",
   ),
   pageContent: cn(
-    "bg-white flex flex-col gap-4 w-full lg:max-w-3xl h-auto rounded-xl shadow-lg p-4 dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) dark:border-gray-700/50 dark:border",
+    "bg-(--pageLight) flex flex-col gap-4 w-full lg:max-w-3xl h-auto rounded-xl shadow-lg p-4 dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) dark:border-gray-700/50 dark:border",
   ),
   // $ Mobile Cards
-  cardParent: cn("flex flex-col min-h-screen lg:hidden w-full bg-gray-50"),
+  cardParent: cn(
+    "flex flex-col min-h-screen lg:hidden w-full",
+    // light
+    "",
+    //dark
+    "",
+  ),
   cardTopBar: cn(
     "rounded-md sticky top-0 z-10 bg-white dark:bg-primary_dark border border-gray-200 dark:border-gray-700/60 px-4 py-3 flex items-center justify-between gap-3",
   ),
-  cardChild: cn(
-    "mt-4 bg-white dark:bg-primary_dark rounded-md border border-gray-200 dark:border-gray-700/60 p-4 w-full",
+  cardRowParent: cn(
+    "mt-4 rounded-md border border-gray-200  p-4 w-full",
+    // light
+    "bg-white",
+    // dark
+    "dark:bg-(--bg-primary_dark) dark:border-gray-700/60",
+  ),
+  cardRow: cn(
+    "flex gap-3 py-3 items-center",
+    // light
+    "bg-white",
+    // dark
+    "dark:bg-(--bg-primary_dark)",
   ),
   // $ Buttons
   btnParent: cn("flex w-full md:max-w-1/2 ml-auto gap-2 md:w-72"), // container for the buttons

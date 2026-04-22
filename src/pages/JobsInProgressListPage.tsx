@@ -21,7 +21,7 @@ import { useState } from "react";
 import { ErrorPage } from "@/components/features/Error";
 import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 import { GenericTable } from "@/components/dashboard/GenericTable";
-import { MobileJobsApprovedContainer } from "@/components/mobile/MobileJobsApprovedContainer";
+import { MobileJobsInProgressContainer } from "@/components/mobile/MobileJobsInProgressContainer";
 import FormHeading from "@/../customComponents/FormHeading";
 import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
@@ -36,7 +36,7 @@ const JobsInProgressListPage = () => {
     resourcePath: "jobs/requests",
     queryKey: ["jobs", "in_progress"],
     params: {
-      status: "In Progress",
+      status: "in progress",
     },
   });
   const navigate = useNavigate();
@@ -129,7 +129,7 @@ const JobsInProgressListPage = () => {
               className="mx-auto dark:text-gray-100"
               heading="Open Jobs"
             />
-            <MobileJobsApprovedContainer
+            <MobileJobsInProgressContainer
               className="flex md:hidden"
               data={table.getRowModel().rows}
             />
