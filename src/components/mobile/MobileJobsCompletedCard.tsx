@@ -1,19 +1,8 @@
-import {
-  ChevronDown,
-  MapPin,
-  Calendar,
-  // Wrench,
-  // File,
-  User,
-  // Clock,
-} from "lucide-react";
+import { ChevronDown, MapPin, Calendar, User } from "lucide-react";
 import type { ActionAPIResponse } from "@/schemas";
 import type { Row } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
-// import { usePOST } from "@/utils/api";
-// import { toast } from "sonner";
 import useGlobalContext from "@/context/useGlobalContext";
-// import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import { CardRow } from "./CardRow";
@@ -29,39 +18,8 @@ export default function MobileJobsCompletedCard({
   isOpen,
   onToggle,
 }: JobsActionedCardProps) {
-  // const priority =
-  //   priorityConfig[row.original.priority?.toLowerCase()] ?? priorityConfig.low;
-
   const navigate = useNavigate();
-
-  const {
-    // selectedRowId,
-    setSelectedRowId,
-    // setShowRejectRequestDialog,
-    // setShowApproveRequestDialog,
-  } = useGlobalContext();
-
-  // const { mutateAsync: approveRequest, isPending } = usePOST({
-  //   resourcePath: "jobs/requests/approved",
-  //   queryKey: ["maintenanceRequest", "approved"],
-  // });
-
-  // const handleSubmit = async () => {
-  //   setShowApproveRequestDialog(true);
-  //   const payload = {
-  //     selectedRowId: selectedRowId,
-  //     status: "In Progress",
-  //   };
-
-  //   try {
-  //     await approveRequest(payload);
-  //     // console.log("approve-request:", response);
-  //     toast.success("The itemm was sucessfully rejected");
-  //     navigate("/jobs/approved");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const { setSelectedRowId } = useGlobalContext();
 
   return (
     <div className="rounded-md border border-gray-200 dark:border-(--clr-borderDark) bg-white dark:bg-(--bg-primary_dark) mb-2 overflow-hidden transition-shadow hover:shadow-sm">
@@ -71,14 +29,13 @@ export default function MobileJobsCompletedCard({
         className="w-full text-left px-2 py-3 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
         onClick={onToggle}
       >
-        {/* Chevron */}
+        {/* // $ ——— Chevron —————————————————————————————————————————————————— */}
         <ChevronDown
           className={`w-4 h-4 text-gray-400 shrink-0 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
           }`}
         />
-
-        {/* Location + meta row */}
+        {/* // $ ——— Location + Meta Row —————————————————————————————————————————————————— */}
         <div className="flex flex-col w-full gap-0.5 min-w-0">
           <div className="flex justify-between items-center py-0">
             <CardRow
@@ -107,10 +64,10 @@ export default function MobileJobsCompletedCard({
         </div>
       </button>
 
-      {/* Expanded section */}
+      {/* // $ ——— Expanded Section ——————————————————————————————————————————————————————*/}
       {isOpen && (
         <div className="border-t border-gray-100 dark:border-gray-700/60 px-4 py-3 flex flex-col gap-3">
-          {/* Technician */}
+          {/* // $ ——— Technician ———————————————————————————————————————————————————————— */}
           <div className="flex justify-between items-center">
             <CardRow
               label="Actioned By"
@@ -124,8 +81,7 @@ export default function MobileJobsCompletedCard({
               iconStyles="dark:text-blue-500"
             />
           </div>
-          {/* Findings */}
-
+          {/* // $ ——— Findings ———————————————————————————————————————————————————————— */}
           {row.original.findings && (
             <div className="flex flex-col">
               <CardRow
@@ -149,8 +105,7 @@ export default function MobileJobsCompletedCard({
               <CardRow value={row.original.work_completed} className="py-1" />
             </div>
           )}
-
-          {/* Actions */}
+          {/* // $ ——— Actions ———————————————————————————————————————————————————————— */}
           <div className={cn(sharedStyles.btnParent)}>
             <button
               type="button"

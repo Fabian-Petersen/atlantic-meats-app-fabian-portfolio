@@ -73,7 +73,7 @@ export function CardRow({
         {children ?? (
           <p
             className={cn(
-              "text-gray-700 dark:text-gray-100 capitalize leading-relaxed text-xs",
+              "text-(--clr-textLight) dark:text-gray-400 capitalize leading-relaxed text-xs",
               valueStyles,
             )}
           >

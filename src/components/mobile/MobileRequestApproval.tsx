@@ -1,6 +1,8 @@
 import useGlobalContext from "@/context/useGlobalContext";
 import type { JobAPIResponse } from "@/schemas";
 import { usePOST } from "@/utils/api";
+import { CardRow } from "./CardRow";
+import { MobileImageModal } from "./MobileImageModal";
 import {
   X,
   Check,
@@ -21,6 +23,9 @@ import { toast } from "sonner";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 import { Spinner } from "../ui/spinner";
+import { impactStyles } from "@/styles/impactStyles";
+import { priorityStyles } from "@/styles/priorityStyles";
+import { useState } from "react";
 
 // import { Separator } from "@/components/ui/separator";
 
@@ -28,26 +33,6 @@ import { Spinner } from "../ui/spinner";
 
 type MobileRequestApprovalProps = {
   item: JobAPIResponse;
-};
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-const priorityStyles: Record<string, string> = {
-  critical:
-    "bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800",
-  high: "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-900/20 dark:text-orange-400 dark:border-orange-800",
-  medium:
-    "bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800",
-  low: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800",
-};
-
-const impactStyles: Record<string, string> = {
-  critical:
-    "bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800",
-  high: "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-900/20 dark:text-orange-400 dark:border-orange-800",
-  medium:
-    "bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800",
-  low: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800",
 };
 
 function Badge({
@@ -70,36 +55,6 @@ function Badge({
   );
 }
 
-function DetailRow({
-  icon: Icon,
-  label,
-  value,
-  children,
-}: {
-  icon: React.ElementType;
-  label: string;
-  value?: string;
-  children?: React.ReactNode;
-}) {
-  return (
-    <div className="flex gap-3 py-3 items-center">
-      <div className="mt-0.5 shrink-0">
-        <Icon className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-      </div>
-      <div className="flex-1 min-w-0 flex justify-between items-center">
-        <p className="text-xs text-gray-400 dark:text-gray-500 mb-0.5">
-          {label}
-        </p>
-        {children ?? (
-          <p className="text-sm text-gray-700 dark:text-gray-100 capitalize leading-relaxed">
-            {value || "—"}
-          </p>
-        )}
-      </div>
-    </div>
-  );
-}
-
 // $ ─── Component ────────────────────────────────────────────────────────────────
 
 export default function MobileRequestApproval({
@@ -113,6 +68,9 @@ export default function MobileRequestApproval({
   } = useGlobalContext();
   const hasImages = item.images && item.images.length > 0;
   const navigate = useNavigate();
+
+  // Image State
+  const [imageIndex, setImageIndex] = useState<number | null>(null);
 
   const { mutateAsync: approveRequest, isPending } = usePOST({
     id: selectedRowId ?? "",
@@ -145,7 +103,7 @@ export default function MobileRequestApproval({
         <button
           type="button"
           onClick={() => navigate("/jobs/pending-approval")}
-          className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-red-400 dark:text-red-400/95 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
           Back
@@ -172,21 +130,23 @@ export default function MobileRequestApproval({
       {/* ── Scrollable content ── */}
       <div className="flex-1 overflow-y-auto pb-32">
         {/* Header card */}
-        <div className={cn(sharedStyles.cardChild)}>
-          <div className="mb-3">
+        <div className={cn(sharedStyles.cardRowParent)}>
+          <div className="">
             <div className="flex justify-between items-center min-w-0">
-              <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">
-                Equipment
-              </p>
-              <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">
-                Asset ID
-              </p>
+              <CardRow
+                label="Equipment"
+                valueStyles="hidden"
+                className="py-1"
+              />
+              <CardRow label="Asset ID" valueStyles="hidden" className="py-1" />
             </div>
-            <div className="flex justify-between items-center gap-2 text-xs text-gray-400 dark:text-gray-500">
-              <p className="text-sm text-gray-700 dark:text-gray-100 capitalize leading-snug">
-                {item?.equipment}
-              </p>
-              <p className="text-gray-700 text-sm">{item?.assetID}</p>
+            <div className="flex justify-between items-center">
+              <CardRow
+                value={item?.equipment}
+                className="py-0"
+                valueStyles="dark:text-gray-400"
+              />
+              <CardRow value={item?.assetID} className="py-0" />
             </div>
           </div>
         </div>
@@ -194,28 +154,28 @@ export default function MobileRequestApproval({
         {/* Details card */}
         <div
           className={cn(
-            sharedStyles.cardChild,
+            sharedStyles.cardRowParent,
             "divide-y divide-gray-100 dark:divide-gray-700/60",
           )}
         >
-          <DetailRow
+          <CardRow
             icon={User}
             label="Requested by"
             value={item?.requested_by}
           />
-          <DetailRow icon={MapPin} label="Location" value={item?.location} />
-          <DetailRow icon={Tag} label="Type" value={item?.type} />
-          <DetailRow icon={Zap} label="Impact">
+          <CardRow icon={MapPin} label="Location" value={item?.location} />
+          <CardRow icon={Tag} label="Type" value={item?.type} />
+          <CardRow icon={Zap} label="Impact">
             <Badge value={item?.impact} styleMap={impactStyles} />
-          </DetailRow>
-          <DetailRow icon={Wrench} label="Priority">
+          </CardRow>
+          <CardRow icon={Wrench} label="Priority">
             <Badge value={item?.priority} styleMap={priorityStyles} />
-          </DetailRow>
+          </CardRow>
         </div>
 
         {/* Description card */}
         {item?.description && (
-          <div className={cn(sharedStyles.cardChild)}>
+          <div className={cn(sharedStyles.cardRowParent)}>
             <div className="flex items-center gap-2 mb-2">
               <FileText className="w-4 h-4 text-gray-400 dark:text-gray-500" />
               <p className="text-xs text-gray-400 dark:text-gray-500">
@@ -230,7 +190,7 @@ export default function MobileRequestApproval({
 
         {/* Comments card */}
         {item?.jobComments && (
-          <div className={cn(sharedStyles.cardChild)}>
+          <div className={cn(sharedStyles.cardRowParent)}>
             <div className="flex items-center gap-2 mb-2">
               <MessageSquare className="w-4 h-4 text-gray-400 dark:text-gray-500" />
               <p className="text-xs text-gray-400 dark:text-gray-500">
@@ -243,24 +203,35 @@ export default function MobileRequestApproval({
           </div>
         )}
 
+        {imageIndex !== null && (
+          <MobileImageModal
+            images={item.images!}
+            initialIndex={imageIndex}
+            onClose={() => setImageIndex(null)}
+          />
+        )}
+
         {/* Images */}
-        <div className={cn(sharedStyles.cardChild)}>
+        <div className={cn(sharedStyles.cardRowParent)}>
           <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">
             Attached photos {hasImages ? `(${item.images!.length})` : ""}
           </p>
           {hasImages ? (
             <div className="grid grid-cols-2 gap-2">
               {item.images!.map((image, i) => (
-                <div
+                <button
+                  aria-label="image button to open images"
+                  type="button"
                   key={i}
-                  className="aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800"
+                  onClick={() => setImageIndex(i)}
+                  className="aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 active:scale-95 transition-transform"
                 >
                   <img
                     src={image.url}
                     alt={`Job photo ${i + 1}`}
                     className="w-full h-full object-cover"
                   />
-                </div>
+                </button>
               ))}
             </div>
           ) : (
@@ -277,13 +248,6 @@ export default function MobileRequestApproval({
       {/* ── Sticky action bar ── */}
       <div className="fixed bottom-0 left-0 right-0 z-10 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700/60 px-4 pt-3 pb-6 safe-area-inset-bottom">
         <div className={cn(sharedStyles.btnParent)}>
-          {/* <button
-            type="button"
-            onClick={() => navigate("/jobs/pending-approval")}
-            className="flex-1 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
-          >
-            Cancel
-          </button> */}
           <button
             type="button"
             onClick={() => setShowRejectRequestDialog(true)}
