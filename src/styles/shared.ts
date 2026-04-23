@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 // $ Mobile Shared Styles
 export const sharedStyles = {
-  // $ Pages
+  /* //$ ——— Pages ———————————————————————————————————————————————————————— */
   appLayout: cn(
     "min-h-screen w-full grid grid-cols-1 lg:grid-rows-[var(--lg-navbarHeight)_1fr] lg:grid-cols-[15rem_1fr] grid-rows-[var(--sm-navbarHeight)_1fr] bg-(--pageLight) dark:bg-page-dark",
   ),
@@ -12,7 +12,7 @@ export const sharedStyles = {
   pageContent: cn(
     "bg-(--pageLight) flex flex-col gap-4 w-full lg:max-w-3xl h-auto rounded-xl shadow-lg p-4 dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) dark:border-gray-700/50 dark:border",
   ),
-  // $ Mobile Cards
+  /* //$ ——— Modal Cards ———————————————————————————————————————————————————————— */
   cardParent: cn(
     "flex flex-col min-h-screen lg:hidden w-full",
     // light
@@ -37,7 +37,7 @@ export const sharedStyles = {
     // dark
     "",
   ),
-  // $ Buttons
+  /* //$ ——— Buttons ———————————————————————————————————————————————————————— */
   btnParent: cn("flex w-full md:max-w-1/2 ml-auto gap-2 md:w-72"), // container for the buttons
   btn: cn(
     // General Styles shared by all
@@ -96,24 +96,75 @@ export const sharedStyles = {
     "hover:bg-red-500/20 hover:border-red-500/60",
     "dark:hover:bg-red-500/22 dark:hover:border-red-500/40",
   ),
-  // $ headings:
+  /* //$ ——— Headings ———————————————————————————————————————————————————————— */
   heading: cn("text-xl md:text-2xl capitalize w-full dark:text-gray-100"), // shared styles
   headingForm: cn("text-center md:text-left md:px-0"), // form headings
   headingTable: cn("text-left p-4 md:py-0"), // table headings
 
-  // $ Forms:
+  /* //$ ——— Forms ——————————————————————————————————————————————————————————— */
   form: cn(
     "flex flex-col rounded-lg md:w-full text-(--clr-textLight) dark:bg-(--bg-primary_dark) bg-white",
   ),
   formParent: cn("grid grid-cols-1 md:grid-cols-2 gap-4 w-full md:py-2"),
 
-  // $ Tables
+  formInputDefault: cn(
+    // layout & sizing
+    "text-xs py-3 px-2 w-full rounded-md outline-none",
+
+    // base border & text (light)
+    "border border-gray-300 text-gray-700",
+
+    // dark mode base
+    "dark:bg-(--bg-secondary_dark) dark:border-(--clr-borderDark) dark:text-(--clr-textDark)",
+
+    // focus styles (shared)
+    "focus:ring-0.5 focus:border-blue-500 focus:dark:border-blue-500",
+  ),
+
+  formInput: cn(
+    "peer",
+    // input-specific
+    "placeholder-transparent placeholder:text-xs placeholder:dark:text-gray-700",
+    // input-specific focus tweaks
+    "focus:dark:bg-gray-700/80",
+  ),
+  //
+  formSelect: cn(
+    "peer appearance-none capitalize",
+    // select-specific tweaks
+    "focus:dark:bg-gray-800/80",
+  ),
+
+  formTextArea: cn(
+    "peer resize-none overflow-hidden",
+    // textarea-specific tweaks
+    "focus:border-rose-600 focus:dark:bg-gray-700/80",
+  ),
+  formFile: cn(""),
+  formLabel: cn(
+    // general
+    "text-xs tracking-wider placeholder-transparent",
+    //position
+    "absolute -top-5 left-0 px-2 mb-0 transition-all duration-400",
+    //peer
+    "peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-600 peer-focus:-top-5  peer-focus:text-gray-600 peer-focus:text-sm",
+    //light
+    "text-gray-700",
+    //dark
+    "dark:peer-focus:text-gray-100 dark:peer-placeholder-shown:text-fontLight dark:text-gray-100/90",
+  ),
+  formError: cn("text-xs text-red-600 dark:text-red-500"),
+  formSelectChevron: cn(
+    "pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 dark:text-(--clr-textDark) text-(--clr-textLight)",
+  ),
+
+  /* //$ ——— Tables ——————————————————————————————————————————————————————————— */
   table: cn("w-full lg:p-4 min-h-0 hidden lg:block"),
   tableParent: cn(),
   tableRows: cn(),
   tableHeaders: cn(),
 
-  // $ Modals
+  /* //$ ——— Modals ——————————————————————————————————————————————————————————— */
   modal: cn(
     // Sizing
     "w-full md:max-w-lg",

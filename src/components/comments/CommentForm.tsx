@@ -22,6 +22,8 @@ type Props = {
 import { usePOST } from "@/utils/api";
 import { Spinner } from "../ui/spinner";
 import clsx from "clsx";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
 
 const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
   //   console.log(selectedRowId);
@@ -63,9 +65,9 @@ const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit, onInvalid)}
-      className="bg-gray-50 dark:bg-(--clr-bgItem) w-full p-2 rounded-md h-auto gap-4 flex-col flex"
+      className="bg-gray-50 dark:bg-(--clr-bgItem) w-full p-2 rounded-md gap-4 flex-col flex h-auto"
     >
-      <div className="flex gap-2 items-center justify-between w-full">
+      <div className="flex gap-2 items-center justify-between w-full h-auto">
         <p className="text-gray-500 dark:text-(--clr-textDark) text-sm md:text-md">
           Add a comment
         </p>
@@ -79,12 +81,16 @@ const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
         </button>
       </div>
       <Textarea
-        rows={3}
+        rows={1}
         {...register("comment")}
-        className="min-h-0 h-10 border-gray-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-green-400 focus-visible:ring-offset-0 text-(--clr-textLight) dark:text-(--clr-textDark) text-sm"
+        className={cn(
+          "min-h-0 text-xs text-gray-100 outline-none",
+          "focus:outline-none focus:ring-0 focus:ring-offset-0 focus:shadow-none",
+          "focus:border-blue-500 dark:focus:border-blue-500",
+        )}
       />
       {errors.comment && (
-        <p className="text-xs text-red-500">{errors.comment.message}</p>
+        <p className={cn(sharedStyles.formError)}>{errors.comment.message}</p>
       )}
       <div className="w-full flex justify-end">
         <button

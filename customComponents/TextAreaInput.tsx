@@ -5,7 +5,8 @@ import type {
   Path,
   UseFormRegister,
 } from "react-hook-form";
-import clsx from "clsx";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
 
 type FormRowTextAreaProps<T extends FieldValues> = {
   name: Path<T>;
@@ -18,6 +19,8 @@ type FormRowTextAreaProps<T extends FieldValues> = {
   rows?: number;
   isValid?: boolean;
   className?: string;
+  labelStyles?: string;
+  textAreaStyles?: string;
 };
 
 const TextAreaInput = <T extends FieldValues>({
@@ -30,6 +33,8 @@ const TextAreaInput = <T extends FieldValues>({
   rows = 4,
   isValid,
   className,
+  labelStyles,
+  textAreaStyles,
 }: FormRowTextAreaProps<T>) => {
   const registered = register(name);
   return (
@@ -40,13 +45,11 @@ const TextAreaInput = <T extends FieldValues>({
         rows={rows}
         placeholder={placeholder}
         disabled={disabled}
-        className={clsx(
-          "text-xs py-3 px-2 peer w-full rounded-md outline-none resize-none text-gray-700",
+        className={cn(
+          textAreaStyles,
           `${placeholder ? "placeholder-shown:" : "placeholder-transparent "}`,
-          "border border-gray-300",
-          "resize-none overflow-hidden", // this removes the scrollbar when the textarea grows
-          "focus:border-rose-600 focus:dark:bg-gray-600",
-          "dark:bg-(--bg-secondary_dark) dark:border-(--clr-borderDark) dark:text-(--clr-textDark)",
+          sharedStyles.formTextArea,
+          sharedStyles.formInputDefault,
           isValid && "border-green-500",
           error && "border-red-300",
         )}
@@ -66,18 +69,14 @@ const TextAreaInput = <T extends FieldValues>({
       {label && (
         <label
           htmlFor={String(name)}
-          className={clsx(
-            "absolute text-xs -top-5 left-0 px-2 transition-all duration-300",
-            "text-gray-700 dark:text-gray-100/50 tracking-wider",
-            "peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-600",
-            "peer-focus:-top-5 peer-focus:text-sm peer-focus:text-gray-600",
-            "placeholder-transparent",
-          )}
+          className={cn(labelStyles, sharedStyles.formLabel)}
         >
           {label}
         </label>
       )}
-      {error && <span className="text-xs text-red-600">{error.message}</span>}
+      {error && (
+        <span className={cn(sharedStyles.formError)}>{error.message}</span>
+      )}
     </div>
   );
 };
