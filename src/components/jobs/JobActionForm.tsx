@@ -43,6 +43,7 @@ type Props = {
 
 /**
  * JobActionForm
+ * Path: Child of JobActionPage"/jobs/:id/action"
  *
  * Purpose:
  * - Handles the actioning and closeout of a maintenance job.
@@ -104,7 +105,7 @@ const JobActionForm = ({ onCancel }: Props) => {
       toast.error("No maintenance request selected for actioning.", {
         duration: 1000,
       });
-      navigate(`/jobs/actioned/${selectedRowId}`);
+      navigate(`/jobs/${selectedRowId}/action`);
     }
   }, [selectedRowId, navigate]);
 
