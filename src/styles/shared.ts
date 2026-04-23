@@ -33,9 +33,9 @@ export const sharedStyles = {
   cardRow: cn(
     "flex gap-3 py-3 items-center",
     // light
-    "bg-white",
+    "",
     // dark
-    "dark:bg-(--bg-primary_dark)",
+    "",
   ),
   // $ Buttons
   btnParent: cn("flex w-full md:max-w-1/2 ml-auto gap-2 md:w-72"), // container for the buttons

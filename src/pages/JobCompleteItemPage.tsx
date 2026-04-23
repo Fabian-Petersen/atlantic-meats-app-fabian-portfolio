@@ -14,7 +14,7 @@ const JobCompleteItemPage = () => {
     id: selectedRowId ?? "",
     queryKey: ["jobs", "completed"],
     resourcePath: "jobs",
-    params: { status: "Complete" },
+    params: { status: "complete" },
   });
 
   if (!selectedRowId || !item) {

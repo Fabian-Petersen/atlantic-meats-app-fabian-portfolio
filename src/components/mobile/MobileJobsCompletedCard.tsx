@@ -109,7 +109,7 @@ export default function MobileJobsCompletedCard({
           <div className={cn(sharedStyles.btnParent)}>
             <button
               type="button"
-              className={cn(sharedStyles.btnSubmit, sharedStyles.btn)}
+              className={cn(sharedStyles.btnSubmit, sharedStyles.btn, "py-3")}
               onClick={(e) => {
                 e.stopPropagation();
                 setSelectedRowId(row.original.id);

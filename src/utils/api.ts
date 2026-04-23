@@ -250,24 +250,18 @@ export const useDeleteItem = (options: {
   });
 };
 
-// $ Download maintenance jobcard pdf
-// type JobcardPresignedUrlResponse = {
-//   jobcard_url: string;
-// };
-
 export const useDownloadPdf = (options: { resourcePath: Resource }) => {
   const { resourcePath } = options;
 
   return useMutation({
     mutationFn: async (id: string): Promise<JobcardPresignedUrlResponse> => {
       const { data } = await apiClient.get<JobcardPresignedUrlResponse>(
-        `/${resourcePath}/${id}`,
+        `/${resourcePath}/${id}/jobcard`,
       );
       return data;
     },
 
     onSuccess: (data) => {
-      // console.log("jobcard_url:", jobcard_url);
       // $ Option 1: trigger a download in the same tab
       window.location.href = data.jobcard_url;
 

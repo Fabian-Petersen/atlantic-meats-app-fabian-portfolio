@@ -9,9 +9,7 @@ type Priority = "critical" | "high" | "medium" | "low";
 export const getInProgressColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
   navigate: (path: string) => void,
-  // setShowActionDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
-  // downloadItem: (id: string) => Promise<JobcardPresignedUrlResponse>, // $ not required
   openDeleteDialog: (
     selectedRowId: string,
     config: { resourcePath: Resource; queryKey: readonly unknown[] },

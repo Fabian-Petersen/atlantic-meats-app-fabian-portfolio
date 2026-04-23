@@ -37,9 +37,10 @@ const JobsCompletedListPage = () => {
     //   group: "technician",
     // },
   });
+  const { setSelectedRowId, setOpenChatSidebar } = useGlobalContext();
 
   const { mutateAsync: downloadItem } = useDownloadPdf({
-    resourcePath: "jobs/jobcard",
+    resourcePath: "jobs",
   });
 
   const [sorting, setSorting] = useState<SortingState>([
@@ -47,8 +48,6 @@ const JobsCompletedListPage = () => {
   ]);
 
   const [globalFilter, setGlobalFilter] = useState("");
-
-  const { setSelectedRowId, setOpenChatSidebar } = useGlobalContext();
 
   // $ Map through the data returned to match the TableRow Data Schema
   // const rows: ActionAPIResponse[] = useMemo(

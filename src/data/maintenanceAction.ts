@@ -1,3 +1,4 @@
+// These values are the options for the select "root causes"
 export const ROOT_CAUSES = [
   "Wear & Tear",
   "Asset Fatigue",
@@ -11,6 +12,7 @@ export const ROOT_CAUSES = [
   "undefined",
 ];
 
-export const status = ["Cancelled", "In Progress", "Complete"];
+// These values are the options for the select "status"
+export const status = ["cancelled", "in progress", "complete"];
 
 export type ROOT_CAUSES = (typeof ROOT_CAUSES)[number];

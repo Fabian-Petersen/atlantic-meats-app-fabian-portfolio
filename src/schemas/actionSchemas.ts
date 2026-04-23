@@ -12,7 +12,7 @@ export const presignedURLResponseSchema = z.object({
 
 export type PresignedUrlResponse = z.infer<typeof presignedURLResponseSchema>;
 
-export const actionRequestSchema = z.object({
+export const defaultActionRequestSchema = z.object({
   start_time: z
     .string()
     .min(1, "Start time required")
@@ -43,8 +43,61 @@ export const actionRequestSchema = z.object({
   signedBy: z.string().min(1, { message: "Please enter name of signatory" }),
 });
 
+/**
+ * Validates logical constraints between start_time and end_time fields.
+ *
+ * Rules enforced:
+ *
+ * 1. Start time cannot be in the future
+ *    - Ensures the job or action has already started or is not scheduled incorrectly.
+ *
+ * 2. End time cannot be in the future
+ *    - Prevents completion timestamps from being set ahead of the current system time.
+ *
+ * 3. End time must be after start time
+ *    - Ensures chronological consistency between the two timestamps.
+ *
+ * Notes:
+ * - Both fields are parsed using JavaScript Date constructor.
+ * - Invalid or unparsable dates should already be handled in base field validation.
+ * - Issues are attached to specific fields for proper form error mapping.
+ */
+
+export const actionRequestSchema = defaultActionRequestSchema.superRefine(
+  (data, ctx) => {
+    const now = new Date();
+
+    const start = new Date(data.start_time);
+    const end = new Date(data.end_time);
+
+    if (start > now) {
+      ctx.addIssue({
+        path: ["start_time"],
+        code: "custom",
+        message: "Start time cannot be in the future",
+      });
+    }
+
+    if (end > now) {
+      ctx.addIssue({
+        path: ["end_time"],
+        code: "custom",
+        message: "End time cannot be in the future",
+      });
+    }
+
+    if (end < start) {
+      ctx.addIssue({
+        path: ["end_time"],
+        code: "custom",
+        message: "End time cannot be before start time",
+      });
+    }
+  },
+);
+
 // % Schema expected from the backend
-export const actionResponseSchema = actionRequestSchema.extend({
+export const actionResponseSchema = defaultActionRequestSchema.extend({
   id: z.string(),
   actionCreated: z.string(),
   actioned_by: z.string(),

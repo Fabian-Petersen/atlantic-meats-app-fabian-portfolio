@@ -141,7 +141,7 @@ export const getJobActionColumns = (
         request_id: row.original.request_id,
         setSelectedRowId,
         download: {
-          url: "/jobs/jobcard",
+          url: `/jobs/${rowId}/jobcard`,
           onDownload: () => {
             downloadItem(rowId);
           },

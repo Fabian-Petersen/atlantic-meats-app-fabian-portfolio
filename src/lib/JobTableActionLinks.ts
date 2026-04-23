@@ -67,7 +67,7 @@ export const getMaintenanceTableMenuItems = (
   {
     id: "4",
     label: "Download",
-    url: "/jobs/jobcard",
+    url: `/jobs/${rowId}/jobcard`,
     icon: DownloadIcon,
     onClick: () => {
       downloadItem(rowId);

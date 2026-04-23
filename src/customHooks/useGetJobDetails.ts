@@ -6,7 +6,7 @@ export const useGetJobDetails = (selectedRowId: string) => {
   const { data: jobData } = useById<JobAPIResponse>({
     id: selectedRowId!,
     resourcePath: "jobs/requests",
-    queryKey: ["maintenanceRequests", selectedRowId],
+    queryKey: ["jobs", selectedRowId],
   });
 
   return { jobData };
