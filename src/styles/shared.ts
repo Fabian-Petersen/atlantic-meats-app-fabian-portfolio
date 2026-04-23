@@ -96,6 +96,9 @@ export const sharedStyles = {
     "hover:bg-red-500/20 hover:border-red-500/60",
     "dark:hover:bg-red-500/22 dark:hover:border-red-500/40",
   ),
+  /* //$ ——— Badge ———————————————————————————————————————————————————————— */
+  badge: cn(),
+
   /* //$ ——— Headings ———————————————————————————————————————————————————————— */
   heading: cn("text-xl md:text-2xl capitalize w-full dark:text-gray-100"), // shared styles
   headingForm: cn("text-center md:text-left md:px-0"), // form headings
@@ -196,4 +199,16 @@ export const sharedStyles = {
   modalParent: cn("flex flex-col gap-2 md:gap-4 w-full rounded-lg"), // Parent of the outermost div
   modalBtnParent: cn("mt-4"),
   modalOverlay: cn("bg-black/60 dark:bg-black/30 backdrop-blur-xs"),
+
+  /* //$ ——— Sidebars ——————————————————————————————————————————————————————————— */
+  sidebar: cn(
+    // Default (layout + behavior)
+    "fixed right-0 z-1000 w-80 lg:w-96 transform transition-transform duration-200 ease-in translate-x-0 overflow-y-scroll",
+    // Appearance (responsive positioning + sizing)
+    "top-(--sm-navbarHeight) lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight)",
+    // Light mode styles
+    "bg-white border-l border-l-gray-200",
+    // Dark mode styles
+    "dark:bg-(--bg-primary_dark) dark:border-l-[rgba(55,65,81,0.5)]",
+  ),
 };

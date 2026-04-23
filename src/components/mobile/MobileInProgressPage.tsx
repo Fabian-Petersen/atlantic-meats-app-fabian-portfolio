@@ -14,6 +14,7 @@ import {
   ImageOff,
   CalendarClock,
 } from "lucide-react";
+import { Badge } from "../features/Badge";
 
 // $ ─── React Hooks ──────────────────────────────────────────────────────────────
 import { useNavigate } from "react-router-dom";
@@ -29,27 +30,6 @@ import { priorityStyles } from "@/styles/priorityStyles";
 type MobileRequestApprovalProps = {
   item: JobApprovedAPIResponse;
 };
-
-// $ ─── Badge Component ────────────────────────────────────────────────────────────
-function Badge({
-  value,
-  styleMap,
-}: {
-  value: string;
-  styleMap: Record<string, string>;
-}) {
-  const key = value?.toLowerCase();
-  const cls =
-    styleMap[key] ??
-    "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700";
-  return (
-    <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border capitalize ${cls}`}
-    >
-      {value}
-    </span>
-  );
-}
 
 // $ ─── Main Component ─────────────────────────────────────────────────────────────
 /**
@@ -80,7 +60,7 @@ function Badge({
 export default function MobileInProgressPage({
   item,
 }: MobileRequestApprovalProps) {
-  const { setOpenChatSidebar } = useGlobalContext();
+  const { setOpenChatSidebar, setIsOpen } = useGlobalContext();
   const hasImages = item.images && item.images.length > 0;
   const navigate = useNavigate();
 
@@ -94,7 +74,7 @@ export default function MobileInProgressPage({
         <button
           type="button"
           onClick={() => navigate("/jobs/in-progress")}
-          className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+          className="flex items-center gap-1.5 text-xs text-red-400 dark:text-red-400/95 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
           Back
@@ -109,7 +89,10 @@ export default function MobileInProgressPage({
         {/* // $ ─── Comment Button ──────────────────────────────────── */}
         <button
           type="button"
-          onClick={() => setOpenChatSidebar(true)}
+          onClick={() => {
+            setIsOpen(false);
+            setOpenChatSidebar(true);
+          }}
           className="flex items-center gap-1.5 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
         >
           <MessageSquare className="w-4 h-4" />

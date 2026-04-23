@@ -65,6 +65,7 @@ export default function MobileRequestApproval({
     setShowRejectRequestDialog,
     setShowApproveRequestDialog,
     setOpenChatSidebar,
+    setIsOpen,
   } = useGlobalContext();
   const hasImages = item.images && item.images.length > 0;
   const navigate = useNavigate();
@@ -119,7 +120,10 @@ export default function MobileRequestApproval({
         {/* Comments button */}
         <button
           type="button"
-          onClick={() => setOpenChatSidebar(true)}
+          onClick={() => {
+            setIsOpen(false);
+            setOpenChatSidebar(true);
+          }}
           className="flex items-center gap-1.5 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
         >
           <MessageSquare className="w-4 h-4" />

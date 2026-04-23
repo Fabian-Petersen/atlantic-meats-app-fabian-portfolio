@@ -1,5 +1,4 @@
 import { SendHorizonal } from "lucide-react";
-import { Textarea } from "../ui/textarea";
 import { X } from "lucide-react";
 
 // $ React-Hook-Form, zod & schema
@@ -65,7 +64,7 @@ const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit, onInvalid)}
-      className="bg-gray-50 dark:bg-(--clr-bgItem) w-full p-2 rounded-md gap-4 flex-col flex h-auto"
+      className="bg-(--bg-secondary_light) dark:bg-(--bg-secondary_dark)/50 w-full px-2 py-4 rounded-md gap-4 flex-col flex h-auto"
     >
       <div className="flex gap-2 items-center justify-between w-full h-auto">
         <p className="text-gray-500 dark:text-(--clr-textDark) text-sm md:text-md">
@@ -80,13 +79,18 @@ const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
           <X />
         </button>
       </div>
-      <Textarea
+      <textarea
         rows={1}
         {...register("comment")}
+        onInput={(e) => {
+          const el = e.currentTarget;
+          el.style.height = "auto"; // reset
+          el.style.height = `${el.scrollHeight}px`; // grow
+        }}
         className={cn(
-          "min-h-0 text-xs text-gray-100 outline-none",
-          "focus:outline-none focus:ring-0 focus:ring-offset-0 focus:shadow-none",
-          "focus:border-blue-500 dark:focus:border-blue-500",
+          sharedStyles.formInputDefault,
+          sharedStyles.formTextArea,
+          "dark:bg-(--bg-primary_dark)/20",
         )}
       />
       {errors.comment && (

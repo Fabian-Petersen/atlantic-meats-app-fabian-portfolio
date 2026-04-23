@@ -46,10 +46,10 @@ const TextAreaInput = <T extends FieldValues>({
         placeholder={placeholder}
         disabled={disabled}
         className={cn(
-          textAreaStyles,
           `${placeholder ? "placeholder-shown:" : "placeholder-transparent "}`,
-          sharedStyles.formTextArea,
           sharedStyles.formInputDefault,
+          sharedStyles.formTextArea,
+          textAreaStyles,
           isValid && "border-green-500",
           error && "border-red-300",
         )}
@@ -69,7 +69,7 @@ const TextAreaInput = <T extends FieldValues>({
       {label && (
         <label
           htmlFor={String(name)}
-          className={cn(labelStyles, sharedStyles.formLabel)}
+          className={cn(sharedStyles.formLabel, labelStyles)}
         >
           {label}
         </label>

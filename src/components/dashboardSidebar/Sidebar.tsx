@@ -48,7 +48,7 @@ const Sidebar = () => {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="md:hidden z-10 w-(--sidebarWidth) fixed top-(--sm-navbarHeight) h-(--sm-sidebarHeight) md:h-(--lg-sidebarHeight) overflow-auto no-scrollbar border-r border-r-gray-200 dark:border-r-gray-700 bg-white dark:bg-(--bg-primary_dark)"
+            className="md:hidden z-1000 w-(--sidebarWidth) fixed top-(--sm-navbarHeight) h-(--sm-sidebarHeight) md:h-(--lg-sidebarHeight) overflow-auto no-scrollbar border-r border-r-gray-200 dark:border-r-gray-700 bg-white dark:bg-(--bg-primary_dark)"
           >
             <SidebarContent userGroups={userGroups} />
           </motion.div>

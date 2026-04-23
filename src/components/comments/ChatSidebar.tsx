@@ -4,6 +4,8 @@ import CommentForm from "./CommentForm";
 import type { CommentAPIResponse } from "@/schemas";
 import CommentItem from "./CommentItem";
 import { useById } from "@/utils/api";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
 
 // import { ErrorPage } from "../features/Error";
 
@@ -24,9 +26,10 @@ const ChatSidebar = () => {
 
   return (
     <div
-      className={`overflow-y-scroll right-0 z-1000 w-80 lg:w-96 fixed top-(--sm-navbarHeight) lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight) border-l border-l-gray-200 dark:border-l-[rgba(55,65,81,0.5)]
-      bg-white dark:bg-(--bg-primary_dark) transform transition-transform duration-200 ease-in translate-x-0
-    ${openChatSidebar ? "translate-x-0" : "translate-x-full ease-out"}`}
+      className={cn(
+        sharedStyles.sidebar,
+        openChatSidebar ? "translate-x-0" : "translate-x-full ease-out",
+      )}
     >
       <div className="flex flex-col h-full gap-4 lg:p-1 p-2">
         {selectedRowId && (
@@ -35,7 +38,7 @@ const ChatSidebar = () => {
             setOpenChatSidebar={setOpenChatSidebar}
           />
         )}
-        <div className="bg-gray-50 dark:bg-(--clr-bgItem) min-h-full overflow-y-scroll flex flex-col gap-4 no-scrollbar p-2 rounded-lg">
+        <div className="overflow-y-scroll flex flex-col gap-4 custom-scrollbar p-2 rounded-lg h-auto">
           {Array.isArray(comments) &&
             comments.map((comment, index) => (
               <CommentItem

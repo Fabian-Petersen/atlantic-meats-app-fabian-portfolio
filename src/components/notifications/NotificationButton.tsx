@@ -9,7 +9,8 @@ type Props = {
 };
 
 const NotificationButton = ({ className }: Props) => {
-  const { setOpenNotificationSidebar, setIsOpen } = useGlobalContext();
+  const { setOpenNotificationSidebar, setIsOpen, setOpenChatSidebar } =
+    useGlobalContext();
   const count = 2;
 
   return (
@@ -18,6 +19,7 @@ const NotificationButton = ({ className }: Props) => {
         type="button"
         onClick={() => {
           setIsOpen(false);
+          setOpenChatSidebar(false);
           setOpenNotificationSidebar((prev) => !prev);
         }}
         className={`${className} hover:cursor-pointer rounded-full bg-white/30 p-1.5`}
