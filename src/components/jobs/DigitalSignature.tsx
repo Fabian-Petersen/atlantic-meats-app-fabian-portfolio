@@ -1,3 +1,4 @@
+// DigitalSignature.tsx
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import SignatureCanvas from "react-signature-canvas";
 
@@ -12,33 +13,27 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({
 }) => {
   const sigRef = useRef<SignatureCanvas | null>(null);
   const saveTimeout = useRef<NodeJS.Timeout | null>(null);
-  const snapshotRef = useRef<string | null>(null); // stores last valid signature data
+  const snapshotRef = useRef<string | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [isDark, setIsDark] = useState(false);
 
-  // Detect dark mode from the DOM
   useEffect(() => {
     const checkDark = () => {
       setIsDark(document.documentElement.classList.contains("dark"));
     };
-
     checkDark();
-
     const observer = new MutationObserver(checkDark);
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["class"],
     });
-
     return () => observer.disconnect();
   }, []);
 
   const penColor = isDark ? "white" : "black";
 
-  // Restore snapshot onto the canvas after resize/re-render
   const restoreSnapshot = useCallback(() => {
     if (!snapshotRef.current || !sigRef.current) return;
-
     const canvas = sigRef.current.getCanvas();
     const img = new Image();
     img.src = snapshotRef.current;
@@ -50,49 +45,46 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({
     };
   }, []);
 
-  // On resize (e.g. mobile keyboard appearing), restore the signature
   useEffect(() => {
     const handleResize = () => {
-      // Let the canvas re-render first, then restore
-      requestAnimationFrame(() => {
-        restoreSnapshot();
-      });
+      requestAnimationFrame(() => restoreSnapshot());
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [restoreSnapshot]);
 
-  // On scroll (mobile viewport shifts), restore the signature
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
-        requestAnimationFrame(() => {
-          restoreSnapshot();
-        });
+        requestAnimationFrame(() => restoreSnapshot());
       }
     };
-
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () =>
       document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, [restoreSnapshot]);
 
+  // ✅ KEY FIX: Before the user starts drawing, blur any focused input
+  // so the keyboard is dismissed and the viewport is stable
+  // ✅ Dismiss keyboard before drawing
+  const handleBegin = () => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  };
+
   const handleClear = () => {
     sigRef.current?.clear();
     snapshotRef.current = null;
-    onSave(""); // notify parent that signature was cleared
+    onSave("");
   };
 
   const handleEnd = () => {
-    if (saveTimeout.current) {
-      clearTimeout(saveTimeout.current);
-    }
-
+    if (saveTimeout.current) clearTimeout(saveTimeout.current);
     saveTimeout.current = setTimeout(() => {
       if (!sigRef.current || sigRef.current.isEmpty()) return;
       const dataUrl = sigRef.current.toDataURL("image/png");
-      snapshotRef.current = dataUrl; // persist snapshot in memory
+      snapshotRef.current = dataUrl;
       onSave(dataUrl);
     }, 1000);
   };
@@ -106,6 +98,7 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({
       <div className="border border-gray-300 dark:border-gray-700/30 rounded-md outline-none bg-white dark:bg-(--bg-primary_dark)">
         <SignatureCanvas
           ref={sigRef}
+          onBegin={handleBegin}
           onEnd={handleEnd}
           penColor={penColor}
           canvasProps={{
