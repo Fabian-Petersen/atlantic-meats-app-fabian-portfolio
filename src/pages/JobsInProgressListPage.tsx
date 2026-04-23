@@ -29,6 +29,69 @@ import { SearchInput } from "@/components/features/SearchInput";
 
 import { useNavigate } from "react-router-dom";
 
+/**
+ * JobsInProgressListPage
+ * Path:/jobs/in-progress
+ *
+ * This page component is responsible for displaying all maintenance jobs
+ * that are currently in progress (approved and active).
+ *
+ * Data Fetching:
+ * - Uses the `useGetAll` hook to retrieve job requests from the backend.
+ * - Filters results by `status: "in progress"`.
+ * - Handles loading and error states with dedicated UI components.
+ *
+ * Table Functionality (Desktop):
+ * - Uses `@tanstack/react-table` to manage:
+ *   - Sorting (default sorted by `jobCreated`)
+ *   - Global filtering (search across all rows)
+ * - Column definitions are generated via `getInProgressColumns`, allowing
+ *   dynamic injection of actions such as:
+ *     - Updating a job
+ *     - Navigating to job details
+ *     - Deleting a job
+ *     - Opening chat sidebar
+ * - Renders data using the `GenericTable` component.
+ * - Applies conditional row styling:
+ *   - Overdue jobs (based on `targetDate`) are highlighted in red.
+ *
+ * Mobile View:
+ * - Displays a simplified layout optimized for smaller screens.
+ * - Includes a `SearchInput` for filtering jobs.
+ * - Uses `MobileJobsInProgressContainer` to render job items.
+ * - Each job is displayed in a clickable accordian card item.
+ * - Handles empty states:
+ *   - No jobs available
+ *   - No results matching the search query
+ *
+ * Global State Integration:
+ * - Uses `useGlobalContext` to manage:
+ *   - Selected row ID
+ *   - Dialog visibility (update, delete)
+ *   - Chat sidebar state
+ *   - Global search filter
+ *
+ * Navigation:
+ * - Uses `react-router-dom` navigation for routing between pages.
+ *
+ * UX Considerations:
+ * - Displays a loading spinner while fetching data.
+ * - Provides retry functionality on API failure.
+ * - Separates desktop and mobile layouts for better responsiveness.
+ *
+ * Dependencies:
+ * - Data fetching: `useGetAll`
+ * - Table management: `@tanstack/react-table`
+ * - UI components: `GenericTable`, `FormHeading`, `SearchInput`,
+ *   `MobileJobsInProgressContainer`, `EmptyMobilePlaceholder`
+ * - Utilities: `isTargetDateOverdue`
+ *
+ * Notes:
+ * - This component focuses on orchestration (data + UI composition).
+ * - Business logic such as column actions and date validation is delegated
+ *   to helper functions and external modules for better separation of concerns.
+ */
+
 const JobsInProgressListPage = () => {
   const { data, isError, refetch, isPending } = useGetAll<
     JobApprovedAPIResponse[]

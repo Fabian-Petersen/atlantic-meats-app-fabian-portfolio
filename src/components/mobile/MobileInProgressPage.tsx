@@ -57,7 +57,7 @@ function Badge({
  *Path: "/jobs/:id/in-progress"
  *
  *Purpose:
- * - Enables users to view open maintenance job requests (Status === In Progress).
+ * - Enables users to view a single open (status === in progress) maintenance job requests.
  *
  *Responsibilities:
  * - Renders the page layout and heading.
