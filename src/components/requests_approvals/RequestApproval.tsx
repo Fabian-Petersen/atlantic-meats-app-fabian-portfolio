@@ -6,7 +6,7 @@ import type { JobAPIResponse } from "@/schemas";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useById, usePOST } from "@/utils/api";
-import { ErrorPage } from "../features/Error";
+import { Error } from "../features/Error";
 import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 import { toast } from "sonner";
@@ -33,7 +33,7 @@ function RequestApproval() {
     queryKey: ["jobs", "pending-approval-job"],
     resourcePath: "jobs",
     params: {
-      status: "Pending",
+      status: "pending",
     },
   });
 
@@ -44,19 +44,14 @@ function RequestApproval() {
 
   // fallback UI if timeout reached
   if (!item) {
-    return (
-      <ErrorPage
-        title="Error loading maintenance request!!"
-        message="Please check your connection and try again."
-      />
-    );
+    return <Error />;
   }
 
   const handleApprove = async () => {
     setShowApproveRequestDialog(true);
     const payload = {
       selectedRowId: selectedRowId,
-      status: "In Progress",
+      status: "in progress",
     };
 
     try {

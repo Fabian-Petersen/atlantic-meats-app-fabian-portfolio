@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 // import useGlobalContext from "@/context/useGlobalContext";
 // import { useById } from "@/utils/api";
 // import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
-import { ErrorPage } from "../features/Error";
+import { Error } from "../features/Error";
 // import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 type Props = {
@@ -18,12 +18,7 @@ function JobCompleteItemInfo({ item }: Props) {
   const navigate = useNavigate();
 
   if (!item) {
-    return (
-      <ErrorPage
-        title="Error loading maintenance request!!"
-        message="Please check your connection and try again."
-      />
-    );
+    return <Error />;
   }
 
   return (

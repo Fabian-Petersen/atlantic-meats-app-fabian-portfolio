@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useById } from "@/utils/api";
 // import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
-import { ErrorPage } from "../features/Error";
+import { Error } from "../features/Error";
 import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 // type Props = {
@@ -22,7 +22,7 @@ function JobPendingSingleItemInfo() {
     queryKey: ["jobs", "pending-approval-job"],
     resourcePath: "jobs",
     params: {
-      status: "Pending",
+      status: "pending",
     },
   });
   const navigate = useNavigate();
@@ -33,12 +33,7 @@ function JobPendingSingleItemInfo() {
 
   // fallback UI if timeout reached
   if (!job) {
-    return (
-      <ErrorPage
-        title="Error loading maintenance request!!"
-        message="Please check your connection and try again."
-      />
-    );
+    return <Error />;
   }
 
   return (

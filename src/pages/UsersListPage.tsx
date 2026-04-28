@@ -18,7 +18,7 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import useGlobalContext from "@/context/useGlobalContext";
 import { getUserColumns } from "@/components/tableColumns/UserColumns";
 import { useState } from "react";
-import { ErrorPage } from "@/components/features/Error";
+import { Error } from "@/components/features/Error";
 import type { UsersAPIResponse } from "@/schemas";
 
 import { GenericTable } from "@/components/dashboard/GenericTable";
@@ -35,7 +35,6 @@ const UsersListPage = () => {
   const {
     data: users = [],
     isError,
-    refetch,
     isPending,
   } = useGetAll<UsersAPIResponse[]>({
     resourcePath: "users",
@@ -85,15 +84,7 @@ const UsersListPage = () => {
 
   if (pendingResendPassword) return <PageLoadingSpinner />;
   if (isPending) return <PageLoadingSpinner />;
-  if (isError)
-    return (
-      <ErrorPage
-        title="Failed to load users"
-        message="Please check your connection and try again."
-        onRetry={refetch}
-        redirect="/users"
-      />
-    );
+  if (isError) return <Error />;
 
   return (
     <div className="flex w-full md:p-4 min-h-0">

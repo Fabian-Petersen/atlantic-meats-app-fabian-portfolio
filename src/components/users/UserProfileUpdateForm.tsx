@@ -60,10 +60,10 @@ function UserProfileUpdateForm() {
         />
       </div>
       <FormActionButtons
-        disabled={isSubmitting}
-        handleCancel={() => setShowUserProfileDialog(false)}
-        cancelText="cancel"
-        submitText="update"
+        isPending={isSubmitting}
+        onCancel={() => setShowUserProfileDialog(false)}
+        cancelText="Cancel"
+        submitText="Update"
       />
     </form>
   );

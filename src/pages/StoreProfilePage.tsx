@@ -1,7 +1,7 @@
 import FormHeading from "../../customComponents/FormHeading";
 // import FormActionButtons from "@/components/features/FormActionButtons";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-import { ErrorPage } from "@/components/features/Error";
+import { Error } from "@/components/features/Error";
 import useGlobalContext from "@/context/useGlobalContext";
 import type { UsersAPIResponse } from "@/schemas";
 import { useById } from "@/utils/api";
@@ -27,17 +27,11 @@ function StoreProfilePage() {
 
   // fallback UI if timeout reached
   if (!user) {
-    return (
-      <ErrorPage
-        title="Error loading user information!!"
-        message="Please check your connection and try again."
-      />
-    );
+    return <Error />;
   }
 
   if (isPending) return <PageLoadingSpinner />;
-  if (isError)
-    return <ErrorPage title="" message="User data could not be retrieved" />;
+  if (isError) return <Error />;
 
   if (showUserProfileDialog) return null;
   return (

@@ -1,7 +1,6 @@
 //$ This component is used to create a maintenace job, the data is submitted to the database (dynamoDB) via API Gateway and Lambda on aws.
 
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { Activity, useState } from "react";
 
 // $ React-Hook-Form, zod & schema
@@ -11,42 +10,66 @@ import { useForm, type Resolver } from "react-hook-form";
 import FormRowInput from "../../../customComponents/FormRowInput";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
 
-// $ Import image compression hook
-import { compressImagesToWebpv1 } from "../../utils/compressImagesToWebpv1";
-
 // $ Import schemas
-import type {
-  AssetRequestFormValues,
-  CreateAssetPayload,
-  PresignedUrlResponse,
-} from "../../schemas/index";
+import type { AssetRequestFormValues } from "../../schemas/index";
 import { assetRequestSchema } from "../../schemas/index";
-
-// $ Import API interaction Functions
-import {
-  useCreateNewAsset,
-  // useCreateNewItem,
-} from "@/utils/api";
-import { useApiError } from "@/customHooks/useApiError";
 
 //$ Import Select Options Data
 import {
   condition,
-  // equipment,
   location,
   CeateAssetFormOptionsData,
 } from "@/data/assetSelectOptions";
 import FileInput from "../../../customComponents/FileInput";
-import { toast } from "sonner";
 import TextAreaInput from "../../../customComponents/TextAreaInput";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
+import FormActionButtons from "../features/FormActionButtons";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
+import useGlobalContext from "@/context/useGlobalContext";
 
 type BusinessUnit = keyof typeof CeateAssetFormOptionsData.business_unit;
 
-// type Category<B extends BusinessUnit>
-//   keyof (typeof CeateAssetFormOptionsData.business_unit)[B]["category"];
-
 const CreateAssetForm = () => {
-  const { handleError } = useApiError(); // This function takes an Axios Error and display a toast to the user from the backend
+  const { setSuccessConfig, setShowSuccess, setErrorConfig, setShowError } =
+    useGlobalContext();
+  // $ Calling the useFormSubmit hook to post the asset data to backend
+  const { submit, isPending } = useFormSubmit({
+    resourcePath: "assets-data",
+    queryKey: ["assets", "create-asset"],
+    buildPayload: (values, compressed) => ({
+      ...values,
+      images: compressed.map((f) => ({
+        filename: f.name,
+        content_type: f.type,
+      })),
+    }),
+    onSuccess: (values) => {
+      setSuccessConfig({
+        title: "Success",
+        message: `The asset with ID ${values.assetID} request was successfully created.`,
+        redirectPath: "assets/list",
+      });
+      setShowSuccess(true);
+    },
+    onError: () => {
+      setErrorConfig({
+        title: "Asset Creation Failed",
+        message: "Could not create the asset. Please try again.",
+        redirectPath: "assets/list",
+      });
+      setShowError(true);
+    },
+  });
+
+  // const { mutateAsync, isError, isPending } = usePOST<
+  //   CreateAssetPayload,
+  //   { presigned_urls: PresignedUrlResponse }
+  // >({
+  //   resourcePath: "assets-data",
+  //   queryKey: ["assets", "create-asset"],
+  // });
+  // const { handleError } = useApiError(); // This function takes an Axios Error and display a toast to the user from the backend
 
   // $ Use cascading (dependent) select inputs driven directly from the data structure.
   const [businessUnit, setBusinessUnit] = useState<BusinessUnit | null>(null);
@@ -67,7 +90,6 @@ const CreateAssetForm = () => {
         ]
       : [];
 
-  const { mutateAsync } = useCreateNewAsset();
   const navigate = useNavigate();
 
   // $ Form Schema
@@ -75,19 +97,8 @@ const CreateAssetForm = () => {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<AssetRequestFormValues>({
-    defaultValues: {
-      business_unit: "",
-      area: "",
-      equipment: "",
-      assetID: "",
-      condition: "",
-      location: "",
-      serialNumber: "",
-      additional_notes: "",
-      images: [],
-    },
     resolver: zodResolver(
       assetRequestSchema,
     ) as unknown as Resolver<AssetRequestFormValues>,
@@ -96,60 +107,61 @@ const CreateAssetForm = () => {
   // $ sort the locations in alphabetical order
   const sortedLocations = [...location].sort((a, b) => a.localeCompare(b));
 
-  // $ Form and Images Submit with Image Compression
-  const onSubmit = async (data: AssetRequestFormValues) => {
-    // console.log("Create new asset:", data);
+  // // $ Form and Images Submit with Image Compression
+  // const onSubmit = async (data: AssetRequestFormValues) => {
+  //   // console.log("Create new asset:", data);
 
-    try {
-      // $ 1️⃣ Compress images in browser
-      const originalFiles = data.images ?? [];
-      const compressedFiles = await compressImagesToWebpv1(originalFiles);
+  //   try {
+  //     // $ 1️⃣ Compress images in browser
+  //     const originalFiles = data.images ?? [];
+  //     const compressedFiles = await compressImagesToWebpv1(originalFiles);
 
-      // $ 2️⃣ Build API payload (metadata only)
-      const payload: CreateAssetPayload = {
-        ...data,
-        images: compressedFiles.map((file) => ({
-          filename: file.name,
-          content_type: file.type,
-        })),
-      };
+  //     // $ 2️⃣ Build API payload (metadata only)
+  //     const payload: CreateAssetPayload = {
+  //       ...data,
+  //       images: compressedFiles.map((file) => ({
+  //         filename: file.name,
+  //         content_type: file.type,
+  //       })),
+  //     };
 
-      // console.log("Payload for API:", payload);
+  //     // console.log("Payload for API:", payload);
 
-      // $ 3️⃣ Create asset + get presigned URLs
-      const response = await mutateAsync(payload);
-      const { presigned_urls } = response;
+  //     // $ 3️⃣ Create asset + get presigned URLs
+  //     const response = await mutateAsync(payload);
+  //     const { presigned_urls } = response;
 
-      // $ 4️⃣ Upload compressed images to S3
-      await Promise.all(
-        presigned_urls.map((image: PresignedUrlResponse[number]) => {
-          const file = compressedFiles.find((f) => f.name === image.filename);
+  //     // $ 4️⃣ Upload compressed images to S3
+  //     await Promise.all(
+  //       presigned_urls.map((image: PresignedUrlResponse[number]) => {
+  //         const file = compressedFiles.find((f) => f.name === image.filename);
 
-          if (!file) return Promise.resolve();
+  //         if (!file) return Promise.resolve();
 
-          return fetch(image.url, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "image/webp",
-            },
-            body: file,
-          });
-        }),
-      );
+  //         return fetch(image.url, {
+  //           method: "PUT",
+  //           headers: {
+  //             "Content-Type": "image/webp",
+  //           },
+  //           body: file,
+  //         });
+  //       }),
+  //     );
 
-      toast.success("Asset successfully created!", { duration: 1000 });
-      navigate("/assets/list"); // $ temporary disabled navigation
-    } catch (err) {
-      handleError(err);
-    }
-  };
+  //     toast.success("Asset successfully created!", { duration: 1000 });
+  //     navigate("/assets/list"); // $ temporary disabled navigation
+  //   } catch (err) {
+  //     handleError(err);
+  //   }
+
+  //   if (isError) {
+  //     return toast.error("Failed to create new asset");
+  //   }
+  // };
 
   return (
-    <form
-      className="flex flex-col rounded-lg lg:w-full text-(--clr-font) dark:bg-(--bg-primary_dark)"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 w-full lg:py-4">
+    <form className={cn(sharedStyles.form)} onSubmit={handleSubmit(submit)}>
+      <div className={cn(sharedStyles.formParent)}>
         <FormRowSelect
           name="business_unit"
           // label="Business Unit"
@@ -175,7 +187,6 @@ const CreateAssetForm = () => {
           // label="Equipment"
           name="equipment"
           options={itemOptions}
-          // control={control}
           placeholder="Select Equipment"
           register={register}
           error={errors.equipment}
@@ -184,7 +195,6 @@ const CreateAssetForm = () => {
           // label="Asset ID"
           type="text"
           name="assetID"
-          // control={control}
           placeholder="Asset ID e.g. MX001"
           register={register}
           error={errors.assetID}
@@ -193,7 +203,6 @@ const CreateAssetForm = () => {
           // label="Location"
           name="location"
           options={sortedLocations}
-          // control={control}
           placeholder="Select Location"
           register={register}
           error={errors.location}
@@ -203,7 +212,6 @@ const CreateAssetForm = () => {
           // label="Condition"
           name="condition"
           options={condition}
-          // control={control}
           placeholder="Select Condition"
           register={register}
           error={errors.condition}
@@ -212,18 +220,12 @@ const CreateAssetForm = () => {
           // label="Serial Number"
           type="text"
           name="serialNumber"
-          // control={control}
           placeholder="Serial Number"
           register={register}
           error={errors.serialNumber}
         />
         <Activity mode="visible">
-          <FileInput
-            control={control}
-            name="images"
-            multiple={true}
-            // error={errors.images}
-          />
+          <FileInput control={control} name="images" multiple={true} />
         </Activity>
         <TextAreaInput
           // label="Comments"
@@ -234,28 +236,14 @@ const CreateAssetForm = () => {
           rows={3}
         />
       </div>
-      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 bg-white pt-2">
-        <Button
-          type="button"
-          onClick={() => {
-            navigate("/assets");
-          }}
-          variant="cancel"
-          size="lg"
-          className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
-        >
-          Cancel
-        </Button>
-        <Button
-          disabled={isSubmitting}
-          type="submit"
-          variant="submit"
-          size="lg"
-          className="flex-1"
-        >
-          {isSubmitting ? "Sending..." : "Submit"}
-        </Button>
-      </div>
+      <FormActionButtons
+        cancelText="Cancel"
+        onCancel={() => {
+          navigate("/assets/list");
+        }}
+        submitText="Submit"
+        isPending={isPending}
+      />
     </form>
   );
 };

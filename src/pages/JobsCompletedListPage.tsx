@@ -11,7 +11,7 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import useGlobalContext from "@/context/useGlobalContext";
 
 import type { ActionAPIResponse } from "@/schemas";
-import { ErrorPage } from "@/components/features/Error";
+import { Error } from "@/components/features/Error";
 // import type { ActionTableRow } from "@/schemas/actionSchemas";
 import { GenericTable } from "@/components/dashboard/GenericTable";
 import FormHeading from "@/../customComponents/FormHeading";
@@ -30,7 +30,7 @@ import {
 import { MobileJobsCompletedParent } from "@/components/mobile/MobileJobsCompletedParent";
 
 const JobsCompletedListPage = () => {
-  const { data, isError, refetch, isPending } = useGetAll<ActionAPIResponse[]>({
+  const { data, isError, isPending } = useGetAll<ActionAPIResponse[]>({
     resourcePath: "jobs/completed",
     queryKey: ["jobs", "complete"],
     // params: {
@@ -89,22 +89,10 @@ const JobsCompletedListPage = () => {
   });
 
   if (isPending) return <PageLoadingSpinner />;
-  if (isError)
-    return (
-      <ErrorPage
-        title="Failed to load assets"
-        message="Please check your connection and try again."
-        onRetry={refetch}
-      />
-    );
+  if (isError) return <Error />;
 
   if (!data) {
-    return (
-      <ErrorPage
-        title="There are not assets to display!!"
-        message="Create an action to view the details."
-      />
-    );
+    return <Error />;
   }
 
   return (

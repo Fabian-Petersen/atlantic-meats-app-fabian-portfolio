@@ -16,7 +16,7 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { MobileJobsPendingContainer } from "@/components/mobile/MobileJobsPendingContainer";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState } from "react";
-import { ErrorPage } from "@/components/features/Error";
+import { Error } from "@/components/features/Error";
 import type { JobAPIResponse } from "@/schemas";
 import { GenericTable } from "@/components/dashboard/GenericTable";
 import { getJobPendingColumns } from "@/components/tableColumns/PendingColumns";
@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 
 const JobsPendingListPage = () => {
-  const { data, isError, refetch, isPending } = useGetAll<JobAPIResponse[]>({
+  const { data, isError, isPending } = useGetAll<JobAPIResponse[]>({
     resourcePath: "jobs/requests",
     queryKey: ["jobs", "pending"],
     params: {
@@ -68,14 +68,7 @@ const JobsPendingListPage = () => {
   });
 
   if (isPending) return <PageLoadingSpinner />;
-  if (isError)
-    return (
-      <ErrorPage
-        title="Failed to load maintenance requests"
-        message="Please check your connection and try again."
-        onRetry={refetch}
-      />
-    );
+  if (isError) return <Error />;
 
   return (
     <div className="flex w-full md:p-4 min-h-0">

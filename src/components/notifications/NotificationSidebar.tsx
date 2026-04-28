@@ -3,8 +3,6 @@ import { useGetAll } from "@/utils/api";
 import NotificationCard from "./NotificationCard";
 import type { JobAPIResponse } from "@/schemas";
 
-// import { ErrorPage } from "../features/Error";
-
 const NotificationSidebar = () => {
   const { openNotificationSidebar } = useGlobalContext();
 

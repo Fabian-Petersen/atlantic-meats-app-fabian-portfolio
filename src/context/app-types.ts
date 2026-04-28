@@ -50,10 +50,18 @@ export type SuccessConfig = {
   redirectPath?: RedirectResource | null;
 } | null;
 
+export type ErrorConfig = {
+  title: string;
+  message: string;
+  redirectPath: RedirectResource;
+};
+
 export type AppContextType = {
   //$ Error State
   showError: boolean;
   setShowError: Dispatch<SetStateAction<boolean>>;
+  setErrorConfig: (config: ErrorConfig) => void;
+  errorConfig: ErrorConfig | null;
 
   //$ Success State
   showSuccess: boolean;

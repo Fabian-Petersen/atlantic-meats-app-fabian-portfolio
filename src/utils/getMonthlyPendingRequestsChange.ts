@@ -5,7 +5,7 @@ export const getMonthlyPendingRequestsChange = (jobs: JobAPIResponse[]) => {
   const now = new Date();
 
   const pendingRequests = jobs.filter(
-    (item) => item.status === "Pending" || item.status === "In Progress",
+    (item) => item.status === "pending" || item.status === "in progress",
   );
 
   const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);

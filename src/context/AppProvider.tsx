@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { AppContext } from "./app-context";
 import type { GlobalData, PendingTableAction } from "../schemas";
-import type { DeleteConfig, SuccessConfig } from "./app-types";
+import type { DeleteConfig, ErrorConfig, SuccessConfig } from "./app-types";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   // $ [Step 3]: Create the state and set the initial state value
 
   // $ State for the Error and Success Components
   const [showError, setShowError] = useState<boolean>(false);
+  const [errorConfig, setErrorConfig] = useState<ErrorConfig | null>(null);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [successConfig, setSuccessConfig] = useState<SuccessConfig | null>(
     null,
@@ -137,6 +138,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setOpenNotificationSidebar,
         userId,
         setUserId,
+        errorConfig,
+        setErrorConfig,
       }}
     >
       {children}

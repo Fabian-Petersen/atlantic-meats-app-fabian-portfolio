@@ -1,13 +1,10 @@
 import useGlobalContext from "@/context/useGlobalContext";
-// import { X } from "lucide-react";
 import CommentForm from "./CommentForm";
 import type { CommentAPIResponse } from "@/schemas";
 import CommentItem from "./CommentItem";
 import { useById } from "@/utils/api";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
-
-// import { ErrorPage } from "../features/Error";
 
 const ChatSidebar = () => {
   const { openChatSidebar, setOpenChatSidebar, selectedRowId } =

@@ -18,7 +18,7 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import useGlobalContext from "@/context/useGlobalContext";
 import { getInProgressColumns } from "@/components/tableColumns/InProgressColumns";
 import { useState } from "react";
-import { ErrorPage } from "@/components/features/Error";
+import { Error } from "@/components/features/Error";
 import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 import { GenericTable } from "@/components/dashboard/GenericTable";
 import { MobileJobsInProgressContainer } from "@/components/mobile/MobileJobsInProgressContainer";
@@ -93,9 +93,7 @@ import { useNavigate } from "react-router-dom";
  */
 
 const JobsInProgressListPage = () => {
-  const { data, isError, refetch, isPending } = useGetAll<
-    JobApprovedAPIResponse[]
-  >({
+  const { data, isError, isPending } = useGetAll<JobApprovedAPIResponse[]>({
     resourcePath: "jobs/requests",
     queryKey: ["jobs", "in_progress"],
     params: {
@@ -143,14 +141,7 @@ const JobsInProgressListPage = () => {
 
   if (isPending) return <PageLoadingSpinner />;
 
-  if (isError)
-    return (
-      <ErrorPage
-        title="Failed to load jobs"
-        message="Please check your connection and try again."
-        onRetry={refetch}
-      />
-    );
+  if (isError) return <Error />;
 
   return (
     <div className="flex w-full lg:p-4 h-auto">

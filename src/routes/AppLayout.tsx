@@ -9,6 +9,7 @@ import { Success } from "@/components/features/Success";
 import NotificationSidebar from "@/components/notifications/NotificationSidebar";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
+import { Error } from "@/components/features/Error";
 
 // AppLayout.tsx
 export const AppLayout = () => (
@@ -17,6 +18,7 @@ export const AppLayout = () => (
     <ChatSidebar />
     <NotificationSidebar />
     <Success />
+    <Error />
     <aside className="lg:block row-start-2 col-start-1">
       <Sidebar />
     </aside>

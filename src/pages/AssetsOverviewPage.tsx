@@ -21,13 +21,13 @@ import { getAssetColumns } from "../components/tableColumns/AssetColumns";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState, useMemo } from "react";
 import type { AssetAPIResponse, AssetTableRow } from "@/schemas";
-import { ErrorPage } from "@/components/features/Error";
+// import { Error } from "@/components/features/Error";
 import { GenericTable } from "@/components/dashboard/GenericTable";
 import { SearchInput } from "@/components/features/SearchInput";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 
 const AssetsOverviewPage = () => {
-  const { data, isPending, isError, refetch } = useGetAll<AssetAPIResponse[]>({
+  const { data, isPending, isError } = useGetAll<AssetAPIResponse[]>({
     resourcePath: "assets-data",
     queryKey: ["getAssetsList", "assetsList"],
   });
@@ -85,22 +85,10 @@ const AssetsOverviewPage = () => {
   });
 
   if (isPending) return <PageLoadingSpinner />;
-  if (isError)
-    return (
-      <ErrorPage
-        title="Failed to load assets"
-        message="Please check your connection and try again."
-        onRetry={refetch}
-      />
-    );
+  if (isError) return <p>There was an error loading the assets</p>;
 
   if (!data) {
-    return (
-      <ErrorPage
-        title="There are not assets to display!!"
-        message="Create an asset to view the details."
-      />
-    );
+    return <p>There was an error loading the assets</p>;
   }
 
   return (

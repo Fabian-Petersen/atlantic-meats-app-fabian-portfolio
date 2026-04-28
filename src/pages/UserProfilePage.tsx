@@ -1,7 +1,7 @@
 import FormHeading from "../../customComponents/FormHeading";
 import UserProfileForm from "@/components/users/UserProfileForm";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-import { ErrorPage } from "@/components/features/Error";
+import { Error } from "@/components/features/Error";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useGetUser } from "@/utils/getUser";
 import { sharedStyles } from "@/styles/shared";
@@ -14,8 +14,7 @@ function UserProfilePage() {
   // console.log("user:", user);
 
   if (isPending) return <PageLoadingSpinner />;
-  if (isError)
-    return <ErrorPage title="" message="User data could not be retrieved" />;
+  if (isError) return <Error />;
 
   if (showUserProfileDialog) return null;
   return (

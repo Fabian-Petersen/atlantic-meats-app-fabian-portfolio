@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 // import useGlobalContext from "@/context/useGlobalContext";
 // import { useById } from "@/utils/api";
 // import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
-import { ErrorPage } from "../features/Error";
+// import { Error } from "../features/Error";
 // import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 type Props = {
@@ -17,14 +17,9 @@ type Props = {
 function JobApprovedItemInfo({ item }: Props) {
   const navigate = useNavigate();
 
-  if (!item) {
-    return (
-      <ErrorPage
-        title="Error loading maintenance request!!"
-        message="Please check your connection and try again."
-      />
-    );
-  }
+  // if (!item) {
+  //   return <Error />;
+  // }
 
   return (
     <div className="flex gap flex-col gap-2 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50">
