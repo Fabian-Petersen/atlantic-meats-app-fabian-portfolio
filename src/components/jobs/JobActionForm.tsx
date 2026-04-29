@@ -1,32 +1,32 @@
 //$ This component is used to action and closeout a maintenace job, the data is submitted to the database (dynamoDB) referenced to the requested_id.
 
-import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+// import { Button } from "@/components/ui/button";
+// import { useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { toast } from "sonner";
 
 // $ React-Hook-Form & zod
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Control, type Resolver } from "react-hook-form";
+import { Controller } from "react-hook-form";
 
 import FormRowInput from "../../../customComponents/FormRowInput";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
-// import useGlobalContext from "@/context/useGlobalContext";
 
 // $ Import schemas
 import {
   actionRequestSchema,
-  type ActionAPIResponse,
+  // type ActionAPIResponse,
   type ActionRequestFormValues,
-  type ActionRequestPayload,
-  type PresignedUrlResponse,
+  // type ActionRequestPayload,
+  // type PresignedUrlResponse,
 } from "../../schemas/index";
 
 // $ Import api & hooks
-import { usePOST } from "@/utils/api";
+// import { usePOST } from "@/utils/api";
 
 // $ Import image compression hook
-import { compressImagesToWebpv1 } from "@/utils/compressImagesToWebpv1";
+// import { compressImagesToWebpv1 } from "@/utils/compressImagesToWebpv1";
 
 import { ROOT_CAUSES, status } from "@/data/maintenanceAction";
 import TextAreaInput from "../../../customComponents/TextAreaInput";
@@ -35,7 +35,9 @@ import FileInput from "../../../customComponents/FileInput";
 import useGlobalContext from "@/context/useGlobalContext";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
-import { Spinner } from "../ui/spinner";
+// import { Spinner } from "../ui/spinner";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
+import FormActionButtons from "../features/FormActionButtons";
 
 type Props = {
   onCancel: () => void;
@@ -83,41 +85,6 @@ type Props = {
  */
 
 const JobActionForm = ({ onCancel }: Props) => {
-  const [signature, setSignature] = useState<string | null>(null);
-  const { setShowError, selectedRowId, setShowActionDialog } =
-    useGlobalContext();
-  const navigate = useNavigate();
-
-  // $ Import POST hook for submitting the actioned maintenance request to the backend (DynamoDB + S3 for images)
-  const { mutateAsync, isError, isPending } = usePOST<
-    ActionRequestPayload,
-    ActionAPIResponse
-  >({
-    id: selectedRowId ?? "",
-    resourcePath: "jobs",
-    queryKey: ["jobs", "action-job"],
-    action: "action",
-  });
-
-  // $ Ensure selectedRowId is available
-  useEffect(() => {
-    if (!selectedRowId) {
-      toast.error("No maintenance request selected for actioning.", {
-        duration: 1000,
-      });
-      navigate(`/jobs/${selectedRowId}/action`);
-    }
-  }, [selectedRowId, navigate]);
-
-  // $ Ensure signature is captured before allowing submission
-  useEffect(() => {
-    if (signature === null) {
-      setShowError(true);
-    } else {
-      setShowError(false);
-    }
-  }, [signature, setShowError]);
-
   // $ Form Schema
   const {
     register,
@@ -130,70 +97,129 @@ const JobActionForm = ({ onCancel }: Props) => {
     ) as unknown as Resolver<ActionRequestFormValues>,
   });
 
-  const onSubmit = async (data: ActionRequestFormValues) => {
-    // $ 1. 1️⃣ Compress images in browser
-    const originalFiles = data.images ?? [];
-    const compressedFiles = await compressImagesToWebpv1(originalFiles);
+  const {
+    selectedRowId,
+    setShowActionDialog,
+    setSuccessConfig,
+    setErrorConfig,
+    setShowError,
+    setShowSuccess,
+  } = useGlobalContext();
+  // const navigate = useNavigate();
 
-    try {
-      // $ 2. Prepare payload with compressed images and signature
-      const payload: ActionRequestPayload = {
-        ...data,
-        images: compressedFiles.map((file) => ({
-          filename: file.name,
-          content_type: file.type,
-        })),
-        signature,
-        selectedRowId: selectedRowId!,
-      };
-
-      // $ 3. Create maintenance request (DynamoDB + presigned URLs)
-      const response = await mutateAsync(payload);
-      const presigned_urls = response.presigned_urls;
-
-      // type guard
-      if (!presigned_urls?.length) {
-        return;
-      }
-
-      // $ 4. Upload files directly to S3
-      await Promise.all(
-        presigned_urls.map((item: PresignedUrlResponse[number]) => {
-          const file = compressedFiles.find((f) => f.name === item.filename);
-
-          if (!file) return Promise.resolve();
-
-          return fetch(item.url, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "image/webp",
-            },
-            body: file,
-          });
-        }),
-      );
-
-      toast.success("Request successfully Actioned!", {
-        duration: 1000,
-      });
+  // $ Hook that handles the file compression and form submission to backend with success and error modals
+  const { submit, isPending } = useFormSubmit({
+    id: selectedRowId ?? "",
+    resourcePath: "jobs",
+    queryKey: ["jobs", "action-job"],
+    action: "action",
+    buildPayload: (values, compressed) => ({
+      ...values,
+      selectedRowId: selectedRowId, // id expected by the backend
+      images: compressed.map((f) => ({
+        filename: f.name,
+        content_type: f.type,
+      })),
+    }),
+    onSuccess: () => {
       setShowActionDialog(false);
-      navigate("/jobs/completed");
-    } catch (err) {
-      toast.error("Request unsuccessfull!!", {
-        duration: 1000,
+      setSuccessConfig({
+        title: "Job Created",
+        message: "Job completion successfully submitted.",
+        redirectPath: "jobs/completed",
       });
-      console.error("Failed to create maintenance request", err);
-    }
-  };
-
-  useEffect(() => {
-    if (isError) {
+      setShowSuccess(true);
+    },
+    onError: () => {
+      setErrorConfig({
+        title: "Submission Failed",
+        message: "Could not close the job. Please try again.",
+        redirectPath: "jobs/in-progress",
+      });
       setShowError(true);
-    }
-  }, [isError, setShowError]);
+    },
+  });
+
+  // $ Import POST hook for submitting the actioned maintenance request to the backend (DynamoDB + S3 for images)
+  // const { mutateAsync: postAction, isPending } = usePOST<
+  //   ActionRequestPayload,
+  //   ActionAPIResponse
+  // >({
+  //   id: selectedRowId ?? "",
+  //   resourcePath: "jobs",
+  //   queryKey: ["jobs", "action-job"],
+  //   action: "action",
+  // });
+
+  // // $ Ensure selectedRowId is available
+  // useEffect(() => {
+  //   if (!selectedRowId) {
+  //     toast.error("No maintenance request selected for actioning.", {
+  //       duration: 1000,
+  //     });
+  //     navigate(`/jobs/${selectedRowId}/action`);
+  //   }
+  // }, [selectedRowId, navigate]);
+
+  // const onSubmit = async (data: ActionRequestFormValues) => {
+  //   // $ 1. 1️⃣ Compress images in browser
+  //   const originalFiles = data.images ?? [];
+  //   const compressedFiles = await compressImagesToWebpv1(originalFiles);
+
+  //   try {
+  //     // $ 2. Prepare payload with compressed images and signature
+  //     const payload: ActionRequestPayload = {
+  //       ...data,
+  //       images: compressedFiles.map((file) => ({
+  //         filename: file.name,
+  //         content_type: file.type,
+  //       })),
+  //       signature: data.signature,
+  //       selectedRowId: selectedRowId!,
+  //     };
+
+  //     console.log("payload:", payload);
+
+  //     // $ 3. Create maintenance request (DynamoDB + presigned URLs)
+  //     const response = await postAction(payload);
+  //     const presigned_urls = response.presigned_urls;
+  //     // type guard
+  //     if (!presigned_urls?.length) {
+  //       return;
+  //     }
+
+  //     // $ 4. Upload files directly to S3
+  //     await Promise.all(
+  //       presigned_urls.map((item: PresignedUrlResponse[number]) => {
+  //         const file = compressedFiles.find((f) => f.name === item.filename);
+
+  //         if (!file) return Promise.resolve();
+
+  //         return fetch(item.url, {
+  //           method: "PUT",
+  //           headers: {
+  //             "Content-Type": "image/webp",
+  //           },
+  //           body: file,
+  //         });
+  //       }),
+  //     );
+
+  //     toast.success("Request successfully Actioned!", {
+  //       duration: 1000,
+  //     });
+  //     setShowActionDialog(false);
+  //     navigate("/jobs/completed");
+  //   } catch (err) {
+  //     toast.error("Request unsuccessfull!!", {
+  //       duration: 1000,
+  //     });
+  //     console.error("Failed to create maintenance request", err);
+  //   }
+  // };
 
   return (
-    <form className={cn(sharedStyles.form)} onSubmit={handleSubmit(onSubmit)}>
+    <form className={cn(sharedStyles.form)} onSubmit={handleSubmit(submit)}>
       <div className={cn(sharedStyles.formParent)}>
         <FormRowInput
           label="Start Date/Time"
@@ -285,29 +311,25 @@ const JobActionForm = ({ onCancel }: Props) => {
           error={errors.signedBy}
         />
       </div>
-      <DigitalSignature onSave={setSignature} className="mb-6" />
-      <div className="flex w-full">
-        <div className={cn(sharedStyles.btnParent)}>
-          <Button
-            className={cn(sharedStyles.btnCancel, sharedStyles.btn)}
-            variant="cancel"
-            // size="lg"
-            type="button"
-            onClick={onCancel}
-          >
-            Cancel
-          </Button>
-          <Button
-            disabled={isPending}
-            type="submit"
-            variant="submit"
-            // size="lg"
-            className={cn(sharedStyles.btnSubmit, sharedStyles.btn)}
-          >
-            {isPending ? <Spinner className="size-8" /> : "Submit"}
-          </Button>
-        </div>
-      </div>
+      <Controller
+        name="signature"
+        control={control}
+        render={({ field, fieldState }) => (
+          <DigitalSignature
+            value={field.value}
+            onSave={field.onChange}
+            onClear={() => field.onChange("")}
+            className="mb-6"
+            error={fieldState.error}
+          />
+        )}
+      />
+      <FormActionButtons
+        onCancel={onCancel}
+        cancelText="Cancel"
+        submitText="Submit"
+        isPending={isPending}
+      />
     </form>
   );
 };

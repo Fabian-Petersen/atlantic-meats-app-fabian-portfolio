@@ -1,21 +1,40 @@
 // DigitalSignature.tsx
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import SignatureCanvas from "react-signature-canvas";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
 
 type DigitalSignatureProps = {
   onSave: (signature: string) => void;
   className?: string;
+  error?: { message?: string };
+  value?: string;
+  onClear: () => void;
 };
 
 const DigitalSignature: React.FC<DigitalSignatureProps> = ({
   onSave,
   className,
+  error,
+  value,
+  onClear,
 }) => {
   const sigRef = useRef<SignatureCanvas | null>(null);
   const saveTimeout = useRef<NodeJS.Timeout | null>(null);
   const snapshotRef = useRef<string | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [isDark, setIsDark] = useState(false);
+
+  // $ 💥 Sync canvas with form value
+  useEffect(() => {
+    if (!sigRef.current) return;
+
+    if (value) {
+      sigRef.current.fromDataURL(value);
+    } else {
+      sigRef.current.clear();
+    }
+  }, [value]);
 
   useEffect(() => {
     const checkDark = () => {
@@ -29,6 +48,12 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({
     });
     return () => observer.disconnect();
   }, []);
+
+  const handleClear = () => {
+    sigRef.current?.clear();
+    snapshotRef.current = null;
+    onClear(); // 🔥 updates form only (not entire form)
+  };
 
   const penColor = isDark ? "white" : "black";
 
@@ -73,12 +98,6 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({
     }
   };
 
-  const handleClear = () => {
-    sigRef.current?.clear();
-    snapshotRef.current = null;
-    onSave("");
-  };
-
   const handleEnd = () => {
     if (saveTimeout.current) clearTimeout(saveTimeout.current);
     saveTimeout.current = setTimeout(() => {
@@ -88,6 +107,11 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({
       onSave(dataUrl);
     }, 1000);
   };
+
+  //   const handleEnd = () => {
+  //   const dataUrl = sigRef.current?.toDataURL();
+  //   if (dataUrl) onSave(dataUrl);
+  // };
 
   return (
     <div className={`w-full mt-4 ${className}`} ref={containerRef}>
@@ -106,7 +130,9 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({
           }}
         />
       </div>
-
+      {error && (
+        <span className={cn(sharedStyles.formError, "")}>{error.message}</span>
+      )}
       <div className="flex gap-3 mt-2">
         <button
           type="button"

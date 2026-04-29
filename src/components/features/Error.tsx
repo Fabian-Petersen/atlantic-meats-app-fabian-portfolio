@@ -57,7 +57,6 @@ import { sharedStyles } from "@/styles/shared";
 export const Error = () => {
   const { showError, setShowError, errorConfig } = useGlobalContext();
   const navigate = useNavigate();
-  console.log("Error render:", showError, errorConfig);
 
   const DEFAULT_ERROR_CONFIG = {
     title: "Oops, something went wrong!!",

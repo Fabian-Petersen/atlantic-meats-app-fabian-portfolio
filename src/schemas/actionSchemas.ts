@@ -39,7 +39,7 @@ export const defaultActionRequestSchema = z.object({
   }),
   findings: z.string().optional(),
   images: z.array(z.instanceof(File)).default([]).optional(),
-  signtuture: z.string().optional(),
+  signature: z.string().min(1, { message: "Signature is required" }),
   signedBy: z.string().min(1, { message: "Please enter name of signatory" }),
 });
 
