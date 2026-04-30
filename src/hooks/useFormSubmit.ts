@@ -67,7 +67,7 @@ type UseFormSubmitOptions<TForm extends WithOptionalImages, TPayload> = {
   onError: (err: unknown) => void;
 };
 
-// ─── Hook ─────────────────────────────────────────────────────────────────────
+// $ ─── Hook ─────────────────────────────────────────────────────────────────────
 
 /**
  * Generic form-submission hook.
@@ -78,22 +78,28 @@ type UseFormSubmitOptions<TForm extends WithOptionalImages, TPayload> = {
  * The hook has no knowledge of routing, modals, or UI state — those are
  * caller responsibilities passed in through `onSuccess` and `onError`.
  *
- * ── Image handling ───────────────────────────────────────────────────────────
- * If `formValues.images` is a non-empty `File[]` the hook will:
+ * ── Image handling ──────────────────────────────────────────────────────────
+ *   If `formValues.images` is a non-empty `File[]` the hook will:
  *   1. Compress images to WebP
  *   2. POST metadata to the API and expect `{ presigned_urls }` back
  *   3. Upload each file directly to S3 via the presigned URLs
  * Otherwise it performs a plain POST and expects any JSON response.
  *
- * ── Callbacks ────────────────────────────────────────────────────────────────
+ *── Action forms (`id` + `action`) ──────────────────────────────────────────
+ * Some components (e.g. approval/rejection dialogs) need to act on an existing
+ * resource rather than create a new one. Pass `id` and `action` together for
+ * these cases — the underlying `usePOST` call will scope the request to that
+ * resource. Both are optional and should be omitted for standard create forms.
+ *
+ * ── Callbacks ──────────────────────────────────────────────────────────────
  * `onSuccess` — optional, receives the submitted form values so you can
  *               build dynamic messages (e.g. include the user's name).
  * `onError`   — required, receives the caught error for logging or display.
  *
- * ─────────────────────────────────────────────────────────────────────────────
+ * ────────────────────────────────────────────────────────────────────────────
  *
  * @example
- * // With images + Success modal + redirect (e.g. CreateJobForm)
+ * // $ With images + Success modal + redirect (e.g. CreateJobForm)
  * const { submit, isPending } = useFormSubmit({
  *   resourcePath: "jobs/requests",
  *   queryKey: ["jobs"],
@@ -120,7 +126,7 @@ type UseFormSubmitOptions<TForm extends WithOptionalImages, TPayload> = {
  * });
  *
  * @example
- * // Modal form, no images, dynamic success message (e.g. CreateUserForm)
+ * // $ Modal form, no images, dynamic success message (e.g. CreateUserForm)
  * const { submit, isPending } = useFormSubmit({
  *   resourcePath: "users",
  *   queryKey: ["users"],
@@ -144,6 +150,66 @@ type UseFormSubmitOptions<TForm extends WithOptionalImages, TPayload> = {
  * });
  *
  * @example
+ * // Action form with id + action with images (e.g. JobActionDialog)
+ * const { submit, isPending } = useFormSubmit({
+ *   id: selectedRowId ?? "",
+ *   resourcePath: "jobs",
+ *   queryKey: ["jobs", "action-job"],
+ *   action: "action",
+ *   buildPayload: (values, compressed) => ({
+ *     ...values,
+ *     selectedRowId: selectedRowId, // id expected by the backend
+ *     images: compressed.map((f) => ({
+ *       filename: f.name,
+ *       content_type: f.type,
+ *     })),
+ *   }),
+ *   onSuccess: () => {
+ *     setShowActionDialog(false);
+ *     setSuccessConfig({
+ *       title: "Job Created",
+ *       message: "Job completion successfully submitted.",
+ *       redirectPath: "jobs/completed",
+ *     });
+ *     setShowSuccess(true);
+ *   },
+ *   onError: () => {
+ *     setErrorConfig({
+ *       title: "Submission Failed",
+ *       message: "Could not close the job. Please try again.",
+ *       redirectPath: "jobs/in-progress",
+ *     });
+ *     setShowError(true);
+ *   },
+ * });
+ *
+ * @example
+ * // Action form with id + action and no images (e.g. ApproveJobDialog)
+ * const { submit, isPending } = useFormSubmit({
+ *   id: job.id,
+ *   action: "approve",
+ *   resourcePath: "jobs/requests",
+ *   queryKey: ["jobs"],
+ *   buildPayload: (values) => values,
+ *   onSuccess: () => {
+ *     setShowApproveDialog(false);
+ *     setSuccessConfig({
+ *       title: "Job Approved",
+ *       message: `Request ${job.id} has been approved.`,
+ *       redirectPath: "jobs/approved",
+ *     });
+ *     setShowSuccess(true);
+ *   },
+ *   onError: () => {
+ *     setErrorConfig({
+ *       title: "Approval Failed",
+ *       message: "Could not approve the job. Please try again.",
+ *     });
+ *     setShowError(true);
+ *   },
+ * });
+ *
+ * @example
  * // No success modal needed — onSuccess omitted
  * const { submit, isPending } = useFormSubmit({
  *   resourcePath: "comments",
@@ -155,6 +221,7 @@ type UseFormSubmitOptions<TForm extends WithOptionalImages, TPayload> = {
  *   },
  * });
  */
+
 export const useFormSubmit = <TForm extends WithOptionalImages, TPayload>({
   id,
   resourcePath,
@@ -215,153 +282,3 @@ export const useFormSubmit = <TForm extends WithOptionalImages, TPayload>({
 
   return { submit, isPending, isError };
 };
-
-/* -------------------------------------------------------------------------- */
-// $ Old Hook
-/* -------------------------------------------------------------------------- */
-// import { useNavigate } from "react-router-dom";
-// import { toast } from "sonner";
-// import { usePOST } from "@/utils/api";
-// import { compressImagesToWebpv1 } from "@/utils/compressImagesToWebpv1";
-
-// import type { Resource, RedirectResource } from "@/utils/api";
-// import type { PresignedUrlResponse } from "@/schemas";
-
-// // ─── Types ────────────────────────────────────────────────────────────────────
-
-// /** Any form payload that may optionally carry raw File objects under `images`. */
-// type WithOptionalImages = {
-//   images?: File[];
-//   [key: string]: unknown;
-// };
-
-// /**
-//  * Shape returned by the API when the payload included images.
-//  * The hook narrows the response to this type so it can upload to S3.
-//  */
-// type WithPresignedUrls = {
-//   presigned_urls: PresignedUrlResponse;
-//   [key: string]: unknown;
-// };
-
-// type UseFormSubmitOptions<TForm extends WithOptionalImages, TPayload> = {
-//   /** The API route to POST to. */
-//   resourcePath: Resource;
-
-//   /** React-Query cache key(s) to invalidate on success. */
-//   queryKey: readonly unknown[];
-
-//   /**
-//    * Transform form values into the API payload.
-//    * For payloads with images: replace `File[]` with metadata objects here —
-//    * the hook passes the compressed files to `buildPayload` so you can map them.
-//    */
-//   buildPayload: (formValues: TForm, compressedFiles: File[]) => TPayload;
-
-//   /** Where to navigate on success. */
-//   redirectTo: RedirectResource;
-
-//   /** Optional toast messages. */
-//   messages?: {
-//     success?: string;
-//     error?: string;
-//   };
-// };
-
-// // ─── Hook ─────────────────────────────────────────────────────────────────────
-
-// /**
-//  * Generic form-submission hook.
-//  *
-//  * - If `formValues.images` is a non-empty `File[]` the hook will:
-//  *     1. Compress images to WebP
-//  *     2. POST metadata to the API and expect `{ presigned_urls }` back
-//  *     3. Upload each file directly to S3 via the presigned URLs
-//  * - Otherwise it performs a plain POST and expects any JSON response.
-//  *
-//  * @example
-//  * // With images
-//  * const { submit, isPending } = useFormSubmit({
-//  *   resourcePath: "jobs/requests",
-//  *   queryKey: ["jobs"],
-//  *   buildPayload: (values, compressed) => ({
-//  *     ...values,
-//  *     images: compressed.map((f) => ({ filename: f.name, content_type: f.type })),
-//  *   }),
-//  *   redirectTo: "jobs/pending-approval",
-//  * });
-//  *
-//  * @example
-//  * // Without images (plain POST)
-//  * const { submit, isPending } = useFormSubmit({
-//  *   resourcePath: "assets-data",
-//  *   queryKey: ["assets"],
-//  *   buildPayload: (values) => values,
-//  *   redirectTo: "assets/list",
-//  * });
-//  */
-// export const useFormSubmit = <TForm extends WithOptionalImages, TPayload>({
-//   resourcePath,
-//   queryKey,
-//   buildPayload,
-//   redirectTo,
-//   messages,
-// }: UseFormSubmitOptions<TForm, TPayload>) => {
-//   const navigate = useNavigate();
-
-//   const { mutateAsync, isPending, isError } = usePOST<TPayload, unknown>({
-//     resourcePath,
-//     queryKey,
-//   });
-
-//   const submit = async (formValues: TForm): Promise<void> => {
-//     try {
-//       const rawFiles: File[] = formValues.images ?? [];
-//       const hasImages = rawFiles.length > 0;
-
-//       // ── 1. Compress images (no-op if none) ──────────────────────────────
-//       const compressedFiles = hasImages
-//         ? await compressImagesToWebpv1(rawFiles)
-//         : [];
-
-//       // ── 2. Build the typed API payload via caller-supplied transform ─────
-//       const payload = buildPayload(formValues, compressedFiles);
-
-//       // ── 3. POST to the API ───────────────────────────────────────────────
-//       const response = await mutateAsync(payload);
-
-//       // ── 4. Upload to S3 if presigned URLs were returned ─────────────────
-//       if (hasImages) {
-//         const { presigned_urls } = response as WithPresignedUrls;
-
-//         await Promise.all(
-//           presigned_urls.map((item: PresignedUrlResponse[number]) => {
-//             const file = compressedFiles.find((f) => f.name === item.filename);
-//             if (!file) return Promise.resolve();
-
-//             return fetch(item.url, {
-//               method: "PUT",
-//               headers: { "Content-Type": "image/webp" },
-//               body: file,
-//             });
-//           }),
-//         );
-//       }
-
-//       // ── 5. Notify & redirect ─────────────────────────────────────────────
-//       toast.success(messages?.success ?? "Submitted successfully!", {
-//         duration: 1500,
-//       });
-
-//       navigate(`/${redirectTo}`);
-//     } catch (err) {
-//       console.error(`[useFormSubmit] POST to "${resourcePath}" failed:`, err);
-//       toast.error(
-//         messages?.error ?? "Submission failed. Please try again later.",
-//         { duration: 1500 },
-//       );
-//     }
-//   };
-
-//   return { submit, isPending, isError };
-// };

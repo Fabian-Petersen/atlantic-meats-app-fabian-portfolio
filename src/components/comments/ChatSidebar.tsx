@@ -6,6 +6,9 @@ import { useById } from "@/utils/api";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 
+// $ Animation
+import { motion, AnimatePresence } from "framer-motion";
+
 const ChatSidebar = () => {
   const { openChatSidebar, setOpenChatSidebar, selectedRowId } =
     useGlobalContext();
@@ -22,31 +25,51 @@ const ChatSidebar = () => {
   }
 
   return (
-    <div
-      className={cn(
-        sharedStyles.sidebar,
-        openChatSidebar ? "translate-x-0" : "translate-x-full ease-out",
-      )}
-    >
-      <div className="flex flex-col h-full gap-4 lg:p-1 p-2">
-        {selectedRowId && (
-          <CommentForm
-            selectedRowId={selectedRowId}
-            setOpenChatSidebar={setOpenChatSidebar}
+    <AnimatePresence initial={false}>
+      {openChatSidebar && (
+        <>
+          <motion.div
+            key="overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setOpenChatSidebar(false)}
+            className={cn(
+              sharedStyles.sidebarOverlay,
+              openChatSidebar ? "block" : "hidden",
+            )}
           />
-        )}
-        <div className="overflow-y-scroll flex flex-col gap-4 custom-scrollbar p-2 rounded-lg h-auto">
-          {Array.isArray(comments) &&
-            comments.map((comment, index) => (
-              <CommentItem
-                key={comment.id}
-                comment={comment}
-                align={index % 2 === 0 ? "left" : "right"}
-              />
-            ))}
-        </div>
-      </div>
-    </div>
+          <motion.div
+            key="chatSidebar"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className={cn(sharedStyles.sidebar, sharedStyles.sidebarChat)}
+          >
+            <div className="flex flex-col h-full gap-4 lg:p-1 p-2">
+              {selectedRowId && (
+                <CommentForm
+                  selectedRowId={selectedRowId}
+                  setOpenChatSidebar={setOpenChatSidebar}
+                />
+              )}
+              <div className="overflow-y-scroll flex flex-col gap-4 custom-scrollbar p-2 rounded-lg h-auto">
+                {Array.isArray(comments) &&
+                  comments.map((comment, index) => (
+                    <CommentItem
+                      key={comment.id}
+                      comment={comment}
+                      align={index % 2 === 0 ? "left" : "right"}
+                    />
+                  ))}
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 };
 

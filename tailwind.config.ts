@@ -33,8 +33,11 @@ const config: Config = {
         textLight: "#001433",
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
-        heading: ["Poppins", "sans-serif"],
+        sans: ["Inter", "sans-serif"], // default body font
+        heading: ["Poppins", "sans-serif"], // font-heading
+        montserrat: ["Montserrat", "sans-serif"], // font-montserrat
+        poppins: ["Poppins", "sans-serif"], // font-poppins
+        cursive: ["Great Vibes", "cursive"], // font-cursive
       },
       text: {
         md: "1rem",

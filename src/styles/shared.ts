@@ -201,17 +201,35 @@ export const sharedStyles = {
   modalOverlay: cn("bg-black/60 dark:bg-black/30 backdrop-blur-xs"),
 
   /* //$ ——— Sidebars ——————————————————————————————————————————————————————————— */
+  sidebarOverlay: cn("fixed inset-0 z-900 bg-black/5"),
   sidebar: cn(
-    // Default (layout + behavior)
-    "fixed right-0 z-1000 w-80 lg:w-96 transform transition-transform duration-200 ease-in translate-x-0 overflow-y-scroll",
-    // Appearance (responsive positioning + sizing)
-    "top-(--sm-navbarHeight) lg:top-(--lg-navbarHeight) h-(--sm-sidebarHeight) lg:h-(--lg-sidebarHeight)",
-    // Light mode styles
-    "bg-white border-l border-l-gray-200",
-    // Dark mode styles
-    "dark:bg-(--bg-primary_dark) dark:border-l-[rgba(55,65,81,0.5)]",
+    "z-1000 w-(--sidebarWidth) fixed",
+    "overflow-auto no-scrollbar",
+    "border-r border-r-gray-200 dark:border-r-gray-700",
+    "bg-white dark:bg-(--bg-primary_dark)",
+    // height
+    "h-(--sm-sidebarHeight) md:h-(--lg-sidebarHeight)",
+    // position from top
+    "top-(--sm-navbarHeight) md:top-(--lg-navbarHeight)",
+  ),
+  sidebarChat: cn(
+    // Layout (chat-specific)
+    "right-0 w-80 lg:w-96",
+    "overflow-y-scroll custom-scrollbar",
+
+    // Appearance (only what differs from sidebarMain)
+    "border-l border-l-gray-200",
+    "dark:border-l-[rgba(55,65,81,0.5)]",
+  ),
+  sidebarNotification: cn(
+    "right-0 w-80 lg:w-96",
+    "overflow-y-scroll custom-scrollbar",
+    "border-l border-l-gray-200",
+    "dark:border-l-[rgba(55,65,81,0.5)]",
   ),
 
+  sidebarMobile: cn("md:hidden"),
+  sidebarDesktop: cn("hidden md:block"),
   /* //$ ——— Success & Error Modals ——————————————————————————————————————————————————————————— */
   actionModalParent: cn(
     "fixed z-2000 h-screen top-0 left-0 w-full flex items-center justify-center px-4 bg-black/50 outline-0 border-0",
