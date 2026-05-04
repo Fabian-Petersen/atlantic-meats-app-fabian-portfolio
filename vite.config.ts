@@ -7,7 +7,6 @@ import path from "path";
 import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
-  mode: "development",
   build: {
     outDir: "dist",
     emptyOutDir: true,
