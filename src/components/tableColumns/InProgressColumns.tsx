@@ -4,6 +4,7 @@ import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { Resource } from "@/utils/api";
 import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
+import { ChevronDown } from "lucide-react";
 type Priority = "critical" | "high" | "medium" | "low";
 
 export const getInProgressColumns = (
@@ -18,17 +19,27 @@ export const getInProgressColumns = (
 ): ColumnDef<JobApprovedAPIResponse>[] => [
   {
     accessorKey: "jobCreated",
-    header: "Date Created",
-    cell: ({ getValue }) =>
-      new Date(getValue<string>()).toLocaleString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      }),
-    // sortingFn: "datetime",
+    header: ({ column }) => {
+      const sorted = column.getIsSorted(); // false | "asc" | "desc"
+      return (
+        <button
+          type="button"
+          className="flex items-center gap-1 select-none hover:cursor-pointer"
+          onClick={() => column.toggleSorting(sorted === "asc")}
+        >
+          <span>Date Created</span>
+          <ChevronDown
+            className="h-4 w-4 transition-transform duration-200"
+            style={{
+              transform: sorted === "asc" ? "rotate(180deg)" : "rotate(0deg)",
+              opacity: sorted ? 1 : 0.4,
+            }}
+          />
+        </button>
+      );
+    },
+    minSize: 130,
+    maxSize: 150,
   },
   {
     accessorKey: "location",
@@ -38,21 +49,25 @@ export const getInProgressColumns = (
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;
     },
+    minSize: 80,
+    maxSize: 100,
   },
   {
     accessorKey: "description",
     header: "Description",
+    minSize: 240,
+    maxSize: 300,
   },
   {
     accessorKey: "equipment",
     header: "Equipment",
     enableColumnFilter: false,
   },
-  {
-    accessorKey: "assetID",
-    header: "AssetID",
-    enableColumnFilter: true,
-  },
+  // {
+  //   accessorKey: "assetID",
+  //   header: "AssetID",
+  //   enableColumnFilter: true,
+  // },
   {
     accessorKey: "impact",
     header: "Impact",
@@ -60,20 +75,24 @@ export const getInProgressColumns = (
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;
     },
+    minSize: 70,
+    maxSize: 90,
   },
-  {
-    accessorKey: "status",
-    header: "Status",
-    enableColumnFilter: true,
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-  },
+  // {
+  //   accessorKey: "status",
+  //   header: "Status",
+  //   enableColumnFilter: true,
+  //   cell: ({ getValue }) => {
+  //     const value = getValue<string>();
+  //     return <p className="capitalize">{value}</p>;
+  //   },
+  // },
   {
     accessorKey: "jobcardNumber",
     header: "Jobcard Number",
     enableColumnFilter: true,
+    minSize: 100,
+    maxSize: 150,
   },
   {
     accessorKey: "priority",
@@ -92,22 +111,40 @@ export const getInProgressColumns = (
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;
     },
+    minSize: 100,
+    maxSize: 120,
   },
-  {
-    accessorKey: "assign_to_group",
-    header: "Group",
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-  },
+  // {
+  //   accessorKey: "assign_to_group",
+  //   header: "Group",
+  //   cell: ({ getValue }) => {
+  //     const value = getValue<string>();
+  //     return <p className="capitalize">{value}</p>;
+  //   },
+  // },
   {
     accessorKey: "targetDate",
-    header: "Target Date",
-    // cell: ({ getValue }) => {
-    //   const value = getValue<string>();
-    //   return <p className={getTargetDateClasses(value)}>{value}</p>;
-    // },
+    header: ({ column }) => {
+      const sorted = column.getIsSorted(); // false | "asc" | "desc"
+      return (
+        <button
+          type="button"
+          className="flex items-center gap-1 select-none hover:cursor-pointer"
+          onClick={() => column.toggleSorting(sorted === "asc")}
+        >
+          <span>Target Date</span>
+          <ChevronDown
+            className="h-4 w-4 transition-transform duration-200"
+            style={{
+              transform: sorted === "asc" ? "rotate(180deg)" : "rotate(0deg)",
+              opacity: sorted ? 1 : 0.4,
+            }}
+          />
+        </button>
+      );
+    },
+    minSize: 130,
+    maxSize: 150,
   },
   {
     id: "actions",
@@ -161,6 +198,8 @@ export const getInProgressColumns = (
         </div>
       );
     },
+    minSize: 60,
+    maxSize: 70,
   },
 ];
 

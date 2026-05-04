@@ -1,11 +1,11 @@
 // $ This component renders the page for the maintenance requests to be approved in a table format.
 // $ The list is from a Get request to the getJobsList.py lambda function.
 
-// import FormHeading from "../../customComponents/FormHeading";
-// import { MaintenanceRequestsTable } from "@/components/maintenanceRequestTable/MaintenanceRequestsTable";
-// import { useDownloadPdf, useGetAll } from "@/utils/api";
-import { useGetAll } from "@/utils/api";
+// $ ———————— React Hooks ———————————————————————————————————————————————————————————————
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
+// $ ———————— Tanstack Table ————————————————————————————————————————————————————————————
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -14,20 +14,25 @@ import {
   type SortingState,
 } from "@tanstack/react-table";
 
-import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-import useGlobalContext from "@/context/useGlobalContext";
-import { getInProgressColumns } from "@/components/tableColumns/InProgressColumns";
-import { useState } from "react";
-import { Error } from "@/components/features/Error";
+// $ ———————— Data, Context & Types —————————————————————————————————————————————————————
+import { useGetAll } from "@/utils/api";
 import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
+import useGlobalContext from "@/context/useGlobalContext";
+
+// $ ———————— Helper Functions  —————————————————————————————————————————————————————————
+import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
+
+// $ ———————— Columns ———————————————————————————————————————————————————————————————————
+import { getInProgressColumns } from "@/components/tableColumns/InProgressColumns";
+
+// $ ———————— Components ————————————————————————————————————————————————————————————————
 import { GenericTable } from "@/components/dashboard/GenericTable";
+import { SearchInput } from "@/components/features/SearchInput";
 import { MobileJobsInProgressContainer } from "@/components/mobile/MobileJobsInProgressContainer";
 import FormHeading from "@/../customComponents/FormHeading";
-import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
+import { Error } from "@/components/features/Error";
+import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
-import { SearchInput } from "@/components/features/SearchInput";
-
-import { useNavigate } from "react-router-dom";
 
 /**
  * JobsInProgressListPage
@@ -105,11 +110,11 @@ const JobsInProgressListPage = () => {
   // console.log("data:", data);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "jobCreated", desc: false },
+    { id: "targetDate", desc: false },
   ]);
 
   const {
     setShowUpdateMaintenanceDialog,
-    // setShowActionDialog,
     setSelectedRowId,
     openDeleteDialog,
     setOpenChatSidebar,
@@ -121,7 +126,6 @@ const JobsInProgressListPage = () => {
   const columns = getInProgressColumns(
     setShowUpdateMaintenanceDialog,
     navigate,
-    // setShowActionDialog,
     setSelectedRowId,
     openDeleteDialog,
     setOpenChatSidebar,
@@ -146,15 +150,12 @@ const JobsInProgressListPage = () => {
   return (
     <div className="flex w-full lg:p-4 h-auto">
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto hidden">
-        <FormHeading
-          className="mx-auto dark:text-gray-100"
-          heading="Approved Open Jobs"
-        />
         <GenericTable
           data={data}
           columns={columns}
           rowPath="jobs"
           action="action"
+          tableHeading="Jobs - In Progress"
           className="hidden md:flex flex-col gap-2"
           searchPlaceholderText="search jobs"
           rowClassName={(row) => {
@@ -181,7 +182,7 @@ const JobsInProgressListPage = () => {
           <div className="grid gap-2">
             <FormHeading
               className="mx-auto dark:text-gray-100"
-              heading="Open Jobs"
+              heading="Jobs - In Progress"
             />
             <MobileJobsInProgressContainer
               className="flex md:hidden"

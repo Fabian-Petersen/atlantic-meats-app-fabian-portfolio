@@ -3,7 +3,9 @@ import type { JobAPIResponse } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { Resource } from "@/utils/api";
-type Priority = "critical" | "high" | "medium" | "low";
+import { ChevronDown } from "lucide-react";
+import { type Priority } from "@/lib/getPriorityClasses";
+import { PriorityBadge } from "../features/PriorityBadge";
 
 export const getJobPendingColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
@@ -16,7 +18,25 @@ export const getJobPendingColumns = (
 ): ColumnDef<JobAPIResponse>[] => [
   {
     accessorKey: "jobCreated",
-    header: "Date Created",
+    header: ({ column }) => {
+      const sorted = column.getIsSorted(); // false | "asc" | "desc"
+      return (
+        <button
+          type="button"
+          className="flex items-center gap-1 select-none hover:cursor-pointer"
+          onClick={() => column.toggleSorting(sorted === "asc")}
+        >
+          <span>Date Created</span>
+          <ChevronDown
+            className="h-4 w-4 transition-transform duration-200"
+            style={{
+              transform: sorted === "asc" ? "rotate(180deg)" : "rotate(0deg)",
+              opacity: sorted ? 1 : 0.4,
+            }}
+          />
+        </button>
+      );
+    },
     cell: ({ getValue }) =>
       new Date(getValue<string>()).toLocaleString("en-GB", {
         day: "2-digit",
@@ -55,15 +75,6 @@ export const getJobPendingColumns = (
     header: "AssetID",
     enableColumnFilter: true,
   },
-  // {
-  //   accessorKey: "area",
-  //   header: "Area",
-  //   enableColumnFilter: true,
-  //   cell: ({ getValue }) => {
-  //     const value = getValue<string>();
-  //     return <p className="capitalize">{value}</p>;
-  //   },
-  // },
   {
     accessorKey: "requested_by",
     header: "Requested By",
@@ -99,15 +110,7 @@ export const getJobPendingColumns = (
     maxSize: 100,
     cell: ({ getValue }) => {
       const value = getValue<string>();
-      return (
-        <p
-          className={`capitalize text-cxs ${getConditionClasses(
-            value as Priority,
-          )}`}
-        >
-          {value}
-        </p>
-      );
+      return <PriorityBadge value={value as Priority} />;
     },
   },
   {
@@ -159,25 +162,6 @@ export const getJobPendingColumns = (
   },
 ];
 
-// border-red-200 dark:border-red-500 text-red-600 dark:bg-red-300/20 dark:text-red-300
-
-function getConditionClasses(priority: Priority) {
-  const generalStyles =
-    "border min-w-12 w-fit rounded-full max-w-fit text-xs p-[0.135rem] text-center px-[0.40rem]";
-  switch (priority.toLocaleLowerCase()) {
-    case "critical":
-      return `text-red-600 bg-red-300/30 border-red-300 dark:border-red-500 dark:bg-red-300/20 dark:text-red-300 ${generalStyles}`;
-    case "high":
-      return `text-orange-600 bg-orange-300/30 border-orange-300  dark:border-orange-500 dark:bg-orange-300/20 dark:text-orange-300 ${generalStyles}`;
-    case "medium":
-      return `text-blue-600 bg-blue-300/30 border-blue-300 dark:border-blue-500 dark:bg-blue-300/20 dark:text-blue-300 ${generalStyles}`;
-    case "low":
-      return `text-green-600 bg-green-300/30 border-green-300 dark:border-green-500 dark:bg-green-300/20 dark:text-green-300 ${generalStyles}`;
-    default:
-      return `text-gray-400 bg-gray-100 border border-gray-500 ${generalStyles}`;
-  }
-}
-
 // $ ================================ Dashhboard Columns ================================
 
 export const getDashboardJobColumns = (): ColumnDef<JobAPIResponse>[] => [
@@ -225,15 +209,7 @@ export const getDashboardJobColumns = (): ColumnDef<JobAPIResponse>[] => [
     enableColumnFilter: true,
     cell: ({ getValue }) => {
       const value = getValue<string>();
-      return (
-        <p
-          className={`capitalize text-xs ${getConditionClasses(
-            value as Priority,
-          )}`}
-        >
-          {value}
-        </p>
-      );
+      return <PriorityBadge value={value as Priority} />;
     },
   },
   {

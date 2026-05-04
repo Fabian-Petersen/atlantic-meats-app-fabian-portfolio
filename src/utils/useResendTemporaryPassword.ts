@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { usePOST } from "./api";
 
 export const useResendTemporaryPassword = (id: string) => {
@@ -6,7 +7,7 @@ export const useResendTemporaryPassword = (id: string) => {
     queryKey: ["userRequests", "resend-password", id],
   });
 
-  const resend = async () => {
+  const resend = useCallback(async () => {
     try {
       const response = await mutateAsync({});
       console.log(response);
@@ -14,7 +15,7 @@ export const useResendTemporaryPassword = (id: string) => {
       console.log(error);
       throw error;
     }
-  };
+  }, [mutateAsync]); // mutateAsync is stable from React Query
 
   return {
     resend,

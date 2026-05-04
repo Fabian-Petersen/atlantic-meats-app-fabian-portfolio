@@ -1,9 +1,6 @@
 // $ This component renders the page for the list of users using a generic table.
 // $ The list is from a Get request to the getUsersList.py lambda function.
 
-// import FormHeading from "../../customComponents/FormHeading";
-// import { MaintenanceRequestsTable } from "@/components/maintenanceRequestTable/MaintenanceRequestsTable";
-// import { useDownloadPdf, useGetAll } from "@/utils/api";
 import { useGetAll } from "@/utils/api";
 
 import {
@@ -17,7 +14,7 @@ import {
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import useGlobalContext from "@/context/useGlobalContext";
 import { getUserColumns } from "@/components/tableColumns/UserColumns";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Error } from "@/components/features/Error";
 import type { UsersAPIResponse } from "@/schemas";
 
@@ -28,10 +25,12 @@ import { SearchInput } from "@/components/features/SearchInput";
 import { MobileUsersContainer } from "@/components/mobile/MobileUsersContainer";
 import { useResendTemporaryPassword } from "@/utils/useResendTemporaryPassword";
 import { PlusCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { sharedStyles } from "@/styles/shared";
 
 const UsersListPage = () => {
+  // $ Opt out of React Compiler memoization — useReactTable returns unstable
+  // $ function references that cannot be safely memoized by the compiler.
+  "use no memo";
+
   const {
     data: users = [],
     isError,
@@ -40,7 +39,6 @@ const UsersListPage = () => {
     resourcePath: "users",
     queryKey: ["userRequests"],
   });
-  // console.log("users:", users);
 
   const [sorting, setSorting] = useState<SortingState>([
     { id: "userCreated", desc: false },
@@ -61,18 +59,32 @@ const UsersListPage = () => {
     useResendTemporaryPassword(selectedRowId ?? "");
 
   // $ Pass the props to the function generating the columns to be used in the table
-  const columns = getUserColumns(
-    setShowCreateUserDialog,
-    setSelectedRowId,
-    openDeleteDialog,
-    resend,
-    setShowSuccess,
-    setSuccessConfig,
+  // $ Memoize columns so getUserColumns() isn't called on every render.
+  // $ The setter functions from useGlobalContext are stable references so
+  // $ they are safe to use as dependencies.
+  const columns = useMemo(
+    () =>
+      getUserColumns(
+        setShowCreateUserDialog,
+        setSelectedRowId,
+        openDeleteDialog,
+        resend,
+        setShowSuccess,
+        setSuccessConfig,
+      ),
+    [
+      setShowCreateUserDialog,
+      setSelectedRowId,
+      openDeleteDialog,
+      resend,
+      setShowSuccess,
+      setSuccessConfig,
+    ],
   );
 
   const table = useReactTable({
     data: users ?? [],
-    columns: columns,
+    columns,
     onGlobalFilterChange: setGlobalFilter,
     state: { sorting, globalFilter },
     onSortingChange: setSorting,
@@ -90,10 +102,6 @@ const UsersListPage = () => {
     <div className="flex w-full md:p-4 min-h-0">
       {/* // $ Desktop View */}
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
-        <FormHeading
-          className={cn(sharedStyles.headingTable)}
-          heading="Users"
-        />
         <GenericTable
           data={users}
           columns={columns}
@@ -103,6 +111,7 @@ const UsersListPage = () => {
           emptyTablePlaceholderText="No users listed"
           addButton={true}
           openDialog={setShowCreateUserDialog}
+          tableHeading="Users"
         />
       </div>
       {/* // $ Mobile View */}

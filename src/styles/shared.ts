@@ -162,7 +162,7 @@ export const sharedStyles = {
   ),
 
   /* //$ ——— Tables ——————————————————————————————————————————————————————————— */
-  table: cn("w-full lg:p-4 min-h-0 hidden lg:block"),
+  table: cn("w-full lg:p-4 min-h-0 hidden md:flex flex-col gap-4"),
   tableParent: cn(),
   tableRows: cn(),
   tableHeaders: cn(),
@@ -242,5 +242,16 @@ export const sharedStyles = {
   ),
   actionModalMessage: cn(
     "mb-2 md:mb-4 text-sm md:text-md tracking-wide text-(--clr-textLight) dark:text-(--clr-textDark)",
+  ),
+  /* //$ ——— Charts ——————————————————————————————————————————————————————————— */
+  chartParent: cn(
+    "col-span-2 h-[300px] rounded-md bg-white dark:bg-(--bg-primary_dark)",
+    "border border-white dark:border-gray-700/50 p-2 shadow-sm",
+  ),
+  chartHeading: cn(
+    "font-normal dark:text-(--clr-textDark) text-(--clr-textLight)",
+  ),
+  chartTable: cn(
+    "flex flex-col gap-4 col-span-full lg:col-span-full xl:col-span-full self-start w-full min-w-0 h-full overflow-y-auto rounded-md bg-white dark:bg-(--bg-primary_dark) border border-white dark:border-gray-700/50 p-4 shadow-sm",
   ),
 };

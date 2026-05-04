@@ -3,7 +3,8 @@ import type { JobAPIResponse, JobcardPresignedUrlResponse } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getMaintenanceTableMenuItems } from "@/lib/JobTableActionLinks";
 import type { Resource } from "@/utils/api";
-type Priority = "critical" | "high" | "medium" | "low";
+import { type Priority } from "@/lib/getPriorityClasses";
+import { PriorityBadge } from "../features/PriorityBadge";
 
 export const getMaintenanceColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
@@ -105,21 +106,6 @@ export const getMaintenanceColumns = (
   },
 ];
 
-function getConditionClasses(priority: Priority) {
-  switch (priority.toLocaleLowerCase()) {
-    case "critical":
-      return "text-red-500";
-    case "high":
-      return "text-purple-500";
-    case "medium":
-      return "text-blue-500";
-    case "low":
-      return "text-green-500";
-    default:
-      return "text-gray-400";
-  }
-}
-
 // $ ================================ Dashhboard Columns ================================
 
 export const getDashboardJobColumns = (): ColumnDef<JobAPIResponse>[] => [
@@ -141,6 +127,10 @@ export const getDashboardJobColumns = (): ColumnDef<JobAPIResponse>[] => [
     accessorKey: "location",
     header: "Location",
     enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
   },
   {
     accessorKey: "equipment",
@@ -167,15 +157,7 @@ export const getDashboardJobColumns = (): ColumnDef<JobAPIResponse>[] => [
     enableColumnFilter: true,
     cell: ({ getValue }) => {
       const value = getValue<string>();
-      return (
-        <p
-          className={`capitalize text-xs ${getConditionClasses(
-            value as Priority,
-          )}`}
-        >
-          {value}
-        </p>
-      );
+      return <PriorityBadge value={value as Priority} />;
     },
   },
   {

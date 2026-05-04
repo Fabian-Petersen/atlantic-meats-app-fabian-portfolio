@@ -2,7 +2,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function PieChartSkeleton() {
   return (
-    <div className="flex flex-col items-center justify-center gap-4 w-full h-full">
+    <div
+      className="flex flex-col items-center justify-center gap-4 w-full h-full"
+      style={{ width: "100%", height: 300 }}
+    >
       {/* Chart Circle */}
       <div className="relative flex items-center justify-center ">
         {/* Outer circle */}

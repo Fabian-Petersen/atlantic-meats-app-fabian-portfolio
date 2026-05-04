@@ -124,7 +124,7 @@ export type ActionRequestPayload = Omit<ActionRequestFormValues, "images"> & {
 // $ Schema for the Jobs Completed Table Menu
 export const actionTableRowSchema = actionResponseSchema
   .omit({
-    signtuture: true,
+    signature: true,
     findings: true,
     images: true,
     root_cause: true,

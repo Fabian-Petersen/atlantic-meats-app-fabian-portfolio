@@ -22,8 +22,6 @@ import { GenericTable } from "@/components/dashboard/GenericTable";
 import { getJobPendingColumns } from "@/components/tableColumns/PendingColumns";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { SearchInput } from "@/components/features/SearchInput";
-import { cn } from "@/lib/utils";
-import { sharedStyles } from "@/styles/shared";
 
 const JobsPendingListPage = () => {
   const { data, isError, isPending } = useGetAll<JobAPIResponse[]>({
@@ -35,7 +33,7 @@ const JobsPendingListPage = () => {
   });
 
   const [sorting, setSorting] = useState<SortingState>([
-    { id: "jobCreated", desc: true },
+    { id: "jobCreated", desc: false },
   ]);
 
   const [globalFilter, setGlobalFilter] = useState("");
@@ -74,10 +72,6 @@ const JobsPendingListPage = () => {
     <div className="flex w-full md:p-4 min-h-0">
       {/* // $ Desktop View */}
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
-        <FormHeading
-          className={cn(sharedStyles.headingTable)}
-          heading="Pending Requests"
-        />
         <GenericTable
           data={data}
           columns={columns}
@@ -85,6 +79,7 @@ const JobsPendingListPage = () => {
           addButton={true}
           addButtonPath="/jobs/create-job"
           action="pending-approval"
+          tableHeading="Jobs - Pending Requests"
         />
       </div>
       {/* // $ Mobile View */}

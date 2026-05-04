@@ -8,33 +8,34 @@ import type {
 } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
+import { ChevronDown } from "lucide-react";
 
-// type StatusCondition = "in progess" | "complete";
-
-// function getConditionClasses(condition: StatusCondition) {
-//   switch (condition.toLowerCase()) {
-//     case "complete":
-//       return "text-green-700 bg-green-300/60";
-//     case "in progess":
-//       return "text-red-700 bg-red-300/60";
-//     default:
-//       return "text-gray-400 bg-gray-200";
-//   }
-// }
 export const getJobActionColumns = (
-  // setShowUpdateMaintenanceDialog: (v: boolean) => void,
-  // setShowActionDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   downloadItem: (id: string) => Promise<JobcardPresignedUrlResponse>,
-  // openDeleteDialog: (
-  //   selectedRowId: string,
-  //   config: { resourcePath: Resource; queryKey: readonly unknown[] },
-  // ) => void,
   setOpenChatSidebar: (v: boolean) => void,
 ): ColumnDef<ActionAPIResponse>[] => [
   {
     accessorKey: "actionCreated",
-    header: "Date Created",
+    header: ({ column }) => {
+      const sorted = column.getIsSorted(); // false | "asc" | "desc"
+      return (
+        <button
+          type="button"
+          className="flex items-center gap-1 select-none hover:cursor-pointer"
+          onClick={() => column.toggleSorting(sorted === "asc")}
+        >
+          <span>Date Created</span>
+          <ChevronDown
+            className="h-4 w-4 transition-transform duration-200"
+            style={{
+              transform: sorted === "asc" ? "rotate(180deg)" : "rotate(0deg)",
+              opacity: sorted ? 1 : 0.4,
+            }}
+          />
+        </button>
+      );
+    },
     cell: ({ getValue }) => (
       <p className="">
         {new Date(getValue<string>()).toLocaleString("en-GB", {
@@ -110,23 +111,6 @@ export const getJobActionColumns = (
       return <p className="capitalize">{value}</p>;
     },
   },
-  // {
-  //   accessorKey: "status",
-  //   header: "Status",
-  //   enableColumnFilter: true,
-  //   cell: ({ getValue }) => {
-  //     const value = getValue<string>();
-  //     return (
-  //       <p
-  //         className={`capitalize text-xs min-w-fit px-2 py-2.5 text-center rounded-full ${getConditionClasses(
-  //           value as StatusCondition,
-  //         )}`}
-  //       >
-  //         {value}
-  //       </p>
-  //     );
-  //   },
-  // },
   {
     id: "actions",
     header: "Actions",

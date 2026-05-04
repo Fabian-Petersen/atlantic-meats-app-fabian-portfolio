@@ -32,8 +32,6 @@ const AssetsOverviewPage = () => {
     queryKey: ["getAssetsList", "assetsList"],
   });
 
-  console.log("Assets data:", data);
-
   const [sorting, setSorting] = useState<SortingState>([
     { id: "createdAt", desc: true },
   ]);
@@ -94,7 +92,6 @@ const AssetsOverviewPage = () => {
   return (
     <div className="flex w-full md:p-4 h-auto">
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
-        <FormHeading heading="Assets Register" />
         <GenericTable
           data={data}
           columns={columns}
@@ -104,6 +101,7 @@ const AssetsOverviewPage = () => {
           pageSize={10}
           addPagination={true}
           addPageSelector={true}
+          tableHeading="Assets Register"
         />
       </div>
       {/* // $ Mobile View */}

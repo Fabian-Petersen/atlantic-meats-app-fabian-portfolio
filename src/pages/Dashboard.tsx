@@ -6,7 +6,7 @@
 // import Sidebar from "@/components/dashboardSidebar/Sidebar";
 import OpenRequestsPieChart from "@/components/dashboard/charts/OpenRequestsPieChart";
 import CardContainer from "../components/dashboard/CardContainer";
-import JobRequestsChart from "@/components/dashboard/charts/JobRequestsChart";
+import CostYTDChart from "@/components/dashboard/charts/CostYTDChart";
 import ChartHeading from "@/components/dashboard/ChartHeading";
 import { getDashboardJobColumns } from "@/components/maintenanceRequestTable/columns";
 import { useGetAll } from "@/utils/api";
@@ -18,6 +18,8 @@ import { PieChartSkeleton } from "@/components/dashboard/charts/PieChartSkeleton
 import { JobRequestsChartSkeleton } from "@/components/dashboard/charts/JobRequestsChartSkeleton";
 import { getUserGroups } from "@/auth/getUserGroups";
 import { useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
 const Dashboard = () => {
   const columns = getDashboardJobColumns();
@@ -26,7 +28,7 @@ const Dashboard = () => {
     resourcePath: "jobs/requests",
     queryKey: ["jobs", "pending"],
     params: {
-      status: "Pending",
+      status: "pending",
     },
   });
 
@@ -47,9 +49,11 @@ const Dashboard = () => {
         </section>
         {/* Revenue & Expense Chart */}
         <section
-          className="flex flex-col gap-4 col-span-2 xl:col-span-3 h-[300px] rounded-md bg-white dark:bg-(--bg-primary_dark)
-          border border-white dark:border-gray-700/50 p-2 shadow-sm
-            text-gray-600 dark:text-gray-100"
+          className={cn(
+            sharedStyles.chartParent,
+            "xl:col-span-3 min-h-0 flex flex-col gap-4",
+            "text-gray-600 dark:text-gray-100",
+          )}
         >
           {isPending ? (
             <JobRequestsChartSkeleton />
@@ -57,37 +61,39 @@ const Dashboard = () => {
             <>
               <ChartHeading
                 title="Maintenance Cost YTD"
-                className="font-normal dark:text-(--clr-textDark) text-(--clr-textLight)"
+                className={cn(sharedStyles.chartHeading)}
               />
-              <JobRequestsChart />
+              <div className="flex-1 min-h-0">
+                <CostYTDChart />
+              </div>
             </>
           )}
         </section>
+        {/* Pie Chart */}
         <section
-          className="col-span-2 xl:col-span-1 h-[300px] rounded-md bg-white dark:bg-(--bg-primary_dark)
-          border border-white dark:border-gray-700/50 p-2 shadow-sm 
-            dark:text-(--clr-textDark) text-(--clr-textLight)"
+          className={cn(
+            sharedStyles.chartParent,
+            "xl:col-span-1",
+            "dark:text-(--clr-textDark) text-(--clr-textLight)",
+          )}
         >
-          {isPending ? <PieChartSkeleton /> : <OpenRequestsPieChart />}
+          {isPending ? (
+            <PieChartSkeleton />
+          ) : (
+            <>
+              <ChartHeading
+                title="Requests Review"
+                className={cn(sharedStyles.chartHeading)}
+              />
+              <OpenRequestsPieChart />
+            </>
+          )}
         </section>
-        <div
-          className="
-          flex flex-col gap-4
-            col-span-full lg:col-span-full xl:col-span-full
-            self-start
-            w-full min-w-0
-            h-full
-            overflow-y-auto
-            rounded-md
-            bg-white dark:bg-(--bg-primary_dark)
-            border border-white dark:border-gray-700/50
-            p-4
-            shadow-sm
-          "
-        >
+        {/* Pending Requests Table */}
+        <section className={cn(sharedStyles.chartTable)}>
           <ChartHeading
             title="Pending Requests"
-            className="dark:text-(--clr-textDark) text-(--clr-textLight)"
+            className={cn(sharedStyles.chartHeading)}
           />
           {isPending ? (
             <div className="grid col-span-full place-items-center">
@@ -97,10 +103,12 @@ const Dashboard = () => {
             <GenericTable
               data={pendingRequests ?? []}
               columns={columns ?? []}
+              rowPath="jobs"
+              action="pending-approval"
               initialSorting={[{ id: "jobCreated", desc: true }]}
             />
           )}
-        </div>
+        </section>
       </div>
     </main>
   );

@@ -98,15 +98,12 @@ const JobsCompletedListPage = () => {
   return (
     <div className="flex w-full md:p-4 min-h-0">
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
-        <FormHeading
-          className={cn(sharedStyles.headingTable)}
-          heading="Completed Jobs List"
-        />
         <GenericTable
           data={data}
           columns={columns}
           rowPath={"jobs"}
           action="completed"
+          tableHeading="Jobs - Completed"
         />
       </div>
       {/* // $ Mobile View */}
@@ -126,7 +123,7 @@ const JobsCompletedListPage = () => {
           <div className="grid gap-2">
             <FormHeading
               className={cn(sharedStyles.headingForm)}
-              heading="Jobs Completed"
+              heading="Jobs - Completed"
             />
             <MobileJobsCompletedParent
               className="flex md:hidden"

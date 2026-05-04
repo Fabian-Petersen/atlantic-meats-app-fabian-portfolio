@@ -127,7 +127,7 @@ export function GenericTable<T extends { id: string }>({
         </div>
       )}
 
-      <div className={`${className} dark:text-gray-200 py-4 md:py-8`}>
+      <div className={`${className} dark:text-gray-200`}>
         {/*
          * overflow-x-auto lets the table scroll horizontally when columns
          * are resized wider than the container.

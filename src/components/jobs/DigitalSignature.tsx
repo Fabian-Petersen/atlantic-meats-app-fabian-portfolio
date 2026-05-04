@@ -20,7 +20,8 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({
   onClear,
 }) => {
   const sigRef = useRef<SignatureCanvas | null>(null);
-  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
+  // const saveTimeout = useRef<NodeJS.Timeout | null>(null);
+  const saveTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const snapshotRef = useRef<string | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [isDark, setIsDark] = useState(false);
