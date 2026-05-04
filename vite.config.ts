@@ -1,7 +1,8 @@
 import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import path from "path";
+// import path from "path";
+import { fileURLToPath, URL } from "url";
 
 // $ analyser used for performance optimisation
 import { visualizer } from "rollup-plugin-visualizer";
@@ -19,7 +20,7 @@ export default defineConfig({
     tailwindcss(),
     visualizer({
       filename: "stats.html",
-      open: true,
+      open: false,
       gzipSize: true,
       brotliSize: true,
       template: "treemap", // or 'sunburst', 'network'
@@ -27,7 +28,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "src"),
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
 });
