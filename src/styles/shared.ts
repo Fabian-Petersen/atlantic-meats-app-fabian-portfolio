@@ -133,7 +133,8 @@ export const sharedStyles = {
   ),
   //
   formSelect: cn(
-    "peer appearance-none capitalize",
+    // peer was removed
+    "peer capitalize",
     // select-specific tweaks
     "focus:dark:bg-gray-800/80",
   ),

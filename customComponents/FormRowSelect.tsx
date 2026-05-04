@@ -54,12 +54,13 @@ function FormRowSelect<T extends FieldValues>({
       <select
         {...restRegister}
         id={String(name)}
-        multiple={multiple}
+        data-multiple={multiple || undefined} // used to selectively apply the appearance styles in index.css
         className={cn(
           selectStyles,
-          sharedStyles.formSelect,
+          // sharedStyles.formSelect,
           sharedStyles.formInputDefault,
           error && "border-red-400",
+          "hover:cursor-pointer",
         )}
         defaultValue={multiple ? defaultValues || [] : ""}
         onChange={(event) => {
@@ -73,6 +74,15 @@ function FormRowSelect<T extends FieldValues>({
         }}
         required={required}
       >
+        {/* Custom button slot — only renders in base-select capable browsers */}
+        <button
+          type="button"
+          className="w-full h-full flex justify-between items-center"
+        >
+          <selectedcontent />
+          <ChevronDownIcon size={14} />
+        </button>
+
         {!multiple && (
           <option value="" disabled hidden>
             {placeholder}
@@ -93,9 +103,9 @@ function FormRowSelect<T extends FieldValues>({
           );
         })}
       </select>
-      <span className={cn(sharedStyles.formSelectChevron)}>
+      {/* <span className={cn(sharedStyles.formSelectChevron)}>
         <ChevronDownIcon size={16} />
-      </span>
+      </span> */}
       {label && (
         <label
           htmlFor={String(name)}

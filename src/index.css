@@ -54,6 +54,76 @@
   --font-size: 0.875rem;
 }
 
+/* OUTSIDE any @layer block — unlayered beats @layer base */
+@supports (appearance: base-select) {
+  select:not([multiple]),
+  select:not([multiple])::picker(select) {
+    appearance: base-select;
+  }
+
+  select:not([multiple])::picker(select) {
+    border-radius: 0.3em;
+    border: 1px solid var(--clr-borderLight, #e5e7eb);
+    background-color: white;
+    color: var(--clr-textLight);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    padding: 4px;
+    margin: 0.5em 0;
+  }
+
+  select:not([multiple])::picker-icon {
+    font-size: 0.6rem;
+    /* transition: rotate 300ms ease; */
+    content: "";
+  }
+
+  /* select:not([multiple]):open::picker-icon {
+    rotate: -180deg;
+  } */
+
+  /* select:not([multiple]) button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  } */
+
+  select:not([multiple]) button svg {
+    transition: rotate 300ms ease;
+  }
+
+  select:not([multiple]):open button svg {
+    rotate: -180deg;
+  }
+
+  select:not([multiple]) option {
+    text-transform: capitalize;
+  }
+
+  select:not([multiple]) option:checked {
+    color: var(--clr-textLight);
+  }
+
+  select:not([multiple]) option::checkmark {
+    content: "✔";
+    color: var(--color-green-500);
+  }
+
+  .dark select:not([multiple])::picker(select) {
+    background-color: var(--bg-primary_dark);
+    color: var(--clr-textDark);
+    border-color: var(--clr-borderDark);
+  }
+
+  .dark select:not([multiple]) option:checked {
+    color: var(--clr-textDark);
+  }
+
+  select selectedcontent {
+    /* margin-left: auto; */
+  }
+}
+
 /* $ ======================== Dark Mode Styles as per user preference ====================== */
 
 html {

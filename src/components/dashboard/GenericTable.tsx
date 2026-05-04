@@ -203,10 +203,10 @@ export function GenericTable<T extends { id: string }>({
                     <tr
                       key={row.id}
                       onClick={() => {
-                        console.log(
-                          "navigate to:",
-                          `/${rowPath}/${row.original.id}/${action ?? ""}`,
-                        );
+                        // console.log(
+                        //   "navigate to:",
+                        //   `/${rowPath}/${row.original.id}/${action ?? ""}`,
+                        // );
                         setSelectedRowId(row.original.id);
                         navigate(
                           `/${rowPath}/${row.original.id}/${action ?? ""}`,

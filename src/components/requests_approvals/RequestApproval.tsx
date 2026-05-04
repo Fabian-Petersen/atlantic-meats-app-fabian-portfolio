@@ -119,7 +119,7 @@ function RequestApproval() {
             }}
             className="flex-1 py-2 rounded-lg bg-red-100 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-xs font-medium dark:text-red-200 text-red-500 dark:(--clr-red-600) hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors flex items-center justify-center gap-2 hover:cursor-pointer"
           >
-            <X w-24 h-24 />
+            <X className="w-6 h-6" />
             <span className="text-md">Reject</span>
           </button>
           <button
@@ -132,7 +132,7 @@ function RequestApproval() {
               handleApprove();
             }}
           >
-            <Check w-24 h-24 />
+            <Check className="w-6 h-6" />
             <span className="text-md">Approve</span>
           </button>
         </div>

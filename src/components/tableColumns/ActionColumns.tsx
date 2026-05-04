@@ -56,6 +56,10 @@ export const getJobActionColumns = (
     accessorKey: "location",
     header: "Location",
     enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
   },
   {
     accessorKey: "start_time",
