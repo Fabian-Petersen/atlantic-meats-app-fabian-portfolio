@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 export const sharedStyles = {
   /* //$ ——— Pages ———————————————————————————————————————————————————————— */
   appLayout: cn(
-    "min-h-screen w-full grid grid-cols-1 lg:grid-rows-[var(--lg-navbarHeight)_1fr] lg:grid-cols-[15rem_1fr] grid-rows-[var(--sm-navbarHeight)_1fr] bg-(--pageLight) dark:bg-page-dark",
+    "min-h-screen w-full grid grid-cols-1 lg:grid-rows-[var(--lg-navbarHeight)_1fr] lg:grid-cols-[15rem_1fr] grid-rows-[var(--sm-navbarHeight)_1fr] bg-(--pageLight) dark:bg-(--pageDark)",
   ),
   pageContainer: cn(
     "flex items-center justify-center w-full h-full p-2 h-[calc(h-screen - var(--lg-navbarHeight)]",
