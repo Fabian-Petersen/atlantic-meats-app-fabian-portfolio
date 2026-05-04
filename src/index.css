@@ -62,12 +62,12 @@
   }
 
   select:not([multiple])::picker(select) {
-    border-radius: 0.3em;
+    border-radius: 0.5rem;
     border: 1px solid var(--clr-borderLight, #e5e7eb);
     background-color: white;
     color: var(--clr-textLight);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    padding: 4px;
+    /* padding: 4px; */
     margin: 0.5em 0;
 
     /* Firefox */
@@ -102,10 +102,16 @@
 
   select:not([multiple]) option:checked {
     color: var(--clr-textLight);
+    background-color: var(--color-gray-200);
+  }
+
+  .dark select:not([multiple]) option:checked {
+    background-color: var(--color-gray-600);
   }
 
   select:not([multiple]) option::checkmark {
     content: "✔";
+    padding: 0 0 0 5px;
     color: var(--color-green-500);
   }
 
