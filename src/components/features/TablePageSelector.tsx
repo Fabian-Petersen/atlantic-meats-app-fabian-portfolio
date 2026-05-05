@@ -12,7 +12,11 @@ function TablePageSelector<T>({ table }: Props<T>) {
       onChange={(e) => table.setPageSize(Number(e.target.value))}
     >
       {[10, 20, 30].map((size) => (
-        <option key={size} value={size}>
+        <option
+          key={size}
+          value={size}
+          className="bg-gray-500 p-2 hover:cursor-pointer"
+        >
           Show {size}
         </option>
       ))}

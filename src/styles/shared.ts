@@ -204,7 +204,7 @@ export const sharedStyles = {
   /* //$ ——— Sidebars ——————————————————————————————————————————————————————————— */
   sidebarOverlay: cn("fixed inset-0 z-900 bg-black/5"),
   sidebar: cn(
-    "z-1000 w-(--sidebarWidth) fixed",
+    "z-50 w-(--sidebarWidth) fixed",
     "overflow-auto no-scrollbar",
     "border-r border-r-gray-200 dark:border-r-gray-700",
     "bg-white dark:bg-(--bg-primary_dark)",

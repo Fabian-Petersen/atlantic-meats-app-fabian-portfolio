@@ -18,7 +18,7 @@ import { useMemo, useState } from "react";
 import { Error } from "@/components/features/Error";
 import type { UsersAPIResponse } from "@/schemas";
 
-import { GenericTable } from "@/components/dashboard/GenericTable";
+import { TableGeneric } from "@/components/features/TableGeneric";
 import FormHeading from "@/../customComponents/FormHeading";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { SearchInput } from "@/components/features/SearchInput";
@@ -102,7 +102,7 @@ const UsersListPage = () => {
     <div className="flex w-full md:p-4 min-h-0">
       {/* // $ Desktop View */}
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
-        <GenericTable
+        <TableGeneric
           data={users}
           columns={columns}
           rowPath={`/users`}

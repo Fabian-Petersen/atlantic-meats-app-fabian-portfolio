@@ -39,7 +39,7 @@ export const maintenanceLinks: NavlinkProps[] = [
     allowedGroups: ["admin"],
   },
   {
-    name: "open requests",
+    name: "open jobs",
     icon: File,
     url: "/jobs/in-progress",
     allowedGroups: ["admin", "user", "technician", "manager"],

@@ -22,7 +22,7 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { useState, useMemo } from "react";
 import type { AssetAPIResponse, AssetTableRow } from "@/schemas";
 // import { Error } from "@/components/features/Error";
-import { GenericTable } from "@/components/dashboard/GenericTable";
+import { TableGeneric } from "@/components/features/TableGeneric";
 import { SearchInput } from "@/components/features/SearchInput";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 
@@ -92,7 +92,7 @@ const AssetsOverviewPage = () => {
   return (
     <div className="flex w-full md:p-4 h-auto">
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
-        <GenericTable
+        <TableGeneric
           data={data}
           columns={columns}
           rowPath="/assets"

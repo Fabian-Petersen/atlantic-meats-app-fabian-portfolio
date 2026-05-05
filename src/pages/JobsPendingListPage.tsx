@@ -18,7 +18,7 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { useState } from "react";
 import { Error } from "@/components/features/Error";
 import type { JobAPIResponse } from "@/schemas";
-import { GenericTable } from "@/components/dashboard/GenericTable";
+import { TableGeneric } from "@/components/features/TableGeneric";
 import { getJobPendingColumns } from "@/components/tableColumns/PendingColumns";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { SearchInput } from "@/components/features/SearchInput";
@@ -72,14 +72,16 @@ const JobsPendingListPage = () => {
     <div className="flex w-full md:p-4 min-h-0">
       {/* // $ Desktop View */}
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
-        <GenericTable
+        <TableGeneric
           data={data}
           columns={columns}
           rowPath="jobs"
-          addButton={true}
-          addButtonPath="/jobs/create-job"
           action="pending-approval"
           tableHeading="Jobs - Pending Requests"
+          addPageSelector={true}
+          addPagination={true}
+          addButton={true}
+          addButtonPath="/jobs/create-job"
         />
       </div>
       {/* // $ Mobile View */}
@@ -90,7 +92,7 @@ const JobsPendingListPage = () => {
           placeholder="Search Requests"
         />
         {data.length === 0 ? (
-          <EmptyMobilePlaceholder message="No Maintenance requests yet" />
+          <EmptyMobilePlaceholder message="No job requests yet" />
         ) : table.getRowModel().rows.length === 0 ? (
           <EmptyMobilePlaceholder
             message={`No results for "${globalFilter}"`}
@@ -99,7 +101,7 @@ const JobsPendingListPage = () => {
           <div className="grid gap-2">
             <FormHeading
               className="mx-auto dark:text-gray-100"
-              heading="Pending Requests"
+              heading="Jobs - Pending Requests"
             />
             <MobileJobsPendingContainer
               className="flex md:hidden"

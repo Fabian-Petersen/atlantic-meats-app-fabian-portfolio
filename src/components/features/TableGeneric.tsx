@@ -17,11 +17,11 @@ import {
 } from "@tanstack/react-table";
 
 import FormHeading from "@/../customComponents/FormHeading";
-import AddNewItemButton from "../features/AddNewItemButton";
-import { SearchInput } from "../features/SearchInput";
-import EmptyTablePlaceholder from "../features/EmptyTablePlaceholder";
-import TablePaginationControls from "../features/TablePaginationControls";
-import TablePageSizeSelector from "../features/TablePageSizeSelector";
+import AddNewItemButton from "./AddNewItemButton";
+import { SearchInput } from "./SearchInput";
+import EmptyTablePlaceholder from "./EmptyTablePlaceholder";
+import TablePaginationControls from "./TablePaginationControls";
+import TablePageSizeSelector from "./TablePageSizeSelector";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 
@@ -44,7 +44,7 @@ type Props<T extends { id: string }> = {
   action?: string; // e.g. "action" for the action page, "update" for the update page, etc. This is used to construct the path when a row is clicked, e.g. /jobs/123/action or /assets/123/update
 };
 
-export function GenericTable<T extends { id: string }>({
+export function TableGeneric<T extends { id: string }>({
   data,
   tableHeading,
   columns,
@@ -113,7 +113,7 @@ export function GenericTable<T extends { id: string }>({
             placeholder={searchPlaceholderText}
           />
           {addPageSelector ? (
-            <TablePageSizeSelector table={table} />
+            <TablePageSizeSelector table={table} className="" />
           ) : undefined}
           {addButton && (
             <div className="hidden md:inline-block ml-auto">
@@ -169,7 +169,7 @@ export function GenericTable<T extends { id: string }>({
                           {/* Visual indicator — a thin bar that widens on hover/drag */}
                           <span
                             className={[
-                              "block h-2/3 w-[3px] rounded-full transition-all duration-150",
+                              "block h-2/3 w-0.75 rounded-full transition-all duration-150",
                               header.column.getIsResizing()
                                 ? "bg-amber-500 dark:bg-amber-400 w-1 h-full opacity-100"
                                 : "bg-gray-300 dark:bg-gray-600 opacity-0 group-hover:opacity-100",
@@ -203,10 +203,6 @@ export function GenericTable<T extends { id: string }>({
                     <tr
                       key={row.id}
                       onClick={() => {
-                        // console.log(
-                        //   "navigate to:",
-                        //   `/${rowPath}/${row.original.id}/${action ?? ""}`,
-                        // );
                         setSelectedRowId(row.original.id);
                         navigate(
                           `/${rowPath}/${row.original.id}/${action ?? ""}`,

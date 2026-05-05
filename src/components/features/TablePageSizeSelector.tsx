@@ -1,5 +1,6 @@
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 import type { Table } from "@tanstack/react-table";
-import clsx from "clsx";
 
 type Props<T> = {
   table: Table<T>;
@@ -13,14 +14,14 @@ function TablePageSizeSelector<T>({ table, className }: Props<T>) {
         title="PageSelect"
         value={table.getState().pagination.pageSize}
         onChange={(e) => table.setPageSize(Number(e.target.value))}
-        className={clsx(
-          "w-full h-11 text-xs rounded-md border-gray-200 px-2 hover:cursor-pointer",
-          "dark:text-(--clr-textDark) text-(--clr-textLight)",
-          "border transition-all outline-none",
+        className={cn(
+          sharedStyles.formInputDefault,
+          sharedStyles.formSelect,
+          "hover:cursor-pointer",
         )}
       >
         {[5, 10, 20, 50].map((size) => (
-          <option key={size} value={size}>
+          <option key={size} value={size} className="p-2 hover:cursor-pointer">
             Show {size}
           </option>
         ))}

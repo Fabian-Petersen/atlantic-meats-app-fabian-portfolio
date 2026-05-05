@@ -13,7 +13,7 @@ import useGlobalContext from "@/context/useGlobalContext";
 import type { ActionAPIResponse } from "@/schemas";
 import { Error } from "@/components/features/Error";
 // import type { ActionTableRow } from "@/schemas/actionSchemas";
-import { GenericTable } from "@/components/dashboard/GenericTable";
+import { TableGeneric } from "@/components/features/TableGeneric";
 import FormHeading from "@/../customComponents/FormHeading";
 import { getJobActionColumns } from "@/components/tableColumns/ActionColumns";
 import { cn } from "@/lib/utils";
@@ -97,13 +97,16 @@ const JobsCompletedListPage = () => {
 
   return (
     <div className="flex w-full md:p-4 min-h-0">
+      {/* // $ Desktop View */}
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
-        <GenericTable
+        <TableGeneric
           data={data}
           columns={columns}
-          rowPath={"jobs"}
+          rowPath="jobs"
           action="completed"
           tableHeading="Jobs - Completed"
+          addPageSelector={true}
+          addPagination={true}
         />
       </div>
       {/* // $ Mobile View */}
@@ -114,7 +117,7 @@ const JobsCompletedListPage = () => {
           placeholder="Search Jobs"
         />
         {data.length === 0 ? (
-          <EmptyMobilePlaceholder message="No compleyed jobs yet" />
+          <EmptyMobilePlaceholder message="No completed jobs yet" />
         ) : table.getRowModel().rows.length === 0 ? (
           <EmptyMobilePlaceholder
             message={`No results for "${globalFilter}"`}

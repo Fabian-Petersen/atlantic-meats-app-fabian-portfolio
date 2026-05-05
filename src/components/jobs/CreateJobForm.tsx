@@ -42,7 +42,7 @@ const CreateJobForm = () => {
 
   // $ Calling the useFormSubmit hook to post the job data to backend
   const { submit, isPending } = useFormSubmit({
-    resourcePath: "jobs/request",
+    resourcePath: "jobs/requests",
     queryKey: ["jobs"],
     buildPayload: (values, compressed) => ({
       ...values,

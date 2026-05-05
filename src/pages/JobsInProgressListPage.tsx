@@ -26,7 +26,7 @@ import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
 import { getInProgressColumns } from "@/components/tableColumns/InProgressColumns";
 
 // $ ———————— Components ————————————————————————————————————————————————————————————————
-import { GenericTable } from "@/components/dashboard/GenericTable";
+import { TableGeneric } from "@/components/features/TableGeneric";
 import { SearchInput } from "@/components/features/SearchInput";
 import { MobileJobsInProgressContainer } from "@/components/mobile/MobileJobsInProgressContainer";
 import FormHeading from "@/../customComponents/FormHeading";
@@ -56,7 +56,7 @@ import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder
  *     - Navigating to job details
  *     - Deleting a job
  *     - Opening chat sidebar
- * - Renders data using the `GenericTable` component.
+ * - Renders data using the `TableGeneric` component.
  * - Applies conditional row styling:
  *   - Overdue jobs (based on `targetDate`) are highlighted in red.
  *
@@ -87,7 +87,7 @@ import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder
  * Dependencies:
  * - Data fetching: `useGetAll`
  * - Table management: `@tanstack/react-table`
- * - UI components: `GenericTable`, `FormHeading`, `SearchInput`,
+ * - UI components: `TableGeneric`, `FormHeading`, `SearchInput`,
  *   `MobileJobsInProgressContainer`, `EmptyMobilePlaceholder`
  * - Utilities: `isTargetDateOverdue`
  *
@@ -150,7 +150,7 @@ const JobsInProgressListPage = () => {
   return (
     <div className="flex w-full lg:p-4 h-auto">
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-4 w-full rounded-xl shadow-lg p-4 h-auto hidden">
-        <GenericTable
+        <TableGeneric
           data={data}
           columns={columns}
           rowPath="jobs"

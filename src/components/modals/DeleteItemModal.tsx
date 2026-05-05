@@ -60,7 +60,9 @@ const DeleteItemModal = () => {
           {/* Body */}
           <DialogDescription>
             <p className="w-3/4 md:mt-2 text-cxs md:text-xs text-gray-600 dark:text-gray-300 text-center mx-auto">
-              {`Are you sure you want to delete the ${config.resourceName}? This action cannot be undone.`}
+              Are you sure you want to delete the{" "}
+              <span className="capitalize">{config.resourceName}</span>? This
+              action cannot be undone.
             </p>
           </DialogDescription>
           <DeleteItemForm />

@@ -11,7 +11,7 @@ import ChartHeading from "@/components/dashboard/ChartHeading";
 import { getDashboardJobColumns } from "@/components/maintenanceRequestTable/columns";
 import { useGetAll } from "@/utils/api";
 import type { JobAPIResponse } from "@/schemas";
-import { GenericTable } from "@/components/dashboard/GenericTable";
+import { TableGeneric } from "@/components/features/TableGeneric";
 // import { Spinner } from "@/components/ui/spinner";
 import { SkeletonTable } from "@/components/dashboard/SkeletonTable";
 import { PieChartSkeleton } from "@/components/dashboard/charts/PieChartSkeleton";
@@ -100,7 +100,7 @@ const Dashboard = () => {
               <SkeletonTable />
             </div>
           ) : (
-            <GenericTable
+            <TableGeneric
               data={pendingRequests ?? []}
               columns={columns ?? []}
               rowPath="jobs"

@@ -60,7 +60,8 @@ function FormRowSelect<T extends FieldValues>({
           // sharedStyles.formSelect,
           sharedStyles.formInputDefault,
           error && "border-red-400",
-          "hover:cursor-pointer",
+          // "hover:cursor-pointer",
+          "base-select",
         )}
         defaultValue={multiple ? defaultValues || [] : ""}
         onChange={(event) => {
