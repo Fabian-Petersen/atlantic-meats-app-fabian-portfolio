@@ -202,7 +202,7 @@ export const sharedStyles = {
   modalOverlay: cn("bg-black/60 dark:bg-black/30 backdrop-blur-xs"),
 
   /* //$ ——— Sidebars ——————————————————————————————————————————————————————————— */
-  sidebarOverlay: cn("fixed inset-0 z-900 bg-black/5"),
+  sidebarOverlay: cn("fixed inset-0 z-40 bg-black/5"),
   sidebar: cn(
     "z-50 w-(--sidebarWidth) fixed",
     "overflow-auto no-scrollbar",
