@@ -5,15 +5,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { type UsersRequestFormValues, userAttributesSchema } from "@/schemas";
 import FormHeading from "../../../customComponents/FormHeading";
 import FormRowInputEditable from "../../../customComponents/FormRowInputEditable";
-import { Button } from "../ui/button";
 import type { UsersAPIResponse } from "@/schemas";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
-import { Spinner } from "../ui/spinner";
 import { usePOST } from "@/utils/api";
 import useGlobalContext from "@/context/useGlobalContext";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import FormActionButtons from "../features/FormActionButtons";
 
 type UserProfileProps = {
   user: UsersAPIResponse | null;
@@ -128,26 +127,12 @@ function UserProfileForm({ user }: UserProfileProps) {
           error={errors.mobile}
         />
       </div>
-      <div className={cn(sharedStyles.btnParent)}>
-        <Button
-          className={cn(sharedStyles.btn, sharedStyles.btnCancel)}
-          type="button"
-          onClick={() => navigate("/dashboard")}
-          variant="cancel"
-          size="lg"
-        >
-          Cancel
-        </Button>
-        <Button
-          disabled={isPending}
-          type="submit"
-          variant="submit"
-          size="lg"
-          className={cn(sharedStyles.btn, sharedStyles.btnSubmit)}
-        >
-          {isPending ? <Spinner className="size-8" /> : "Update"}
-        </Button>
-      </div>
+      <FormActionButtons
+        cancelText="Cancel"
+        isPending={isPending}
+        onCancel={() => navigate("/dashboard")}
+        submitText="Update"
+      />
     </form>
   );
 }

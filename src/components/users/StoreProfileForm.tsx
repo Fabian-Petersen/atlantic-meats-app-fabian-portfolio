@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormHeading from "../../../customComponents/FormHeading";
 import FormRowInputEditable from "../../../customComponents/FormRowInputEditable";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../ui/button";
 import {
   usersRequestSchema,
   type UserUpdateRequest,
@@ -15,8 +14,10 @@ import {
 import { getUserGroups } from "@/auth/getUserGroups";
 import { useEffect } from "react";
 import { useUpdateItem } from "@/utils/api";
-import { Spinner } from "../ui/spinner";
 import useGlobalContext from "@/context/useGlobalContext";
+import FormActionButtons from "../features/FormActionButtons";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
 
 type UserProfileProps = {
   user: UserUpdateRequest | null;
@@ -78,10 +79,10 @@ function StoreProfileForm({ user }: UserProfileProps) {
 
   return (
     <form
-      className="flex flex-col rounded-lg lg:w-full text-font dark:bg-[#1d2739] pt-4 h-auto"
+      className={cn(sharedStyles.form, "gap-4")}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-6 w-full lg:py-6">
+      <div className={cn(sharedStyles.formParent, "gap-6 md:gap-8")}>
         <FormHeading
           heading="Profile Information"
           className="col-span-full text-md lg:text-md"
@@ -132,26 +133,12 @@ function StoreProfileForm({ user }: UserProfileProps) {
           error={errors.mobile}
         />
       </div>
-      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 bg-white pb-4">
-        <Button
-          className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white capitalize"
-          type="button"
-          onClick={() => navigate("/users")}
-          variant="cancel"
-          size="lg"
-        >
-          Cancel
-        </Button>
-        <Button
-          disabled={isPending}
-          type="submit"
-          variant="submit"
-          size="lg"
-          className="flex-1 capitalize"
-        >
-          {isPending ? <Spinner className="w-8 h-8" /> : "Update"}
-        </Button>
-      </div>
+      <FormActionButtons
+        cancelText="Cancel"
+        isPending={isPending}
+        onCancel={() => navigate("/users")}
+        submitText={"Update"}
+      />
     </form>
   );
 }

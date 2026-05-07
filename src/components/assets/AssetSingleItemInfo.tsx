@@ -1,9 +1,9 @@
 import Separator from "@/components/dashboardSidebar/Seperator";
 import type { AssetAPIResponse } from "@/schemas";
-import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
 import UpdateAssetDialog from "../modals/UpdateAssetDialog";
+import FormActionButtons from "../features/FormActionButtons";
 
 type Props = {
   item: AssetAPIResponse;
@@ -13,7 +13,7 @@ function AssetSingleItemInfo({ item }: Props) {
   const navigate = useNavigate();
   const { setShowUpdateAssetDialog, setSelectedRowId } = useGlobalContext();
   return (
-    <div className="flex gap flex-col text-font dark:text-gray-100 rounded-md p-4 md:p-2 dark:border-gray-700/50">
+    <div className="flex gap flex-col text-font dark:text-gray-100 rounded-md p-4 md:p-2 dark:border-gray-700/50 h-full">
       <UpdateAssetDialog />
       <h1 className="text-lg md:text-2xl">Asset : {item.equipment}</h1>
       <Separator width="100%" className="mt-2 mb-4" />
@@ -47,33 +47,18 @@ function AssetSingleItemInfo({ item }: Props) {
           <span>{item.additional_notes}</span>
         </li>
       </ul>
-      <div className="flex w-full justify-end pt-6">
-        <div className="flex gap-4 w-full md:w-1/2">
-          <Button
-            type="button"
-            onClick={() => {
-              navigate("/assets");
-            }}
-            variant="cancel"
-            size="xl"
-            className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
-          >
-            Back
-          </Button>
-          <Button
-            type="button"
-            variant="submit"
-            size="xl"
-            className="flex-1"
-            onClick={() => {
-              setSelectedRowId(item.id);
-              setShowUpdateAssetDialog(true);
-            }}
-          >
-            Edit Asset
-          </Button>
-        </div>
-      </div>
+      <FormActionButtons
+        cancelText="Back"
+        onCancel={() => {
+          navigate("/assets/list");
+        }}
+        submitText="Edit Asset"
+        onSubmit={() => {
+          setSelectedRowId(item.id);
+          setShowUpdateAssetDialog(true);
+        }}
+        className="mt-auto"
+      />
     </div>
   );
 }

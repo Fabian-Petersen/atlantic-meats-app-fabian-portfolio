@@ -10,6 +10,7 @@ type Props = {
   cancelText: string;
   submitText: string;
   isPending?: boolean;
+  className?: string;
 };
 
 /**
@@ -33,6 +34,7 @@ type Props = {
  * @param onSubmit  - Optional Callback executed on submit button click.
  * @param isPending - Optional flag to indicate loading state for submission.
  * @param redirect - (Unused) Optional redirect path for future extension.
+ * @param className - Optional CSS class for custom styling.
  */
 
 function FormActionButtons({
@@ -41,9 +43,10 @@ function FormActionButtons({
   submitText,
   onCancel,
   isPending,
+  className,
 }: Props) {
   return (
-    <div className={cn(sharedStyles.btnParent)}>
+    <div className={cn(sharedStyles.btnParent, className)}>
       <Button
         type="button"
         onClick={onCancel}

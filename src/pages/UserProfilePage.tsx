@@ -21,7 +21,7 @@ function UserProfilePage() {
     <div className={cn(sharedStyles.pageContainer)}>
       <div className={cn(sharedStyles.pageContent, "gap-2")}>
         <FormHeading
-          heading="User Account Profile"
+          heading="My Account Profile"
           className={sharedStyles.headingForm}
         />
         <UserProfileForm user={user ?? null} />

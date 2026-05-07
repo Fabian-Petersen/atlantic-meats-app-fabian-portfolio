@@ -48,12 +48,12 @@ export const sharedStyles = {
   btnCancel: cn(
     "",
     // light
-    "bg-orange-500/15 border-orange-500/40 text-orange-700",
+    "bg-red-500/15 border-red-500/40 text-red-700",
     // dark
-    "dark:bg-orange-500/15 dark:border-orange-500/25 dark:text-orange-300",
+    "dark:bg-red-500/15 dark:border-red-500/25 dark:text-red-300",
     // hover
-    "hover:bg-orange-500/20 hover:border-orange-500/60",
-    "dark:hover:bg-orange-500/22 dark:hover:border-orange-500/40",
+    "hover:bg-red-500/20 hover:border-red-500/60",
+    "dark:hover:bg-red-500/22 dark:hover:border-red-500/40",
   ),
   btnApprove: cn(
     "flex-1",

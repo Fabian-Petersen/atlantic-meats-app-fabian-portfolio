@@ -29,10 +29,10 @@ import FormRowSelect from "../../../customComponents/FormRowSelect";
 import FormRowInput from "../../../customComponents/FormRowInput";
 import TextAreaInput from "../../../customComponents/TextAreaInput";
 import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
-import { Button } from "../ui/button";
 
 // $ Context
 import useGlobalContext from "@/context/useGlobalContext";
+import FormActionButtons from "../features/FormActionButtons";
 
 type BusinessUnit = keyof typeof CeateAssetFormOptionsData.business_unit;
 
@@ -107,8 +107,6 @@ const UpdateAssetForm = () => {
       images: [], // File[] cannot be hydrated
     });
   }, [item, reset]);
-
-  // console.log("item in form:", item);
 
   if (!id || isPending || !item) {
     return <PageLoadingSpinner />;
@@ -252,7 +250,7 @@ const UpdateAssetForm = () => {
           // error={errors.images}
         />
         <TextAreaInput
-          label="Comments"
+          // label="Comments"
           name="additional_notes"
           placeholder="Comments"
           register={register}
@@ -260,28 +258,14 @@ const UpdateAssetForm = () => {
           rows={3}
         />
       </div>
-      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72 bg-white mt-auto">
-        <Button
-          type="button"
-          onClick={() => {
-            setShowUpdateAssetDialog(false);
-          }}
-          variant="cancel"
-          size="lg"
-          className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
-        >
-          Cancel
-        </Button>
-        <Button
-          disabled={isPending}
-          type="submit"
-          variant="submit"
-          size="lg"
-          className="flex-1"
-        >
-          {isPending ? "Sending..." : "Submit"}
-        </Button>
-      </div>
+      <FormActionButtons
+        cancelText="Cancel"
+        isPending={isPending}
+        onCancel={() => {
+          setShowUpdateAssetDialog(false);
+        }}
+        submitText="Submit"
+      />
     </form>
   );
 };
