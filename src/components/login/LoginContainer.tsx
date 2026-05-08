@@ -19,6 +19,8 @@ import type {
 } from "../../schemas/index";
 import useGlobalContext from "@/context/useGlobalContext";
 import { usePOST } from "@/utils/api";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
 
 type Step = "LOGIN" | "NEW_PASSWORD";
 
@@ -31,8 +33,8 @@ export default function LoginContainer() {
   const { refetch } = useUserAttributes();
 
   const { mutateAsync: confirmUserSignup } = usePOST<void, void>({
-    resourcePath: "admin/confirm_user_signup",
-    queryKey: ["userRequests", "status_update"],
+    resourcePath: "admin/confirm-user-signup",
+    queryKey: ["users", "status_update"],
   });
 
   /* -------- LOGIN -------- */
@@ -114,10 +116,20 @@ export default function LoginContainer() {
   return (
     <>
       {step === "LOGIN" && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2 md:gap-4">
+          <div className="flex justify-center items-center overflow-hidden w-full max-h-24">
+            <img
+              src="https://www.atlanticmeat.co.za/assets/images/am20loyalty20logo-472x214.webp"
+              alt="Logo"
+              className="w-1/2 h-full rounded-lg"
+            />
+          </div>
           <FormHeading
-            heading="Login to your Account"
-            className="text-center pb-4 pt-2"
+            heading="Login to your account"
+            className={cn(
+              sharedStyles.headingForm,
+              "md:text-center md:text-lg",
+            )}
           />
           <LoginForm onSubmit={handleLogin} loading={loading} />
         </div>

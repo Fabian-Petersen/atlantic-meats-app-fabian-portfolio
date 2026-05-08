@@ -10,7 +10,7 @@ import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import { ChevronDown } from "lucide-react";
 
-export const getJobActionColumns = (
+export const getJobCompletedColumns = (
   setSelectedRowId: (id: string) => void,
   downloadItem: (id: string) => Promise<JobcardPresignedUrlResponse>,
   setOpenChatSidebar: (v: boolean) => void,

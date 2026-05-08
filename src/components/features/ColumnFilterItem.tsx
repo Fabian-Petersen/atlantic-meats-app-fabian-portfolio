@@ -1,8 +1,10 @@
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
+
 // src/components/table/ColumnFilterItem.tsx
 type Option = { label: string; value: string };
 
 export type ColumnFilter = {
-  //   id: string;
   value: string | undefined;
   onChange: (value: string) => void;
   options: Option[];
@@ -20,7 +22,11 @@ export function ColumnFilterItem({
   return (
     <select
       aria-label="filter options"
-      className="rounded-lg px-3 py-2 text-xs w-full focus:outline-none hover:cursor-pointer dark:bg-[#1d2739] dark:text-gray-200 border border-gray-200"
+      className={cn(
+        sharedStyles.formInputDefault,
+        sharedStyles.formSelect,
+        "hover:cursor-pointer",
+      )}
       value={(value ?? "") as string}
       onChange={(e) => onChange(e.target.value || "")}
     >

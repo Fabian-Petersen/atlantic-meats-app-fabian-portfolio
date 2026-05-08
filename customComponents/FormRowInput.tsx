@@ -60,7 +60,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
   }
 
   // $ Manange the Password Visibility
-  const isPassword = name === "password";
+  const isPassword = name.toLowerCase().includes("password");
 
   return (
     <div className={cn(className, "relative w-full mb-2 group")}>

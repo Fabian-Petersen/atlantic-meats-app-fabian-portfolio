@@ -1,15 +1,19 @@
 import {
   File,
   Home,
+  CheckCircleIcon,
   // LogOut,
   // Settings,
   User2,
   Library,
-  Wrench,
+  Hammer,
   Clock,
+  Bolt,
   // MoveHorizontal,
   Truck,
   Users2,
+  Hourglass,
+  FileClock,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { UserGroup } from "@/schemas/usersSchema";
@@ -28,32 +32,38 @@ export const mainLinks: NavlinkProps[] = [
 export const maintenanceLinks: NavlinkProps[] = [
   {
     name: "create request",
-    icon: Wrench,
+    icon: Hammer,
     url: "/jobs/create-job",
     allowedGroups: ["admin", "user", "technician", "manager"],
   },
   {
     name: "pending approval",
-    icon: File,
+    icon: Hourglass,
     url: "/jobs/pending-approval",
     allowedGroups: ["admin"],
   },
   {
     name: "open jobs",
-    icon: File,
+    icon: FileClock,
     url: "/jobs/in-progress",
     allowedGroups: ["admin", "user", "technician", "manager"],
   },
   {
     name: ({ groups }) =>
       groups.includes("admin") ? "Completed Jobs" : "My Jobs",
-    icon: File,
+    icon: CheckCircleIcon,
     url: "/jobs/completed",
     allowedGroups: ["admin", "technician", "manager", "contractor"],
   },
   {
     name: "schedule task",
     icon: Clock,
+    url: "#",
+    allowedGroups: ["admin"],
+  },
+  {
+    name: "stock management",
+    icon: Bolt,
     url: "#",
     allowedGroups: ["admin"],
   },
@@ -98,7 +108,7 @@ export const profileLinks: NavlinkProps[] = [
     allowedGroups: ["admin"],
   },
   {
-    name: "User Profile",
+    name: "My Profile",
     icon: User2,
     url: "/users/profile",
     allowedGroups: ["admin", "user", "technician", "manager", "contractor"],

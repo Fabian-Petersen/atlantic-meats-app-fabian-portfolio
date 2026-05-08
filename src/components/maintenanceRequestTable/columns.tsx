@@ -1,10 +1,14 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { JobAPIResponse, JobcardPresignedUrlResponse } from "@/schemas";
+import type {
+  JobAPIResponse,
+  JobcardPresignedUrlResponse,
+  Priority,
+} from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getMaintenanceTableMenuItems } from "@/lib/JobTableActionLinks";
 import type { Resource } from "@/utils/api";
-import { type Priority } from "@/lib/getPriorityClasses";
-import { PriorityBadge } from "../features/PriorityBadge";
+import { Badge } from "../features/Badge";
+import { badgeStyles } from "@/styles/badgeStyles";
 
 export const getMaintenanceColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
@@ -71,6 +75,15 @@ export const getMaintenanceColumns = (
     accessorKey: "priority",
     header: "Priority",
     enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return (
+        <Badge
+          value={value as Priority}
+          styleMap={badgeStyles.families.priority}
+        />
+      );
+    },
   },
   // {
   //   accessorKey: "additional_notes",
@@ -157,7 +170,10 @@ export const getDashboardJobColumns = (): ColumnDef<JobAPIResponse>[] => [
     enableColumnFilter: true,
     cell: ({ getValue }) => {
       const value = getValue<string>();
-      return <PriorityBadge value={value as Priority} />;
+      <Badge
+        value={value as Priority}
+        styleMap={badgeStyles.families.priority}
+      />;
     },
   },
   {

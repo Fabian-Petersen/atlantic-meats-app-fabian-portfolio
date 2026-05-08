@@ -15,7 +15,7 @@ import { Error } from "@/components/features/Error";
 // import type { ActionTableRow } from "@/schemas/actionSchemas";
 import { TableGeneric } from "@/components/features/TableGeneric";
 import FormHeading from "@/../customComponents/FormHeading";
-import { getJobActionColumns } from "@/components/tableColumns/ActionColumns";
+import { getJobCompletedColumns } from "@/components/tableColumns/CompletedColumns";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import { SearchInput } from "@/components/features/SearchInput";
@@ -70,7 +70,7 @@ const JobsCompletedListPage = () => {
   //   [data],
   // );
 
-  const columns = getJobActionColumns(
+  const columns = getJobCompletedColumns(
     setSelectedRowId,
     downloadItem,
     setOpenChatSidebar,

@@ -146,6 +146,9 @@ export type JobcardPresignedUrlResponse = {
   jobcard_url: string;
 };
 
+// $ General types for Badges
+export type Priority = "critical" | "high" | "medium" | "low";
+
 // $ Generic Table schema for the Rows and Columns
 export type TableRows = AssetTableRow | JobTableRow;
 export type APIData = JobAPIResponse | AssetAPIResponse;

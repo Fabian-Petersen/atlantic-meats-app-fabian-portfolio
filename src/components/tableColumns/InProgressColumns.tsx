@@ -1,11 +1,12 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { JobAPIResponse } from "@/schemas";
+import type { JobAPIResponse, Priority } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { Resource } from "@/utils/api";
 import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 import { ChevronDown } from "lucide-react";
-type Priority = "critical" | "high" | "medium" | "low";
+import { badgeStyles } from "@/styles/badgeStyles";
+import { Badge } from "../features/Badge";
 
 export const getInProgressColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
@@ -63,11 +64,6 @@ export const getInProgressColumns = (
     header: "Equipment",
     enableColumnFilter: false,
   },
-  // {
-  //   accessorKey: "assetID",
-  //   header: "AssetID",
-  //   enableColumnFilter: true,
-  // },
   {
     accessorKey: "impact",
     header: "Impact",
@@ -78,15 +74,6 @@ export const getInProgressColumns = (
     minSize: 70,
     maxSize: 90,
   },
-  // {
-  //   accessorKey: "status",
-  //   header: "Status",
-  //   enableColumnFilter: true,
-  //   cell: ({ getValue }) => {
-  //     const value = getValue<string>();
-  //     return <p className="capitalize">{value}</p>;
-  //   },
-  // },
   {
     accessorKey: "jobcardNumber",
     header: "Jobcard Number",
@@ -100,7 +87,12 @@ export const getInProgressColumns = (
     enableColumnFilter: true,
     cell: ({ getValue }) => {
       const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
+      return (
+        <Badge
+          value={value as Priority}
+          styleMap={badgeStyles.families.priority}
+        />
+      );
     },
   },
   {
@@ -114,14 +106,6 @@ export const getInProgressColumns = (
     minSize: 100,
     maxSize: 120,
   },
-  // {
-  //   accessorKey: "assign_to_group",
-  //   header: "Group",
-  //   cell: ({ getValue }) => {
-  //     const value = getValue<string>();
-  //     return <p className="capitalize">{value}</p>;
-  //   },
-  // },
   {
     accessorKey: "targetDate",
     header: ({ column }) => {
@@ -161,7 +145,6 @@ export const getInProgressColumns = (
         action: {
           url: `/jobs/${rowId}/action`,
           onOpen: () => {
-            // setShowActionDialog(true);
             navigate(`/jobs/${rowId}/action`);
             setSelectedRowId(rowId);
           },
@@ -202,21 +185,6 @@ export const getInProgressColumns = (
     maxSize: 70,
   },
 ];
-
-function getConditionClasses(priority: Priority) {
-  switch (priority.toLocaleLowerCase()) {
-    case "critical":
-      return "text-red-500";
-    case "high":
-      return "text-purple-500";
-    case "medium":
-      return "text-blue-500";
-    case "low":
-      return "text-green-500";
-    default:
-      return "text-gray-400";
-  }
-}
 
 // $ ================================ Dashhboard Columns ================================
 
@@ -266,13 +234,10 @@ export const getDashboardJobColumns = (): ColumnDef<JobAPIResponse>[] => [
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return (
-        <p
-          className={`capitalize text-xs ${getConditionClasses(
-            value as Priority,
-          )}`}
-        >
-          {value}
-        </p>
+        <Badge
+          value={value as Priority}
+          styleMap={badgeStyles.families.priority}
+        />
       );
     },
   },

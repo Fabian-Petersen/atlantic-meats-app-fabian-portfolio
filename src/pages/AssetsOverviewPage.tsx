@@ -43,8 +43,12 @@ const AssetsOverviewPage = () => {
 
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const { setShowUpdateAssetDialog, setSelectedRowId, openDeleteDialog } =
-    useGlobalContext();
+  const {
+    setShowUpdateAssetDialog,
+    showUpdateAssetDialog,
+    setSelectedRowId,
+    openDeleteDialog,
+  } = useGlobalContext();
 
   // $ Map through the data returned to match the TableRow Data Schema
   const rows: AssetTableRow[] = useMemo(
@@ -63,6 +67,7 @@ const AssetsOverviewPage = () => {
   );
 
   const columns = getAssetColumns(
+    showUpdateAssetDialog,
     setShowUpdateAssetDialog,
     setSelectedRowId,
     openDeleteDialog,
@@ -97,7 +102,8 @@ const AssetsOverviewPage = () => {
           columns={columns}
           rowPath="/assets"
           addButton={true}
-          addButtonPath="/assets"
+          addFilter={true}
+          addButtonPath="/assets/create-new-asset"
           pageSize={10}
           addPagination={true}
           addPageSelector={true}

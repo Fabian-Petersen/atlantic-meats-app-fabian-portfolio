@@ -7,6 +7,7 @@ import { changePasswordSchema } from "../../schemas/index";
 
 import type { ChangePasswordFormValues } from "../../schemas/index";
 import { Spinner } from "../ui/spinner";
+import { usePasswordVisibility } from "@/utils/usePasswordVisibility";
 
 const ChangePasswordForm = ({
   onSubmit,
@@ -25,6 +26,9 @@ const ChangePasswordForm = ({
     resolver: zodResolver(changePasswordSchema),
   });
 
+  // $ Manange the Password Visibility
+  const showPassword = usePasswordVisibility();
+
   return (
     <form
       className="flex flex-col gap-8 rounded-lg max-w-xl text-gray-700"
@@ -42,17 +46,21 @@ const ChangePasswordForm = ({
         />
         <FormRowInput
           label="Password"
-          type="password"
           name="newPassword"
           placeholder="Enter your password"
+          type={showPassword.type} // comes from the usePasswordVisibility hook
+          togglePassword={showPassword.toggle} // comes from the usePasswordVisibility hook
+          isVisible={showPassword.isVisible} // comes from the usePasswordVisibility hook
           register={register}
           error={errors.newPassword}
         />
         <FormRowInput
           label="Confirm Password"
-          type="password"
           name="confirmPassword"
           placeholder="Confirm your password"
+          // type={showPassword.type} // comes from the usePasswordVisibility hook
+          // togglePassword={showPassword.toggle} // comes from the usePasswordVisibility hook
+          // isVisible={showPassword.isVisible} // comes from the usePasswordVisibility hook
           register={register}
           error={errors.confirmPassword}
         />

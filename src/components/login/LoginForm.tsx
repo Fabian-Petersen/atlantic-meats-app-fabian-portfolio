@@ -50,11 +50,11 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
           />
           <FormRowInput
             label="Password"
+            name="password"
+            placeholder="Enter your password"
             type={showPassword.type} // comes from the usePasswordVisibility hook
             togglePassword={showPassword.toggle} // comes from the usePasswordVisibility hook
             isVisible={showPassword.isVisible} // comes from the usePasswordVisibility hook
-            name="password"
-            placeholder="Enter your password"
             register={register}
             error={errors.password}
           />

@@ -25,6 +25,7 @@ import { SearchInput } from "@/components/features/SearchInput";
 import { MobileUsersContainer } from "@/components/mobile/MobileUsersContainer";
 import { useResendTemporaryPassword } from "@/utils/useResendTemporaryPassword";
 import { PlusCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const UsersListPage = () => {
   // $ Opt out of React Compiler memoization — useReactTable returns unstable
@@ -37,15 +38,17 @@ const UsersListPage = () => {
     isPending,
   } = useGetAll<UsersAPIResponse[]>({
     resourcePath: "users",
-    queryKey: ["userRequests"],
+    queryKey: ["users", "list"],
   });
+
+  const navigate = useNavigate();
 
   const [sorting, setSorting] = useState<SortingState>([
     { id: "userCreated", desc: false },
   ]);
 
   const {
-    setShowCreateUserDialog,
+    // setShowCreateUserDialog,
     setSelectedRowId,
     openDeleteDialog,
     globalFilter,
@@ -65,7 +68,7 @@ const UsersListPage = () => {
   const columns = useMemo(
     () =>
       getUserColumns(
-        setShowCreateUserDialog,
+        // setShowCreateUserDialog,
         setSelectedRowId,
         openDeleteDialog,
         resend,
@@ -73,7 +76,7 @@ const UsersListPage = () => {
         setSuccessConfig,
       ),
     [
-      setShowCreateUserDialog,
+      // setShowCreateUserDialog,
       setSelectedRowId,
       openDeleteDialog,
       resend,
@@ -110,7 +113,8 @@ const UsersListPage = () => {
           searchPlaceholderText="search users"
           emptyTablePlaceholderText="No users listed"
           addButton={true}
-          openDialog={setShowCreateUserDialog}
+          addButtonPath="/users/create-user"
+          // openDialog={setShowCreateUserDialog}
           tableHeading="Users"
         />
       </div>
@@ -137,7 +141,7 @@ const UsersListPage = () => {
               <button
                 type="button"
                 aria-label="create new user"
-                onClick={() => setShowCreateUserDialog(true)}
+                onClick={() => navigate("/users/create-user")}
               >
                 <PlusCircle />
               </button>

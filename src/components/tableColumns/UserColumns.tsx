@@ -3,11 +3,9 @@ import type { UsersAPIResponse } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { Resource } from "@/utils/api";
-// import { Badge } from "../ui/badge";
 import type { SuccessConfig } from "@/context/app-types";
 
 export const getUserColumns = (
-  setShowCreateUserDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (
     selectedRowId: string,
@@ -114,9 +112,10 @@ export const getUserColumns = (
         userStatus: row.original.status,
 
         create: {
-          url: "",
+          url: "/users/create-user",
           onOpen: () => {
-            setShowCreateUserDialog(true);
+            // navigate("/users/create-user");
+            // setShowCreateUserDialog(true);
           },
         },
         edit: {

@@ -19,7 +19,7 @@ function CreateUserDialog() {
       <DialogContent
         aria-describedby="create new user dialog"
         aria-label="create user"
-        className={cn(sharedStyles.modal)}
+        className={cn(sharedStyles.modal, "md:max-w-3xl")}
       >
         <DialogTitle>
           <FormHeading

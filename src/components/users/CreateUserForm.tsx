@@ -1,7 +1,7 @@
 // import type { UserAttributes } from "@/schemas";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import { getUserGroups } from "@/auth/getUserGroups";
 // import { useEffect } from "react";
 // $ Types
@@ -20,6 +20,8 @@ import FormHeading from "../../../customComponents/FormHeading";
 import FormRowSelect from "@/../customComponents/FormRowSelect";
 import FormActionButtons from "../features/FormActionButtons";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
 
 function CreateUserForm() {
   const {
@@ -31,6 +33,8 @@ function CreateUserForm() {
       usersRequestSchema,
     ) as unknown as Resolver<UsersRequestFormValues>,
   });
+
+  const navigate = useNavigate();
 
   const {
     setShowCreateUserDialog,
@@ -48,8 +52,9 @@ function CreateUserForm() {
       setShowCreateUserDialog(false);
       setTimeout(() => {
         setSuccessConfig({
-          title: "Job Request Created",
-          message: `${values.name} ${values.family_name} was successfully created.`,
+          title: "Success",
+          message: `${values.name} ${values.family_name} was created.`,
+          redirectPath: "users",
         });
         setShowSuccess(true);
       }, 1000);
@@ -100,13 +105,16 @@ function CreateUserForm() {
 
   return (
     <form
-      className="flex flex-col lg:w-full gap-4 text-(--clr-textLight) dark:bg-(--bg-primary_dark)"
+      className={cn(sharedStyles.form, "gap-4")}
       onSubmit={handleSubmit(submit)}
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4 md:gap-y-6 w-full">
+      <div className={cn(sharedStyles.formParent, "gap-6 md:gap-4")}>
         <FormHeading
           heading="Profile Information"
-          className="col-span-full text-sm"
+          className={cn(
+            sharedStyles.headingForm,
+            "text-left text-xs md:text-sm p-0 col-span-full",
+          )}
         />
         <FormRowInput
           // label=""
@@ -142,10 +150,12 @@ function CreateUserForm() {
           className="capitalize"
           error={errors.group}
         />
-
         <FormHeading
           heading="Contact Information"
-          className="col-span-full text-sm"
+          className={cn(
+            sharedStyles.headingForm,
+            "text-left text-xs md:text-sm p-0 col-span-full",
+          )}
         />
         <FormRowInput
           // label=""
@@ -166,7 +176,7 @@ function CreateUserForm() {
         />
       </div>
       <FormActionButtons
-        onCancel={() => setShowCreateUserDialog(false)}
+        onCancel={() => navigate("/users")}
         cancelText="Cancel"
         submitText="Submit"
         isPending={isPending}

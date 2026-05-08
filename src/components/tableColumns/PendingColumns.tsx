@@ -1,11 +1,11 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { JobAPIResponse } from "@/schemas";
+import type { JobAPIResponse, Priority } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { Resource } from "@/utils/api";
 import { ChevronDown } from "lucide-react";
-import { type Priority } from "@/lib/getPriorityClasses";
-import { PriorityBadge } from "../features/PriorityBadge";
+import { badgeStyles } from "@/styles/badgeStyles";
+import { Badge } from "../features/Badge";
 
 export const getJobPendingColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
@@ -104,13 +104,19 @@ export const getJobPendingColumns = (
   {
     accessorKey: "priority",
     header: "Priority",
-    enableColumnFilter: true,
     size: 30,
     minSize: 20,
     maxSize: 100,
     cell: ({ getValue }) => {
       const value = getValue<string>();
-      return <PriorityBadge value={value as Priority} />;
+      return (
+        <div className="flex">
+          <Badge
+            value={value as Priority}
+            styleMap={badgeStyles.families.priority}
+          />
+        </div>
+      );
     },
   },
   {
@@ -162,7 +168,7 @@ export const getJobPendingColumns = (
   },
 ];
 
-// $ ================================ Dashhboard Columns ================================
+// $ ================================ Dashboard Columns ================================
 
 export const getDashboardJobColumns = (): ColumnDef<JobAPIResponse>[] => [
   {
@@ -182,22 +188,18 @@ export const getDashboardJobColumns = (): ColumnDef<JobAPIResponse>[] => [
   {
     accessorKey: "location",
     header: "Location",
-    enableColumnFilter: true,
   },
   {
     accessorKey: "equipment",
     header: "Equipment",
-    enableColumnFilter: false,
   },
   {
     accessorKey: "assetID",
     header: "AssetID",
-    enableColumnFilter: true,
   },
   {
     accessorKey: "status",
     header: "Status",
-    enableColumnFilter: true,
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;
@@ -206,15 +208,25 @@ export const getDashboardJobColumns = (): ColumnDef<JobAPIResponse>[] => [
   {
     accessorKey: "priority",
     header: "Priority",
-    enableColumnFilter: true,
+    size: 30,
+    minSize: 30,
+    maxSize: 50,
     cell: ({ getValue }) => {
       const value = getValue<string>();
-      return <PriorityBadge value={value as Priority} />;
+      return (
+        <Badge
+          value={value as Priority}
+          styleMap={badgeStyles.families.priority}
+        />
+      );
     },
   },
   {
     accessorKey: "requested_by",
     header: "Requested By",
+    size: 80,
+    minSize: 80,
+    maxSize: 100,
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;

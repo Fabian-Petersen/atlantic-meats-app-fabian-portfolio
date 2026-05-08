@@ -10,27 +10,11 @@ import { getTableMenuItems } from "@/lib/getTableMenuItems";
 type EquipmentCondition = "operational" | "new" | "poor" | "broken";
 
 import type { Resource } from "@/utils/api";
-
-function getConditionClasses(condition: EquipmentCondition) {
-  const generalStyles =
-    "border min-w-16 w-fit rounded-full max-w-fit py-[0.25rem] text-center px-[0.40rem]";
-  switch (condition.toLowerCase()) {
-    case "operational":
-      return `text-green-600 bg-green-300/30 border-green-300 dark:border-green-500 dark:bg-green-300/20 dark:text-green-300 ${generalStyles}`;
-    case "not operational":
-      return `text-orange-600 bg-orange-300/30 border-orange-300  dark:border-orange-500 dark:bg-orange-300/20 dark:text-orange-300 ${generalStyles}`;
-    case "new":
-      return `text-blue-600 bg-blue-300/30 border-blue-300 dark:border-blue-500 dark:bg-blue-300/20 dark:text-blue-300 ${generalStyles}`;
-    case "poor":
-      return `text-orange-600 bg-orange-300/30 border-orange-300  dark:border-orange-500 dark:bg-orange-300/20 dark:text-orange-300 ${generalStyles}`;
-    case "broken":
-      return `text-red-600 bg-red-300/30 border-red-300 dark:border-red-500 dark:bg-red-300/20 dark:text-red-300 ${generalStyles}`;
-    default:
-      return `text-gray-400 bg-gray-100 border border-gray-500 ${generalStyles}`;
-  }
-}
+import { Badge } from "../features/Badge";
+import { badgeStyles } from "@/styles/badgeStyles";
 
 export const getAssetColumns = (
+  showUpdateAssetDialog: boolean, // remove this again, only for testing
   setShowUpdateAssetDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (
@@ -53,12 +37,10 @@ export const getAssetColumns = (
   {
     accessorKey: "location",
     header: "Location",
-    enableColumnFilter: true,
   },
   {
     accessorKey: "area",
     header: "Area",
-    enableColumnFilter: true,
   },
   {
     accessorKey: "equipment",
@@ -71,29 +53,20 @@ export const getAssetColumns = (
     size: 120,
     minSize: 100,
     maxSize: 140,
-    enableColumnFilter: true,
   },
-  // {
-  //   accessorKey: "serialNumber",
-  //   header: "Serial Number",
-  // },
   {
     accessorKey: "condition",
     header: "Condition",
-    enableColumnFilter: true,
     size: 150,
     minSize: 100,
     maxSize: 160,
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return (
-        <p
-          className={`capitalize text-cxs ${getConditionClasses(
-            value as EquipmentCondition,
-          )}`}
-        >
-          {value}
-        </p>
+        <Badge
+          value={value as EquipmentCondition}
+          styleMap={badgeStyles.families.condition}
+        />
       );
     },
   },
@@ -114,6 +87,8 @@ export const getAssetColumns = (
           url: "/asset",
           onOpen: () => {
             setShowUpdateAssetDialog(true);
+            console.log(showUpdateAssetDialog);
+            console.log("rowId:", rowId);
             setSelectedRowId(rowId);
           },
         },

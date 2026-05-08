@@ -41,7 +41,7 @@ export type Resource =
   // $ Users ROUTES
   | "comments" // POST a comment
   // $ admin ROUTES
-  | "admin/confirm_user_signup" // handle the user status update after initial login. Trigger PostConfirmationTrigger lambda
+  | "admin/confirm-user-signup" // handle the user status update after initial login. Trigger PostConfirmationTrigger lambda
   | `admin/resend-temp-password/${string}`
   | `admin/${string}`;
 
@@ -180,13 +180,23 @@ export const usePOST = <RequestType, ResponseType>(options: {
 
   return useMutation({
     mutationFn: async (payload: RequestType): Promise<ResponseType> => {
-      const { data } = await apiClient.post<ResponseType>(
-        `/${resourcePath}/${options.id ?? ""}/${options.action ?? ""}`,
-        payload,
-        {
-          headers: { "Content-Type": "application/json" },
-        },
+      /**
+       * Dynamically build the url to prevent errors and ensure consistency. The URL structure is based on the resourcePath and optional id and action parameters.
+       * Examples:
+       * - For a simple POST to create a new job request: resourcePath="jobs/requests" -> URL: "/jobs/requests"
+       * - For approving a job request: resourcePath="jobs", id="123", action="approve" -> URL: "/jobs/123/approve"
+       * - For actioning a job by a technician: resourcePath="jobs", id="123", action="action" -> URL: "/jobs/123/action"
+       * - For rejecting a job request: resourcePath="jobs", id="123", action="reject" -> URL: "/jobs/123/reject"
+       * This approach centralizes the URL construction logic, reduces the risk of typos, and makes it easier to maintain as the API evolves.
+       */
+      const pathParts = [resourcePath, options.id, options.action].filter(
+        Boolean,
       );
+
+      const url = `/${pathParts.join("/")}`;
+      const { data } = await apiClient.post<ResponseType>(url, payload, {
+        headers: { "Content-Type": "application/json" },
+      });
       return data;
     },
     onSuccess: () => {

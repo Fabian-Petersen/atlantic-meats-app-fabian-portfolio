@@ -42,6 +42,7 @@ import JobsInProgressListPage from "./pages/JobsInProgressListPage";
 import { PageLoadingSpinner } from "./components/features/PageLoadingSpinner";
 import UsersListPage from "./pages/UsersListPage";
 import { useAuth } from "./auth/useAuth";
+import CreateUserPage from "./pages/CreateUserPage";
 
 function App() {
   const { loading } = useAuth();
@@ -107,6 +108,7 @@ function App() {
             <Route path="/users" element={<UsersListPage />} />
             {/* // $ Page to show the profile of a user or store */}
             <Route path="/users/:id" element={<StoreProfilePage />} />
+            <Route path="/users/create-user" element={<CreateUserPage />} />
           </Route>
           {/* // $ ======================= Maintenance Routes ======================= */}
           {/* //% admin, technician, contractor Routes */}

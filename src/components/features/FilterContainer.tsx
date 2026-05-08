@@ -1,18 +1,15 @@
-// import { useState } from "react";
+import { cn } from "@/lib/utils";
 import { ColumnFilterItem } from "./ColumnFilterItem";
-// import type { AssetFormValues, CreateJobFormValues } from "@/schemas";
 import { type Table } from "@tanstack/react-table";
-// import AddNewItemButton from "./AddNewItemButton";
 
 type Props<T extends Record<string, unknown>> = {
   table: Table<T>;
-  className: string;
+  className?: string;
 };
 
 function FilterContainer<T extends Record<string, unknown>>({
   table,
-  className,
-  // onClick,
+  className = "",
 }: Props<T>) {
   const filterableColumns = table
     .getAllLeafColumns()
@@ -25,29 +22,22 @@ function FilterContainer<T extends Record<string, unknown>>({
       .map((row) => row.original[columnId as keyof T])
       .filter((v) => typeof v === "string") as string[];
 
-    return Array.from(new Set(values)).map((v) => ({
-      label: v,
-      value: v,
-    }));
+    return Array.from(new Set(values))
+      .sort((a, b) => a.localeCompare(b)) // Sort the options in alphabetical order
+      .map((v) => ({
+        label: v,
+        value: v,
+      }));
   };
 
   if (!filterableColumns.length) return null;
 
-  // <div className="flex gap-4 items-end w-full">
-  //   <FilterContainer table={table} className="" />
-  // </div>;
-
   return (
-    <div
-      className={`${className} flex gap-2 shadow-sm py-1 p-2 rounded-md dark:bg-(--bg-secondary_dark)`}
-    >
+    <div className={cn(className)}>
       {filterableColumns.map((column) => (
-        <div key={column.id} className="py-2 flex-1 capitalize">
-          <label className="text-xs text-gray-500">
-            {column.columnDef.header as string}
-          </label>
+        <div key={column.id} className="capitalize">
           <ColumnFilterItem
-            placeholder="All"
+            placeholder={column.columnDef.header as string}
             value={(column.getFilterValue() as string) ?? ""}
             onChange={(v) => column.setFilterValue(v)}
             options={uniqueValues(column.id)}
