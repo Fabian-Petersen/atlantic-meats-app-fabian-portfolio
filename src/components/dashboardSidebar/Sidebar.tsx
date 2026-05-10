@@ -1,4 +1,3 @@
-// import Separator from "./Seperator";
 import { Separator } from "../ui/separator";
 import { getUserGroups } from "@/auth/getUserGroups";
 import type { UserGroup } from "@/schemas/usersSchema";
@@ -6,17 +5,12 @@ import type { UserGroup } from "@/schemas/usersSchema";
 // $ Animation
 import { motion, AnimatePresence } from "framer-motion";
 
-import {
-  maintenanceLinks,
-  assetLinks,
-  mainLinks,
-  profileLinks,
-} from "../../data/navbarLinks";
+import { sidebarSectionData } from "../../data/navbarLinks";
 
 import SidebarSection from "./SidebarSection";
 
 import useGlobalContext from "../../context/useGlobalContext";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 
@@ -120,25 +114,17 @@ const Sidebar = () => {
 // Extract shared content to avoid duplication
 const SidebarContent = ({ userGroups }: { userGroups: UserGroup[] }) => (
   <div className="flex flex-col h-full gap-2 mt-6">
-    <SidebarSection data={mainLinks} heading="Main" userGroups={userGroups} />
-    <Separator />
-    <SidebarSection
-      data={maintenanceLinks}
-      heading="Maintenance"
-      userGroups={userGroups}
-    />
-    <Separator />
-    <SidebarSection
-      data={assetLinks}
-      heading="Assets"
-      userGroups={userGroups}
-    />
-    <Separator />
-    <SidebarSection
-      data={profileLinks}
-      heading="Profile"
-      userGroups={userGroups}
-    />
+    {sidebarSectionData.map((section, index) => (
+      <Fragment key={section.heading}>
+        <SidebarSection
+          data={section.data}
+          heading={section.heading}
+          userGroups={userGroups}
+        />
+
+        {index !== sidebarSectionData.length - 1 && <Separator />}
+      </Fragment>
+    ))}
   </div>
 );
 

@@ -44,6 +44,10 @@ import UsersListPage from "./pages/UsersListPage";
 import { useAuth } from "./auth/useAuth";
 import CreateUserPage from "./pages/CreateUserPage";
 
+// $ Stock Pages
+import CreateStockPage from "./pages/stocks/CreateStockPage";
+import StocksListPage from "./pages/stocks/StocksListPage";
+
 function App() {
   const { loading } = useAuth();
 
@@ -86,6 +90,8 @@ function App() {
               path="/jobs/:id/completed"
               element={<JobCompleteItemPage />}
             />
+            {/* <Route path="/stocks/:id/stock-item" element={<StockItemPage />} /> */}
+            <Route path="/stocks/list" element={<StocksListPage />} />
           </Route>
           {/* // % Admin only Routes */}
           <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>
@@ -103,6 +109,11 @@ function App() {
             <Route
               path="/assets/create-new-asset"
               element={<CreateAssetPage />}
+            />
+            {/* // $ Page to create a new stock item */}
+            <Route
+              path="/stocks/create-new-stock"
+              element={<CreateStockPage />}
             />
             {/* // $ Page to list all the users */}
             <Route path="/users" element={<UsersListPage />} />
