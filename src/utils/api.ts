@@ -43,7 +43,10 @@ export type Resource =
   // $ admin ROUTES
   | "admin/confirm-user-signup" // handle the user status update after initial login. Trigger PostConfirmationTrigger lambda
   | `admin/resend-temp-password/${string}`
-  | `admin/${string}`;
+  | `admin/${string}`
+  // $ Stocks ROUTES
+  | "stocks/create-new-stock" // "stocks-list" GET all stocks
+  | `stocks/${string}`; // GET, PUT, DELETE a single stock by id
 
 // $ Frontend Routing Paths (for redirection after actions)
 export type RedirectResource =
@@ -60,7 +63,10 @@ export type RedirectResource =
   | "assets/list" // Page showing all assets
   | `assets/${string}` // Page showing the details of an asset by id
   | "users" // Page showing the list of all users (admin only)
-  | "users/profile"; // Page showing details of a user meta data
+  | "users/profile" // Page showing details of a user meta data
+  | "stocks/create-new-stock" // Page with the form to create a new stock item
+  | "stocks/list" // Page showing all stock items
+  | `stocks/${string}`; // Page showing the details of a stock item by id
 
 // $ Combine the types into a union type for the generic functions
 export type RequestType =

@@ -23,6 +23,7 @@ type FormInputProps<TFieldValues extends FieldValues> = {
   inputStyles?: string;
   iconStyles?: string;
   labelStyles?: string;
+  required?: boolean;
 };
 
 import type {
@@ -54,6 +55,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
   inputStyles,
   iconStyles,
   labelStyles,
+  required,
 }: FormInputProps<TFieldValues>) {
   {
     /* import type {Control} from "react-hook-form"; */
@@ -111,6 +113,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
           )}
         >
           {label}
+          {required && <span className="text-red-500 ml-1">*</span>}
         </label>
       )}
       {/* Show error message if validation fails */}

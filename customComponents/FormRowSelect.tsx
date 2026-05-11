@@ -113,6 +113,7 @@ function FormRowSelect<T extends FieldValues>({
           className={cn(labelStyles, sharedStyles.formLabel)}
         >
           {label}
+          {required && <span className="text-red-500 ml-1">*</span>}
         </label>
       )}
       {error && (

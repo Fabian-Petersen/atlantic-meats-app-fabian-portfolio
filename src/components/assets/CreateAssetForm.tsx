@@ -228,7 +228,6 @@ const CreateAssetForm = () => {
           <FileInput control={control} name="images" multiple={true} />
         </Activity>
         <TextAreaInput
-          // label="Comments"
           name="additional_notes"
           placeholder="Comments"
           register={register}

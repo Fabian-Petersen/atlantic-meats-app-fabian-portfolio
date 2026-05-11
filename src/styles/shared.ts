@@ -147,11 +147,15 @@ export const sharedStyles = {
   formFile: cn(""),
   formLabel: cn(
     // general
-    "text-xs tracking-wider placeholder-transparent",
+    "text-[0.7rem] tracking-wider placeholder-transparent",
     //position
-    "absolute -top-5 left-0 px-2 mb-0 transition-all duration-400",
-    //peer
-    "peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-600 peer-focus:-top-5  peer-focus:text-gray-600 peer-focus:text-sm",
+    "absolute -top-2 left-2 px-1 mb-0 ",
+    //animation
+    "transition-all duration-200",
+    // background cuts through border
+    "bg-(--bg-secondary_light) dark:bg-(--clr-bgDark)",
+    //peer values can be set as a after focus position for the label
+    "peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-600 peer-focus:-top-2  peer-focus:text-gray-600 peer-focus:text-xs",
     //light
     "text-gray-700",
     //dark

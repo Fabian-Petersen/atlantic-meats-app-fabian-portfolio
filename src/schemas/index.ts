@@ -11,6 +11,7 @@ import { actionRequestSchema } from "./actionSchemas";
 import { assetRequestSchema } from "./assetSchemas";
 import { commentRequestSchema, commentResponseSchema } from "./commentSchemas";
 import { usersResponseSchema, usersRequestSchema } from "./usersSchema";
+import { stockRequestSchema } from "./stockSchemas";
 
 // #  Export Schemas
 export {
@@ -26,6 +27,7 @@ export {
   commentResponseSchema,
   usersResponseSchema,
   usersRequestSchema,
+  stockRequestSchema,
 };
 
 // ! Types
@@ -88,6 +90,12 @@ import type {
   UsersRequestFormValues,
   UserUpdateRequest,
 } from "./usersSchema";
+import type {
+  CreateStockPayload,
+  StockAPIResponse,
+  StockApprovedAPIResponse,
+  StockRequestFormValues,
+} from "./stockSchemas";
 
 export type {
   // Auth Types
@@ -130,6 +138,11 @@ export type {
   UsersAPIResponse,
   UsersRequestFormValues,
   UserUpdateRequest,
+  // Stock
+  StockRequestFormValues,
+  StockAPIResponse,
+  StockApprovedAPIResponse,
+  CreateStockPayload,
 };
 
 // GlobalContext.ts
