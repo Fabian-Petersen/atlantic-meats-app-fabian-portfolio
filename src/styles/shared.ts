@@ -149,13 +149,15 @@ export const sharedStyles = {
     // general
     "text-[0.7rem] tracking-wider placeholder-transparent",
     //position
-    "absolute -top-2 left-2 px-1 mb-0 ",
+    "absolute top-3 left-2 px-1 mb-0",
     //animation
     "transition-all duration-200",
     // background cuts through border
     "bg-(--bg-secondary_light) dark:bg-(--clr-bgDark)",
     //peer values can be set as a after focus position for the label
-    "peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-600 peer-focus:-top-2  peer-focus:text-gray-600 peer-focus:text-xs",
+    "peer-placeholder-shown:top-2 peer-placeholder-shown:text-gray-600 peer-focus:-top-2  peer-focus:text-gray-600 peer-focus:text-xs",
+    // State when a value is present (not placeholder, but actual value) - keeps the label up
+    "peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:text-xs",
     //light
     "text-gray-700",
     //dark

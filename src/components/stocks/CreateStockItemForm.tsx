@@ -2,31 +2,28 @@
 // Uses DynamicForm to create a new stock item.
 // Demonstrates cascading selects by updating the config array in state.
 
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DynamicForm, { type DynamicFormField } from "../forms/DynamicForm";
+import DynamicForm from "../forms/DynamicForm";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useStockFields } from "../forms/configs/useStockFields";
 import {
   type StockRequestFormValues,
   stockRequestSchema,
 } from "@/schemas/index";
-
-// $ ─── Data ─────────────────────────────────────────────────────────────────────
-import { CATEGORIES, SUPPLIERS, UNITS } from "@/data/stockFormOptions";
+// import { useForm, type Resolver } from "react-hook-form";
+// import { zodResolver } from "@hookform/resolvers/zod";
 
 // $ ─── Component ────────────────────────────────────────────────────────────────
 
 const CreateStockItemForm = () => {
   const navigate = useNavigate();
+  // $ Global context for showing success/error messages
   const { setSuccessConfig, setShowSuccess, setErrorConfig, setShowError } =
     useGlobalContext();
 
-  // Cascading select state
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const subCategoryOptions = selectedCategory
-    ? (CATEGORIES[selectedCategory] ?? [])
-    : [];
+  // $ Get dynamic field configurations from the custom hook
+  const { fields } = useStockFields();
 
   // Hook into shared submit logic (mirrors CreateAssetForm pattern)
   const { submit, isPending } = useFormSubmit({
@@ -51,85 +48,13 @@ const CreateStockItemForm = () => {
     },
   });
 
-  // ─── Field config ───────────────────────────────────────────────────────────
-  // Rebuild whenever cascading state changes so subCategory options stay fresh.
+  // const form = useForm<StockRequestFormValues>({
+  //   resolver: zodResolver(
+  //     stockRequestSchema,
+  //   ) as unknown as Resolver<StockRequestFormValues>,
+  // });
 
-  const fields: DynamicFormField<StockRequestFormValues>[] = [
-    {
-      fieldType: "input",
-      name: "description",
-      label: "Description",
-      required: true,
-    },
-    {
-      fieldType: "select",
-      label: "Unit Measure",
-      name: "unit",
-      // placeholder: "",
-      options: UNITS,
-      required: true,
-    },
-    {
-      fieldType: "select",
-      label: "Category",
-      name: "category",
-      // placeholder: "",
-      options: Object.keys(CATEGORIES),
-      required: true,
-      onChange: ([value]) => {
-        setSelectedCategory(value ?? null);
-      },
-    },
-    {
-      fieldType: "select",
-      name: "subCategory",
-      label: "Sub Category",
-      placeholder: "",
-      options: subCategoryOptions,
-      required: true,
-    },
-    {
-      fieldType: "input",
-      name: "minQty",
-      label: "Minimum Quantity",
-      type: "number",
-      required: true,
-    },
-    {
-      fieldType: "input",
-      name: "reorderQty",
-      type: "number",
-      label: "Reorder Quantity",
-    },
-    {
-      fieldType: "file",
-      name: "images",
-      label: "Upload images",
-      multiple: true,
-    },
-    {
-      fieldType: "select",
-      name: "supplier",
-      label: "Supplier",
-      options: SUPPLIERS,
-    },
-    {
-      fieldType: "input",
-      type: "text",
-      name: "costPerUnit",
-      label: "Cost per Unit",
-    },
-    {
-      fieldType: "textarea",
-      name: "notes",
-      label: "Notes",
-      rows: 3,
-      className: "md:col-span-2", // span full width on desktop
-    },
-  ];
-
-  // ─── Render ─────────────────────────────────────────────────────────────────
-
+  // $  ─── Render ─────────────────────────────────────────────────────────────────
   return (
     <DynamicForm<StockRequestFormValues>
       schema={stockRequestSchema}
@@ -138,8 +63,11 @@ const CreateStockItemForm = () => {
       isPending={isPending}
       submitText="Submit"
       cancelText="Cancel"
+      // control={form.control}
+      // register={form.register}
+      // errors={form.formState.errors}
+      // handleSubmit={form.handleSubmit}
       onCancel={() => navigate("/stock/list")}
-      // Optional per-form styling overrides
       className=""
       gridClassName="gap-6"
     />

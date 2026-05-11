@@ -4,11 +4,12 @@
 
 import {
   useForm,
-  type Resolver,
+  // type Resolver,
   type FieldValues,
   type Path,
   type FieldError,
   type Control,
+  type Resolver,
   type DefaultValues,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -95,6 +96,10 @@ export type DynamicFormProps<T extends FieldValues> = {
   isPending?: boolean;
   /** Default values pre-populated into the form */
   defaultValues?: DefaultValues<T>;
+  // control: Control<T>;
+  // register: ReturnType<typeof useForm<T>>["register"];
+  // errors: ReturnType<typeof useForm<T>>["formState"]["errors"];
+  // handleSubmit: ReturnType<typeof useForm<T>>["handleSubmit"];
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -110,6 +115,10 @@ function DynamicForm<T extends FieldValues>({
   onCancel,
   isPending = false,
   defaultValues,
+  // control,
+  // register,
+  // errors,
+  // handleSubmit,
 }: DynamicFormProps<T>) {
   const {
     register,
@@ -117,7 +126,7 @@ function DynamicForm<T extends FieldValues>({
     control,
     formState: { errors },
   } = useForm<T>({
-    resolver: zodResolver(schema) as Resolver<T>,
+    resolver: zodResolver(schema) as unknown as Resolver<T>,
     defaultValues,
   });
 

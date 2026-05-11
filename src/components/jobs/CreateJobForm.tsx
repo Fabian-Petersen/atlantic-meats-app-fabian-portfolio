@@ -3,12 +3,14 @@
 import { useNavigate } from "react-router-dom";
 
 // $ React-Hook-Form
-import { zodResolver } from "@hookform/resolvers/zod";
+// import { zodResolver } from "@hookform/resolvers/zod";
 import {
   useForm,
-  type Control,
   type Resolver,
-  useWatch,
+  // useForm,
+  // type Control,
+  // type Resolver,
+  // useWatch,
 } from "react-hook-form";
 
 // $ Zod Schema and Types
@@ -19,24 +21,29 @@ import type {
 
 import { jobRequestSchema } from "../../schemas/index";
 
-import FormRowSelect from "../../../customComponents/FormRowSelect";
+// import FormRowSelect from "../../../customComponents/FormRowSelect";
 
 // $ Data for select options
-import { priority, type, impact } from "@/data/maintenanceRequestFormData";
+// import { priority, type, impact } from "@/data/maintenanceRequestFormData";
 
-import FileInput from "../../../customComponents/FileInput";
-import TextAreaInput from "../../../customComponents/TextAreaInput";
+// import FileInput from "../../../customComponents/FileInput";
+// import TextAreaInput from "../../../customComponents/TextAreaInput";
 
 // $ Import api & custom hooks
-import { useAssetFilters } from "@/customHooks/useAssetFilters";
+// import { useAssetFilters } from "@/customHooks/useAssetFilters";
 import { useGetAll } from "@/utils/api";
-import { cn } from "@/lib/utils";
-import { sharedStyles } from "@/styles/shared";
+// import { cn } from "@/lib/utils";
+// import { sharedStyles } from "@/styles/shared";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
-import FormActionButtons from "../features/FormActionButtons";
+// import FormActionButtons from "../features/FormActionButtons";
 import useGlobalContext from "@/context/useGlobalContext";
 
+import { useJobFields } from "../forms/configs/useJobFields";
+import DynamicForm from "../forms/DynamicForm";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 const CreateJobForm = () => {
+  const navigate = useNavigate();
   const { setSuccessConfig, setShowSuccess, setErrorConfig, setShowError } =
     useGlobalContext();
 
@@ -78,146 +85,181 @@ const CreateJobForm = () => {
   const assetsArray: AssetRequestFormValues[] = Array.isArray(data) ? data : [];
   // $ Custom hook that manages the select input options based on asset data
 
-  const navigate = useNavigate();
-
-  // $ Form Schema
-  const {
-    handleSubmit,
-    control,
-    register,
-    setValue,
-    formState: { errors },
-  } = useForm<JobRequestFormValues>({
+  const form = useForm<JobRequestFormValues>({
     resolver: zodResolver(
       jobRequestSchema,
     ) as unknown as Resolver<JobRequestFormValues>,
   });
 
-  const selectedLocation = useWatch({
-    control,
-    name: "location",
+  const { fields } = useJobFields({
+    control: form.control,
+    setValue: form.setValue,
+    assets: assetsArray,
   });
 
-  const selectedArea = useWatch({
-    control,
-    name: "area",
-  });
-
-  const selectedEquipment = useWatch({
-    control,
-    name: "equipment",
-  });
-
-  const selectedAssetID = useWatch({
-    control,
-    name: "assetID",
-  });
-
-  const { equipmentOptions, assetIdOptions, locationOptions, areaOptions } =
-    useAssetFilters({
-      assets: assetsArray,
-      location: selectedLocation,
-      equipment: selectedEquipment,
-      assetID: selectedAssetID,
-      area: selectedArea,
-      setValue,
-    });
-
+  // $  ─── Render ─────────────────────────────────────────────────────────────────
   return (
-    <form className={cn(sharedStyles.form)} onSubmit={handleSubmit(submit)}>
-      <div className={cn(sharedStyles.formParent)}>
-        <TextAreaInput
-          name="description"
-          register={register}
-          placeholder="Enter a job description"
-          rows={1}
-          // label="Description"
-          className="lg:col-span-2"
-          error={errors.description}
-        />
-        <FormRowSelect
-          // label="Location"
-          name="location"
-          options={locationOptions}
-          placeholder="Select Location"
-          register={register}
-          error={errors.location}
-          className="capitalize"
-        />
-        <FormRowSelect
-          // label="Area"
-          name="area"
-          options={areaOptions}
-          placeholder="Select Area"
-          register={register}
-          error={errors.area}
-        />
-        <FormRowSelect
-          // label="Equipment"
-          name="equipment"
-          options={equipmentOptions}
-          // control={control}
-          placeholder="Select Equipment"
-          register={register}
-          error={errors.equipment}
-        />
-        <FormRowSelect
-          // label="Asset ID"
-          name="assetID"
-          options={assetIdOptions}
-          placeholder="Select Asset ID"
-          register={register}
-          error={errors.assetID}
-        />
-        <FormRowSelect
-          // label="Request Type"
-          name="type"
-          options={type}
-          placeholder="Select type"
-          register={register}
-          error={errors.type}
-        />
-        <FormRowSelect
-          // label="Impact"
-          name="impact"
-          options={impact}
-          placeholder="Select Impact"
-          register={register}
-          error={errors.impact}
-        />
-        <FormRowSelect
-          // label="Priority"
-          name="priority"
-          options={priority}
-          placeholder="Select Priority"
-          register={register}
-          error={errors.priority}
-        />
-        <FileInput
-          label=""
-          control={control as unknown as Control<JobRequestFormValues>}
-          name="images"
-          multiple={true}
-        />
-        <TextAreaInput
-          name="jobComments"
-          register={register}
-          placeholder="Comments"
-          rows={4}
-          // label="Comments"
-          className="lg:col-span-2"
-        />
-      </div>
-      <FormActionButtons
-        cancelText="Cancel"
-        onCancel={() => {
-          navigate("/dashboard");
-        }}
-        submitText="Submit"
-        isPending={isPending}
-      />
-    </form>
+    <DynamicForm<JobRequestFormValues>
+      schema={jobRequestSchema}
+      fields={fields}
+      errors={form.formState.errors}
+      register={form.register}
+      control={form.control}
+      onSubmit={submit}
+      handleSubmit={form.handleSubmit}
+      isPending={isPending}
+      submitText="Submit"
+      cancelText="Cancel"
+      onCancel={() => navigate("/dashboard")}
+      className=""
+      gridClassName="gap-6"
+    />
   );
+
+  // const navigate = useNavigate();
+
+  // // $ Form Schema
+  // const {
+  //   handleSubmit,
+  //   control,
+  //   register,
+  //   setValue,
+  //   formState: { errors },
+  // } = useForm<JobRequestFormValues>({
+  //   resolver: zodResolver(
+  //     jobRequestSchema,
+  //   ) as unknown as Resolver<JobRequestFormValues>,
+  // });
+
+  // const selectedLocation = useWatch({
+  //   control,
+  //   name: "location",
+  // });
+
+  // const selectedArea = useWatch({
+  //   control,
+  //   name: "area",
+  // });
+
+  // const selectedEquipment = useWatch({
+  //   control,
+  //   name: "equipment",
+  // });
+
+  // const selectedAssetID = useWatch({
+  //   control,
+  //   name: "assetID",
+  // });
+
+  // const { equipmentOptions, assetIdOptions, locationOptions, areaOptions } =
+  //   useAssetFilters({
+  //     assets: assetsArray,
+  //     location: selectedLocation,
+  //     equipment: selectedEquipment,
+  //     assetID: selectedAssetID,
+  //     area: selectedArea,
+  //     setValue,
+  //   });
+
+  // return (
+  //   <form className={cn(sharedStyles.form)} onSubmit={handleSubmit(submit)}>
+  //     <div className={cn(sharedStyles.formParent)}>
+  //       <TextAreaInput
+  //         name="description"
+  //         register={register}
+  //         label="Enter a job description"
+  //         rows={1}
+  //         className="lg:col-span-2"
+  //         error={errors.description}
+  //       />
+  //       <FormRowSelect
+  //         name="location"
+  //         options={locationOptions}
+  //         label="Select Location"
+  //         register={register}
+  //         error={errors.location}
+  //         className="capitalize"
+  //         required={true}
+  //         placeholder=""
+  //       />
+  //       <FormRowSelect
+  //         // label="Area"
+  //         name="area"
+  //         options={areaOptions}
+  //         label="Select Area"
+  //         register={register}
+  //         error={errors.area}
+  //       />
+  //       <FormRowSelect
+  //         // label="Equipment"
+  //         name="equipment"
+  //         options={equipmentOptions}
+  //         // control={control}
+  //         label="Select Equipment"
+  //         register={register}
+  //         error={errors.equipment}
+  //         required={true}
+  //       />
+  //       <FormRowSelect
+  //         // label="Asset ID"
+  //         name="assetID"
+  //         options={assetIdOptions}
+  //         label="Select Asset ID"
+  //         register={register}
+  //         error={errors.assetID}
+  //       />
+  //       <FormRowSelect
+  //         // label="Request Type"
+  //         name="type"
+  //         options={type}
+  //         label="Select Type"
+  //         register={register}
+  //         error={errors.type}
+  //         required={true}
+  //       />
+  //       <FormRowSelect
+  //         // label="Impact"
+  //         name="impact"
+  //         options={impact}
+  //         label="Select Impact"
+  //         register={register}
+  //         error={errors.impact}
+  //         required={true}
+  //       />
+  //       <FormRowSelect
+  //         // label="Priority"
+  //         name="priority"
+  //         options={priority}
+  //         label="Select Priority"
+  //         register={register}
+  //         error={errors.priority}
+  //         required={true}
+  //       />
+  //       <FileInput
+  //         label=""
+  //         control={control as unknown as Control<JobRequestFormValues>}
+  //         name="images"
+  //         multiple={true}
+  //       />
+  //       <TextAreaInput
+  //         name="jobComments"
+  //         register={register}
+  //         label="Comments"
+  //         rows={4}
+  //         // label="Comments"
+  //         className="lg:col-span-2"
+  //       />
+  //     </div>
+  //     <FormActionButtons
+  //       cancelText="Cancel"
+  //       onCancel={() => {
+  //         navigate("/dashboard");
+  //       }}
+  //       submitText="Submit"
+  //       isPending={isPending}
+  //     />
+  //   </form>
+  // );
 };
 
 export default CreateJobForm;

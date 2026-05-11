@@ -96,7 +96,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
         readOnly={readOnly}
         multiple={multiple}
         accept={accept}
-      ></input>
+      />
       {isPassword && togglePassword && (
         <PasswordToggle
           visible={isVisible ?? false}
