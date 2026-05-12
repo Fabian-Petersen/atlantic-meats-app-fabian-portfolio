@@ -4,6 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { AssetTableRow } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
+import type { NavigateFunction } from "react-router-dom";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -14,7 +15,6 @@ import { Badge } from "../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 
 export const getAssetColumns = (
-  showUpdateAssetDialog: boolean, // remove this again, only for testing
   setShowUpdateAssetDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (
@@ -25,6 +25,7 @@ export const getAssetColumns = (
       resourceName?: string;
     },
   ) => void,
+  navigate: NavigateFunction,
 ): ColumnDef<AssetTableRow>[] => [
   {
     accessorKey: "createdAt",
@@ -87,15 +88,28 @@ export const getAssetColumns = (
           url: "/asset",
           onOpen: () => {
             setShowUpdateAssetDialog(true);
-            console.log(showUpdateAssetDialog);
-            console.log("rowId:", rowId);
+            // console.log(showUpdateAssetDialog);
+            // console.log("rowId:", rowId);
             setSelectedRowId(rowId);
+          },
+        },
+        history: {
+          url: `/asset/${rowId}/history`,
+          config: {
+            resourcePath: `assets-data/${rowId}/history`,
+            queryKey: ["assets", "asset-history"],
+            resourceName: "asset",
+          },
+          onOpen: () => {
+            setSelectedRowId(rowId);
+            navigate(`/asset/${rowId}/history`);
+            console.log("history:", rowId);
           },
         },
         delete: {
           config: {
             resourcePath: "assets-data",
-            queryKey: ["assetRequests"],
+            queryKey: ["assets", "asset-elete"],
             resourceName: "asset",
           },
           onDelete: openDeleteDialog,

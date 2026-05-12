@@ -33,6 +33,7 @@ export type Resource =
   // $ Assets ROUTES
   | "assets-data" // "assets-list" GET all assets assets/{assetId} to DELETE, PUT, GET assetById
   | "assets-data/location" // NOT in use : Get all assets by location
+  | `assets-data/${string}/history`
   // $ Users ROUTES
   | "users/get-current-user" // Get user details by id
   | "users" // "admin/users" GET all users
@@ -62,6 +63,7 @@ export type RedirectResource =
   | "assets/create-new-asset" // Page with the form to create a new asset
   | "assets/list" // Page showing all assets
   | `assets/${string}` // Page showing the details of an asset by id
+  | `assets/${string}/history` // Page showing the history of an asset by id
   | "users" // Page showing the list of all users (admin only)
   | "users/profile" // Page showing details of a user meta data
   | "stocks/create-new-stock" // Page with the form to create a new stock item

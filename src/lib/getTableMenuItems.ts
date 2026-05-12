@@ -9,6 +9,7 @@ import {
   DownloadIcon,
   User,
   type LucideIcon,
+  History,
 } from "lucide-react";
 
 import type { Resource } from "@/utils/api";
@@ -22,11 +23,6 @@ export type TableActionLinks = {
   url?: string;
   onClick: () => void | Promise<void>;
 };
-
-// type DeleteConfig = {
-//   resourcePath: Resource;
-//   queryKey: readonly unknown[];
-// };
 
 type GetTableMenuItemsProps = {
   rowId: string;
@@ -50,6 +46,13 @@ type GetTableMenuItemsProps = {
     label?: string;
     url?: string;
     onOpen: () => void;
+  };
+
+  history?: {
+    label?: string;
+    url?: string;
+    onOpen: () => void;
+    config: DeleteConfig; // Change to its own config if needed
   };
 
   delete?: {
@@ -96,6 +99,7 @@ export const getTableMenuItems = ({
   comments,
   resend,
   userStatus,
+  history,
 }: GetTableMenuItemsProps): TableActionLinks[] => {
   const items: TableActionLinks[] = [];
 
@@ -121,6 +125,19 @@ export const getTableMenuItems = ({
       onClick: () => {
         setSelectedRowId(rowId);
         action.onOpen();
+      },
+    });
+  }
+
+  if (history) {
+    items.push({
+      id: "history",
+      label: history.label ?? "History",
+      icon: History,
+      url: history.url,
+      onClick: () => {
+        setSelectedRowId(rowId);
+        history.onOpen();
       },
     });
   }

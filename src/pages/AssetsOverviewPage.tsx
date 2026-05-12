@@ -6,6 +6,8 @@ import { useGetAll } from "@/utils/api";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { MobileAssetsOverviewTable } from "@/components/mobile/MolbileAssetsOverviewTable";
 
+import { useNavigate } from "react-router-dom";
+
 // $ Import Tanstack Table
 import {
   getCoreRowModel,
@@ -27,6 +29,7 @@ import { SearchInput } from "@/components/features/SearchInput";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 
 const AssetsOverviewPage = () => {
+  const navigate = useNavigate();
   const { data, isPending, isError } = useGetAll<AssetAPIResponse[]>({
     resourcePath: "assets-data",
     queryKey: ["getAssetsList", "assetsList"],
@@ -43,12 +46,8 @@ const AssetsOverviewPage = () => {
 
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const {
-    setShowUpdateAssetDialog,
-    showUpdateAssetDialog,
-    setSelectedRowId,
-    openDeleteDialog,
-  } = useGlobalContext();
+  const { setShowUpdateAssetDialog, setSelectedRowId, openDeleteDialog } =
+    useGlobalContext();
 
   // $ Map through the data returned to match the TableRow Data Schema
   const rows: AssetTableRow[] = useMemo(
@@ -67,10 +66,10 @@ const AssetsOverviewPage = () => {
   );
 
   const columns = getAssetColumns(
-    showUpdateAssetDialog,
     setShowUpdateAssetDialog,
     setSelectedRowId,
     openDeleteDialog,
+    navigate,
   );
   // $ This data is passed into the mobile component
   const table = useReactTable({
