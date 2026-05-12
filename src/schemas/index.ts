@@ -90,12 +90,7 @@ import type {
   UsersRequestFormValues,
   UserUpdateRequest,
 } from "./usersSchema";
-import type {
-  CreateStockPayload,
-  StockAPIResponse,
-  StockApprovedAPIResponse,
-  StockRequestFormValues,
-} from "./stockSchemas";
+import type { StockAPIResponse, StockRequestFormValues } from "./stockSchemas";
 
 export type {
   // Auth Types
@@ -141,8 +136,6 @@ export type {
   // Stock
   StockRequestFormValues,
   StockAPIResponse,
-  StockApprovedAPIResponse,
-  CreateStockPayload,
 };
 
 // GlobalContext.ts
