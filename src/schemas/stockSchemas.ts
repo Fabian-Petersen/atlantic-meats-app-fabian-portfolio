@@ -15,8 +15,6 @@ export type PresignedUrls = z.infer<typeof presignedURLSchema>;
 
 // $ Schema to create a maintenance request
 export const stockRequestSchema = z.object({
-  //   stockCode: z.string().min(1, { message: "Please enter a stock code" }),
-  //   stockType: z.string().min(1, { message: "Please select stock type" }),
   description: z.string().min(1, { message: "Please provide a description" }),
   unit: z.string().min(1, "Unit of measure is required"),
   category: z.string().min(1, { message: "Please select category" }),
@@ -27,64 +25,30 @@ export const stockRequestSchema = z.object({
     .min(1, { message: "Please enter a quantity" })
     .default(0),
   reorderQty: z.string().optional(),
-  images: z.array(z.instanceof(File)).default([]).optional(),
+  // images: z.array(z.instanceof(File)).default([]).optional(),
   supplier: z.string().optional().default(""),
-  costPerUnit: z.string().optional().default(""),
+  unitPrice: z.string().optional().default(""),
   notes: z.string().optional().default(""),
 });
 
 export type StockRequestFormValues = z.infer<typeof stockRequestSchema>;
 
 // $ Schema for the API Response from the database when fetching the maintenance requests
-export const stockRequestAPIResponseSchema = stockRequestSchema
-  .omit({
-    images: true,
-  })
-  .extend({
-    id: z.string(),
-    // jobCreated: z.string(),
-    // completed_at: z.string(),
-    // jobcardNumber: z.string(),
-    // status: z.string(),
-    // requested_by: z.string(),
-    // images: z.array(presignedURLSchema).default([]), // existing images (urls/keys)
-    // // $ These fields are added when a request was rejected
-    // reject_message: z.string().optional(),
-    // rejected_at: z.string().optional(),
-    // rejected_by: z.string().optional(),
-  });
-
-export const stockApprovedAPIResponseSchema = stockRequestSchema
-  .omit({
-    images: true,
-  })
-  .extend({
-    id: z.string(),
-    // jobCreated: z.string(),
-    // jobcardNumber: z.string(),
-    // status: z.string(),
-    // targetDate: z.string(),
-    // assign_to_group: z.string(),
-    // assign_to_name: z.string(),
-    // requested_by: z.string().optional(),
-    // approved_at: z.string().optional(),
-    // approved_by: z.string().optional(),
-    images: z.array(presignedURLSchema).default([]),
-  });
+export const stockRequestAPIResponseSchema = stockRequestSchema.extend({
+  id: z.string(),
+  stockCreated: z.string(),
+  stockID: z.string(),
+});
 
 export type StockAPIResponse = z.infer<typeof stockRequestAPIResponseSchema>;
 
-export type StockApprovedAPIResponse = z.infer<
-  typeof stockApprovedAPIResponseSchema
->;
-
 // $ Type for sending the images to the backend
-export type CreateStockPayload = Omit<StockRequestFormValues, "images"> & {
-  images: {
-    filename: string;
-    content_type: string;
-  }[];
-};
+// export type CreateStockPayload = Omit<StockRequestFormValues, "images"> & {
+//   images: {
+//     filename: string;
+//     content_type: string;
+//   }[];
+// };
 
 // $ Schema for the Maintenance Table Menu
 // export const jobTableRowSchema = jobRequestAPIResponseSchema

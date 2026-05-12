@@ -112,7 +112,7 @@ export const sharedStyles = {
 
   formInputDefault: cn(
     // layout & sizing
-    "text-xs py-3 px-2 w-full rounded-md outline-none",
+    "text-xs py-3 px-2 w-full rounded-md outline-none min-h-10",
 
     // base border & text (light)
     "border border-gray-300 text-gray-700",
@@ -134,9 +134,9 @@ export const sharedStyles = {
   //
   formSelect: cn(
     // peer was removed
-    "peer capitalize",
+    "peer capitalize hover:cursor-pointer",
     // select-specific tweaks
-    "focus:dark:bg-gray-800/80",
+    "",
   ),
 
   formTextArea: cn(
@@ -147,21 +147,23 @@ export const sharedStyles = {
   formFile: cn(""),
   formLabel: cn(
     // general
-    "text-[0.7rem] tracking-wider placeholder-transparent",
+    "text-[0.7rem] tracking-wider placeholder-transparent capitalize",
     //position
-    "absolute top-3 left-2 px-1 mb-0",
-    //animation
-    "transition-all duration-200",
+    "absolute -top-2 left-2 px-1 mb-0",
     // background cuts through border
-    "bg-(--bg-secondary_light) dark:bg-(--clr-bgDark)",
+    "bg-(--bg-secondary_light) dark:bg-(--bg-primary_dark)",
     //peer values can be set as a after focus position for the label
-    "peer-placeholder-shown:top-2 peer-placeholder-shown:text-gray-600 peer-focus:-top-2  peer-focus:text-gray-600 peer-focus:text-xs",
-    // State when a value is present (not placeholder, but actual value) - keeps the label up
-    "peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:text-xs",
+    "peer-placeholder-shown:-top-2 peer-placeholder-shown:text-gray-600 peer-focus:-top-2  peer-focus:text-gray-600",
     //light
     "text-gray-700",
     //dark
     "dark:peer-focus:text-gray-100 dark:peer-placeholder-shown:text-fontLight dark:text-gray-100/90",
+  ),
+  formLabelAnimate: cn(
+    //animation
+    "transition-all duration-200",
+    // State when a value is present (not placeholder, but actual value) - keeps the label up
+    "peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:text-xs",
   ),
   formError: cn("text-xs text-red-600 dark:text-red-500"),
   formSelectChevron: cn(

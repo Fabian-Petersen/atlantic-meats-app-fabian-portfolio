@@ -2,15 +2,20 @@
 // Uses DynamicForm to create a new stock item.
 // Demonstrates cascading selects by updating the config array in state.
 
+// $ ——— RHF & zod ————————————————————————————————————————————————————
+import { useForm, type Resolver } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  type StockRequestFormValues,
+  stockRequestSchema,
+} from "../../schemas/index";
+
 import { useNavigate } from "react-router-dom";
 import DynamicForm from "../forms/DynamicForm";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useStockFields } from "../forms/configs/useStockFields";
-import {
-  type StockRequestFormValues,
-  stockRequestSchema,
-} from "@/schemas/index";
+
 // import { useForm, type Resolver } from "react-hook-form";
 // import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -48,27 +53,36 @@ const CreateStockItemForm = () => {
     },
   });
 
-  // const form = useForm<StockRequestFormValues>({
-  //   resolver: zodResolver(
-  //     stockRequestSchema,
-  //   ) as unknown as Resolver<StockRequestFormValues>,
-  // });
+  const form = useForm<StockRequestFormValues>({
+    resolver: zodResolver(
+      stockRequestSchema,
+    ) as unknown as Resolver<StockRequestFormValues>,
+    defaultValues: {
+      description: "",
+      unit: "",
+      category: "",
+      subCategory: "",
+      minQty: "",
+      quantity: 0,
+      reorderQty: "",
+      // images: [],
+      supplier: "",
+      unitPrice: "",
+      notes: "",
+    },
+  });
 
   // $  ─── Render ─────────────────────────────────────────────────────────────────
   return (
     <DynamicForm<StockRequestFormValues>
-      schema={stockRequestSchema}
+      form={form}
       fields={fields}
       onSubmit={submit}
       isPending={isPending}
+      formHeading="Stocks - Create New"
       submitText="Submit"
       cancelText="Cancel"
-      // control={form.control}
-      // register={form.register}
-      // errors={form.formState.errors}
-      // handleSubmit={form.handleSubmit}
-      onCancel={() => navigate("/stock/list")}
-      className=""
+      onCancel={() => navigate("/stocks/list")}
       gridClassName="gap-6"
     />
   );

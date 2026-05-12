@@ -1,64 +1,70 @@
-import { useWatch, type UseFormSetValue, type Control } from "react-hook-form";
-
-import type { JobRequestFormValues, AssetRequestFormValues } from "@/schemas";
+import { useWatch, type UseFormReturn } from "react-hook-form";
+import {
+  type JobRequestFormValues,
+  type AssetRequestFormValues,
+} from "@/schemas";
 
 import type { DynamicFormField } from "../DynamicForm";
-
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
-
 import { impact, priority, type } from "@/data/maintenanceRequestFormData";
 
-type UseJobFieldsProps = {
-  control: Control<JobRequestFormValues>;
-  setValue: UseFormSetValue<JobRequestFormValues>;
-  assets: AssetRequestFormValues[];
-};
-
-export const useJobFields = ({
-  control,
-  setValue,
-  assets,
-}: UseJobFieldsProps) => {
-  // ─── Watch Dependent Values ───────────────────────
+// $ ——— Hook ─────────────────────────────────────────────────────
+export const useJobFields = (
+  form: UseFormReturn<JobRequestFormValues>,
+  assetsArray: AssetRequestFormValues[],
+) => {
+  // $ ─── Watch Dependent Values ─────────────────────────────────
   const selectedLocation = useWatch({
-    control,
+    control: form.control,
     name: "location",
   });
 
   const selectedArea = useWatch({
-    control,
+    control: form.control,
     name: "area",
   });
 
   const selectedEquipment = useWatch({
-    control,
+    control: form.control,
     name: "equipment",
   });
 
   const selectedAssetID = useWatch({
-    control,
+    control: form.control,
     name: "assetID",
   });
 
-  // ─── Dynamic Asset Filters ───────────────────────
+  // $ ─── Dynamic Asset Filters ─────────────────────────────────────
   const { equipmentOptions, assetIdOptions, locationOptions, areaOptions } =
     useAssetFilters({
-      assets,
+      assets: assetsArray || [], // ✅ default to empty array if assets is undefined
       location: selectedLocation,
+      area: selectedArea,
       equipment: selectedEquipment,
       assetID: selectedAssetID,
-      area: selectedArea,
-      setValue,
+      setValue: form.setValue,
     });
 
-  // ─── Dynamic Fields ──────────────────────────────
+  // $ ─── Helpers ──────────────────────────────────────
+  /**
+   * Safely converts any option shape to plain string values.
+   * Returns [] if the source array is undefined/null so that
+   * FormRowSelect never receives undefined and tries to .map() it.
+   */
   const normalizeOptions = (
-    options: Array<string> | Array<{ label: string; value: string }>,
-  ): string[] =>
-    options.map((option) =>
+    options:
+      | Array<string>
+      | Array<{ label: string; value: string }>
+      | undefined
+      | null,
+  ): string[] => {
+    if (!options) return []; // ✅ guard against undefined/null from async data
+    return options.map((option) =>
       typeof option === "string" ? option : option.value,
     );
+  };
 
+  // $ ─── Field Config ─────────────────────────────────
   const fields: DynamicFormField<JobRequestFormValues>[] = [
     {
       fieldType: "textarea",
@@ -68,11 +74,12 @@ export const useJobFields = ({
       className: "lg:col-span-2",
       required: true,
     },
-
     {
       fieldType: "select",
       name: "location",
-      label: "Select Location",
+      label: "Location",
+      placeholder: "Select Location",
+      // ✅ always an array, even when assets haven't loaded yet
       options: normalizeOptions(locationOptions),
       required: true,
     },
@@ -80,14 +87,16 @@ export const useJobFields = ({
     {
       fieldType: "select",
       name: "area",
-      label: "Select Area",
+      label: "Area",
+      placeholder: "Select Area",
       options: normalizeOptions(areaOptions),
     },
 
     {
       fieldType: "select",
       name: "equipment",
-      label: "Select Equipment",
+      label: "Equipment",
+      placeholder: "Select Equipment",
       options: normalizeOptions(equipmentOptions),
       required: true,
     },
@@ -95,14 +104,16 @@ export const useJobFields = ({
     {
       fieldType: "select",
       name: "assetID",
-      label: "Select Asset ID",
+      label: "Asset ID",
+      placeholder: "Select Asset ID",
       options: normalizeOptions(assetIdOptions),
     },
 
     {
       fieldType: "select",
       name: "type",
-      label: "Select Type",
+      label: "Type",
+      placeholder: "Select Type",
       options: normalizeOptions(type),
       required: true,
     },
@@ -110,7 +121,8 @@ export const useJobFields = ({
     {
       fieldType: "select",
       name: "impact",
-      label: "Select Impact",
+      label: "Impact",
+      placeholder: "Select Impact",
       options: normalizeOptions(impact),
       required: true,
     },
@@ -118,7 +130,8 @@ export const useJobFields = ({
     {
       fieldType: "select",
       name: "priority",
-      label: "Select Priority",
+      label: "Priority",
+      placeholder: "Select Priority",
       options: normalizeOptions(priority),
       required: true,
     },

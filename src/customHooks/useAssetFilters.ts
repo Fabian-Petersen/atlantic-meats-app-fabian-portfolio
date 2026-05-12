@@ -20,6 +20,92 @@ interface Params {
 
 const normalize = (value?: string) => value?.trim().toLowerCase() ?? "";
 
+/**
+ * A cascading filter hook for asset selection forms.
+ *
+ * Filters a flat list of assets through four hierarchical levels:
+ * **Location → Area → Equipment → Asset ID**
+ *
+ * Each level's options are derived from the assets that pass all
+ * upstream filters, so selecting a Location automatically narrows
+ * the available Areas, and so on. When an upstream value changes
+ * such that a downstream selection is no longer valid, the hook
+ * automatically resets the stale field(s) via `setValue`.
+ *
+ * @param params - Configuration object
+ * @param params.assets - The full, unfiltered list of assets (from the form
+ *   state or an API response). Should be stable across renders to avoid
+ *   unnecessary recomputation.
+ * @param params.location - The currently selected location value (controlled).
+ *   Pass `undefined` or `""` to show all locations.
+ * @param params.area - The currently selected area value (controlled).
+ *   Automatically cleared when it becomes invalid after a location change.
+ * @param params.equipment - The currently selected equipment value (controlled).
+ *   Automatically cleared when it becomes invalid after an area change.
+ * @param params.assetID - The currently selected asset ID value (controlled).
+ *   Automatically cleared when it becomes invalid after an equipment change.
+ *   Values that are `null`, `undefined`, `NaN`, `""`, or the string `"nan"`
+ *   are excluded from the available options.
+ * @param params.setValue - The `setValue` function from `react-hook-form`,
+ *   used to reset downstream fields when an upstream filter changes.
+ *
+ * @returns An object containing four option arrays for use in select inputs:
+ * @returns returns.locationOptions - All unique locations across the full asset list.
+ * @returns returns.areaOptions - Unique areas within the selected location
+ *   (or all areas if no location is selected).
+ * @returns returns.equipmentOptions - Unique equipment types within the selected
+ *   location + area combination.
+ * @returns returns.assetIdOptions - Valid, unique asset IDs within the selected
+ *   location + area + equipment combination. Invalid IDs (`null`, `undefined`,
+ *   `NaN`, `""`, `"nan"`) are filtered out.
+ *
+ * @example
+ * // Basic usage inside a react-hook-form form component
+ * const { control, setValue, watch } = useForm<JobRequestFormValues>();
+ *
+ * const location  = watch("location");
+ * const area      = watch("area");
+ * const equipment = watch("equipment");
+ * const assetID   = watch("assetID");
+ *
+ * const {
+ *   locationOptions,
+ *   areaOptions,
+ *   equipmentOptions,
+ *   assetIdOptions,
+ * } = useAssetFilters({
+ *   assets,      // AssetRequestFormValues[] from API or form state
+ *   location,
+ *   area,
+ *   equipment,
+ *   assetID,
+ *   setValue,
+ * });
+ *
+ * return (
+ *   <>
+ *     <Select name="location" options={locationOptions} />
+ *     <Select name="area"      options={areaOptions} />
+ *     <Select name="equipment" options={equipmentOptions} />
+ *     <Select name="assetID"   options={assetIdOptions ?? []} />
+ *   </>
+ * );
+ *
+ * @example
+ * // Cascade reset behaviour — when location changes from "Site A" to "Site B",
+ * // if the current area ("Zone 1") doesn't exist under "Site B", the hook
+ * // automatically calls:
+ * //   setValue("area", "")
+ * //   setValue("equipment", "")
+ * //   setValue("assetID", "")
+ *
+ * @dependencies
+ * - react          — `useMemo`, `useEffect`
+ * - react-hook-form — `UseFormSetValue` (type), `setValue` at runtime
+ *
+ * @see {@link AssetRequestFormValues} for the shape of each asset record
+ * @see {@link JobRequestFormValues}   for the parent form schema
+ */
 export const useAssetFilters = ({
   location,
   assets,

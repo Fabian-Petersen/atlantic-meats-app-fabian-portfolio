@@ -144,15 +144,15 @@ export const useStockFields = () => {
     {
       fieldType: "input",
       type: "text",
-      name: "costPerUnit",
+      name: "unitPrice",
       label: "Cost per Unit",
     },
-    {
-      fieldType: "file",
-      name: "images",
-      label: "Images",
-      multiple: true,
-    },
+    // {
+    //   fieldType: "file",
+    //   name: "images",
+    //   label: "Images",
+    //   multiple: true,
+    // },
     {
       fieldType: "textarea",
       name: "notes",

@@ -9,6 +9,7 @@ import type {
 import { Controller } from "react-hook-form";
 import clsx from "clsx";
 import { Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const MAX_FILES = 10;
@@ -94,8 +95,8 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
             {/* Custom button */}
             <label
               htmlFor={String(name)}
-              className={clsx(
-                "inline-flex cursor-pointer items-center rounded-md border text-xs py-3 px-2",
+              className={cn(
+                "inline-flex cursor-pointer items-center rounded-md border text-xs py-3 px-2 min-h-10",
                 "bg-white hover:bg-gray-50 border-gray-300 w-full",
                 "dark:bg-(--bg-secondary_dark) dark:border-(--clr-borderDark) dark:text-(--clr-textDark) not-[]:dark:bg-[#2b3a5c] dark:hover:bg-[#34466e]",
                 (error || localError) && "border-red-500",

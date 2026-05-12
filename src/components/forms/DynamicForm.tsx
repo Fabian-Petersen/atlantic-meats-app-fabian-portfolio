@@ -3,16 +3,16 @@
 // Pass a `fields` config array to declaratively render any form layout.
 
 import {
-  useForm,
-  // type Resolver,
+  // useForm,
   type FieldValues,
   type Path,
   type FieldError,
   type Control,
-  type Resolver,
+  // type Resolver,
   type DefaultValues,
+  type UseFormReturn,
 } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+// import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
 import FormRowInput from "../../../customComponents/FormRowInput";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
@@ -20,11 +20,13 @@ import TextAreaInput from "../../../customComponents/TextAreaInput";
 import FileInput from "../../../customComponents/FileInput";
 import FormActionButtons from "../features/FormActionButtons";
 import { sharedStyles } from "@/styles/shared";
+import { FormSkeleton } from "./FormSkeleton";
+import FormHeading from "../../../customComponents/FormHeading";
 
 // Bridge the Zod v4 ↔ @hookform/resolvers (Zod v3) type gap without `any`.
 // Parameters<...>[0] extracts exactly the schema type zodResolver expects,
 // so the cast below is fully grounded in the library's own types.
-type ZodResolverSchema = Parameters<typeof zodResolver>[0];
+// type ZodResolverSchema = Parameters<typeof zodResolver>[0];
 
 // ─── Field Config Types ───────────────────────────────────────────────────────
 
@@ -74,10 +76,9 @@ export type DynamicFormField<T extends FieldValues> =
   | FileField<T>;
 
 // ─── DynamicForm Props ────────────────────────────────────────────────────────
-
 export type DynamicFormProps<T extends FieldValues> = {
   /** Zod schema used for validation */
-  schema: ZodResolverSchema;
+  form: UseFormReturn<T>;
   /** Field configuration array — drives what the form renders */
   fields: DynamicFormField<T>[];
   /** Called with validated form values on submit */
@@ -96,16 +97,21 @@ export type DynamicFormProps<T extends FieldValues> = {
   isPending?: boolean;
   /** Default values pre-populated into the form */
   defaultValues?: DefaultValues<T>;
-  // control: Control<T>;
-  // register: ReturnType<typeof useForm<T>>["register"];
-  // errors: ReturnType<typeof useForm<T>>["formState"]["errors"];
-  // handleSubmit: ReturnType<typeof useForm<T>>["handleSubmit"];
+  /** Form heading */
+  formHeading?: string;
+  /**
+   * When true the form renders skeleton placeholders instead of
+   * interactive inputs. Pass this while your async data (e.g. `assets`)
+   * is still loading so that option arrays are never undefined at render
+   * time inside child components.
+   */
+  isLoading?: boolean;
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
 function DynamicForm<T extends FieldValues>({
-  schema,
+  form,
   fields,
   onSubmit,
   className,
@@ -114,21 +120,15 @@ function DynamicForm<T extends FieldValues>({
   cancelText = "Cancel",
   onCancel,
   isPending = false,
-  defaultValues,
-  // control,
-  // register,
-  // errors,
-  // handleSubmit,
+  isLoading = false, // from the loading state of the query that fetches data for select options
+  formHeading,
 }: DynamicFormProps<T>) {
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<T>({
-    resolver: zodResolver(schema) as unknown as Resolver<T>,
-    defaultValues,
-  });
+  } = form;
 
   // FieldErrors<T>[Path<T>] is a wide union type; narrow it to FieldError for
   // the individual input components that expect FieldError | undefined.
@@ -200,23 +200,37 @@ function DynamicForm<T extends FieldValues>({
     }
   };
 
-  return (
-    <form
-      className={cn(sharedStyles.form, className)}
-      onSubmit={handleSubmit(onSubmit)}
-      noValidate
-    >
-      <div className={cn(sharedStyles.formParent, gridClassName)}>
-        {fields.map(renderField)}
+  if (isLoading) {
+    return (
+      <div className={cn(sharedStyles.form, className)}>
+        <FormSkeleton />
       </div>
+    );
+  }
 
-      <FormActionButtons
-        submitText={submitText}
-        cancelText={cancelText}
-        onCancel={onCancel}
-        isPending={isPending}
+  return (
+    <>
+      <FormHeading
+        className={cn(sharedStyles.headingForm)}
+        heading={formHeading ?? "Form"}
       />
-    </form>
+      <form
+        className={cn(sharedStyles.form, className)}
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+      >
+        <div className={cn(sharedStyles.formParent, gridClassName)}>
+          {fields.map(renderField)}
+        </div>
+
+        <FormActionButtons
+          submitText={submitText}
+          cancelText={cancelText}
+          onCancel={onCancel}
+          isPending={isPending}
+        />
+      </form>
+    </>
   );
 }
 

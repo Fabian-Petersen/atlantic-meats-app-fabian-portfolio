@@ -1,6 +1,4 @@
 import { cn } from "@/lib/utils";
-import FormHeading from "../../../customComponents/FormHeading";
-// import CreateStockForm from "@/components/assets/CreateStockForm";
 import { sharedStyles } from "@/styles/shared";
 import CreateStockItemForm from "@/components/stocks/CreateStockItemForm";
 
@@ -33,10 +31,6 @@ const CreateStockPage = () => {
   return (
     <div className={cn(sharedStyles.pageContainer)}>
       <div className={cn(sharedStyles.pageContent)}>
-        <FormHeading
-          className={cn(sharedStyles.headingForm)}
-          heading="Create Stock"
-        />
         <CreateStockItemForm />
       </div>
     </div>
