@@ -94,7 +94,7 @@ export const getAssetColumns = (
           },
         },
         history: {
-          url: `/asset/${rowId}/history`,
+          url: `/assets/${rowId}/history`,
           config: {
             resourcePath: `assets-data/${rowId}/history`,
             queryKey: ["assets", "asset-history"],
@@ -102,7 +102,7 @@ export const getAssetColumns = (
           },
           onOpen: () => {
             setSelectedRowId(rowId);
-            navigate(`/asset/${rowId}/history`);
+            navigate(`/assets/${rowId}/history`);
             console.log("history:", rowId);
           },
         },

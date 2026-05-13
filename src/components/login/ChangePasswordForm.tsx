@@ -27,7 +27,7 @@ const ChangePasswordForm = ({
   });
 
   // $ Manange the Password Visibility
-  const showPassword = usePasswordVisibility();
+  const { isVisible, type, toggle } = usePasswordVisibility();
 
   return (
     <form
@@ -48,9 +48,9 @@ const ChangePasswordForm = ({
           label="Password"
           name="newPassword"
           placeholder="Enter your password"
-          type={showPassword.type} // comes from the usePasswordVisibility hook
-          togglePassword={showPassword.toggle} // comes from the usePasswordVisibility hook
-          isVisible={showPassword.isVisible} // comes from the usePasswordVisibility hook
+          type={type("newPassword")} // comes from the usePasswordVisibility hook
+          togglePassword={() => toggle("newPassword")} // comes from the usePasswordVisibility hook
+          isVisible={isVisible("newPassword")} // comes from the usePasswordVisibility hook
           register={register}
           error={errors.newPassword}
         />
@@ -58,9 +58,9 @@ const ChangePasswordForm = ({
           label="Confirm Password"
           name="confirmPassword"
           placeholder="Confirm your password"
-          // type={showPassword.type} // comes from the usePasswordVisibility hook
-          // togglePassword={showPassword.toggle} // comes from the usePasswordVisibility hook
-          // isVisible={showPassword.isVisible} // comes from the usePasswordVisibility hook
+          type={type("confirmPassword")} // comes from the usePasswordVisibility hook
+          togglePassword={() => toggle("confirmPassword")} // comes from the usePasswordVisibility hook
+          isVisible={isVisible("confirmPassword")} // comes from the usePasswordVisibility hook
           register={register}
           error={errors.confirmPassword}
         />

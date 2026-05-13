@@ -31,7 +31,7 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
   });
 
   // $ Manange the Password Visibility
-  const showPassword = usePasswordVisibility();
+  const { type, toggle, isVisible } = usePasswordVisibility();
 
   return (
     <form
@@ -52,9 +52,9 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
             label="Password"
             name="password"
             placeholder="Enter your password"
-            type={showPassword.type} // comes from the usePasswordVisibility hook
-            togglePassword={showPassword.toggle} // comes from the usePasswordVisibility hook
-            isVisible={showPassword.isVisible} // comes from the usePasswordVisibility hook
+            type={type("password")} // comes from the usePasswordVisibility hook
+            togglePassword={() => toggle("password")} // comes from the usePasswordVisibility hook
+            isVisible={isVisible("password")} // comes from the usePasswordVisibility hook
             register={register}
             error={errors.password}
           />

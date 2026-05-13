@@ -47,6 +47,7 @@ import CreateUserPage from "./pages/CreateUserPage";
 // $ Stock Pages
 import CreateStockPage from "./pages/stocks/CreateStockPage";
 import StocksListPage from "./pages/stocks/StocksListPage";
+import AssetHistoryPage from "./pages/AssetHistoryPage";
 
 function App() {
   const { loading } = useAuth();
@@ -110,6 +111,7 @@ function App() {
               path="/assets/create-new-asset"
               element={<CreateAssetPage />}
             />
+            <Route path="/assets/:id/history" element={<AssetHistoryPage />} />
             {/* // $ Page to create a new stock item */}
             <Route
               path="/stocks/create-new-stock"
