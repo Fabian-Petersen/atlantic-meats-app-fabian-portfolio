@@ -6,12 +6,12 @@ import type {
 } from "@/schemas/dashboardSchema";
 import { useGetAll } from "@/utils/api";
 
-export const useDashboardMetrics = (): {
+export const useDashboardJobsMetrics = (): {
   cards: MetricCardConfig[];
   isPending: boolean;
 } => {
   const { data, isPending } = useGetAll<DashboardMetricsResponse>({
-    resourcePath: "dashboard/metrics",
+    resourcePath: "dashboard/metrics/jobs",
     queryKey: ["dashboard", "metrics"],
   });
 

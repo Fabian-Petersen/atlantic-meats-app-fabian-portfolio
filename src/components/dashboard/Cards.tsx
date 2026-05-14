@@ -1,19 +1,14 @@
-import { useDashboardMetrics } from "@/hooks/useDashboardMetrics";
+import { useDashboardJobsMetrics } from "@/hooks/useDashboardJobsMetrics";
 
 import { MetricCardItem } from "./MetricsCardItem";
 
 const Cards = () => {
-  const { cards, isPending } = useDashboardMetrics();
+  const { cards, isPending } = useDashboardJobsMetrics();
 
   if (!cards.length) return null;
 
   return (
-    <div
-      className="
-        grid w-full
-        grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4
-      "
-    >
+    <div className="grid w-full grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
       {cards.map((card) => (
         <MetricCardItem
           key={card.cardData.id}

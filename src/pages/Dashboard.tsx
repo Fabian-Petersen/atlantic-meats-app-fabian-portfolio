@@ -5,7 +5,6 @@
 
 // import Sidebar from "@/components/dashboardSidebar/Sidebar";
 import OpenRequestsPieChart from "@/components/dashboard/charts/OpenRequestsPieChart";
-import CardContainer from "../components/dashboard/CardContainer";
 import CostYTDChart from "@/components/dashboard/charts/CostYTDChart";
 import ChartHeading from "@/components/dashboard/ChartHeading";
 import { getDashboardJobColumns } from "@/components/maintenanceRequestTable/columns";
@@ -20,7 +19,9 @@ import { getUserGroups } from "@/auth/getUserGroups";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
-import { useDashboardMetrics } from "@/hooks/useDashboardMetrics";
+import { useDashboardJobsMetrics } from "@/hooks/useDashboardJobsMetrics";
+// import Cards from "@/components/dashboard/Cards";
+import CardContainer from "../components/dashboard/CardContainer";
 
 const Dashboard = () => {
   const columns = getDashboardJobColumns();
@@ -35,7 +36,8 @@ const Dashboard = () => {
   });
 
   // $ Hook pass the cards data to the CardContainer
-  const { cards, isPending } = useDashboardMetrics();
+  const { cards, isPending } = useDashboardJobsMetrics();
+  // console.log("cards:", cards);
 
   useEffect(() => {
     const loadGroups = async () => {
@@ -51,6 +53,7 @@ const Dashboard = () => {
         {/* $ Cards */}
         <section className="col-span-2 lg:col-span-3 xl:col-span-4 dark:border-gray-700/50">
           <CardContainer cards={cards} isPending={isPending} />
+          {/* <Cards /> */}
         </section>
         {/* Revenue & Expense Chart */}
         <section

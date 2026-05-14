@@ -27,7 +27,8 @@ export type DashboardMetricKey =
   | "approvedRequests"
   | "overdueRequests"
   | "totalCompleted"
-  | "totalAssets";
+  | "totalAssets"
+  | "totalCost";
 
 export type MetricCardConfig = {
   cardData: CardData;
