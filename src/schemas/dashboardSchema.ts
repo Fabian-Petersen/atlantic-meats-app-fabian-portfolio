@@ -9,25 +9,41 @@ export const cardItemSchema = z.object({
   bgColor: z.string(),
 });
 
-export type MetricItem = {
+export type MetricValues = {
   value: number;
   valueChange: number;
 };
 
-type Metrics<T extends string> = Record<T, MetricItem>;
-
-export type CardData<T extends string> = {
-  id: T;
+export type CardData = {
+  id: DashboardMetricKey;
   title: string;
   color: string;
   bgColor: string;
   icon: LucideIcon;
 };
 
-export type CardItem<T extends string> = {
-  cardData: CardData<T>[];
-  metrics: Metrics<T>;
+export type DashboardMetricKey =
+  | "pendingRequests"
+  | "approvedRequests"
+  | "overdueRequests"
+  | "totalCompleted"
+  | "totalAssets";
+
+export type MetricCardConfig = {
+  cardData: CardData;
+  metrics: MetricValues;
 };
+
+export type DashboardMetricsResponse = Record<DashboardMetricKey, MetricValues>;
+
+/* -------------------------------- Old Types ------------------------------- */
+
+type Metrics<T extends string> = Record<T, MetricValues>;
+
+// export type CardItem<T extends string> = {
+//   cardData: CardData<T>[];
+//   metrics: Metrics<T>;
+// };
 
 // $ Metrics Key for pending jobs card
 export type PendingJobsMetricKey = "pendingRequests";
