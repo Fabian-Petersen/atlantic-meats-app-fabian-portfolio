@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { metricValuesSchema } from "@/schemas/dashboardSchema";
 
 // $ Schema to create a new asset
 export const assetRequestSchema = z.object({
@@ -57,6 +58,33 @@ export const assetTableRowSchema = assetRequestSchema
     id: z.string(),
     createdAt: z.string(),
   });
+
+export const assetHistoryItemSchema = z.object({
+  requestId: z.string(),
+  assetID: z.string(),
+  status: z.enum(["pending", "in progress", "complete"]),
+  jobCreated: z.string(), // ISO date
+  targetDate: z.string().optional(),
+  completedAt: z.string().optional(),
+  location: z.string(),
+  description: z.string().optional(),
+  requestedBy: z.string().optional(),
+  technician: z.string().optional(),
+});
+
+export type AssetHistoryItem = z.infer<typeof assetHistoryItemSchema>;
+
+export const assetHistoryResponseSchema = z.object({
+  assetID: z.string(),
+  metrics: {
+    completedRequests: metricValuesSchema,
+    inProgressRequests: metricValuesSchema,
+    pendingRequests: metricValuesSchema,
+  },
+  history: z.array(assetHistoryItemSchema),
+});
+
+export type AssetHistoryResponse = z.infer<typeof assetHistoryResponseSchema>;
 
 export type AssetTableRow = z.infer<typeof assetTableRowSchema>;
 

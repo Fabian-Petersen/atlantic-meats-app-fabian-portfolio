@@ -103,7 +103,7 @@ export const getAssetColumns = (
           onOpen: () => {
             setSelectedRowId(rowId);
             navigate(`/assets/${rowId}/history`);
-            console.log("history:", rowId);
+            // console.log("history:", rowId);
           },
         },
         delete: {

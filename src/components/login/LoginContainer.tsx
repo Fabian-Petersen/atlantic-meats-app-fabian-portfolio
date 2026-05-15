@@ -121,7 +121,7 @@ export default function LoginContainer() {
             <img
               src="https://www.atlanticmeat.co.za/assets/images/am20loyalty20logo-472x214.webp"
               alt="Logo"
-              className="w-1/2 h-full rounded-lg"
+              className="w-1/2 h-full rounded-md"
             />
           </div>
           <FormHeading

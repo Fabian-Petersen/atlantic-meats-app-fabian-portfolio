@@ -34,6 +34,7 @@ export type Resource =
   | "assets-data" // "assets-list" GET all assets assets/{assetId} to DELETE, PUT, GET assetById
   | "assets-data/location" // NOT in use : Get all assets by location
   | `assets-data/${string}/history`
+  | `assets-data/${string}/history/metrics` // GET, asset history metrics
   // $ Users ROUTES
   | "users/get-current-user" // Get user details by id
   | "users" // "admin/users" GET all users
@@ -48,8 +49,7 @@ export type Resource =
   // $ Stocks ROUTES
   | "stocks/create-new-stock" // "stocks-list" GET all stocks
   | `stocks/${string}` // GET, PUT, DELETE a single stock by id
-  | "dashboard/metrics/jobs" // GET, the metrics data for jobs from the backend
-  | `assets/${string}/history/metrics`; // GET, asset history metrics
+  | "dashboard/metrics/jobs"; // GET, the metrics data for jobs from the backend
 
 // $ Frontend Routing Paths (for redirection after actions)
 export type RedirectResource =

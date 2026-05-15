@@ -9,10 +9,12 @@ export const cardItemSchema = z.object({
   bgColor: z.string(),
 });
 
-export type MetricValues = {
-  value: number;
-  valueChange: number;
-};
+export const metricValuesSchema = z.object({
+  value: z.number(),
+  valueChange: z.number().optional(),
+});
+
+export type MetricValues = z.infer<typeof metricValuesSchema>;
 
 export type CardData = {
   id: DashboardMetricKey;
@@ -27,6 +29,9 @@ export type DashboardMetricKey =
   | "approvedRequests"
   | "overdueRequests"
   | "totalCompleted"
+  // Assets History
+  | "inProgressRequests"
+  | "completedRequests"
   | "totalAssets"
   | "totalCost";
 

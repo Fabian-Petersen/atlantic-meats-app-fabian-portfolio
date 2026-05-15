@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 // $ Mobile Shared Styles
 export const sharedStyles = {
-  /* //$ ——— Pages ———————————————————————————————————————————————————————— */
+  /* //$ ——— Pages —————————————————————————————————————————————————————————————— */
   appLayout: cn(
     "min-h-screen w-full grid grid-cols-1 lg:grid-rows-[var(--lg-navbarHeight)_1fr] lg:grid-cols-[15rem_1fr] grid-rows-[var(--sm-navbarHeight)_1fr] bg-(--pageLight) dark:bg-(--pageDark)",
   ),
@@ -12,6 +12,26 @@ export const sharedStyles = {
   pageContent: cn(
     "bg-(--pageLight) flex flex-col gap-4 w-full lg:max-w-3xl h-auto rounded-xl shadow-lg p-4 dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) dark:border-gray-700/50 dark:border border border-gray-200/70",
   ),
+
+  /* //$ ——— Dashboards ————————————————————————————————————————————————————————— */
+
+  dashboard: cn(
+    "grid grid-cols-2 gap-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4 overflow-x-hidden h-auto px-2",
+  ),
+
+  dashboardCardsParent: cn(
+    "col-span-2 lg:col-span-3 xl:col-span-4 dark:border-gray-700/50",
+  ),
+  dashboardCard: cn(
+    "flex flex-col justify-between gap-2 w-full rounded-md shadow-md",
+    "bg-white dark:bg-(--bg-primary_dark) text-gray-600 dark:text-white",
+    "p-[0.325rem] xl:p-1.5 border border-white",
+    "dark:border-[rgba(55,65,81,0.5)]",
+  ),
+  dashboardCardIcon: cn(
+    "flex items-center justify-center size-8 lg:size-18 rounded-full p-2 xl:p-3 border border-white dark:border-none",
+  ),
+
   /* //$ ——— Modal Cards ———————————————————————————————————————————————————————— */
   cardParent: cn(
     "flex flex-col min-h-screen lg:hidden w-full",

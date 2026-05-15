@@ -49,9 +49,9 @@ const Dashboard = () => {
   return (
     <main className="w-full h-full md:p-4 p-2">
       {/* <NotificationSidebar /> */}
-      <div className="grid grid-cols-2 gap-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4 overflow-x-hidden h-auto px-2">
+      <div className={cn(sharedStyles.dashboard)}>
         {/* $ Cards */}
-        <section className="col-span-2 lg:col-span-3 xl:col-span-4 dark:border-gray-700/50">
+        <section className={cn(sharedStyles.dashboardCardsParent)}>
           <CardContainer cards={cards} isPending={isPending} />
           {/* <Cards /> */}
         </section>
