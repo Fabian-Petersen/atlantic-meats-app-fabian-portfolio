@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import { useEffect } from "react";
 import FormHeading from "../../customComponents/FormHeading";
+import EmptyTablePlaceholder from "@/components/features/EmptyTablePlaceholder";
 
 const AssetHistoryPage = () => {
   useEffect(() => {
@@ -14,7 +15,7 @@ const AssetHistoryPage = () => {
     loadGroups();
   }, []);
 
-  const { cards, isPending, barcode_id } = useAssetJobsHistory();
+  const { cards, isPending, barcode_id, hasHistory } = useAssetJobsHistory();
 
   return (
     <main className="w-full h-full md:p-4 p-2">
@@ -25,7 +26,11 @@ const AssetHistoryPage = () => {
       <section className={cn(sharedStyles.dashboardCardsParent)}>
         <CardContainer cards={cards} isPending={isPending} />
       </section>
-      <section></section>
+      {!hasHistory && (
+        <section className="">
+          <EmptyTablePlaceholder colSpan={4} message="No history available" />
+        </section>
+      )}
     </main>
   );
 };

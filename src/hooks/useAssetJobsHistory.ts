@@ -14,6 +14,7 @@ export const useAssetJobsHistory = (): {
   cards: AssetHistoryCardConfig[];
   isPending: boolean;
   barcode_id: string;
+  hasHistory: boolean;
 } => {
   const { selectedRowId } = useGlobalContext();
 
@@ -22,6 +23,7 @@ export const useAssetJobsHistory = (): {
     queryKey: ["asset", "jobs-history", selectedRowId],
   });
 
+  const hasHistory = (data?.history?.length ?? 0) > 0;
   const barcode_id = data?.barcode_id ?? "";
 
   const cards: AssetHistoryCardConfig[] = useMemo(
@@ -35,5 +37,5 @@ export const useAssetJobsHistory = (): {
     [data],
   );
 
-  return { cards, isPending, barcode_id };
+  return { cards, isPending, barcode_id, hasHistory };
 };
