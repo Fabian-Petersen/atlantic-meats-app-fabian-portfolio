@@ -13,13 +13,16 @@ type AssetHistoryCardConfig = {
 export const useAssetJobsHistory = (): {
   cards: AssetHistoryCardConfig[];
   isPending: boolean;
+  barcode_id: string;
 } => {
   const { selectedRowId } = useGlobalContext();
 
   const { data, isPending } = useGetAll<AssetHistoryResponse>({
     resourcePath: `assets-data/${selectedRowId}/history`,
-    queryKey: ["asset", "history"],
+    queryKey: ["asset", "jobs-history", selectedRowId],
   });
+
+  const barcode_id = data?.barcode_id ?? "";
 
   const cards: AssetHistoryCardConfig[] = useMemo(
     () =>
@@ -32,5 +35,5 @@ export const useAssetJobsHistory = (): {
     [data],
   );
 
-  return { cards, isPending };
+  return { cards, isPending, barcode_id };
 };

@@ -62,11 +62,6 @@ type Props = {
  * - Prevents submission if no maintenance request is selected.
  * - Requires a digital signature before allowing submission.
  * - Displays loading state during submission.
- * - On success:
- *   - Closes the action dialog.
- *   - Redirects user to "/jobs/completed".
- * - On error:
- *   - Triggers global error state and displays feedback.
  *
  * Props:
  * - onCancel: Callback triggered when the user cancels the form.
@@ -113,12 +108,16 @@ const JobActionForm = ({ onCancel }: Props) => {
     resourcePath: "jobs",
     queryKey: ["jobs", "action-job"],
     action: "action",
-    buildPayload: (values, compressed) => ({
+    buildPayload: (values, compressed, invoices) => ({
       ...values,
       selectedRowId: selectedRowId, // id expected by the backend
       images: compressed.map((f) => ({
         filename: f.name,
         content_type: f.type,
+      })),
+      invoices: invoices.map((f) => ({
+        filename: f.name,
+        content_type: f.type || "application/octet-stream",
       })),
     }),
     onSuccess: () => {
@@ -139,84 +138,6 @@ const JobActionForm = ({ onCancel }: Props) => {
       setShowError(true);
     },
   });
-
-  // $ Import POST hook for submitting the actioned maintenance request to the backend (DynamoDB + S3 for images)
-  // const { mutateAsync: postAction, isPending } = usePOST<
-  //   ActionRequestPayload,
-  //   ActionAPIResponse
-  // >({
-  //   id: selectedRowId ?? "",
-  //   resourcePath: "jobs",
-  //   queryKey: ["jobs", "action-job"],
-  //   action: "action",
-  // });
-
-  // // $ Ensure selectedRowId is available
-  // useEffect(() => {
-  //   if (!selectedRowId) {
-  //     toast.error("No maintenance request selected for actioning.", {
-  //       duration: 1000,
-  //     });
-  //     navigate(`/jobs/${selectedRowId}/action`);
-  //   }
-  // }, [selectedRowId, navigate]);
-
-  // const onSubmit = async (data: ActionRequestFormValues) => {
-  //   // $ 1. 1️⃣ Compress images in browser
-  //   const originalFiles = data.images ?? [];
-  //   const compressedFiles = await compressImagesToWebpv1(originalFiles);
-
-  //   try {
-  //     // $ 2. Prepare payload with compressed images and signature
-  //     const payload: ActionRequestPayload = {
-  //       ...data,
-  //       images: compressedFiles.map((file) => ({
-  //         filename: file.name,
-  //         content_type: file.type,
-  //       })),
-  //       signature: data.signature,
-  //       selectedRowId: selectedRowId!,
-  //     };
-
-  //     console.log("payload:", payload);
-
-  //     // $ 3. Create maintenance request (DynamoDB + presigned URLs)
-  //     const response = await postAction(payload);
-  //     const presigned_urls = response.presigned_urls;
-  //     // type guard
-  //     if (!presigned_urls?.length) {
-  //       return;
-  //     }
-
-  //     // $ 4. Upload files directly to S3
-  //     await Promise.all(
-  //       presigned_urls.map((item: PresignedUrlResponse[number]) => {
-  //         const file = compressedFiles.find((f) => f.name === item.filename);
-
-  //         if (!file) return Promise.resolve();
-
-  //         return fetch(item.url, {
-  //           method: "PUT",
-  //           headers: {
-  //             "Content-Type": "image/webp",
-  //           },
-  //           body: file,
-  //         });
-  //       }),
-  //     );
-
-  //     toast.success("Request successfully Actioned!", {
-  //       duration: 1000,
-  //     });
-  //     setShowActionDialog(false);
-  //     navigate("/jobs/completed");
-  //   } catch (err) {
-  //     toast.error("Request unsuccessfull!!", {
-  //       duration: 1000,
-  //     });
-  //     console.error("Failed to create maintenance request", err);
-  //   }
-  // };
 
   return (
     <form className={cn(sharedStyles.form)} onSubmit={handleSubmit(submit)}>
@@ -296,12 +217,55 @@ const JobActionForm = ({ onCancel }: Props) => {
           rows={1}
           error={errors.findings}
         />
+        <FormRowInput
+          name="sundries"
+          placeholder="Sundries"
+          register={register}
+          error={errors.sundries}
+        />
+        <FormRowInput
+          name="total_cost_sundries"
+          placeholder="Subtotal: Sundries"
+          register={register}
+          error={errors.total_cost_sundries}
+        />
+        <FormRowInput
+          name="parts"
+          placeholder="Parts & Materials"
+          register={register}
+          error={errors.parts}
+        />
+        <FormRowInput
+          name="total_cost_parts"
+          placeholder="Subtotal: Materials"
+          register={register}
+          error={errors.total_cost_parts}
+        />
+        <FormRowInput
+          name="contractor"
+          placeholder="Contractor"
+          register={register}
+          error={errors.contractor}
+        />
+        <FormRowInput
+          name="total_cost_contractor"
+          placeholder="Subtotal: Contractor"
+          register={register}
+          error={errors.total_cost_contractor}
+        />
+        <FileInput
+          label=""
+          placeholder="add invoices"
+          name="invoices"
+          multiple={true}
+          control={control as unknown as Control<ActionRequestFormValues>}
+        />
         <FileInput
           label=""
           control={control as unknown as Control<ActionRequestFormValues>}
           name="images"
           multiple={true}
-          className="col-span-2"
+          className="col-span-1"
         />
         <FormRowInput
           name="signedBy"

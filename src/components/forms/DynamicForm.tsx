@@ -22,6 +22,11 @@ import FormActionButtons from "../features/FormActionButtons";
 import { sharedStyles } from "@/styles/shared";
 import { FormSkeleton } from "./FormSkeleton";
 import FormHeading from "../../../customComponents/FormHeading";
+import {
+  Controller,
+  type ControllerRenderProps,
+  type ControllerFieldState,
+} from "react-hook-form";
 
 // Bridge the Zod v4 ↔ @hookform/resolvers (Zod v3) type gap without `any`.
 // Parameters<...>[0] extracts exactly the schema type zodResolver expects,
@@ -69,11 +74,20 @@ export type FileField<T extends FieldValues> = BaseField<T> & {
   multiple?: boolean;
 };
 
+export type ControllerField<T extends FieldValues> = BaseField<T> & {
+  fieldType: "controller";
+  render: (props: {
+    field: ControllerRenderProps<T, Path<T>>;
+    fieldState: ControllerFieldState;
+  }) => React.ReactElement | null;
+};
+
 export type DynamicFormField<T extends FieldValues> =
   | InputField<T>
   | SelectField<T>
   | TextAreaField<T>
-  | FileField<T>;
+  | FileField<T>
+  | ControllerField<T>;
 
 // ─── DynamicForm Props ────────────────────────────────────────────────────────
 export type DynamicFormProps<T extends FieldValues> = {
@@ -192,6 +206,20 @@ function DynamicForm<T extends FieldValues>({
             name={field.name}
             control={typedControl}
             multiple={field.multiple}
+          />
+        );
+      case "controller":
+        return (
+          <Controller
+            key={field.name}
+            name={field.name}
+            control={typedControl}
+            render={({ field: controllerField, fieldState }) =>
+              field.render({
+                field: controllerField,
+                fieldState,
+              }) as React.ReactElement
+            }
           />
         );
 

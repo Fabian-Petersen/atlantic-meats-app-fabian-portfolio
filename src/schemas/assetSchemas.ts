@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { metricValuesSchema } from "@/schemas/dashboardSchema";
+import { jobRequestAPIResponseSchema } from "./jobSchemas";
 
 // $ Schema to create a new asset
 export const assetRequestSchema = z.object({
@@ -59,23 +60,13 @@ export const assetTableRowSchema = assetRequestSchema
     createdAt: z.string(),
   });
 
-export const assetHistoryItemSchema = z.object({
-  requestId: z.string(),
-  assetID: z.string(),
-  status: z.enum(["pending", "in progress", "complete"]),
-  jobCreated: z.string(), // ISO date
-  targetDate: z.string().optional(),
-  completedAt: z.string().optional(),
-  location: z.string(),
-  description: z.string().optional(),
-  requestedBy: z.string().optional(),
-  technician: z.string().optional(),
-});
+export const assetHistoryItemSchema = jobRequestAPIResponseSchema;
 
 export type AssetHistoryItem = z.infer<typeof assetHistoryItemSchema>;
 
 export const assetHistoryResponseSchema = z.object({
   assetID: z.string(),
+  barcode_id: z.string(),
   metrics: {
     completedRequests: metricValuesSchema,
     inProgressRequests: metricValuesSchema,

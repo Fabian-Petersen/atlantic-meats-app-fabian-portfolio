@@ -8,6 +8,7 @@ import type { PresignedUrlResponse } from "@/schemas";
 
 type WithOptionalImages = {
   images?: File[];
+  invoices?: File[];
   [key: string]: unknown;
 };
 
@@ -31,7 +32,11 @@ type UseFormSubmitOptions<TForm extends WithOptionalImages, TPayload> = {
    * Transform form values into the API payload.
    * `compressedFiles` is an empty array when the form has no images.
    */
-  buildPayload: (formValues: TForm, compressedFiles: File[]) => TPayload;
+  buildPayload: (
+    formValues: TForm,
+    compressedFiles: File[],
+    invoices: File[],
+  ) => TPayload;
 
   /**
    * Called after a successful POST (and S3 upload if applicable).
@@ -241,7 +246,10 @@ export const useFormSubmit = <TForm extends WithOptionalImages, TPayload>({
   const submit = async (formValues: TForm): Promise<void> => {
     try {
       const rawFiles: File[] = formValues.images ?? [];
+      const rawInvoices: File[] = formValues.invoices ?? [];
+
       const hasImages = rawFiles.length > 0;
+      const hasInvoices = rawInvoices.length > 0;
 
       // ── 1. Compress images (no-op when form has no images) ───────────────
       const compressedFiles = hasImages
@@ -249,24 +257,47 @@ export const useFormSubmit = <TForm extends WithOptionalImages, TPayload>({
         : [];
 
       // ── 2. Build the typed API payload ───────────────────────────────────
-      const payload = buildPayload(formValues, compressedFiles);
+      const payload = buildPayload(formValues, compressedFiles, rawInvoices);
+      console.log(payload);
 
       // ── 3. POST to the API ───────────────────────────────────────────────
       const response = await mutateAsync(payload);
 
-      // ── 4. Upload to S3 if presigned URLs were returned ─────────────────
-      if (hasImages) {
+      // ── 4. Upload images and invoices to S3 if presigned URLs were returned ─────────────────
+      if (hasImages || hasInvoices) {
         const { presigned_urls } = response as WithPresignedUrls;
 
         await Promise.all(
           presigned_urls.map((item: PresignedUrlResponse[number]) => {
-            const file = compressedFiles.find((f) => f.name === item.filename);
+            // Check images first, then invoices
+            const file =
+              compressedFiles.find((f) => f.name === item.filename) ??
+              rawInvoices.find((f) => f.name === item.filename);
+
             if (!file) return Promise.resolve();
+
+            // return fetch(item.url, {
+            //   method: "PUT",
+            //   headers: { "Content-Type": item.content_type },
+            //   body: file,
+            // });
 
             return fetch(item.url, {
               method: "PUT",
-              headers: { "Content-Type": "image/webp" },
+              headers: { "Content-Type": item.content_type },
               body: file,
+            }).then(async (res) => {
+              if (!res.ok) {
+                const errorText = await res.text(); // S3 returns XML error details
+                console.error("S3 upload failed:", {
+                  status: res.status,
+                  filename: item.filename,
+                  content_type: item.content_type,
+                  file_type: file.type,
+                  error: errorText, // 👈 this will tell you exactly why S3 rejected it
+                });
+              }
+              return res;
             });
           }),
         );

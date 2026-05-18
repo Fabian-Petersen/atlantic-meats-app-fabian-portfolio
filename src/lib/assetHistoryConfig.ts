@@ -27,14 +27,6 @@ export const assetHistoryConfig: CardData[] = [
     color: "#8884d8",
     bgColor: "rgba(136, 132, 216, 0.1)",
   },
-
-  // {
-  //   id: "totalCost",
-  //   title: "Overdue Requests",
-  //   icon: Currency,
-  //   color: "#ef4444",
-  //   bgColor: "rgba(239, 68, 68, 0.1)",
-  // },
 ];
 
 // interface AssetWorkHistoryMetrics {

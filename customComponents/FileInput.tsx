@@ -22,6 +22,7 @@ type FileInputProps<T extends FieldValues, TName extends Path<T>> = {
   accept?: string;
   className?: string;
   error?: FieldError;
+  placeholder?: string;
 };
 
 function FileInput<T extends FieldValues, TName extends Path<T>>({
@@ -32,6 +33,7 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
   accept = "image/*",
   className,
   error,
+  placeholder,
 }: FileInputProps<T, TName>) {
   const [files, setFiles] = useState<File[]>([]);
   const [localError, setLocalError] = useState<string | null>(null);
@@ -102,7 +104,9 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
                 (error || localError) && "border-red-500",
               )}
             >
-              Add images
+              <span className="capitalize">
+                {placeholder ? placeholder : "Add images"}
+              </span>
             </label>
 
             {/* File list */}
