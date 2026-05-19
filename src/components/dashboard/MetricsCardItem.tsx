@@ -30,9 +30,14 @@ export const MetricCardItem = ({ cardData, metrics, isPending }: Props) => {
             <div key={cardData.id} className="w-full relative">
               <div className={cn(sharedStyles.dashboardCard)}>
                 <div className="p-1">
-                  <p className="capitalize text-xs lg:text-sm">
-                    {cardData.title}
-                  </p>
+                  <div className="flex gap-2 items-center">
+                    {React.createElement(cardData.titleIcon, {
+                      size: 16,
+                    })}
+                    <p className="capitalize text-xs lg:text-sm">
+                      {cardData.title}
+                    </p>
+                  </div>
 
                   <div className="flex justify-between items-center">
                     <p className="text-[2rem] md:text-[2.5rem]">

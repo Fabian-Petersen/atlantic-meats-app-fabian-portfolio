@@ -8,6 +8,8 @@ import RequestApproval from "@/components/requests_approvals/RequestApproval";
 import { Success } from "@/components/features/Success";
 import useGlobalContext from "@/context/useGlobalContext";
 import MobileRequestApproval from "@/components/mobile/MobileRequestApproval";
+import BackButton from "@/components/features/BackButton";
+import { cn } from "@/lib/utils";
 
 export type PresignedUrlResponse = {
   key: string;
@@ -34,10 +36,16 @@ const JobPendingItemPage = () => {
   const images = item.images;
 
   return (
-    <div className="p-4">
+    <div className="flex flex-col gap-4 px-4 py-8 min-h-[calc(100vh-var(--sm-navbarHeight))] md:h-[calc(100vh-var(--lg-navbarHeight))]">
       {showSuccess ? <Success /> : undefined}
-      <div className="hidden h-auto var(--bg-primary-light) border-gray-700/70 rounded-md lg:grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800 p-4">
-        <div>
+      <BackButton to="/jobs/pending-approval" />
+      <div
+        className={cn(
+          "flex-1 min-h-0 hidden bg-(--bg-primary-light) border-gray-700/70 rounded-md lg:grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800",
+          "dark:bg-(--bg-secondary_dark)",
+        )}
+      >
+        <div className="flex flex-col gap-2 min-h-0">
           <ImageGallery images={images ?? []} />
         </div>
         <div>

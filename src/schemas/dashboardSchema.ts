@@ -22,6 +22,7 @@ export type CardData = {
   color: string;
   bgColor: string;
   icon: LucideIcon;
+  titleIcon: LucideIcon;
 };
 
 export type DashboardMetricKey =
@@ -33,7 +34,7 @@ export type DashboardMetricKey =
   | "inProgressRequests"
   | "completedRequests"
   | "totalAssets"
-  | "totalCost";
+  | "totalCostYTD";
 
 export type MetricCardConfig = {
   cardData: CardData;

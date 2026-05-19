@@ -10,15 +10,19 @@ type AssetHistoryCardConfig = {
   cardData: CardData;
   metrics: MetricValues;
 };
-export const useAssetJobsHistory = (): {
+
+type AssetHistoryProps = {
   cards: AssetHistoryCardConfig[];
   isPending: boolean;
   barcode_id: string;
   hasHistory: boolean;
-} => {
+  isError: boolean;
+  data: AssetHistoryResponse | undefined;
+};
+export const useAssetJobsHistory = (): AssetHistoryProps => {
   const { selectedRowId } = useGlobalContext();
 
-  const { data, isPending } = useGetAll<AssetHistoryResponse>({
+  const { data, isPending, isError } = useGetAll<AssetHistoryResponse>({
     resourcePath: `assets-data/${selectedRowId}/history`,
     queryKey: ["asset", "jobs-history", selectedRowId],
   });
@@ -37,5 +41,5 @@ export const useAssetJobsHistory = (): {
     [data],
   );
 
-  return { cards, isPending, barcode_id, hasHistory };
+  return { cards, isPending, barcode_id, hasHistory, isError, data };
 };

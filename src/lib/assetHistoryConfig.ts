@@ -1,31 +1,45 @@
-import { Wallet, FileBarChart } from "lucide-react";
+import {
+  Wallet,
+  FileBarChart,
+  ClipboardClock,
+  Loader,
+  CircleCheckBig,
+  DollarSign,
+} from "lucide-react";
 
 import type { CardData } from "@/schemas/dashboardSchema";
-//  totalRequests: z.number,
-//     completedRequests: z.number,
-//     inProgressRequests: z.number,
-//     pendingRequests: z.number,
 export const assetHistoryConfig: CardData[] = [
   {
     id: "pendingRequests",
-    title: "Requests: Pending ",
+    title: "Pending ",
     icon: Wallet,
     color: "#8884d8",
     bgColor: "rgba(136, 132, 216, 0.1)",
+    titleIcon: ClipboardClock,
   },
   {
     id: "inProgressRequests",
-    title: "Requests: In Progress",
+    title: "In Progress",
     icon: FileBarChart,
     color: "#ffc658",
     bgColor: "rgba(255, 198, 88, 0.1)",
+    titleIcon: Loader,
   },
   {
     id: "completedRequests",
-    title: "Requests: Total Completed",
+    title: "Total Completed",
     icon: Wallet,
     color: "#8884d8",
     bgColor: "rgba(136, 132, 216, 0.1)",
+    titleIcon: CircleCheckBig,
+  },
+  {
+    id: "totalCostYTD",
+    title: "Total Cost YTD",
+    icon: Wallet,
+    color: "#8884d8",
+    bgColor: "rgba(136, 132, 216, 0.1)",
+    titleIcon: DollarSign,
   },
 ];
 

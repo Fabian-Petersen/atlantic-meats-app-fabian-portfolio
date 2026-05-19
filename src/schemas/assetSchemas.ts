@@ -1,6 +1,7 @@
 import * as z from "zod";
 import { metricValuesSchema } from "@/schemas/dashboardSchema";
 import { jobRequestAPIResponseSchema } from "./jobSchemas";
+import { actionResponseSchema } from "./actionSchemas";
 
 // $ Schema to create a new asset
 export const assetRequestSchema = z.object({
@@ -60,7 +61,16 @@ export const assetTableRowSchema = assetRequestSchema
     createdAt: z.string(),
   });
 
-export const assetHistoryItemSchema = jobRequestAPIResponseSchema;
+export const assetHistoryItemSchema = jobRequestAPIResponseSchema
+  .omit({
+    images: true,
+    reject_message: true,
+    rejected_at: true,
+    rejected_by: true,
+    priority: true,
+    requested_by: true,
+  })
+  .extend({ ...actionResponseSchema.shape });
 
 export type AssetHistoryItem = z.infer<typeof assetHistoryItemSchema>;
 

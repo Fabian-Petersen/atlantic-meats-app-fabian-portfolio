@@ -6,7 +6,7 @@ export const badgeStyles = {
     "text-center min-w-12 max-w-fit",
     "px-[0.40rem] py-[0.135rem]",
     "rounded-full",
-    "text-cxs capitalize",
+    "text-cxs",
     "border",
   ),
 
@@ -81,6 +81,22 @@ export const badgeStyles = {
       broken: cn(
         "text-red-600 bg-red-300/30 border-red-300",
         "dark:border-red-500 dark:bg-red-300/20 dark:text-red-300",
+      ),
+    },
+    type: {
+      corrective: cn(
+        "text-green-600 bg-green-300/30 border-green-300",
+        "dark:border-green-500 dark:bg-green-300/20 dark:text-green-300",
+      ),
+
+      preventative: cn(
+        "text-orange-600 bg-orange-300/30 border-orange-300",
+        "dark:border-orange-500 dark:bg-orange-300/20 dark:text-orange-300",
+      ),
+
+      safety: cn(
+        "text-blue-600 bg-blue-300/30 border-blue-300",
+        "dark:border-blue-500 dark:bg-blue-300/20 dark:text-blue-300",
       ),
     },
   },

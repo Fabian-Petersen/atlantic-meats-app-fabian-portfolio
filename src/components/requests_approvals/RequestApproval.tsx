@@ -13,6 +13,28 @@ import { toast } from "sonner";
 
 // icons
 import { X, Check } from "lucide-react";
+import { useState } from "react";
+import { Badge } from "../features/Badge";
+import { badgeStyles } from "@/styles/badgeStyles";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
+import Avatar from "../header/Avatar";
+
+// import Avatar from "../header/Avatar";
+
+function Field({ label, value }: { label: string; value?: string | null }) {
+  if (!value) return null;
+  return (
+    <div className="grid grid-cols-[120px_1fr] gap-2 items-start text-sm">
+      <span className="text-xs text-gray-500 dark:text-gray-400 pt-0.5">
+        {label}
+      </span>
+      <span className="text-gray-900 dark:text-gray-100 capitalize font-medium">
+        {value}
+      </span>
+    </div>
+  );
+}
 
 function RequestApproval() {
   const {
@@ -21,21 +43,27 @@ function RequestApproval() {
     setShowApproveRequestDialog,
   } = useGlobalContext();
 
+  // Generate a random number for the request - not stored in db
+  const [randomNumber] = useState(() => Math.floor(Math.random() * 9999) + 1);
+  const formattedNumber = randomNumber.toString().padStart(4, "0");
+
   const { mutateAsync: approveRequest, isPending: isApproved } = usePOST({
     id: selectedRowId ?? "",
     resourcePath: "jobs",
-    queryKey: ["jobs", "approve-job"] as const,
+    queryKey: ["jobs", "approve-item"] as const,
     action: "approve",
   });
 
   const { data: item, isPending } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
-    queryKey: ["jobs", "pending-approval-job"],
+    queryKey: ["jobs", "pending-approval-item"],
     resourcePath: "jobs",
     params: {
       status: "pending",
     },
   });
+
+  console.log("item", item);
 
   const navigate = useNavigate();
   if (isPending) {
@@ -65,59 +93,114 @@ function RequestApproval() {
   };
 
   return (
-    <div className="hidden lg:flex gap flex-col gap-2 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50">
+    <div className="flex flex-col gap-4 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50 h-full">
+      {/* 
+      <div className="hidden lg:flex gap flex-col gap-2 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50"> 
+      */}
+
+      {/* // $ ── Header ── */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-md md:text-xl capitalize">
-          Request No : {item?.jobcardNumber}
+        <p className="text-[11px] uppercase tracking-widest text-gray-400 dark:text-gray-500 font-medium select-none">
+          Request No ·{" "}
+          {item?.jobcardNumber ?? `${item?.location}-${formattedNumber}`}
+        </p>
+        <h1 className="text-lg md:text-xl font-semibold capitalize leading-tight">
+          {item?.equipment}
         </h1>
-        <div className="capitalize flex gap-2">
-          <span className="">Asset : </span>
-          <span>{item?.equipment}</span>
-        </div>
-        <div className="capitalize flex gap-2">
-          <span className="">Asset No : </span>
-          <span>{item?.assetID}</span>
-        </div>
+        <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">
+          Asset ID: {item?.assetID}
+        </p>
+      </div>
+
+      {/* ── Status badges ── */}
+      <div className="flex flex-wrap gap-2 text-cxs">
+        <Badge
+          value={`${item.priority ?? "medium"}`}
+          styleMap={badgeStyles.families.priority}
+        />
+        {item.type && (
+          <Badge value={item.type} styleMap={badgeStyles.families.type} />
+        )}
+        {item.impact && (
+          <Badge
+            value={item.impact}
+            styleMap={
+              badgeStyles.families.impact ?? badgeStyles.families.impact
+            }
+          />
+        )}
       </div>
       <Separator width="100%" className="mt-2 mb-4" />
-      <ul className="flex flex-col gap-4 md:text-sm text-xs">
-        <li className="capitalize flex gap-2">
-          <span>Requested By : </span>
-          <span>{item?.requested_by}</span>
-        </li>
-        <li className="capitalize flex gap-2">
-          <span>Location : </span>
-          <span>{item?.location}</span>
-        </li>
-        <li className="capitalize flex gap-2">
-          <span>Description : </span>
-          <span>{item?.description}</span>
-        </li>
-        <li className="capitalize flex gap-2">
-          <span>Type : </span>
-          <span>{item?.type}</span>
-        </li>
-        <li className="capitalize flex gap-2">
-          <span>Impact : </span>
-          <span>{item?.impact}</span>
-        </li>
-        <li className="capitalize flex gap-2">
-          <span>Priority : </span>
-          <span>{item?.priority}</span>
-        </li>
-        <li className="flex gap-2">
-          <span>Comments: </span>
-          <span>{item?.jobComments}</span>
-        </li>
-      </ul>
-      <div className="flex w-full justify-end pt-6 bg-red-500/0">
-        <div className="flex gap-4 w-[18rem] bg-black/0 justify-end">
+
+      {/* ── Requester row ── */}
+      {item.requested_by && (
+        <div className="flex items-center gap-3">
+          <Avatar name={item.requested_by} isFullName={true} />
+          <div className="flex flex-col leading-snug">
+            <span className="text-sm font-medium capitalize">
+              {item.requested_by}
+            </span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              {`Requested · ${item.jobCreated}`}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* ── Structured fields ── */}
+      <div className="flex flex-col gap-3">
+        <Field label="Location" value={item.location} />
+        <Field label="Type" value={item.type} />
+        <Field label="Impact" value={item.impact} />
+        <Field label="Priority" value={item.priority} />
+      </div>
+
+      {/* ── Description box ── */}
+      {item.description && (
+        <div className="flex flex-col gap-1.5">
+          <span className="text-xs text-gray-400 dark:text-gray-500">
+            Description
+          </span>
+          <div className="bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700 rounded-md px-3 py-2.5 text-sm leading-relaxed text-gray-800 dark:text-gray-200">
+            {item.description}
+          </div>
+        </div>
+      )}
+
+      {/* ── Comments ── */}
+      {item.jobComments && (
+        <div className="flex flex-col gap-1.5">
+          <span className="text-xs text-gray-400 dark:text-gray-500">
+            Comments
+          </span>
+          <div className="bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700 rounded-md px-3 py-2.5">
+            <p className="text-xs text-gray-400 dark:text-gray-500 mb-1 capitalize">
+              {item.requested_by}
+            </p>
+            <p className="text-sm text-gray-800 dark:text-gray-200">
+              {item.jobComments}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── Actions ── */}
+      <div className="mt-auto pt-4 flex flex-col gap-6">
+        <p className="text-xs text-center text-gray-400 dark:text-gray-500">
+          Review all details before approving this request.
+        </p>
+        {/* <div className="flex w-full justify-end pt-6 bg-red-500/0"> */}
+        <div className={cn(sharedStyles.btnParent, "md:w-full")}>
           <button
             type="button"
             onClick={() => {
               setShowRejectRequestDialog(true);
             }}
-            className="flex-1 py-2 rounded-lg bg-red-100 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-xs font-medium dark:text-red-200 text-red-500 dark:(--clr-red-600) hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors flex items-center justify-center gap-2 hover:cursor-pointer"
+            className={cn(
+              sharedStyles.btnCancel,
+              sharedStyles.btn,
+              "flex items-center justify-center gap-4",
+            )}
           >
             <X className="w-6 h-6" />
             <span className="text-md">Reject</span>
@@ -127,7 +210,11 @@ function RequestApproval() {
             disabled={isApproved}
             // variant="submit"
             // size="lg"
-            className="flex-1 py-2 rounded-lg bg-green-100 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-xs font-medium dark:text-green-200 text-green-500 dark:(--clr-red-600) hover:bg-green-100 dark:hover:bg-green-900/40 transition-colors flex items-center justify-center gap-2 hover:cursor-pointer"
+            className={cn(
+              sharedStyles.btnApprove,
+              sharedStyles.btn,
+              "flex items-center justify-center gap-4",
+            )}
             onClick={() => {
               handleApprove();
             }}
@@ -138,6 +225,7 @@ function RequestApproval() {
         </div>
       </div>
     </div>
+    // </div>
   );
 }
 
