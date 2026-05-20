@@ -61,7 +61,8 @@ const AssetHistoryPage = () => {
   const rows: AssetHistoryItem[] = useMemo(
     () =>
       (data?.history ?? []).map((job) => ({
-        id: job.request_id,
+        id: job.id,
+        // request_id: job.request_id,
         jobCreated: job.jobCreated,
         description: job.description,
         equipment: job.equipment,

@@ -1,17 +1,16 @@
 import { PureComponent } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Sector } from "recharts";
 import type { PieSectorDataItem } from "recharts/types/polar/Pie";
+import type { Reliability } from "@/schemas/assetSchemas";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type ReliabilityKey = "mtbf" | "mttr" | "availability" | "failureCount";
-type ReliabilityEntry = Partial<Record<ReliabilityKey, number>>;
 type CustomSectorProps = PieSectorDataItem & {
   isActive: boolean;
 };
 
 interface Props {
-  reliability: ReliabilityEntry[];
+  reliability: Reliability[]; // { name: string; value: number }[]
   colors?: string[];
   innerRadius?: number;
   outerRadius?: number;
@@ -22,60 +21,18 @@ interface Props {
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042"];
 
-const LABELS: Record<ReliabilityKey, string> = {
-  mtbf: "MTBF",
-  mttr: "MTTR",
-  availability: "Availability",
-  failureCount: "Failures",
-};
+// ─── Helpers ────────────────────────────────────────────────────────────────
 
-// ─── Transform ───────────────────────────────────────────────────────────────
-
-// function normalize(data: ReliabilityEntry[]) {
-//   return data.flatMap((entry) =>
-//     Object.entries(entry).map(([key, value]) => ({
-//       key: key as ReliabilityKey,
-//       name: LABELS[key as ReliabilityKey] ?? key,
-//       value: Math.abs(value as number) || 0.001,
-//       raw: value as number,
-//     })),
-//   );
-// }
-
-// function formatValue(key: ReliabilityKey, raw: number) {
-//   if (key === "availability") {
-//     return `${(raw * 100).toFixed(2)}%`;
-//   }
-
-//   if (key === "mttr" || key === "mtbf") {
-//     return `${raw} hrs`;
-//   }
-
-//   return String(raw);
-
-// }
-
-function normalizeReliabilityData(data: ReliabilityEntry[]) {
-  return data.flatMap((entry) =>
-    Object.entries(entry).map(([key, value]) => ({
-      key: key as ReliabilityKey,
-      name: LABELS[key as ReliabilityKey] ?? key,
-      value: Math.abs(value as number) || 0.001,
-      raw: value as number,
-    })),
-  );
-}
-
-function formatMetricValue(key: ReliabilityKey, raw: number) {
-  if (key === "availability") {
-    return `${raw.toFixed(0)}%`;
+function formatMetricValue(name: string, value: number) {
+  if (name === "Availability") {
+    return `${value.toFixed(0)}%`;
   }
 
-  if (key === "mttr" || key === "mtbf") {
-    return `${raw} hrs`;
+  if (name === "MTTR" || name === "MTBF") {
+    return `${value} hrs`;
   }
 
-  return String(raw);
+  return String(value);
 }
 
 // ─── Custom Sector ───────────────────────────────────────────────────────────
@@ -118,18 +75,24 @@ export class PieChartGeneric extends PureComponent<Props> {
   render() {
     const {
       reliability,
-      colors = COLORS,
-      // innerRadius = 80,
-      // outerRadius = 110,
-      // centerLabel = "Total",
+      // colors = COLORS,
+      innerRadius = 80,
+      outerRadius = 110,
     } = this.props;
 
-    const data = normalizeReliabilityData(reliability);
     const { activeIndex } = this.state;
 
-    const active = activeIndex >= 0 ? data[activeIndex] : null;
-    // const total = data.reduce((sum, d) => sum + d.value, 0);
-    const availabilityMetric = data.find((item) => item.key === "availability");
+    const active = activeIndex >= 0 ? reliability[activeIndex] : null;
+
+    const availabilityMetric = reliability.find(
+      (item) => item.name === "Availability",
+    );
+
+    const coloredReliability = reliability.map((item, index) => ({
+      ...item,
+      color: COLORS[index % COLORS.length],
+    }));
+
     return (
       <div style={{ width: "100%", height: "100%" }}>
         <ResponsiveContainer width="100%" height="100%">
@@ -145,7 +108,6 @@ export class PieChartGeneric extends PureComponent<Props> {
                     textAnchor="middle"
                     fill="var(--chart-text)"
                     fontSize={16}
-                    // fontWeight={500}
                   >
                     {active.name}
                   </text>
@@ -155,9 +117,8 @@ export class PieChartGeneric extends PureComponent<Props> {
                     textAnchor="middle"
                     fill="var(--chart-text)"
                     fontSize={32}
-                    // fontWeight={400}
                   >
-                    {formatMetricValue(active.key, active.raw)}
+                    {formatMetricValue(active.name, active.value)}
                   </text>
                 </>
               ) : (
@@ -178,13 +139,11 @@ export class PieChartGeneric extends PureComponent<Props> {
                     textAnchor="middle"
                     fill="var(--chart-text)"
                     fontSize={32}
-                    // fontWeight={700}
                   >
                     {availabilityMetric
                       ? formatMetricValue(
-                          availabilityMetric.key,
-
-                          availabilityMetric.raw,
+                          availabilityMetric.name,
+                          availabilityMetric.value,
                         )
                       : "0%"}
                   </text>
@@ -192,13 +151,15 @@ export class PieChartGeneric extends PureComponent<Props> {
               )}
             </g>
 
+            {/* Pie */}
             <Pie
-              data={data}
+              data={reliability}
               cx="50%"
               cy="50%"
-              innerRadius={80}
-              outerRadius={110}
+              innerRadius={innerRadius}
+              outerRadius={outerRadius}
               dataKey="value"
+              nameKey="name"
               paddingAngle={3}
               onMouseEnter={(_, index) => this.setState({ activeIndex: index })}
               onMouseLeave={() => this.setState({ activeIndex: -1 })}
@@ -209,8 +170,8 @@ export class PieChartGeneric extends PureComponent<Props> {
                 />
               )}
             >
-              {data.map((_, i) => (
-                <Cell key={i} fill={colors[i % colors.length]} />
+              {coloredReliability.map((entry, index) => (
+                <Cell key={index} fill={entry.color} />
               ))}
             </Pie>
           </PieChart>
@@ -221,3 +182,183 @@ export class PieChartGeneric extends PureComponent<Props> {
 }
 
 export default PieChartGeneric;
+
+// import { PureComponent } from "react";
+// import { PieChart, Pie, Cell, ResponsiveContainer, Sector } from "recharts";
+// import type { PieSectorDataItem } from "recharts/types/polar/Pie";
+// import type { Reliability } from "@/schemas/assetSchemas";
+// // ─── Types ────────────────────────────────────────────────────────────────────
+
+// type CustomSectorProps = PieSectorDataItem & {
+//   isActive: boolean;
+// };
+// interface Props {
+//   reliability: Reliability[];
+//   colors?: string[];
+//   innerRadius?: number;
+//   outerRadius?: number;
+//   centerLabel?: string;
+// }
+
+// // ─── Defaults ────────────────────────────────────────────────────────────────
+
+// const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042"];
+
+// // ─── Transform ───────────────────────────────────────────────────────────────
+
+// function formatMetricValue(key: ReliabilityKey, raw: number) {
+//   if (key === "availability") {
+//     return `${raw.toFixed(0)}%`;
+//   }
+
+//   if (key === "mttr" || key === "mtbf") {
+//     return `${raw} hrs`;
+//   }
+
+//   return String(raw);
+// }
+
+// // ─── Custom Sector ───────────────────────────────────────────────────────────
+
+// function CustomSector(props: CustomSectorProps & { isActive: boolean }) {
+//   const {
+//     cx,
+//     cy,
+//     innerRadius,
+//     outerRadius,
+//     startAngle,
+//     endAngle,
+//     fill,
+//     isActive,
+//   } = props;
+
+//   const expand = isActive ? 8 : 0;
+
+//   return (
+//     <Sector
+//       cx={cx}
+//       cy={cy}
+//       innerRadius={innerRadius - (isActive ? 4 : 0)}
+//       outerRadius={outerRadius + expand}
+//       startAngle={startAngle}
+//       endAngle={endAngle}
+//       fill={fill}
+//       opacity={isActive ? 1 : 0.8}
+//     />
+//   );
+// }
+
+// // ─── Component ───────────────────────────────────────────────────────────────
+
+// export class PieChartGeneric extends PureComponent<Props> {
+//   state = {
+//     activeIndex: -1,
+//   };
+
+//   render() {
+//     const {
+//       reliability,
+//       colors = COLORS,
+//       // innerRadius = 80,
+//       // outerRadius = 110,
+//       // centerLabel = "Total",
+//     } = this.props;
+
+//     const data = normalizeReliabilityData(reliability);
+//     const { activeIndex } = this.state;
+
+//     const active = activeIndex >= 0 ? data[activeIndex] : null;
+//     // const total = data.reduce((sum, d) => sum + d.value, 0);
+//     const availabilityMetric = data.find((item) => item.key === "availability");
+//     return (
+//       <div style={{ width: "100%", height: "100%" }}>
+//         <ResponsiveContainer width="100%" height="100%">
+//           <PieChart>
+//             {/* Center display */}
+//             <g>
+//               {active ? (
+//                 <>
+//                   <text
+//                     x="50%"
+//                     y="50%"
+//                     dy={32}
+//                     textAnchor="middle"
+//                     fill="var(--chart-text)"
+//                     fontSize={16}
+//                     // fontWeight={500}
+//                   >
+//                     {active.name}
+//                   </text>
+//                   <text
+//                     x="50%"
+//                     y="50%"
+//                     textAnchor="middle"
+//                     fill="var(--chart-text)"
+//                     fontSize={32}
+//                     // fontWeight={400}
+//                   >
+//                     {formatMetricValue(active.key, active.raw)}
+//                   </text>
+//                 </>
+//               ) : (
+//                 <>
+//                   <text
+//                     x="50%"
+//                     y="50%"
+//                     dy={32}
+//                     textAnchor="middle"
+//                     fill="var(--chart-text-muted)"
+//                     fontSize={16}
+//                   >
+//                     Availability
+//                   </text>
+//                   <text
+//                     x="50%"
+//                     y="50%"
+//                     textAnchor="middle"
+//                     fill="var(--chart-text)"
+//                     fontSize={32}
+//                     // fontWeight={700}
+//                   >
+//                     {availabilityMetric
+//                       ? formatMetricValue(
+//                           availabilityMetric.key,
+
+//                           availabilityMetric.raw,
+//                         )
+//                       : "0%"}
+//                   </text>
+//                 </>
+//               )}
+//             </g>
+//             {/* <Pie data={reliability} dataKey="value" nameKey="name" /> */}
+//             <Pie
+//               data={data}
+//               cx="50%"
+//               cy="50%"
+//               innerRadius={80}
+//               outerRadius={110}
+//               dataKey="value"
+//               nameKey="name"
+//               paddingAngle={3}
+//               onMouseEnter={(_, index) => this.setState({ activeIndex: index })}
+//               onMouseLeave={() => this.setState({ activeIndex: -1 })}
+//               shape={(props: PieSectorDataItem & { index?: number }) => (
+//                 <CustomSector
+//                   {...props}
+//                   isActive={props.index === activeIndex}
+//                 />
+//               )}
+//             >
+//               {data.map((_, i) => (
+//                 <Cell key={i} fill={colors[i % colors.length]} />
+//               ))}
+//             </Pie>
+//           </PieChart>
+//         </ResponsiveContainer>
+//       </div>
+//     );
+//   }
+// }
+
+// export default PieChartGeneric;

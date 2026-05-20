@@ -67,7 +67,7 @@ export const assetHistoryItemSchema = z.object({
   equipment: z.string().nullable(),
 
   // from actions table
-  request_id: z.string().nullable(),
+  // request_id: z.string().nullable(),
   location: z.string(),
   assetID: z.string(),
   jobcardNumber: z.string().nullable(),
@@ -81,6 +81,16 @@ export const assetHistoryItemSchema = z.object({
   completed_at: z.string().nullable(),
 });
 
+export const reliabilitySchema = z.array(
+  z.object({
+    name: z.enum(["MTBF", "MTTR", "Availability", "Failure Count"]),
+    value: z.number(),
+  }),
+);
+
+// export type Reliability = z.infer<typeof reliabilitySchema>;
+export type Reliability = z.infer<typeof reliabilitySchema>[number];
+
 export type AssetHistoryItem = z.infer<typeof assetHistoryItemSchema>;
 
 export const assetHistoryResponseSchema = z.object({
@@ -92,14 +102,7 @@ export const assetHistoryResponseSchema = z.object({
     pendingRequests: metricValuesSchema,
     total_cost: metricValuesSchema,
   },
-  reliability: z.array(
-    z.object({
-      mtbf: metricValuesSchema,
-      mttr: metricValuesSchema,
-      availability: metricValuesSchema,
-      failureCount: metricValuesSchema,
-    }),
-  ),
+  reliability: reliabilitySchema,
   history: z.array(assetHistoryItemSchema),
   total_cost_by_month: z.record(
     z.string(), // year e.g. "2026"
