@@ -24,7 +24,7 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { SearchInput } from "@/components/features/SearchInput";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import useGlobalContext from "@/context/useGlobalContext";
-import CostYTDChart from "@/components/dashboard/charts/CostYTDChart";
+// import CostYTDChart from "@/components/dashboard/charts/CostYTDChart";
 import { JobRequestsChartSkeleton } from "@/components/dashboard/charts/JobRequestsChartSkeleton";
 import ChartHeading from "@/components/dashboard/ChartHeading";
 import { Barcode, CalendarCheck, MapPin, Tag } from "lucide-react";
