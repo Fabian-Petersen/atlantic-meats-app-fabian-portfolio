@@ -34,8 +34,8 @@ export const assetHistoryConfig: CardData[] = [
     titleIcon: CircleCheckBig,
   },
   {
-    id: "totalCostYTD",
-    title: "Total Cost YTD",
+    id: "total_cost",
+    title: "Total Cost",
     icon: Wallet,
     color: "#8884d8",
     bgColor: "rgba(136, 132, 216, 0.1)",

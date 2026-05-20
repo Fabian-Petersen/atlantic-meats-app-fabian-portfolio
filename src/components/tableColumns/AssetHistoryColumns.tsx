@@ -1,11 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { Priority } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 // import type { Resource } from "@/utils/api";
 import { ChevronDown } from "lucide-react";
-import { badgeStyles } from "@/styles/badgeStyles";
-import { Badge } from "../features/Badge";
 import type { AssetHistoryItem } from "@/schemas/assetSchemas";
 
 export const getAssetHistoryColumns = (
@@ -43,70 +40,6 @@ export const getAssetHistoryColumns = (
     maxSize: 150,
   },
   {
-    accessorKey: "location",
-    header: "Location",
-    enableColumnFilter: true,
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-    minSize: 80,
-    maxSize: 100,
-  },
-  {
-    accessorKey: "description",
-    header: "Description",
-    minSize: 240,
-    maxSize: 300,
-  },
-  {
-    accessorKey: "equipment",
-    header: "Equipment",
-    enableColumnFilter: false,
-  },
-  {
-    accessorKey: "sundries",
-    header: "Sundries",
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-    minSize: 70,
-    maxSize: 90,
-  },
-  {
-    accessorKey: "jobcardNumber",
-    header: "Jobcard Number",
-    enableColumnFilter: true,
-    minSize: 100,
-    maxSize: 150,
-  },
-  {
-    accessorKey: "parts",
-    header: "Parts",
-    enableColumnFilter: true,
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return (
-        <Badge
-          value={value as Priority}
-          styleMap={badgeStyles.families.priority}
-        />
-      );
-    },
-  },
-  {
-    accessorKey: "assign_to_name",
-    header: "Assigned To",
-    enableColumnFilter: true,
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-    minSize: 100,
-    maxSize: 120,
-  },
-  {
     accessorKey: "completed_at",
     header: ({ column }) => {
       const sorted = column.getIsSorted(); // false | "asc" | "desc"
@@ -129,6 +62,86 @@ export const getAssetHistoryColumns = (
     },
     minSize: 130,
     maxSize: 150,
+  },
+  {
+    accessorKey: "description",
+    header: "Description",
+    minSize: 240,
+    maxSize: 300,
+  },
+  {
+    accessorKey: "jobcardNumber",
+    header: "Jobcard Number",
+    enableColumnFilter: true,
+    minSize: 100,
+    maxSize: 150,
+  },
+  {
+    accessorKey: "sundries",
+    header: "Sundries",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+    minSize: 70,
+    maxSize: 90,
+  },
+  {
+    accessorKey: "total_cost_sundries",
+    header: "Cost Sundries",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+    minSize: 70,
+    maxSize: 90,
+  },
+  {
+    accessorKey: "parts",
+    header: "Parts",
+    enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
+    accessorKey: "total_cost_parts",
+    header: "Cost Parts",
+    enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
+    accessorKey: "contractor",
+    header: "Contractor",
+    enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
+    accessorKey: "total_cost_contractor",
+    header: "Cost Contractor",
+    enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
+    accessorKey: "actioned_by",
+    header: "Actioned By",
+    enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+    minSize: 100,
+    maxSize: 120,
   },
   {
     id: "actions",

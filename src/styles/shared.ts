@@ -16,7 +16,7 @@ export const sharedStyles = {
   /* //$ ——— Dashboards ————————————————————————————————————————————————————————— */
 
   dashboard: cn(
-    "grid grid-cols-2 gap-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4 overflow-x-hidden h-auto px-2",
+    "grid grid-cols-2 gap-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4 overflow-x-hidden h-auto",
   ),
 
   dashboardCardsParent: cn(

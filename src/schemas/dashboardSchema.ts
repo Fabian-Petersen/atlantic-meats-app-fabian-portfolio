@@ -34,7 +34,7 @@ export type DashboardMetricKey =
   | "inProgressRequests"
   | "completedRequests"
   | "totalAssets"
-  | "totalCostYTD";
+  | "total_cost";
 
 export type MetricCardConfig = {
   cardData: CardData;

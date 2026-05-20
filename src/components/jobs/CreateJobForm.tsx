@@ -82,6 +82,7 @@ const CreateJobForm = () => {
       impact: "",
       priority: "",
       jobComments: "",
+      breakdown_time: "",
     },
   });
 

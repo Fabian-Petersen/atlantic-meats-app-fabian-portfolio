@@ -1,7 +1,5 @@
 import * as z from "zod";
 import { metricValuesSchema } from "@/schemas/dashboardSchema";
-import { jobRequestAPIResponseSchema } from "./jobSchemas";
-import { actionResponseSchema } from "./actionSchemas";
 
 // $ Schema to create a new asset
 export const assetRequestSchema = z.object({
@@ -61,28 +59,57 @@ export const assetTableRowSchema = assetRequestSchema
     createdAt: z.string(),
   });
 
-export const assetHistoryItemSchema = jobRequestAPIResponseSchema
-  .omit({
-    images: true,
-    reject_message: true,
-    rejected_at: true,
-    rejected_by: true,
-    priority: true,
-    requested_by: true,
-  })
-  .extend({ ...actionResponseSchema.shape });
+export const assetHistoryItemSchema = z.object({
+  // from requests table
+  id: z.string(),
+  jobCreated: z.string().nullable(),
+  description: z.string().nullable(),
+  equipment: z.string().nullable(),
+
+  // from actions table
+  request_id: z.string().nullable(),
+  location: z.string(),
+  assetID: z.string(),
+  jobcardNumber: z.string().nullable(),
+  sundries: z.array(z.unknown()).nullable(),
+  total_cost_sundries: z.number().nullable(),
+  parts: z.array(z.unknown()).nullable(),
+  total_cost_parts: z.number().nullable(),
+  contractor: z.string().nullable(),
+  total_cost_contractor: z.number().nullable(),
+  actioned_by: z.string().nullable(),
+  completed_at: z.string().nullable(),
+});
 
 export type AssetHistoryItem = z.infer<typeof assetHistoryItemSchema>;
 
 export const assetHistoryResponseSchema = z.object({
   assetID: z.string(),
-  barcode_id: z.string(),
+  last_completed_job: z.string(),
   metrics: {
     completedRequests: metricValuesSchema,
     inProgressRequests: metricValuesSchema,
     pendingRequests: metricValuesSchema,
+    total_cost: metricValuesSchema,
   },
+  reliability: z.array(
+    z.object({
+      mtbf: metricValuesSchema,
+      mttr: metricValuesSchema,
+      availability: metricValuesSchema,
+      failureCount: metricValuesSchema,
+    }),
+  ),
   history: z.array(assetHistoryItemSchema),
+  total_cost_by_month: z.record(
+    z.string(), // year e.g. "2026"
+    z.array(
+      z.object({
+        name: z.string(), // "Jan", "Feb", etc.
+        value: z.number(), // cost
+      }),
+    ),
+  ),
 });
 
 export type AssetHistoryResponse = z.infer<typeof assetHistoryResponseSchema>;

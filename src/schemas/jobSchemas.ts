@@ -19,6 +19,9 @@ export const jobRequestSchema = z.object({
   type: z.string().min(1, { message: "Please select maintenance type" }),
   priority: z.string().min(1, { message: "Please select a priority" }),
   equipment: z.string().min(1, { message: "Please select equipment" }),
+  breakdown_time: z
+    .string()
+    .min(1, { message: "Please enter time of breakdown" }),
   impact: z.string().min(1, { message: "Please select impact" }),
   jobComments: z.string().optional().default(""),
   description: z

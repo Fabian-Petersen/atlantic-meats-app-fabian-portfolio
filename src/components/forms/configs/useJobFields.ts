@@ -108,6 +108,13 @@ export const useJobFields = (
       placeholder: "Select Asset ID",
       options: normalizeOptions(assetIdOptions),
     },
+    {
+      fieldType: "input",
+      type: "datetime-local",
+      name: "breakdown_time",
+      label: "Breakdown Time",
+      placeholder: "Time of Breakdown",
+    },
 
     {
       fieldType: "select",

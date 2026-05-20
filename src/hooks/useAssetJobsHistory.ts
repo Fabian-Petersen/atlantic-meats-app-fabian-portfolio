@@ -14,7 +14,6 @@ type AssetHistoryCardConfig = {
 type AssetHistoryProps = {
   cards: AssetHistoryCardConfig[];
   isPending: boolean;
-  barcode_id: string;
   hasHistory: boolean;
   isError: boolean;
   data: AssetHistoryResponse | undefined;
@@ -28,7 +27,6 @@ export const useAssetJobsHistory = (): AssetHistoryProps => {
   });
 
   const hasHistory = (data?.history?.length ?? 0) > 0;
-  const barcode_id = data?.barcode_id ?? "";
 
   const cards: AssetHistoryCardConfig[] = useMemo(
     () =>
@@ -41,5 +39,5 @@ export const useAssetJobsHistory = (): AssetHistoryProps => {
     [data],
   );
 
-  return { cards, isPending, barcode_id, hasHistory, isError, data };
+  return { cards, isPending, hasHistory, isError, data };
 };

@@ -33,7 +33,7 @@ export function DropdownMenuButtonDialog({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="w-36 bg-white border-gray-50 dark:border-border-dark/20 dark:bg-(--bg-secondary_dark) dark:text-gray-100 shadow-lg px-1 py-2"
+          className="w-36 bg-white border-gray-50 dark:border-(--clr-borderDark) dark:bg-(--bg-secondary_dark) dark:text-gray-100 shadow-lg px-1 py-2"
           align="end"
         >
           {/* <DropdownMenuLabel className="text-sm">Action</DropdownMenuLabel> */}
