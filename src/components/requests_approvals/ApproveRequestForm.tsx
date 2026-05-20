@@ -121,6 +121,8 @@ const ApproveRequestForm = () => {
           name="assign_to_group"
           options={assignToGroup}
           placeholder="Select a Group"
+          label="Select Group"
+          required={true}
           error={errors.assign_to_group}
           // placeholder="Select Group"
         />
@@ -128,6 +130,8 @@ const ApproveRequestForm = () => {
         <FormRowSelect
           register={register}
           name="assign_to_sub"
+          label="Assign To"
+          required={true}
           options={technicians ?? []}
           placeholder="Assign To"
           error={errors.assign_to_sub}
@@ -137,6 +141,7 @@ const ApproveRequestForm = () => {
           register={register}
           label="Target Date"
           type="date"
+          required={true}
           // placeholder="Target Date"
           name="targetDate"
           error={errors.targetDate}

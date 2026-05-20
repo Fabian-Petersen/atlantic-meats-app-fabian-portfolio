@@ -62,6 +62,15 @@ export const getJobCompletedColumns = (
     },
   },
   {
+    accessorKey: "assetID",
+    header: "assetID",
+    enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="">{value}</p>;
+    },
+  },
+  {
     accessorKey: "start_time",
     header: "Start Date",
     enableColumnFilter: true,

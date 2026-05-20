@@ -29,8 +29,8 @@ import { JobRequestsChartSkeleton } from "@/components/dashboard/charts/JobReque
 import ChartHeading from "@/components/dashboard/ChartHeading";
 import { Barcode, CalendarCheck, MapPin, Tag } from "lucide-react";
 import { PieChartSkeleton } from "@/components/dashboard/charts/PieChartSkeleton";
-import OpenRequestsPieChart from "@/components/dashboard/charts/OpenRequestsPieChart";
 import CostChart from "@/components/dashboard/charts/CostChart";
+import PieChartGeneric from "@/components/dashboard/charts/PieChartGeneric";
 
 const AssetHistoryPage = () => {
   useEffect(() => {
@@ -178,7 +178,7 @@ const AssetHistoryPage = () => {
                 title="Reliability"
                 className={cn(sharedStyles.chartHeading)}
               />
-              <OpenRequestsPieChart />
+              <PieChartGeneric reliability={data.reliability} />
             </>
           )}
         </div>

@@ -106,6 +106,7 @@ export const actionRequestSchema = defaultActionRequestSchema.superRefine(
 // % Schema expected from the backend
 export const actionResponseSchema = defaultActionRequestSchema.extend({
   id: z.string(),
+  assetID: z.string(),
   actionCreated: z.string(),
   actioned_by: z.string(),
   request_id: z.string(),

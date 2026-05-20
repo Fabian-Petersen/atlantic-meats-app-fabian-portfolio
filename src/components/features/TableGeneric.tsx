@@ -148,7 +148,7 @@ export function TableGeneric<T extends { id: string }>({
                   {hg.headers.map((header) => (
                     <th
                       key={header.id}
-                      className="relative px-4 py-3 text-left tracking-wider dark:text-white text-cxs select-none"
+                      className="relative px-2 py-3 text-left tracking-wider dark:text-white text-[0.65rem] select-none"
                       style={{
                         width: `${header.getSize()}px`,
                         minWidth: `${header.column.columnDef.minSize ?? 60}px`,
@@ -215,7 +215,7 @@ export function TableGeneric<T extends { id: string }>({
                       className={`text-cxs cursor-pointer hover:bg-primary/20 dark:bg-(--bg-secondary_dark) bg-gray-50/90 ${customRowClass}`}
                     >
                       {row.getVisibleCells().map((cell) => (
-                        <td key={cell.id} className="px-4 py-3">
+                        <td key={cell.id} className="px-2 py-3">
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext(),
