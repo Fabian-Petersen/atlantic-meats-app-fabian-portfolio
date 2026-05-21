@@ -67,7 +67,6 @@ export const assetHistoryItemSchema = z.object({
   equipment: z.string().nullable(),
 
   // from actions table
-  // request_id: z.string().nullable(),
   location: z.string(),
   assetID: z.string(),
   jobcardNumber: z.string().nullable(),

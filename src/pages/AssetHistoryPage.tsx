@@ -179,7 +179,11 @@ const AssetHistoryPage = () => {
                 title="Reliability"
                 className={cn(sharedStyles.chartHeading)}
               />
-              <PieChartGeneric reliability={data.reliability} />
+              <PieChartGeneric
+                reliability={data.reliability}
+                innerRadius={80}
+                outerRadius={110}
+              />
             </>
           )}
         </div>
