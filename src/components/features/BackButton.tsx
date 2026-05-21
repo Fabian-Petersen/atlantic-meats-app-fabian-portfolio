@@ -1,13 +1,18 @@
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface BackButtonProps {
   to: string;
   label?: string;
+  iconStyles?: string;
 }
 
-export default function BackButton({ to, label = "Back" }: BackButtonProps) {
+export default function BackButton({
+  to,
+  label = "Back",
+  iconStyles,
+}: BackButtonProps) {
   const navigate = useNavigate();
 
   return (
@@ -21,7 +26,7 @@ export default function BackButton({ to, label = "Back" }: BackButtonProps) {
       )}
     >
       <span className="transition-all duration-200 group-hover:-translate-x-0.5">
-        <ChevronLeft />
+        <ArrowLeft className={iconStyles} />
       </span>
       {label}
     </button>

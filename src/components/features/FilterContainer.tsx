@@ -33,9 +33,9 @@ function FilterContainer<T extends Record<string, unknown>>({
   if (!filterableColumns.length) return null;
 
   return (
-    <div className={cn(className)}>
+    <div className={cn(className, "h-full")}>
       {filterableColumns.map((column) => (
-        <div key={column.id} className="capitalize">
+        <div key={column.id} className="capitalize h-full">
           <ColumnFilterItem
             placeholder={column.columnDef.header as string}
             value={(column.getFilterValue() as string) ?? ""}

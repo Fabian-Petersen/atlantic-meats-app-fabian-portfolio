@@ -34,6 +34,14 @@ function formatMetricValue(name: string, value: number) {
 
   return String(value);
 }
+// ─── Custom Availability Ring Color ───────────────────────────────────────────
+function getAvailabilityColor(value: number) {
+  if (value >= 95) return "#22c55e"; // green
+  if (value >= 80) return "#facc15"; // yellow
+  if (value >= 60) return "#fb923c"; // orange
+
+  return "#d10c0c"; // red
+}
 
 // ─── Custom Sector ───────────────────────────────────────────────────────────
 
@@ -47,10 +55,15 @@ function CustomSector(props: CustomSectorProps & { isActive: boolean }) {
     endAngle,
     fill,
     isActive,
+    name,
+    value,
   } = props;
 
   const ringGap = 8;
   const ringWidth = 4;
+
+  const ringColor =
+    name === "Availability" ? getAvailabilityColor(Number(value)) : fill;
 
   // const expand = isActive ? 8 : 0;
 
@@ -65,7 +78,7 @@ function CustomSector(props: CustomSectorProps & { isActive: boolean }) {
           outerRadius={outerRadius + ringGap + ringWidth}
           startAngle={startAngle}
           endAngle={endAngle}
-          fill={fill}
+          fill={ringColor}
           opacity={0.9}
         />
       )}
@@ -77,7 +90,7 @@ function CustomSector(props: CustomSectorProps & { isActive: boolean }) {
         outerRadius={outerRadius}
         startAngle={startAngle}
         endAngle={endAngle}
-        fill={fill}
+        fill={ringColor}
         opacity={isActive ? 1 : 0.8}
       />
     </>
@@ -92,12 +105,7 @@ export class PieChartGeneric extends PureComponent<Props> {
   };
 
   render() {
-    const {
-      reliability,
-      // colors = COLORS,
-      innerRadius = 80,
-      outerRadius = 110,
-    } = this.props;
+    const { reliability, innerRadius = 80, outerRadius = 110 } = this.props;
 
     const { activeIndex } = this.state;
 
@@ -113,7 +121,7 @@ export class PieChartGeneric extends PureComponent<Props> {
     }));
 
     return (
-      <div style={{ width: "100%", height: "100%" }}>
+      <div className="w-full h-full min-h-0 min-w-0">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             {/* Center display */}
@@ -122,42 +130,32 @@ export class PieChartGeneric extends PureComponent<Props> {
                 <>
                   <text
                     x="50%"
-                    y="50%"
-                    dy={32}
+                    y="45%"
+                    textAnchor="middle"
+                    fill="var(--chart-text)"
+                    fontSize={36}
+                  >
+                    {formatMetricValue(active.name, active.value)}
+                  </text>
+                  <text
+                    x="50%"
+                    y="45%"
+                    dy={24}
                     textAnchor="middle"
                     fill="var(--chart-text)"
                     fontSize={16}
                   >
                     {active.name}
                   </text>
-                  <text
-                    x="50%"
-                    y="50%"
-                    textAnchor="middle"
-                    fill="var(--chart-text)"
-                    fontSize={32}
-                  >
-                    {formatMetricValue(active.name, active.value)}
-                  </text>
                 </>
               ) : (
                 <>
                   <text
                     x="50%"
-                    y="50%"
-                    dy={32}
-                    textAnchor="middle"
-                    fill="var(--chart-text-muted)"
-                    fontSize={16}
-                  >
-                    Availability
-                  </text>
-                  <text
-                    x="50%"
-                    y="50%"
+                    y="45%"
                     textAnchor="middle"
                     fill="var(--chart-text)"
-                    fontSize={32}
+                    fontSize={36}
                   >
                     {availabilityMetric
                       ? formatMetricValue(
@@ -165,6 +163,16 @@ export class PieChartGeneric extends PureComponent<Props> {
                           availabilityMetric.value,
                         )
                       : "0%"}
+                  </text>
+                  <text
+                    x="50%"
+                    y="45%"
+                    dy={24}
+                    textAnchor="middle"
+                    fill="var(--chart-text-muted)"
+                    fontSize={16}
+                  >
+                    Availability
                   </text>
                 </>
               )}
@@ -174,7 +182,7 @@ export class PieChartGeneric extends PureComponent<Props> {
             <Pie
               data={reliability}
               cx="50%"
-              cy="50%"
+              cy="45%"
               innerRadius={innerRadius}
               outerRadius={outerRadius}
               dataKey="value"

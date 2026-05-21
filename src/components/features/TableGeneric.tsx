@@ -109,7 +109,7 @@ export function TableGeneric<T extends { id: string }>({
     <div className={cn(sharedStyles.table)}>
       {tableHeading && <FormHeading heading={tableHeading} />}
       {location.pathname === "/dashboard" ? undefined : (
-        <div className="flex gap-4 items-end w-full">
+        <div className="flex gap-4 items-end w-full h-11">
           <SearchInput
             value={globalFilter}
             onChange={setGlobalFilter}

@@ -91,13 +91,6 @@ select:not([multiple])::picker(select) {
     content: "";
   }
 
-  /* select:not([multiple]) button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-  } */
-
   select.base-select:not([multiple]) button svg {
     transition: rotate 300ms ease;
   }

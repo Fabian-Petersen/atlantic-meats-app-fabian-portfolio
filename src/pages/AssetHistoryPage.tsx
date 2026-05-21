@@ -31,6 +31,8 @@ import { Barcode, CalendarCheck, MapPin, Tag } from "lucide-react";
 import { PieChartSkeleton } from "@/components/dashboard/charts/PieChartSkeleton";
 import CostChart from "@/components/dashboard/charts/CostChart";
 import PieChartGeneric from "@/components/dashboard/charts/PieChartGeneric";
+import { Breadcrumbs } from "@/components/features/Breadcrumbs";
+import { assetHistoryPageRouteConfig } from "@/lib/routeConfig";
 
 const AssetHistoryPage = () => {
   useEffect(() => {
@@ -50,7 +52,7 @@ const AssetHistoryPage = () => {
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 10, // 👈 this controls "10 items per page"
+    pageSize: 10,
   });
 
   const [globalFilter, setGlobalFilter] = useState("");
@@ -105,14 +107,26 @@ const AssetHistoryPage = () => {
   }
 
   return (
-    <main className="w-full h-full md:p-4 p-2">
+    <main className="flex flex-col gap-2 w-full h-full md:p-4 p-2">
+      <Breadcrumbs
+        className="col-span-full"
+        routes={assetHistoryPageRouteConfig}
+        overrides={{
+          "/assets/list": {
+            label: "Assets",
+          },
+        }}
+      />
       <div className={cn(sharedStyles.dashboard)}>
         {/* Heading */}
-        <div className="flex flex-col gap-2 w-full col-span-full">
-          <FormHeading
-            heading={`${data.history[0].equipment}`}
-            className={cn(sharedStyles.headingTable)}
-          />
+        <div className="flex flex-col gap-4 w-full col-span-full">
+          <div className="flex gap-2">
+            <FormHeading
+              heading={`${data.history[0].equipment}`}
+              className={cn(sharedStyles.headingTable, "md:text-4xl")}
+            />
+          </div>
+
           <div className="flex gap-6 text-sm dark:text-gray-400 text-(--clr-textLight) capitalize">
             <div className="flex gap-2 items-center">
               <MapPin className="size-4" />

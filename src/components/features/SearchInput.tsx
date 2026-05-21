@@ -12,7 +12,7 @@ export function SearchInput({
   placeholder = "Search requests...",
 }: SearchInputProps) {
   return (
-    <div className="relative w-full lg:w-1/4">
+    <div className="relative h-full w-full lg:w-1/4">
       <Search
         className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none transition-colors ${
           value
@@ -26,7 +26,7 @@ export function SearchInput({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         className={`
-          w-full h-11 pl-[42px] pr-10 text-sm rounded-md
+          w-full h-full pl-10.5 pr-10 text-sm rounded-md
           bg-white dark:bg-gray-900
           text-gray-900 dark:text-gray-100
           placeholder:text-gray-400 dark:placeholder:text-gray-500

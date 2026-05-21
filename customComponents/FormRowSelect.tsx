@@ -86,7 +86,7 @@ function FormRowSelect<T extends FieldValues>({
       >
         {/* Placeholder option — single-select only */}
         {!multiple && (
-          <option value="" disabled hidden>
+          <option value="" disabled>
             {/* {placeholder ?? ""} */}
           </option>
         )}

@@ -90,6 +90,19 @@ const JobActionForm = ({ onCancel }: Props) => {
     resolver: zodResolver(
       actionRequestSchema,
     ) as unknown as Resolver<ActionRequestFormValues>,
+    defaultValues: {
+      start_time: "",
+      end_time: "",
+      total_km: "",
+      total_cost_contractor: "",
+      total_cost_parts: "",
+      total_cost_sundries: "",
+      work_completed: "",
+      work_order_number: "",
+      status: "",
+      root_cause: "",
+      signedBy: "",
+    },
   });
 
   const {
@@ -150,6 +163,7 @@ const JobActionForm = ({ onCancel }: Props) => {
           register={register}
           className="col-span-2 md:col-span-1 mt-1"
           error={errors.start_time}
+          required={true}
         />
         <FormRowInput
           label="End Date/Time"
@@ -159,12 +173,13 @@ const JobActionForm = ({ onCancel }: Props) => {
           register={register}
           className="col-span-2 md:col-span-1 mt-2"
           error={errors.end_time}
+          required={true}
         />
         <FormRowInput
           // label="Kilometers"
           type="text"
           name="total_km"
-          placeholder="Total Km's"
+          label="Total Km's"
           register={register}
           className="col-span-2 md:col-span-1"
           error={errors.total_km}
@@ -173,7 +188,7 @@ const JobActionForm = ({ onCancel }: Props) => {
           // label="Work Order Number"
           type="text"
           name="work_order_number"
-          placeholder="Work Order Number"
+          label="Work Order Number"
           register={register}
           className="col-span-2 md:col-span-1"
           error={errors.work_order_number}
@@ -185,71 +200,75 @@ const JobActionForm = ({ onCancel }: Props) => {
             label: cause,
             value: cause,
           }))}
-          placeholder="Root Cause"
+          label="Root Cause"
           register={register}
           className="col-span-2 md:col-span-1"
           error={errors.root_cause}
+          required={true}
         />
         <FormRowSelect
           // label="Status"
           name="status"
           options={status}
-          placeholder="Job Status"
+          label="Job Status"
           register={register}
           className="col-span-2 md:col-span-1"
           error={errors.status}
+          required={true}
         />
         <TextAreaInput
           // label="Work Completed"
           name="work_completed"
-          placeholder="Work Completed"
+          label="Work Completed"
           register={register}
           className="col-span-2"
           rows={1}
           error={errors.work_completed}
+          required={true}
         />
         <TextAreaInput
           // label="Findings"
           name="findings"
-          placeholder="Findings"
+          label="Findings"
           className="col-span-2"
           register={register}
           rows={1}
           error={errors.findings}
+          required={true}
         />
         <FormRowInput
           name="sundries"
-          placeholder="Sundries"
+          label="Sundries Description"
           register={register}
           error={errors.sundries}
         />
         <FormRowInput
           name="total_cost_sundries"
-          placeholder="Subtotal: Sundries"
+          label="Subtotal: Sundries"
           register={register}
           error={errors.total_cost_sundries}
         />
         <FormRowInput
           name="parts"
-          placeholder="Parts & Materials"
+          label="Parts & Materials Description"
           register={register}
           error={errors.parts}
         />
         <FormRowInput
           name="total_cost_parts"
-          placeholder="Subtotal: Materials"
+          label="Subtotal: Materials"
           register={register}
           error={errors.total_cost_parts}
         />
         <FormRowInput
           name="contractor"
-          placeholder="Contractor"
+          label="Contractor Name"
           register={register}
           error={errors.contractor}
         />
         <FormRowInput
           name="total_cost_contractor"
-          placeholder="Subtotal: Contractor"
+          label="Subtotal: Contractor"
           register={register}
           error={errors.total_cost_contractor}
         />
@@ -269,7 +288,7 @@ const JobActionForm = ({ onCancel }: Props) => {
         />
         <FormRowInput
           name="signedBy"
-          placeholder="signed by"
+          label="Signed By (Name & Surname)"
           className="col-span-2"
           register={register}
           error={errors.signedBy}

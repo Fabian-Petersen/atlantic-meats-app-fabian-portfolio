@@ -21,6 +21,7 @@ type FormRowTextAreaProps<T extends FieldValues> = {
   className?: string;
   labelStyles?: string;
   textAreaStyles?: string;
+  required?: boolean;
 };
 
 const TextAreaInput = <T extends FieldValues>({
@@ -35,6 +36,7 @@ const TextAreaInput = <T extends FieldValues>({
   className,
   labelStyles,
   textAreaStyles,
+  required,
 }: FormRowTextAreaProps<T>) => {
   const registered = register(name);
   return (
@@ -72,6 +74,7 @@ const TextAreaInput = <T extends FieldValues>({
           className={cn(sharedStyles.formLabel, labelStyles)}
         >
           {label}
+          {required && <span className="text-red-500 ml-1">*</span>}
         </label>
       )}
       {error && (

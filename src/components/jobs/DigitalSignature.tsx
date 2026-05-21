@@ -117,7 +117,7 @@ const DigitalSignature: React.FC<DigitalSignatureProps> = ({
   return (
     <div className={`w-full mt-4 ${className}`} ref={containerRef}>
       <p className="mb-2 text-xs ml-1 dark:text-(--clr-textDark)">
-        Customer Signature
+        Manager / Supervisor Signature
       </p>
 
       <div className="border border-gray-300 dark:border-gray-700/30 rounded-md outline-none bg-white dark:bg-(--bg-primary_dark)">
