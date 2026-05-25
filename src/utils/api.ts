@@ -49,7 +49,8 @@ export type Resource =
   // $ Stocks ROUTES
   | "stocks/create-new-stock" // "stocks-list" GET all stocks
   | `stocks/${string}` // GET, PUT, DELETE a single stock by id
-  | "dashboard/metrics/jobs"; // GET, the metrics data for jobs from the backend
+  | "dashboard/metrics/jobs" // GET, the metrics data for jobs from the backend
+  | "dashboard/metrics/charts"; // GET, the metrics data for store job charts from the backend
 
 // $ Frontend Routing Paths (for redirection after actions)
 export type RedirectResource =

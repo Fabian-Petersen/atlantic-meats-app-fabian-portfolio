@@ -5,7 +5,7 @@
 
 // import Sidebar from "@/components/dashboardSidebar/Sidebar";
 import OpenRequestsPieChart from "@/components/dashboard/charts/OpenRequestsPieChart";
-import CostYTDChart from "@/components/dashboard/charts/CostYTDChart";
+// import CostYTDChart from "@/components/dashboard/charts/CostYTDChart";
 import ChartHeading from "@/components/dashboard/ChartHeading";
 import { getDashboardJobColumns } from "@/components/maintenanceRequestTable/columns";
 import { useGetAll } from "@/utils/api";
@@ -22,6 +22,8 @@ import { sharedStyles } from "@/styles/shared";
 import { useDashboardJobsMetrics } from "@/hooks/useDashboardJobsMetrics";
 // import Cards from "@/components/dashboard/Cards";
 import CardContainer from "../components/dashboard/CardContainer";
+import { useDashboardJobsStoreCostByYear } from "@/hooks/useDashboardStoreCosByYear";
+import CostChart from "@/components/dashboard/charts/CostChart";
 
 const Dashboard = () => {
   const columns = getDashboardJobColumns();
@@ -37,7 +39,9 @@ const Dashboard = () => {
 
   // $ Hook pass the cards data to the CardContainer
   const { cards, isPending } = useDashboardJobsMetrics();
-  // console.log("cards:", cards);
+
+  const { data: costByYearData, isPending: isCostByYearPending } =
+    useDashboardJobsStoreCostByYear();
 
   useEffect(() => {
     const loadGroups = async () => {
@@ -63,7 +67,7 @@ const Dashboard = () => {
             "text-gray-600 dark:text-gray-100",
           )}
         >
-          {isPending ? (
+          {isCostByYearPending ? (
             <JobRequestsChartSkeleton />
           ) : (
             <>
@@ -72,7 +76,7 @@ const Dashboard = () => {
                 className={cn(sharedStyles.chartHeading)}
               />
               <div className="flex-1 min-h-0">
-                <CostYTDChart />
+                <CostChart data={costByYearData ?? []} />
               </div>
             </>
           )}

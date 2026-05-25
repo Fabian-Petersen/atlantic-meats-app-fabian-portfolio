@@ -28,17 +28,14 @@ function CostChart({ data }: Props) {
     return data[selectedYear] || [];
   }, [selectedYear, data]);
 
+  const handleBarClick = (data: CostPoint) => {
+    const year = selectedYear;
+    const location = data.name;
+    console.log({ year, location });
+  };
+
   return (
-    <div
-      className="w-full h-full p-4 relative"
-      //   style={{
-      //     width: "100%",
-      //     height: "100%",
-      //     padding: "16px",
-      //     boxSizing: "border-box",
-      //     position: "relative",
-      //   }}
-    >
+    <div className="w-full h-full p-4 relative">
       {/* Floating year selector */}
       <div className="absolute top-0 right-4 z-10">
         <select
@@ -78,6 +75,7 @@ function CostChart({ data }: Props) {
               strokeWidth: 0,
             }}
             style={{ cursor: "pointer" }}
+            onClick={(data) => handleBarClick(data as CostPoint)}
           />
         </BarChart>
       </ResponsiveContainer>

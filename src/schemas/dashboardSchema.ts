@@ -14,6 +14,20 @@ export const metricValuesSchema = z.object({
   valueChange: z.number().optional(),
 });
 
+export const dashboardJobsStoreCostByYearResponseSchema = z.record(
+  z.string(),
+  z.array(
+    z.object({
+      name: z.string(),
+      value: z.number(),
+    }),
+  ),
+);
+
+export type DashboardJobsStoreCostByYearResponse = z.infer<
+  typeof dashboardJobsStoreCostByYearResponseSchema
+>;
+
 export type MetricValues = z.infer<typeof metricValuesSchema>;
 
 export type CardData = {
