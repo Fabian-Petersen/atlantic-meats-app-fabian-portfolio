@@ -33,7 +33,7 @@ import { assetOverviewPageRouteConfig } from "@/lib/routeConfig";
 const AssetsOverviewPage = () => {
   const navigate = useNavigate();
   const { data, isPending, isError } = useGetAll<AssetAPIResponse[]>({
-    resourcePath: "assets-data",
+    resourcePath: "api/assets",
     queryKey: ["getAssetsList", "assetsList"],
   });
 

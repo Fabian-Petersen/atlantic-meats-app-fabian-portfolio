@@ -75,7 +75,7 @@ export default function MobileRequestApproval({
 
   const { mutateAsync: approveRequest, isPending } = usePOST({
     id: selectedRowId ?? "",
-    resourcePath: "jobs",
+    resourcePath: "api/jobs",
     queryKey: ["jobs", "approve-request"],
     action: "approve",
   });

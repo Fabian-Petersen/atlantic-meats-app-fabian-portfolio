@@ -58,7 +58,7 @@ export const getMaintenanceTableMenuItems = (
     icon: Trash2Icon,
     onClick: () => {
       openDeleteDialog(rowId, {
-        resourcePath: "jobs/pending",
+        resourcePath: "api/jobs/pending",
         queryKey: ["MAINTENANCE_DELETE_KEY"] as const,
       });
       setSelectedRowId(rowId);

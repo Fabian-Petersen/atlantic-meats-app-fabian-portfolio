@@ -160,7 +160,7 @@ export const getInProgressColumns = (
 
         delete: {
           config: {
-            resourcePath: "jobs",
+            resourcePath: "api/jobs",
             queryKey: ["jobs", "delete-inProgess-job"],
             resourceName: "job",
           },

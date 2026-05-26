@@ -24,7 +24,7 @@ function ActionRequestDialog() {
 
   const { data: job } = useById<JobAPIResponse>({
     id: selectedRowId!,
-    resourcePath: "jobs",
+    resourcePath: "api/jobs",
     queryKey: ["jobs", "job-details"],
   });
 

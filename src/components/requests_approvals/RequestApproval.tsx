@@ -2,7 +2,6 @@
 
 import Separator from "@/components/dashboardSidebar/Seperator";
 import type { JobAPIResponse } from "@/schemas";
-// import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useById, usePOST } from "@/utils/api";
@@ -49,21 +48,21 @@ function RequestApproval() {
 
   const { mutateAsync: approveRequest, isPending: isApproved } = usePOST({
     id: selectedRowId ?? "",
-    resourcePath: "jobs",
-    queryKey: ["jobs", "approve-item"] as const,
+    resourcePath: "api/jobs",
+    queryKey: ["jobs", "action: approve-item"] as const,
     action: "approve",
   });
 
   const { data: item, isPending } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
     queryKey: ["jobs", "pending-approval-item"],
-    resourcePath: "jobs",
+    resourcePath: "api/jobs",
     params: {
       status: "pending",
     },
   });
 
-  console.log("item", item);
+  // console.log("item", item);
 
   const navigate = useNavigate();
   if (isPending) {

@@ -32,7 +32,7 @@ const CreateJobForm = () => {
 
   // $ Calling the useFormSubmit hook to post the job data to backend
   const { submit, isPending } = useFormSubmit({
-    resourcePath: "jobs/requests",
+    resourcePath: "api/jobs/requests",
     queryKey: ["jobs"],
     buildPayload: (values, compressed) => ({
       ...values,
@@ -60,7 +60,7 @@ const CreateJobForm = () => {
   });
 
   const { data, isPending: isLoading } = useGetAll<AssetRequestFormValues[]>({
-    resourcePath: "assets-data",
+    resourcePath: "api/assets",
     queryKey: ["assets", "create-job-form"],
   });
 

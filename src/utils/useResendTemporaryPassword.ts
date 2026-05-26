@@ -3,7 +3,7 @@ import { usePOST } from "./api";
 
 export const useResendTemporaryPassword = (id: string) => {
   const { mutateAsync, isPending } = usePOST({
-    resourcePath: `admin/resend-temp-password/${id}`, // ✅ id in the URL
+    resourcePath: `api/admin/resend-temp-password/${id}`, // ✅ id in the URL
     queryKey: ["userRequests", "resend-password", id],
   });
 

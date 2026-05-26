@@ -18,7 +18,7 @@ import RoleGaurdRoute from "./routes/RoleGaurdRoute";
 
 //$ Page Layouts
 // import JobItemPage from "./pages/JobApprovedItemPage";
-import JobActionItemPage from "./pages/JobActionPage";
+// import JobActionItemPage from "./pages/JobActionPage";
 import JobActionPage from "./pages/JobActionPage";
 
 // $ Assets Pages
@@ -88,7 +88,7 @@ function App() {
             />
             <Route path="/jobs/:id/action" element={<JobActionPage />} />
             <Route
-              path="/jobs/:id/completed"
+              path="/jobs/:id/complete"
               element={<JobCompleteItemPage />}
             />
             {/* <Route path="/stocks/:id/stock-item" element={<StockItemPage />} /> */}
@@ -132,7 +132,10 @@ function App() {
               />
             }
           >
-            <Route path="/jobs/:id/completed" element={<JobActionItemPage />} />
+            <Route
+              path="/jobs/:id/complete"
+              element={<JobCompleteItemPage />}
+            />
             <Route path="/jobs/completed" element={<JobsCompletedListPage />} />
           </Route>
         </Route>

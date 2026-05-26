@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { actionResponseSchema } from "./actionSchemas";
 
 /**
  * presignedURLSchema :
@@ -53,6 +54,21 @@ export const jobRequestAPIResponseSchema = jobRequestSchema
     rejected_at: z.string().optional(),
     rejected_by: z.string().optional(),
   });
+
+// $ Schema for the API Response for a completed job from the database tables action and request
+
+export const completedJobSchemaResponse = jobRequestAPIResponseSchema
+  .omit({
+    reject_message: true,
+    rejected_at: true,
+    rejected_by: true,
+  })
+  .extend({
+    completion: actionResponseSchema.omit({ signature: true }),
+    status: z.string(),
+  });
+
+export type CompletedJobResponse = z.infer<typeof completedJobSchemaResponse>;
 
 export const jobApprovedAPIResponseSchema = jobRequestSchema
   .omit({

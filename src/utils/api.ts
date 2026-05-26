@@ -21,36 +21,37 @@ import type { CommentRequestFormValues } from "@/schemas/commentSchemas";
 // $ Backend Routing Paths
 export type Resource =
   // $Jobs ROUTES
-  | "jobs" // parent route
-  | "jobs/requests" // "POST: Job request" | "GET: All jobs enum["pending", "approved", "in-progress", "completed"]"
-  | "jobs/actioned" // "GET: All actions enum["technicians", "contractors"]"
-  | `jobs/${string}/approve` // POST: Approve a pending job
-  | `jobs/${string}/reject` // POST: Reject a pending job
-  | `jobs/${string}/action` // POST: Job action by technician or contractor
-  | `jobs/${string}` // GET, PUT, DELETE a single job by id enum["pending", "approved", "in-progress", "completed", "actioned"]
-  | "jobs/approved" //"jobs-list-approved" : GET all approved requests
-  | `jobs/${string}/jobcard` // GET: Download jobcard from backend
+  | "api/jobs" // parent route
+  | "api/jobs/requests" // "POST: Job request" | "GET: All jobs enum["pending", "approved", "in-progress", "completed"]"
+  | "api/jobs/actioned" // "GET: All actions enum["technicians", "contractors"]"
+  | "api/jobs/completed"
+  | `api/jobs/${string}/approve` // POST: Approve a pending job
+  | `api/jobs/${string}/reject` // POST: Reject a pending job
+  | `api/jobs/${string}/action` // POST: Job action by technician or contractor
+  | `api/jobs/${string}` // GET, PUT, DELETE a single job by id enum["pending", "approved", "in-progress", "complete", "actioned"]
+  | "api/jobs/approved" //"jobs-list-approved" : GET all approved requests
+  | `api/jobs/${string}/jobcard` // GET: Download jobcard from backend
   // $ Assets ROUTES
-  | "assets-data" // "assets-list" GET all assets assets/{assetId} to DELETE, PUT, GET assetById
-  | "assets-data/location" // NOT in use : Get all assets by location
-  | `assets-data/${string}/history`
-  | `assets-data/${string}/history/metrics` // GET, asset history metrics
+  | "api/assets" // "assets-list" GET all assets assets/{assetId} to DELETE, PUT, GET assetById
+  | "api/assets/location" // NOT in use : Get all assets by location
+  | `api/assets/${string}/history`
+  | `api/assets/${string}/history/metrics` // GET, asset history metrics
   // $ Users ROUTES
-  | "users/get-current-user" // Get user details by id
-  | "users" // "admin/users" GET all users
-  | "users/technicians" // "technician-list" Get the list of technicians
-  | "users/contractors" // Not in use: Get the list of technicians
+  | "api/users/get-current-user" // Get user details by id
+  | "api/users" // "admin/users" GET all users
+  | "api/users/technicians" // "technician-list" Get the list of technicians
+  | "api/users/contractors" // Not in use: Get the list of technicians
   // $ Users ROUTES
-  | "comments" // POST a comment
-  // $ admin ROUTES
-  | "admin/confirm-user-signup" // handle the user status update after initial login. Trigger PostConfirmationTrigger lambda
-  | `admin/resend-temp-password/${string}`
-  | `admin/${string}`
+  | "api/comments" // POST a comment
+  // api/$ admin ROUTES
+  | "api/admin/confirm-user-signup" // handle the user status update after initial login. Trigger PostConfirmationTrigger lambda
+  | `api/admin/resend-temp-password/${string}`
+  | `api/admin/${string}`
   // $ Stocks ROUTES
-  | "stocks/create-new-stock" // "stocks-list" GET all stocks
-  | `stocks/${string}` // GET, PUT, DELETE a single stock by id
-  | "dashboard/metrics/jobs" // GET, the metrics data for jobs from the backend
-  | "dashboard/metrics/charts"; // GET, the metrics data for store job charts from the backend
+  | "api/stocks/create-new-stock" // "stocks-list" GET all stocks
+  | `api/stocks/${string}` // GET, PUT, DELETE a single stock by id
+  | "api/dashboard/metrics/jobs" // GET, the metrics data for jobs from the backend
+  | "api/dashboard/metrics/charts"; // GET, the metrics data for store job charts from the backend
 
 // $ Frontend Routing Paths (for redirection after actions)
 export type RedirectResource =
@@ -58,10 +59,10 @@ export type RedirectResource =
   | "jobs/create-job" // Page with the form to create a new maintenance request
   | "jobs/pending-approval" // Page showing all pending approval jobs
   | `jobs/${string}/pending-approval` // Page showing the details of a pending approval job by id
-  | "jobs/in-progress" // Page showing al the in progress jobs
+  | "jobs/in-progress" // Page showing all the in progress jobs
   | `jobs/${string}/in-progress` // Get the details of an in-progress job by id
   | "jobs/completed" // Page showing all completed jobs
-  | `jobs/${string}/completed` // Page showing the details of a completed job by id
+  | `jobs/${string}/complete` // Page showing the details of a completed job by id
   | `jobs/${string}/action` // Page for actioning a job by id (technician/contractor)
   | "assets/create-new-asset" // Page with the form to create a new asset
   | "assets/list" // Page showing all assets
@@ -112,12 +113,14 @@ const ASSETS_REQUESTS_KEY = ["assets", "asset"];
 export const useGetAll = <ResponseType>(options: {
   resourcePath: Resource;
   queryKey: readonly unknown[];
-  params?: Record<string, string | number | boolean>;
+  params?: Record<string, string | number | boolean | null | undefined>;
+  enabled?: boolean;
 }) => {
-  const { resourcePath, queryKey, params } = options;
+  const { resourcePath, queryKey, params, enabled } = options;
 
   return useQuery({
     queryKey,
+    enabled: enabled ?? true,
     queryFn: async (): Promise<ResponseType> => {
       try {
         const response = await apiClient.get<ResponseType>(`/${resourcePath}`, {

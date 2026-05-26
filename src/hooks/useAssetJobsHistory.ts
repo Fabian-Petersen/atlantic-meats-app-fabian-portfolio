@@ -22,7 +22,7 @@ export const useAssetJobsHistory = (): AssetHistoryProps => {
   const { selectedRowId } = useGlobalContext();
 
   const { data, isPending, isError } = useGetAll<AssetHistoryResponse>({
-    resourcePath: `assets-data/${selectedRowId}/history`,
+    resourcePath: `api/assets/${selectedRowId}/history`,
     queryKey: ["asset", "jobs-history", selectedRowId],
   });
 

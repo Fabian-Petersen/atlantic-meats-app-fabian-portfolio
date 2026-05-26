@@ -20,7 +20,7 @@ function JobPendingSingleItemInfo() {
   const { data: job, isPending } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
     queryKey: ["jobs", "pending-approval-job"],
-    resourcePath: "jobs",
+    resourcePath: "api/jobs",
     params: {
       status: "pending",
     },

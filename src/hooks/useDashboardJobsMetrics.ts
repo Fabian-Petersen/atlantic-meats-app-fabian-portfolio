@@ -11,7 +11,7 @@ export const useDashboardJobsMetrics = (): {
   isPending: boolean;
 } => {
   const { data, isPending } = useGetAll<DashboardMetricsResponse>({
-    resourcePath: "dashboard/metrics/jobs",
+    resourcePath: "api/dashboard/metrics/jobs",
     queryKey: ["dashboard", "metrics"],
   });
 

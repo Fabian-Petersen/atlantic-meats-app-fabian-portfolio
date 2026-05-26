@@ -45,7 +45,7 @@ function CreateUserForm() {
   } = useGlobalContext();
 
   const { submit, isPending } = useFormSubmit({
-    resourcePath: "users",
+    resourcePath: "api/users",
     queryKey: ["users"],
     buildPayload: (values) => values,
     onSuccess: (values) => {

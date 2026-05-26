@@ -144,7 +144,7 @@ export const getJobCompletedColumns = (
           },
         },
         comments: {
-          url: `/comments/${request_id}`,
+          url: `/api/comments/${request_id}`,
           onOpen: () => {
             setOpenChatSidebar(true);
           },

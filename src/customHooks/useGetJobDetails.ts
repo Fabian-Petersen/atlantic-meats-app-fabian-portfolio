@@ -5,7 +5,7 @@ import { type JobAPIResponse } from "../schemas/index";
 export const useGetJobDetails = (selectedRowId: string) => {
   const { data: jobData } = useById<JobAPIResponse>({
     id: selectedRowId!,
-    resourcePath: "jobs/requests",
+    resourcePath: "api/jobs/requests",
     queryKey: ["jobs", selectedRowId],
   });
 

@@ -18,7 +18,7 @@ const JobInProgressItemPage = () => {
   const { data: item, isPending } = useById<JobApprovedAPIResponse>({
     id: selectedRowId ?? "",
     queryKey: ["jobs", "in-progress"],
-    resourcePath: "jobs",
+    resourcePath: "api/jobs",
     params: { status: "in progress" },
   });
 

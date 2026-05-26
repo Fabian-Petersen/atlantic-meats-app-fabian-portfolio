@@ -14,7 +14,7 @@ const NotificationSidebar = () => {
 
   const { data: pendingJobs } = useGetAll<JobAPIResponse[]>({
     queryKey: ["jobs", "pending-jobs"],
-    resourcePath: "jobs/requests",
+    resourcePath: "api/jobs/requests",
     params: {
       status: "pending",
     },

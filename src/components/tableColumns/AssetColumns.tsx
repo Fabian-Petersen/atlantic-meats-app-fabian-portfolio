@@ -96,7 +96,7 @@ export const getAssetColumns = (
         history: {
           url: `/assets/${rowId}/history`,
           config: {
-            resourcePath: `assets-data/${rowId}/history`,
+            resourcePath: `api/assets/${rowId}/history`,
             queryKey: ["assets", "asset-history"],
             resourceName: "asset",
           },
@@ -108,7 +108,7 @@ export const getAssetColumns = (
         },
         delete: {
           config: {
-            resourcePath: "assets-data",
+            resourcePath: "api/assets",
             queryKey: ["assets", "asset-elete"],
             resourceName: "asset",
           },

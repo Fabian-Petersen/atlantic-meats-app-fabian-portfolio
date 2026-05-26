@@ -144,7 +144,7 @@ export const getJobPendingColumns = (
 
         delete: {
           config: {
-            resourcePath: "jobs",
+            resourcePath: "api/jobs",
             queryKey: ["jobs", "delete-pending"],
             resourceName: "request",
           },
@@ -152,7 +152,7 @@ export const getJobPendingColumns = (
         },
 
         comments: {
-          url: `/jobs/pending/${rowId}/comments`,
+          url: `/api/jobs/pending/${rowId}/comments`,
           onOpen: () => {
             setOpenChatSidebar(true);
           },

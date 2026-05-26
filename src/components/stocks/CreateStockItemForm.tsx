@@ -32,7 +32,7 @@ const CreateStockItemForm = () => {
 
   // Hook into shared submit logic (mirrors CreateAssetForm pattern)
   const { submit, isPending } = useFormSubmit({
-    resourcePath: "stocks/create-new-stock",
+    resourcePath: "api/stocks/create-new-stock",
     queryKey: ["stock", "create-stock-item"],
     buildPayload: (values) => ({ ...values }),
     onSuccess: (values) => {

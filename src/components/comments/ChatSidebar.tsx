@@ -16,7 +16,7 @@ const ChatSidebar = () => {
   const { data: comments, isPending } = useById<CommentAPIResponse[]>({
     id: selectedRowId ?? "",
     queryKey: ["CommentsKey"],
-    resourcePath: "comments",
+    resourcePath: "api/comments",
   });
 
   // [INFO] Change to something nice

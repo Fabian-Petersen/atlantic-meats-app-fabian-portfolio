@@ -43,7 +43,7 @@ const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
   };
 
   const { mutateAsync, isPending } = usePOST({
-    resourcePath: "comments",
+    resourcePath: "api/comments",
     queryKey: ["CommentsKey"],
   });
 

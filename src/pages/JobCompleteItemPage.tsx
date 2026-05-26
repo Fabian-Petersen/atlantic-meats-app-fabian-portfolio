@@ -2,7 +2,7 @@
 // import { useParams } from "react-router-dom";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../utils/api";
-import { type JobApprovedAPIResponse } from "@/schemas/jobSchemas";
+import { type CompletedJobResponse } from "@/schemas/jobSchemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
 import useGlobalContext from "@/context/useGlobalContext";
 import JobCompleteItemInfo from "@/components/jobs/JobCompleteItemInfo";
@@ -10,12 +10,14 @@ import JobCompleteItemInfo from "@/components/jobs/JobCompleteItemInfo";
 const JobCompleteItemPage = () => {
   const { selectedRowId } = useGlobalContext();
 
-  const { data: item, isPending } = useById<JobApprovedAPIResponse>({
+  const { data: item, isPending } = useById<CompletedJobResponse>({
     id: selectedRowId ?? "",
-    queryKey: ["jobs", "completed"],
-    resourcePath: "jobs",
+    queryKey: ["jobs", "status: complete", selectedRowId],
+    resourcePath: "api/jobs",
     params: { status: "complete" },
   });
+
+  console.log("completedJob:", item);
 
   if (!selectedRowId || !item) {
     return <PageLoadingSpinner />;
@@ -26,8 +28,6 @@ const JobCompleteItemPage = () => {
   }
 
   const images = item.images;
-
-  // console.log("Item Data with Presigned URLS:", item);
   return (
     <div className="p-8">
       <div className="h-auto p-8 bg-white dark:bg-(--bgd) border-(--clr-borderDark) rounded-md grid md:grid-cols-2 gap-2 text-(--clr-textLight) dark:(--clr-textDark)">

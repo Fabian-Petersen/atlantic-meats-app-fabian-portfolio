@@ -34,7 +34,7 @@ function UserProfileForm({ user }: UserProfileProps) {
   });
 
   const { mutateAsync: editUser, isPending } = usePOST({
-    resourcePath: "users",
+    resourcePath: "api/users",
     queryKey: ["users", "update-user"],
   });
 

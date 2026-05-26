@@ -118,7 +118,7 @@ const JobActionForm = ({ onCancel }: Props) => {
   // $ Hook that handles the file compression and form submission to backend with success and error modals
   const { submit, isPending } = useFormSubmit({
     id: selectedRowId ?? "",
-    resourcePath: "jobs",
+    resourcePath: "api/jobs",
     queryKey: ["jobs", "action-job"],
     action: "action",
     buildPayload: (values, compressed, invoices) => ({

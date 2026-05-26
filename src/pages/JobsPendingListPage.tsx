@@ -25,7 +25,7 @@ import { SearchInput } from "@/components/features/SearchInput";
 
 const JobsPendingListPage = () => {
   const { data, isError, isPending } = useGetAll<JobAPIResponse[]>({
-    resourcePath: "jobs/requests",
+    resourcePath: "api/jobs/requests",
     queryKey: ["jobs", "pending"],
     params: {
       status: "pending",

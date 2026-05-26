@@ -5,7 +5,7 @@ import type { TechnicianOption } from "@/schemas/technicianSchemas";
 
 export const useGetTechnicians = () => {
   return useGetAll<TechnicianOption[]>({
-    resourcePath: "users/technicians",
+    resourcePath: "api/users/technicians",
     queryKey: ["technicians"],
   });
 };

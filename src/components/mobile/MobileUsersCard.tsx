@@ -124,7 +124,7 @@ export function MobileUsersCard({ row, isOpen, setOpen, onToggle }: Props) {
               onClick={(e) => {
                 e.stopPropagation();
                 setDeleteConfig({
-                  resourcePath: `users`,
+                  resourcePath: `api/users`,
                   queryKey: ["userRequests"],
                   resourceName: "user",
                 });

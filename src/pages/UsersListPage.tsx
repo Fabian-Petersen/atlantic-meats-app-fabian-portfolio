@@ -37,7 +37,7 @@ const UsersListPage = () => {
     isError,
     isPending,
   } = useGetAll<UsersAPIResponse[]>({
-    resourcePath: "users",
+    resourcePath: "api/users",
     queryKey: ["users", "list"],
   });
 

@@ -99,7 +99,7 @@ import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder
 
 const JobsInProgressListPage = () => {
   const { data, isError, isPending } = useGetAll<JobApprovedAPIResponse[]>({
-    resourcePath: "jobs/requests",
+    resourcePath: "api/jobs/requests",
     queryKey: ["jobs", "in_progress"],
     params: {
       status: "in progress",

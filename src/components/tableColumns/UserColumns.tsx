@@ -128,7 +128,7 @@ export const getUserColumns = (
 
         delete: {
           config: {
-            resourcePath: "users",
+            resourcePath: "api/users",
             queryKey: ["users"],
             resourceName: "user",
           },

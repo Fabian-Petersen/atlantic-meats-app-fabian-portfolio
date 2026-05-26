@@ -1,7 +1,7 @@
 //$ This component display detailed information of the the maintenance request created and actioned data.
 
 import Separator from "@/components/dashboardSidebar/Seperator";
-import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
+import type { CompletedJobResponse } from "@/schemas/jobSchemas";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 // import useGlobalContext from "@/context/useGlobalContext";
@@ -11,7 +11,7 @@ import { Error } from "../features/Error";
 // import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 type Props = {
-  item: JobApprovedAPIResponse;
+  item: CompletedJobResponse;
 };
 
 function JobCompleteItemInfo({ item }: Props) {

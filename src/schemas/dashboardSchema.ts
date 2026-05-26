@@ -14,7 +14,8 @@ export const metricValuesSchema = z.object({
   valueChange: z.number().optional(),
 });
 
-export const dashboardJobsStoreCostByYearResponseSchema = z.record(
+/* // $ ------------------ Dashboard Charts Schema & Types ------------------ */
+export const dbCostByYearResponseSchema = z.record(
   z.string(),
   z.array(
     z.object({
@@ -25,9 +26,34 @@ export const dashboardJobsStoreCostByYearResponseSchema = z.record(
 );
 
 export type DashboardJobsStoreCostByYearResponse = z.infer<
-  typeof dashboardJobsStoreCostByYearResponseSchema
+  typeof dbCostByYearResponseSchema
 >;
 
+export type AllYearlyCostPoint = {
+  name: string;
+  value: number;
+};
+
+/**
+ * Type for the API response for all stores annual cost
+ */
+export type CostByYear = Record<string, AllYearlyCostPoint[]>;
+
+export type MonthlyCostPoint = {
+  name: string;
+  value: number;
+};
+
+/**
+ * Type for the API response for a single store annual cost
+ */
+export type LocationMonthlyCosts = {
+  location: string;
+  year: string;
+  data: Record<string, MonthlyCostPoint[]>;
+};
+
+/* // $ ------------------- Dashboard Cards Schema & Types ------------------ */
 export type MetricValues = z.infer<typeof metricValuesSchema>;
 
 export type CardData = {
@@ -60,11 +86,6 @@ export type DashboardMetricsResponse = Record<DashboardMetricKey, MetricValues>;
 /* -------------------------------- Old Types ------------------------------- */
 
 type Metrics<T extends string> = Record<T, MetricValues>;
-
-// export type CardItem<T extends string> = {
-//   cardData: CardData<T>[];
-//   metrics: Metrics<T>;
-// };
 
 // $ Metrics Key for pending jobs card
 export type PendingJobsMetricKey = "pendingRequests";

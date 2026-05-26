@@ -22,7 +22,7 @@ const CreateAssetForm = () => {
 
   // $ Hook handling the data send to the backend
   const { submit, isPending } = useFormSubmit({
-    resourcePath: "assets-data",
+    resourcePath: "api/assets",
     queryKey: ["assets", "create-asset"],
     buildPayload: (values, compressed) => ({
       ...values,

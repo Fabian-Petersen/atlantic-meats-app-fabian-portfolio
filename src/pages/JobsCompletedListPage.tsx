@@ -31,8 +31,8 @@ import { MobileJobsCompletedParent } from "@/components/mobile/MobileJobsComplet
 
 const JobsCompletedListPage = () => {
   const { data, isError, isPending } = useGetAll<ActionAPIResponse[]>({
-    resourcePath: "jobs/completed",
-    queryKey: ["jobs", "complete"],
+    resourcePath: "api/jobs/completed",
+    queryKey: ["jobs", "all", "status: complete"],
     // params: {
     //   group: "technician",
     // },
@@ -40,7 +40,7 @@ const JobsCompletedListPage = () => {
   const { setSelectedRowId, setOpenChatSidebar } = useGlobalContext();
 
   const { mutateAsync: downloadItem } = useDownloadPdf({
-    resourcePath: "jobs",
+    resourcePath: "api/jobs",
   });
 
   const [sorting, setSorting] = useState<SortingState>([
@@ -103,7 +103,7 @@ const JobsCompletedListPage = () => {
           data={data}
           columns={columns}
           rowPath="jobs"
-          action="completed"
+          action="complete"
           tableHeading="Jobs - Completed"
           addPageSelector={true}
           addPagination={true}
