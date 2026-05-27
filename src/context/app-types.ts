@@ -60,6 +60,16 @@ export type AppContextType = {
   //$ Error State
   showError: boolean;
   setShowError: Dispatch<SetStateAction<boolean>>;
+
+  /**
+   * ErrorConfig = {
+  title: string;
+  message: string;
+  redirectPath: RedirectResource;
+};
+   * 
+   * 
+  */
   setErrorConfig: (config: ErrorConfig) => void;
   errorConfig: ErrorConfig | null;
 

@@ -264,7 +264,7 @@ export const sharedStyles = {
     "fixed z-2000 h-screen top-0 left-0 w-full flex items-center justify-center px-4 bg-black/50 outline-0 border-0",
   ),
   actionModalContent: cn(
-    "flex flex-col items-center justify-center gap-8 w-full max-w-md rounded-2xl h-80 md:h-90 dark:border-[rgba(55,65,81,0.5)] border border-gray-100 dark:bg-(--bg-primary_dark) bg-white p-4 text-center shadow-sm",
+    "flex flex-col items-center justify-center gap-8 w-full max-w-sm rounded-2xl h-80 md:h-90 dark:border-[rgba(55,65,81,0.5)] border border-gray-100 dark:bg-(--bg-primary_dark) bg-white p-4 text-center shadow-sm",
   ),
   actionModalTitle: cn(
     "mb-2 text-2xl tracking-wide font-semibold text-(--clr-textLight) dark:text-(--clr-textDark)",

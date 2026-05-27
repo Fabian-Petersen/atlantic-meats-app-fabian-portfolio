@@ -113,7 +113,8 @@ export const useJobFields = (
       type: "datetime-local",
       name: "breakdown_time",
       label: "Breakdown Time",
-      placeholder: "Time of Breakdown",
+      required: true,
+      placeholder: "",
     },
 
     {
@@ -153,7 +154,7 @@ export const useJobFields = (
     {
       fieldType: "textarea",
       name: "jobComments",
-      label: "Comments",
+      label: "Additional Information",
       rows: 4,
       className: "lg:col-span-2",
     },
@@ -162,4 +163,26 @@ export const useJobFields = (
   return {
     fields,
   };
+};
+
+export const total_cost_by_store = [
+  {
+    "2025": {
+      maitland: "8000",
+      bellville: "6500",
+    },
+  },
+  {
+    "2026": {
+      maitland: "8000",
+      bellville: "6500",
+    },
+  },
+];
+
+export const costs = {
+  "2026": [
+    { name: "maitland", value: 18740.0 },
+    { name: "bellville", value: 12620.0 },
+  ],
 };

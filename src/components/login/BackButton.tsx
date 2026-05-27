@@ -1,4 +1,5 @@
 import { Button } from "../ui/button";
+import { Link } from "react-router-dom";
 
 const BackButton = () => {
   return (
@@ -11,9 +12,9 @@ const BackButton = () => {
       <div className="flex gap-1 hover:no-underline w-1">
         Dont have access?
         <span>Return</span>
-        <a href="/">
+        <Link to="/">
           <span className="hover:text-red-500">Home.</span>
-        </a>
+        </Link>
       </div>
     </Button>
   );
