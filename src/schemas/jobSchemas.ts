@@ -53,6 +53,11 @@ export const jobRequestAPIResponseSchema = jobRequestSchema
     reject_message: z.string().optional(),
     rejected_at: z.string().optional(),
     rejected_by: z.string().optional(),
+    targetDate: z.string().optional(),
+    assign_to_name: z.string().optional(),
+    assign_to_group: z.string().optional(),
+    approved_by: z.string().optional(),
+    approved_at: z.string().optional(),
   });
 
 // $ Schema for the API Response for a completed job from the database tables action and request
@@ -64,8 +69,7 @@ export const completedJobSchemaResponse = jobRequestAPIResponseSchema
     rejected_by: true,
   })
   .extend({
-    completion: actionResponseSchema.omit({ signature: true }),
-    status: z.string(),
+    action_data: actionResponseSchema.omit({ signature: true }),
   });
 
 export type CompletedJobResponse = z.infer<typeof completedJobSchemaResponse>;

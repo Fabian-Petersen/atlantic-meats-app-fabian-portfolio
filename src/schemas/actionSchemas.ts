@@ -115,7 +115,8 @@ export const actionResponseSchema = defaultActionRequestSchema.extend({
   location: z.string(),
   requested_by: z.string(),
   jobcardNumber: z.string(),
-  presigned_urls: presignedURLResponseSchema.array().optional(),
+  invoices: presignedURLResponseSchema.array().optional(),
+  images: presignedURLResponseSchema.array().optional(),
 });
 
 // $ Type for sending the Action to the backend excluding the images (the images is not included with the initial request). Backend will send a presignURL for the images

@@ -3,9 +3,10 @@
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../utils/api";
 import { type CompletedJobResponse } from "@/schemas/jobSchemas";
-import { ImageGallery } from "@/components/features/ImageGallery";
+// import { ImageGallery } from "@/components/features/ImageGallery";
 import useGlobalContext from "@/context/useGlobalContext";
 import JobCompleteItemInfo from "@/components/jobs/JobCompleteItemInfo";
+import BackButton from "@/components/features/BackButton";
 
 const JobCompleteItemPage = () => {
   const { selectedRowId } = useGlobalContext();
@@ -27,17 +28,11 @@ const JobCompleteItemPage = () => {
     return <PageLoadingSpinner />;
   }
 
-  const images = item.images;
+  // const images = item.images;
   return (
-    <div className="p-8">
-      <div className="h-auto p-8 bg-white dark:bg-(--bgd) border-(--clr-borderDark) rounded-md grid md:grid-cols-2 gap-2 text-(--clr-textLight) dark:(--clr-textDark)">
-        <div>
-          <ImageGallery images={images ?? []} />
-        </div>
-        <div>
-          <JobCompleteItemInfo item={item} />
-        </div>
-      </div>
+    <div className="flex flex-col gap-4 px-4 py-8 min-h-[calc(100vh-var(--sm-navbarHeight))] md:h-[calc(100vh-var(--lg-navbarHeight))]">
+      <BackButton to="/jobs/completed" />
+      <JobCompleteItemInfo item={item} />
     </div>
   );
 };

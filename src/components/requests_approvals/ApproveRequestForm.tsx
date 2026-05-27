@@ -60,8 +60,8 @@ const ApproveRequestForm = () => {
 
   const { mutateAsync: approveItem, isPending } = usePOST({
     id: selectedRowId ?? "",
-    resourcePath: "jobs" as Resource,
-    queryKey: ["jobs", "approve-job"] as const,
+    resourcePath: "api/jobs" as Resource,
+    queryKey: ["jobs", "action: approve request", selectedRowId] as const,
     action: "approve",
   });
 
@@ -142,7 +142,6 @@ const ApproveRequestForm = () => {
           label="Target Date"
           type="date"
           required={true}
-          // placeholder="Target Date"
           name="targetDate"
           error={errors.targetDate}
           className=""
