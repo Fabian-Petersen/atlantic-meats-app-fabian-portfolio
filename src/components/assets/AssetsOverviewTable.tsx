@@ -13,7 +13,6 @@ type Props = {
 
 export function AssetsOverviewTable({ table, className }: Props) {
   const navigate = useNavigate();
-  // const pageIndex = table.getState().pagination.pageIndex;
 
   const containerRef = useAutoPageSize(table, {
     rowHeight: 44,

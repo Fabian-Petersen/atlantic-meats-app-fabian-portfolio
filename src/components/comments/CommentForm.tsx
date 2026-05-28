@@ -56,7 +56,6 @@ const CommentForm = ({
   const onSubmit = async (data: CommentRequestFormValues) => {
     try {
       const payload: CommentPayload = { ...data, request_id: selectedRowId };
-      // console.log("comment-payload:", payload);
       await mutateAsync(payload);
       reset();
     } catch (error) {

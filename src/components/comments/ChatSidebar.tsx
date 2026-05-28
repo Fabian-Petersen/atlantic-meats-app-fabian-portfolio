@@ -6,7 +6,7 @@ import { useById } from "@/utils/api";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 import { useMatch } from "react-router-dom";
-import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
+// import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 // $ Animation
 import { motion, AnimatePresence } from "framer-motion";
@@ -20,15 +20,14 @@ const ChatSidebar = () => {
   const isCompleteJobsPage = useMatch("/jobs/completed") !== null;
   const isDisabled = isCompleteJobPage || isCompleteJobsPage;
 
-  const { data: comments, isPending } = useById<CommentAPIResponse[]>({
+  const { data: comments, isError } = useById<CommentAPIResponse[]>({
     id: selectedRowId ?? "",
     queryKey: ["CommentsKey"],
     resourcePath: "api/comments",
   });
 
-  // [INFO] Change to something nice
-  if (isPending) {
-    return <PageLoadingSpinner />;
+  if (isError) {
+    <p>Error: Commments cannot be loaded</p>;
   }
 
   return (

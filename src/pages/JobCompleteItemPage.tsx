@@ -3,35 +3,25 @@
 // import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../utils/api";
 import { type CompletedJobResponse } from "@/schemas/jobSchemas";
-// import { ImageGallery } from "@/components/features/ImageGallery";
-import useGlobalContext from "@/context/useGlobalContext";
 import BackButton from "@/components/features/BackButton";
 import CompletedJobDetails from "@/components/jobs/CompletedJobDetails";
 import MobileCompletedJobDetails from "@/components/mobile/MobileCompletedJobDetails";
+import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
+import { useParams } from "react-router-dom";
 
 const JobCompleteItemPage = () => {
-  const { selectedRowId } = useGlobalContext();
+  const { id: jobId } = useParams<{ id: string }>();
 
-  const { data: item } = useById<CompletedJobResponse>({
-    id: selectedRowId ?? "",
+  const { data: item, isPending } = useById<CompletedJobResponse>({
+    id: jobId ?? "",
     queryKey: ["jobs", "status: complete"],
     resourcePath: "api/jobs",
     params: { status: "complete" },
   });
 
-  // console.log("completedJob:", item);
-
-  if (!selectedRowId) {
-    return (
-      <p className="w-full h-screen flex justify-center items-center">
-        No job selected. Please go back.
-      </p>
-    );
+  if (isPending) {
+    return <PageLoadingSpinner />;
   }
-
-  // if (isPending) {
-  //   return <PageLoadingSpinner />;
-  // }
 
   if (!item) {
     return <p>Job not found</p>;

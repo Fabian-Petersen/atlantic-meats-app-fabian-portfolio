@@ -43,7 +43,7 @@ const AssetHistoryPage = () => {
   }, []);
 
   const { cards, isPending, isError, data } = useAssetJobsHistory();
-  console.log("data:", data);
+  console.log("asset history:", data);
 
   const navigate = useNavigate();
   const [sorting, setSorting] = useState<SortingState>([
@@ -64,7 +64,6 @@ const AssetHistoryPage = () => {
     () =>
       (data?.history ?? []).map((job) => ({
         id: job.id,
-        // request_id: job.request_id,
         jobCreated: job.jobCreated,
         description: job.description,
         equipment: job.equipment,

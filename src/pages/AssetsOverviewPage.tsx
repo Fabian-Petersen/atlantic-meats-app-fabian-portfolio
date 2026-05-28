@@ -34,7 +34,7 @@ const AssetsOverviewPage = () => {
   const navigate = useNavigate();
   const { data, isPending, isError } = useGetAll<AssetAPIResponse[]>({
     resourcePath: "api/assets",
-    queryKey: ["getAssetsList", "assetsList"],
+    queryKey: ["assets", "list"],
   });
 
   const [sorting, setSorting] = useState<SortingState>([
@@ -102,7 +102,7 @@ const AssetsOverviewPage = () => {
         <TableGeneric
           data={data}
           columns={columns}
-          rowPath="/assets"
+          rowPath="assets"
           addButton={true}
           addFilter={true}
           addButtonPath="/assets/create-new-asset"

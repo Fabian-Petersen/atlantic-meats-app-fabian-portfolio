@@ -27,6 +27,7 @@ export const useAssetJobsHistory = (): AssetHistoryProps => {
   });
 
   const hasHistory = (data?.history?.length ?? 0) > 0;
+  console.log("hook-assets-history:", data);
 
   const cards: AssetHistoryCardConfig[] = useMemo(
     () =>

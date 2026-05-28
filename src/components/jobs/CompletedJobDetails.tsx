@@ -55,8 +55,6 @@ function CompletedJobDetails({ item }: Props) {
 
   const action = item.action_data;
 
-  console.log("item:", item);
-
   const totalCost =
     (Number(action?.total_cost_parts) || 0) +
     (Number(action?.total_cost_sundries) || 0) +
@@ -90,7 +88,10 @@ function CompletedJobDetails({ item }: Props) {
       </div>
 
       {/* ── RIGHT: Detail panel ── */}
-      <div className="relative flex flex-col flex-1 gap-4 text-font dark:text-gray-100 rounded-md p-4 border border-gray-100 dark:border-gray-700/50 min-h-0 overflow-y-auto pr-2 custom-scrollbar dark:bg-(--bg-primary_dark)">
+      <div
+        className="relative flex flex-col flex-1 gap-4 text-font dark:text-gray-100 rounded-md p-4 border border-gray-100 dark:border-gray-700/50 min-h-0 overflow-y-auto 
+      custom-scrollbar pr-1 dark:bg-(--bg-primary_dark)"
+      >
         {/* Header */}
         <div className="flex flex-col gap-2 sticky">
           <p className="text-[11px] uppercase tracking-widest text-gray-400 dark:text-gray-500 font-medium select-none">

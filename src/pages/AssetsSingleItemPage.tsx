@@ -20,7 +20,7 @@ const AssetsSingleItemPage = () => {
     queryKey: ASSETS_KEY,
     resourcePath: "api/assets",
   });
-
+  console.log("assets:", item);
   if (!id || !item) {
     return <PageLoadingSpinner />;
   }
