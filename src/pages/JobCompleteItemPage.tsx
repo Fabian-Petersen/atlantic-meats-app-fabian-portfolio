@@ -7,6 +7,7 @@ import { type CompletedJobResponse } from "@/schemas/jobSchemas";
 import useGlobalContext from "@/context/useGlobalContext";
 import BackButton from "@/components/features/BackButton";
 import CompletedJobDetails from "@/components/jobs/CompletedJobDetails";
+import MobileCompletedJobDetails from "@/components/mobile/MobileCompletedJobDetails";
 
 const JobCompleteItemPage = () => {
   const { selectedRowId } = useGlobalContext();
@@ -18,15 +19,9 @@ const JobCompleteItemPage = () => {
     params: { status: "complete" },
   });
 
-  console.log("completedJob:", item);
+  // console.log("completedJob:", item);
 
   if (!selectedRowId) {
-    // setErrorConfig({
-    //   title: "Error",
-    //   message: "No job selected",
-    //   redirectPath: "jobs/completed",
-    // });
-    // setShowError(true);
     return (
       <p className="w-full h-screen flex justify-center items-center">
         No job selected. Please go back.
@@ -40,19 +35,19 @@ const JobCompleteItemPage = () => {
 
   if (!item) {
     return <p>Job not found</p>;
-    // setErrorConfig({
-    //   title: "Error",
-    //   message: "Job details not found",
-    //   redirectPath: "jobs/completed",
-    // });
-    // setShowError(true);
   }
 
-  // const images = item.images;
   return (
-    <div className="flex flex-col gap-4 px-4 py-8 min-h-[calc(100vh-var(--sm-navbarHeight))] md:h-[calc(100vh-var(--lg-navbarHeight))] overflow-hidden">
-      <BackButton to="/jobs/completed" parentStyles="text-gray-400 flex-none" />
-      <CompletedJobDetails item={item} />
+    <div>
+      <div className="hidden md:flex flex-col gap-4 px-4 py-8 min-h-[calc(100vh-var(--sm-navbarHeight))] md:h-[calc(100vh-var(--lg-navbarHeight))] overflow-hidden">
+        <BackButton
+          to="/jobs/completed"
+          parentStyles="text-gray-400 flex-none"
+          label="Jobs"
+        />
+        <CompletedJobDetails item={item} />
+      </div>
+      <MobileCompletedJobDetails item={item} />
     </div>
   );
 };

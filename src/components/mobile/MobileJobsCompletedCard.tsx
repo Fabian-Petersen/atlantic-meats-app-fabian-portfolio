@@ -113,7 +113,7 @@ export default function MobileJobsCompletedCard({
               onClick={(e) => {
                 e.stopPropagation();
                 setSelectedRowId(row.original.id);
-                navigate(`/jobs/${row.original.id}/completed`);
+                navigate(`/jobs/${row.original.id}/complete`);
               }}
             >
               View Job Details

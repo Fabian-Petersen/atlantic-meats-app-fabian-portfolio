@@ -1,144 +1,51 @@
-// $ This component displays detailed information for a completed maintenance job,
-// including job details, request info, action info, contractor info, costs, and images.
-
 import { useState } from "react";
 import Separator from "@/components/dashboardSidebar/Seperator";
 import { Badge } from "../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { cn } from "@/lib/utils";
-import Avatar from "../header/Avatar";
 import { ImageGallery } from "../features/ImageGallery";
-import {
-  ClipboardList,
-  UserCircle,
-  Wrench,
-  HardHat,
-  Banknote,
-} from "lucide-react";
 import type { CompletedJobResponse, PresignedUrls } from "@/schemas/jobSchemas";
 import { Link } from "react-router-dom";
 
-// ── Types ────────────────────────────────────────────────────────────────────
+// $ ————— Feature Components ——————————————————————————————————————————————————————
+import SectionTitle from "../features/layout/SectionTitle";
+import Field from "../features/layout/Field";
+import DescriptionBox from "../features/layout/DescriptionBox";
+import TimeChip from "../features/layout/TimeChip";
+import CostCard from "../features/layout/CostCard";
+import PersonRow from "../features/layout/PersonRow";
 
-type Tab = "details" | "request" | "action" | "contractor" | "costs";
+// $ ————— config ——————————————————————————————————————————————————————————————————
+import { TAB_CONFIG, type Tab } from "@/lib/tabConfig";
+
+// $ ————— utils ——————————————————————————————————————————————————————————————————
+import { formatDateTime } from "@/utils/formatDateTime";
+
+// ── Types ────────────────────────────────────────────────────────────────────
 
 type Props = {
   item: CompletedJobResponse;
 };
 
-// ── Sub-components ───────────────────────────────────────────────────────────
-
-function Field({ label, value }: { label: string; value?: string | null }) {
-  if (!value) return null;
-  return (
-    <div className="grid grid-cols-[130px_1fr] gap-2 items-start text-sm capitalize">
-      <span className="text-xs text-gray-500 dark:text-gray-400 pt-0.5">
-        {label}
-      </span>
-      <span className="text-gray-600 dark:text-gray-100 capitalize font-medium">
-        {value}
-      </span>
-    </div>
-  );
-}
-
-function SectionTitle({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="text-[10px] uppercase tracking-widest font-medium text-gray-400 dark:text-gray-500 mb-3">
-      {children}
-    </p>
-  );
-}
-
-function DescriptionBox({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700 rounded-md px-3 py-2.5 text-sm leading-relaxed text-gray-800 dark:text-gray-200">
-      {children}
-    </div>
-  );
-}
-
-function TimeChip({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex-1 bg-gray-50 dark:bg-gray-800/60 rounded-md px-3 py-2">
-      <p className="text-[10px] text-gray-400 dark:text-gray-500 mb-0.5">
-        {label}
-      </p>
-      <p className="text-xs font-medium text-gray-800 dark:text-gray-200">
-        {value}
-      </p>
-    </div>
-  );
-}
-
-function CostCard({ label, value }: { label: string; value?: string | null }) {
-  const isEmpty = !value || value.trim() === "";
-  return (
-    <div className="bg-gray-50 dark:bg-gray-800/60 rounded-md px-4 py-3">
-      <p className="text-[10px] text-gray-400 dark:text-gray-500 mb-1">
-        {label}
-      </p>
-      <p
-        className={cn(
-          "text-lg font-medium",
-          isEmpty
-            ? "text-gray-300 dark:text-gray-600"
-            : "text-gray-900 dark:text-gray-100",
-        )}
-      >
-        {isEmpty ? "—" : `R ${Number(value).toLocaleString()}`}
-      </p>
-    </div>
-  );
-}
-
-function PersonRow({ name, sub }: { name: string; sub: string }) {
-  return (
-    <div className="flex items-center gap-3 capitalize">
-      <Avatar name={name} isFullName={true} />
-      <div className="flex flex-col leading-snug">
-        <span className="text-sm font-medium capitalize">{name}</span>
-        <span className="text-xs text-gray-500 dark:text-gray-400">{sub}</span>
-      </div>
-    </div>
-  );
-}
-
-// ── Tab button ───────────────────────────────────────────────────────────────
-
-const TAB_CONFIG: {
-  key: Tab;
-  label: string;
-  icon: React.ReactNode;
-}[] = [
-  {
-    key: "details",
-    label: "Job details",
-    icon: <ClipboardList className="w-3.5 h-3.5" />,
-  },
-  {
-    key: "request",
-    label: "Request info",
-    icon: <UserCircle className="w-3.5 h-3.5" />,
-  },
-  {
-    key: "action",
-    label: "Action info",
-    icon: <Wrench className="w-3.5 h-3.5" />,
-  },
-  {
-    key: "contractor",
-    label: "Contractor",
-    icon: <HardHat className="w-3.5 h-3.5" />,
-  },
-  {
-    key: "costs",
-    label: "Costs",
-    icon: <Banknote className="w-3.5 h-3.5" />,
-  },
-];
-
-// ── Main component ────────────────────────────────────────────────────────────
+// $ ── Main component ────────────────────────────────────────────────────────────
+/**
+ * CompletedJobDetails
+ *
+ *  Path
+ * - route: /jobs/:id/complete
+ * - backend: api/jobs/:id/complete
+ *
+ * Renders a desktop-optimized view of a completed maintenance job.
+ *
+ * Features:
+ * - Sticky tab navigation for switching between job sections
+ * - Dynamic rendering based on selected tab
+ * - Conditional contractor and invoice rendering
+ * - Display request and action images in gallery
+ * - Cost aggregation across multiple categories
+ *
+ * @param item - Completed job data from API
+ */
 
 function CompletedJobDetails({ item }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>("details");
@@ -152,30 +59,19 @@ function CompletedJobDetails({ item }: Props) {
 
   const hasContractor = !!action?.contractor && action.contractor.trim() !== "";
 
-  // Format ISO datetime to readable string
-  const formatDateTime = (iso?: string | null) => {
-    if (!iso) return null;
-    return new Date(iso).toLocaleString("en-ZA", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
   return (
     <div
       className={cn(
-        "flex-1 md:min-h-0 hidden bg-(--bg-primary-light) border-gray-700/70 rounded-md text-gray-100",
-        "md:grid grid-cols-[1fr_1fr] items-stretch gap-2",
-        "dark:bg-(--bg-secondary_dark) dark:text-gray-800",
+        "flex-1 min-h-0 p-4",
+        "h-auto hidden bg-(--bg-primary-light) border-gray-700/70 rounded-md text-gray-100",
+        "md:grid grid-cols-[1fr_1fr] items-stretch gap-4",
+        "dark:bg-(--bg-primary_dark) dark:text-gray-800",
       )}
     >
       {/* ── LEFT: Image panel ── */}
       {/* Gallery */}
-      {/* <div className=" w-full"> */}
-      <div className="h-[calc(100vh-var(--lg-navbarHeight)-5rem)] object-cover gap-2">
+      {/* <div className="h-[calc(100vh-var(--lg-navbarHeight)-5rem)] object-cover gap-2"> */}
+      <div className="h-full overflow-hidden object-cover gap-2">
         <ImageGallery
           images={
             activeTab === "details"
@@ -184,13 +80,12 @@ function CompletedJobDetails({ item }: Props) {
                 ? (action?.images ?? [])
                 : (item.images ?? [])
           }
+          className="p-0"
         />
       </div>
-      {/* </div> */}
-      {/* </div> */}
 
       {/* ── RIGHT: Detail panel ── */}
-      <div className="relative flex flex-col flex-1 gap-4 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50 h-full min-h-0 overflow-y-auto pr-2 custom-scrollbar">
+      <div className="relative flex flex-col flex-1 gap-4 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50 min-h-0 overflow-y-auto pr-2 custom-scrollbar border dark:bg-(--bg-primary_dark)">
         {/* Header */}
         <div className="flex flex-col gap-2 sticky">
           <p className="text-[11px] uppercase tracking-widest text-gray-400 dark:text-gray-500 font-medium select-none">
@@ -218,20 +113,20 @@ function CompletedJobDetails({ item }: Props) {
                 styleMap={badgeStyles.families.impact}
               />
             )}
-            {/* {item.status && (
+            {item.status && (
               <Badge
                 value={item.status}
-                styleMap={badgeStyles.families.condition}
+                styleMap={badgeStyles.families.status}
               />
-            )} */}
+            )}
           </div>
         </div>
 
         <Separator width="100%" className="flex-none" />
 
         {/* Tab nav */}
-        <div className="flex flex-wrap gap-1 -mt-2">
-          {TAB_CONFIG.map(({ key, label, icon }) => {
+        <div className="flex flex-wrap gap-2 md:justify-evenly  -mt-2 w-full">
+          {TAB_CONFIG.map(({ key, label, icon: Icon }) => {
             // Hide contractor tab if no contractor data
             if (key === "contractor" && !hasContractor) return null;
             return (
@@ -240,13 +135,13 @@ function CompletedJobDetails({ item }: Props) {
                 type="button"
                 onClick={() => setActiveTab(key)}
                 className={cn(
-                  "flex items-center gap-2 text-xs px-3 py-1.5 rounded-md border transition-colors hover:cursor-pointer",
+                  "flex flex-1 max-w-40 items-center gap-2 text-xs px-3 py-1.5 rounded-md border transition-colors hover:cursor-pointer",
                   activeTab === key
-                    ? "bg-primary/70 dark:bg-gray-100 text-(--clr-textLight) dark:text-gray-900 border-transparent"
+                    ? "bg-primary/70 dark:bg-primary text-(--clr-textLight) dark:text-gray-900 border-transparent"
                     : "border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-400",
                 )}
               >
-                {icon}
+                <Icon className="w-4.5 h-4.5" />
                 {label}
               </button>
             );
@@ -467,18 +362,23 @@ function CompletedJobDetails({ item }: Props) {
 
 export default CompletedJobDetails;
 
-<div className="md:min-h-[calc(100vh-var(--lg-navbarHeight))]">
-  <button>back button</button>
-  {/* Added items-stretch to ensure both columns have equal height */}
-  <div className="md:grid grid-cols-[1fr_1fr] items-stretch">
-    {/* This wrapper now matches the sibling's height */}
-    <div className="h-full">
-      {/* The sticky element wrapper */}
-      <div className="md:sticky md:top-(--lg-navbarHeight) md:self-start h-[calc(100vh-var(--lg-navbarHeight))] object-cover">
-        Images with fixed height
-      </div>
+{
+  /* 
+  <div className="hidden md:flex flex-col gap-4 px-4 py-8 min-h-[calc(100vh-var(--sm-navbarHeight))] md:h-[calc(100vh-var(--lg-navbarHeight))] overflow-hidden border border-dashed dark:border-yellow-500">
+  <div
+    className={cn(
+      "flex-1 md:min-h-0 h-auto hidden bg-(--bg-primary-light) border-gray-700/70 rounded-md text-gray-100",
+      "md:grid grid-cols-[1fr_1fr] items-stretch gap-4",
+      "dark:bg-(--bg-primary_dark) dark:text-gray-800 border dark:border-red-500",
+    )}
+  >
+    <div className="h-[calc(100vh-var(--lg-navbarHeight)-5rem)] object-cover gap-2">
+      Left component
     </div>
-
-    <div className="">Component with varying height</div>
+    <div className="relative flex flex-col flex-1 gap-4 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50 h-full min-h-0 overflow-y-auto pr-2 custom-scrollbar border dark:bg-(--bg-primary_dark)">
+      Right Component
+    </div>
   </div>
 </div>;
+ */
+}

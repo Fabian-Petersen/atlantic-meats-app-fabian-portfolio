@@ -34,7 +34,7 @@ export const ImageGallery = ({ images, className }: Props) => {
   if (!images || images.length === 0) {
     return (
       <div
-        className={`${className} bg-white p-2 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full`}
+        className={`bg-white p-2 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full`}
       >
         <NoImagePlaceholder className="h-full min-h-100" />
       </div>
@@ -43,7 +43,7 @@ export const ImageGallery = ({ images, className }: Props) => {
 
   return (
     <div
-      className={`${className} bg-white p-2 grid grid-rows-[25rem_5rem] md:grid-rows-[2fr_1fr] gap-3 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full min-h-0`}
+      className={`${className} bg-white grid grid-rows-[25rem_5rem] md:grid-rows-[2fr_1fr] gap-3 rounded-md dark:border-gray-700/50 dark:bg-(--bg-primary_dark) h-full min-h-0`}
     >
       {/* Main Image */}
       <div className="relative rounded-md overflow-hidden min-h-0">

@@ -99,5 +99,21 @@ export const badgeStyles = {
         "dark:border-blue-500 dark:bg-blue-300/20 dark:text-blue-300",
       ),
     },
+    status: {
+      complete: cn(
+        "text-green-600 bg-green-300/30 border-green-300",
+        "dark:border-green-500 dark:bg-green-300/20 dark:text-green-300",
+      ),
+
+      cancelled: cn(
+        "text-orange-600 bg-orange-300/30 border-orange-300",
+        "dark:border-orange-500 dark:bg-orange-300/20 dark:text-orange-300",
+      ),
+
+      "in progress": cn(
+        "text-blue-600 bg-blue-300/30 border-blue-300",
+        "dark:border-blue-500 dark:bg-blue-300/20 dark:text-blue-300",
+      ),
+    },
   },
 };
