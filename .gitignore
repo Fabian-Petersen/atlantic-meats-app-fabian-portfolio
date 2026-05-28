@@ -41,3 +41,7 @@ venv/
 env/
 *.xlsx
 
+# sample Data
+src/data/sampleData/**
+
+

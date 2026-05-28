@@ -258,7 +258,7 @@ export const useFormSubmit = <TForm extends WithOptionalImages, TPayload>({
 
       // ── 2. Build the typed API payload ───────────────────────────────────
       const payload = buildPayload(formValues, compressedFiles, rawInvoices);
-      console.log(payload);
+      // console.log(payload);
 
       // ── 3. POST to the API ───────────────────────────────────────────────
       const response = await mutateAsync(payload);

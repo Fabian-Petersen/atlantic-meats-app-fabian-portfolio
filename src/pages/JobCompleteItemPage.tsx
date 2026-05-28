@@ -1,6 +1,6 @@
 // $ This page renders the full details of an completed job with information and pictures
 // import { useParams } from "react-router-dom";
-import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
+// import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../utils/api";
 import { type CompletedJobResponse } from "@/schemas/jobSchemas";
 // import { ImageGallery } from "@/components/features/ImageGallery";
@@ -12,7 +12,7 @@ import MobileCompletedJobDetails from "@/components/mobile/MobileCompletedJobDet
 const JobCompleteItemPage = () => {
   const { selectedRowId } = useGlobalContext();
 
-  const { data: item, isPending } = useById<CompletedJobResponse>({
+  const { data: item } = useById<CompletedJobResponse>({
     id: selectedRowId ?? "",
     queryKey: ["jobs", "status: complete"],
     resourcePath: "api/jobs",
@@ -26,12 +26,12 @@ const JobCompleteItemPage = () => {
       <p className="w-full h-screen flex justify-center items-center">
         No job selected. Please go back.
       </p>
-    ); // Or redirect
+    );
   }
 
-  if (isPending) {
-    return <PageLoadingSpinner />;
-  }
+  // if (isPending) {
+  //   return <PageLoadingSpinner />;
+  // }
 
   if (!item) {
     return <p>Job not found</p>;

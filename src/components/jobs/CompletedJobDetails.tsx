@@ -20,6 +20,8 @@ import { TAB_CONFIG, type Tab } from "@/lib/tabConfig";
 
 // $ ————— utils ——————————————————————————————————————————————————————————————————
 import { formatDateTime } from "@/utils/formatDateTime";
+import { MessageSquare } from "lucide-react";
+import useGlobalContext from "@/context/useGlobalContext";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -49,8 +51,11 @@ type Props = {
 
 function CompletedJobDetails({ item }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>("details");
+  const { setOpenChatSidebar, setSelectedRowId } = useGlobalContext();
 
   const action = item.action_data;
+
+  console.log("item:", item);
 
   const totalCost =
     (Number(action?.total_cost_parts) || 0) +
@@ -65,7 +70,7 @@ function CompletedJobDetails({ item }: Props) {
         "flex-1 min-h-0 p-4",
         "h-auto hidden bg-(--bg-primary-light) border-gray-700/70 rounded-md text-gray-100",
         "md:grid grid-cols-[1fr_1fr] items-stretch gap-4",
-        "dark:bg-(--bg-primary_dark) dark:text-gray-800",
+        "dark:bg-(--bg-primary_dark) dark:text-gray-800 shadow-md",
       )}
     >
       {/* ── LEFT: Image panel ── */}
@@ -85,15 +90,28 @@ function CompletedJobDetails({ item }: Props) {
       </div>
 
       {/* ── RIGHT: Detail panel ── */}
-      <div className="relative flex flex-col flex-1 gap-4 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50 min-h-0 overflow-y-auto pr-2 custom-scrollbar border dark:bg-(--bg-primary_dark)">
+      <div className="relative flex flex-col flex-1 gap-4 text-font dark:text-gray-100 rounded-md p-4 border border-gray-100 dark:border-gray-700/50 min-h-0 overflow-y-auto pr-2 custom-scrollbar dark:bg-(--bg-primary_dark)">
         {/* Header */}
         <div className="flex flex-col gap-2 sticky">
           <p className="text-[11px] uppercase tracking-widest text-gray-400 dark:text-gray-500 font-medium select-none">
             Job No · {item.jobcardNumber}
           </p>
-          <h1 className="text-lg md:text-xl font-semibold capitalize leading-tight">
-            {item.equipment}
-          </h1>
+          <div className="flex justify-between items-center">
+            <h1 className="text-lg md:text-xl font-semibold capitalize leading-tight">
+              {item.equipment}
+            </h1>
+            <button
+              type="button"
+              aria-label="open chatbar"
+              className="mr-4 text-blue-500 hover:cursor-pointer"
+              onClick={() => {
+                setSelectedRowId(item.id);
+                setOpenChatSidebar(true);
+              }}
+            >
+              <MessageSquare />
+            </button>
+          </div>
           <p className="text-sm text-gray-500 dark:text-gray-400">
             Asset ID: {item.assetID}
           </p>
@@ -125,7 +143,7 @@ function CompletedJobDetails({ item }: Props) {
         <Separator width="100%" className="flex-none" />
 
         {/* Tab nav */}
-        <div className="flex flex-wrap gap-2 md:justify-evenly  -mt-2 w-full">
+        <div className="flex flex-wrap gap-2 md:justify-evenly py-2 -mt-2 w-full">
           {TAB_CONFIG.map(({ key, label, icon: Icon }) => {
             // Hide contractor tab if no contractor data
             if (key === "contractor" && !hasContractor) return null;

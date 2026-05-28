@@ -5,6 +5,8 @@ import CommentItem from "./CommentItem";
 import { useById } from "@/utils/api";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
+import { useMatch } from "react-router-dom";
+import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 // $ Animation
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,6 +14,11 @@ import { motion, AnimatePresence } from "framer-motion";
 const ChatSidebar = () => {
   const { openChatSidebar, setOpenChatSidebar, selectedRowId } =
     useGlobalContext();
+
+  // $ Disable the comments input when a job is completed
+  const isCompleteJobPage = useMatch("/jobs/:id/complete") !== null;
+  const isCompleteJobsPage = useMatch("/jobs/completed") !== null;
+  const isDisabled = isCompleteJobPage || isCompleteJobsPage;
 
   const { data: comments, isPending } = useById<CommentAPIResponse[]>({
     id: selectedRowId ?? "",
@@ -21,7 +28,7 @@ const ChatSidebar = () => {
 
   // [INFO] Change to something nice
   if (isPending) {
-    // return <p>Loading...</p>;
+    return <PageLoadingSpinner />;
   }
 
   return (
@@ -51,6 +58,7 @@ const ChatSidebar = () => {
             <div className="flex flex-col h-full gap-4 lg:p-1 p-2">
               {selectedRowId && (
                 <CommentForm
+                  disabled={isDisabled}
                   selectedRowId={selectedRowId}
                   setOpenChatSidebar={setOpenChatSidebar}
                 />

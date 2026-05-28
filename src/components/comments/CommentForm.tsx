@@ -15,6 +15,7 @@ import {
 type Props = {
   selectedRowId: string;
   setOpenChatSidebar: (v: boolean) => void;
+  disabled?: boolean;
 };
 
 // $ Hooks and API Functions
@@ -24,7 +25,11 @@ import clsx from "clsx";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 
-const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
+const CommentForm = ({
+  selectedRowId,
+  setOpenChatSidebar,
+  disabled = false,
+}: Props) => {
   //   console.log(selectedRowId);
   // $ Form Schema
   const {
@@ -52,10 +57,8 @@ const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
     try {
       const payload: CommentPayload = { ...data, request_id: selectedRowId };
       // console.log("comment-payload:", payload);
-      const response = await mutateAsync(payload);
+      await mutateAsync(payload);
       reset();
-
-      console.log("comment-response:", response);
     } catch (error) {
       console.log("comment-error:", error);
     }
@@ -81,6 +84,7 @@ const CommentForm = ({ selectedRowId, setOpenChatSidebar }: Props) => {
       </div>
       <textarea
         rows={1}
+        disabled={disabled}
         {...register("comment")}
         onInput={(e) => {
           const el = e.currentTarget;
