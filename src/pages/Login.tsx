@@ -13,7 +13,7 @@ const LoginPage = () => {
         "dark:bg-(--bg-primary_dark) bg-(--pageLight) px-4 h-screen",
       )}
     >
-      <div className="flex flex-col gap-8 w-full max-w-[360px] bg-white rounded-xl shadow-lg p-4 border border-white dark:border-border-dark/20 dark:bg-(--bg-secondary_dark)">
+      <div className="flex flex-col gap-8 w-full max-w-90 bg-white rounded-xl shadow-lg p-4 border border-white dark:border-(--clr-borderDark) dark:bg-(--bg-secondary_dark)">
         <LoginContainer />
       </div>
     </main>
