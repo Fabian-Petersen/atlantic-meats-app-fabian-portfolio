@@ -31,7 +31,7 @@ import { motion } from "framer-motion";
 
 const Dashboard = () => {
   const columns = getDashboardJobColumns();
-
+  const [selectedYear, setSelectedYear] = useState<string>("");
   // 👇 State to track which store/year was selected from the main chart
   const [selectedStore, setSelectedStore] = useState<{
     year: string;
@@ -67,10 +67,10 @@ const Dashboard = () => {
     : (costByYear ?? {});
 
   const years = Object.keys(chartData).sort();
-  const [selectedYear, setSelectedYear] = useState<string>(
-    years[years.length - 1],
-  );
+  const latestYear = years[years.length - 1] ?? "";
+
   const isLoading = isDrilldown ? isCostPerStorePending : isCostByYearPending;
+  const resolvedYear = isLoading ? "" : selectedYear || latestYear;
 
   // $ Use a key that changes when view changes
   // const viewKey = selectedStore
@@ -123,13 +123,13 @@ const Dashboard = () => {
               {/* Selected Year Menu Dropdown */}
               {!isDrilldown && (
                 <select
-                  value={selectedYear}
+                  value={resolvedYear}
                   onChange={(e) => setSelectedYear(e.target.value)}
                   aria-label="year selector"
                   className="base-select text-sm"
                 >
                   {years.map((year) => (
-                    <option key={year} value={year} className="p-2">
+                    <option key={year} value={year} className="">
                       {year}
                     </option>
                   ))}
@@ -144,7 +144,7 @@ const Dashboard = () => {
               ) : (
                 <CostChart
                   data={chartData}
-                  selectedYear={selectedYear}
+                  selectedYear={resolvedYear}
                   onSelect={
                     isDrilldown
                       ? undefined
