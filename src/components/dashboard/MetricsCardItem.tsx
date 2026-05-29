@@ -52,7 +52,7 @@ export const MetricCardItem = ({ cardData, metrics, isPending }: Props) => {
                       }}
                     >
                       {React.createElement(cardData.icon, {
-                        size: 36,
+                        size: 48,
                       })}
                     </div>
                   </div>

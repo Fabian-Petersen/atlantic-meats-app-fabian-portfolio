@@ -29,7 +29,7 @@ export const sharedStyles = {
     "dark:border-[rgba(55,65,81,0.5)]",
   ),
   dashboardCardIcon: cn(
-    "flex items-center justify-center size-8 lg:size-18 rounded-full p-2 xl:p-3 border border-white dark:border-none",
+    "flex items-center justify-center size-10 md:size-18 rounded-full p-2 md:p-4 border border-white dark:border-none",
   ),
 
   /* //$ ——— Modal Cards ———————————————————————————————————————————————————————— */
