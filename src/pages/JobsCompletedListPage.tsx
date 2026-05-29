@@ -26,6 +26,7 @@ import {
   getSortedRowModel,
   useReactTable,
   type SortingState,
+  type PaginationState,
 } from "@tanstack/react-table";
 import { MobileJobsCompletedParent } from "@/components/mobile/MobileJobsCompletedParent";
 
@@ -37,10 +38,11 @@ const JobsCompletedListPage = () => {
     //   group: "technician",
     // },
   });
-  const { setSelectedRowId, setOpenChatSidebar } = useGlobalContext();
+  const { setSelectedRowId, selectedRowId, setOpenChatSidebar } =
+    useGlobalContext();
 
   const { mutateAsync: downloadItem } = useDownloadPdf({
-    resourcePath: "api/jobs",
+    resourcePath: `api/jobs/${selectedRowId}/jobcard`,
   });
 
   const [sorting, setSorting] = useState<SortingState>([
@@ -49,26 +51,10 @@ const JobsCompletedListPage = () => {
 
   const [globalFilter, setGlobalFilter] = useState("");
 
-  // $ Map through the data returned to match the TableRow Data Schema
-  // const rows: ActionAPIResponse[] = useMemo(
-  //   () =>
-  //     (data ?? []).map((action) => ({
-  //       id: action.id,
-  //       actionCreated: action.actionCreated,
-  //       actioned_by: action.actioned_by,
-  //       location: action.location,
-  //       start_time: action.start_time,
-  //       end_time: action.end_time,
-  //       total_km: action.total_km,
-  //       work_order_number: action.work_order_number,
-  //       work_completed: action.work_completed,
-  //       jobcardNumber: action.jobcardNumber,
-  //       requested_by: action.requested_by,
-  //       request_id: action.request_id,
-  //       status: action.status,
-  //     })),
-  //   [data],
-  // );
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10, // 👈 this controls "10 items per page"
+  });
 
   const columns = getJobCompletedColumns(
     setSelectedRowId,
@@ -80,8 +66,9 @@ const JobsCompletedListPage = () => {
   const table = useReactTable({
     data: data ?? [],
     columns: columns,
-    state: { sorting, globalFilter },
+    state: { sorting, pagination, globalFilter },
     onSortingChange: setSorting,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -105,6 +92,7 @@ const JobsCompletedListPage = () => {
           rowPath="jobs"
           action="complete"
           tableHeading="Jobs - Completed"
+          pageSize={10}
           addPageSelector={true}
           addPagination={true}
         />
@@ -112,6 +100,7 @@ const JobsCompletedListPage = () => {
       {/* // $ Mobile View */}
       <div className="grid lg:hidden gap-2 w-full p-2">
         <SearchInput
+          enableMobile={true}
           value={globalFilter}
           onChange={setGlobalFilter}
           placeholder="Search Jobs"

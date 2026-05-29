@@ -3,7 +3,7 @@ import LogoutButton from "./LogoutButton";
 import Avatar from "./Avatar";
 import NotificationButton from "../notifications/NotificationButton";
 import UserDetails from "./UserDetails";
-// import { SearchInputBtn } from "./SearchInputBtn";
+import { SearchInputBtn } from "./SearchInputBtn";
 
 const NavbarActionButtons = () => {
   return (
@@ -13,7 +13,7 @@ const NavbarActionButtons = () => {
         <div className="hidden lg:flex">
           <UserDetails />
         </div>
-        {/* <SearchInputBtn /> */}
+        <SearchInputBtn />
         <ThemeToggleButton />
         <NotificationButton />
         <Avatar />

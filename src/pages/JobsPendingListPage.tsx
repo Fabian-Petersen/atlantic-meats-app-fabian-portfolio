@@ -89,6 +89,7 @@ const JobsPendingListPage = () => {
       {/* // $ Mobile View */}
       <div className="grid lg:hidden gap-2 w-full p-2">
         <SearchInput
+          enableMobile={true}
           value={globalFilter}
           onChange={setGlobalFilter}
           placeholder="Search Requests"

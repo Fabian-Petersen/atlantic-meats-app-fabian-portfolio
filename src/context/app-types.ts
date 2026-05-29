@@ -101,6 +101,10 @@ export type AppContextType = {
   openNotificationSidebar: boolean;
   setOpenNotificationSidebar: Dispatch<SetStateAction<boolean>>;
 
+  // $ Search Input State
+  openSearchInput: boolean;
+  setOpenSearchInput: Dispatch<SetStateAction<boolean>>;
+
   // $ Modals and Dialog
   showUpdateMaintenanceDialog: boolean;
   setShowUpdateMaintenanceDialog: (v: boolean) => void;

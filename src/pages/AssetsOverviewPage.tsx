@@ -43,12 +43,12 @@ const AssetsOverviewPage = () => {
     { id: "createdAt", desc: true },
   ]);
 
+  const [globalFilter, setGlobalFilter] = useState("");
+
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10, // 👈 this controls "10 items per page"
   });
-
-  const [globalFilter, setGlobalFilter] = useState("");
 
   const { setShowUpdateAssetDialog, setSelectedRowId, openDeleteDialog } =
     useGlobalContext();
@@ -80,14 +80,13 @@ const AssetsOverviewPage = () => {
     data: rows ?? [],
     columns: columns,
     columnResizeMode: "onChange",
-    state: { sorting, pagination },
+    state: { sorting, pagination, globalFilter },
     onSortingChange: setSorting,
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    globalFilterFn: "includesString",
   });
 
   if (isPending) return <PageLoadingSpinner />;
@@ -120,6 +119,7 @@ const AssetsOverviewPage = () => {
       {/* // $ Mobile View */}
       <div className="grid lg:hidden gap-2 w-full p-2">
         <SearchInput
+          enableMobile={true}
           value={globalFilter}
           onChange={setGlobalFilter}
           placeholder="Search Assets"

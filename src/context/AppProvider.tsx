@@ -31,6 +31,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [openNotificationSidebar, setOpenNotificationSidebar] =
     useState<boolean>(false);
 
+  // $ State for the Search Input behavior
+  const [openSearchInput, setOpenSearchInput] = useState<boolean>(false);
+
   // $ State for the dialogs (modals)
   const [showUpdateMaintenanceDialog, setShowUpdateMaintenanceDialog] =
     useState<boolean>(false);
@@ -140,6 +143,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setUserId,
         errorConfig,
         setErrorConfig,
+        openSearchInput,
+        setOpenSearchInput,
       }}
     >
       {children}
