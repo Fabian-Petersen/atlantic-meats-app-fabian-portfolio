@@ -12,7 +12,7 @@ export function SearchInput({
   placeholder = "Search requests...",
 }: SearchInputProps) {
   return (
-    <div className="relative h-full w-full lg:w-1/4">
+    <div className="hidden md:block relative h-full w-full lg:w-1/4">
       <Search
         className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none transition-colors ${
           value

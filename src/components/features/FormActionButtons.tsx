@@ -53,8 +53,8 @@ function FormActionButtons({
         variant="cancel"
         size="lg"
         className={cn(
-          sharedStyles.btnCancel,
           sharedStyles.btn,
+          sharedStyles.btnCancel,
           "capitalize hidden md:block",
         )}
       >
@@ -65,7 +65,7 @@ function FormActionButtons({
         type="submit"
         variant="submit"
         size="lg"
-        className={cn(sharedStyles.btnSubmit, sharedStyles.btn, "capitalize")}
+        className={cn(sharedStyles.btn, sharedStyles.btnSubmit, "capitalize")}
         onClick={onSubmit}
       >
         {isPending ? <Spinner className="size-8" /> : submitText}

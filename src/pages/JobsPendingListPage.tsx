@@ -22,6 +22,8 @@ import { TableGeneric } from "@/components/features/TableGeneric";
 import { getJobPendingColumns } from "@/components/tableColumns/PendingColumns";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { SearchInput } from "@/components/features/SearchInput";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
 
 const JobsPendingListPage = () => {
   const { data, isError, isPending } = useGetAll<JobAPIResponse[]>({
@@ -92,7 +94,15 @@ const JobsPendingListPage = () => {
           placeholder="Search Requests"
         />
         {data.length === 0 ? (
-          <EmptyMobilePlaceholder message="No job requests yet" />
+          <>
+            <FormHeading
+              className={cn(sharedStyles.headingForm)}
+              heading="Jobs - Pending Requests"
+              redirect={true}
+              redirectTo="/dashboard"
+            />
+            <EmptyMobilePlaceholder message="No job requests yet" />
+          </>
         ) : table.getRowModel().rows.length === 0 ? (
           <EmptyMobilePlaceholder
             message={`No results for "${globalFilter}"`}

@@ -33,6 +33,8 @@ import FormHeading from "@/../customComponents/FormHeading";
 import { Error } from "@/components/features/Error";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
 
 /**
  * JobsInProgressListPage
@@ -173,7 +175,15 @@ const JobsInProgressListPage = () => {
           placeholder="Search Jobs"
         />
         {data.length === 0 ? (
-          <EmptyMobilePlaceholder message="No Maintenance requests yet" />
+          <>
+            <FormHeading
+              className={cn(sharedStyles.headingForm, "px-0")}
+              heading="Jobs - In Progress"
+              redirect={true}
+              redirectTo="/dashboard"
+            />
+            <EmptyMobilePlaceholder message="No jobs in progress yet" />
+          </>
         ) : table.getRowModel().rows.length === 0 ? (
           <EmptyMobilePlaceholder
             message={`No results for "${globalFilter}"`}
