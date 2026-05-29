@@ -62,14 +62,11 @@ select:not([multiple])::picker(select) {
 } */
 
 @supports (appearance: base-select) {
+  /* Enable the new base-select appearance */
   select.base-select:not([multiple]),
   select.base-select:not([multiple])::picker(select) {
     appearance: base-select;
   }
-
-  /* select.base-select:not([multiple]):hover {
-    cursor: pointer;
-  } */
 
   select.base-select:not([multiple])::picker(select) {
     border-radius: 0.5rem;
@@ -87,7 +84,6 @@ select:not([multiple])::picker(select) {
 
   select.base-select:not([multiple])::picker-icon {
     font-size: 0.6rem;
-    /* transition: rotate 300ms ease; */
     content: "";
   }
 
@@ -119,7 +115,7 @@ select:not([multiple])::picker(select) {
   }
 
   .dark select.base-select:not([multiple])::picker(select) {
-    background-color: var(--bg-primary_dark);
+    background-color: var(--bg-secondary_dark);
     color: var(--clr-textDark);
     border-color: var(--clr-borderDark);
   }
@@ -156,6 +152,13 @@ select:not([multiple])::picker(select) {
       select
     )::-webkit-scrollbar-thumb:hover {
     background-color: var(--clr-primary);
+  }
+
+  /* Focus ring - this is where you apply the blue ring */
+  select.base-select:not([multiple]):focus {
+    outline: 0.5px solid var(--color-blue-500);
+    /* outline-offset: 1px; */
+    border-color: var(--color-blue-500);
   }
 }
 
@@ -234,6 +237,25 @@ input[type="date"]:valid,
 input[type="datetime-local"]:focus,
 input[type="datetime-local"]:valid {
   color: #374151; /* normal text */
+}
+
+/* Remove autofill background */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: var(--clr-textLight) !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: var(--clr-textDark) !important;
 }
 
 /* Hide scrollbar but allow scroll */

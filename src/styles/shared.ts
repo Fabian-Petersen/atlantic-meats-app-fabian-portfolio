@@ -4,13 +4,14 @@ import { cn } from "@/lib/utils";
 export const sharedStyles = {
   /* //$ ——— Pages —————————————————————————————————————————————————————————————— */
   appLayout: cn(
-    "min-h-screen w-full grid grid-cols-1 lg:grid-rows-[var(--lg-navbarHeight)_1fr] lg:grid-cols-[15rem_1fr] grid-rows-[var(--sm-navbarHeight)_1fr] bg-(--pageLight) dark:bg-(--pageDark)",
+    "min-h-screen w-full grid grid-cols-1 lg:grid-rows-[var(--lg-navbarHeight)_1fr] lg:grid-cols-[15rem_1fr] grid-rows-[var(--sm-navbarHeight)_1fr] bg-(--pageLight) md:dark:bg-(--pageDark) dark:bg-gray-900",
   ),
   pageContainer: cn(
     "flex items-center justify-center w-full h-full p-2 h-[calc(h-screen - var(--lg-navbarHeight)]",
+    "custom-scrollbar",
   ),
   pageContent: cn(
-    "md:bg-(--pageLight) flex flex-col gap-4 w-full lg:max-w-3xl h-auto md:rounded-xl md:shadow-lg p-2 md:dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) md:dark:border-gray-700/50 md:dark:border md:border md:border-gray-200/70",
+    "md:bg-(--pageLight) flex flex-col gap-4 w-full lg:max-w-3xl h-auto md:rounded-xl md:shadow-lg md:p-2 p-1 md:dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) md:dark:border-gray-700/50 md:dark:border md:border md:border-gray-200/70",
   ),
 
   /* //$ ——— Dashboards ————————————————————————————————————————————————————————— */
@@ -135,21 +136,18 @@ export const sharedStyles = {
     "text-xs py-3 px-2 w-full rounded-md outline-none min-h-10",
 
     // base border & text (light)
-    "border border-gray-300 text-gray-700",
+    "border border-gray-600 text-gray-700",
 
     // dark mode base
     "dark:text-(--clr-textDark)",
 
     // focus styles (shared)
-    "focus:ring-0.5 focus:border-blue-500 focus:dark:border-blue-500",
+    "focus:outline-none focus:ring-0.5 focus:ring-blue-500 focus:border-blue-500 focus:dark:border-blue-500",
   ),
 
   formInput: cn(
     "peer bg-transparent outline-none border-(--clr-borderDark)",
-    // input-specific
     "placeholder-transparent placeholder:text-xs placeholder:dark:text-gray-700",
-    // input-specific focus tweaks
-    // "focus:dark:bg-gray-700/80",
   ),
   //
   formSelect: cn(
@@ -162,7 +160,7 @@ export const sharedStyles = {
   formTextArea: cn(
     "peer resize-none overflow-hidden",
     // textarea-specific tweaks
-    "focus:border-rose-600 focus:dark:bg-gray-700/80",
+    "focus:border-rose-600 focus:dark:transparent",
   ),
   formFile: cn(""),
   formLabel: cn(
@@ -171,13 +169,13 @@ export const sharedStyles = {
     //position
     "absolute -top-2 left-3 px-1.5 mb-0 py-0",
     // background cuts through border
-    "bg-(--bg-secondary_light) dark:bg-(--pageDark)",
+    "bg-(--bg-secondary_light) dark:bg-gray-900",
     //peer values can be set as a after focus position for the label
     "peer-placeholder-shown:-top-2 peer-placeholder-shown:text-gray-600 peer-focus:-top-2  peer-focus:text-gray-600",
     //light
     "text-gray-700",
     //dark
-    "dark:peer-focus:text-gray-100 dark:peer-placeholder-shown:text-fontLight dark:text-gray-100/90",
+    "dark:peer-focus:text-gray-100 dark:peer-placeholder-shown:text-fontLight dark:text-gray-300/90",
   ),
   formLabelAnimate: cn(
     //animation
