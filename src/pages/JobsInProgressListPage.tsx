@@ -11,7 +11,9 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
+  getPaginationRowModel,
   type SortingState,
+  type PaginationState,
 } from "@tanstack/react-table";
 
 // $ ———————— Data, Context & Types —————————————————————————————————————————————————————
@@ -115,13 +117,18 @@ const JobsInProgressListPage = () => {
     { id: "targetDate", desc: false },
   ]);
 
+  const [globalFilter, setGlobalFilter] = useState("");
+
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10, // 👈 this controls "10 items per page"
+  });
+
   const {
     setShowUpdateMaintenanceDialog,
     setSelectedRowId,
     openDeleteDialog,
     setOpenChatSidebar,
-    globalFilter,
-    setGlobalFilter,
   } = useGlobalContext();
 
   // $ Pass the props to the function generating the columns to be used in the table
@@ -137,12 +144,14 @@ const JobsInProgressListPage = () => {
     data: data ?? [],
     columns: columns,
     onGlobalFilterChange: setGlobalFilter,
-    state: { sorting, globalFilter },
+    state: { sorting, globalFilter, pagination },
     onSortingChange: setSorting,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     globalFilterFn: "includesString",
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   if (isPending) return <PageLoadingSpinner />;
@@ -170,6 +179,7 @@ const JobsInProgressListPage = () => {
       {/* // $ Mobile View */}
       <div className="grid lg:hidden gap-2 w-full p-2">
         <SearchInput
+          enableMobile={true}
           value={globalFilter}
           onChange={setGlobalFilter}
           placeholder="Search Jobs"

@@ -66,6 +66,10 @@ const Dashboard = () => {
     ? (costPerStoreByYear?.data ?? {})
     : (costByYear ?? {});
 
+  const years = Object.keys(chartData).sort();
+  const [selectedYear, setSelectedYear] = useState<string>(
+    years[years.length - 1],
+  );
   const isLoading = isDrilldown ? isCostPerStorePending : isCostByYearPending;
 
   // $ Use a key that changes when view changes
@@ -116,6 +120,21 @@ const Dashboard = () => {
                 onClick={() => setSelectedStore(null)}
                 className={cn(sharedStyles.chartHeading, "capitalize")}
               />
+              {/* Selected Year Menu Dropdown */}
+              {!isDrilldown && (
+                <select
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  aria-label="year selector"
+                  className="base-select text-sm"
+                >
+                  {years.map((year) => (
+                    <option key={year} value={year} className="p-2">
+                      {year}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
 
             {/* Chart container (layout animated) */}
@@ -125,6 +144,7 @@ const Dashboard = () => {
               ) : (
                 <CostChart
                   data={chartData}
+                  selectedYear={selectedYear}
                   onSelect={
                     isDrilldown
                       ? undefined

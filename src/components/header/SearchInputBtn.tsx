@@ -7,12 +7,11 @@ type SearchInputBtnProps = {
 };
 
 export function SearchInputBtn({ className = "" }: SearchInputBtnProps) {
-  const { openSearchInput, setOpenSearchInput } = useGlobalContext();
+  const { setOpenSearchInput } = useGlobalContext();
 
   const handleOnClick = () => {
     setOpenSearchInput(true);
   };
-  console.log(openSearchInput);
   return (
     <div className="p-2 flex items-center justify-center text-gray-900 hover:cursor-pointer relative">
       {/* Icon button (always visible) */}
