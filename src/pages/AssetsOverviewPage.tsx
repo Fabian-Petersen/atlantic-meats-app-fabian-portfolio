@@ -29,6 +29,8 @@ import { SearchInput } from "@/components/features/SearchInput";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { Breadcrumbs } from "@/components/features/Breadcrumbs";
 import { assetOverviewPageRouteConfig } from "@/lib/routeConfig";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
 const AssetsOverviewPage = () => {
   const navigate = useNavigate();
@@ -97,7 +99,10 @@ const AssetsOverviewPage = () => {
 
   return (
     <div className="flex flex-col w-full md:p-4 h-auto gap-2">
-      <Breadcrumbs routes={assetOverviewPageRouteConfig} />
+      <Breadcrumbs
+        routes={assetOverviewPageRouteConfig}
+        className="hidden md:block"
+      />
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
         <TableGeneric
           data={data}
@@ -128,8 +133,10 @@ const AssetsOverviewPage = () => {
         ) : (
           <div className="grid gap-2">
             <FormHeading
-              className="mx-auto dark:text-gray-100"
+              className={cn(sharedStyles.headingForm, "px-0")}
               heading="Assets Register"
+              redirect={true}
+              redirectTo="/dashboard"
             />
             <MobileAssetsOverviewTable
               className="flex lg:hidden"

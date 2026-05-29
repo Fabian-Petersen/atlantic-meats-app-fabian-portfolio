@@ -121,7 +121,7 @@ export const sharedStyles = {
 
   /* //$ ——— Headings ———————————————————————————————————————————————————————— */
   heading: cn("text-xl md:text-2xl capitalize w-full dark:text-gray-100"), // shared styles
-  headingForm: cn("text-center md:text-left md:px-0"), // form headings
+  headingForm: cn("text-left px-2 text-gray-800"), // form headings
   headingTable: cn("text-left p-4 md:py-0"), // table headings
 
   /* //$ ——— Forms ——————————————————————————————————————————————————————————— */

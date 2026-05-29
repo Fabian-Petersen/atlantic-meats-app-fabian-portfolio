@@ -120,6 +120,8 @@ export type DynamicFormProps<T extends FieldValues> = {
    * time inside child components.
    */
   isLoading?: boolean;
+  redirect?: boolean;
+  redirectTo?: string;
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -136,6 +138,8 @@ function DynamicForm<T extends FieldValues>({
   isPending = false,
   isLoading = false, // from the loading state of the query that fetches data for select options
   formHeading,
+  redirectTo,
+  redirect,
 }: DynamicFormProps<T>) {
   const {
     register,
@@ -239,8 +243,10 @@ function DynamicForm<T extends FieldValues>({
   return (
     <>
       <FormHeading
-        className={cn(sharedStyles.headingForm)}
+        className={cn(sharedStyles.headingForm, "px-0")}
         heading={formHeading ?? "Form"}
+        redirect={redirect}
+        redirectTo={redirectTo}
       />
       <form
         className={cn(sharedStyles.form, className)}

@@ -80,6 +80,8 @@ const CreateStockItemForm = () => {
       onSubmit={submit}
       isPending={isPending}
       formHeading="Stocks - Create New"
+      redirect={true}
+      redirectTo="/stocks/list"
       submitText="Submit"
       cancelText="Cancel"
       onCancel={() => navigate("/stocks/list")}

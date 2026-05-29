@@ -125,8 +125,10 @@ const JobsCompletedListPage = () => {
         ) : (
           <div className="grid gap-2">
             <FormHeading
-              className={cn(sharedStyles.headingForm)}
+              className={cn(sharedStyles.headingForm, "px-0")}
               heading="Jobs - Completed"
+              redirect={true}
+              redirectTo="/dashboard"
             />
             <MobileJobsCompletedParent
               className="flex md:hidden"

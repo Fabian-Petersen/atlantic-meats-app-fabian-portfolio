@@ -52,7 +52,11 @@ function FormActionButtons({
         onClick={onCancel}
         variant="cancel"
         size="lg"
-        className={cn(sharedStyles.btnCancel, sharedStyles.btn, "capitalize")}
+        className={cn(
+          sharedStyles.btnCancel,
+          sharedStyles.btn,
+          "capitalize hidden md:block",
+        )}
       >
         {cancelText}
       </Button>

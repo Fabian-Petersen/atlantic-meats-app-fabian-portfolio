@@ -94,6 +94,8 @@ const CreateJobForm = () => {
       form={form}
       fields={fields}
       formHeading="Jobs - Create Request"
+      redirect={true}
+      redirectTo="/dashboard"
       onSubmit={submit}
       isPending={isPending}
       submitText="Submit"

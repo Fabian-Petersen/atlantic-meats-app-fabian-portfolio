@@ -75,6 +75,8 @@ const CreateAssetForm = () => {
       form={form}
       fields={fields}
       formHeading="Assets - Create New"
+      redirect={true}
+      redirectTo="/assets/list"
       onSubmit={submit}
       isPending={isPending}
       submitText="Submit"

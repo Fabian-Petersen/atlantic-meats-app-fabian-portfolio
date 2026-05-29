@@ -26,6 +26,8 @@ import { MobileUsersContainer } from "@/components/mobile/MobileUsersContainer";
 import { useResendTemporaryPassword } from "@/utils/useResendTemporaryPassword";
 import { PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
 
 const UsersListPage = () => {
   // $ Opt out of React Compiler memoization — useReactTable returns unstable
@@ -133,14 +135,17 @@ const UsersListPage = () => {
           />
         ) : (
           <div className="grid gap-2">
-            <div className="flex justify-between items-center text-primary w-full">
+            <div className="flex justify-between items-center w-full">
               <FormHeading
-                className="mx-auto dark:text-gray-100"
+                className={cn(sharedStyles.headingForm, "px-0")}
                 heading="Users"
+                redirect={true}
+                redirectTo="/dashboard"
               />
               <button
                 type="button"
                 aria-label="create new user"
+                className="text-primary"
                 onClick={() => navigate("/users/create-user")}
               >
                 <PlusCircle />

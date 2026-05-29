@@ -22,7 +22,9 @@ function UserProfilePage() {
       <div className={cn(sharedStyles.pageContent, "gap-2")}>
         <FormHeading
           heading="My Account Profile"
-          className={sharedStyles.headingForm}
+          className={cn(sharedStyles.headingForm, "px-0")}
+          redirect={true}
+          redirectTo="/dashboard"
         />
         <UserProfileForm user={user ?? null} />
       </div>
