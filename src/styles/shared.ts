@@ -138,18 +138,18 @@ export const sharedStyles = {
     "border border-gray-300 text-gray-700",
 
     // dark mode base
-    "dark:bg-(--bg-secondary_dark) dark:border-(--clr-borderDark) dark:text-(--clr-textDark)",
+    "dark:text-(--clr-textDark)",
 
     // focus styles (shared)
     "focus:ring-0.5 focus:border-blue-500 focus:dark:border-blue-500",
   ),
 
   formInput: cn(
-    "peer",
+    "peer bg-transparent outline-none border-(--clr-borderDark)",
     // input-specific
     "placeholder-transparent placeholder:text-xs placeholder:dark:text-gray-700",
     // input-specific focus tweaks
-    "focus:dark:bg-gray-700/80",
+    // "focus:dark:bg-gray-700/80",
   ),
   //
   formSelect: cn(
@@ -167,11 +167,11 @@ export const sharedStyles = {
   formFile: cn(""),
   formLabel: cn(
     // general
-    "text-[0.7rem] tracking-wider placeholder-transparent capitalize",
+    "text-[0.7rem] tracking-wider placeholder-transparent capitalize pointer-events-none",
     //position
-    "absolute -top-2 left-2 px-1 mb-0",
+    "absolute -top-2 left-3 px-1.5 mb-0 py-0",
     // background cuts through border
-    "bg-(--bg-secondary_light) dark:bg-(--bg-primary_dark)",
+    "bg-(--bg-secondary_light) dark:bg-(--pageDark)",
     //peer values can be set as a after focus position for the label
     "peer-placeholder-shown:-top-2 peer-placeholder-shown:text-gray-600 peer-focus:-top-2  peer-focus:text-gray-600",
     //light
