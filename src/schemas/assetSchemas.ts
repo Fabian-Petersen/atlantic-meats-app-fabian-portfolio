@@ -114,6 +114,23 @@ export const assetHistoryResponseSchema = z.object({
   ),
 });
 
+// $ Schema for the Asset Verification
+export const assetVerificationSchema = z.object({
+  assetID: z.string(),
+  latitude: z.number(),
+  longitude: z.number(),
+});
+
+export const assetVerificationResponseSchema = z.object({
+  message: z.string(),
+});
+
+export type VerifyAssetRequest = z.infer<typeof assetVerificationSchema>;
+
+export type VerifyAssetResponse = z.infer<
+  typeof assetVerificationResponseSchema
+>;
+
 export type AssetHistoryResponse = z.infer<typeof assetHistoryResponseSchema>;
 
 export type AssetTableRow = z.infer<typeof assetTableRowSchema>;

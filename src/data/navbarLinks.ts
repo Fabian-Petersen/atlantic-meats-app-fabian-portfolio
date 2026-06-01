@@ -92,6 +92,12 @@ export const assetLinks: NavlinkProps[] = [
     url: "/assets/list", // frontend routes only, GET: /assets for backend
     allowedGroups: ["admin"],
   },
+  {
+    name: "assets verification",
+    icon: Library,
+    url: "/assets/verification", // frontend routes only, GET: /assets for backend
+    allowedGroups: ["admin", "manager"],
+  },
 ] as const;
 
 export const profileLinks: NavlinkProps[] = [

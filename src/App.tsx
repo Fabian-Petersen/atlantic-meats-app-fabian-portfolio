@@ -48,6 +48,7 @@ import CreateUserPage from "./pages/CreateUserPage";
 import CreateStockPage from "./pages/stocks/CreateStockPage";
 import StocksListPage from "./pages/stocks/StocksListPage";
 import AssetHistoryPage from "./pages/AssetHistoryPage";
+import AssetVerification from "./pages/AssetVerification";
 
 function App() {
   const { loading } = useAuth();
@@ -122,6 +123,15 @@ function App() {
             {/* // $ Page to show the profile of a user or store */}
             <Route path="/users/:id" element={<StoreProfilePage />} />
             <Route path="/users/create-user" element={<CreateUserPage />} />
+          </Route>
+          {/* //% admin, manager routes */}
+          <Route
+            element={<RoleGaurdRoute allowedGroups={["admin", "manager"]} />}
+          >
+            <Route
+              path="/assets/verification"
+              element={<AssetVerification />}
+            />
           </Route>
           {/* // $ ======================= Maintenance Routes ======================= */}
           {/* //% admin, technician, contractor Routes */}
