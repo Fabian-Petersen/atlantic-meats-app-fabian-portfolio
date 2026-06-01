@@ -125,14 +125,6 @@ function App() {
             <Route path="/users/create-user" element={<CreateUserPage />} />
           </Route>
           {/* //% admin, manager routes */}
-          <Route
-            element={<RoleGaurdRoute allowedGroups={["admin", "manager"]} />}
-          >
-            <Route
-              path="/assets/verification"
-              element={<AssetVerification />}
-            />
-          </Route>
           {/* // $ ======================= Maintenance Routes ======================= */}
           {/* //% admin, technician, contractor Routes */}
           <Route
@@ -149,6 +141,10 @@ function App() {
             <Route path="/jobs/completed" element={<JobsCompletedListPage />} />
           </Route>
         </Route>
+      </Route>
+      {/* FULL SCREEN ROUTES (no layout) */}
+      <Route element={<RoleGaurdRoute allowedGroups={["admin", "manager"]} />}>
+        <Route path="/assets/verification" element={<AssetVerification />} />
       </Route>
     </Routes>
   );

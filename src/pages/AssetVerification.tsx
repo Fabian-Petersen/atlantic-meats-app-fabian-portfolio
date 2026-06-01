@@ -1,91 +1,93 @@
 // import { getCurrentPosition } from "@/utils/getCurrentPosition";
-import { useState } from "react";
-// import { usePOST } from "@/utils/api";
-// import BarcodeScannerComponent from "react-qr-barcode-scanner";
-import BackButton from "@/components/features/BackButton";
-import { sharedStyles } from "@/styles/shared";
-import { cn } from "@/lib/utils";
-import BarcodeScanner from "react-qr-barcode-scanner";
+import { useState, useEffect, useRef } from "react";
+import { X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Html5QrcodeScanner, type Html5QrcodeResult } from "html5-qrcode";
 
 export default function ScannerPage() {
   const [started, setStarted] = useState(false);
-  //   const [result, setResult] = useState<string | null>(null);
   const [barcode, setBarcode] = useState<string | null>(null);
+  const scannerRef = useRef<Html5QrcodeScanner | null>(null);
 
-  //   const {
-  //     mutate: verifyAsset,
-  //     isPending,
-  //     isSuccess,
-  //     isError,
-  //   } = usePOST({
-  //     resourcePath: "api/assets",
-  //     action: "action",
-  //     queryKey: ["assets"] as const,
-  //   });
+  const handleScannedValue = (value: string) => {
+    setBarcode(value);
+    alert(`Scanned value: ${value}`);
+  };
 
-  //   const handleScan = async (data: string) => {
-  //     const match = data.match(/[A-Z]{2}-\d{4}/);
-  //     if (!match) return;
+  useEffect(() => {
+    // Only init scanner when started and #reader div exists
+    if (!started) return;
 
-  //     // setResult(match[0]);
-  //     setStarted(false); // stop scanner
+    const scanner = new Html5QrcodeScanner(
+      "reader",
+      { fps: 20, qrbox: { width: 250, height: 250 } },
+      false,
+    );
 
-  //     const { coords } = await getCurrentPosition();
-  //     verifyAsset({
-  //       assetId: match[0],
-  //       latitude: coords.latitude,
-  //       longitude: coords.longitude,
-  //     });
-  //     console.log("Submitting verification for", match[0], "at coords", coords);
-  //   };
+    function success(decodedText: string, decodedResult: Html5QrcodeResult) {
+      console.log("Decoded Result:", decodedResult);
+      scanner
+        .clear()
+        .then(() => {
+          handleScannedValue(decodedText);
+        })
+        .catch(console.error);
+    }
 
+    function error(err: string) {
+      // noisy, safe to ignore
+      console.log("Error:", err);
+    }
+
+    scanner.render(success, error);
+    scannerRef.current = scanner;
+
+    // Cleanup when component unmounts or started changes
+    return () => {
+      scannerRef.current?.clear().catch(console.error);
+    };
+  }, [started]); // runs when `started` flips to true
+
+  const navigate = useNavigate();
   return (
-    <div className={cn(sharedStyles.pageContainer, "relative")}>
+    <div className="fixed inset-0 bg-black z-9999 flex items-center justify-center">
+      {/* Start Scanning Button */}
       {!started && !barcode && (
         <button
           type="button"
           aria-label="start scan button"
           onClick={() => setStarted(true)}
-          className="bottom-10 absolute m-auto w-8 h-8 px-4 py-2 bg-white rounded-full outline-2 outline-rounded-full outline-offset-4 outline-white flex items-center justify-center"
+          className="bottom-10 absolute m-auto w-8 h-8 px-4 py-2 bg-white rounded-full outline-2 outline-rounded-full z-9999 outline-offset-4 outline-white flex items-center justify-center"
         />
       )}
 
-      <div className={cn(sharedStyles.pageContent, "h-full")}>
-        <BackButton to="/dashboard" />
-        {/* Scanner viewport */}
-        <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
-          {started && (
-            <>
-              <BarcodeScanner
-                width={500}
-                height={500}
-                // facingMode="environment"
-                onUpdate={(err, result) => {
-                  if (err) {
-                    console.error("Error scanning barcode:", err);
-                  }
-                  if (result) {
-                    console.log("Barcode detected:", result.getText());
-                    setBarcode(result.getText());
-                  }
-                  // const match = result.text.match(/[A-Z]{2}-\d{4}/);
-                  // if (match) handleScan(match[0]);
-                }}
-                onError={(err) => console.error(err)}
-              />
-              {/* Scanning overlay */}
+      <div className="h-full">
+        {/* CloseButton */}
+        <button
+          type="button"
+          aria-label="Close Button"
+          className="absolute top-8 right-10 text-gray-400 text-2xl z-50 hover:cursor-pointer hover:bg-white/30 hover:rounded-full p-2"
+          onClick={() => navigate("/dashboard")}
+        >
+          <X size={24} />
+        </button>
 
-              <div className="absolute top-[1%] left-[1%] right-[1%] bottom-[1%] border border-white/30 border-dashed">
+        {/* Scanner viewport */}
+        <div className="absolute inset-0 overflow-hidden w-full aspect-video bg-black rounded-lg flex items-center justify-center">
+          {started && (
+            <div id="reader" className="w-full h-full relative">
+              {/* Scanning overlay */}
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2">
                 {/* Corner accents */}
-                <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-white rounded-tl" />
-                <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-white rounded-tr" />
-                <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-white rounded-bl" />
-                <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-white rounded-br" />
+                <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-white" />
+                <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-white" />
+                <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-white" />
+                <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-white" />
                 {/* Scanning line */}
 
-                <div className="absolute left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-green-400 to-transparent animate-scanLine" />
+                <div className="absolute left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-red-400 to-transparent animate-scanLine" />
               </div>
-            </>
+            </div>
           )}
           {!started && (
             <div className="absolute inset-0 flex items-center justify-center">
@@ -101,14 +103,14 @@ export default function ScannerPage() {
           </p>
         )}
 
-        {barcode && barcode !== null && barcode !== "Not Detected" && (
+        {barcode && barcode !== null && barcode !== "not detected" && (
           <div className="mt-4 p-4 rounded-lg border">
             <p className="text-sm text-muted-foreground">Asset detected</p>
             <p className="text-lg font-medium">{barcode}</p>
             {/* {isPending && (
               <p className="text-sm mt-2">Submitting verification...</p>
             )}
-            {isSuccess && (
+            {isSuccess && (P
               <p className="text-sm mt-2 text-green-600">
                 ✓ Verified successfully
               </p>
@@ -124,103 +126,3 @@ export default function ScannerPage() {
     </div>
   );
 }
-
-// function getCurrentPosition(): Promise<GeolocationPosition> {
-//   return new Promise((resolve, reject) =>
-//     navigator.geolocation.getCurrentPosition(resolve, reject, {
-//       enableHighAccuracy: true,
-//       timeout: 8000,
-//     }),
-//   );
-// }
-
-// import { useBarcodeScanner } from "../hooks/useBarcodeScanner";
-// import BackButton from "@/components/features/BackButton";
-// import { sharedStyles } from "@/styles/shared";
-// import { cn } from "@/lib/utils";
-
-// export default function AssetVerification() {
-//   const [started, setStarted] = useState(false);
-//   const { videoRef, result, error: scanError } = useBarcodeScanner(started);
-
-//   const {
-//     mutate: verifyAsset,
-//     isPending,
-//     isSuccess,
-//     isError,
-//   } = usePOST({
-//     resourcePath: "api/assets",
-//     action: "verify",
-//     queryKey: ["assets", "verify"] as const,
-//   });
-
-//   const handleVerify = async () => {
-//     if (!result) return;
-//     const { coords } = await getCurrentPosition();
-//     verifyAsset({
-//       assetID: result.assetID,
-//       latitude: coords.latitude,
-//       longitude: coords.longitude,
-//     });
-//     console.log(
-//       "Submitting verification for",
-//       result.assetID,
-//       "at coords",
-//       coords,
-//     );
-//   };
-
-//   return (
-//     <div className={cn(sharedStyles.pageContainer, "relative")}>
-//       {/* Show start button until scanning begins */}
-//       {!started && !result && (
-//         <button
-//           type="button"
-//           aria-label="strat scan button"
-//           onClick={() => setStarted(true)}
-//           className=" bottom-10 absolute m-auto w-8 h-8 px-4 py-2 bg-white rounded-full outline-2 outline-rounded-full outline-offset-4 outline-white flex items-center justify-center"
-//         />
-//       )}
-//       <div className={cn(sharedStyles.pageContent, "h-full border-dashed")}>
-//         <BackButton to={"/dashboard"} />
-//         <div className="relative w-full">
-//           <video ref={videoRef} className="w-full block" />
-
-//           {started && !result && (
-//             <div className="absolute inset-0 pointer-events-none">
-//               {/* Dimmed overlay outside scan area */}
-//               <div className="absolute inset-0 bg-black/40" />
-
-//               {/* Scan window */}
-//               <div className="absolute top-[5%] left-[5%] right-[5%] bottom-[5%] border border-white/30 border-dashed">
-//                 {/* Corner accents */}
-//                 <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-white rounded-tl" />
-//                 <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-white rounded-tr" />
-//                 <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-white rounded-bl" />
-//                 <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-white rounded-br" />
-
-//                 {/* Scanning line */}
-//                 <div className="absolute left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-green-400 to-transparent animate-scanLine" />
-//               </div>
-//             </div>
-//           )}
-//         </div>
-
-//         {result && !isSuccess && (
-//           <div>
-//             <p>
-//               Asset detected: <strong>{result.assetID}</strong>
-//             </p>
-//             <button type="button" onClick={handleVerify} disabled={isPending}>
-//               {isPending ? "Submitting..." : "Confirm verification"}
-//             </button>
-//           </div>
-//         )}
-
-//         {isSuccess && <p>✓ Verification submitted successfully</p>}
-//         {isError && <p>Failed to submit — please try again</p>}
-//         {scanError && <p>{scanError.message ?? "An unknown error occurred"}</p>}
-//       </div>
-//     </div>
-//   );
-// }
