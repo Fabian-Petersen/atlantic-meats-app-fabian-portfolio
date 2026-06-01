@@ -7,7 +7,8 @@ interface ScanResult {
   raw: string;
 }
 
-export function useBarcodeScanner() {
+export function useBarcodeScanner(started: boolean) {
+  // ← accepts started flag
   const videoRef = useRef<HTMLVideoElement>(null);
   const controlsRef = useRef<{ stop: () => void } | null>(null);
   const [result, setResult] = useState<ScanResult | null>(null);
@@ -19,36 +20,32 @@ export function useBarcodeScanner() {
   }, []);
 
   useEffect(() => {
-    if (!videoRef.current) return; // ← removed the `active` check
+    if (!started || !videoRef.current) return; // ← only start when triggered
 
     const reader = new BrowserMultiFormatReader();
 
     reader
-      .decodeFromConstraints(
-        { video: { facingMode: "environment" } },
-        videoRef.current,
-        (res, err) => {
-          if (res) {
-            const text = res.getText();
-            const match = text.match(/[A-Z]{2}-\d{4}/);
-            if (match) {
-              setResult({ assetID: match[0], raw: text });
-              stop();
-            }
+      .decodeFromVideoDevice(undefined, videoRef.current, (res, err) => {
+        if (res) {
+          const text = res.getText();
+          const match = text.match(/[A-Z]{2}-\d{4}/);
+          if (match) {
+            setResult({ assetID: match[0], raw: text });
+            stop();
           }
-          if (err && !(err instanceof NotFoundException)) {
-            setError(err);
-          }
-        },
-      )
+        }
+        if (err && !(err instanceof NotFoundException)) {
+          setError(err);
+        }
+      })
       .then((controls) => {
         controlsRef.current = controls;
       });
 
     return () => {
-      stop(); // ← cleanup on unmount stops the camera
+      stop();
     };
-  }, []); // ← empty deps, runs once on mount
+  }, [started, stop]); // ← re-runs when started changes
 
   return { videoRef, result, error, stop };
 }

@@ -5,6 +5,15 @@ const config: Config = {
   content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx,css}", "./src/**/*.css"],
   theme: {
     extend: {
+      keyframes: {
+        scanLine: {
+          "0%, 100%": { top: "0%" },
+          "50%": { top: "calc(100% - 2px)" },
+        },
+      },
+      animation: {
+        scanLine: "scanLine 2s ease-in-out infinite",
+      },
       // colors must be added to the index.css as a variable before becoming available
       colors: {
         // $ Theme Colors
