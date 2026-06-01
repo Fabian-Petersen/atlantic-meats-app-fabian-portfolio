@@ -1,16 +1,41 @@
 // import { getCurrentPosition } from "@/utils/getCurrentPosition";
 import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { Html5QrcodeScanner, type Html5QrcodeResult } from "html5-qrcode";
+import {
+  Html5QrcodeScanner,
+  //   Html5Qrcode,
+  type Html5QrcodeResult,
+} from "html5-qrcode";
+import { usePOST } from "@/utils/api";
+import { getCurrentPosition } from "@/utils/getCurrentPosition";
+import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 
 export default function ScannerPage() {
   const [started, setStarted] = useState(false);
   const [barcode, setBarcode] = useState<string | null>(null);
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
 
-  const handleScannedValue = (value: string) => {
-    setBarcode(value);
+  const { mutateAsync: postVerify, isPending } = usePOST({
+    resourcePath: "api/assets",
+    action: "verify",
+    queryKey: ["assets"],
+  });
+
+  const handleVerify = async (value: string) => {
+    try {
+      const position = await getCurrentPosition();
+      await postVerify({
+        assetID: barcode,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+      alert({ assetID: barcode, position });
+    } catch (err) {
+      console.error("Verification failed:", err);
+      alert("Verification failed. Please try again.");
+      return;
+    }
+
     alert(`Scanned value: ${value}`);
   };
 
@@ -29,13 +54,13 @@ export default function ScannerPage() {
       scanner
         .clear()
         .then(() => {
-          handleScannedValue(decodedText);
+          setBarcode(decodedText);
+          handleVerify(decodedText);
         })
         .catch(console.error);
     }
 
     function error(err: string) {
-      // noisy, safe to ignore
       console.log("Error:", err);
     }
 
@@ -48,18 +73,22 @@ export default function ScannerPage() {
     };
   }, [started]); // runs when `started` flips to true
 
-  const navigate = useNavigate();
+  if (isPending) return <PageLoadingSpinner />;
+
   return (
     <div className="fixed inset-0 z-9999 flex flex-col items-center justify-center">
       {/* Close button */}
-      <button
-        type="button"
-        aria-label="Close"
-        className="absolute top-8 right-10 text-gray-400 z-50 hover:bg-white/30 hover:rounded-full p-2"
-        onClick={() => navigate("/dashboard")}
-      >
-        <X size={24} />
-      </button>
+
+      {started && (
+        <button
+          type="button"
+          aria-label="Close"
+          className="absolute top-8 right-10 text-gray-400 z-50 hover:bg-white/30 hover:rounded-full p-2"
+          onClick={() => setStarted(false)}
+        >
+          <X size={24} />
+        </button>
+      )}
 
       {/* Start button */}
       {!started && !barcode && (
@@ -67,7 +96,7 @@ export default function ScannerPage() {
           type="button"
           aria-label="Start scanning"
           onClick={() => setStarted(true)}
-          className="absolute bottom-10 w-14 h-14 dark:bg-white rounded-full outline-2 dark:outline-white bg-black outline-black outline-offset-4 z-9999"
+          className="absolute bottom-10 w-14 h-14 rounded-full outline-2 bg-black outline-black outline-offset-4 z-9999"
         />
       )}
 
@@ -80,7 +109,7 @@ export default function ScannerPage() {
       */}
       <div
         id="reader"
-        className={`w-full ${started ? "block border border-red-500" : "hidden"}`}
+        className={`w-full h-full ${started ? "block" : "hidden"}`}
       />
 
       {/* Scanning overlay — rendered *outside* #reader, positioned over it */}
