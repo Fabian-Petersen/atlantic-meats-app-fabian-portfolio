@@ -20,7 +20,7 @@ export default function ScannerPage() {
 
     const scanner = new Html5QrcodeScanner(
       "reader",
-      { fps: 20, qrbox: { width: 250, height: 250 } },
+      { fps: 30, qrbox: { width: 250, height: 250 } },
       false,
     );
 
@@ -50,79 +50,68 @@ export default function ScannerPage() {
 
   const navigate = useNavigate();
   return (
-    <div className="fixed inset-0 bg-black z-9999 flex items-center justify-center">
-      {/* Start Scanning Button */}
+    <div className="fixed inset-0 z-9999 flex flex-col items-center justify-center">
+      {/* Close button */}
+      <button
+        type="button"
+        aria-label="Close"
+        className="absolute top-8 right-10 text-gray-400 z-50 hover:bg-white/30 hover:rounded-full p-2"
+        onClick={() => navigate("/dashboard")}
+      >
+        <X size={24} />
+      </button>
+
+      {/* Start button */}
       {!started && !barcode && (
         <button
           type="button"
-          aria-label="start scan button"
+          aria-label="Start scanning"
           onClick={() => setStarted(true)}
-          className="bottom-10 absolute m-auto w-8 h-8 px-4 py-2 bg-white rounded-full outline-2 outline-rounded-full z-9999 outline-offset-4 outline-white flex items-center justify-center"
+          className="absolute bottom-10 w-14 h-14 dark:bg-white rounded-full outline-2 dark:outline-white bg-black outline-black outline-offset-4 z-9999"
         />
       )}
 
-      <div className="h-full">
-        {/* CloseButton */}
-        <button
-          type="button"
-          aria-label="Close Button"
-          className="absolute top-8 right-10 text-gray-400 text-2xl z-50 hover:cursor-pointer hover:bg-white/30 hover:rounded-full p-2"
-          onClick={() => navigate("/dashboard")}
-        >
-          <X size={24} />
-        </button>
+      {/* Camera inactive placeholder */}
+      {!started && <p className="text-white/50 text-sm">Camera inactive</p>}
 
-        {/* Scanner viewport */}
-        <div className="absolute inset-0 overflow-hidden w-full aspect-video bg-black rounded-lg flex items-center justify-center">
-          {started && (
-            <div id="reader" className="w-full h-full relative">
-              {/* Scanning overlay */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2">
-                {/* Corner accents */}
-                <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-white" />
-                <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-white" />
-                <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-white" />
-                <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-white" />
-                {/* Scanning line */}
+      {/* 
+        IMPORTANT: #reader must be a clean, empty div.
+        html5-qrcode owns this DOM node entirely — never put children inside it.
+      */}
+      <div
+        id="reader"
+        className={`w-full ${started ? "block border border-red-500" : "hidden"}`}
+      />
 
-                <div className="absolute left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-red-400 to-transparent animate-scanLine" />
-              </div>
+      {/* Scanning overlay — rendered *outside* #reader, positioned over it */}
+      {/* 
+      {started && !barcode && (
+        <>
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center border border-dashed border-red-500">
+            <div className="relative w-64 h-64">
+              {/* Corner accents
+              <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-white" />
+              <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-white" />
+              <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-white" />
+              <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-white" />
+              {/* Scan line
+              <div className="absolute left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-red-400 to-transparent animate-scanLine" />
             </div>
-          )}
-          {!started && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <p className="text-white/50 text-sm">Camera inactive</p>
-            </div>
-          )}
-        </div>
-
-        {/* Controls */}
-        {started && !barcode && (
-          <p className="text-center text-sm text-muted-foreground mt-3">
+          </div>
+          <p className="absolute bottom-24 md:bottom-36 text-white/70 text-sm">
             Point camera at barcode
           </p>
-        )}
+        </>
+      )} 
+       */}
 
-        {barcode && barcode !== null && barcode !== "not detected" && (
-          <div className="mt-4 p-4 rounded-lg border">
-            <p className="text-sm text-muted-foreground">Asset detected</p>
-            <p className="text-lg font-medium">{barcode}</p>
-            {/* {isPending && (
-              <p className="text-sm mt-2">Submitting verification...</p>
-            )}
-            {isSuccess && (P
-              <p className="text-sm mt-2 text-green-600">
-                ✓ Verified successfully
-              </p>
-            )}
-            {isError && (
-              <p className="text-sm mt-2 text-red-500">
-                Failed to submit — please try again
-              </p>
-            )} */}
-          </div>
-        )}
-      </div>
+      {/* Result card */}
+      {barcode && (
+        <div className="absolute bottom-24 mx-4 p-4 rounded-lg border border-white/20 bg-white/10 text-white">
+          <p className="text-sm text-white/60">Asset detected</p>
+          <p className="text-lg font-medium">{barcode}</p>
+        </div>
+      )}
     </div>
   );
 }
