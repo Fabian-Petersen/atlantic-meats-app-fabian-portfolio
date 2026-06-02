@@ -36,6 +36,8 @@ export type Resource =
   | "api/assets/location" // NOT in use : Get all assets by location
   | `api/assets/${string}/history`
   | `api/assets/${string}/history/metrics` // GET, asset history metrics
+  | `api/assets/${string}/verify`
+  | `api/assets/${string}/transfer`
   // $ Users ROUTES
   | "api/users/get-current-user" // Get user details by id
   | "api/users" // "admin/users" GET all users

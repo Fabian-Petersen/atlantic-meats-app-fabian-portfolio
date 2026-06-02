@@ -36,6 +36,22 @@ export const assetApiResponseSchema = assetRequestSchema
     id: z.string(),
     createdAt: z.string(),
     images: z.array(presignedURLSchema).default([]), // existing images (urls/keys)
+  })
+  .extend({
+    // asset verification fields
+    verified_by: z.string(),
+    last_verified_at: z.string(),
+    next_verification_due: z.string(),
+    last_location: z.object({
+      longitude: z.number(),
+      latitude: z.number(),
+    }),
+    verification_result: z.enum([
+      "verified",
+      "overdue",
+      "due soon",
+      "not found",
+    ]),
   });
 
 export type AssetAPIResponse = z.infer<typeof assetApiResponseSchema>;
@@ -120,6 +136,21 @@ export const assetVerificationSchema = z.object({
   latitude: z.number(),
   longitude: z.number(),
 });
+
+// $ Schema for the Asset Verification History API response
+export const assetAPIVerificationHistorySchema = z.object({
+  id: z.string(),
+  assetID: z.string(),
+  verified_by: z.string(),
+  verified_at: z.string(),
+  latitude: z.number(),
+  longitude: z.number(),
+  verification_result: z.enum(["verified", "overdue", "due soon", "not found"]),
+});
+
+export type AssetAPIVerificationHistory = z.infer<
+  typeof assetAPIVerificationHistorySchema
+>;
 
 export const assetVerificationResponseSchema = z.object({
   message: z.string(),
