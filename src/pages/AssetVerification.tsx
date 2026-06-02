@@ -16,27 +16,29 @@ export default function ScannerPage() {
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
 
   const { mutateAsync: postVerify, isPending } = usePOST({
+    id: barcode ?? "",
     resourcePath: "api/assets",
     action: "verify",
     queryKey: ["assets"],
   });
 
-  const handleVerify = async (value: string) => {
+  const handleVerify = async () => {
     try {
       const position = await getCurrentPosition();
-      await postVerify({
+      const result = await postVerify({
         assetID: barcode,
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       });
-      alert({ assetID: barcode, position });
+      console.log(result);
+      // alert({ assetID: barcode, position });
     } catch (err) {
       console.error("Verification failed:", err);
       alert("Verification failed. Please try again.");
       return;
     }
 
-    alert(`Scanned value: ${value}`);
+    // alert(`Scanned value: ${value}`);
   };
 
   useEffect(() => {
@@ -55,7 +57,7 @@ export default function ScannerPage() {
         .clear()
         .then(() => {
           setBarcode(decodedText);
-          handleVerify(decodedText);
+          handleVerify();
         })
         .catch(console.error);
     }
