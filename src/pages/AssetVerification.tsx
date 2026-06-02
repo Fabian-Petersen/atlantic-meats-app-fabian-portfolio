@@ -22,11 +22,11 @@ export default function ScannerPage() {
     queryKey: ["assets"],
   });
 
-  const handleVerify = async () => {
+  const handleVerify = async (value: string) => {
     try {
       const position = await getCurrentPosition();
       const result = await postVerify({
-        assetID: barcode,
+        assetID: value,
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       });
@@ -57,7 +57,7 @@ export default function ScannerPage() {
         .clear()
         .then(() => {
           setBarcode(decodedText);
-          handleVerify();
+          handleVerify(decodedText);
         })
         .catch(console.error);
     }
