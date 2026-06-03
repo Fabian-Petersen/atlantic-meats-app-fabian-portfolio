@@ -179,11 +179,11 @@ select:not([multiple])::picker(select) {
   object-fit: cover !important;
 } */
 
-#reader > div[style] {
+/* #reader > div[style] {
   display: none !important;
-}
+} */
 
-/* Wrapper fills the full screen */
+/* Wrapper fills the full screen
 #reader {
   width: 100% !important;
   height: 100% !important;
@@ -191,7 +191,7 @@ select:not([multiple])::picker(select) {
   position: relative;
 }
 
-/* Kill all inline styles the library sets on its children*/
+/* Kill all inline styles the library sets on its children
 #reader * {
   width: 100% !important;
   height: 100% !important;
@@ -199,7 +199,7 @@ select:not([multiple])::picker(select) {
   max-height: unset !important;
 }
 
-/* Video fills the box — object-fit cover crops instead of letterboxing*/
+/* Video fills the box — object-fit cover crops instead of letterboxing
 #reader video {
   object-fit: cover !important;
   position: absolute !important;

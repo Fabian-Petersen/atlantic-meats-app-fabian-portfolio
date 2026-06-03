@@ -47,13 +47,7 @@ export function useBarcodeScanner() {
         });
 
         await scannerRef.current.start(
-          // If we found a specific device use it, otherwise fall back
-          // to environment facing mode
-          // cameraId
-          //   ? { deviceId: { exact: cameraId } }
-          //   : { facingMode: "environment" },
           { facingMode: "environment" },
-
           {
             fps: 30,
             qrbox: { width: 250, height: 250 },
