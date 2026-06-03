@@ -6,14 +6,14 @@ import { toast } from "sonner";
 import { Html5QrcodeScanner, type Html5QrcodeResult } from "html5-qrcode";
 import { usePOST } from "@/utils/api";
 import { getCurrentPosition } from "@/utils/getCurrentPosition";
-import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
+// import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 
 export default function ScannerPage() {
   const [started, setStarted] = useState(false);
   const [barcode, setBarcode] = useState<string | null>(null);
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
 
-  const { mutateAsync: postVerify, isPending } = usePOST({
+  const { mutateAsync: postVerify } = usePOST({
     id: barcode ?? "",
     resourcePath: "api/assets",
     action: "verify",
@@ -70,7 +70,7 @@ export default function ScannerPage() {
     };
   }, [started]); // runs when `started` flips to true
 
-  if (isPending) return <PageLoadingSpinner />;
+  // if (isPending) return <PageLoadingSpinner />;
 
   return (
     <div className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-white/20 dark:bg-gray-900">
@@ -115,12 +115,13 @@ export default function ScannerPage() {
         className={started ? "fixed inset-0 w-screen h-screen" : "hidden"}
       />
       {/* Result card */}
-      {barcode && (
-        <div className="absolute bottom-24 mx-4 p-4 rounded-lg border border-white/20 bg-white/10 text-white">
-          <p className="text-sm text-white/60">Asset detected</p>
-          <p className="text-lg font-medium">{barcode}</p>
-        </div>
-      )}
+      {
+        barcode && toast(`Asset ${barcode} detected`)
+        // <div className="absolute bottom-24 mx-4 p-4 rounded-lg border border-white/20 bg-white/10 text-white">
+        //   <p className="text-sm text-white/60">Asset detected</p>
+        //   <p className="text-lg font-medium">{barcode}</p>
+        // </div>
+      }
     </div>
   );
 }
