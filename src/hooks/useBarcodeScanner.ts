@@ -22,7 +22,13 @@ export function useBarcodeScanner() {
 
         await scannerRef.current.start(
           { facingMode: "environment" },
-          { fps: 30, qrbox: { width: 250, height: 250 } },
+          {
+            fps: 30,
+            qrbox: (videoWidth, videoHeight) => {
+              const size = Math.min(videoWidth, videoHeight, 256); // matches your w-64
+              return { width: size, height: size };
+            },
+          },
           (decodedText) => {
             onScanSuccess(decodedText);
           },

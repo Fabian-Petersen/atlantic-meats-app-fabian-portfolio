@@ -87,7 +87,7 @@ export default function ScannerPage() {
       {/* Your custom scanning overlay — positioned over #reader */}
       {isScanning && (
         <>
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="pointer-events-none h-full w-full absolute inset-0 flex items-center justify-center">
             <div className="relative w-64 h-64">
               {/* Corner accents */}
               <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-white" />

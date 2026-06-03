@@ -162,6 +162,41 @@ select:not([multiple])::picker(select) {
   }
 }
 
+#reader > div[style] {
+  display: none !important;
+}
+
+/* Wrapper fills the full screen */
+#reader {
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Kill all inline styles the library sets on its children */
+#reader * {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: unset !important;
+  max-height: unset !important;
+}
+
+/* Video fills the box — object-fit cover crops instead of letterboxing */
+#reader video {
+  object-fit: cover !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+/* Hide the library's scan box and any injected UI */
+#reader > div[style],
+#reader canvas,
+#reader img {
+  display: none !important;
+}
+
 /* $ ======================== Dark Mode Styles as per user preference ====================== */
 
 html {
