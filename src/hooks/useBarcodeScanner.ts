@@ -55,11 +55,8 @@ export function useBarcodeScanner() {
           { facingMode: "environment" },
 
           {
-            fps: 20,
-            qrbox: (videoWidth, videoHeight) => {
-              const size = Math.round(Math.min(videoWidth, videoHeight) * 0.8);
-              return { width: size, height: size };
-            },
+            fps: 30,
+            qrbox: { width: 250, height: 250 },
           },
           (decodedText) => {
             onScanSuccess(decodedText);

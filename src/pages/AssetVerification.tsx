@@ -215,21 +215,20 @@ export default function ScannerPage() {
       {/* // $ Your custom scanning overlay — positioned over #reader */}
       {isScanning && (
         <>
-          {/* <div className="pointer-events-none h-full w-full absolute inset-0 z-10 flex items-center justify-center">
+          <div className="pointer-events-none h-full w-full absolute inset-0 z-10 flex items-center justify-center">
             <div className="relative w-64 h-64">
-              {/* Corner accents
+              {/* Corner accents*/}
               <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-white" />
               <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-white" />
               <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-white" />
               <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-white" />
-              {/* Scan line
+              {/* Scan line*/}
               <div className="absolute left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-red-400 to-transparent animate-scanLine" />
             </div>
           </div>
           <p className="absolute bottom-24 md:bottom-36 text-white/70 text-sm">
             Point camera at barcode
-          </p> 
-          */}
+          </p>
         </>
       )}
 
