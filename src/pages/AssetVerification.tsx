@@ -1,6 +1,8 @@
 // import { getCurrentPosition } from "@/utils/getCurrentPosition";
 import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
+import { toast } from "sonner";
+
 import {
   Html5QrcodeScanner,
   //   Html5Qrcode,
@@ -25,20 +27,17 @@ export default function ScannerPage() {
   const handleVerify = async (value: string) => {
     try {
       const position = await getCurrentPosition();
-      const result = await postVerify({
+      await postVerify({
         assetID: value,
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       });
-      console.log(result);
-      // alert({ assetID: barcode, position });
+      toast.success(`Asset ${barcode} verified success`, { duration: 1500 });
     } catch (err) {
       console.error("Verification failed:", err);
-      alert("Verification failed. Please try again.");
+      toast.error(`Asset ${barcode} verification failed`, { duration: 1500 });
       return;
     }
-
-    // alert(`Scanned value: ${value}`);
   };
 
   useEffect(() => {
