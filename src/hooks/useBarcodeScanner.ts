@@ -21,11 +21,15 @@ export function useBarcodeScanner() {
         scannerRef.current = new Html5Qrcode(ELEMENT_ID);
 
         await scannerRef.current.start(
-          { facingMode: "environment" },
+          {
+            facingMode: "environment",
+            // aspectRatio: window.innerHeight / window.innerWidth,
+          },
+
           {
             fps: 30,
             qrbox: (videoWidth, videoHeight) => {
-              const size = Math.min(videoWidth, videoHeight, 256); // matches your w-64
+              const size = Math.round(Math.min(videoWidth, videoHeight) * 0.5);
               return { width: size, height: size };
             },
           },

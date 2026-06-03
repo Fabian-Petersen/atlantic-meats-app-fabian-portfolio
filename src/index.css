@@ -191,12 +191,10 @@ select:not([multiple])::picker(select) {
 }
 
 /* Hide the library's scan box and any injected UI */
-#reader > div[style],
-#reader canvas,
-#reader img {
+/* Only hide the visual scan box — NOT canvas or img */
+#reader > div[style] {
   display: none !important;
 }
-
 /* $ ======================== Dark Mode Styles as per user preference ====================== */
 
 html {
