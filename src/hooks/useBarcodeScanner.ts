@@ -1,51 +1,76 @@
-import { useEffect, useRef, useState, useCallback } from "react";
-import { BrowserMultiFormatReader } from "@zxing/browser";
-import { NotFoundException } from "@zxing/library";
+import { useRef, useState, useCallback, useEffect } from "react";
+import { Html5Qrcode } from "html5-qrcode";
 
-interface ScanResult {
-  assetID: string;
-  raw: string;
-}
+type ScannerStatus = "idle" | "starting" | "scanning" | "stopping";
 
-export function useBarcodeScanner(started: boolean) {
-  // ← accepts started flag
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const controlsRef = useRef<{ stop: () => void } | null>(null);
-  const [result, setResult] = useState<ScanResult | null>(null);
-  const [error, setError] = useState<Error | null>(null);
+const ELEMENT_ID = "reader";
 
-  const stop = useCallback(() => {
-    controlsRef.current?.stop();
-    controlsRef.current = null;
+export function useBarcodeScanner() {
+  const scannerRef = useRef<Html5Qrcode | null>(null);
+  const [status, setStatus] = useState<ScannerStatus>("idle");
+  const [error, setError] = useState<string | null>(null);
+
+  const start = useCallback(
+    async (onScanSuccess: (decodedText: string) => void) => {
+      if (status !== "idle") return;
+
+      try {
+        setStatus("starting");
+        setError(null);
+
+        scannerRef.current = new Html5Qrcode(ELEMENT_ID);
+
+        await scannerRef.current.start(
+          { facingMode: "environment" },
+          { fps: 30, qrbox: { width: 250, height: 250 } },
+          (decodedText) => {
+            onScanSuccess(decodedText);
+          },
+          undefined, // suppress per-frame errors
+        );
+
+        setStatus("scanning");
+      } catch (err) {
+        scannerRef.current = null;
+        setStatus("idle");
+        setError(err instanceof Error ? err.message : "Failed to start camera");
+      }
+    },
+    [status],
+  );
+
+  const stop = useCallback(async () => {
+    if (status !== "scanning" || !scannerRef.current) return;
+
+    try {
+      setStatus("stopping");
+      await scannerRef.current.stop();
+      scannerRef.current = null;
+      setStatus("idle");
+    } catch (err) {
+      setStatus("scanning");
+      setError(err instanceof Error ? err.message : "Failed to stop camera");
+    }
+  }, [status]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      scannerRef.current
+        ?.stop()
+        .catch(() => {})
+        .finally(() => {
+          scannerRef.current = null;
+        });
+    };
   }, []);
 
-  useEffect(() => {
-    if (!started || !videoRef.current) return; // ← only start when triggered
-
-    const reader = new BrowserMultiFormatReader();
-
-    reader
-      .decodeFromVideoDevice(undefined, videoRef.current, (res, err) => {
-        if (res) {
-          const text = res.getText();
-          const match = text.match(/[A-Z]{2}-\d{4}/);
-          if (match) {
-            setResult({ assetID: match[0], raw: text });
-            stop();
-          }
-        }
-        if (err && !(err instanceof NotFoundException)) {
-          setError(err);
-        }
-      })
-      .then((controls) => {
-        controlsRef.current = controls;
-      });
-
-    return () => {
-      stop();
-    };
-  }, [started, stop]); // ← re-runs when started changes
-
-  return { videoRef, result, error, stop };
+  return {
+    start,
+    stop,
+    status,
+    error,
+    isScanning: status === "scanning",
+    isBusy: status === "starting" || status === "stopping",
+  };
 }
