@@ -162,6 +162,23 @@ select:not([multiple])::picker(select) {
   }
 }
 
+/* #reader__dashboard,
+#reader__header_message,
+#reader__scan_region img {
+  display: none !important;
+}
+
+#reader {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+#reader video {
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover !important;
+} */
+
 #reader > div[style] {
   display: none !important;
 }
@@ -174,7 +191,7 @@ select:not([multiple])::picker(select) {
   position: relative;
 }
 
-/* Kill all inline styles the library sets on its children */
+/* Kill all inline styles the library sets on its children*/
 #reader * {
   width: 100% !important;
   height: 100% !important;
@@ -182,7 +199,7 @@ select:not([multiple])::picker(select) {
   max-height: unset !important;
 }
 
-/* Video fills the box — object-fit cover crops instead of letterboxing */
+/* Video fills the box — object-fit cover crops instead of letterboxing*/
 #reader video {
   object-fit: cover !important;
   position: absolute !important;
@@ -190,14 +207,24 @@ select:not([multiple])::picker(select) {
   left: 0 !important;
 }
 
-/* Hide the library's scan box and any injected UI */
-/* Only hide the visual scan box — NOT canvas or img */
+/* Hide the library's scan box and any injected UI
+/* Only hide the visual scan box — NOT canvas or img
 #reader > div[style] {
   display: none !important;
-}
-/* $ ======================== Dark Mode Styles as per user preference ====================== */
+} 
+*/
 
-html {
+$
+  ========================
+  Dark
+  Mode
+  Styles
+  as
+  per
+  user
+  preference
+  ======================
+  html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;

@@ -5,27 +5,27 @@ type ScannerStatus = "idle" | "starting" | "scanning" | "stopping";
 
 const ELEMENT_ID = "reader";
 
-async function getBestBackCamera(): Promise<string | null> {
-  const devices = await Html5Qrcode.getCameras();
+// async function getBestBackCamera(): Promise<string | null> {
+//   const devices = await Html5Qrcode.getCameras();
 
-  if (!devices.length) return null;
+//   if (!devices.length) return null;
 
-  // Filter to back cameras
-  const backCameras = devices.filter((d) =>
-    /back|rear|environment/i.test(d.label),
-  );
+//   // Filter to back cameras
+//   const backCameras = devices.filter((d) =>
+//     /back|rear|environment/i.test(d.label),
+//   );
 
-  const pool = backCameras.length ? backCameras : devices;
+//   const pool = backCameras.length ? backCameras : devices;
 
-  // Prefer "wide" or main lens — avoid "ultra wide" and "front"
-  const preferred = pool.find(
-    (d) => /wide/i.test(d.label) && !/ultra/i.test(d.label),
-  );
+//   // Prefer "wide" or main lens — avoid "ultra wide" and "front"
+//   const preferred = pool.find(
+//     (d) => /wide/i.test(d.label) && !/ultra/i.test(d.label),
+//   );
 
-  // Fallback: last in the list — most devices order cameras
-  // with the highest-res main camera last
-  return preferred?.id ?? pool[pool.length - 1].id;
-}
+//   // Fallback: last in the list — most devices order cameras
+//   // with the highest-res main camera last
+//   return preferred?.id ?? pool[pool.length - 1].id;
+// }
 
 export function useBarcodeScanner() {
   const scannerRef = useRef<Html5Qrcode | null>(null);
@@ -40,21 +40,24 @@ export function useBarcodeScanner() {
         setStatus("starting");
         setError(null);
 
-        const cameraId = await getBestBackCamera();
+        // const cameraId = await getBestBackCamera();
 
-        scannerRef.current = new Html5Qrcode(ELEMENT_ID);
+        scannerRef.current = new Html5Qrcode(ELEMENT_ID, {
+          verbose: false,
+        });
 
         await scannerRef.current.start(
           // If we found a specific device use it, otherwise fall back
           // to environment facing mode
-          cameraId
-            ? { deviceId: { exact: cameraId } }
-            : { facingMode: "environment" },
+          // cameraId
+          //   ? { deviceId: { exact: cameraId } }
+          //   : { facingMode: "environment" },
+          { facingMode: "environment" },
 
           {
-            fps: 30,
+            fps: 20,
             qrbox: (videoWidth, videoHeight) => {
-              const size = Math.round(Math.min(videoWidth, videoHeight) * 0.5);
+              const size = Math.round(Math.min(videoWidth, videoHeight) * 0.8);
               return { width: size, height: size };
             },
           },
