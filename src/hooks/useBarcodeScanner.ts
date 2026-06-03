@@ -5,6 +5,28 @@ type ScannerStatus = "idle" | "starting" | "scanning" | "stopping";
 
 const ELEMENT_ID = "reader";
 
+async function getBestBackCamera(): Promise<string | null> {
+  const devices = await Html5Qrcode.getCameras();
+
+  if (!devices.length) return null;
+
+  // Filter to back cameras
+  const backCameras = devices.filter((d) =>
+    /back|rear|environment/i.test(d.label),
+  );
+
+  const pool = backCameras.length ? backCameras : devices;
+
+  // Prefer "wide" or main lens — avoid "ultra wide" and "front"
+  const preferred = pool.find(
+    (d) => /wide/i.test(d.label) && !/ultra/i.test(d.label),
+  );
+
+  // Fallback: last in the list — most devices order cameras
+  // with the highest-res main camera last
+  return preferred?.id ?? pool[pool.length - 1].id;
+}
+
 export function useBarcodeScanner() {
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const [status, setStatus] = useState<ScannerStatus>("idle");
@@ -18,13 +40,16 @@ export function useBarcodeScanner() {
         setStatus("starting");
         setError(null);
 
+        const cameraId = await getBestBackCamera();
+
         scannerRef.current = new Html5Qrcode(ELEMENT_ID);
 
         await scannerRef.current.start(
-          {
-            facingMode: "environment",
-            // aspectRatio: window.innerHeight / window.innerWidth,
-          },
+          // If we found a specific device use it, otherwise fall back
+          // to environment facing mode
+          cameraId
+            ? { deviceId: { exact: cameraId } }
+            : { facingMode: "environment" },
 
           {
             fps: 30,

@@ -33,11 +33,11 @@ export default function ScannerPage() {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         });
-        toast.success(`Asset ${decodedText} verified`, { duration: 1500 });
+        toast.success(`Asset ${decodedText} verified`, { duration: 2000 });
       } catch (err) {
         console.error("Verification failed:", err);
         toast.error(`Asset ${decodedText} verification failed`, {
-          duration: 1500,
+          duration: 2000,
         });
       }
     },
