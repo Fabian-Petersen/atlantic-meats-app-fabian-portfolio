@@ -10,12 +10,7 @@ import { getCurrentPosition } from "@/utils/getCurrentPosition";
 // import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 
 type VerifyAssetResponse = {
-  data: { message: string };
-};
-
-type VerifyAssetError = {
   message: string;
-  assetID: string;
 };
 
 export default function ScannerPage() {
@@ -43,14 +38,12 @@ export default function ScannerPage() {
       });
       setDebug(response);
 
-      toast.success(response?.data.message, { duration: 1500 });
+      toast.success(response?.message, { duration: 1500 });
     } catch (error) {
-      const axiosError = error as AxiosError<VerifyAssetError>;
+      const axiosError = error as AxiosError<VerifyAssetResponse>;
 
       const message =
-        axiosError.response?.data?.message ||
-        axiosError.message ||
-        "Unknown error";
+        axiosError?.message || axiosError.message || "Unknown error";
       toast.error(message, { duration: 1500 });
       return;
     }
@@ -95,6 +88,11 @@ export default function ScannerPage() {
 
   return (
     <div className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-white/20 dark:bg-gray-900">
+      {debug && (
+        <div className="text-xs bg-black text-white p-2 absolute w-full h-full">
+          {JSON.stringify(debug, null, 2)}
+        </div>
+      )}
       {/* Close button */}
 
       {started && (
@@ -135,11 +133,6 @@ export default function ScannerPage() {
         id="reader"
         className={started ? "fixed inset-0 w-screen h-screen" : "hidden"}
       />
-      {debug && (
-        <div className="text-xs bg-black text-white p-2 flex w-full h-full">
-          {JSON.stringify(debug, null, 2)}
-        </div>
-      )}
     </div>
   );
 }
