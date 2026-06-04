@@ -22,7 +22,7 @@ export default function ScannerPage() {
   // const [debug, setDebug] = useState<VerifyAssetResponse | null>(null);
   const navigate = useNavigate();
 
-  const { mutateAsync: postVerify, isPending } = usePOST<
+  const { mutateAsync: postVerify, isPending: isVerifying } = usePOST<
     unknown,
     VerifyAssetResponse
   >({
@@ -56,6 +56,7 @@ export default function ScannerPage() {
   };
 
   const handleVerify = async (value: string) => {
+    setStarted(false);
     try {
       const position = await getCurrentPosition();
 
@@ -69,7 +70,6 @@ export default function ScannerPage() {
       toast.success(response?.message, { duration: 1500 });
     } catch (error) {
       toast.error(getErrorMessage(error), { duration: 1500 });
-      return;
     }
   };
 
@@ -109,7 +109,7 @@ export default function ScannerPage() {
     };
   }, [started]); // runs when `started` flips to true
 
-  if (isPending) return <PageLoadingSpinner />;
+  if (isVerifying) return <PageLoadingSpinner />;
 
   return (
     <div className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-white/20 dark:bg-gray-900">
@@ -132,7 +132,7 @@ export default function ScannerPage() {
       )}
 
       {/* Start button */}
-      {!started && !barcode && (
+      {!started && (
         <button
           type="button"
           aria-label="Start scanning"
