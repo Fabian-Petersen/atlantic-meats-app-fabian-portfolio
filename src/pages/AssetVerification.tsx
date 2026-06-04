@@ -22,6 +22,8 @@ export default function ScannerPage() {
   const [started, setStarted] = useState(false);
   const [barcode, setBarcode] = useState<string | null>(null);
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
+  // Temporary mobile debug state
+  const [debug, setDebug] = useState<VerifyAssetResponse | null>(null);
 
   const { mutateAsync: postVerify } = usePOST<unknown, VerifyAssetResponse>({
     id: barcode ?? "",
@@ -33,14 +35,18 @@ export default function ScannerPage() {
   const handleVerify = async (value: string) => {
     try {
       const position = await getCurrentPosition();
+
       const response = await postVerify({
         assetID: value,
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       });
+      setDebug(response);
+
       toast.success(response?.data.message, { duration: 1500 });
     } catch (error) {
       const axiosError = error as AxiosError<VerifyAssetError>;
+
       const message =
         axiosError.response?.data?.message ||
         axiosError.message ||
@@ -62,6 +68,7 @@ export default function ScannerPage() {
 
     function success(decodedText: string, decodedResult: Html5QrcodeResult) {
       console.log("Decoded Result:", decodedResult);
+      toast.info(`Asset ${decodedText} detected`, { duration: 1000 });
       scanner
         .clear()
         .then(() => {
@@ -128,14 +135,11 @@ export default function ScannerPage() {
         id="reader"
         className={started ? "fixed inset-0 w-screen h-screen" : "hidden"}
       />
-      {/* Result card */}
-      {
-        // barcode && toast(`Asset ${barcode} detected`)
-        // <div className="absolute bottom-24 mx-4 p-4 rounded-lg border border-white/20 bg-white/10 text-white">
-        //   <p className="text-sm text-white/60">Asset detected</p>
-        //   <p className="text-lg font-medium">{barcode}</p>
-        // </div>
-      }
+      {debug && (
+        <pre className="text-xs bg-black text-white p-2">
+          {JSON.stringify(debug, null, 2)}
+        </pre>
+      )}
     </div>
   );
 }
