@@ -10,8 +10,7 @@ import { getCurrentPosition } from "@/utils/getCurrentPosition";
 // import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 
 type VerifyAssetResponse = {
-  message: string;
-  assetID: string;
+  data: { message: string };
 };
 
 type VerifyAssetError = {
@@ -39,10 +38,14 @@ export default function ScannerPage() {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       });
-      toast.success(`Asset ${response.assetID} verified`, { duration: 1500 });
+      toast.success(response?.data.message, { duration: 1500 });
     } catch (error) {
       const axiosError = error as AxiosError<VerifyAssetError>;
-      toast.error(`${axiosError}`, { duration: 1500 });
+      const message =
+        axiosError.response?.data?.message ||
+        axiosError.message ||
+        "Unknown error";
+      toast.error(message, { duration: 1500 });
       return;
     }
   };
@@ -127,7 +130,7 @@ export default function ScannerPage() {
       />
       {/* Result card */}
       {
-        barcode && toast(`Asset ${barcode} detected`)
+        // barcode && toast(`Asset ${barcode} detected`)
         // <div className="absolute bottom-24 mx-4 p-4 rounded-lg border border-white/20 bg-white/10 text-white">
         //   <p className="text-sm text-white/60">Asset detected</p>
         //   <p className="text-lg font-medium">{barcode}</p>
