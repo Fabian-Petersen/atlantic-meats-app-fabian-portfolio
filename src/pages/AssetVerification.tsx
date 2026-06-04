@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { toast } from "sonner";
-import { AxiosError } from "axios";
+import axios from "axios";
 
 import { Html5QrcodeScanner, type Html5QrcodeResult } from "html5-qrcode";
 import { usePOST } from "@/utils/api";
@@ -27,6 +27,27 @@ export default function ScannerPage() {
     queryKey: ["assets"],
   });
 
+  // $ Handle error messages from the backend to display in the toast.
+  const getErrorMessage = (error: unknown) => {
+    if (!axios.isAxiosError(error)) return "Unexpected error";
+
+    const data = error.response?.data;
+
+    // Case 1: direct message (normal case)
+    if (data?.message) return data.message;
+
+    // Case 2: API Gateway proxy style response
+    if (data?.body) {
+      try {
+        return JSON.parse(data.body)?.message;
+      } catch {
+        return "Asset not found";
+      }
+    }
+
+    return error.message || "Unknown error";
+  };
+
   const handleVerify = async (value: string) => {
     try {
       const position = await getCurrentPosition();
@@ -40,11 +61,7 @@ export default function ScannerPage() {
 
       toast.success(response?.message, { duration: 1500 });
     } catch (error) {
-      const axiosError = error as AxiosError<VerifyAssetResponse>;
-
-      const message =
-        axiosError?.message || axiosError.message || "Unknown error";
-      toast.error(message, { duration: 1500 });
+      toast.error(getErrorMessage(error), { duration: 1500 });
       return;
     }
   };
