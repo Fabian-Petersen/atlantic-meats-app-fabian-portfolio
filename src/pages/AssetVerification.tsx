@@ -2,18 +2,29 @@
 import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 import { Html5QrcodeScanner, type Html5QrcodeResult } from "html5-qrcode";
 import { usePOST } from "@/utils/api";
 import { getCurrentPosition } from "@/utils/getCurrentPosition";
 // import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 
+type VerifyAssetResponse = {
+  message: string;
+  assetID: string;
+};
+
+type VerifyAssetError = {
+  message: string;
+  assetID: string;
+};
+
 export default function ScannerPage() {
   const [started, setStarted] = useState(false);
   const [barcode, setBarcode] = useState<string | null>(null);
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
 
-  const { mutateAsync: postVerify } = usePOST({
+  const { mutateAsync: postVerify } = usePOST<unknown, VerifyAssetResponse>({
     id: barcode ?? "",
     resourcePath: "api/assets",
     action: "verify",
@@ -23,15 +34,15 @@ export default function ScannerPage() {
   const handleVerify = async (value: string) => {
     try {
       const position = await getCurrentPosition();
-      await postVerify({
+      const response = await postVerify({
         assetID: value,
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       });
-      toast.success(`Asset ${barcode} verified success`, { duration: 1500 });
-    } catch (err) {
-      console.error("Verification failed:", err);
-      toast.error(`Asset ${barcode} verification failed`, { duration: 1500 });
+      toast.success(`Asset ${response.assetID} verified`, { duration: 1500 });
+    } catch (error) {
+      const axiosError = error as AxiosError<VerifyAssetError>;
+      toast.error(`${axiosError}`, { duration: 1500 });
       return;
     }
   };
