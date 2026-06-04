@@ -28,18 +28,20 @@ export default function ScannerPage() {
   });
 
   // $ Handle error messages from the backend to display in the toast.
-  const getErrorMessage = (error: unknown) => {
+  // $ getErrorMessage to also handle plain Error objects thrown below
+  const getErrorMessage = (error: unknown): string => {
+    // Plain Error thrown from unwrapLambdaResponse
+    if (error instanceof Error) return error.message;
+
     if (!axios.isAxiosError(error)) return "Unexpected error";
 
     const data = error.response?.data;
 
-    // Case 1: direct message (normal case)
     if (data?.message) return data.message;
 
-    // Case 2: API Gateway proxy style response
     if (data?.body) {
       try {
-        return JSON.parse(data.body)?.message;
+        return JSON.parse(data.body)?.message ?? "Asset not found";
       } catch {
         return "Asset not found";
       }
@@ -48,15 +50,43 @@ export default function ScannerPage() {
     return error.message || "Unknown error";
   };
 
+  type LambdaEnvelope = {
+    statusCode?: number;
+    body?: string;
+  };
+
+  type VerifyAssetRaw = VerifyAssetResponse & LambdaEnvelope;
+  // Unwrap Lambda proxy envelope: { statusCode, body: '{"message":"..."}' }
+  const unwrapLambdaResponse = (
+    response: VerifyAssetRaw & LambdaEnvelope,
+  ): VerifyAssetResponse => {
+    // If Lambda leaked its envelope through (API GW proxy passthrough)
+    if (response?.statusCode && response.statusCode >= 400) {
+      const parsed =
+        typeof response.body === "string"
+          ? JSON.parse(response.body)
+          : response.body;
+      throw new Error(parsed?.message ?? `Error ${response.statusCode}`);
+    }
+
+    // If body is a nested JSON string (double-encoded)
+    if (typeof response.body === "string") {
+      return JSON.parse(response.body as string) as VerifyAssetResponse;
+    }
+
+    return response;
+  };
+
   const handleVerify = async (value: string) => {
     try {
       const position = await getCurrentPosition();
 
-      const response = await postVerify({
+      const raw = (await postVerify({
         assetID: value,
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
-      });
+      })) as VerifyAssetRaw;
+      const response = unwrapLambdaResponse(raw);
       setDebug(response);
 
       toast.success(response?.message, { duration: 1500 });
