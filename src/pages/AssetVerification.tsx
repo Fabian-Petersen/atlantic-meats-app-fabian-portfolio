@@ -136,9 +136,9 @@ export default function ScannerPage() {
         className={started ? "fixed inset-0 w-screen h-screen" : "hidden"}
       />
       {debug && (
-        <pre className="text-xs bg-black text-white p-2">
+        <div className="text-xs bg-black text-white p-2 flex w-full h-full">
           {JSON.stringify(debug, null, 2)}
-        </pre>
+        </div>
       )}
     </div>
   );
