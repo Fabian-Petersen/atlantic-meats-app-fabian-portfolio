@@ -2,11 +2,11 @@
 import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { toast } from "sonner";
-import axios from "axios";
 
 import { Html5QrcodeScanner, type Html5QrcodeResult } from "html5-qrcode";
 import { usePOST } from "@/utils/api";
 import { getCurrentPosition } from "@/utils/getCurrentPosition";
+import axios from "axios";
 // import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 
 type VerifyAssetResponse = {
@@ -27,66 +27,38 @@ export default function ScannerPage() {
     queryKey: ["assets"],
   });
 
-  // $ Handle error messages from the backend to display in the toast.
-  // $ getErrorMessage to also handle plain Error objects thrown below
   const getErrorMessage = (error: unknown): string => {
-    // Plain Error thrown from unwrapLambdaResponse
     if (error instanceof Error) return error.message;
 
     if (!axios.isAxiosError(error)) return "Unexpected error";
 
     const data = error.response?.data;
 
-    if (data?.message) return data.message;
-
-    if (data?.body) {
+    // Lambda proxy envelope: body is a JSON string
+    if (typeof data?.body === "string") {
       try {
-        return JSON.parse(data.body)?.message ?? "Asset not found";
+        const parsed = JSON.parse(data.body);
+        if (parsed?.message) return parsed.message;
       } catch {
-        return "Asset not found";
+        // fall through
       }
     }
 
+    // Direct message on the data object
+    if (data?.message) return data.message;
+
     return error.message || "Unknown error";
-  };
-
-  type LambdaEnvelope = {
-    statusCode?: number;
-    body?: string;
-  };
-
-  type VerifyAssetRaw = VerifyAssetResponse & LambdaEnvelope;
-  // Unwrap Lambda proxy envelope: { statusCode, body: '{"message":"..."}' }
-  const unwrapLambdaResponse = (
-    response: VerifyAssetRaw & LambdaEnvelope,
-  ): VerifyAssetResponse => {
-    // If Lambda leaked its envelope through (API GW proxy passthrough)
-    if (response?.statusCode && response.statusCode >= 400) {
-      const parsed =
-        typeof response.body === "string"
-          ? JSON.parse(response.body)
-          : response.body;
-      throw new Error(parsed?.message ?? `Error ${response.statusCode}`);
-    }
-
-    // If body is a nested JSON string (double-encoded)
-    if (typeof response.body === "string") {
-      return JSON.parse(response.body as string) as VerifyAssetResponse;
-    }
-
-    return response;
   };
 
   const handleVerify = async (value: string) => {
     try {
       const position = await getCurrentPosition();
 
-      const raw = (await postVerify({
+      const response = await postVerify({
         assetID: value,
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
-      })) as VerifyAssetRaw;
-      const response = unwrapLambdaResponse(raw);
+      });
       setDebug(response);
 
       toast.success(response?.message, { duration: 1500 });
