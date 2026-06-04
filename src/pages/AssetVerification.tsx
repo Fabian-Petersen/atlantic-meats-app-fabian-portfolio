@@ -7,7 +7,8 @@ import { Html5QrcodeScanner, type Html5QrcodeResult } from "html5-qrcode";
 import { usePOST } from "@/utils/api";
 import { getCurrentPosition } from "@/utils/getCurrentPosition";
 import axios from "axios";
-// import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
+import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
+import { useNavigate } from "react-router-dom";
 
 type VerifyAssetResponse = {
   message: string;
@@ -19,8 +20,12 @@ export default function ScannerPage() {
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
   // Temporary mobile debug state
   const [debug, setDebug] = useState<VerifyAssetResponse | null>(null);
+  const navigate = useNavigate();
 
-  const { mutateAsync: postVerify } = usePOST<unknown, VerifyAssetResponse>({
+  const { mutateAsync: postVerify, isPending } = usePOST<
+    unknown,
+    VerifyAssetResponse
+  >({
     id: barcode ?? "",
     resourcePath: "api/assets",
     action: "verify",
@@ -86,12 +91,14 @@ export default function ScannerPage() {
         .then(() => {
           setBarcode(decodedText);
           handleVerify(decodedText);
+          navigate("/assets/verification");
         })
         .catch(console.error);
     }
 
     function error(err: string) {
       console.log("Error:", err);
+      toast.error(err, { duration: 1500 });
     }
 
     scanner.render(success, error);
@@ -103,7 +110,7 @@ export default function ScannerPage() {
     };
   }, [started]); // runs when `started` flips to true
 
-  // if (isPending) return <PageLoadingSpinner />;
+  if (isPending) return <PageLoadingSpinner />;
 
   return (
     <div className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-white/20 dark:bg-gray-900">
