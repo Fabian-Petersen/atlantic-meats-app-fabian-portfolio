@@ -42,16 +42,11 @@ export const assetApiResponseSchema = assetRequestSchema
     verified_by: z.string(),
     last_verified_at: z.string(),
     next_verification_due: z.string(),
-    last_location: z.object({
+    verified_location: z.object({
       longitude: z.number(),
       latitude: z.number(),
     }),
-    verification_result: z.enum([
-      "verified",
-      "overdue",
-      "due soon",
-      "not found",
-    ]),
+    verify_status: z.enum(["verified", "overdue", "due soon", "not found"]),
   });
 
 export type AssetAPIResponse = z.infer<typeof assetApiResponseSchema>;
