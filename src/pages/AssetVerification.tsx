@@ -19,7 +19,7 @@ export default function ScannerPage() {
   const [barcode, setBarcode] = useState<string | null>(null);
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
   // Temporary mobile debug state
-  const [debug, setDebug] = useState<VerifyAssetResponse | null>(null);
+  // const [debug, setDebug] = useState<VerifyAssetResponse | null>(null);
   const navigate = useNavigate();
 
   const { mutateAsync: postVerify, isPending } = usePOST<
@@ -64,7 +64,7 @@ export default function ScannerPage() {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       });
-      setDebug(response);
+      // setDebug(response);
 
       toast.success(response?.message, { duration: 1500 });
     } catch (error) {
@@ -98,7 +98,6 @@ export default function ScannerPage() {
 
     function error(err: string) {
       console.log("Error:", err);
-      toast.error(err, { duration: 1500 });
     }
 
     scanner.render(success, error);
@@ -114,11 +113,11 @@ export default function ScannerPage() {
 
   return (
     <div className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-white/20 dark:bg-gray-900">
-      {debug && (
+      {/* {debug && (
         <div className="text-xs bg-black text-white p-2 absolute w-full h-full">
           {JSON.stringify(debug, null, 2)}
         </div>
-      )}
+      )} */}
       {/* Close button */}
 
       {started && (
