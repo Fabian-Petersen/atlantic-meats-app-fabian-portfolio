@@ -32,6 +32,7 @@ import {
   ArrowLeftRight,
   MapPin,
   Wrench,
+  ScanBarcode,
 } from "lucide-react";
 
 // $ ————— Feature Components ——————————————————————————————————————————————————————
@@ -128,7 +129,19 @@ function MobileAssetDetails({ item }: Props) {
         </p>
         {/* Edit action aligned right, matches header width of back button */}
         <div className="w-13 flex justify-end">
-          <UpdateAssetDialog />
+          <button
+            type="button"
+            aria-label="verify asset"
+            className={cn(
+              "flex gap-2 items-center text-sm py-1 px-2 rounded-full",
+              item.verify_status === "verified"
+                ? "text-emerald-700 dark:text-emerald-400"
+                : "text-red-500 animate-pulse",
+            )}
+            onClick={() => navigate("/assets/verification")}
+          >
+            <ScanBarcode className="size-6" />
+          </button>
         </div>
       </header>
 
@@ -239,7 +252,7 @@ function MobileAssetDetails({ item }: Props) {
               {/* Status banner */}
               <div
                 className={cn(
-                  "flex items-center gap-2 text-xs rounded-full px-3 py-1.5 self-start border",
+                  "flex items-center gap-2 text-xs rounded-full px-3 py-1.5 self-start w-fit",
                   item.verify_status === "verified"
                     ? "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800/40"
                     : "text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 border-amber-100 dark:border-amber-800/40",

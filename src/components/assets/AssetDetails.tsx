@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   MapPin,
   ShieldCheck,
   ClipboardList,
   ArrowLeftRight,
   User,
+  ScanBarcode,
 } from "lucide-react";
 
 import Separator from "@/components/dashboardSidebar/Seperator";
@@ -73,6 +74,7 @@ const ASSET_TAB_CONFIG: {
 
 function AssetDetails({ item }: Props) {
   const [activeTab, setActiveTab] = useState<AssetTab>("details");
+  const navigate = useNavigate();
 
   const maintenanceJobs = item.maintenanceHistory ?? [];
   const transfers = item.transferHistory ?? [];
@@ -115,25 +117,52 @@ function AssetDetails({ item }: Props) {
           </div>
 
           {/* Badges */}
-          <div className="flex flex-wrap gap-2 text-cxs capitalize pt-2">
-            {item.condition && (
+          <div className="flex flex-wrap gap-2 text-cxs capitalize pt-2 justify-between w-full">
+            <div className="flex items-center gap-2">
+              {item.condition && (
+                <Badge
+                  value={item.condition}
+                  styleMap={badgeStyles.families.condition}
+                />
+              )}
               <Badge
-                value={item.condition}
-                styleMap={badgeStyles.families.condition}
+                value={
+                  item.verify_status === "verified" ? "Verified" : "Unverified"
+                }
+                styleMap={badgeStyles.families.verification}
               />
-            )}
-            <Badge
-              value={
-                item.verify_status === "verified" ? "Verified" : "Unverified"
-              }
-              styleMap={badgeStyles.families.verification}
-            />
-            {item.business_unit && (
-              <Badge
-                value={item.business_unit}
-                styleMap={badgeStyles.families.business_unit}
-              />
-            )}
+              {item.business_unit && (
+                <Badge
+                  value={item.business_unit}
+                  styleMap={badgeStyles.families.business_unit}
+                />
+              )}
+            </div>
+            <div className="flex justify-end w-fit px-2">
+              <button
+                type="button"
+                aria-label="verify asset"
+                className={cn(
+                  "flex gap-2 items-center text-sm hover:cursor-pointer",
+                  item.verify_status === "verified"
+                    ? "text-emerald-700 dark:text-emerald-400"
+                    : "text-red-500 animate-pulse",
+                )}
+                onClick={() => navigate("/assets/verification")}
+              >
+                <div className="flex gap-2 items-center">
+                  <ScanBarcode
+                    className={cn(
+                      "size-6",
+                      item.verify_status === "verified"
+                        ? "text-emerald-700 dark:text-emerald-400"
+                        : "text-red-500",
+                    )}
+                  />
+                  <span>Verify Asset</span>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
 
