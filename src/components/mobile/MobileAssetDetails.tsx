@@ -46,8 +46,6 @@ import PersonRow from "../features/layout/PersonRow";
 import { formatDateTime } from "@/utils/formatDateTime";
 import type { AssetAPIResponse } from "@/schemas";
 
-import UpdateAssetDialog from "../modals/UpdateAssetDialog";
-
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 type AssetTab = "details" | "verification" | "maintenance" | "transfers";
