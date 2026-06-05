@@ -59,17 +59,6 @@ export type CreateAssetPayload = Omit<AssetRequestFormValues, "images"> & {
   }[];
 };
 
-// $ Schema for the Asset Table Menu
-export const assetTableRowSchema = assetRequestSchema
-  .omit({
-    business_unit: true,
-    images: true,
-  })
-  .extend({
-    id: z.string(),
-    createdAt: z.string(),
-  });
-
 export const assetHistoryItemSchema = z.object({
   // from requests table
   id: z.string(),
@@ -125,7 +114,7 @@ export const assetHistoryResponseSchema = z.object({
   ),
 });
 
-// $ Schema for the Asset Verification
+// $ Schema for the Asset Verification request to backend
 export const assetVerificationSchema = z.object({
   assetID: z.string(),
   latitude: z.number(),
@@ -133,18 +122,38 @@ export const assetVerificationSchema = z.object({
 });
 
 // $ Schema for the Asset Verification History API response
-export const assetAPIVerificationHistorySchema = z.object({
+export const assetVerificationHistorySchema = z.object({
   id: z.string(),
   assetID: z.string(),
   verified_by: z.string(),
-  verified_at: z.string(),
-  latitude: z.number(),
-  longitude: z.number(),
-  verification_result: z.enum(["verified", "overdue", "due soon", "not found"]),
+  last_verified_at: z.string(),
+  next_verification_due: z.string(),
+  verified_location: z.object({
+    longitude: z.number(),
+    latitude: z.number(),
+  }),
+  verify_status: z.enum([
+    "verified",
+    "overdue",
+    "due soon",
+    "not found",
+    "pending",
+  ]),
 });
 
+// $ Schema for the Asset Table Menu
+export const assetTableRowSchema = assetRequestSchema
+  .omit({
+    business_unit: true,
+    images: true,
+  })
+  .extend({
+    id: z.string(),
+    createdAt: z.string(),
+  });
+
 export type AssetAPIVerificationHistory = z.infer<
-  typeof assetAPIVerificationHistorySchema
+  typeof assetVerificationHistorySchema
 >;
 
 export const assetVerificationResponseSchema = z.object({

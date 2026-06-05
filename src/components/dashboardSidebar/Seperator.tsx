@@ -7,7 +7,7 @@ export default function Separator({
 }: Props) {
   return (
     <div
-      className={`mx-auto border-t dark:border-gray-100/20 border-gray-700/50 ${
+      className={`mx-auto border-t dark:border-gray-100/20 border-gray-500/50 ${
         className || ""
       }`}
       style={{ height, width }}

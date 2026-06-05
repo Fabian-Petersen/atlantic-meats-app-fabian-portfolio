@@ -36,7 +36,7 @@ export const ImageGallery = ({ images, className }: Props) => {
       <div
         className={`bg-white p-2 rounded-md dark:border-gray-700/50 dark:bg-[#1d2739] h-full`}
       >
-        <NoImagePlaceholder className="h-full min-h-100" />
+        <NoImagePlaceholder className="h-full" />
       </div>
     );
   }
@@ -111,7 +111,7 @@ export const ImageGallery = ({ images, className }: Props) => {
           </button>
         )}
 
-        <div className="grid grid-cols-4 gap-2 h-full w-full">
+        <div className="grid grid-cols-4 gap-2 h-full w-full py-0.5">
           {/* Visible thumbnails */}
           {visibleImages.map((img, index) => {
             const actualIndex = startIndex + index;
@@ -123,7 +123,7 @@ export const ImageGallery = ({ images, className }: Props) => {
                 onClick={() => setActiveIndex(actualIndex)}
                 className={`cursor-pointer bg-gray-200 rounded-md h-full w-full overflow-hidden transition-all duration-150 ${
                   actualIndex === activeIndex
-                    ? "ring-2 ring-primary ring-offset-1"
+                    ? "ring-1 ring-primary ring-offset-0"
                     : "opacity-70 hover:opacity-100"
                 }`}
               >

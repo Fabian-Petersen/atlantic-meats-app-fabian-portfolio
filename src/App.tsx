@@ -23,7 +23,7 @@ import JobActionPage from "./pages/JobActionPage";
 
 // $ Assets Pages
 import CreateAssetPage from "./pages/CreateAssetPage";
-import AssetsSingleItemPage from "./pages/AssetsSingleItemPage";
+import AssetItemPage from "./pages/AssetItemPage";
 
 // $ User Management Pages
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
@@ -103,7 +103,7 @@ function App() {
             />
             <Route path="/assets/list" element={<AssetsOverviewPage />} />
             {/* // $ Page to list an asset by id */}
-            <Route path="/assets/:id" element={<AssetsSingleItemPage />} />
+            <Route path="/assets/:id" element={<AssetItemPage />} />
             <Route
               path="/jobs/:id/pending-approval"
               element={<JobPendingItemPage />}

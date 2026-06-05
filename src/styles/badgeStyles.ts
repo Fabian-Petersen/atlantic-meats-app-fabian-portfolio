@@ -69,8 +69,8 @@ export const badgeStyles = {
       ),
 
       new: cn(
-        "text-blue-600 bg-blue-300/30 border-blue-300",
-        "dark:border-blue-500 dark:bg-blue-300/20 dark:text-blue-300",
+        "text-sky-600 bg-sky-300/30 border-sky-300",
+        "dark:border-sky-500 dark:bg-sky-300/20 dark:text-sky-300",
       ),
 
       poor: cn(
@@ -133,6 +133,35 @@ export const badgeStyles = {
       overdue: cn(
         "text-red-600 bg-red-300/30 border-red-300",
         "dark:border-red-500 dark:bg-red-300/20 dark:text-red-300",
+      ),
+      unverified: cn(
+        "text-red-600 bg-red-300/30 border-red-300",
+        "dark:border-red-500 dark:bg-red-300/20 dark:text-red-300",
+      ),
+      "not found": cn(
+        "text-gray-800 bg-gray-800/30 border-gray-300",
+        "dark:border-gray-500 dark:bg-gray-300/20 dark:text-gray-300",
+      ),
+    },
+    business_unit: {
+      retail: cn(
+        "text-indigo-600 bg-indigo-300/30 border-indigo-300",
+        "dark:border-indigo-500 dark:bg-indigo-300/20 dark:text-indigo-300",
+      ),
+
+      distribution: cn(
+        "text-cyan-600 bg-cyan-300/30 border-cyan-300",
+        "dark:border-cyan-500 dark:bg-cyan-300/20 dark:text-cyan-300",
+      ),
+
+      central_services: cn(
+        "text-purple-600 bg-purple-300/30 border-purple-300",
+        "dark:border-purple-500 dark:bg-purple-300/20 dark:text-purple-300",
+      ),
+
+      maintenance: cn(
+        "text-amber-600 bg-amber-300/30 border-amber-300",
+        "dark:border-amber-500 dark:bg-amber-300/20 dark:text-amber-300",
       ),
     },
   },

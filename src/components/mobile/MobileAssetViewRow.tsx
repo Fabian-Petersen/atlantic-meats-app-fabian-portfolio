@@ -36,7 +36,7 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
 
   return (
     <div
-      className="hover:cursor-pointer dark:border rounded-md p-2 mb-2 bg-gray-100 dark:bg-(--bg-primary_dark)"
+      className="hover:cursor-pointer dark:border rounded-md p-2 mb-2 bg-gray-100 dark:bg-(--bg-primary_dark) dark:border-gray-700"
       onClick={onToggle}
     >
       <div className="flex justify-between items-start dark:text-gray-400">
@@ -59,7 +59,7 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
             </button>
 
             {menuOpen && (
-              <div className="absolute right-0 top-8 z-10 min-w-[150px] rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm overflow-hidden">
+              <div className="absolute right-0 top-8 z-10 min-w-37.5 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm overflow-hidden">
                 <button
                   type="button"
                   className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-left text-green-700 dark:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700"

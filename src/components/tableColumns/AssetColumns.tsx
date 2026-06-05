@@ -42,6 +42,10 @@ export const getAssetColumns = (
   {
     accessorKey: "area",
     header: "Area",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
   },
   {
     accessorKey: "equipment",
@@ -54,6 +58,47 @@ export const getAssetColumns = (
     size: 120,
     minSize: 100,
     maxSize: 140,
+  },
+  {
+    accessorKey: "last_verified_at",
+    header: "Last Verified",
+    size: 120,
+    minSize: 100,
+    maxSize: 140,
+  },
+  {
+    accessorKey: "next_verification_due",
+    header: "Verification Due",
+    size: 120,
+    minSize: 100,
+    maxSize: 140,
+  },
+  {
+    accessorKey: "verified_by",
+    header: "verified _by",
+    size: 120,
+    minSize: 100,
+    maxSize: 140,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
+    accessorKey: "verify_status",
+    header: "Verify Status",
+    size: 120,
+    minSize: 100,
+    maxSize: 140,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return (
+        <Badge
+          value={value as EquipmentCondition}
+          styleMap={badgeStyles.families.verification}
+        />
+      );
+    },
   },
   {
     accessorKey: "condition",
