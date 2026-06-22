@@ -111,8 +111,10 @@ const JobsPendingListPage = () => {
         ) : (
           <div className="grid gap-2">
             <FormHeading
-              className="mx-auto dark:text-gray-100"
+              className={cn(sharedStyles.headingForm, "px-0")}
               heading="Jobs - Pending Requests"
+              redirect={true}
+              redirectTo="/dashboard"
             />
             <MobileJobsPendingContainer
               className="flex md:hidden"

@@ -5,6 +5,7 @@ export const stores: string[] = [
   "Wynberg",
   "Maitland",
   "Golden Acre",
+  "Middestad Mall",
 ];
 
 export const allLocations: string[] = [
@@ -16,6 +17,7 @@ export const allLocations: string[] = [
   "Golden Acre",
   "Central Services",
   "Distribution Centre",
+  "Middestad Mall",
 ];
 
 // export const locations = {
@@ -101,5 +103,15 @@ export const locations = {
       latitude: "",
     },
     landline: "",
+  },
+  "middestad mall": {
+    code: "MSM",
+    area: "bellville",
+    address: "",
+    position: {
+      longitude: "-33.903290529672695",
+      latitude: "18.630155191399062",
+    },
+    landline: "0210110183",
   },
 };

@@ -136,7 +136,7 @@ export const sharedStyles = {
     "text-xs py-3 px-2 w-full rounded-md outline-none min-h-10",
 
     // base border & text (light)
-    "border border-gray-600 text-gray-700",
+    "border border-gray-300 dark:border-gray-600/80 text-gray-700",
 
     // dark mode base
     "dark:text-(--clr-textDark)",

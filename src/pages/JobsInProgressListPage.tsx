@@ -201,8 +201,10 @@ const JobsInProgressListPage = () => {
         ) : (
           <div className="grid gap-2">
             <FormHeading
-              className="mx-auto dark:text-gray-100"
+              className={cn(sharedStyles.headingForm, "px-0")}
               heading="Jobs - In Progress"
+              redirect={true}
+              redirectTo="/dashboard"
             />
             <MobileJobsInProgressContainer
               className="flex md:hidden"
