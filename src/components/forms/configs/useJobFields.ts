@@ -71,7 +71,7 @@ export const useJobFields = (
       name: "description",
       label: "Enter a job description",
       rows: 1,
-      className: "lg:col-span-2",
+      className: "md:col-span-2",
       required: true,
     },
     {

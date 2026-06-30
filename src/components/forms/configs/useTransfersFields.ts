@@ -46,6 +46,14 @@ export const useTransfersFields = () => {
   // $ ─── Field Config ─────────────────────────────────
   const fields: DynamicFormField<TransferRequestFormValues>[] = [
     {
+      fieldType: "textarea",
+      name: "transferReason",
+      required: true,
+      rows: 1,
+      className: "md:col-span-2",
+      label: "Reason for Transfer",
+    },
+    {
       fieldType: "select",
       name: "business_unit",
       label: "Business Unit",

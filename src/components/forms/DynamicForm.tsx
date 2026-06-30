@@ -273,7 +273,9 @@ function DynamicForm<T extends FieldValues>({
       />
       <form
         className={cn(sharedStyles.form, className)}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit, (validationErrors) => {
+          console.error("Form validation failed:", validationErrors);
+        })}
         noValidate
       >
         <div className={cn(sharedStyles.formParent, gridClassName)}>

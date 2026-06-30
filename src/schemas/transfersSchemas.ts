@@ -19,7 +19,7 @@ export const transferRequestSchema = assetRequestSchema
       .string()
       .min(1, { message: "Please enter expected date for transfer" }),
     transferReason: z.string().min(1, {
-      message: "Give a brief description reason for transfer request",
+      message: "Give a brief reason for transfer request",
     }),
     // hasBarcode: z.string().optional(),
     // description: z.string().optional(),

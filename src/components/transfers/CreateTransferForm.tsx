@@ -55,9 +55,9 @@ const CreateTransferForm = () => {
       transferRequestSchema,
     ) as unknown as Resolver<TransferRequestFormValues>,
     defaultValues: {
-      business_unit: "",
-      area: "",
-      equipment: "",
+      // business_unit: "",
+      // area: "",
+      // equipment: "",
       assetID: "",
       locationFrom: "",
       locationTo: "",

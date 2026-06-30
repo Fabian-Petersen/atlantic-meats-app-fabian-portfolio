@@ -244,7 +244,7 @@ export const useFormSubmit = <TForm extends WithOptionalImages, TPayload>({
   });
 
   const submit = async (formValues: TForm): Promise<void> => {
-    console.log("formvalues:", "form submitted");
+    console.log("formvalues:", formValues);
     try {
       const rawFiles: File[] = formValues.images ?? [];
       const rawInvoices: File[] = formValues.invoices ?? [];
