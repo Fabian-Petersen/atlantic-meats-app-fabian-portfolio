@@ -44,6 +44,10 @@ import UsersListPage from "./pages/UsersListPage";
 import { useAuth } from "./auth/useAuth";
 import CreateUserPage from "./pages/CreateUserPage";
 
+// $ Transfer Asset Pages
+import TransfersListPage from "./pages/TransfersListPage";
+import CreateTransferPage from "./pages/CreateTransferPage";
+
 // $ Stock Pages
 import CreateStockPage from "./pages/stocks/CreateStockPage";
 import StocksListPage from "./pages/stocks/StocksListPage";
@@ -94,6 +98,13 @@ function App() {
             />
             {/* <Route path="/stocks/:id/stock-item" element={<StockItemPage />} /> */}
             <Route path="/stocks/list" element={<StocksListPage />} />
+
+            {/* // $ Transfer of an Asset Pages  */}
+            <Route path="/transfers/list" element={<TransfersListPage />} />
+            <Route
+              path="/transfers/create-new-transfer"
+              element={<CreateTransferPage />}
+            />
           </Route>
           {/* // % Admin only Routes */}
           <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>

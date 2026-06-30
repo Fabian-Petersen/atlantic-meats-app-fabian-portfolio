@@ -81,9 +81,9 @@ export const assetLinks: NavlinkProps[] = [
     allowedGroups: ["admin"],
   },
   {
-    name: "transfer request",
+    name: "transfer requests",
     icon: Truck,
-    url: "#",
+    url: "/transfers/list",
     allowedGroups: ["admin", "user", "technician", "manager"],
   },
   {

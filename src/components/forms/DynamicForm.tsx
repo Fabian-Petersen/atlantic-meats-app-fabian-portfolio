@@ -18,6 +18,7 @@ import FormRowInput from "../../../customComponents/FormRowInput";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
 import TextAreaInput from "../../../customComponents/TextAreaInput";
 import FileInput from "../../../customComponents/FileInput";
+import FormRowRadio from "../../../customComponents/FormRowRadio";
 import FormActionButtons from "../features/FormActionButtons";
 import { sharedStyles } from "@/styles/shared";
 import { FormSkeleton } from "./FormSkeleton";
@@ -74,6 +75,12 @@ export type FileField<T extends FieldValues> = BaseField<T> & {
   multiple?: boolean;
 };
 
+export type RadioField<T extends FieldValues> = BaseField<T> & {
+  fieldType: "radio";
+  options: { label: string; value: string }[];
+  orientation?: "row" | "column";
+};
+
 export type ControllerField<T extends FieldValues> = BaseField<T> & {
   fieldType: "controller";
   render: (props: {
@@ -86,6 +93,7 @@ export type DynamicFormField<T extends FieldValues> =
   | InputField<T>
   | SelectField<T>
   | TextAreaField<T>
+  | RadioField<T>
   | FileField<T>
   | ControllerField<T>;
 
@@ -224,6 +232,21 @@ function DynamicForm<T extends FieldValues>({
                 fieldState,
               }) as React.ReactElement
             }
+          />
+        );
+
+      case "radio":
+        return (
+          <FormRowRadio
+            key={field.name}
+            name={field.name}
+            label={field.label}
+            register={register}
+            options={field.options}
+            error={fieldError(field.name)}
+            className={field.className}
+            required={field.required}
+            orientation={field.orientation}
           />
         );
 

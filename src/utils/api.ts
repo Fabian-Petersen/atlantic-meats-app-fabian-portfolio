@@ -49,6 +49,17 @@ export type Resource =
   | "api/admin/confirm-user-signup" // handle the user status update after initial login. Trigger PostConfirmationTrigger lambda
   | `api/admin/resend-temp-password/${string}`
   | `api/admin/${string}`
+  // $ Transfers ROUTES
+  | "api/transfers" // "POST: Transfer request" | "GET: All transfers"
+  | `api/transfers/${string}` // "GET: Transfer request"
+  | `api/transfers/${string}/approve` // "POST: status === `approve`
+  | `api/transfers/${string}/reject` // "POST: status === `reject`
+  | `api/transfers/${string}/in-transit` // "POST: status === `in-transit`
+  | `api/transfers/${string}/receipt` // "POST: status === `receipt`
+  | `api/transfers/${string}/cancel` // "POST: status === `cancel`
+  | `api/transfers/metrics` // "GET: Dashboard metrics for transfer requests"
+  | `api/transfers/my-transfers` // "GET: Transfers by user sub"
+
   // $ Stocks ROUTES
   | "api/stocks/create-new-stock" // "stocks-list" GET all stocks
   | `api/stocks/${string}` // GET, PUT, DELETE a single stock by id
@@ -74,7 +85,8 @@ export type RedirectResource =
   | "users/profile" // Page showing details of a user meta data
   | "stocks/create-new-stock" // Page with the form to create a new stock item
   | "stocks/list" // Page showing all stock items
-  | `stocks/${string}`; // Page showing the details of a stock item by id
+  | `stocks/${string}` // Page showing the details of a stock item by id
+  | "transfers/list"; // List of All transfer requests by group (admin: All, users: CreatedBySub)
 
 // $ Combine the types into a union type for the generic functions
 export type RequestType =
