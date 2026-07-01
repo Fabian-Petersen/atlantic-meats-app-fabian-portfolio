@@ -6,7 +6,6 @@ import { assetRequestSchema } from "./assetSchemas";
 export const transferRequestSchema = assetRequestSchema
   .pick({
     assetID: true,
-    business_unit: true,
     area: true,
     images: true,
     equipment: true,

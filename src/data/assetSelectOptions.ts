@@ -15,7 +15,7 @@ export const location: string[] = [
 ];
 
 export const areaOptions: string[] = [
-  "Processing",
+  "Production",
   "Point of Sale",
   "Cold Storage",
   "Handling",
@@ -47,7 +47,7 @@ export const CeateAssetFormOptionsData = {
   business_unit: {
     retail: {
       category: {
-        processing: [
+        production: [
           "Band Saw",
           "Vacuum Sausage Filler",
           "Piston Sausage Filler",

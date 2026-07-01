@@ -112,7 +112,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
             Icon ? "left-8 peer-focus:left-3 peer-placeholder-shown:top-0" : "",
           )}
         >
-          <span className="flex items-baseline gap-1">
+          <span className="flex items-baseline gap-1 bg-white dark:bg-(--bg-primary_dark)">
             <span>{label}</span>
             {required && <span className="text-red-500">*</span>}
           </span>

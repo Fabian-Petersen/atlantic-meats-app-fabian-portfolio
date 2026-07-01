@@ -208,6 +208,7 @@ function DynamicForm<T extends FieldValues>({
             error={fieldError(field.name)}
             className={field.className}
             rows={field.rows}
+            required={field.required}
           />
         );
 

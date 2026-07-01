@@ -7,6 +7,7 @@ import {
 import type { DynamicFormField } from "../DynamicForm";
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
 import { impact, priority, type } from "@/data/maintenanceRequestFormData";
+import { useAssetFilterReset } from "@/customHooks/useAssetFilterReset";
 
 // $ ——— Hook ─────────────────────────────────────────────────────
 export const useJobFields = (
@@ -35,15 +36,36 @@ export const useJobFields = (
   });
 
   // $ ─── Dynamic Asset Filters ─────────────────────────────────────
-  const { equipmentOptions, assetIdOptions, locationOptions, areaOptions } =
-    useAssetFilters({
-      assets: assetsArray || [], // ✅ default to empty array if assets is undefined
-      location: selectedLocation,
-      area: selectedArea,
-      equipment: selectedEquipment,
-      assetID: selectedAssetID,
-      setValue: form.setValue,
-    });
+  const {
+    equipmentOptions,
+    assetIdOptions,
+    locationOptions,
+    areaOptions,
+    isFieldValid,
+  } = useAssetFilters({
+    assets: assetsArray || [], // ✅ default to empty array if assets is undefined
+    location: selectedLocation,
+    area: selectedArea,
+    equipment: selectedEquipment,
+    assetID: selectedAssetID,
+  });
+
+  /* ------------------ RESET LOGIC ------------------ */
+  useAssetFilterReset({
+    resetArea: () => {
+      form.setValue("area", "");
+      form.setValue("equipment", "");
+      form.setValue("assetID", "");
+    },
+    resetEquipment: () => {
+      form.setValue("equipment", "");
+      form.setValue("assetID", "");
+    },
+    resetAssetID: () => {
+      form.setValue("assetID", "");
+    },
+    validity: isFieldValid,
+  });
 
   // $ ─── Helpers ──────────────────────────────────────
   /**

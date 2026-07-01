@@ -11,7 +11,9 @@ export const sharedStyles = {
     "custom-scrollbar",
   ),
   pageContent: cn(
-    "md:bg-(--pageLight) flex flex-col gap-4 w-full lg:max-w-3xl h-auto md:rounded-xl md:shadow-lg md:p-2 p-1 md:dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) md:dark:border-gray-700/50 md:dark:border md:border md:border-gray-200/70",
+    "flex flex-col gap-4 w-full lg:max-w-3xl h-auto md:rounded-xl md:shadow-lg md:p-6 p-1",
+    "md:border md:border-gray-200/70 bg-white",
+    "md:dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) md:dark:border-gray-700/50 md:dark:border",
   ),
 
   /* //$ ——— Dashboards ————————————————————————————————————————————————————————— */
@@ -127,7 +129,7 @@ export const sharedStyles = {
 
   /* //$ ——— Forms ——————————————————————————————————————————————————————————— */
   form: cn(
-    "flex flex-col md:rounded-lg md:w-full text-(--clr-textLight) md:dark:bg-(--bg-primary_dark)",
+    "flex flex-col md:rounded-lg md:w-full text-(--clr-textLight) bg-white md:dark:bg-(--bg-primary_dark)",
   ),
   formParent: cn("grid grid-cols-1 md:grid-cols-2 gap-4 w-full md:py-2"),
 

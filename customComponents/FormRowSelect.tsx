@@ -118,8 +118,10 @@ function FormRowSelect<T extends FieldValues>({
           htmlFor={String(name)}
           className={cn(labelStyles, sharedStyles.formLabel)}
         >
-          {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
+          <span className="flex items-baseline gap-1 bg-white dark:bg-(--bg-primary_dark)">
+            <span>{label}</span>
+            {required && <span className="text-red-500">*</span>}
+          </span>
         </label>
       )}
 

@@ -1,22 +1,23 @@
 // $ This hook is used to filter the assets based on the selected location, equipment and assetID in the maintenance request form. It returns the options for the select inputs and a loading state.
 
-import { useMemo, useEffect } from "react";
-// import { useGetAssetList } from "./useGetAssetList";
-import type { UseFormSetValue } from "react-hook-form";
-import type {
-  AssetRequestFormValues,
-  // AssetsAPIResponse,
-  JobRequestFormValues,
-} from "@/schemas";
+import { useMemo } from "react";
+// import type { UseFormSetValue } from "react-hook-form";
+import type { AssetRequestFormValues } from "@/schemas";
 
-interface Params {
+export type AssetFilterFormValues = {
+  location: string;
+  area: string;
+  equipment: string;
+  assetID: string;
+};
+type Params = {
   location?: string;
   assets: AssetRequestFormValues[];
   area?: string;
   equipment?: string;
   assetID?: string;
-  setValue: UseFormSetValue<JobRequestFormValues>;
-}
+  // setValue: UseFormSetValue<AssetFilterFormValues>;
+};
 
 const normalize = (value?: string) => value?.trim().toLowerCase() ?? "";
 
@@ -112,7 +113,7 @@ export const useAssetFilters = ({
   area,
   equipment,
   assetID,
-  setValue,
+  // setValue,
 }: Params) => {
   /* ------------------ LOCATION OPTIONS ------------------ */
   const locationOptions = useMemo(() => {
@@ -177,39 +178,38 @@ export const useAssetFilters = ({
       });
   }, [assetsByEquipment]);
 
-  // const assetIdOptions = useMemo(() => {
-  //   return assetsByEquipment.map((a) => ({
-  //     label: a.assetID,
-  //     value: a.assetID,
-  //   }));
-  // }, [assetsByEquipment]);
-
   /* ------------------ RESET LOGIC ------------------ */
-  useEffect(() => {
-    if (area && !areaOptions.some((o) => o.value === area)) {
-      setValue("area", "");
-      setValue("equipment", "");
-      setValue("assetID", "");
-    }
-  }, [area, areaOptions, setValue]);
+  // useEffect(() => {
+  //   if (area && !areaOptions.some((o) => o.value === area)) {
+  //     setValue("area", "");
+  //     setValue("equipment", "");
+  //     setValue("assetID", "");
+  //   }
+  // }, [area, areaOptions, setValue]);
 
-  useEffect(() => {
-    if (equipment && !equipmentOptions.some((o) => o.value === equipment)) {
-      setValue("equipment", "");
-      setValue("assetID", "");
-    }
-  }, [equipment, equipmentOptions, setValue]);
+  // useEffect(() => {
+  //   if (equipment && !equipmentOptions.some((o) => o.value === equipment)) {
+  //     setValue("equipment", "");
+  //     setValue("assetID", "");
+  //   }
+  // }, [equipment, equipmentOptions, setValue]);
 
-  useEffect(() => {
-    if (assetID && !assetIdOptions?.some((o) => o.value === assetID)) {
-      setValue("assetID", "");
-    }
-  }, [assetID, assetIdOptions, setValue]);
+  // useEffect(() => {
+  //   if (assetID && !assetIdOptions?.some((o) => o.value === assetID)) {
+  //     setValue("assetID", "");
+  //   }
+  // }, [assetID, assetIdOptions, setValue]);
 
   return {
     locationOptions,
     areaOptions,
     equipmentOptions,
     assetIdOptions,
+    isFieldValid: {
+      area: !area || areaOptions.some((o) => o.value === area),
+      equipment:
+        !equipment || equipmentOptions.some((o) => o.value === equipment),
+      assetID: !assetID || assetIdOptions.some((o) => o.value === assetID),
+    },
   };
 };
