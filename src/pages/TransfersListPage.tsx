@@ -4,7 +4,7 @@
 import FormHeading from "../../customComponents/FormHeading";
 import { useGetAll } from "@/utils/api";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-import { MobileAssetsOverviewTable } from "@/components/mobile/MolbileAssetsOverviewTable";
+// import { MobileAssetsOverviewTable } from "@/components/mobile/MolbileAssetsOverviewTable";
 
 import { useNavigate } from "react-router-dom";
 
@@ -19,26 +19,28 @@ import {
   type PaginationState,
 } from "@tanstack/react-table";
 
-import { getAssetColumns } from "../components/tableColumns/AssetColumns";
 import useGlobalContext from "@/context/useGlobalContext";
-import { useState, useMemo } from "react";
-import type { AssetAPIResponse, AssetTableRow } from "@/schemas";
+import { useState } from "react";
+import type { TransferResponseValues } from "@/schemas";
 // import { Error } from "@/components/features/Error";
 import { TableGeneric } from "@/components/features/TableGeneric";
 import { SearchInput } from "@/components/features/SearchInput";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
+import { getTransferColumns } from "@/components/tableColumns/TransferColumns";
 
 const TransfersListPage = () => {
   const navigate = useNavigate();
-  const { data, isPending, isError } = useGetAll<AssetAPIResponse[]>({
-    resourcePath: "api/assets",
-    queryKey: ["assets", "list"],
+  const { data, isPending, isError } = useGetAll<TransferResponseValues[]>({
+    resourcePath: "api/transfers",
+    queryKey: ["transfers", "transfers-list"],
   });
 
+  console.log("TransfersListPage data:", data);
+
   const [sorting, setSorting] = useState<SortingState>([
-    { id: "createdAt", desc: true },
+    { id: "transferCreated", desc: true },
   ]);
 
   const [globalFilter, setGlobalFilter] = useState("");
@@ -52,22 +54,30 @@ const TransfersListPage = () => {
     useGlobalContext();
 
   // $ Map through the data returned to match the TableRow Data Schema
-  const rows: AssetTableRow[] = useMemo(
-    () =>
-      (data ?? []).map((asset) => ({
-        id: asset.id,
-        createdAt: asset.createdAt,
-        location: asset.location,
-        area: asset.area,
-        equipment: asset.equipment,
-        assetID: asset.assetID,
-        serialNumber: asset.serialNumber,
-        condition: asset.condition,
-      })),
-    [data],
-  );
+  // const rows: TransferResponseValues[] = useMemo(() =>
+  //   (data ?? []).map(
+  //     (item) => ({
+  //       assetID: item.assetID,
+  //       area: item.area,
+  //       equipment: item.equipment,
+  //       locationFrom: item.locationFrom,
+  //       locationTo: item.locationTo,
+  //       description: item.description,
+  //       expectedTransferDate: item.expectedTransferDate,
+  //       transferReason: item.transferReason,
+  //       id: item.id,
+  //       transferCreated: item.transferCreated,
+  //       status: item.status,
+  //       requested_by: item.requested_by,
+  //       requestor_name: item.requestor_name,
+  //       requestor_email: item.requestor_email,
+  //       requestor_sub: item.requestor_sub,
+  //     }),
+  //     [data],
+  //   ),
+  // );
 
-  const columns = getAssetColumns(
+  const columns = getTransferColumns(
     setShowUpdateAssetDialog,
     setSelectedRowId,
     openDeleteDialog,
@@ -75,7 +85,7 @@ const TransfersListPage = () => {
   );
   // $ This data is passed into the mobile component
   const table = useReactTable({
-    data: rows ?? [],
+    data: data ?? [],
     columns: columns,
     columnResizeMode: "onChange",
     state: { sorting, pagination, globalFilter },
@@ -132,10 +142,10 @@ const TransfersListPage = () => {
               redirect={true}
               redirectTo="/dashboard"
             />
-            <MobileAssetsOverviewTable
+            {/* <MobileAssetsOverviewTable
               className="flex lg:hidden"
               data={table.getRowModel().rows}
-            />
+            /> */}
           </div>
         )}
       </div>

@@ -14,6 +14,7 @@ export const transferRequestSchema = assetRequestSchema
     assetID: z.string().optional(), // override assetID to make it optional
     locationFrom: z.string().min(1, { message: "Please select a location" }),
     locationTo: z.string().min(1, { message: "Please select a location" }),
+    description: z.string().optional(),
     expectedTransferDate: z
       .string()
       .min(1, { message: "Please enter expected date for transfer" }),
@@ -63,4 +64,19 @@ export const transferRequestSchema = assetRequestSchema
     // }
   });
 
+export const transferResponseSchema = transferRequestSchema
+  // .omit({
+  //   images: true, // Omit images from the response schema
+  // })
+  .extend({
+    id: z.string(),
+    transferCreated: z.string(),
+    status: z.string(),
+    requested_by: z.string(),
+    requestor_name: z.string(),
+    requestor_email: z.string(),
+    requestor_sub: z.string(),
+  });
+
 export type TransferRequestFormValues = z.infer<typeof transferRequestSchema>;
+export type TransferResponseValues = z.infer<typeof transferResponseSchema>;

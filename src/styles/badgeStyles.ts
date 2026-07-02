@@ -164,5 +164,33 @@ export const badgeStyles = {
         "dark:border-amber-500 dark:bg-amber-300/20 dark:text-amber-300",
       ),
     },
+    transfer_status: {
+      receipt: cn(
+        "text-green-600 bg-green-300/30 border-green-300",
+        "dark:border-green-500 dark:bg-green-300/20 dark:text-green-300",
+      ),
+
+      cancelled: cn(
+        "text-orange-600 bg-orange-300/30 border-orange-300",
+        "dark:border-orange-500 dark:bg-orange-300/20 dark:text-orange-300",
+      ),
+
+      pending: cn(
+        "text-blue-600 bg-blue-300/30 border-blue-300",
+        "dark:border-blue-500 dark:bg-blue-300/20 dark:text-blue-300",
+      ),
+      rejected: cn(
+        "text-red-600 bg-red-300/30 border-red-300",
+        "dark:border-red-500 dark:bg-red-300/20 dark:text-red-300",
+      ),
+      in_transit: cn(
+        "text-red-600 bg-red-300/30 border-red-300",
+        "dark:border-red-500 dark:bg-red-300/20 dark:text-red-300",
+      ),
+      approved: cn(
+        "text-gray-800 bg-gray-800/30 border-gray-300",
+        "dark:border-gray-500 dark:bg-gray-300/20 dark:text-gray-300",
+      ),
+    },
   },
 };

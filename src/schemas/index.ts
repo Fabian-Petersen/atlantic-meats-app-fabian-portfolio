@@ -13,7 +13,10 @@ import { commentRequestSchema, commentResponseSchema } from "./commentSchemas";
 import { usersResponseSchema, usersRequestSchema } from "./usersSchema";
 import { stockRequestSchema } from "./stockSchemas";
 // % Import Transfer Schemas
-import { transferRequestSchema } from "./transfersSchemas";
+import {
+  transferRequestSchema,
+  transferResponseSchema,
+} from "./transfersSchemas";
 
 // #  Export Schemas
 export {
@@ -31,6 +34,7 @@ export {
   usersRequestSchema,
   stockRequestSchema,
   transferRequestSchema,
+  transferResponseSchema,
 };
 
 // ! Types
@@ -96,7 +100,10 @@ import type {
 import type { StockAPIResponse, StockRequestFormValues } from "./stockSchemas";
 
 // % Transfers Types
-import type { TransferRequestFormValues } from "./transfersSchemas";
+import type {
+  TransferRequestFormValues,
+  TransferResponseValues,
+} from "./transfersSchemas";
 
 export type {
   // Auth Types
@@ -141,6 +148,7 @@ export type {
   UserUpdateRequest,
   // Transfers
   TransferRequestFormValues,
+  TransferResponseValues,
   // Stock
   StockRequestFormValues,
   StockAPIResponse,
