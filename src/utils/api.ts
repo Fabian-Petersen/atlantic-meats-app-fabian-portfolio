@@ -52,6 +52,7 @@ export type Resource =
   // $ Transfers ROUTES
   | "api/transfers" // "POST: Transfer request" | "GET: All transfers"
   | `api/transfers/${string}` // "GET: Transfer request"
+  | "api/transfers/requests" // "POST: Job request" | "GET: All jobs enum["pending", "approved",
   | `api/transfers/${string}/approve` // "POST: status === `approve`
   | `api/transfers/${string}/reject` // "POST: status === `reject`
   | `api/transfers/${string}/in-transit` // "POST: status === `in-transit`

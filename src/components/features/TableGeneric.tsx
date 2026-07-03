@@ -208,6 +208,7 @@ export function TableGeneric<T extends { id: string }>({
                       key={row.id}
                       onClick={() => {
                         setSelectedRowId(row.original.id);
+                        console.log("row.original.id:", row.original.id);
                         navigate(
                           `/${rowPath}/${row.original.id}${action ? `/${action}` : ""}`,
                         );

@@ -53,6 +53,8 @@ import CreateStockPage from "./pages/stocks/CreateStockPage";
 import StocksListPage from "./pages/stocks/StocksListPage";
 import AssetHistoryPage from "./pages/AssetHistoryPage";
 import AssetVerification from "./pages/AssetVerification";
+import TransferPendingItemPage from "./pages/transfers/TransferPendingItemPage";
+import TransferPendingListPage from "./pages/transfers/TransfersPendingListPage";
 
 function App() {
   const { loading } = useAuth();
@@ -112,12 +114,20 @@ function App() {
               path="/jobs/pending-approval"
               element={<JobsPendingListPage />}
             />
+            <Route
+              path="/transfers/pending-approval"
+              element={<TransferPendingListPage />}
+            />
             <Route path="/assets/list" element={<AssetsOverviewPage />} />
             {/* // $ Page to list an asset by id */}
             <Route path="/assets/:id" element={<AssetItemPage />} />
             <Route
               path="/jobs/:id/pending-approval"
               element={<JobPendingItemPage />}
+            />
+            <Route
+              path="/transfers/:id/pending-approval"
+              element={<TransferPendingItemPage />}
             />
             <Route
               path="/assets/create-new-asset"

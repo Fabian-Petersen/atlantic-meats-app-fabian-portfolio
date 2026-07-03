@@ -15,7 +15,7 @@ export const transferRequestSchema = assetRequestSchema
     locationFrom: z.string().min(1, { message: "Please select a location" }),
     locationTo: z.string().min(1, { message: "Please select a location" }),
     description: z.string().optional(),
-    expectedTransferDate: z
+    transferDate: z
       .string()
       .min(1, { message: "Please enter expected date for transfer" }),
     transferReason: z.string().min(1, {
@@ -33,7 +33,7 @@ export const transferRequestSchema = assetRequestSchema
       });
     }
 
-    const selectedDate = new Date(data.expectedTransferDate);
+    const selectedDate = new Date(data.transferDate);
 
     // Set today's time to midnight so only the date is compared
     const today = new Date();
@@ -42,8 +42,8 @@ export const transferRequestSchema = assetRequestSchema
     if (selectedDate < today) {
       ctx.addIssue({
         code: "custom",
-        path: ["expectedTransferDate"],
-        message: "The expected transfer date cannot be in the past.",
+        path: ["transferDate"],
+        message: "The transfer date cannot be in the past.",
       });
     }
 

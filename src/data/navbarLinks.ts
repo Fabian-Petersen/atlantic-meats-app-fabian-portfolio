@@ -15,6 +15,7 @@ import {
   Hourglass,
   FileClock,
   List,
+  ArchiveX,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { UserGroup } from "@/schemas/usersSchema";
@@ -81,12 +82,6 @@ export const assetLinks: NavlinkProps[] = [
     allowedGroups: ["admin"],
   },
   {
-    name: "transfer requests",
-    icon: Truck,
-    url: "/transfers/list",
-    allowedGroups: ["admin", "user", "technician", "manager"],
-  },
-  {
     name: "assets register",
     icon: Library,
     url: "/assets/list", // frontend routes only, GET: /assets for backend
@@ -97,6 +92,62 @@ export const assetLinks: NavlinkProps[] = [
     icon: Library,
     url: "/assets/verification", // frontend routes only, GET: /assets for backend
     allowedGroups: ["admin", "manager"],
+  },
+] as const;
+
+export const transferLinks: NavlinkProps[] = [
+  {
+    name: "create transfer",
+    icon: Truck,
+    url: "/transfers/create-new-transfer",
+    allowedGroups: ["admin", "user", "technician", "manager"],
+  },
+  {
+    name: "pending approval",
+    icon: Hourglass,
+    url: "/transfers/pending-approval",
+    allowedGroups: ["admin", "user", "technician", "manager"],
+  },
+  {
+    name: "open transfers",
+    icon: FileClock,
+    url: "/transfers/in-progress",
+    allowedGroups: ["admin", "user", "technician", "manager"],
+  },
+  {
+    name: ({ groups }) =>
+      groups.includes("admin") ? "Completed Transfers" : "My Transfers",
+    icon: CheckCircleIcon,
+    url: "/transfers/completed",
+    allowedGroups: ["admin", "technician", "manager", "contractor"],
+  },
+] as const;
+
+export const disposalLinks: NavlinkProps[] = [
+  {
+    name: "create disposal",
+    icon: ArchiveX,
+    url: "/disposals/create-new-disposal",
+    allowedGroups: ["admin", "user", "technician", "manager"],
+  },
+  {
+    name: "pending approval",
+    icon: Hourglass,
+    url: "/disposals/pending-approval",
+    allowedGroups: ["admin", "user", "technician", "manager"],
+  },
+  {
+    name: "open disposals",
+    icon: FileClock,
+    url: "/disposals/in-progress",
+    allowedGroups: ["admin", "user", "technician", "manager"],
+  },
+  {
+    name: ({ groups }) =>
+      groups.includes("admin") ? "Completed Disposals" : "My Disposals",
+    icon: CheckCircleIcon,
+    url: "/disposals/completed",
+    allowedGroups: ["admin", "technician", "manager"],
   },
 ] as const;
 
@@ -157,7 +208,9 @@ export const stockLinks: NavlinkProps[] = [
 export const sidebarSectionData = [
   { heading: "Main", data: mainLinks },
   { heading: "Maintenance", data: maintenanceLinks },
-  { heading: "Stock Management", data: stockLinks },
   { heading: "Assets", data: assetLinks },
+  { heading: "Asset Transfers", data: transferLinks },
+  { heading: "Stock Management", data: stockLinks },
+  { heading: "Disposals", data: disposalLinks },
   { heading: "Profile", data: profileLinks },
 ];

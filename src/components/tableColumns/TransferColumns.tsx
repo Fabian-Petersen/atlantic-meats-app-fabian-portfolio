@@ -38,10 +38,18 @@ export const getTransferColumns = (
   {
     accessorKey: "locationFrom",
     header: "Location From",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
   },
   {
     accessorKey: "locationTo",
     header: "Location To",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
   },
   {
     accessorKey: "area",
@@ -69,10 +77,14 @@ export const getTransferColumns = (
     size: 120,
     minSize: 100,
     maxSize: 140,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
   },
   {
     accessorKey: "expectedTransferDate",
-    header: "Expected Transfer Date",
+    header: "Transfer Date",
     cell: ({ getValue }) => <p>{getValue<string>()}</p>,
     size: 140,
     minSize: 120,
@@ -90,6 +102,7 @@ export const getTransferColumns = (
         <Badge
           value={value as EquipmentCondition}
           styleMap={badgeStyles.families.transfer_status}
+          className="capitalize"
         />
       );
     },
@@ -108,7 +121,7 @@ export const getTransferColumns = (
         rowId: row.original.id,
         setSelectedRowId,
         edit: {
-          url: "/asset",
+          url: `api/transfers/${rowId}`,
           onOpen: () => {
             setShowUpdateAssetDialog(true);
             // console.log(showUpdateAssetDialog);
@@ -131,9 +144,9 @@ export const getTransferColumns = (
         },
         delete: {
           config: {
-            resourcePath: "api/assets",
-            queryKey: ["assets", "asset-elete"],
-            resourceName: "asset",
+            resourcePath: `api/transfers/${rowId}`,
+            queryKey: ["transfers", "transfer-delete"],
+            resourceName: "transfer",
           },
           onDelete: openDeleteDialog,
         },

@@ -66,15 +66,21 @@ import { cn } from "@/lib/utils";
 export function Badge({
   value,
   styleMap,
+  className,
 }: {
   value: string;
   styleMap: Record<string, string>;
+  className?: string;
 }) {
   const key = value?.toLowerCase();
 
   return (
     <span
-      className={cn(badgeStyles.base, styleMap[key] ?? badgeStyles.fallback)}
+      className={cn(
+        badgeStyles.base,
+        styleMap[key] ?? badgeStyles.fallback,
+        className,
+      )}
     >
       {value}
     </span>
