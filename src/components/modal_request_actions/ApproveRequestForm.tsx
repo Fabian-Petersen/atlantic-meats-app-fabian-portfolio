@@ -39,7 +39,7 @@ const ApproveRequestForm = () => {
   } = useGlobalContext();
 
   const { data: technicians = [] } = useGetTechnicians();
-
+  console.log("technicians:", technicians);
   // $ Form Schema
   const {
     register,
@@ -61,13 +61,12 @@ const ApproveRequestForm = () => {
   const { mutateAsync: approveItem, isPending } = usePOST({
     id: selectedRowId ?? "",
     resourcePath: "api/jobs" as Resource,
-    queryKey: ["jobs", "action: approve request", selectedRowId] as const,
+    queryKey: ["jobs", "action: approve-request", selectedRowId] as const,
     action: "approve",
   });
 
   if (!showApproveRequestDialog || !selectedRowId) return null;
 
-  // console.log("technicians:", technicians);
   const onSubmit = async (data: ApproveRequestFormValues) => {
     try {
       const selectedTechnician = technicians.find(

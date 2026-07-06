@@ -16,6 +16,11 @@ import { stockRequestSchema } from "./stockSchemas";
 import {
   transferRequestSchema,
   transferResponseSchema,
+  transferInTransitRequestSchema,
+  transferInTransitResponseSchema,
+  transferReceiptRequestSchema,
+  transferReceiptResponseSchema,
+  transferWorkflowResponseSchema,
 } from "./transfersSchemas";
 
 // #  Export Schemas
@@ -35,6 +40,11 @@ export {
   stockRequestSchema,
   transferRequestSchema,
   transferResponseSchema,
+  transferInTransitRequestSchema,
+  transferInTransitResponseSchema,
+  transferReceiptRequestSchema,
+  transferReceiptResponseSchema,
+  transferWorkflowResponseSchema,
 };
 
 // ! Types
@@ -103,6 +113,12 @@ import type { StockAPIResponse, StockRequestFormValues } from "./stockSchemas";
 import type {
   TransferRequestFormValues,
   TransferResponseValues,
+  TransferInTransitRequestValues,
+  TransferInTransitResponse,
+  TransferReceiptRequestValues,
+  TransferReceiptResponse,
+  TransferWorkflowResponse,
+  TransferTransitTableRow,
 } from "./transfersSchemas";
 
 export type {
@@ -149,6 +165,12 @@ export type {
   // Transfers
   TransferRequestFormValues,
   TransferResponseValues,
+  TransferInTransitRequestValues,
+  TransferInTransitResponse,
+  TransferReceiptRequestValues,
+  TransferReceiptResponse,
+  TransferWorkflowResponse,
+  TransferTransitTableRow,
   // Stock
   StockRequestFormValues,
   StockAPIResponse,

@@ -65,6 +65,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [showApproveRequestDialog, setShowApproveRequestDialog] =
     useState(false);
 
+  // $ Approve Transfer Request Modal
+  const [showApproveTransferDialog, setShowApproveTransferDialog] =
+    useState(false);
+
   // $ Create User Modal
   const [showCreateUserDialog, setShowCreateUserDialog] = useState(false);
 
@@ -145,6 +149,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setErrorConfig,
         openSearchInput,
         setOpenSearchInput,
+        showApproveTransferDialog,
+        setShowApproveTransferDialog,
       }}
     >
       {children}

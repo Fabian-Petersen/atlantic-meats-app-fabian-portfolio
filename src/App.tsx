@@ -47,6 +47,7 @@ import CreateUserPage from "./pages/CreateUserPage";
 // $ Transfer Asset Pages
 import TransfersListPage from "./pages/TransfersListPage";
 import CreateTransferPage from "./pages/CreateTransferPage";
+import TransfersTransitListPage from "./pages/transfers/TransfersTransitListPage";
 
 // $ Stock Pages
 import CreateStockPage from "./pages/stocks/CreateStockPage";
@@ -106,6 +107,10 @@ function App() {
             <Route
               path="/transfers/create-new-transfer"
               element={<CreateTransferPage />}
+            />
+            <Route
+              path="/transfers/in-transit"
+              element={<TransfersTransitListPage />}
             />
           </Route>
           {/* // % Admin only Routes */}

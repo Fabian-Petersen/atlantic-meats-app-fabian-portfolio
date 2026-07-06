@@ -2,13 +2,13 @@
 
 import Separator from "@/components/dashboardSidebar/Seperator";
 import type { JobAPIResponse } from "@/schemas";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
-import { useById, usePOST } from "@/utils/api";
+import { useById } from "@/utils/api";
 import { Error } from "../features/Error";
 import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
-import { toast } from "sonner";
+// import { toast } from "sonner";
 
 // icons
 import { X, Check } from "lucide-react";
@@ -46,12 +46,12 @@ function RequestApproval() {
   const [randomNumber] = useState(() => Math.floor(Math.random() * 9999) + 1);
   const formattedNumber = randomNumber.toString().padStart(4, "0");
 
-  const { mutateAsync: approveRequest, isPending: isApproved } = usePOST({
-    id: selectedRowId ?? "",
-    resourcePath: "api/jobs",
-    queryKey: ["jobs", "action: approve-item"] as const,
-    action: "approve",
-  });
+  // const { mutateAsync: approveRequest, isPending: isApproved } = usePOST({
+  //   id: selectedRowId ?? "",
+  //   resourcePath: "api/jobs",
+  //   queryKey: ["jobs", "action: approve-item"] as const,
+  //   action: "approve",
+  // });
 
   const { data: item, isPending } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
@@ -64,7 +64,7 @@ function RequestApproval() {
 
   // console.log("item", item);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   if (isPending) {
     return <PageLoadingSpinner />;
   }
@@ -74,21 +74,24 @@ function RequestApproval() {
     return <Error />;
   }
 
-  const handleApprove = async () => {
+  const handleApprove = () => {
+    console.log("clicked approved job request");
     setShowApproveRequestDialog(true);
-    const payload = {
-      selectedRowId: selectedRowId,
-      status: "in progress",
-    };
+    // const payload = {
+    //   selectedRowId: selectedRowId,
+    //   status: "in progress",
+    // };
 
-    try {
-      const response = await approveRequest(payload);
-      console.log("approve-request:", response);
-      toast.success("The itemm was sucessfully rejected");
-      navigate("/jobs/pending-approval");
-    } catch (error) {
-      console.log(error);
-    }
+    // console.log("payload:", payload);
+
+    // try {
+    //   const response = await approveRequest(payload);
+    //   console.log("approve-request:", response);
+    //   toast.success("The itemm was sucessfully approved");
+    //   navigate("/jobs/pending-approval");
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   return (
@@ -206,7 +209,6 @@ function RequestApproval() {
           </button>
           <button
             type="submit"
-            disabled={isApproved}
             // variant="submit"
             // size="lg"
             className={cn(
@@ -214,9 +216,7 @@ function RequestApproval() {
               sharedStyles.btn,
               "flex items-center justify-center gap-4",
             )}
-            onClick={() => {
-              handleApprove();
-            }}
+            onClick={handleApprove}
           >
             <Check className="w-6 h-6" />
             <span className="text-md">Approve</span>

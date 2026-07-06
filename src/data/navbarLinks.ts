@@ -111,7 +111,7 @@ export const transferLinks: NavlinkProps[] = [
   {
     name: "open transfers",
     icon: FileClock,
-    url: "/transfers/in-progress",
+    url: "/transfers/in-transit",
     allowedGroups: ["admin", "user", "technician", "manager"],
   },
   {

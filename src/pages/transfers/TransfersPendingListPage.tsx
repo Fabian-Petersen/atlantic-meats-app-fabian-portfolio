@@ -1,5 +1,5 @@
-// $ This component renders the page for the maintenance requests to be approved in a table format.
-// $ The list is from a Get request to the getJobsList.py lambda function.
+// $ This component renders the page for the asset transfer requests to be approved in a table format.
+// $ The list is from a Get request to the getTransfersList.py lambda function.
 
 import FormHeading from "../../../customComponents/FormHeading";
 import { useGetAll } from "@/utils/api";

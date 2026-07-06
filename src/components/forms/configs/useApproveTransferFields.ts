@@ -146,13 +146,6 @@ export const useTransfersFields = (
       options: normalizeOptions(assetIdOptions),
     },
     {
-      fieldType: "input",
-      type: "date",
-      name: "expectedDate",
-      label: "Expected Transfer Date",
-      placeholder: "Expected Transfer Date",
-    },
-    {
       fieldType: "file",
       name: "images",
       multiple: true,

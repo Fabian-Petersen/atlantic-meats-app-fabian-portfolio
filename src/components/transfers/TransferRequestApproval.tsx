@@ -39,7 +39,7 @@ function TransferRequestApproval() {
   const {
     selectedRowId,
     setShowRejectRequestDialog,
-    setShowApproveRequestDialog,
+    setShowApproveTransferDialog,
   } = useGlobalContext();
 
   // Generate a random number for the request - not stored in db
@@ -75,7 +75,7 @@ function TransferRequestApproval() {
   }
 
   const handleApprove = async () => {
-    setShowApproveRequestDialog(true);
+    setShowApproveTransferDialog(true);
     const payload = {
       selectedRowId: selectedRowId,
       status: "approved",
@@ -100,7 +100,7 @@ function TransferRequestApproval() {
       {/* // $ ── Header ── */}
       <div className="flex flex-col gap-2">
         <p className="text-[11px] uppercase tracking-widest text-gray-400 dark:text-gray-500 font-medium select-none">
-          Transfer No ·{" "}
+          Transfer No ·{""}
           {/* {item?.jobcardNumber ?? `${item?.location}-${formattedNumber}`} */}
         </p>
         <h1 className="text-lg md:text-xl font-semibold capitalize leading-tight">
@@ -140,7 +140,7 @@ function TransferRequestApproval() {
       <div className="flex flex-col gap-3">
         <Field label="Location From: " value={item.locationFrom} />
         <Field label="Location To: " value={item.locationTo} />
-        <Field label="Date of Transfer " value={item.transferDate} />
+        <Field label="Date of Transfer " value={item.expectedDate} />
       </div>
 
       {/* ── Description box ── */}
@@ -203,9 +203,7 @@ function TransferRequestApproval() {
               sharedStyles.btn,
               "flex items-center justify-center gap-4",
             )}
-            onClick={() => {
-              handleApprove();
-            }}
+            onClick={handleApprove}
           >
             <Check className="w-6 h-6" />
             <span className="text-md">Approve</span>

@@ -1,7 +1,7 @@
 // $ This component renders the columns for the Assets Table.
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TransferResponseValues } from "@/schemas";
+import type { TransferTransitTableRow } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { NavigateFunction } from "react-router-dom";
@@ -14,7 +14,7 @@ import type { Resource } from "@/utils/api";
 import { Badge } from "../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 
-export const getTransferColumns = (
+export const getTransferTransitColumns = (
   setShowUpdateAssetDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (
@@ -26,43 +26,14 @@ export const getTransferColumns = (
     },
   ) => void,
   navigate: NavigateFunction,
-): ColumnDef<TransferResponseValues>[] => [
+): ColumnDef<TransferTransitTableRow>[] => [
   {
-    accessorKey: "transferCreated",
+    accessorKey: "dateCreated",
     header: "Date Created",
     cell: ({ getValue }) => <p>{getValue<string>()}</p>,
     size: 140,
     minSize: 120,
     maxSize: 160,
-  },
-  {
-    accessorKey: "locationFrom",
-    header: "Location From",
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-  },
-  {
-    accessorKey: "locationTo",
-    header: "Location To",
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-  },
-  {
-    accessorKey: "area",
-    header: "Area",
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-  },
-  {
-    accessorKey: "equipment",
-    header: "Equipment",
-    enableColumnFilter: true,
   },
   {
     accessorKey: "assetID",
@@ -72,19 +43,45 @@ export const getTransferColumns = (
     maxSize: 140,
   },
   {
-    accessorKey: "requested_by",
-    header: "Requested By",
-    size: 120,
-    minSize: 100,
-    maxSize: 140,
+    accessorKey: "equipment",
+    header: "Equipment",
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;
     },
   },
   {
-    accessorKey: "expectedDate",
-    header: "Expected Transfer Date",
+    accessorKey: "transportType",
+    header: "Transport Type",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
+    accessorKey: "transportName",
+    header: "Transport Name",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
+    accessorKey: "trackingNumber",
+    header: "Trancking Number",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
+    accessorKey: "transportCost",
+    header: "Cost",
+    enableColumnFilter: true,
+  },
+  {
+    accessorKey: "transportDate",
+    header: "Transport Date",
     cell: ({ getValue }) => <p>{getValue<string>()}</p>,
     size: 140,
     minSize: 120,
@@ -115,10 +112,10 @@ export const getTransferColumns = (
     enableHiding: false,
     size: 10,
     cell: ({ row }) => {
-      const rowId = row.original.id;
+      const rowId = row.original.transitId;
 
       const menuItems = getTableMenuItems({
-        rowId: row.original.id,
+        rowId: row.original.transitId,
         setSelectedRowId,
         edit: {
           url: `api/transfers/${rowId}`,

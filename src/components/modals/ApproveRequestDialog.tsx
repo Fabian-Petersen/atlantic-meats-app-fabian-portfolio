@@ -2,7 +2,7 @@ import { Dialog, DialogTitle, DialogContent } from "@/components/ui/dialog";
 
 import useGlobalContext from "@/context/useGlobalContext";
 import FormHeading from "../../../customComponents/FormHeading";
-import ApproveRequestForm from "@/components/requests_approvals/ApproveRequestForm";
+import ApproveRequestForm from "@/components/modal_request_actions/ApproveRequestForm";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 
@@ -17,7 +17,7 @@ function ApproveRequestDialog() {
       <DialogContent className="sm:max-w-lg bg-white z-10000 dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) dark:border-gray-700/50 px-2 py-2 md:py-4 h-auto">
         <DialogTitle className="">
           <FormHeading
-            arial-label="Approve Job Request"
+            arial-label="Approve Request"
             className={cn(
               sharedStyles.headingForm,
               "md:text-center font-normal",

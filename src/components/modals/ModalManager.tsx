@@ -7,6 +7,7 @@ import ActionRequestDialog from "./ActionRequestDialog";
 import RequestRejectedDialog from "./RequestRejectedDialog";
 import ApproveRequestDialog from "./ApproveRequestDialog";
 import CreateUserDialog from "./CreateUserDialog";
+import ApproveTransferRequestDialog from "./ApproveTransferRequestDialog";
 
 // $ Styles
 // import { sharedStyles } from "@/styles/shared";
@@ -21,6 +22,7 @@ const ModalManager = () => {
     showUserProfileDialog,
     showRejectRequestDialog,
     showApproveRequestDialog,
+    showApproveTransferDialog,
     showCreateUserDialog,
   } = useGlobalContext();
   // console.log(showUpdateAssetDialog);
@@ -32,6 +34,7 @@ const ModalManager = () => {
     showActionDialog ||
     showRejectRequestDialog ||
     showApproveRequestDialog ||
+    showApproveTransferDialog ||
     showCreateUserDialog;
   // console.log("ModalManager state:", {
   //   showUpdateMaintenanceDialog,
@@ -52,6 +55,7 @@ const ModalManager = () => {
       {showActionDialog && <ActionRequestDialog />}
       {showRejectRequestDialog && <RequestRejectedDialog />}
       {showApproveRequestDialog && <ApproveRequestDialog />}
+      {showApproveTransferDialog && <ApproveTransferRequestDialog />}
       {showCreateUserDialog && <CreateUserDialog />}
     </>
   );

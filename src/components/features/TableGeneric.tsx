@@ -208,14 +208,14 @@ export function TableGeneric<T extends { id: string }>({
                       key={row.id}
                       onClick={() => {
                         setSelectedRowId(row.original.id);
-                        console.log("row.original.id:", row.original.id);
+                        // console.log("row.original.id:", row.original.id);
                         navigate(
                           `/${rowPath}/${row.original.id}${action ? `/${action}` : ""}`,
                         );
-                        console.log(
-                          "table path:",
-                          `/${rowPath}/${row.original.id}${action ? `/${action}` : ""}`,
-                        );
+                        // console.log(
+                        //   "table path:",
+                        //   `/${rowPath}/${row.original.id}${action ? `/${action}` : ""}`,
+                        // );
                       }}
                       className={`text-cxs cursor-pointer hover:bg-primary/20 dark:bg-(--bg-secondary_dark) bg-gray-50/90 ${customRowClass}`}
                     >

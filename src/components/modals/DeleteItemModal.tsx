@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
-import DeleteItemForm from "../features/DeleteItemForm";
+import DeleteItemForm from "@/components/modal_request_actions/DeleteItemForm";
 import type { Resource } from "@/utils/api";
 
 const DeleteItemModal = () => {

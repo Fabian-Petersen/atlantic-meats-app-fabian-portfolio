@@ -137,6 +137,10 @@ export type AppContextType = {
   showApproveRequestDialog: boolean;
   setShowApproveRequestDialog: (v: boolean) => void;
 
+  // $ Approve Transfer Request Modal
+  showApproveTransferDialog: boolean;
+  setShowApproveTransferDialog: (v: boolean) => void;
+
   openDeleteDialog: (id: string, config: DeleteConfig) => void;
   closeDeleteDialog: () => void;
 

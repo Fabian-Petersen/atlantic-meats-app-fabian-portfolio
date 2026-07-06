@@ -2,7 +2,7 @@ import { Dialog, DialogTitle, DialogContent } from "@/components/ui/dialog";
 
 import useGlobalContext from "@/context/useGlobalContext";
 import FormHeading from "../../../customComponents/FormHeading";
-import RejectRequestForm from "@/components/requests_approvals/RejectRequestForm";
+import RejectRequestForm from "@/components/modal_request_actions/RejectRequestForm";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import { OctagonX } from "lucide-react";

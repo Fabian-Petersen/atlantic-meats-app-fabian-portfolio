@@ -6,7 +6,7 @@ export const badgeStyles = {
     "text-center min-w-12 max-w-fit",
     "px-[0.40rem] py-[0.135rem]",
     "rounded-full",
-    "text-cxs",
+    "text-cxs capitalize",
     "border",
   ),
 

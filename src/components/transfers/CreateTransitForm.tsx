@@ -1,4 +1,4 @@
-//$ This component is used to create a maintenace job, the data is submitted to the database (dynamoDB) via API Gateway and Lambda on aws.
+//$ This component is used to create a asset in-transit, the data is submitted to the database (dynamoDB) via API Gateway and Lambda on aws.
 
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +9,7 @@ import { useForm, type Resolver } from "react-hook-form";
 // $ Import schemas
 import type {
   AssetRequestFormValues,
-  TransferRequestFormValues,
+  TransferInTransitRequestValues,
 } from "../../schemas/index";
 import { transferRequestSchema } from "../../schemas/index";
 
@@ -19,7 +19,7 @@ import { useTransfersFields } from "../forms/configs/useTransfersFields";
 import DynamicForm from "../forms/DynamicForm";
 import { useGetAll } from "@/utils/api";
 
-const CreateTransferForm = () => {
+const CreateTransitForm = () => {
   const navigate = useNavigate();
   const { setSuccessConfig, setShowSuccess, setErrorConfig, setShowError } =
     useGlobalContext();
@@ -63,18 +63,17 @@ const CreateTransferForm = () => {
   // $ Custom hook that manages the select input options based on asset data
 
   // $ Form Instance passed to the Dynamic Form
-  const form = useForm<TransferRequestFormValues>({
+  const form = useForm<TransferInTransitRequestValues>({
     resolver: zodResolver(
       transferRequestSchema,
-    ) as unknown as Resolver<TransferRequestFormValues>,
+    ) as unknown as Resolver<TransferInTransitRequestValues>,
     defaultValues: {
-      area: "",
-      equipment: "",
-      assetID: "",
-      locationFrom: "",
-      locationTo: "",
-      expectedDate: "",
-      transferReason: "",
+      transportType: ["courier", "contracor", "employee"],
+      transportName: "",
+      trackingNumber: "",
+      transportCost: 0,
+      transportNotes: "",
+      transportInvoie: "",
     },
   });
 
@@ -83,10 +82,10 @@ const CreateTransferForm = () => {
 
   // $  ─── Render ─────────────────────────────────────────────────────────────────
   return (
-    <DynamicForm<TransferRequestFormValues>
+    <DynamicForm<TransferInTransitRequestValues>
       form={form}
       fields={fields}
-      formHeading="Transfers - Create New"
+      formHeading="Transfers - Ship Asset"
       redirect={true}
       redirectTo="/transfers/list"
       onSubmit={submit}
@@ -101,4 +100,4 @@ const CreateTransferForm = () => {
   );
 };
 
-export default CreateTransferForm;
+export default CreateTransitForm;

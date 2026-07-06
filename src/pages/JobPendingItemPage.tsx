@@ -4,7 +4,7 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../utils/api";
 import { type JobAPIResponse } from "@/schemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
-import RequestApproval from "@/components/requests_approvals/RequestApproval";
+import RequestApproval from "@/components/modal_request_actions/RequestApproval";
 import { Success } from "@/components/features/Success";
 import useGlobalContext from "@/context/useGlobalContext";
 import MobileRequestApproval from "@/components/mobile/MobileRequestApproval";

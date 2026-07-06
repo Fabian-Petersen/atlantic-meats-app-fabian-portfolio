@@ -87,6 +87,7 @@ export type RedirectResource =
   | "stocks/create-new-stock" // Page with the form to create a new stock item
   | "stocks/list" // Page showing all stock items
   | `stocks/${string}` // Page showing the details of a stock item by id
+  | "transfers/in-transit" // List of All transfer requests by group (admin: All, users: CreatedBySub)
   | "transfers/list"; // List of All transfer requests by group (admin: All, users: CreatedBySub)
 
 // $ Combine the types into a union type for the generic functions
