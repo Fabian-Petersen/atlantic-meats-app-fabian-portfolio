@@ -88,6 +88,8 @@ export type RedirectResource =
   | "stocks/list" // Page showing all stock items
   | `stocks/${string}` // Page showing the details of a stock item by id
   | "transfers/in-transit" // List of All transfer requests by group (admin: All, users: CreatedBySub)
+  | `/transfers/${string}/in-transit` // "POST: status === `in-transit`
+  | "transfers/requests" // List of all pending, approved and rejected transfer requests
   | "transfers/list"; // List of All transfer requests by group (admin: All, users: CreatedBySub)
 
 // $ Combine the types into a union type for the generic functions
@@ -129,7 +131,10 @@ const ASSETS_REQUESTS_KEY = ["assets", "asset"];
 export const useGetAll = <ResponseType>(options: {
   resourcePath: Resource;
   queryKey: readonly unknown[];
-  params?: Record<string, string | number | boolean | null | undefined>;
+  params?: Record<
+    string,
+    string | number | boolean | string[] | null | undefined
+  >;
   enabled?: boolean;
 }) => {
   const { resourcePath, queryKey, params, enabled } = options;

@@ -37,8 +37,8 @@ const ApproveTransferForm = () => {
         selectedRowId: selectedRowId,
       };
       // $ Send payload to the backend
+      console.log("payload:", payload);
       await approveItem(payload);
-      // console.log("payload:", payload);
       // console.log(approveItem);
 
       // $ Close the modal

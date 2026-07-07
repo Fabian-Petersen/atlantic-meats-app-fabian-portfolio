@@ -38,7 +38,7 @@ const TransferPendingItemPage = () => {
   return (
     <div className="flex flex-col gap-4 px-4 py-8 min-h-[calc(100vh-var(--sm-navbarHeight))] md:h-[calc(100vh-var(--lg-navbarHeight))]">
       {showSuccess ? <Success /> : undefined}
-      <BackButton to="/transfers/pending-approval" />
+      <BackButton to="/transfers/requests" />
       <div
         className={cn(
           "flex-1 min-h-0 hidden bg-(--bg-primary-light) border-gray-700/70 rounded-md lg:grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800",

@@ -184,12 +184,12 @@ export const badgeStyles = {
         "dark:border-red-500 dark:bg-red-300/20 dark:text-red-300",
       ),
       in_transit: cn(
-        "text-red-600 bg-red-300/30 border-red-300",
-        "dark:border-red-500 dark:bg-red-300/20 dark:text-red-300",
+        "text-amber-600 bg-amber-300/30 border-amber-300",
+        "dark:border-amber-500 dark:bg-amber-300/20 dark:text-amber-300",
       ),
       approved: cn(
-        "text-gray-800 bg-gray-800/30 border-gray-300",
-        "dark:border-gray-500 dark:bg-gray-300/20 dark:text-gray-300",
+        "text-green-600 bg-green-300/30 border-green-300",
+        "dark:border-green-500 dark:bg-green-300/20 dark:text-green-300",
       ),
     },
   },

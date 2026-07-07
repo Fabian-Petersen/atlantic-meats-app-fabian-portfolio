@@ -46,7 +46,7 @@ import CreateUserPage from "./pages/CreateUserPage";
 
 // $ Transfer Asset Pages
 import TransfersListPage from "./pages/TransfersListPage";
-import CreateTransferPage from "./pages/CreateTransferPage";
+import CreateTransferPage from "./pages/transfers/CreateTransferPage";
 import TransfersTransitListPage from "./pages/transfers/TransfersTransitListPage";
 
 // $ Stock Pages
@@ -56,6 +56,7 @@ import AssetHistoryPage from "./pages/AssetHistoryPage";
 import AssetVerification from "./pages/AssetVerification";
 import TransferPendingItemPage from "./pages/transfers/TransferPendingItemPage";
 import TransferPendingListPage from "./pages/transfers/TransfersPendingListPage";
+import CreateTransferTransitPage from "./pages/transfers/CreateTransferTransitPage";
 
 function App() {
   const { loading } = useAuth();
@@ -112,6 +113,10 @@ function App() {
               path="/transfers/in-transit"
               element={<TransfersTransitListPage />}
             />
+            <Route
+              path="/transfers/:id/in-transit"
+              element={<CreateTransferTransitPage />}
+            />
           </Route>
           {/* // % Admin only Routes */}
           <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>
@@ -120,7 +125,7 @@ function App() {
               element={<JobsPendingListPage />}
             />
             <Route
-              path="/transfers/pending-approval"
+              path="/transfers/requests"
               element={<TransferPendingListPage />}
             />
             <Route path="/assets/list" element={<AssetsOverviewPage />} />

@@ -6,6 +6,7 @@ import type { Resource } from "@/utils/api";
 import { ChevronDown } from "lucide-react";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { Badge } from "../features/Badge";
+import type { NavigateFunction } from "react-router-dom";
 
 type TransferStatus =
   | "pending"
@@ -14,7 +15,7 @@ type TransferStatus =
   | "in-transit"
   | "rejected"
   | "receipted";
-export const getTransferPendingColumns = (
+export const getTransferRequestsColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (
@@ -22,6 +23,7 @@ export const getTransferPendingColumns = (
     config: { resourcePath: Resource; queryKey: readonly unknown[] },
   ) => void,
   setOpenChatSidebar: (v: boolean) => void,
+  navigate: NavigateFunction,
 ): ColumnDef<TransferResponseValues>[] => [
   {
     accessorKey: "transferCreated",
@@ -92,18 +94,7 @@ export const getTransferPendingColumns = (
     maxSize: 140,
   },
   {
-    accessorKey: "requested_by",
-    header: "Requested By",
-    size: 120,
-    minSize: 100,
-    maxSize: 140,
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-  },
-  {
-    accessorKey: "expectedTransferDate",
+    accessorKey: "expectedDate",
     header: "Transfer Date",
     cell: ({ getValue }) => <p>{getValue<string>()}</p>,
     size: 140,
@@ -128,6 +119,17 @@ export const getTransferPendingColumns = (
     },
   },
   {
+    accessorKey: "requested_by",
+    header: "Requested By",
+    size: 120,
+    minSize: 100,
+    maxSize: 140,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
     id: "actions",
     header: "Actions",
     enableSorting: false,
@@ -140,6 +142,7 @@ export const getTransferPendingColumns = (
 
       const menuItems = getTableMenuItems({
         rowId: row.original.id,
+        status: row.original.status,
         setSelectedRowId,
 
         edit: {
@@ -147,6 +150,14 @@ export const getTransferPendingColumns = (
           onOpen: () => {
             setShowUpdateMaintenanceDialog(true);
             setSelectedRowId(rowId);
+          },
+        },
+
+        transit: {
+          url: "/transfers/in-transit",
+          onOpen: () => {
+            setSelectedRowId(rowId);
+            navigate(`/transfers/${rowId}/in-transit`);
           },
         },
 

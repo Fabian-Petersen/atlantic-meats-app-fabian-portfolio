@@ -10,6 +10,7 @@ import {
   User,
   type LucideIcon,
   History,
+  Truck,
 } from "lucide-react";
 
 import type { Resource } from "@/utils/api";
@@ -28,6 +29,7 @@ type GetTableMenuItemsProps = {
   rowId: string;
   request_id?: string;
   userStatus?: string;
+  status?: string;
   setSelectedRowId: (id: string) => void;
 
   create?: {
@@ -43,6 +45,12 @@ type GetTableMenuItemsProps = {
   };
 
   edit?: {
+    label?: string;
+    url?: string;
+    onOpen: () => void;
+  };
+
+  transit?: {
     label?: string;
     url?: string;
     onOpen: () => void;
@@ -90,8 +98,10 @@ type GetTableMenuItemsProps = {
 export const getTableMenuItems = ({
   rowId,
   request_id,
+  status,
   setSelectedRowId,
   edit,
+  transit,
   action,
   create,
   delete: deleteAction,
@@ -151,6 +161,19 @@ export const getTableMenuItems = ({
       onClick: () => {
         setSelectedRowId(rowId);
         edit.onOpen();
+      },
+    });
+  }
+
+  if (transit && status === "approved") {
+    items.push({
+      id: "transit",
+      label: transit.label ?? "Transit",
+      icon: Truck,
+      url: transit.url,
+      onClick: () => {
+        setSelectedRowId(rowId);
+        transit.onOpen();
       },
     });
   }

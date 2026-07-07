@@ -1,11 +1,11 @@
 import { Dialog, DialogTitle, DialogContent } from "@/components/ui/dialog";
 
 import useGlobalContext from "@/context/useGlobalContext";
-// import FormHeading from "../../../customComponents/FormHeading";
+import FormHeading from "../../../customComponents/FormHeading";
 import ApproveTransferForm from "@/components/modal_request_actions/ApproveTransferForm";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
-import { DialogDescription } from "@radix-ui/react-dialog";
+// import { DialogDescription } from "@radix-ui/react-dialog";
 import { CheckCircle } from "lucide-react";
 
 function ApproveTransferRequestDialog() {
@@ -25,20 +25,16 @@ function ApproveTransferRequestDialog() {
             </div>
           </div>
           <DialogTitle className="">
-            {/* <FormHeading
-              heading="Approve Asset Transfer Request......."
+            <FormHeading
+              heading="Approve Asset Transfer Request"
               arial-label="Approve Transfer Request"
               className={cn(
                 sharedStyles.headingForm,
-                "md:text-center border border-red-500",
+                "md:flex md:justify-center font-normal w-full",
               )}
-            /> */}
+            />
           </DialogTitle>
-          <DialogDescription>
-            <p className="w-3/4 md:mt-2 text-cxs md:text-xs text-gray-600 dark:text-gray-300 text-center border border-red-500">
-              Approve asset tranfer request.......
-            </p>
-          </DialogDescription>
+          {/* <DialogDescription /> */}
           <ApproveTransferForm />
         </div>
       </DialogContent>

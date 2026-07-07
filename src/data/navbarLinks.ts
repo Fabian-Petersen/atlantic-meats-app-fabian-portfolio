@@ -103,9 +103,9 @@ export const transferLinks: NavlinkProps[] = [
     allowedGroups: ["admin", "user", "technician", "manager"],
   },
   {
-    name: "pending approval",
+    name: "transfer requests",
     icon: Hourglass,
-    url: "/transfers/pending-approval",
+    url: "/transfers/requests",
     allowedGroups: ["admin", "user", "technician", "manager"],
   },
   {

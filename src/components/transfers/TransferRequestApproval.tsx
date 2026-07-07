@@ -2,7 +2,7 @@
 
 import Separator from "@/components/dashboardSidebar/Seperator";
 import type { TransferResponseValues } from "@/schemas";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useById, usePOST } from "@/utils/api";
 import { Error } from "../features/Error";
@@ -18,6 +18,8 @@ import { badgeStyles } from "@/styles/badgeStyles";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 import Avatar from "../header/Avatar";
+import axios from "axios";
+import { Spinner } from "../ui/spinner";
 
 // import Avatar from "../header/Avatar";
 
@@ -39,14 +41,15 @@ function TransferRequestApproval() {
   const {
     selectedRowId,
     setShowRejectRequestDialog,
-    setShowApproveTransferDialog,
+    setSuccessConfig,
+    setShowSuccess,
   } = useGlobalContext();
 
   // Generate a random number for the request - not stored in db
   // const [randomNumber] = useState(() => Math.floor(Math.random() * 9999) + 1);
   // const formattedNumber = randomNumber.toString().padStart(4, "0");
 
-  const { mutateAsync: approveRequest, isPending: isApproved } = usePOST({
+  const { mutateAsync: approveRequest, isPending: isApproving } = usePOST({
     id: selectedRowId ?? "",
     resourcePath: "api/transfers",
     queryKey: ["transfers", "action: approve-item"] as const,
@@ -64,7 +67,7 @@ function TransferRequestApproval() {
 
   // console.log("item", item);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   if (isPending) {
     return <PageLoadingSpinner />;
   }
@@ -75,21 +78,68 @@ function TransferRequestApproval() {
   }
 
   const handleApprove = async () => {
-    setShowApproveTransferDialog(true);
-    const payload = {
-      selectedRowId: selectedRowId,
-      status: "approved",
-    };
+    console.log("clicked: approve transfer");
 
     try {
+      const payload = {
+        id: selectedRowId,
+        status: "approved",
+      };
+      // await approveRequest(payload);
+      console.log("payload:", payload);
       const response = await approveRequest(payload);
+      setSuccessConfig({
+        title: "Success",
+        message: "The Request was Successfully Approved!!!",
+        redirectPath: "transfers/requests",
+      });
+      setShowSuccess(true);
       console.log("approve-request:", response);
       toast.success("The asset transfer was approved successfully.");
-      navigate("/transfers/pending-approval");
+      // navigate("/transfers/pending-approval");
     } catch (error) {
       console.log(error);
+      console.error("Approve Request failed:", error);
+
+      if (axios.isAxiosError<{ message: string }>(error)) {
+        // The error returned is AxiosError hence to access response the type must be handled as such
+        toast.error(error?.response?.data?.message); // Pass the message from the backend to the user to inform user what must be done
+      } else toast.error("Failed to assign item");
     }
   };
+  // };
+
+  // const handleApprove = async () => {
+  //   try {
+  //     const payload = {
+  //       status: "approved",
+  //       selectedRowId: selectedRowId,
+  //     };
+  //     // $ Send payload to the backend
+  //     console.log("payload:", payload);
+  //     await approveItem(payload);
+  //     // console.log(approveItem);
+
+  //     // $ Close the modal
+  //     setShowApproveTransferDialog(false);
+  //     setSuccessConfig({
+  //       title: "Success",
+  //       message: "The Request was Successfully Approved!!!",
+  //       redirectPath: "transfers/in-transit",
+  //     });
+  //     setShowSuccess(true);
+
+  //     // toast.success("The item was sucessfully assigned");
+  //   } catch (error) {
+  //     console.log(error);
+  //     console.error("Approve Request failed:", error);
+
+  //     if (axios.isAxiosError<{ message: string }>(error)) {
+  //       // The error returned is AxiosError hence to access response the type must be handled as such
+  //       toast.error(error?.response?.data?.message); // Pass the message from the backend to the user to inform user what must be done
+  //     } else toast.error("Failed to assign item");
+  //   }
+  // };
 
   return (
     <div className="flex flex-col gap-4 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50 h-full">
@@ -195,7 +245,7 @@ function TransferRequestApproval() {
           </button>
           <button
             type="submit"
-            disabled={isApproved}
+            disabled={isApproving}
             // variant="submit"
             // size="lg"
             className={cn(
@@ -205,7 +255,11 @@ function TransferRequestApproval() {
             )}
             onClick={handleApprove}
           >
-            <Check className="w-6 h-6" />
+            {isApproving ? (
+              <Spinner className="w-6 h-6" />
+            ) : (
+              <Check className="w-6 h-6" />
+            )}
             <span className="text-md">Approve</span>
           </button>
         </div>

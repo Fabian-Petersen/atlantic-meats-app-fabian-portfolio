@@ -82,17 +82,50 @@ export const transferResponseSchema = transferRequestSchema
 /*                                   TRANSIT                                  */
 /* -------------------------------------------------------------------------- */
 
-export const transferInTransitRequestSchema = z.object({
-  transportType: z.enum(["courier", "contractor", "employee", "other"]),
-  transportName: z.string().min(1, { message: "Please enter a name" }),
-  trackingNumber: z.string().optional(),
-  transportDate: z.string(),
-  transportCost: z.number().optional(),
-  transportNotes: z.string().optional(),
-  // NEW uploads only
-  transitImages: z.array(z.instanceof(File)).default([]),
-  transportInvoice: z.array(z.instanceof(File)).default([]),
-});
+export const transferInTransitRequestSchema = z
+  .object({
+    transportType: z.enum(["courier", "contractor", "employee", "other"]),
+    transportName: z.string().min(1, { message: "Please enter a name" }),
+    trackingNumber: z.string().optional(),
+    transportDate: z.string(),
+    transportCost: z
+      .string()
+      .optional()
+      .refine(
+        (value) =>
+          !value || (!Number.isNaN(Number(value)) && Number(value) >= 0),
+        {
+          message: "Please enter a valid transport cost.",
+        },
+      ),
+    transportNotes: z.string().optional(),
+    // NEW uploads only
+    transitImages: z.array(z.instanceof(File)).default([]),
+    transportInvoice: z.array(z.instanceof(File)).default([]),
+  })
+  .superRefine((data, ctx) => {
+    if (data.transportType === "courier" && !data.trackingNumber?.trim()) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["trackingNumber"],
+        message: "Tracking number is required for courier transport.",
+      });
+    }
+
+    const selectedDate = new Date(data.transportDate);
+
+    // Set today's time to midnight so only the date is compared
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["transportDate"],
+        message: "The transport date cannot be in the past.",
+      });
+    }
+  });
 
 export const transferInTransitResponseSchema =
   transferInTransitRequestSchema.extend({

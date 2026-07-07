@@ -16,6 +16,7 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 // import { MobileJobsPendingContainer } from "@/components/mobile/MobileJobsPendingContainer";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Error } from "@/components/features/Error";
 import type { TransferResponseValues } from "@/schemas";
 import { TableGeneric } from "@/components/features/TableGeneric";
@@ -24,14 +25,15 @@ import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder
 import { SearchInput } from "@/components/features/SearchInput";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
-import { getTransferPendingColumns } from "@/components/tableColumns/TransferPendingColumns";
+import { getTransferRequestsColumns } from "@/components/tableColumns/TransferRequestsColumns";
 
 const TransferPendingListPage = () => {
+  const navigate = useNavigate();
   const { data, isError, isPending } = useGetAll<TransferResponseValues[]>({
     resourcePath: "api/transfers/requests",
-    queryKey: ["transfers", "pending"],
+    queryKey: ["transfers", ["pending", "approved"]],
     params: {
-      status: "pending",
+      status: ["pending", "approved"],
     },
   });
 
@@ -49,11 +51,12 @@ const TransferPendingListPage = () => {
   } = useGlobalContext();
 
   // $ Pass the props to the function generating the columns to be used in the table
-  const columns = getTransferPendingColumns(
+  const columns = getTransferRequestsColumns(
     setShowUpdateMaintenanceDialog,
     setSelectedRowId,
     openDeleteDialog,
     setOpenChatSidebar,
+    navigate,
   );
 
   // $ This data is passed into the mobile component
