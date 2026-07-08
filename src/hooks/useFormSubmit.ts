@@ -26,7 +26,13 @@ type UseFormSubmitOptions<TForm extends WithOptionalImages, TPayload> = {
   /** React-Query cache key(s) to invalidate on success. */
   queryKey: readonly unknown[];
 
-  action?: "approve" | "reject" | "action";
+  action?:
+    | "approve"
+    | "reject"
+    | "action"
+    | "in-transit"
+    | "receipt"
+    | "verify";
 
   /**
    * Transform form values into the API payload.

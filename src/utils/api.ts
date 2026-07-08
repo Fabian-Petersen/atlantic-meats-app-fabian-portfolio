@@ -208,7 +208,13 @@ export const usePOST = <RequestType, ResponseType>(options: {
   id?: string;
   resourcePath: Resource;
   queryKey: readonly unknown[];
-  action?: "approve" | "reject" | "action" | "verify";
+  action?:
+    | "approve"
+    | "reject"
+    | "action"
+    | "verify"
+    | "in-transit"
+    | "receipt";
 }) => {
   const queryClient = useQueryClient();
   const { resourcePath, queryKey } = options;

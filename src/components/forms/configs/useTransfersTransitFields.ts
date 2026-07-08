@@ -31,7 +31,7 @@ export const useTransfersTransitFields = (
     );
   };
 
-  const transportOptions = ["courier", "employee", "contractor", "other"];
+  const transportOptions = ["", "courier", "employee", "contractor", "other"];
 
   // $ ─── Field Config ─────────────────────────────────
   const fields: DynamicFormField<TransferInTransitRequestValues>[] = [
@@ -75,16 +75,26 @@ export const useTransfersTransitFields = (
       required: true,
     },
     {
-      fieldType: "file",
-      name: "transitImages",
-      multiple: true,
-      label: "Upload Images",
+      fieldType: "textarea",
+      name: "transportNotes",
+      label: "Notes",
+      required: false,
+      rows: 1,
+      className: "col-span-full",
     },
     {
       fieldType: "file",
-      name: "transportInvoice",
+      name: "images",
+      multiple: true,
+      label: "Upload Images",
+      className: "col-span-full",
+    },
+    {
+      fieldType: "file",
+      name: "invoices",
       multiple: true,
       label: "Upload Invoice",
+      className: "col-span-full",
     },
   ];
 

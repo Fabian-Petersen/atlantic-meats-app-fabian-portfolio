@@ -100,8 +100,8 @@ export const transferInTransitRequestSchema = z
       ),
     transportNotes: z.string().optional(),
     // NEW uploads only
-    transitImages: z.array(z.instanceof(File)).default([]),
-    transportInvoice: z.array(z.instanceof(File)).default([]),
+    images: z.array(z.instanceof(File)).default([]),
+    invoices: z.array(z.instanceof(File)).default([]),
   })
   .superRefine((data, ctx) => {
     if (data.transportType === "courier" && !data.trackingNumber?.trim()) {

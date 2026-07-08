@@ -183,7 +183,7 @@ export const badgeStyles = {
         "text-red-600 bg-red-300/30 border-red-300",
         "dark:border-red-500 dark:bg-red-300/20 dark:text-red-300",
       ),
-      in_transit: cn(
+      "in-transit": cn(
         "text-amber-600 bg-amber-300/30 border-amber-300",
         "dark:border-amber-500 dark:bg-amber-300/20 dark:text-amber-300",
       ),

@@ -28,10 +28,11 @@ const CreateTransferForm = () => {
   // $ Hook handling the data send to the backend
   const { submit, isPending } = useFormSubmit({
     id: selectedRowId ?? "",
-    resourcePath: "api/transfers/requests",
+    resourcePath: "api/transfers",
     queryKey: ["transfers", "create-transfer"],
-    // params:{},
+    action: "in-transit",
     buildPayload: (values, compressed) => ({
+      status: "in-transit",
       ...values,
       images: compressed.map((f) => ({
         filename: f.name,
