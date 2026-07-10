@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TransferResponseValues, Priority } from "@/schemas";
+import type { PendingTableRow } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { Resource } from "@/utils/api";
@@ -24,7 +24,7 @@ export const getTransferRequestsColumns = (
   ) => void,
   setOpenChatSidebar: (v: boolean) => void,
   navigate: NavigateFunction,
-): ColumnDef<TransferResponseValues>[] => [
+): ColumnDef<PendingTableRow>[] => [
   {
     accessorKey: "transferCreated",
     header: ({ column }) => {
@@ -186,70 +186,3 @@ export const getTransferRequestsColumns = (
     },
   },
 ];
-
-// $ ================================ Dashboard Columns ================================
-
-export const getDashboardJobColumns =
-  (): ColumnDef<TransferResponseValues>[] => [
-    {
-      accessorKey: "jobCreated",
-      header: "Date Created",
-      cell: ({ getValue }) =>
-        new Date(getValue<string>()).toLocaleString("en-GB", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        }),
-      sortingFn: "datetime",
-    },
-    {
-      accessorKey: "location",
-      header: "Location",
-    },
-    {
-      accessorKey: "equipment",
-      header: "Equipment",
-    },
-    {
-      accessorKey: "assetID",
-      header: "AssetID",
-    },
-    {
-      accessorKey: "status",
-      header: "Status",
-      cell: ({ getValue }) => {
-        const value = getValue<string>();
-        return <p className="capitalize">{value}</p>;
-      },
-    },
-    {
-      accessorKey: "priority",
-      header: "Priority",
-      size: 30,
-      minSize: 30,
-      maxSize: 50,
-      cell: ({ getValue }) => {
-        const value = getValue<string>();
-        return (
-          <Badge
-            value={value as Priority}
-            styleMap={badgeStyles.families.priority}
-          />
-        );
-      },
-    },
-    {
-      accessorKey: "requested_by",
-      header: "Requested By",
-      size: 80,
-      minSize: 80,
-      maxSize: 100,
-      cell: ({ getValue }) => {
-        const value = getValue<string>();
-        return <p className="capitalize">{value}</p>;
-      },
-    },
-  ];

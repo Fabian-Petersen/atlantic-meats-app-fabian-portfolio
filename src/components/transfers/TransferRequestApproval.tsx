@@ -1,7 +1,7 @@
 //$ This component display detailed information of the the maintenance request created and actioned data.
 
 import Separator from "@/components/dashboardSidebar/Seperator";
-import type { TransferResponseValues } from "@/schemas";
+import type { TransferWorkflowResponse } from "@/schemas";
 // import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useById, usePOST } from "@/utils/api";
@@ -56,7 +56,7 @@ function TransferRequestApproval() {
     action: "approve",
   });
 
-  const { data: item, isPending } = useById<TransferResponseValues>({
+  const { data: item, isPending } = useById<TransferWorkflowResponse>({
     id: selectedRowId ?? "",
     queryKey: ["transfers", "pending-approval-item"],
     resourcePath: "api/transfers",
@@ -107,39 +107,6 @@ function TransferRequestApproval() {
       } else toast.error("Failed to assign item");
     }
   };
-  // };
-
-  // const handleApprove = async () => {
-  //   try {
-  //     const payload = {
-  //       status: "approved",
-  //       selectedRowId: selectedRowId,
-  //     };
-  //     // $ Send payload to the backend
-  //     console.log("payload:", payload);
-  //     await approveItem(payload);
-  //     // console.log(approveItem);
-
-  //     // $ Close the modal
-  //     setShowApproveTransferDialog(false);
-  //     setSuccessConfig({
-  //       title: "Success",
-  //       message: "The Request was Successfully Approved!!!",
-  //       redirectPath: "transfers/in-transit",
-  //     });
-  //     setShowSuccess(true);
-
-  //     // toast.success("The item was sucessfully assigned");
-  //   } catch (error) {
-  //     console.log(error);
-  //     console.error("Approve Request failed:", error);
-
-  //     if (axios.isAxiosError<{ message: string }>(error)) {
-  //       // The error returned is AxiosError hence to access response the type must be handled as such
-  //       toast.error(error?.response?.data?.message); // Pass the message from the backend to the user to inform user what must be done
-  //     } else toast.error("Failed to assign item");
-  //   }
-  // };
 
   return (
     <div className="flex flex-col gap-4 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50 h-full">
@@ -154,7 +121,7 @@ function TransferRequestApproval() {
           {/* {item?.jobcardNumber ?? `${item?.location}-${formattedNumber}`} */}
         </p>
         <h1 className="text-lg md:text-xl font-semibold capitalize leading-tight">
-          {item?.equipment}
+          {item?.request?.equipment}
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">
           Asset ID: {item?.assetID}
@@ -172,12 +139,12 @@ function TransferRequestApproval() {
       <Separator width="100%" className="mt-2 mb-4" />
 
       {/* ── Requester row ── */}
-      {item.requested_by && (
+      {item.request?.requested_by && (
         <div className="flex items-center gap-3">
-          <Avatar name={item.requested_by} isFullName={true} />
+          <Avatar name={item.request?.requested_by} isFullName={true} />
           <div className="flex flex-col leading-snug">
             <span className="text-sm font-medium capitalize">
-              {item.requested_by}
+              {item?.request.requested_by}
             </span>
             <span className="text-xs text-gray-500 dark:text-gray-400">
               {`Requested · ${item.transferCreated}`}
@@ -188,25 +155,31 @@ function TransferRequestApproval() {
 
       {/* ── Structured fields ── */}
       <div className="flex flex-col gap-3">
-        <Field label="Location From: " value={item.locationFrom} />
-        <Field label="Location To: " value={item.locationTo} />
-        <Field label="Date of Transfer " value={item.expectedDate} />
+        <Field
+          label="Location From: "
+          value={item?.request?.locationFrom ?? ""}
+        />
+        <Field label="Location To: " value={item?.request?.locationTo ?? ""} />
+        <Field
+          label="Date of Transfer "
+          value={item?.request?.expectedDate ?? ""}
+        />
       </div>
 
       {/* ── Description box ── */}
-      {item.description && (
+      {item?.request?.description && (
         <div className="flex flex-col gap-1.5">
           <span className="text-xs text-gray-400 dark:text-gray-500">
             Description
           </span>
           <div className="bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700 rounded-md px-3 py-2.5 text-sm leading-relaxed text-gray-800 dark:text-gray-200">
-            {item.description}
+            {item?.request.description}
           </div>
         </div>
       )}
 
       {/* ── Comments ── */}
-      {item.transferReason && (
+      {item?.request?.transferReason && (
         <div className="flex flex-col gap-1.5">
           <span className="text-xs text-gray-400 dark:text-gray-500">
             Reason
@@ -216,7 +189,7 @@ function TransferRequestApproval() {
               {item.requested_by}
             </p> */}
             <p className="text-sm text-gray-800 dark:text-gray-200">
-              {item.transferReason}
+              {item?.request?.transferReason}
             </p>
           </div>
         </div>
@@ -227,7 +200,6 @@ function TransferRequestApproval() {
         <p className="text-xs text-center text-gray-400 dark:text-gray-500">
           Review all details before approving this request.
         </p>
-        {/* <div className="flex w-full justify-end pt-6 bg-red-500/0"> */}
         <div className={cn(sharedStyles.btnParent, "md:w-full")}>
           <button
             type="button"

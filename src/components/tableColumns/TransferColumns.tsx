@@ -1,7 +1,7 @@
-// $ This component renders the columns for the Assets Table.
+// $ This component renders the columns for the Transfer Requests with Status "Pending" and "Approved".
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { TransferResponseValues } from "@/schemas";
+import type { PendingTableRow } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { NavigateFunction } from "react-router-dom";
@@ -26,7 +26,7 @@ export const getTransferColumns = (
     },
   ) => void,
   navigate: NavigateFunction,
-): ColumnDef<TransferResponseValues>[] => [
+): ColumnDef<PendingTableRow>[] => [
   {
     accessorKey: "transferCreated",
     header: "Date Created",

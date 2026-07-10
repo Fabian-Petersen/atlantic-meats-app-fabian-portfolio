@@ -720,46 +720,43 @@ Fields fall into two categories:
 
 ```json
 {
-  "assetId": "string (PK)",
-  "transferId": "string (UUID)",
+  "assetID": "string (PK)",
+  "id": "string (UUID)",
   "transferCreated": "string (ISO 8601, backend-derived) (SK)",
   "status": "PENDING | APPROVED | REJECTED | EXPIRED | CANCELLED | IN_TRANSIT | RECEIVED",
 
   "requestorSub": "string (backend-derived from Cognito claim)",
   "approverSub": "string | null (intended/assigned approver, set at request time)",
   "recipientSub": "string (client-supplied)",
-
   "description": "string",
-
   "transferReason": "string",
   "locationFrom": "string",
   "locationTo": "string",
   "expectedDate": "string (ISO 8601, client-supplied)",
-  "approval_reminder_count": "number (initial count == 0)",
-  "schedule_name": "string (transfer-transferId-timeout)"
+  "schedule_name": "string (transfer-transferId-timeout)",
 
   "approval": {
+    "approvalId": "string(UUID)",
     "dateApproved": "string (ISO 8601, backend-derived)",
     "approvedBySub": "string (backend-derived from Cognito claim)",
-    "status": "APPROVED | REJECTED"
+    "approval_reminder_count": "number (initial count == 0)"
   },
 
   "inTransit": {
+    "transitId": "string (UUID)",
     "dateCreated": "string (ISO 8601, backend-derived)",
     "inTransitSub": "string (backend-derived from Cognito claim)",
-    "status": "IN_TRANSIT",
-    "transferDate": "string (ISO 8601, client-supplied)",
+    "transportDate": "string (ISO 8601, client-supplied)",
     "transportType": "company | courier | contractor | individual",
     "transportName": "string",
     "transportCost": "number | null",
-    "invoiceUrl": "string | null (optional attachment)",
-    "imageUrls": "string[] | null (optional)"
+    "transitInvoices": "string[] | null (optional attachment)",
+    "transitImages": "string[] | null (optional)"
   },
 
   "receipt": {
     "dateReceived": "string (ISO 8601, backend-derived)",
     "receivedBySub": "string (backend-derived from Cognito claim)",
-    "status": "RECEIVED",
     "condition": "excellent | damaged",
     "damageDetails": "string | null (required if condition = damaged)",
     "imageUrls": "string[] | null (optional)",
@@ -770,7 +767,6 @@ Fields fall into two categories:
     "dateReceived": "string (ISO 8601, backend-derived)",
     "cancelledBySub": "string (backend-derived from Cognito claim)",
     "cancelReason": "string"
-    "status": "CANCELLED"
   }
 }
 ```

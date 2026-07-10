@@ -1,7 +1,7 @@
 // $ This component renders the page for the assets register in a table format.
 // $ The list is from a Get request to the getAssetsRegister.py lambda function.
 
-import FormHeading from "../../customComponents/FormHeading";
+import FormHeading from "../../../customComponents/FormHeading";
 import { useGetAll } from "@/utils/api";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 // import { MobileAssetsOverviewTable } from "@/components/mobile/MolbileAssetsOverviewTable";
@@ -20,28 +20,54 @@ import {
 } from "@tanstack/react-table";
 
 import useGlobalContext from "@/context/useGlobalContext";
-import { useState } from "react";
-import type { TransferResponseValues } from "@/schemas";
+import { useMemo, useState } from "react";
+import type { TransferWorkflowResponse } from "@/schemas";
 // import { Error } from "@/components/features/Error";
 import { TableGeneric } from "@/components/features/TableGeneric";
 import { SearchInput } from "@/components/features/SearchInput";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
-import { getTransferColumns } from "@/components/tableColumns/TransferColumns";
+import { getTransferTransitColumns } from "@/components/tableColumns/TransferTransitColumns";
+import { flattenTransfersData } from "@/utils/flattenTranferData";
 
-const TransfersListPage = () => {
+const TransferTransitListPage = () => {
   const navigate = useNavigate();
-  const { data, isPending, isError } = useGetAll<TransferResponseValues[]>({
-    resourcePath: "api/transfers",
-    queryKey: ["transfers", "transfers-list"],
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    DATA                                    */
+  /* -------------------------------------------------------------------------- */
+  const { data, isPending, isError } = useGetAll<TransferWorkflowResponse[]>({
+    resourcePath: "api/transfers/requests",
+    queryKey: ["transfers", "transit-list"],
+    params: {
+      status: "in-transit",
+    },
   });
 
-  console.log("TransfersListPage data:", data);
+  // console.log("transferTransitDataList:", data);
 
+  /**
+   * Convert the rows have the data in the root object and not nested using the util
+   * function flattenTransfersData
+   */
+
+  const rows = useMemo(
+    () => flattenTransfersData(data, ["in-transit"]),
+    [data],
+  );
+
+  console.log("transferTransitRowList:", rows);
+  /* -------------------------------------------------------------------------- */
+  /*                                   SORTING                                  */
+  /* -------------------------------------------------------------------------- */
   const [sorting, setSorting] = useState<SortingState>([
     { id: "transferCreated", desc: true },
   ]);
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   FILTERING                                */
+  /* -------------------------------------------------------------------------- */
 
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -53,39 +79,24 @@ const TransfersListPage = () => {
   const { setShowUpdateAssetDialog, setSelectedRowId, openDeleteDialog } =
     useGlobalContext();
 
-  // $ Map through the data returned to match the TableRow Data Schema
-  // const rows: TransferResponseValues[] = useMemo(() =>
-  //   (data ?? []).map(
-  //     (item) => ({
-  //       assetID: item.assetID,
-  //       area: item.area,
-  //       equipment: item.equipment,
-  //       locationFrom: item.locationFrom,
-  //       locationTo: item.locationTo,
-  //       description: item.description,
-  //       expectedTransferDate: item.expectedTransferDate,
-  //       transferReason: item.transferReason,
-  //       id: item.id,
-  //       transferCreated: item.transferCreated,
-  //       status: item.status,
-  //       requested_by: item.requested_by,
-  //       requestor_name: item.requestor_name,
-  //       requestor_email: item.requestor_email,
-  //       requestor_sub: item.requestor_sub,
-  //     }),
-  //     [data],
-  //   ),
-  // );
+  /* -------------------------------------------------------------------------- */
+  /*                                   COLUMNS                                  */
+  /* -------------------------------------------------------------------------- */
 
-  const columns = getTransferColumns(
+  const columns = getTransferTransitColumns(
     setShowUpdateAssetDialog,
     setSelectedRowId,
     openDeleteDialog,
     navigate,
   );
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    TABLE                                   */
+  /* -------------------------------------------------------------------------- */
+
   // $ This data is passed into the mobile component
   const table = useReactTable({
-    data: data ?? [],
+    data: rows,
     columns: columns,
     columnResizeMode: "onChange",
     state: { sorting, pagination, globalFilter },
@@ -97,9 +108,12 @@ const TransfersListPage = () => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
+  /* -------------------------------------------------------------------------- */
+  /*                                  LOADING STATE                             */
+  /* -------------------------------------------------------------------------- */
+
   if (isPending) return <PageLoadingSpinner />;
   if (isError) return <p>There was an error loading the transfer requests</p>;
-
   if (!data) {
     return <p>There was an error loading the transfer requests</p>;
   }
@@ -108,7 +122,7 @@ const TransfersListPage = () => {
     <div className="flex flex-col w-full md:p-4 h-auto gap-2">
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
         <TableGeneric
-          data={data}
+          data={rows}
           columns={columns}
           rowPath="transfers"
           addButton={true}
@@ -117,7 +131,7 @@ const TransfersListPage = () => {
           pageSize={10}
           addPagination={true}
           addPageSelector={true}
-          tableHeading="Transfers Register"
+          tableHeading="Transfers - Open"
         />
       </div>
       {/* // $ Mobile View */}
@@ -153,4 +167,4 @@ const TransfersListPage = () => {
   );
 };
 
-export default TransfersListPage;
+export default TransferTransitListPage;

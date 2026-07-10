@@ -313,8 +313,9 @@ Fields fall into two categories:
 
 ```json
 {
-  "transferId": "string (PK)",
-  "transferCreated": "string (ISO 8601, backend-derived)",
+  "id": "string (PK)",
+  "assetId": "string (PK)",
+  "transferCreated": "string (ISO 8601, backend-derived) (SK)",
   "status": "PENDING | APPROVED | REJECTED | EXPIRED | CANCELLED | IN_TRANSIT | RECEIVED",
 
   "requestorSub": "string (backend-derived from Cognito claim)",
@@ -322,7 +323,6 @@ Fields fall into two categories:
   "recipientSub": "string (client-supplied)",
 
   "description": "string",
-  "assetId": "string",
   "transferReason": "string",
   "locationFrom": "string",
   "locationTo": "string",

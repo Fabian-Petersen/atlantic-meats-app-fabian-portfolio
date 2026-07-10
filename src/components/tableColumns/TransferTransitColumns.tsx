@@ -121,8 +121,6 @@ export const getTransferTransitColumns = (
           url: `api/transfers/${rowId}`,
           onOpen: () => {
             setShowUpdateAssetDialog(true);
-            // console.log(showUpdateAssetDialog);
-            // console.log("rowId:", rowId);
             setSelectedRowId(rowId);
           },
         },

@@ -186,7 +186,7 @@ export const useById = <ResponseType>(options: {
   id: string;
   queryKey: readonly unknown[];
   resourcePath: Resource;
-  params?: Record<string, string | number | boolean>;
+  params?: Record<string, string | number | boolean | string[]>;
 }) => {
   // console.log("🔥 useById called with options:", options);
   const { id, queryKey, resourcePath, params } = options;

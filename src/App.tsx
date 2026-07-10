@@ -24,6 +24,8 @@ import JobActionPage from "./pages/JobActionPage";
 // $ Assets Pages
 import CreateAssetPage from "./pages/CreateAssetPage";
 import AssetItemPage from "./pages/AssetItemPage";
+import AssetHistoryPage from "./pages/AssetHistoryPage";
+import AssetVerification from "./pages/AssetVerification";
 
 // $ User Management Pages
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
@@ -45,18 +47,20 @@ import { useAuth } from "./auth/useAuth";
 import CreateUserPage from "./pages/CreateUserPage";
 
 // $ Transfer Asset Pages
-import TransfersListPage from "./pages/TransfersListPage";
+// # ——————— Create Pages ————————————————————————————————————————————————————————
 import CreateTransferPage from "./pages/transfers/CreateTransferPage";
-import TransfersTransitListPage from "./pages/transfers/TransfersTransitListPage";
+import CreateTransferTransitPage from "./pages/transfers/CreateTransferTransitPage";
+// # ——————— Tables Pages ————————————————————————————————————————————————————————
+// import TransfersListPage from "./pages/transfers/TransfersListPage";
+import TransferTransitListPage from "./pages/transfers/TransferTransitListPage";
+// import TransferPendingListPage from "./pages/transfers/TransfersPendingListPage";
+// # ——————— Display Item Pages ——————————————————————————————————————————————————
+import TransferItemPage from "./pages/transfers/TransferItemPage";
+// import TransferPendingItemPage from "./pages/transfers/TransferPendingItemPage";
 
 // $ Stock Pages
 import CreateStockPage from "./pages/stocks/CreateStockPage";
 import StocksListPage from "./pages/stocks/StocksListPage";
-import AssetHistoryPage from "./pages/AssetHistoryPage";
-import AssetVerification from "./pages/AssetVerification";
-import TransferPendingItemPage from "./pages/transfers/TransferPendingItemPage";
-import TransferPendingListPage from "./pages/transfers/TransfersPendingListPage";
-import CreateTransferTransitPage from "./pages/transfers/CreateTransferTransitPage";
 
 function App() {
   const { loading } = useAuth();
@@ -104,19 +108,19 @@ function App() {
             <Route path="/stocks/list" element={<StocksListPage />} />
 
             {/* // $ Transfer of an Asset Pages  */}
-            <Route path="/transfers/list" element={<TransfersListPage />} />
             <Route
               path="/transfers/create-new-transfer"
               element={<CreateTransferPage />}
             />
             <Route
               path="/transfers/in-transit"
-              element={<TransfersTransitListPage />}
+              element={<TransferTransitListPage />}
             />
             <Route
               path="/transfers/:id/in-transit"
               element={<CreateTransferTransitPage />}
             />
+            <Route path="/transfers/:id" element={<TransferItemPage />} />
           </Route>
           {/* // % Admin only Routes */}
           <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>
@@ -124,10 +128,10 @@ function App() {
               path="/jobs/pending-approval"
               element={<JobsPendingListPage />}
             />
-            <Route
+            {/* <Route
               path="/transfers/requests"
               element={<TransferPendingListPage />}
-            />
+            /> */}
             <Route path="/assets/list" element={<AssetsOverviewPage />} />
             {/* // $ Page to list an asset by id */}
             <Route path="/assets/:id" element={<AssetItemPage />} />
@@ -135,10 +139,10 @@ function App() {
               path="/jobs/:id/pending-approval"
               element={<JobPendingItemPage />}
             />
-            <Route
+            {/* <Route
               path="/transfers/:id/pending-approval"
               element={<TransferPendingItemPage />}
-            />
+            /> */}
             <Route
               path="/assets/create-new-asset"
               element={<CreateAssetPage />}

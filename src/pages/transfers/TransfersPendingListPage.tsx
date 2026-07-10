@@ -1,5 +1,13 @@
-// $ This component renders the page for the asset transfer requests to be approved in a table format.
-// $ The list is from a Get request to the getTransfersList.py lambda function.
+/**
+ * This component renders the table for the asset transfer requests that was created including the
+ * approved transfers.
+ *
+ * ROUTE: /transfers/requests
+ *
+ * PATH: /api/transfers/requests?status[]="pending" & status[]="approved"
+ * The list is from a Get request to the getTransfersList.py lambda function.
+ *
+ * */
 
 import FormHeading from "../../../customComponents/FormHeading";
 import { useGetAll } from "@/utils/api";
@@ -18,7 +26,7 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Error } from "@/components/features/Error";
-import type { TransferResponseValues } from "@/schemas";
+import { type TransferWorkflowResponse } from "@/schemas";
 import { TableGeneric } from "@/components/features/TableGeneric";
 // import { getJobPendingColumns } from "@/components/tableColumns/PendingColumns";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
@@ -26,10 +34,15 @@ import { SearchInput } from "@/components/features/SearchInput";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 import { getTransferRequestsColumns } from "@/components/tableColumns/TransferRequestsColumns";
+import { flattenTransfersData } from "@/utils/flattenTranferData";
 
 const TransferPendingListPage = () => {
   const navigate = useNavigate();
-  const { data, isError, isPending } = useGetAll<TransferResponseValues[]>({
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    DATA                                    */
+  /* -------------------------------------------------------------------------- */
+  const { data, isError, isPending } = useGetAll<TransferWorkflowResponse[]>({
     resourcePath: "api/transfers/requests",
     queryKey: ["transfers", ["pending", "approved"]],
     params: {
@@ -37,9 +50,24 @@ const TransferPendingListPage = () => {
     },
   });
 
+  /**
+   * Convert the rows have the data in the root object and not nested using the util
+   * function flattenTransfersData
+   */
+
+  const rows = flattenTransfersData(data, ["request", "approved"]);
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   SORTING                                  */
+  /* -------------------------------------------------------------------------- */
+
   const [sorting, setSorting] = useState<SortingState>([
     { id: "transferCreated", desc: false },
   ]);
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   FILTERING                                */
+  /* -------------------------------------------------------------------------- */
 
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -50,7 +78,10 @@ const TransferPendingListPage = () => {
     setOpenChatSidebar,
   } = useGlobalContext();
 
-  // $ Pass the props to the function generating the columns to be used in the table
+  /* -------------------------------------------------------------------------- */
+  /*                                   COLUMNS                                  */
+  /* -------------------------------------------------------------------------- */
+
   const columns = getTransferRequestsColumns(
     setShowUpdateMaintenanceDialog,
     setSelectedRowId,
@@ -59,9 +90,13 @@ const TransferPendingListPage = () => {
     navigate,
   );
 
+  /* -------------------------------------------------------------------------- */
+  /*                                    TABLE                                   */
+  /* -------------------------------------------------------------------------- */
+
   // $ This data is passed into the mobile component
   const table = useReactTable({
-    data: data ?? [],
+    data: rows,
     columns: columns,
     state: { sorting, globalFilter },
     onSortingChange: setSorting,
@@ -71,6 +106,10 @@ const TransferPendingListPage = () => {
     globalFilterFn: "includesString",
   });
 
+  /* -------------------------------------------------------------------------- */
+  /*                                  LOADING STATE                             */
+  /* -------------------------------------------------------------------------- */
+
   if (isPending) return <PageLoadingSpinner />;
   if (isError) return <Error />;
 
@@ -79,10 +118,19 @@ const TransferPendingListPage = () => {
       {/* // $ Desktop View */}
       <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
         <TableGeneric
-          data={data}
+          data={rows}
           columns={columns}
           rowPath="transfers"
-          action="pending-approval"
+          action={(row) => {
+            switch (row.status) {
+              case "pending":
+                return "pending-approval";
+              // case "approved":
+              //   return "";
+              default:
+                return "";
+            }
+          }}
           tableHeading="Transfers - Pending Requests"
           addPageSelector={true}
           addPagination={true}

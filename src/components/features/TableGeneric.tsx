@@ -42,7 +42,7 @@ type Props<T extends { id: string }> = {
   pageSize?: number;
   addPagination?: boolean;
   addPageSelector?: boolean;
-  action?: string; // e.g. "action" for the action page, "update" for the update page, etc. This is used to construct the path when a row is clicked, e.g. /jobs/123/action or /assets/123/update
+  action?: string | ((row: T) => string); // e.g. "action" for the action page, "update" for the update page, etc. This is used to construct the path when a row is clicked, e.g. /jobs/123/action or /assets/123/update. It can also dynamically check the action with multitype data e.g. TransferPendingListPage.tsx
   addFilter?: boolean; // whether to show the filter component or not. This is useful because not all tables will have filterable columns, and the filter component takes up a lot of space.
 };
 
@@ -99,6 +99,8 @@ export function TableGeneric<T extends { id: string }>({
       maxSize: 800,
     },
   });
+
+  // const rowAction = typeof action === "function" ? action(row) : action;
 
   const handleSubmit = () => {
     if (addButtonPath) return navigate(addButtonPath);
@@ -209,13 +211,15 @@ export function TableGeneric<T extends { id: string }>({
                       onClick={() => {
                         setSelectedRowId(row.original.id);
                         // console.log("row.original.id:", row.original.id);
+
+                        const rowAction =
+                          typeof action === "function"
+                            ? action(row.original)
+                            : action;
+
                         navigate(
-                          `/${rowPath}/${row.original.id}${action ? `/${action}` : ""}`,
+                          `/${rowPath}/${row.original.id}${rowAction ? `/${rowAction}` : ""}`,
                         );
-                        // console.log(
-                        //   "table path:",
-                        //   `/${rowPath}/${row.original.id}${action ? `/${action}` : ""}`,
-                        // );
                       }}
                       className={`text-cxs cursor-pointer hover:bg-primary/20 dark:bg-(--bg-secondary_dark) bg-gray-50/90 ${customRowClass}`}
                     >

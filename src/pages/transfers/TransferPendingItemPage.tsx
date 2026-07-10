@@ -6,7 +6,7 @@ import { type TransferResponseValues } from "@/schemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
 import { Success } from "@/components/features/Success";
 import useGlobalContext from "@/context/useGlobalContext";
-import MobileRequestApproval from "@/components/mobile/MobileRequestApproval";
+// import MobileRequestApproval from "@/components/mobile/MobileRequestApproval";
 import BackButton from "@/components/features/BackButton";
 import { cn } from "@/lib/utils";
 import TransferRequestApproval from "@/components/transfers/TransferRequestApproval";
@@ -28,6 +28,8 @@ const TransferPendingItemPage = () => {
       status: "pending",
     },
   });
+
+  console.log("item:", item);
 
   if (!selectedRowId || !item) {
     return <PageLoadingSpinner />;
@@ -52,7 +54,7 @@ const TransferPendingItemPage = () => {
           <TransferRequestApproval />
         </div>
       </div>
-      <MobileRequestApproval item={item} />
+      {/* <MobileRequestApproval item={item} /> */}
     </div>
   );
 };
