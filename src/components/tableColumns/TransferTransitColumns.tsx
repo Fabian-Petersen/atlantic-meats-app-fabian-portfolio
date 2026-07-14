@@ -5,6 +5,7 @@ import type { TransferTransitTableRow } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { NavigateFunction } from "react-router-dom";
+import { ChevronDown } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -29,11 +30,35 @@ export const getTransferTransitColumns = (
 ): ColumnDef<TransferTransitTableRow>[] => [
   {
     accessorKey: "dateCreated",
-    header: "Date Created",
-    cell: ({ getValue }) => <p>{getValue<string>()}</p>,
-    size: 140,
-    minSize: 120,
-    maxSize: 160,
+    header: ({ column }) => {
+      const sorted = column.getIsSorted(); // false | "asc" | "desc"
+      return (
+        <button
+          type="button"
+          className="flex items-center gap-1 select-none hover:cursor-pointer"
+          onClick={() => column.toggleSorting(sorted === "asc")}
+        >
+          <span>Date Created</span>
+          <ChevronDown
+            className="h-4 w-4 transition-transform duration-200"
+            style={{
+              transform: sorted === "asc" ? "rotate(180deg)" : "rotate(0deg)",
+              opacity: sorted ? 1 : 0.4,
+            }}
+          />
+        </button>
+      );
+    },
+    cell: ({ getValue }) =>
+      new Date(getValue<string>()).toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }),
+    sortingFn: "datetime",
   },
   {
     accessorKey: "assetID",
@@ -81,11 +106,32 @@ export const getTransferTransitColumns = (
   },
   {
     accessorKey: "transportDate",
-    header: "Transport Date",
-    cell: ({ getValue }) => <p>{getValue<string>()}</p>,
-    size: 140,
-    minSize: 120,
-    maxSize: 160,
+    header: ({ column }) => {
+      const sorted = column.getIsSorted(); // false | "asc" | "desc"
+      return (
+        <button
+          type="button"
+          className="flex items-center gap-1 select-none hover:cursor-pointer"
+          onClick={() => column.toggleSorting(sorted === "asc")}
+        >
+          <span>Transport Date</span>
+          <ChevronDown
+            className="h-4 w-4 transition-transform duration-200"
+            style={{
+              transform: sorted === "asc" ? "rotate(180deg)" : "rotate(0deg)",
+              opacity: sorted ? 1 : 0.4,
+            }}
+          />
+        </button>
+      );
+    },
+    cell: ({ getValue }) =>
+      new Date(getValue<string>()).toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }),
+    sortingFn: "datetime",
   },
   {
     accessorKey: "status",

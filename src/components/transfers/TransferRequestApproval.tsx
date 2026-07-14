@@ -4,15 +4,13 @@ import Separator from "@/components/dashboardSidebar/Seperator";
 import type { TransferWorkflowResponse } from "@/schemas";
 // import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
-import { useById, usePOST } from "@/utils/api";
+import { useById } from "@/utils/api";
 import { Error } from "../features/Error";
 import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
-
 import { toast } from "sonner";
 
 // icons
 import { X, Check } from "lucide-react";
-// import { useState } from "react";
 import { Badge } from "../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { sharedStyles } from "@/styles/shared";
@@ -20,8 +18,7 @@ import { cn } from "@/lib/utils";
 import Avatar from "../header/Avatar";
 import axios from "axios";
 import { Spinner } from "../ui/spinner";
-
-// import Avatar from "../header/Avatar";
+import { useApproveRequest } from "@/hooks/useApproveRequest";
 
 function Field({ label, value }: { label: string; value?: string | null }) {
   if (!value) return null;
@@ -40,21 +37,16 @@ function Field({ label, value }: { label: string; value?: string | null }) {
 function TransferRequestApproval() {
   const {
     selectedRowId,
-    setShowRejectRequestDialog,
-    setSuccessConfig,
-    setShowSuccess,
+    showRejectRequestDialogGeneric,
+    setShowRejectRequestDialogGeneric,
+    setRejectConfig,
   } = useGlobalContext();
 
-  // Generate a random number for the request - not stored in db
-  // const [randomNumber] = useState(() => Math.floor(Math.random() * 9999) + 1);
-  // const formattedNumber = randomNumber.toString().padStart(4, "0");
+  console.log("genericModal:", showRejectRequestDialogGeneric);
 
-  const { mutateAsync: approveRequest, isPending: isApproving } = usePOST({
-    id: selectedRowId ?? "",
-    resourcePath: "api/transfers",
-    queryKey: ["transfers", "action: approve-item"] as const,
-    action: "approve",
-  });
+  /* -------------------------------------------------------------------------- */
+  /*                          Item Data                                         */
+  /* -------------------------------------------------------------------------- */
 
   const { data: item, isPending } = useById<TransferWorkflowResponse>({
     id: selectedRowId ?? "",
@@ -65,9 +57,34 @@ function TransferRequestApproval() {
     },
   });
 
-  // console.log("item", item);
+  /* -------------------------------------------------------------------------- */
+  /*                          Submit Data Hook                                  */
+  /* -------------------------------------------------------------------------- */
 
-  // const navigate = useNavigate();
+  const { submit: approveRequest, isPending: isApproving } = useApproveRequest({
+    id: selectedRowId ?? "",
+    resourcePath: "api/transfers",
+    queryKey: ["transfers", "action: approve-item"],
+    successMessage: `The Request for asset ${item?.assetID} was Successfully Approved!!!`,
+    errorMessage: "Could not approve the asset transfer. Please try again.",
+    redirectPath: "transfers/requests",
+  });
+
+  /* -------------------------------------------------------------------------- */
+  /*                          Handle Approve                                    */
+  /* -------------------------------------------------------------------------- */
+  const handleApprove = async () => {
+    try {
+      await approveRequest({});
+    } catch (error) {
+      if (axios.isAxiosError<{ message: string }>(error)) {
+        toast.error(error?.response?.data?.message);
+      } else {
+        toast.error("Failed to assign item");
+      }
+    }
+  };
+
   if (isPending) {
     return <PageLoadingSpinner />;
   }
@@ -77,43 +94,25 @@ function TransferRequestApproval() {
     return <Error />;
   }
 
-  const handleApprove = async () => {
-    console.log("clicked: approve transfer");
+  /* -------------------------------------------------------------------------- */
+  /*                          Handle Reject                                     */
+  /* -------------------------------------------------------------------------- */
 
-    try {
-      const payload = {
-        id: selectedRowId,
-        status: "approved",
-      };
-      // await approveRequest(payload);
-      console.log("payload:", payload);
-      const response = await approveRequest(payload);
-      setSuccessConfig({
-        title: "Success",
-        message: "The Request was Successfully Approved!!!",
-        redirectPath: "transfers/requests",
-      });
-      setShowSuccess(true);
-      console.log("approve-request:", response);
-      toast.success("The asset transfer was approved successfully.");
-      // navigate("/transfers/pending-approval");
-    } catch (error) {
-      console.log(error);
-      console.error("Approve Request failed:", error);
-
-      if (axios.isAxiosError<{ message: string }>(error)) {
-        // The error returned is AxiosError hence to access response the type must be handled as such
-        toast.error(error?.response?.data?.message); // Pass the message from the backend to the user to inform user what must be done
-      } else toast.error("Failed to assign item");
-    }
+  const handleReject = () => {
+    setRejectConfig({
+      title: "Reject Transfer",
+      message: "Are you sure you want to reject this transfer?",
+      resourcePath: "api/transfers",
+      redirectPath: "transfers/requests",
+      queryKey: ["transfers", "action: reject"],
+      successMessage: "The Request was Successfully Rejected.",
+      errorMessage: "Could not reject the asset transfer. Please try again.",
+    });
+    setShowRejectRequestDialogGeneric(true);
   };
 
   return (
     <div className="flex flex-col gap-4 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50 h-full">
-      {/* 
-      <div className="hidden lg:flex gap flex-col gap-2 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50"> 
-      */}
-
       {/* // $ ── Header ── */}
       <div className="flex flex-col gap-2">
         <p className="text-[11px] uppercase tracking-widest text-gray-400 dark:text-gray-500 font-medium select-none">
@@ -121,7 +120,7 @@ function TransferRequestApproval() {
           {/* {item?.jobcardNumber ?? `${item?.location}-${formattedNumber}`} */}
         </p>
         <h1 className="text-lg md:text-xl font-semibold capitalize leading-tight">
-          {item?.request?.equipment}
+          {item?.pending?.equipment}
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">
           Asset ID: {item?.assetID}
@@ -139,12 +138,12 @@ function TransferRequestApproval() {
       <Separator width="100%" className="mt-2 mb-4" />
 
       {/* ── Requester row ── */}
-      {item.request?.requested_by && (
+      {item.pending?.requested_by && (
         <div className="flex items-center gap-3">
-          <Avatar name={item.request?.requested_by} isFullName={true} />
+          <Avatar name={item.pending?.requested_by} isFullName={true} />
           <div className="flex flex-col leading-snug">
             <span className="text-sm font-medium capitalize">
-              {item?.request.requested_by}
+              {item?.pending.requested_by}
             </span>
             <span className="text-xs text-gray-500 dark:text-gray-400">
               {`Requested · ${item.transferCreated}`}
@@ -157,29 +156,29 @@ function TransferRequestApproval() {
       <div className="flex flex-col gap-3">
         <Field
           label="Location From: "
-          value={item?.request?.locationFrom ?? ""}
+          value={item?.pending?.locationFrom ?? ""}
         />
-        <Field label="Location To: " value={item?.request?.locationTo ?? ""} />
+        <Field label="Location To: " value={item?.pending?.locationTo ?? ""} />
         <Field
           label="Date of Transfer "
-          value={item?.request?.expectedDate ?? ""}
+          value={item?.pending?.expectedDate ?? ""}
         />
       </div>
 
       {/* ── Description box ── */}
-      {item?.request?.description && (
+      {item?.pending?.description && (
         <div className="flex flex-col gap-1.5">
           <span className="text-xs text-gray-400 dark:text-gray-500">
             Description
           </span>
           <div className="bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700 rounded-md px-3 py-2.5 text-sm leading-relaxed text-gray-800 dark:text-gray-200">
-            {item?.request.description}
+            {item?.pending.description}
           </div>
         </div>
       )}
 
       {/* ── Comments ── */}
-      {item?.request?.transferReason && (
+      {item?.pending?.transferReason && (
         <div className="flex flex-col gap-1.5">
           <span className="text-xs text-gray-400 dark:text-gray-500">
             Reason
@@ -189,7 +188,7 @@ function TransferRequestApproval() {
               {item.requested_by}
             </p> */}
             <p className="text-sm text-gray-800 dark:text-gray-200">
-              {item?.request?.transferReason}
+              {item?.pending?.transferReason}
             </p>
           </div>
         </div>
@@ -203,9 +202,7 @@ function TransferRequestApproval() {
         <div className={cn(sharedStyles.btnParent, "md:w-full")}>
           <button
             type="button"
-            onClick={() => {
-              setShowRejectRequestDialog(true);
-            }}
+            onClick={handleReject}
             className={cn(
               sharedStyles.btnCancel,
               sharedStyles.btn,
@@ -237,7 +234,6 @@ function TransferRequestApproval() {
         </div>
       </div>
     </div>
-    // </div>
   );
 }
 

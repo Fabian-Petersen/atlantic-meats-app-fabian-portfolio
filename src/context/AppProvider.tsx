@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { AppContext } from "./app-context";
 import type { GlobalData, PendingTableAction } from "../schemas";
-import type { DeleteConfig, ErrorConfig, SuccessConfig } from "./app-types";
+import type {
+  DeleteConfig,
+  ErrorConfig,
+  SuccessConfig,
+  RejectConfig,
+} from "./app-types";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   // $ [Step 3]: Create the state and set the initial state value
@@ -13,6 +18,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [successConfig, setSuccessConfig] = useState<SuccessConfig | null>(
     null,
   );
+  const [rejectConfig, setRejectConfig] = useState<RejectConfig | null>(null);
 
   // $ State for the theme mode
   // ? The isDarkTheme is used to set the theme in the 'useSetDarkTheme' hook.
@@ -60,6 +66,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   // $ Reject Request Modal
   const [showRejectRequestDialog, setShowRejectRequestDialog] = useState(false);
+  const [showRejectRequestDialogGeneric, setShowRejectRequestDialogGeneric] =
+    useState(false);
 
   // $ Approve Request Modal
   const [showApproveRequestDialog, setShowApproveRequestDialog] =
@@ -151,6 +159,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setOpenSearchInput,
         showApproveTransferDialog,
         setShowApproveTransferDialog,
+        rejectConfig,
+        setRejectConfig,
+        showRejectRequestDialogGeneric,
+        setShowRejectRequestDialogGeneric,
       }}
     >
       {children}

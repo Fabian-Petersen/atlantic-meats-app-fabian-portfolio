@@ -17,6 +17,10 @@ import DynamicForm from "../forms/DynamicForm";
 
 const CreateTransferForm = () => {
   const navigate = useNavigate();
+
+  /* -------------------------------------------------------------------------- */
+  /*                              Global Context                                */
+  /* -------------------------------------------------------------------------- */
   const {
     setSuccessConfig,
     selectedRowId,
@@ -24,6 +28,10 @@ const CreateTransferForm = () => {
     setErrorConfig,
     setShowError,
   } = useGlobalContext();
+
+  /* -------------------------------------------------------------------------- */
+  /*                              POST: Data                                    */
+  /* -------------------------------------------------------------------------- */
 
   // $ Hook handling the data send to the backend
   const { submit, isPending } = useFormSubmit({
@@ -58,8 +66,9 @@ const CreateTransferForm = () => {
     },
   });
 
-  // $ Custom hook that manages the select input options based on asset data
-
+  /* -------------------------------------------------------------------------- */
+  /*                              React Hook Form                               */
+  /* -------------------------------------------------------------------------- */
   // $ Form Instance passed to the Dynamic Form
   const form = useForm<TransferInTransitRequestValues>({
     resolver: zodResolver(
@@ -75,10 +84,15 @@ const CreateTransferForm = () => {
     // },
   });
 
+  /* -------------------------------------------------------------------------- */
+  /*                              Form Fields Hook                              */
+  /* -------------------------------------------------------------------------- */
   // $ Hook creating the fields to be displayed by the Dynamic Form
   const { fields } = useTransfersTransitFields(form);
 
-  // $  ─── Render ─────────────────────────────────────────────────────────────────
+  /* -------------------------------------------------------------------------- */
+  /*                              Render Dynamic Form                           */
+  /* -------------------------------------------------------------------------- */
   return (
     <DynamicForm<TransferInTransitRequestValues>
       form={form}

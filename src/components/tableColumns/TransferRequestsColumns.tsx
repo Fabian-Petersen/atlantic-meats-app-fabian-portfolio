@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { PendingTableRow } from "@/schemas";
+import type { TransferPendingTableRow, TransferStatus } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { Resource } from "@/utils/api";
@@ -8,13 +8,6 @@ import { badgeStyles } from "@/styles/badgeStyles";
 import { Badge } from "../features/Badge";
 import type { NavigateFunction } from "react-router-dom";
 
-type TransferStatus =
-  | "pending"
-  | "aproved"
-  | "cancelled"
-  | "in-transit"
-  | "rejected"
-  | "receipted";
 export const getTransferRequestsColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
@@ -24,7 +17,7 @@ export const getTransferRequestsColumns = (
   ) => void,
   setOpenChatSidebar: (v: boolean) => void,
   navigate: NavigateFunction,
-): ColumnDef<PendingTableRow>[] => [
+): ColumnDef<TransferPendingTableRow>[] => [
   {
     accessorKey: "transferCreated",
     header: ({ column }) => {

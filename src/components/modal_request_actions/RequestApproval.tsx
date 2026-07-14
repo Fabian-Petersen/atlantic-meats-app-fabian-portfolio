@@ -46,13 +46,6 @@ function RequestApproval() {
   const [randomNumber] = useState(() => Math.floor(Math.random() * 9999) + 1);
   const formattedNumber = randomNumber.toString().padStart(4, "0");
 
-  // const { mutateAsync: approveRequest, isPending: isApproved } = usePOST({
-  //   id: selectedRowId ?? "",
-  //   resourcePath: "api/jobs",
-  //   queryKey: ["jobs", "action: approve-item"] as const,
-  //   action: "approve",
-  // });
-
   const { data: item, isPending } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",
     queryKey: ["jobs", "pending-approval-item"],
@@ -64,7 +57,6 @@ function RequestApproval() {
 
   // console.log("item", item);
 
-  // const navigate = useNavigate();
   if (isPending) {
     return <PageLoadingSpinner />;
   }
@@ -77,29 +69,10 @@ function RequestApproval() {
   const handleApprove = () => {
     console.log("clicked approved job request");
     setShowApproveRequestDialog(true);
-    // const payload = {
-    //   selectedRowId: selectedRowId,
-    //   status: "in progress",
-    // };
-
-    // console.log("payload:", payload);
-
-    // try {
-    //   const response = await approveRequest(payload);
-    //   console.log("approve-request:", response);
-    //   toast.success("The itemm was sucessfully approved");
-    //   navigate("/jobs/pending-approval");
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
 
   return (
     <div className="flex flex-col gap-4 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50 h-full">
-      {/* 
-      <div className="hidden lg:flex gap flex-col gap-2 text-font dark:text-gray-100 rounded-md p-4 dark:border-gray-700/50"> 
-      */}
-
       {/* // $ ── Header ── */}
       <div className="flex flex-col gap-2">
         <p className="text-[11px] uppercase tracking-widest text-gray-400 dark:text-gray-500 font-medium select-none">

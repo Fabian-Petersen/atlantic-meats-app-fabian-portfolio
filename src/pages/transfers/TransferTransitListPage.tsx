@@ -57,12 +57,12 @@ const TransferTransitListPage = () => {
     [data],
   );
 
-  console.log("transferTransitRowList:", rows);
+  console.log("flattenedInTransitRows:", rows);
   /* -------------------------------------------------------------------------- */
   /*                                   SORTING                                  */
   /* -------------------------------------------------------------------------- */
   const [sorting, setSorting] = useState<SortingState>([
-    { id: "transferCreated", desc: true },
+    { id: "dateCreated", desc: true },
   ]);
 
   /* -------------------------------------------------------------------------- */

@@ -23,7 +23,7 @@ function RejectRequestDialog() {
               <OctagonX className="size-12 md:size-16" />
             </div>
           </div>
-          <DialogTitle>
+          <DialogTitle className="md:mx-auto">
             <FormHeading
               heading="Reject Request"
               className={cn(

@@ -23,7 +23,7 @@ import {
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 // import { MobileJobsPendingContainer } from "@/components/mobile/MobileJobsPendingContainer";
 import useGlobalContext from "@/context/useGlobalContext";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Error } from "@/components/features/Error";
 import { type TransferWorkflowResponse } from "@/schemas";
@@ -44,18 +44,30 @@ const TransferPendingListPage = () => {
   /* -------------------------------------------------------------------------- */
   const { data, isError, isPending } = useGetAll<TransferWorkflowResponse[]>({
     resourcePath: "api/transfers/requests",
-    queryKey: ["transfers", ["pending", "approved"]],
+    queryKey: ["transfers", ["pending", "approved", "rejected", "cancelled"]],
     params: {
-      status: ["pending", "approved"],
+      status: ["pending", "approved", "rejected", "cancelled"],
     },
   });
+
+  // console.log("pendingData:", data);
 
   /**
    * Convert the rows have the data in the root object and not nested using the util
    * function flattenTransfersData
    */
 
-  const rows = flattenTransfersData(data, ["request", "approved"]);
+  const rows = useMemo(
+    () =>
+      flattenTransfersData(data, [
+        "pending",
+        "approved",
+        "rejected",
+        "cancelled",
+      ]),
+    [data],
+  );
+  // console.log("flattenedPendingRows:", rows);
 
   /* -------------------------------------------------------------------------- */
   /*                                   SORTING                                  */
@@ -125,17 +137,15 @@ const TransferPendingListPage = () => {
             switch (row.status) {
               case "pending":
                 return "pending-approval";
-              // case "approved":
-              //   return "";
               default:
                 return "";
             }
           }}
-          tableHeading="Transfers - Pending Requests"
+          tableHeading="Transfers - Requests"
           addPageSelector={true}
           addPagination={true}
           addButton={true}
-          addButtonPath="/transfers/create-transfer-request"
+          addButtonPath="/transfers/create-new-transfer"
         />
       </div>
       {/* // $ Mobile View */}

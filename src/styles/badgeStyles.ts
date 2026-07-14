@@ -165,7 +165,7 @@ export const badgeStyles = {
       ),
     },
     transfer_status: {
-      receipt: cn(
+      completed: cn(
         "text-green-600 bg-green-300/30 border-green-300",
         "dark:border-green-500 dark:bg-green-300/20 dark:text-green-300",
       ),

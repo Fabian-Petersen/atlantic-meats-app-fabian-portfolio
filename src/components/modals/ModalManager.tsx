@@ -8,6 +8,7 @@ import RequestRejectedDialog from "./RequestRejectedDialog";
 import ApproveRequestDialog from "./ApproveRequestDialog";
 import CreateUserDialog from "./CreateUserDialog";
 import ApproveTransferRequestDialog from "./ApproveTransferRequestDialog";
+import RejectRequestDialogGeneric from "./RejectRequestDialogGeneric";
 
 // $ Styles
 // import { sharedStyles } from "@/styles/shared";
@@ -24,6 +25,7 @@ const ModalManager = () => {
     showApproveRequestDialog,
     showApproveTransferDialog,
     showCreateUserDialog,
+    showRejectRequestDialogGeneric,
   } = useGlobalContext();
   // console.log(showUpdateAssetDialog);
   const isAnyModalOpen =
@@ -33,17 +35,10 @@ const ModalManager = () => {
     showUserProfileDialog ||
     showActionDialog ||
     showRejectRequestDialog ||
+    showRejectRequestDialogGeneric ||
     showApproveRequestDialog ||
     showApproveTransferDialog ||
     showCreateUserDialog;
-  // console.log("ModalManager state:", {
-  //   showUpdateMaintenanceDialog,
-  //   showDeleteDialog,
-  //   showUpdateAssetDialog,
-  //   isAnyModalOpen,
-
-  // showRejectRequestDialog,
-  // });
   if (!isAnyModalOpen) return null;
 
   return (
@@ -53,10 +48,11 @@ const ModalManager = () => {
       {showUpdateAssetDialog && <UpdateAssetDialog />}
       {showUserProfileDialog && <UpdateUserDialog />}
       {showActionDialog && <ActionRequestDialog />}
-      {showRejectRequestDialog && <RequestRejectedDialog />}
       {showApproveRequestDialog && <ApproveRequestDialog />}
       {showApproveTransferDialog && <ApproveTransferRequestDialog />}
       {showCreateUserDialog && <CreateUserDialog />}
+      {showRejectRequestDialog && <RequestRejectedDialog />}
+      {showRejectRequestDialogGeneric && <RejectRequestDialogGeneric />}
     </>
   );
 };

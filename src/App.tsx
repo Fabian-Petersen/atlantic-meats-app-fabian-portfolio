@@ -53,10 +53,10 @@ import CreateTransferTransitPage from "./pages/transfers/CreateTransferTransitPa
 // # ——————— Tables Pages ————————————————————————————————————————————————————————
 // import TransfersListPage from "./pages/transfers/TransfersListPage";
 import TransferTransitListPage from "./pages/transfers/TransferTransitListPage";
-// import TransferPendingListPage from "./pages/transfers/TransfersPendingListPage";
+import TransferPendingListPage from "./pages/transfers/TransfersPendingListPage";
 // # ——————— Display Item Pages ——————————————————————————————————————————————————
 import TransferItemPage from "./pages/transfers/TransferItemPage";
-// import TransferPendingItemPage from "./pages/transfers/TransferPendingItemPage";
+import TransferPendingItemPage from "./pages/transfers/TransferPendingItemPage";
 
 // $ Stock Pages
 import CreateStockPage from "./pages/stocks/CreateStockPage";
@@ -128,10 +128,10 @@ function App() {
               path="/jobs/pending-approval"
               element={<JobsPendingListPage />}
             />
-            {/* <Route
+            <Route
               path="/transfers/requests"
               element={<TransferPendingListPage />}
-            /> */}
+            />
             <Route path="/assets/list" element={<AssetsOverviewPage />} />
             {/* // $ Page to list an asset by id */}
             <Route path="/assets/:id" element={<AssetItemPage />} />
@@ -139,10 +139,10 @@ function App() {
               path="/jobs/:id/pending-approval"
               element={<JobPendingItemPage />}
             />
-            {/* <Route
+            <Route
               path="/transfers/:id/pending-approval"
               element={<TransferPendingItemPage />}
-            /> */}
+            />
             <Route
               path="/assets/create-new-asset"
               element={<CreateAssetPage />}

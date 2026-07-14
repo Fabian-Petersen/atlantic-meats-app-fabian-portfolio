@@ -198,16 +198,22 @@ export const sharedStyles = {
 
   /* //$ ——— Modals ——————————————————————————————————————————————————————————— */
   modal: cn(
+    // Position
+    "fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
     // Sizing
-    "w-full md:max-w-lg",
+    "w-sm max-w-md",
     // Layout
     "flex flex-col",
+    // Remove native dialog styling
+    "border-none outline-none",
     // Appearance
-    "p-4 bg-white  rounded-lg",
+    "p-4 bg-white rounded-lg",
     //light
     " bg-white text-(--clr-textLight)",
     // Dark
     "dark:bg-(--bg-secondary_dark) border-none dark:border-(--clr-borderDark) dark:text-(--clr-textDark)",
+    // Shadow
+    "shadow-xl",
   ),
   modalLarge: cn(
     // Position (below Navbar)
@@ -225,7 +231,11 @@ export const sharedStyles = {
     "overflow-y-auto",
   ),
   modalForm: cn("flex flex-col items-center justify-center px-2"), // form housing the content
-  modalParent: cn("flex flex-col gap-2 md:gap-4 w-full rounded-lg"), // Parent of the outermost div
+  modalParent: cn(
+    "flex flex-col gap-2 md:gap-4 w-full rounded-lg",
+    "bg-white p-4 shadow-xl",
+    "dark:bg-(--bg-secondary_dark)",
+  ), // Parent of the outermost div
   modalBtnParent: cn("mt-4"),
   modalOverlay: cn("bg-black/60 dark:bg-black/30 backdrop-blur-xs"),
 

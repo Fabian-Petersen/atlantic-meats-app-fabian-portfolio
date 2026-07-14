@@ -7,7 +7,7 @@ import BackButton from "@/components/features/BackButton";
 // import MobileCompletedJobDetails from "@/components/mobile/MobileCompletedJobDetails";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useParams } from "react-router-dom";
-// import TransferItemDetails from "@/components/transfers/TransferItemDetails";
+import TransferItemDetails from "@/components/transfers/TransferItemDetails";
 
 const TransferItemPage = () => {
   const { id: transferId } = useParams<{ id: string }>();
@@ -19,7 +19,7 @@ const TransferItemPage = () => {
     params: { status: "in-transit" },
   });
 
-  console.log("data-item:", item);
+  // console.log("data-item:", item);
 
   const status = item?.status;
 
@@ -36,10 +36,10 @@ const TransferItemPage = () => {
       <div className="hidden md:flex flex-col gap-4 px-4 py-8 min-h-[calc(100vh-var(--sm-navbarHeight))] md:h-[calc(100vh-var(--lg-navbarHeight))] overflow-hidden">
         <BackButton
           to={`/transfers/${status}`}
-          parentStyles="text-gray-400 flex-none"
+          parentStyles="flex-none"
           label="Transfers"
         />
-        {/* <TransferItemDetails item={item} /> */}
+        <TransferItemDetails item={item} />
       </div>
       {/* <MobileCompletedJobDetails item={item} /> */}
     </div>

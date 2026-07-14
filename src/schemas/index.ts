@@ -22,6 +22,7 @@ import {
   transferReceiptResponseSchema,
   transferWorkflowResponseSchema,
   pendingTableRowSchema,
+  transferStatusSchema,
 } from "./transfersSchemas";
 
 // #  Export Schemas
@@ -47,6 +48,7 @@ export {
   transferReceiptResponseSchema,
   transferWorkflowResponseSchema,
   pendingTableRowSchema,
+  transferStatusSchema,
 };
 
 // ! Types
@@ -122,6 +124,7 @@ import type {
   TransferWorkflowResponse,
   TransferTransitTableRow,
   TransferPendingTableRow,
+  TransferStatus,
 } from "./transfersSchemas";
 
 export type {
@@ -175,6 +178,7 @@ export type {
   TransferWorkflowResponse,
   TransferTransitTableRow,
   TransferPendingTableRow,
+  TransferStatus,
   // Stock
   StockRequestFormValues,
   StockAPIResponse,

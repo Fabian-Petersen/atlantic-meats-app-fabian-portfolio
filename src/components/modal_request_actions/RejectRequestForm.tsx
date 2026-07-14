@@ -65,7 +65,7 @@ const RequestRejectedForm = () => {
     try {
       const payload: JobRejectRequestPayload = {
         ...data,
-        status: "Rejected",
+        status: "rejected",
         selectedRowId: selectedRowId,
       };
       // $ Send payload to the backend

@@ -1,9 +1,4 @@
-import type { TransferWorkflowResponse } from "@/schemas";
-
-type TransferStage = keyof Pick<
-  TransferWorkflowResponse,
-  "request" | "approved" | "in-transit" | "receipt" | "cancelled"
->;
+import type { TransferWorkflowResponse, TransferStatus } from "@/schemas";
 
 /**
  * Flattens one or more workflow stages into the root transfer object.
@@ -23,12 +18,12 @@ type TransferStage = keyof Pick<
  *
  * @example
  * // Pending/Approved Requests table
- * const rows = flattenTransfers(data, ["request", "approved"]);
+ * const rows = flattenTransfers(data, ["pending", "approved"]);
  *
  * @example
  * // In Transit table
  * const rows = flattenTransfers(data, [
- *   "request",
+ *   "pending",
  *   "approved",
  *   "in-transit",
  * ]);
@@ -36,7 +31,7 @@ type TransferStage = keyof Pick<
  * @example
  * // Receipted table
  * const rows = flattenTransfers(data, [
- *   "request",
+ *   "pending",
  *   "approved",
  *   "in-transit",
  *   "receipt",
@@ -48,12 +43,13 @@ type TransferStage = keyof Pick<
  */
 export const flattenTransfersData = (
   transfers: TransferWorkflowResponse[] = [],
-  stages: TransferStage[] = [
-    "request",
+  stages: TransferStatus[] = [
+    "pending",
     "approved",
-    "in-transit",
-    "receipt",
     "cancelled",
+    "in-transit",
+    "rejected",
+    "completed",
   ],
 ) =>
   transfers.map((transfer) => ({

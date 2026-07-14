@@ -2,6 +2,19 @@ import * as z from "zod";
 import { assetRequestSchema } from "./assetSchemas";
 import { presignedURLSchema } from "./jobSchemas";
 
+export const transferStatusSchema = z.object({
+  status: z.enum([
+    "pending",
+    "approved",
+    "cancelled",
+    "in-transit",
+    "rejected",
+    "completed",
+  ]),
+});
+
+export type TransferStatus = z.infer<typeof transferStatusSchema.shape.status>;
+
 // $ Schema to create a maintenance request
 export const transferRequestBaseSchema = assetRequestSchema
   .pick({
@@ -68,7 +81,7 @@ export const transferRequestResponseSchema = transferRequestBaseSchema
 
 export const transferApprovalResponseSchema = z.object({
   approvalId: z.string(),
-  dateApproved: z.string(),
+  approvedDate: z.string(),
   approvedBy: z.string(),
   approvedBySub: z.string(),
   approvalReminderCount: z.number().default(0),
@@ -82,8 +95,10 @@ export const transferInTransitBaseSchema = z.object({
   transportType: z.enum(["courier", "contractor", "employee", "other"]),
   transportName: z.string().min(1, { message: "Please enter a name" }),
   trackingNumber: z.string().optional(),
-  transportDate: z.string(),
-  transportCost: z
+  transportDate: z
+    .string()
+    .min(1, { message: "Please enter a transport date" }),
+  transportCost: z.coerce
     .number()
     .optional()
     .refine(
@@ -98,28 +113,8 @@ export const transferInTransitBaseSchema = z.object({
   invoices: z.array(z.instanceof(File)).default([]),
 });
 
-export const transferInTransitRequestSchema = z
-  .object({
-    transportType: z.enum(["courier", "contractor", "employee", "other"]),
-    transportName: z.string().min(1, { message: "Please enter a name" }),
-    trackingNumber: z.string().optional(),
-    transportDate: z.string(),
-    transportCost: z
-      .number()
-      .optional()
-      .refine(
-        (value) =>
-          !value || (!Number.isNaN(Number(value)) && Number(value) >= 0),
-        {
-          message: "Please enter a valid transport cost.",
-        },
-      ),
-    transportNotes: z.string().optional(),
-    // NEW uploads only
-    images: z.array(z.instanceof(File)).default([]),
-    invoices: z.array(z.instanceof(File)).default([]),
-  })
-  .superRefine((data, ctx) => {
+export const transferInTransitRequestSchema =
+  transferInTransitBaseSchema.superRefine((data, ctx) => {
     if (data.transportType === "courier" && !data.trackingNumber?.trim()) {
       ctx.addIssue({
         code: "custom",
@@ -152,6 +147,7 @@ export const transferInTransitResponseSchema = transferInTransitBaseSchema
     transitId: z.string(), // Backend-generated transit record ID
     dateCreated: z.string(), // Backend-generated timestamp
     inTransitSub: z.string(), // Cognito user who marked the transfer in transit
+    inTransitBy: z.string(), // Cognito user name who made the transfer in transit
     images: z.array(presignedURLSchema).default([]),
     invoices: z.array(presignedURLSchema).default([]),
   });
@@ -209,18 +205,36 @@ export const transferCancelledResponseSchema = z.object({
   cancelStatus: z.string(),
 });
 
+/* -------------------------------------------------------------------------- */
+/*                                   REJECTED                                   */
+/* -------------------------------------------------------------------------- */
+
+export const transferRejectedRequestSchema = z.object({
+  reason: z
+    .string()
+    .min(1, "Please provide a reason for rejecting this request."),
+});
+
+export const transferRejectedResponseSchema = z.object({
+  dateRejected: z.string(),
+  rejectedBySub: z.string(),
+  rejectedReason: z.string(),
+  rejectedStatus: z.string(),
+});
+
 export const transferWorkflowResponseSchema = z.object({
   id: z.string(),
   assetID: z.string(),
   transferCreated: z.string(),
-  status: z.string(),
+  status: transferStatusSchema.shape.status,
   equipment: z.string(),
 
-  request: transferRequestResponseSchema.nullable(),
+  pending: transferRequestResponseSchema.nullable(),
   approved: transferApprovalResponseSchema.nullable(),
   "in-transit": transferInTransitResponseSchema.nullable(),
-  receipt: transferReceiptResponseSchema.nullable(),
   cancelled: transferCancelledResponseSchema.nullable(),
+  rejected: transferRejectedResponseSchema,
+  completed: transferReceiptResponseSchema.nullable(),
 });
 
 /* -------------------------------------------------------------------------- */
@@ -292,4 +306,8 @@ export type TransferTransitTableRow = z.infer<typeof transitTableRowSchema>;
 
 export type TransferWorkflowResponse = z.infer<
   typeof transferWorkflowResponseSchema
+>;
+
+export type RejectRequestFormValues = z.infer<
+  typeof transferRejectedRequestSchema
 >;

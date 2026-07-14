@@ -50,10 +50,31 @@ export type SuccessConfig = {
   redirectPath?: RedirectResource | null;
 } | null;
 
+/**
+ * RejectConfig: The config passed to the reject confirmation dialog before rejecting a maintenance request, transfer, or asset action. It includes an optional title and message to display in the dialog, as well as an optional icon to reflect the context of what's being rejected.
+ *
+ * title: The title to display in the reject dialog e.g. "Reject Request" or "Reject Transfer".
+ *
+ * message: The confirmation message to display in the reject dialog, explaining the consequence of the rejection action to the user.
+ *
+ * icon: The icon component to display at the top of the reject dialog - used to visually reflect the context of the item being rejected (e.g. a transfer, job request, or asset).
+ *
+ *
+ */
+export type RejectConfig = {
+  title: string;
+  message: string;
+  resourcePath: Resource;
+  redirectPath: RedirectResource;
+  queryKey: readonly unknown[];
+  successMessage: string;
+  errorMessage: string;
+};
+
 export type ErrorConfig = {
   title: string;
   message: string;
-  redirectPath: RedirectResource;
+  redirectPath?: RedirectResource | null;
 };
 
 export type AppContextType = {
@@ -132,6 +153,22 @@ export type AppContextType = {
   // $ Reject Request Modal
   showRejectRequestDialog: boolean;
   setShowRejectRequestDialog: (v: boolean) => void;
+  showRejectRequestDialogGeneric: boolean;
+  setShowRejectRequestDialogGeneric: (v: boolean) => void;
+  rejectConfig: RejectConfig;
+
+  /**
+   * config = {
+   * title: string;
+   * message: string;
+   * resourcePath: Resource;
+   * redirectPath: RedirectResource;
+   * queryKey: readonly unknown[];
+   * successMessage: string;
+   * errorMessage: string;
+   * }
+   */
+  setRejectConfig: (config: RejectConfig) => void;
 
   // $ Approve Request Modal
   showApproveRequestDialog: boolean;

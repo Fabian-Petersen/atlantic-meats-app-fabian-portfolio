@@ -57,13 +57,13 @@ function TransferItemDetails({ item }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>("request");
   const { setOpenChatSidebar, setSelectedRowId } = useGlobalContext();
 
-  const request = item.request;
+  const request = item.pending;
   const approved = item.approved;
   const inTransit = item["in-transit"];
-  const receipt = item.receipt;
+  const completed = item.completed;
 
   const hasInTransitTab = !!approved || !!inTransit;
-  const hasReceivedTab = !!receipt;
+  const hasReceivedTab = !!completed;
   const hasCostsTab = !!inTransit;
 
   // Keep the active tab valid if the item changes (e.g. list navigation)
@@ -74,7 +74,7 @@ function TransferItemDetails({ item }: Props) {
     if (activeTab === "costs" && !hasCostsTab) setActiveTab("request");
   }, [activeTab, hasInTransitTab, hasReceivedTab, hasCostsTab]);
 
-  const isDamaged = receipt?.condition === "damaged";
+  const isDamaged = completed?.condition === "damaged";
 
   return (
     <div
@@ -92,7 +92,7 @@ function TransferItemDetails({ item }: Props) {
             activeTab === "in-transit"
               ? (inTransit?.images ?? [])
               : activeTab === "received"
-                ? (receipt?.images ?? [])
+                ? (completed?.images ?? [])
                 : (request?.images ?? [])
           }
           className="p-0"
@@ -107,7 +107,7 @@ function TransferItemDetails({ item }: Props) {
         {/* Header */}
         <div className="flex flex-col gap-2 sticky">
           <p className="text-[11px] uppercase tracking-widest text-gray-400 dark:text-gray-500 font-medium select-none">
-            Transfer · {item.id ?? ""}
+            Transfer · {item.id}
           </p>
           <div className="flex justify-between items-center">
             <h1 className="text-lg md:text-xl font-semibold capitalize leading-tight">
@@ -221,13 +221,13 @@ function TransferItemDetails({ item }: Props) {
               <>
                 <div className="flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/40 rounded-md px-3 py-2 max-w-fit">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                  Approved · {formatDateTime(approved.dateApproved)}
+                  Approved · {formatDateTime(approved.approvedDate)}
                 </div>
                 <div className="flex flex-col gap-3">
                   <SectionTitle>Approved by</SectionTitle>
                   <PersonRow
-                    name={approved.approvedBySub}
-                    sub={`Approval ID · ${approved.approvalId}`}
+                    name={approved?.approvedBy}
+                    sub={`Approval ID · ${approved.approvedDate}`}
                   />
                 </div>
               </>
@@ -241,7 +241,7 @@ function TransferItemDetails({ item }: Props) {
                   <SectionTitle>Marked in transit by</SectionTitle>
                   {/* Add the name of the person that put the asset in transit */}
                   <PersonRow
-                    name={inTransit.inTransitSub}
+                    name={inTransit.inTransitBy}
                     sub={formatDateTime(inTransit.dateCreated) ?? ""}
                   />
                 </div>
@@ -278,18 +278,18 @@ function TransferItemDetails({ item }: Props) {
         )}
 
         {/* ── Tab: Received ── */}
-        {activeTab === "received" && receipt && (
+        {activeTab === "received" && completed && (
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/40 rounded-md px-3 py-2 max-w-fit">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-              Received · {formatDateTime(receipt.dateReceived)}
+              Received · {formatDateTime(completed.dateReceived)}
             </div>
 
             <div className="flex flex-col gap-3">
               <SectionTitle>Received by</SectionTitle>
               <PersonRow
-                name={receipt.receivedBySub}
-                sub={formatDateTime(receipt.dateReceived) ?? ""}
+                name={completed.receivedBySub}
+                sub={formatDateTime(completed.dateReceived) ?? ""}
               />
             </div>
 
@@ -298,33 +298,33 @@ function TransferItemDetails({ item }: Props) {
             <div className="flex flex-col gap-3">
               <SectionTitle>Condition</SectionTitle>
               <Badge
-                value={receipt.condition}
+                value={completed.condition}
                 styleMap={badgeStyles.families.status}
               />
             </div>
 
-            {isDamaged && receipt.damageDetails && (
+            {isDamaged && completed.damageDetails && (
               <>
                 <Separator width="100%" />
                 <SectionTitle>Damage details</SectionTitle>
-                <DescriptionBox>{receipt.damageDetails}</DescriptionBox>
+                <DescriptionBox>{completed.damageDetails}</DescriptionBox>
               </>
             )}
 
-            {receipt.receiptNotes && (
+            {completed.receiptNotes && (
               <>
                 <Separator width="100%" />
                 <SectionTitle>Notes</SectionTitle>
-                <DescriptionBox>{receipt.receiptNotes}</DescriptionBox>
+                <DescriptionBox>{completed.receiptNotes}</DescriptionBox>
               </>
             )}
 
-            {receipt?.deliveryNote && receipt.deliveryNote.length > 0 && (
+            {completed?.deliveryNote && completed.deliveryNote.length > 0 && (
               <>
                 <Separator width="100%" className="my-1" />
                 <SectionTitle>Delivery note</SectionTitle>
                 <div className="flex flex-col gap-1">
-                  {receipt.deliveryNote.map((doc, i) => (
+                  {completed.deliveryNote.map((doc, i) => (
                     <Link
                       key={i}
                       to={doc.url}

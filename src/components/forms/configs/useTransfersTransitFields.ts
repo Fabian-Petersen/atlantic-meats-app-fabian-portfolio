@@ -49,7 +49,6 @@ export const useTransfersTransitFields = (
             fieldType: "input",
             name: "trackingNumber",
             label: "Tracking Number",
-            // placeholder: "Enter Tracking Number",
             required: true,
           } satisfies DynamicFormField<TransferInTransitRequestValues>,
         ]
@@ -71,7 +70,7 @@ export const useTransfersTransitFields = (
       fieldType: "input",
       type: "datetime-local",
       name: "transportDate",
-      label: "Expected Date",
+      label: "Transport Date",
       required: true,
     },
     {

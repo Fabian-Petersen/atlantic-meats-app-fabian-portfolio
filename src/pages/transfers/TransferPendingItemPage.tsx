@@ -29,7 +29,7 @@ const TransferPendingItemPage = () => {
     },
   });
 
-  console.log("item:", item);
+  // console.log("item:", item);
 
   if (!selectedRowId || !item) {
     return <PageLoadingSpinner />;
