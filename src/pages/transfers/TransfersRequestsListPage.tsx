@@ -1,10 +1,9 @@
 /**
- * This component renders the table for the asset transfer requests that was created including the
- * approved transfers.
+ * This component renders the table for the asset transfer requests that was created ["pending", "approved", "rejected", "cancelled"]
  *
  * ROUTE: /transfers/requests
  *
- * PATH: /api/transfers/requests?status[]="pending" & status[]="approved"
+ * PATH: /api/transfers/requests?status[]="pending" & status[]="approved" & status[]="rejected" & status[]="cancelled"
  * The list is from a Get request to the getTransfersList.py lambda function.
  *
  * */
@@ -36,7 +35,7 @@ import { cn } from "@/lib/utils";
 import { getTransferRequestsColumns } from "@/components/tableColumns/TransferRequestsColumns";
 import { flattenTransfersData } from "@/utils/flattenTranferData";
 
-const TransferPendingListPage = () => {
+const TransfersRequestsListPage = () => {
   const navigate = useNavigate();
 
   /* -------------------------------------------------------------------------- */
@@ -189,4 +188,4 @@ const TransferPendingListPage = () => {
   );
 };
 
-export default TransferPendingListPage;
+export default TransfersRequestsListPage;

@@ -157,11 +157,9 @@ export const transferInTransitResponseSchema = transferInTransitBaseSchema
 /* -------------------------------------------------------------------------- */
 
 export const transferReceiptBaseSchema = z.object({
-  dateReceived: z
-    .string()
-    .min(1, { message: "Please enter the date received" }),
+  receiptDate: z.string().min(1, { message: "Please enter the date received" }),
   condition: z.enum(["excellent", "good", "fair", "damaged"]),
-  damageDetails: z.string(), // if condition is damaged, this field is required
+  damageDetails: z.string().optional(), // if condition is damaged, this field is required
   receiptNotes: z.string().optional(),
   // NEW uploads only
   images: z.array(z.instanceof(File)).default([]),
@@ -220,6 +218,7 @@ export const transferRejectedResponseSchema = z.object({
   rejectedBySub: z.string(),
   rejectedReason: z.string(),
   rejectedStatus: z.string(),
+  rejectedBy: z.string(),
 });
 
 export const transferWorkflowResponseSchema = z.object({

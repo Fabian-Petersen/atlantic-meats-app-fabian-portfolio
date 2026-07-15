@@ -56,6 +56,12 @@ type GetTableMenuItemsProps = {
     onOpen: () => void;
   };
 
+  receipt?: {
+    label?: string;
+    url?: string;
+    onOpen: () => void;
+  };
+
   history?: {
     label?: string;
     url?: string;
@@ -102,6 +108,7 @@ export const getTableMenuItems = ({
   setSelectedRowId,
   edit,
   transit,
+  receipt,
   action,
   create,
   delete: deleteAction,
@@ -151,16 +158,15 @@ export const getTableMenuItems = ({
       },
     });
   }
-
-  if (edit) {
+  if (receipt) {
     items.push({
-      id: "edit",
-      label: edit.label ?? "Edit",
-      icon: Pencil,
-      url: edit.url,
+      id: "receipt",
+      label: receipt.label ?? "Receipt",
+      icon: Truck,
+      url: receipt.url,
       onClick: () => {
         setSelectedRowId(rowId);
-        edit.onOpen();
+        receipt.onOpen();
       },
     });
   }
@@ -174,6 +180,19 @@ export const getTableMenuItems = ({
       onClick: () => {
         setSelectedRowId(rowId);
         transit.onOpen();
+      },
+    });
+  }
+
+  if (edit) {
+    items.push({
+      id: "edit",
+      label: edit.label ?? "Edit",
+      icon: Pencil,
+      url: edit.url,
+      onClick: () => {
+        setSelectedRowId(rowId);
+        edit.onOpen();
       },
     });
   }

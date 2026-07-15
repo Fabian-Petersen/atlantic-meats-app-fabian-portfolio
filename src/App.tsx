@@ -53,7 +53,7 @@ import CreateTransferTransitPage from "./pages/transfers/CreateTransferTransitPa
 // # ——————— Tables Pages ————————————————————————————————————————————————————————
 // import TransfersListPage from "./pages/transfers/TransfersListPage";
 import TransferTransitListPage from "./pages/transfers/TransferTransitListPage";
-import TransferPendingListPage from "./pages/transfers/TransfersPendingListPage";
+import TransfersRequestsListPage from "./pages/transfers/TransfersRequestsListPage";
 // # ——————— Display Item Pages ——————————————————————————————————————————————————
 import TransferItemPage from "./pages/transfers/TransferItemPage";
 import TransferPendingItemPage from "./pages/transfers/TransferPendingItemPage";
@@ -61,6 +61,7 @@ import TransferPendingItemPage from "./pages/transfers/TransferPendingItemPage";
 // $ Stock Pages
 import CreateStockPage from "./pages/stocks/CreateStockPage";
 import StocksListPage from "./pages/stocks/StocksListPage";
+import CreateTransferReceiptPage from "./pages/transfers/CreateTransferReceiptPage";
 
 function App() {
   const { loading } = useAuth();
@@ -120,6 +121,10 @@ function App() {
               path="/transfers/:id/in-transit"
               element={<CreateTransferTransitPage />}
             />
+            <Route
+              path="/transfers/:id/receipt"
+              element={<CreateTransferReceiptPage />}
+            />
             <Route path="/transfers/:id" element={<TransferItemPage />} />
           </Route>
           {/* // % Admin only Routes */}
@@ -130,7 +135,7 @@ function App() {
             />
             <Route
               path="/transfers/requests"
-              element={<TransferPendingListPage />}
+              element={<TransfersRequestsListPage />}
             />
             <Route path="/assets/list" element={<AssetsOverviewPage />} />
             {/* // $ Page to list an asset by id */}

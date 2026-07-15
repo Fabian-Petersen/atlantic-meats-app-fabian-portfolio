@@ -10,18 +10,17 @@ import { useParams } from "react-router-dom";
 import TransferItemDetails from "@/components/transfers/TransferItemDetails";
 
 const TransferItemPage = () => {
-  const { id: transferId } = useParams<{ id: string }>();
+  const { id: transferId } = useParams<{
+    id: string;
+  }>();
 
   const { data: item, isPending } = useById<TransferWorkflowResponse>({
     id: transferId ?? "",
     queryKey: ["transfer", "status: all"],
     resourcePath: "api/transfers",
-    params: { status: "in-transit" },
   });
 
-  // console.log("data-item:", item);
-
-  const status = item?.status;
+  console.log("item:", item);
 
   if (isPending) {
     return <PageLoadingSpinner />;
@@ -35,7 +34,7 @@ const TransferItemPage = () => {
     <div>
       <div className="hidden md:flex flex-col gap-4 px-4 py-8 min-h-[calc(100vh-var(--sm-navbarHeight))] md:h-[calc(100vh-var(--lg-navbarHeight))] overflow-hidden">
         <BackButton
-          to={`/transfers/${status}`}
+          to={`/transfers/requests`}
           parentStyles="flex-none"
           label="Transfers"
         />

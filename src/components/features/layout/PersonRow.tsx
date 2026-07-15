@@ -23,7 +23,7 @@ import Avatar from "@/components/header/Avatar";
  * - `capitalize` Utility applied twice to force standard visual title-casing across names
  * - `flex flex-col leading-snug` Stacked data structure with a tight 1.375 line height ratio
  */
-function PersonRow({ name, sub }: { name: string; sub: string }) {
+function PersonRow({ name, sub }: { name: string; sub?: string }) {
   return (
     <div className="flex items-center gap-3 dark:text-(--clr-textDark) capitalize">
       <Avatar name={name} isFullName={true} />

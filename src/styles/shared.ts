@@ -293,4 +293,13 @@ export const sharedStyles = {
   chartTable: cn(
     "flex flex-col gap-4 col-span-full lg:col-span-full xl:col-span-full self-start w-full min-w-0 h-full overflow-y-auto rounded-md bg-white dark:bg-(--bg-primary_dark) border border-white dark:border-gray-700/50 p-4 shadow-sm",
   ),
+
+  /* //$ ——— Description (Items) ——————————————————————————————————————————————————————————— */
+  description: cn("rounded-md px-3 py-2.5 text-sm leading-relaxed"),
+  DescriptionDefault: cn(
+    "bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700 text-gray-800 dark:text-gray-200",
+  ),
+  descriptionReject: cn(
+    "bg-red-100/80 dark:bg-red-900/20 border border-red-100 dark:border-red-800/40 text-red-700 dark:text-red-400",
+  ),
 };

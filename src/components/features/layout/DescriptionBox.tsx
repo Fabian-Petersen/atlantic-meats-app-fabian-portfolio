@@ -24,11 +24,18 @@
  * - `text-gray-800` / `dark:text-gray-200` High-contrast body text optimization
  */
 
-function DescriptionBox({ children }: { children: React.ReactNode }) {
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
+
+function DescriptionBox({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div className="bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700 rounded-md px-3 py-2.5 text-sm leading-relaxed text-gray-800 dark:text-gray-200">
-      {children}
-    </div>
+    <div className={cn(sharedStyles.description, className)}>{children}</div>
   );
 }
 

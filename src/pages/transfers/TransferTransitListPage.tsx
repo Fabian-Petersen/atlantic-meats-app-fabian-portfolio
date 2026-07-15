@@ -57,7 +57,7 @@ const TransferTransitListPage = () => {
     [data],
   );
 
-  console.log("flattenedInTransitRows:", rows);
+  // console.log("flattenedInTransitRows:", rows);
   /* -------------------------------------------------------------------------- */
   /*                                   SORTING                                  */
   /* -------------------------------------------------------------------------- */

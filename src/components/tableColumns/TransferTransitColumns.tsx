@@ -163,24 +163,18 @@ export const getTransferTransitColumns = (
       const menuItems = getTableMenuItems({
         rowId: row.original.transitId,
         setSelectedRowId,
+        receipt: {
+          url: `api/transfers/${rowId}/receipt`,
+          onOpen: () => {
+            setSelectedRowId(rowId);
+            navigate(`/transfers/${rowId}/receipt`);
+          },
+        },
         edit: {
           url: `api/transfers/${rowId}`,
           onOpen: () => {
             setShowUpdateAssetDialog(true);
             setSelectedRowId(rowId);
-          },
-        },
-        history: {
-          url: `/assets/${rowId}/history`,
-          config: {
-            resourcePath: `api/assets/${rowId}/history`,
-            queryKey: ["assets", "asset-history"],
-            resourceName: "asset",
-          },
-          onOpen: () => {
-            setSelectedRowId(rowId);
-            navigate(`/assets/${rowId}/history`);
-            // console.log("history:", rowId);
           },
         },
         delete: {
