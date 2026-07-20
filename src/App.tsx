@@ -62,6 +62,7 @@ import TransferPendingItemPage from "./pages/transfers/TransferPendingItemPage";
 import CreateStockPage from "./pages/stocks/CreateStockPage";
 import StocksListPage from "./pages/stocks/StocksListPage";
 import CreateTransferReceiptPage from "./pages/transfers/CreateTransferReceiptPage";
+import TransferCompleteListPage from "./pages/transfers/TransferCompleteListPage";
 
 function App() {
   const { loading } = useAuth();
@@ -126,6 +127,10 @@ function App() {
               element={<CreateTransferReceiptPage />}
             />
             <Route path="/transfers/:id" element={<TransferItemPage />} />
+            <Route
+              path="/transfers/completed"
+              element={<TransferCompleteListPage />}
+            />
           </Route>
           {/* // % Admin only Routes */}
           <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>

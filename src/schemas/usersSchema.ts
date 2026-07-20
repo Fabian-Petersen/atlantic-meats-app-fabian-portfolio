@@ -1,11 +1,15 @@
 import * as z from "zod";
 
-export type UserGroup =
-  | "admin"
+export type UserGroup = "admin" | "manager" | "user" | "contractor";
+
+export type UserPosition =
+  | "operation's manager"
+  | "regional manager"
+  | "maintenance manager"
+  | "branch manager"
+  | "branch supervisor"
   | "technician"
-  | "manager"
-  | "user"
-  | "contractor";
+  | "general worker";
 
 export const usersRequestSchema = z.object({
   email: z.email().min(1, "Email is required"),
@@ -13,6 +17,7 @@ export const usersRequestSchema = z.object({
   family_name: z.string().min(1, { message: "Surname is required" }),
   name: z.string().min(1, { message: "Name is required" }),
   location: z.string().min(1, { message: "User location is required" }),
+  position: z.string().min(1, { message: "User position is required" }),
   mobile: z
     .string()
     .min(1, { message: "Mobile number is required" })
@@ -35,6 +40,7 @@ export const usersResponseSchema = z.object({
   userCreated: z.string(),
   updatedAt: z.string(),
   mobile: z.string(),
+  position: z.string(),
 });
 
 // $ Type for sending the Action to the backend excluding the images (the images is not included with the initial request). Backend will send a presignURL for the images

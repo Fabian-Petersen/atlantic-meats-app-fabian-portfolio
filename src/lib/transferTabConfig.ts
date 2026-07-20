@@ -11,7 +11,7 @@ import {
  *
  * Each value represents a distinct section of the UI.
  */
-export type Tab = "request" | "in-transit" | "received" | "costs";
+export type Tab = "request" | "in-transit" | "completed" | "costs";
 
 /**
  * Configuration for UI tabs used in navigation components.
@@ -64,7 +64,7 @@ export const TAB_CONFIG: {
     icon: UserCircle,
   },
   {
-    key: "received",
+    key: "completed",
     label: "Received",
     icon: Wrench,
   },

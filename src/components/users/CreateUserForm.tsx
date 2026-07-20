@@ -1,15 +1,12 @@
-// import type { UserAttributes } from "@/schemas";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-// import { getUserGroups } from "@/auth/getUserGroups";
-// import { useEffect } from "react";
 // $ Types
 import { type UsersRequestFormValues, usersRequestSchema } from "@/schemas";
 
 // $ Select Form Data
 import { allLocations } from "@/data/stores";
-import { userRoles } from "@/data/userRoles";
+import { userRoles, userPosition } from "@/data/userRoles";
 
 // $ Context
 import useGlobalContext from "@/context/useGlobalContext";
@@ -32,6 +29,15 @@ function CreateUserForm() {
     resolver: zodResolver(
       usersRequestSchema,
     ) as unknown as Resolver<UsersRequestFormValues>,
+    defaultValues: {
+      email: "",
+      group: "",
+      family_name: "",
+      name: "",
+      position: "",
+      location: "",
+      mobile: "",
+    },
   });
 
   const navigate = useNavigate();
@@ -69,40 +75,6 @@ function CreateUserForm() {
     },
   });
 
-  // $ Calling the usePOST hook to fetch the data
-  // const { mutateAsync, isError, isPending } = usePOST({
-  //   resourcePath: "users",
-  //   queryKey: ["userRequests"],
-  // });
-
-  // const onSubmit = async (data: UsersRequestFormValues) => {
-  //   try {
-  //     await mutateAsync(data);
-  //     // console.log(response);
-
-  //     // $ Close the dialog immediately
-  //     setShowCreateUserDialog(false);
-
-  //     // $ Wait 1 second before showing the success modal
-  //     setTimeout(() => {
-  //       setSuccessConfig({
-  //         title: "Success",
-  //         message: `User ${data.name} ${data.family_name} successfully created`,
-  //       });
-  //       setShowSuccess(true);
-  //     }, 1000);
-
-  //     reset();
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error("Failed to create user");
-  //   }
-
-  //   if (isError) {
-  //     return toast.error("Failed to create new user.");
-  //   }
-  // };
-
   return (
     <form
       className={cn(sharedStyles.form, "gap-4")}
@@ -119,36 +91,50 @@ function CreateUserForm() {
         <FormRowInput
           // label=""
           name="name"
-          placeholder="Name"
+          label="Name"
           className="capitalize"
           register={register}
           error={errors.name}
+          required={true}
         />
         <FormRowInput
           // label=""
           name="family_name"
-          placeholder="surname"
+          label="surname"
           register={register}
           className="capitalize"
           error={errors.family_name}
+          required={true}
         />
         <FormRowSelect
           // label=""
           name="location"
-          placeholder="Location"
+          label="Location"
           options={allLocations}
           register={register}
           className="capitalize"
           error={errors.location}
+          required={true}
         />
         <FormRowSelect
           // label=""
           name="group"
-          placeholder="Group"
+          label="Group"
           options={userRoles}
           register={register}
-          className="capitalize"
+          className=""
           error={errors.group}
+          required={true}
+        />
+        <FormRowSelect
+          // label=""
+          name="position"
+          label="Position"
+          options={userPosition}
+          register={register}
+          className="capitalize"
+          error={errors.position}
+          required={true}
         />
         <FormHeading
           heading="Contact Information"
@@ -161,7 +147,7 @@ function CreateUserForm() {
           // label=""
           type="email"
           name="email"
-          placeholder="email"
+          label="email"
           register={register}
           error={errors.email}
         />
@@ -169,7 +155,7 @@ function CreateUserForm() {
           // label=""
           type="text"
           name="mobile"
-          placeholder="mobile number"
+          label="mobile number"
           register={register}
           className="capitalize"
           error={errors.mobile}

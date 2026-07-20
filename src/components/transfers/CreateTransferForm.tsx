@@ -68,13 +68,13 @@ const CreateTransferForm = () => {
       transferRequestSchema,
     ) as unknown as Resolver<TransferRequestFormValues>,
     defaultValues: {
-      area: "processing room",
-      equipment: "mixer",
-      assetID: "RT-0006",
-      locationFrom: "maitland",
-      locationTo: "bellville",
-      expectedDate: "2026-07-10",
-      transferReason: "Testing: CREATE",
+      area: "",
+      equipment: "",
+      assetID: "",
+      locationFrom: "",
+      locationTo: "",
+      expectedDate: "",
+      transferReason: "",
     },
   });
 
@@ -88,12 +88,12 @@ const CreateTransferForm = () => {
       fields={fields}
       formHeading="Transfers - Create New"
       redirect={true}
-      redirectTo="/transfers/list"
+      redirectTo="/transfers/requests"
       onSubmit={submit}
       isPending={isPending}
       submitText="Submit"
       cancelText="Cancel"
-      onCancel={() => navigate("/transfers/list")}
+      onCancel={() => navigate("/transfers/requests")}
       className=""
       gridClassName="gap-6"
       isLoading={isLoading}

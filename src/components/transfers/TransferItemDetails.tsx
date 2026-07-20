@@ -71,14 +71,17 @@ function TransferItemDetails({ item }: Props) {
   // happened yet, so `!!inTransit` / `!!completed` are always true. Check a
   // field that only exists once the stage has actually occurred instead.
   const hasInTransitData = !!inTransit?.dateCreated;
-  const hasReceivedData = !!completed?.dateReceived;
+  const hasReceivedData = !!completed?.receiptDate;
+  console.log("receiptDate:", completed?.receiptDate);
 
   // Tabs are always shown (keeps the nav layout stable); each panel renders
   // an <EmptyDataState /> with stage-specific copy when its data isn't
   // available yet, rather than the tab itself disappearing.
   const activeTab = rawActiveTab;
 
-  const isDamaged = completed?.condition === "damaged";
+  const isDamaged = completed?.receiptCondition.toLowerCase() === "damaged";
+
+  console.log("DamageDetails", completed?.damageDetails);
 
   return (
     <div
@@ -95,8 +98,8 @@ function TransferItemDetails({ item }: Props) {
           images={
             activeTab === "in-transit"
               ? (inTransit?.images ?? [])
-              : activeTab === "received"
-                ? (completed?.images ?? [])
+              : activeTab === "completed"
+                ? (completed?.receiptImages ?? [])
                 : (request?.images ?? [])
           }
           className="p-0"
@@ -332,14 +335,14 @@ function TransferItemDetails({ item }: Props) {
         )}
 
         {/* ── Tab: Received ── */}
-        {activeTab === "received" && (
+        {activeTab === "completed" && (
           <div className="flex flex-col gap-4 w-full h-full">
             {hasReceivedData ? (
               <>
                 {item.status === "completed" ? (
                   <div className="flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/40 rounded-md px-3 py-2 max-w-fit">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                    Received · {formatDateTime(completed.dateReceived)}
+                    Received · {formatDateTime(completed.receiptDate)}
                   </div>
                 ) : (
                   ""
@@ -348,8 +351,8 @@ function TransferItemDetails({ item }: Props) {
                 <div className="flex flex-col gap-3">
                   <SectionTitle>Received by</SectionTitle>
                   <PersonRow
-                    name={completed.receivedBySub}
-                    sub={formatDateTime(completed.dateReceived) ?? ""}
+                    name={completed.receiptBy}
+                    sub={formatDateTime(completed.dateReceiptCreated) ?? ""}
                   />
                 </div>
 
@@ -358,16 +361,20 @@ function TransferItemDetails({ item }: Props) {
                 <div className="flex flex-col gap-3">
                   <SectionTitle>Condition</SectionTitle>
                   <Badge
-                    value={completed.condition}
-                    styleMap={badgeStyles.families.status}
+                    value={completed.receiptCondition}
+                    styleMap={badgeStyles.families.condition}
                   />
                 </div>
 
-                {isDamaged && completed.damageDetails && (
+                {isDamaged && completed?.damageDetails && (
                   <>
                     <Separator width="100%" />
                     <SectionTitle>Damage details</SectionTitle>
-                    <DescriptionBox>{completed.damageDetails}</DescriptionBox>
+                    <DescriptionBox
+                      className={cn(sharedStyles.descriptionReject)}
+                    >
+                      {completed.damageDetails}
+                    </DescriptionBox>
                   </>
                 )}
 

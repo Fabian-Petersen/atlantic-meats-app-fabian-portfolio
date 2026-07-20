@@ -55,8 +55,8 @@ export const transferRequestSchema = transferRequestBaseSchema.superRefine(
     if (selectedDate < today) {
       ctx.addIssue({
         code: "custom",
-        path: ["transferDate"],
-        message: "The transfer date cannot be in the past.",
+        path: ["expectedDate"],
+        message: "The expected transit date cannot be in the past.",
       });
     }
   },
@@ -183,12 +183,14 @@ export const transferReceiptResponseSchema = transferReceiptBaseSchema
     deliveryNote: true,
   })
   .extend({
-    receiptId: z.string(), // backend field for when the transfer was created
-    dateReceived: z.string(), // backend field for when the transfer was created
+    receiptDate: z.string(), // backend field for when the transfer was created
     receivedBySub: z.string(), // backend field for when the transfer was created
-    condition: z.string(),
+    dateReceiptCreated: z.string(),
+    receiptCondition: z.string(),
+    receiptBy: z.string(),
     damageDetails: z.string(),
-    images: z.array(presignedURLSchema).default([]),
+    receiptNotes: z.string(),
+    receiptImages: z.array(presignedURLSchema).default([]),
     deliveryNote: z.array(presignedURLSchema).default([]),
   });
 

@@ -19,9 +19,7 @@ const TransferItemPage = () => {
     queryKey: ["transfer", "status: all"],
     resourcePath: "api/transfers",
   });
-
-  console.log("item:", item);
-
+  console.log("itemReceived:", item);
   if (isPending) {
     return <PageLoadingSpinner />;
   }

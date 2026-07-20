@@ -218,6 +218,7 @@ function DynamicForm<T extends FieldValues>({
             key={field.name}
             name={field.name}
             control={typedControl}
+            label={field.label}
             multiple={field.multiple}
           />
         );

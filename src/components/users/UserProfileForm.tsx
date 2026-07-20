@@ -102,6 +102,15 @@ function UserProfileForm({ user }: UserProfileProps) {
           className="capitalize"
           // errors={error}
         />
+        <FormRowInput
+          label="Position"
+          name="position"
+          // placeholder="Group"
+          // readOnly={true}
+          register={register}
+          className="capitalize"
+          // errors={error}
+        />
         <FormHeading
           heading="Contact Information"
           className={cn(

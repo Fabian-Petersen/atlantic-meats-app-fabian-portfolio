@@ -83,7 +83,7 @@ export const useTransfersReceiptFields = (
     },
     {
       fieldType: "file",
-      name: "images",
+      name: "deliveryNote",
       multiple: true,
       label: "Delivery Note",
       className: "col-span-full",

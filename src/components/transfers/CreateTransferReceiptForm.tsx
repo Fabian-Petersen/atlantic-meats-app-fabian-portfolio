@@ -36,7 +36,7 @@ const CreateTransferForm = () => {
   /* -------------------------------------------------------------------------- */
   /*                              POST: Data                                    */
   /* -------------------------------------------------------------------------- */
-  console.log("rowId:", selectedRowId);
+
   // $ Hook handling the data send to the backend
   const { submit, isPending } = useFormSubmit({
     id: selectedRowId ?? "",
@@ -47,6 +47,10 @@ const CreateTransferForm = () => {
       status: "receipt",
       ...values,
       images: compressed.map((f) => ({
+        filename: f.name,
+        content_type: f.type,
+      })),
+      deliveryNote: compressed.map((f) => ({
         filename: f.name,
         content_type: f.type,
       })),

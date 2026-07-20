@@ -149,8 +149,8 @@ export const useTransfersFields = (
       fieldType: "input",
       type: "date",
       name: "expectedDate",
-      label: "Expected Transfer Date",
-      placeholder: "Expected Transfer Date",
+      label: "Expected Transit Date",
+      // placeholder: "Expected Transfer Date",
     },
     {
       fieldType: "file",

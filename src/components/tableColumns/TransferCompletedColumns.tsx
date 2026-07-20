@@ -15,7 +15,7 @@ import type { Resource } from "@/utils/api";
 import { Badge } from "../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 
-export const getTransferTransitColumns = (
+export const getTransferCompletedColumns = (
   setShowUpdateAssetDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (

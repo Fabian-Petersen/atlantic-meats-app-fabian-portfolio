@@ -68,6 +68,15 @@ export const getUserColumns = (
     },
   },
   {
+    accessorKey: "position",
+    header: "Position",
+    enableColumnFilter: false,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
     accessorKey: "email",
     header: "Email",
     cell: ({ getValue }) => {

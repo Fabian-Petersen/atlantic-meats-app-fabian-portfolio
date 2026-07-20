@@ -78,8 +78,12 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
 
         return (
           <div className={clsx("w-full space-y-2", className)}>
+            {/* Static label above the field, e.g. "Images" / "Invoices" */}
             {label && (
-              <label className="block text-sm font-medium text-gray-600 dark:text-gray-200">
+              <label
+                htmlFor={String(name)}
+                className="block text-xs font-medium text-gray-600 dark:text-gray-200"
+              >
                 {label}
               </label>
             )}
