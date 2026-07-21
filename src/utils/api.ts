@@ -60,7 +60,8 @@ export type Resource =
   | `api/transfers/${string}/cancel` // "POST: status === `cancel`
   | `api/transfers/metrics` // "GET: Dashboard metrics for transfer requests"
   | `api/transfers/my-transfers` // "GET: Transfers by user sub"
-
+  // $ Notifications
+  | "api/notifications" // "GET: All notifications by user id
   // $ Stocks ROUTES
   | "api/stocks/create-new-stock" // "stocks-list" GET all stocks
   | `api/stocks/${string}` // GET, PUT, DELETE a single stock by id

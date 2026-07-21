@@ -9,14 +9,14 @@ import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 
 const NotificationSidebar = () => {
-  const { openNotificationSidebar, setOpenNotificationSidebar } =
+  const { openNotificationSidebar, setOpenNotificationSidebar, userId } =
     useGlobalContext();
 
   const { data: pendingJobs } = useGetAll<JobAPIResponse[]>({
-    queryKey: ["jobs", "pending-jobs"],
-    resourcePath: "api/jobs/requests",
+    queryKey: ["notifications", "user-notifications"],
+    resourcePath: "api/notifications",
     params: {
-      status: "pending",
+      id: userId,
     },
   });
 
