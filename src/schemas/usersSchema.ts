@@ -1,9 +1,14 @@
 import * as z from "zod";
 
-export type UserGroup = "admin" | "manager" | "user" | "contractor";
+export type UserGroup =
+  | "admin"
+  | "manager"
+  | "user"
+  | "contractor"
+  | "maintenance";
 
 export type UserPosition =
-  | "operation's manager"
+  | "operations manager"
   | "regional manager"
   | "maintenance manager"
   | "branch manager"
