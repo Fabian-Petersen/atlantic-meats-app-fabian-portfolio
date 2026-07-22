@@ -1,7 +1,7 @@
 import useGlobalContext from "@/context/useGlobalContext";
 import { useGetAll } from "@/utils/api";
 import NotificationCard from "./NotificationCard";
-import type { JobAPIResponse } from "@/schemas";
+import type { Notification } from "@/schemas";
 
 // $ Animation
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,7 +12,7 @@ const NotificationSidebar = () => {
   const { openNotificationSidebar, setOpenNotificationSidebar, userId } =
     useGlobalContext();
 
-  const { data: pendingJobs } = useGetAll<JobAPIResponse[]>({
+  const { data: notifications } = useGetAll<Notification[]>({
     queryKey: ["notifications", "user-notifications"],
     resourcePath: "api/notifications",
     params: {
@@ -49,9 +49,13 @@ const NotificationSidebar = () => {
           >
             <div className="flex flex-col h-full lg:p-1 p-2">
               <div className="bg-gray-50 dark:bg-(--clr-bgItem) min-h-full overflow-y-scroll flex flex-col gap-2 no-scrollbar p-2 rounded-lg">
-                {Array.isArray(pendingJobs) &&
-                  pendingJobs.map((job) => (
-                    <NotificationCard key={job.id} row={job} />
+                {Array.isArray(notifications) &&
+                  notifications.map((item) => (
+                    <NotificationCard
+                      key={item.id}
+                      row={item}
+                      userId={userId ?? ""}
+                    />
                   ))}
               </div>
             </div>

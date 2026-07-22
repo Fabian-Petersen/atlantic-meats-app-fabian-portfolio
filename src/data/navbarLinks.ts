@@ -36,7 +36,7 @@ export const maintenanceLinks: NavlinkProps[] = [
     name: "create request",
     icon: Hammer,
     url: "/jobs/create-job",
-    allowedGroups: ["admin", "user", "technician", "manager"],
+    allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
   {
     name: "pending approval",
@@ -48,14 +48,14 @@ export const maintenanceLinks: NavlinkProps[] = [
     name: "open jobs",
     icon: FileClock,
     url: "/jobs/in-progress",
-    allowedGroups: ["admin", "user", "technician", "manager"],
+    allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
   {
     name: ({ groups }) =>
       groups.includes("admin") ? "Completed Jobs" : "My Jobs",
     icon: CheckCircleIcon,
     url: "/jobs/completed",
-    allowedGroups: ["admin", "technician", "manager", "contractor"],
+    allowedGroups: ["admin", "maintenance", "manager", "contractor"],
   },
   {
     name: "schedule task",
@@ -70,7 +70,7 @@ export const actionLinks: NavlinkProps[] = [
     name: "task history",
     icon: Library,
     url: "/jobs/actioned",
-    allowedGroups: ["admin", "technician", "contractor"],
+    allowedGroups: ["admin", "maintenance", "contractor"],
   },
 ] as const;
 
@@ -100,26 +100,26 @@ export const transferLinks: NavlinkProps[] = [
     name: "create transfer",
     icon: Truck,
     url: "/transfers/create-new-transfer",
-    allowedGroups: ["admin", "user", "technician", "manager"],
+    allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
   {
     name: "transfer requests",
     icon: Hourglass,
     url: "/transfers/requests",
-    allowedGroups: ["admin", "user", "technician", "manager"],
+    allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
   {
     name: "open transfers",
     icon: FileClock,
     url: "/transfers/in-transit",
-    allowedGroups: ["admin", "user", "technician", "manager"],
+    allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
   {
     name: ({ groups }) =>
       groups.includes("admin") ? "Completed Transfers" : "My Transfers",
     icon: CheckCircleIcon,
     url: "/transfers/completed",
-    allowedGroups: ["admin", "technician", "manager", "contractor"],
+    allowedGroups: ["admin", "maintenance", "manager", "contractor"],
   },
 ] as const;
 
@@ -128,26 +128,26 @@ export const disposalLinks: NavlinkProps[] = [
     name: "create disposal",
     icon: ArchiveX,
     url: "/disposals/create-new-disposal",
-    allowedGroups: ["admin", "user", "technician", "manager"],
+    allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
   {
     name: "pending approval",
     icon: Hourglass,
     url: "/disposals/pending-approval",
-    allowedGroups: ["admin", "user", "technician", "manager"],
+    allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
   {
     name: "open disposals",
     icon: FileClock,
     url: "/disposals/in-progress",
-    allowedGroups: ["admin", "user", "technician", "manager"],
+    allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
   {
     name: ({ groups }) =>
       groups.includes("admin") ? "Completed Disposals" : "My Disposals",
     icon: CheckCircleIcon,
     url: "/disposals/completed",
-    allowedGroups: ["admin", "technician", "manager"],
+    allowedGroups: ["admin", "maintenance", "manager"],
   },
 ] as const;
 
@@ -163,7 +163,7 @@ export const profileLinks: NavlinkProps[] = [
     name: "My Profile",
     icon: User2,
     url: "/users/profile",
-    allowedGroups: ["admin", "user", "technician", "manager", "contractor"],
+    allowedGroups: ["admin", "user", "maintenance", "manager", "contractor"],
   },
 ];
 
@@ -179,7 +179,7 @@ export const stockLinks: NavlinkProps[] = [
     name: "Stock Register",
     icon: List,
     url: "/stocks/list", // frontend routes only, GET: /stocks for backend
-    allowedGroups: ["admin", "user", "technician", "manager"],
+    allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
 ];
 

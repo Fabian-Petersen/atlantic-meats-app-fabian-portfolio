@@ -773,12 +773,25 @@ Fields fall into two categories:
 
 #### `notifications_table`
 
+The attributes for a notification stored in the database table. The partition key is the user sub where a user can retrieve his/her data including the status update to "READ":
+
 ```json
 {
-  "notificationId": "string (PK)",
-  "status": "PENDING | APPROVED | REJECTED | EXPIRED | CANCEL | IN_TRANSIT | RECEIVED",
+  "recipientSub": "string (PK)",
+  "notificationCreated": "string (SK)",
+  "id": "string",
+  "transferId": "",
+  "recipientEmail": "string",
+  "assetId": "string",
+  " type": "string",
+  " title:": "string",
+  "message": "string",
+  "location": "string",
+  "status": "UNREAD | READ | ARCHIVED",
+  "priority": "LOW | NORMAL | HIGH | URGENT",
   "sub": "string (Cognito sub of the recipient of this notification)",
-  "notificationDate": "string (ISO 8601, backend-derived)"
+  "channels": "IN_APP  | EMAIL  | PUSH  | SMS",
+  "dateRead": "string"
 }
 ```
 

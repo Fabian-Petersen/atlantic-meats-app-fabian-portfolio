@@ -69,7 +69,7 @@ export const transferRequestResponseSchema = transferRequestBaseSchema
   .extend({
     requested_by: z.string(),
     requestor_name: z.string(),
-    requestor_email: z.string(),
+    requestor_email: z.email(),
     requestor_sub: z.string(),
     schedule_name: z.string(),
     images: z.array(presignedURLSchema).default([]),
