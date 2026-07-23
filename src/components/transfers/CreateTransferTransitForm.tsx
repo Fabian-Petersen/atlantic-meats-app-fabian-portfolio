@@ -74,6 +74,14 @@ const CreateTransferForm = () => {
     resolver: zodResolver(
       transferInTransitRequestSchema,
     ) as unknown as Resolver<TransferInTransitRequestValues>,
+    defaultValues: {
+      transportType: "",
+      transportName: "",
+      trackingNumber: "",
+      transportDate: "",
+      transportNotes: "",
+      transportCost: 0,
+    },
   });
 
   /* -------------------------------------------------------------------------- */

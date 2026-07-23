@@ -92,7 +92,7 @@ export const transferApprovalResponseSchema = z.object({
 /* -------------------------------------------------------------------------- */
 
 export const transferInTransitBaseSchema = z.object({
-  transportType: z.enum(["courier", "contractor", "employee", "other"]),
+  transportType: z.enum(["courier", "contractor", "employee", "other", ""]),
   transportName: z.string().min(1, { message: "Please enter a name" }),
   trackingNumber: z.string().optional(),
   transportDate: z

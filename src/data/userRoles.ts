@@ -15,10 +15,10 @@ export const division: string[] = [
 ];
 
 export const userPosition: UserPosition[] = [
-  "operation's manager",
+  "operations manager",
   "regional manager",
-  "branch manager",
-  "branch supervisor",
+  "manager",
+  "supervisor",
   "maintenance manager",
   "technician",
   "general worker",

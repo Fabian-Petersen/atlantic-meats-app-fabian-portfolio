@@ -4,6 +4,7 @@ import { LucideBell } from "lucide-react";
 import Button from "@/components/features/Button";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useGetAll } from "@/utils/api";
+import type { Notification } from "@/schemas";
 
 type Props = {
   className?: string;
@@ -21,7 +22,10 @@ const NotificationButton = ({ className }: Props) => {
     },
   });
 
-  const count = notifications?.length;
+  // console.log("notifications:", notifications);
+
+  const count =
+    notifications?.filter((item) => item.status === "UNREAD").length ?? 0;
 
   return (
     <div className="p-2 flex items-center justify-center text-gray-900 hover:cursor-pointer relative">
@@ -36,9 +40,13 @@ const NotificationButton = ({ className }: Props) => {
       >
         <LucideBell size={18} />
       </Button>
-      <div className="absolute top-1 right-0 p-1.5 bg-red-500 text-white text-xs flex justify-center items-center rounded-full size-4">
-        {count}
-      </div>
+      {count > 0 ? (
+        <div className="absolute top-1 right-0 p-1.5 bg-red-500 text-white text-xs flex justify-center items-center rounded-full size-4">
+          {count}
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
