@@ -4,7 +4,7 @@ import { LucideBell } from "lucide-react";
 import Button from "@/components/features/Button";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useGetAll } from "@/utils/api";
-import type { Notification } from "@/schemas";
+import type { NotificationResponse } from "@/schemas";
 
 type Props = {
   className?: string;
@@ -14,7 +14,7 @@ const NotificationButton = ({ className }: Props) => {
   const { setOpenNotificationSidebar, setIsOpen, setOpenChatSidebar, userId } =
     useGlobalContext();
 
-  const { data: notifications } = useGetAll<Notification[]>({
+  const { data: notifications } = useGetAll<NotificationResponse>({
     queryKey: ["notifications", "user-notifications"],
     resourcePath: "api/notifications",
     params: {
@@ -22,10 +22,12 @@ const NotificationButton = ({ className }: Props) => {
     },
   });
 
-  // console.log("notifications:", notifications);
+  console.log("notifications:", notifications);
 
-  const count =
-    notifications?.filter((item) => item.status === "UNREAD").length ?? 0;
+  const count = notifications?.counts.unread ?? 0;
+
+  // const count =
+  //   notifications?.filter((item) => item.status === "UNREAD").length ?? 0;
 
   return (
     <div className="p-2 flex items-center justify-center text-gray-900 hover:cursor-pointer relative">

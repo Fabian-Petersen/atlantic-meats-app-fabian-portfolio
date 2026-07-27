@@ -16,6 +16,7 @@ import { stockRequestSchema } from "./stockSchemas";
 import {
   notificationSchema,
   notificationPayloadSchema,
+  notificationsResponseSchema,
 } from "./notificationSchemas";
 // % Import Transfer Schemas
 import {
@@ -56,6 +57,7 @@ export {
   transferStatusSchema,
   notificationSchema,
   notificationPayloadSchema,
+  notificationsResponseSchema,
 };
 
 // ! Types
@@ -134,8 +136,13 @@ import type {
   TransferStatus,
 } from "./transfersSchemas";
 
-// % Transfers Types
-import type { Notification, NotificationPayload } from "./notificationSchemas";
+// % Notifications Types
+import type {
+  Notification,
+  NotificationPayload,
+  NotificationResponse,
+  NotificationType,
+} from "./notificationSchemas";
 
 export type {
   // Auth Types
@@ -195,6 +202,8 @@ export type {
   // Notifications
   Notification,
   NotificationPayload,
+  NotificationResponse,
+  NotificationType,
 };
 
 // GlobalContext.ts
