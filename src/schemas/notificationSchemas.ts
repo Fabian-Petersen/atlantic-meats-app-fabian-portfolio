@@ -25,6 +25,7 @@ export const notificationSchema = z.object({
   recipientSub: z.string(),
   notificationCreated: z.string(), // Return date in ISO format
   notificationCreatedDisplay: z.string(), // Return the date in human readible format
+  notificationCreatedAt: z.string(), // Date when item was put into notifications table
 
   recipientEmail: z.email(),
   assetId: z.string(),

@@ -285,7 +285,61 @@ export const useUpdateItem = <TPayload, TResponse>({
 };
 
 // $ Generic: DELETE
-export const useDeleteItem = (options: {
+
+type DeleteArgs<TPayload> = {
+  id: string;
+  payload?: TPayload;
+};
+/**
+ * Creates a reusable React Query mutation for deleting a resource.
+ *
+ * The hook supports both standard DELETE requests, where only the resource ID
+ * is required, and DELETE requests that require an optional request body
+ * (payload). This is useful for APIs that require additional information,
+ * such as a DynamoDB sort key (SK), while maintaining a single generic hook
+ * for all delete operations.
+ *
+ * On successful deletion, the supplied React Query cache is invalidated to
+ * ensure fresh data is fetched.
+ *
+ * @template TPayload - The shape of the optional request payload. Defaults to `unknown`.
+ *
+ * @param options - Configuration for the delete mutation.
+ * @param options.resourcePath - The API resource path (e.g. `"assets"` or `"notifications"`).
+ * @param options.queryKey - The React Query cache key to invalidate after a successful deletion.
+ *
+ * @returns A React Query mutation that accepts:
+ * - `id` - The unique identifier of the resource to delete.
+ * - `payload` *(optional)* - Additional data to send in the DELETE request body.
+ *
+ * @example
+ * // Standard DELETE request
+ * const deleteAsset = useDeleteItem({
+ *   resourcePath: "assets",
+ *   queryKey: ["assets"],
+ * });
+ *
+ * deleteAsset.mutate({
+ *   id: assetId,
+ * });
+ *
+ * @example
+ * // DELETE request with an optional payload
+ * const deleteNotification = useDeleteItem<{
+ *   notificationCreated: string;
+ * }>({
+ *   resourcePath: "notifications",
+ *   queryKey: ["notifications"],
+ * });
+ *
+ * deleteNotification.mutate({
+ *   id: notificationId,
+ *   payload: {
+ *     notificationCreated,
+ *   },
+ * });
+ */
+export const useDeleteItem = <TPayload = unknown>(options: {
   resourcePath: Resource;
   queryKey: readonly unknown[];
 }) => {
@@ -293,8 +347,13 @@ export const useDeleteItem = (options: {
   const { resourcePath, queryKey } = options;
 
   return useMutation({
-    mutationFn: async (id: string): Promise<void> => {
-      await apiClient.delete(`/${resourcePath}/${id}`);
+    mutationFn: async ({
+      id,
+      payload,
+    }: DeleteArgs<TPayload>): Promise<void> => {
+      await apiClient.delete(`/${resourcePath}/${id}`, {
+        data: payload,
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });

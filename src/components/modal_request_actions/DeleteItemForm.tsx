@@ -30,7 +30,7 @@ const DeleteItemForm = () => {
     e.preventDefault();
     console.log("selectedRowId:", selectedRowId);
     try {
-      await deleteItem(selectedRowId);
+      await deleteItem({ id: selectedRowId });
       closeDeleteDialog();
       toast.success("The itemm was sucessfully deleted");
     } catch (error) {

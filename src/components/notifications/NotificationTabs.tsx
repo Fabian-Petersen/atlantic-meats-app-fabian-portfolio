@@ -1,7 +1,7 @@
 // NotificationTabs.tsx
 import { cn } from "@/lib/utils";
 
-export type NotificationTab = "unread" | "all" | "read";
+export type NotificationTab = "unread" | "all";
 
 type NotificationCounts = {
   all: number;
@@ -19,7 +19,6 @@ type NotificationTabsProps = {
 const TABS: { key: NotificationTab; label: string }[] = [
   { key: "all", label: "All" },
   { key: "unread", label: "Unread" },
-  { key: "read", label: "Read" },
 ];
 
 export default function NotificationTabs({
