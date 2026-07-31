@@ -22,7 +22,7 @@ const NotificationButton = ({ className }: Props) => {
     },
   });
 
-  console.log("notifications:", notifications);
+  // console.log("notifications:", notifications);
 
   const count = notifications?.counts.unread ?? 0;
 

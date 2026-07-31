@@ -135,10 +135,16 @@ export default function NotificationCard({
             : "border-gray-200 dark:border-(--clr-borderDark)"
       }`}
     >
-      <button
-        type="button"
+      <div
+        role="button"
         onClick={handleToggle}
         aria-expanded={isExpanded}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleToggle();
+          }
+        }}
         className="hover:cursor-pointer w-full text-left px-4 py-3 flex flex-col hover:bg-gray-50 dark:hover:bg-white/5 transition-colors space-y-4 rounded-md"
       >
         {/* Header */}
@@ -233,7 +239,7 @@ export default function NotificationCard({
             )}
           </div>
         )}
-      </button>
+      </div>
     </div>
   );
 }

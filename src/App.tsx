@@ -85,7 +85,7 @@ function App() {
           <Route
             element={
               <RoleGaurdRoute
-                allowedGroups={["admin", "manager", "user", "technician"]}
+                allowedGroups={["admin", "manager", "user", "maintenance"]}
               />
             }
           >
@@ -171,11 +171,11 @@ function App() {
           </Route>
           {/* //% admin, manager routes */}
           {/* // $ ======================= Maintenance Routes ======================= */}
-          {/* //% admin, technician, contractor Routes */}
+          {/* //% admin, maintenance, contractor Routes */}
           <Route
             element={
               <RoleGaurdRoute
-                allowedGroups={["contractor", "technician", "admin"]}
+                allowedGroups={["contractor", "maintenance", "admin"]}
               />
             }
           >

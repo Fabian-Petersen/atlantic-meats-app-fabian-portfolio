@@ -3,7 +3,7 @@
 import { fetchAuthSession } from "aws-amplify/auth";
 import type { UserGroup } from "@/schemas/usersSchema";
 
-const validGroups: UserGroup[] = ["admin", "technician", "manager", "user"];
+const validGroups: UserGroup[] = ["admin", "maintenance", "manager", "user"];
 
 export async function getUserGroups(): Promise<UserGroup[]> {
   const session = await fetchAuthSession();
