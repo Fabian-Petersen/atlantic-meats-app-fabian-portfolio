@@ -155,7 +155,7 @@ export type AppContextType = {
   setShowRejectRequestDialog: (v: boolean) => void;
   showRejectRequestDialogGeneric: boolean;
   setShowRejectRequestDialogGeneric: (v: boolean) => void;
-  rejectConfig: RejectConfig;
+  rejectConfig: RejectConfig | null;
 
   /**
    * config = {

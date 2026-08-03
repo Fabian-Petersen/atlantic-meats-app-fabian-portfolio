@@ -18,14 +18,21 @@ import { Spinner } from "../ui/spinner";
 import useGlobalContext from "@/context/useGlobalContext";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
+import type { RejectConfig } from "@/context/app-types";
 
-const RejectRequestFormGeneric = () => {
+type Props = {
+  rejectConfig: RejectConfig;
+};
+
+const RejectRequestFormGeneric = ({ rejectConfig }: Props) => {
   const {
     setShowRejectRequestDialogGeneric,
     selectedRowId,
     showRejectRequestDialogGeneric,
-    rejectConfig,
   } = useGlobalContext();
+
+  const { resourcePath, queryKey, successMessage, errorMessage, redirectPath } =
+    rejectConfig;
 
   const {
     register,
@@ -40,9 +47,6 @@ const RejectRequestFormGeneric = () => {
       transferRejectedRequestSchema,
     ) as unknown as Resolver<RejectRequestFormValues>,
   });
-
-  const { resourcePath, queryKey, successMessage, errorMessage, redirectPath } =
-    rejectConfig;
 
   const { submit: rejectRequest, isPending } = useRejectRequest({
     id: selectedRowId ?? "",

@@ -62,6 +62,10 @@ function RejectRequestDialogGeneric() {
     ...rejectConfig,
   };
 
+  if (!rejectConfig) {
+    return null;
+  }
+
   return (
     <dialog
       ref={dialogRef}
@@ -84,7 +88,7 @@ function RejectRequestDialogGeneric() {
         </div>
         <div id="reject-dialog-title" className="md:mx-auto">
           <FormHeading
-            heading={title}
+            heading={title ?? ""}
             className={cn(
               sharedStyles.headingForm,
               "md:text-center font-normal",
@@ -97,7 +101,7 @@ function RejectRequestDialogGeneric() {
         >
           {message}
         </p>
-        <RejectRequestFormGeneric />
+        <RejectRequestFormGeneric rejectConfig={rejectConfig} />
       </div>
     </dialog>
   );

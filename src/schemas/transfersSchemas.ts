@@ -34,6 +34,7 @@ export const transferRequestBaseSchema = assetRequestSchema
     transferReason: z.string().min(1, {
       message: "Give a brief reason for transfer request",
     }),
+    transportInvoices: z.array(z.instanceof(File)).default([]),
   });
 
 export const transferRequestSchema = transferRequestBaseSchema.superRefine(
@@ -110,7 +111,7 @@ export const transferInTransitBaseSchema = z.object({
   transportNotes: z.string().optional(),
   // NEW uploads only
   images: z.array(z.instanceof(File)).default([]),
-  invoices: z.array(z.instanceof(File)).default([]),
+  transportInvoices: z.array(z.instanceof(File)).default([]),
 });
 
 export const transferInTransitRequestSchema =
@@ -140,7 +141,7 @@ export const transferInTransitRequestSchema =
 
 export const transferInTransitResponseSchema = transferInTransitBaseSchema
   .omit({
-    invoices: true,
+    transportInvoices: true,
     images: true,
   })
   .extend({
@@ -149,7 +150,7 @@ export const transferInTransitResponseSchema = transferInTransitBaseSchema
     inTransitSub: z.string(), // Cognito user who marked the transfer in transit
     inTransitBy: z.string(), // Cognito user name who made the transfer in transit
     images: z.array(presignedURLSchema).default([]),
-    invoices: z.array(presignedURLSchema).default([]),
+    transportInvoices: z.array(presignedURLSchema).default([]),
   });
 
 /* -------------------------------------------------------------------------- */
@@ -268,7 +269,7 @@ export const transitTableRowSchema = transferWorkflowResponseSchema
   .extend(transferInTransitResponseSchema.shape)
   .omit({
     images: true,
-    invoices: true,
+    transportInvoices: true,
   });
 
 export const completedTransferTableRowSchema = transitTableRowSchema.extend(

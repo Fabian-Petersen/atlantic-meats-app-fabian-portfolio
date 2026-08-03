@@ -8,16 +8,16 @@ import { useForm, type Resolver } from "react-hook-form";
 
 // $ Import schemas
 import type {
-  AssetRequestFormValues,
+  // AssetRequestFormValues,
   TransferInTransitRequestValues,
 } from "../../schemas/index";
 import { transferRequestSchema } from "../../schemas/index";
 
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import useGlobalContext from "@/context/useGlobalContext";
-import { useTransfersFields } from "../forms/configs/useTransfersFields";
 import DynamicForm from "../forms/DynamicForm";
-import { useGetAll } from "@/utils/api";
+// import { useGetAll } from "@/utils/api";
+import { useTransfersTransitFields } from "../forms/configs/useTransfersTransitFields";
 
 const CreateTransitForm = () => {
   const navigate = useNavigate();
@@ -53,32 +53,24 @@ const CreateTransitForm = () => {
     },
   });
 
-  const { data, isPending: isLoading } = useGetAll<AssetRequestFormValues[]>({
-    resourcePath: "api/assets",
-    queryKey: ["assets", "create-job-form"],
-  });
-
-  // data looks like { assets: Array(107) }
-  const assetsArray: AssetRequestFormValues[] = Array.isArray(data) ? data : [];
-  // $ Custom hook that manages the select input options based on asset data
-
   // $ Form Instance passed to the Dynamic Form
   const form = useForm<TransferInTransitRequestValues>({
     resolver: zodResolver(
       transferRequestSchema,
     ) as unknown as Resolver<TransferInTransitRequestValues>,
     defaultValues: {
-      transportType: ["courier", "contracor", "employee"],
+      transportType: "",
       transportName: "",
       trackingNumber: "",
       transportCost: 0,
       transportNotes: "",
-      transportInvoie: "",
+      images: [],
+      transportInvoices: [],
     },
   });
 
   // $ Hook creating the fields to be displayed by the Dynamic Form
-  const { fields } = useTransfersFields(form, assetsArray);
+  const { fields } = useTransfersTransitFields(form);
 
   // $  ─── Render ─────────────────────────────────────────────────────────────────
   return (
@@ -95,7 +87,7 @@ const CreateTransitForm = () => {
       onCancel={() => navigate("/transfers/list")}
       className=""
       gridClassName="gap-6"
-      isLoading={isLoading}
+      // isLoading={isLoading}
     />
   );
 };

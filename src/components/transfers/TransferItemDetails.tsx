@@ -440,9 +440,10 @@ function TransferItemDetails({ item }: Props) {
                 {/* Invoices */}
                 <Separator width="100%" />
                 <SectionTitle>Invoices</SectionTitle>
-                {inTransit.invoices && inTransit.invoices.length > 0 ? (
+                {inTransit.transportInvoices &&
+                inTransit.transportInvoices.length > 0 ? (
                   <div className="flex flex-col gap-2">
-                    {inTransit.invoices.map((inv, i) => (
+                    {inTransit.transportInvoices.map((inv, i) => (
                       <div
                         key={i}
                         className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 dark:border-gray-700 rounded-md px-3 py-2"

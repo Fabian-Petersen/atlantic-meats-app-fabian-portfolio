@@ -31,7 +31,7 @@ export const useTransfersTransitFields = (
     );
   };
 
-  const transportOptions = ["", "courier", "employee", "contractor", "other"];
+  const transportOptions = ["courier", "contractor", "employee", "other", ""];
 
   // $ ─── Field Config ─────────────────────────────────
   const fields: DynamicFormField<TransferInTransitRequestValues>[] = [
@@ -90,7 +90,7 @@ export const useTransfersTransitFields = (
     },
     {
       fieldType: "file",
-      name: "invoices",
+      name: "transportInvoices",
       multiple: true,
       label: "Upload Invoice",
       className: "col-span-full",

@@ -1,3 +1,8 @@
+/**
+ * This is a custom hook that generates the field configuration for the transfer request form. It uses react-hook-form's useWatch to monitor changes in specific form fields and dynamically updates the options for dependent select fields based on the selected values. The hook also includes logic to reset dependent fields when their parent field values change, ensuring that the form remains consistent and valid.
+ *
+ */
+
 import {
   type TransferRequestFormValues,
   type AssetRequestFormValues,
