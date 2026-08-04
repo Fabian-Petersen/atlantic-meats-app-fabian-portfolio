@@ -120,7 +120,7 @@ function MobileAssetDetails({ item }: Props) {
           aria-label="Go back"
         >
           <ChevronLeft className="w-5 h-5" />
-          Return
+          Back
         </button>
         <p className="flex-1 text-center text-sm font-medium text-gray-800 dark:text-gray-100 truncate">
           Asset Details

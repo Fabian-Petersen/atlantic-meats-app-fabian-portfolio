@@ -31,10 +31,10 @@ function EmptyDataState({
   className,
 }: EmptyStateProps) {
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="w-full h-full flex justify-center md:items-center ">
       <div
         className={cn(
-          "max-w-1/2 flex flex-col items-center justify-center text-center gap-2 py-10 px-4 bg-gray-100  rounded-md shadow-md",
+          "md:max-w-1/2 flex flex-col items-center justify-center text-center gap-2 py-10 px-4 bg-gray-100  rounded-md shadow-md",
           "dark:bg-[#141c2f] text-gray-500 dark:text-gray-400",
           className,
         )}

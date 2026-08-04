@@ -4,7 +4,7 @@ import type { Row } from "@tanstack/react-table";
 import { ChevronDown, Truck, Calendar, Hash, Wallet } from "lucide-react";
 
 import type { TransferWorkflowResponse } from "@/schemas";
-import type { Resource } from "@/utils/api";
+// import type { Resource } from "@/utils/api";
 import { DropdownMenuButtonDialog } from "../../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import { CardRow } from "../CardRow";
@@ -15,22 +15,22 @@ import { cn } from "@/lib/utils";
 
 type MobileTransferTransitCardProps = {
   row: Row<TransferWorkflowResponse>;
-  setShowUpdateAssetDialog: (v: boolean) => void;
   setSelectedRowId: (id: string) => void;
-  openDeleteDialog: (
-    selectedRowId: string,
-    config: {
-      resourcePath: Resource;
-      queryKey: readonly unknown[];
-      resourceName?: string;
-    },
-  ) => void;
+  //   setShowUpdateAssetDialog: (v: boolean) => void;
+  //   openDeleteDialog: (
+  //     selectedRowId: string,
+  //     config: {
+  //       resourcePath: Resource;
+  //       queryKey: readonly unknown[];
+  //       resourceName?: string;
+  //     },
+  //   ) => void;
 };
 
-function MobileTransferTransitCard({
+function MobileTransfersCompletedCard({
   row,
-  setShowUpdateAssetDialog,
   setSelectedRowId,
+  //   setShowUpdateAssetDialog,
   //   openDeleteDialog,
 }: MobileTransferTransitCardProps) {
   const item = row.original;
@@ -53,18 +53,10 @@ function MobileTransferTransitCard({
     edit: {
       url: `api/transfers/${rowId}`,
       onOpen: () => {
-        setShowUpdateAssetDialog(true);
+        // setShowUpdateAssetDialog(true);
         setSelectedRowId(rowId);
       },
     },
-    view: {
-      url: `api/transfers/${rowId}`,
-      onOpen: () => {
-        setSelectedRowId(rowId);
-        navigate(`/transfers/${rowId}`);
-      },
-    },
-
     // delete: {
     //   config: {
     //     resourcePath: `api/transfers/${rowId}`,
@@ -175,4 +167,4 @@ function MobileTransferTransitCard({
   );
 }
 
-export default MobileTransferTransitCard;
+export default MobileTransfersCompletedCard;

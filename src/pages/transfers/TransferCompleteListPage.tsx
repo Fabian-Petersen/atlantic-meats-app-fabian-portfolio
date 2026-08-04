@@ -4,7 +4,7 @@
 import FormHeading from "../../../customComponents/FormHeading";
 import { useGetAll } from "@/utils/api";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-// import { MobileAssetsOverviewTable } from "@/components/mobile/MolbileAssetsOverviewTable";
+import MobileTransfersCompletedList from "@/components/mobile/transfers/MobileTransfersCompletedList";
 
 import { useNavigate } from "react-router-dom";
 
@@ -147,14 +147,15 @@ const TransferCompleteListPage = () => {
           <div className="grid gap-2">
             <FormHeading
               className={cn(sharedStyles.headingForm, "px-0")}
-              heading="Transfers Register"
+              heading="Transfers - Completed"
               redirect={true}
               redirectTo="/dashboard"
             />
-            {/* <MobileAssetsOverviewTable
+            <MobileTransfersCompletedList
               className="flex lg:hidden"
               data={table.getRowModel().rows}
-            /> */}
+              setSelectedRowId={setSelectedRowId}
+            />
           </div>
         )}
       </div>

@@ -11,6 +11,7 @@ import {
   type LucideIcon,
   History,
   Truck,
+  Eye,
 } from "lucide-react";
 
 import type { Resource } from "@/utils/api";
@@ -45,6 +46,12 @@ type GetTableMenuItemsProps = {
   };
 
   edit?: {
+    label?: string;
+    url?: string;
+    onOpen: () => void;
+  };
+
+  view?: {
     label?: string;
     url?: string;
     onOpen: () => void;
@@ -107,6 +114,7 @@ export const getTableMenuItems = ({
   status,
   setSelectedRowId,
   edit,
+  view,
   transit,
   receipt,
   action,
@@ -193,6 +201,19 @@ export const getTableMenuItems = ({
       onClick: () => {
         setSelectedRowId(rowId);
         edit.onOpen();
+      },
+    });
+  }
+
+  if (view) {
+    items.push({
+      id: "view",
+      label: view.label ?? "View",
+      icon: Eye,
+      url: view.url,
+      onClick: () => {
+        setSelectedRowId(rowId);
+        view.onOpen();
       },
     });
   }

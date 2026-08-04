@@ -4,7 +4,7 @@
 import { useById } from "../../utils/api";
 import type { TransferWorkflowResponse } from "@/schemas";
 import BackButton from "@/components/features/BackButton";
-// import MobileCompletedJobDetails from "@/components/mobile/MobileCompletedJobDetails";
+import MobileTransfersItemDetails from "@/components/mobile/transfers/MobileTransfersItemDetails";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useParams } from "react-router-dom";
 import TransferItemDetails from "@/components/transfers/TransferItemDetails";
@@ -19,7 +19,7 @@ const TransferItemPage = () => {
     queryKey: ["transfer", "status: all"],
     resourcePath: "api/transfers",
   });
-  console.log("itemReceived:", item);
+  // console.log("itemReceived:", item);
   if (isPending) {
     return <PageLoadingSpinner />;
   }
@@ -38,7 +38,7 @@ const TransferItemPage = () => {
         />
         <TransferItemDetails item={item} />
       </div>
-      {/* <MobileCompletedJobDetails item={item} /> */}
+      <MobileTransfersItemDetails item={item} />
     </div>
   );
 };
