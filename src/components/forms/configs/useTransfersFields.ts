@@ -162,6 +162,7 @@ export const useTransfersFields = (
       name: "images",
       multiple: true,
       label: "Upload Images",
+      className: "",
     },
   ];
 

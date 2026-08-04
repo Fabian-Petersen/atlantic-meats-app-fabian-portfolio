@@ -131,7 +131,7 @@ export const sharedStyles = {
   form: cn(
     "flex flex-col md:rounded-lg md:w-full text-(--clr-textLight) bg-white md:dark:bg-(--bg-primary_dark)",
   ),
-  formParent: cn("grid grid-cols-1 md:grid-cols-2 gap-4 w-full md:py-2"),
+  formParent: cn("grid grid-cols-1 md:grid-cols-2 gap-4 w-full pb-1 md:py-2"),
 
   formInputDefault: cn(
     // layout & sizing

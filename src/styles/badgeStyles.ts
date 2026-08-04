@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils";
 export const badgeStyles = {
   base: cn(
     "text-center min-w-12 max-w-fit",
+    "text-[0.65rem] md:text-cxs capitalize",
     "px-[0.40rem] py-[0.135rem]",
     "rounded-full",
-    "text-cxs capitalize",
     "border",
   ),
 

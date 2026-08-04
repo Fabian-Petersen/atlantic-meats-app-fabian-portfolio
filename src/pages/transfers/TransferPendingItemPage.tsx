@@ -2,11 +2,11 @@
 
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../../utils/api";
-import { type TransferResponseValues } from "@/schemas";
+import { type TransferWorkflowResponse } from "@/schemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
 import { Success } from "@/components/features/Success";
 import useGlobalContext from "@/context/useGlobalContext";
-// import MobileRequestApproval from "@/components/mobile/MobileRequestApproval";
+import MobileTransferRequestApproval from "@/components/mobile/transfers/MobileTransfersRequestApproval";
 import BackButton from "@/components/features/BackButton";
 import { cn } from "@/lib/utils";
 import TransferRequestApproval from "@/components/transfers/TransferRequestApproval";
@@ -20,7 +20,7 @@ export type PresignedUrlResponse = {
 const TransferPendingItemPage = () => {
   const { showSuccess, selectedRowId } = useGlobalContext();
 
-  const { data: item } = useById<TransferResponseValues>({
+  const { data: item } = useById<TransferWorkflowResponse>({
     id: selectedRowId ?? "",
     queryKey: ["transfers", "pending-approval"],
     resourcePath: `api/transfers`,
@@ -35,7 +35,7 @@ const TransferPendingItemPage = () => {
     return <PageLoadingSpinner />;
   }
 
-  const images = item.images;
+  const images = item?.pending?.images;
 
   return (
     <div className="flex flex-col gap-4 px-4 py-8 min-h-[calc(100vh-var(--sm-navbarHeight))] md:h-[calc(100vh-var(--lg-navbarHeight))]">
@@ -54,9 +54,8 @@ const TransferPendingItemPage = () => {
           <TransferRequestApproval />
         </div>
       </div>
-      {/* <MobileRequestApproval item={item} /> */}
+      <MobileTransferRequestApproval item={item} />
     </div>
   );
 };
-
 export default TransferPendingItemPage;

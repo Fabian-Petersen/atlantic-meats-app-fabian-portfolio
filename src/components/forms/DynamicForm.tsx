@@ -280,7 +280,13 @@ function DynamicForm<T extends FieldValues>({
         })}
         noValidate
       >
-        <div className={cn(sharedStyles.formParent, gridClassName)}>
+        <div
+          className={cn(
+            sharedStyles.formParent,
+            gridClassName,
+            // "border border-red-500 border-dashed",
+          )}
+        >
           {fields.map(renderField)}
         </div>
 

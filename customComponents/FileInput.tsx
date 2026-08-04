@@ -7,7 +7,6 @@ import type {
   PathValue,
 } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import clsx from "clsx";
 import { Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -77,7 +76,7 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
         };
 
         return (
-          <div className={clsx("w-full space-y-2", className)}>
+          <div className={cn("w-full pb-1 mb-2 group", className)}>
             {/* Static label above the field, e.g. "Images" / "Invoices" */}
             {label && (
               <label

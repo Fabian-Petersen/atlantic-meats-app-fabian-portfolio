@@ -20,7 +20,7 @@ import {
 } from "@tanstack/react-table";
 
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-// import { MobileJobsPendingContainer } from "@/components/mobile/MobileJobsPendingContainer";
+import MobileTransfersRequestsList from "@/components/mobile/transfers/MobileTransfersRequestsList";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -159,7 +159,7 @@ const TransfersRequestsListPage = () => {
           <>
             <FormHeading
               className={cn(sharedStyles.headingForm)}
-              heading="Transfers - Pending Requests"
+              heading="Transfers - Requests"
               redirect={true}
               redirectTo="/dashboard"
             />
@@ -173,14 +173,14 @@ const TransfersRequestsListPage = () => {
           <div className="grid gap-2">
             <FormHeading
               className={cn(sharedStyles.headingForm, "px-0")}
-              heading="Transfers - Pending Requests"
+              heading="Transfers - Requests"
               redirect={true}
               redirectTo="/dashboard"
             />
-            {/* <MobileJobsPendingContainer
+            <MobileTransfersRequestsList
               className="flex md:hidden"
               data={table.getRowModel().rows}
-            /> */}
+            />
           </div>
         )}
       </div>
