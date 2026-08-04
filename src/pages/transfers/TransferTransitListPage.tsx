@@ -30,6 +30,7 @@ import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import { getTransferTransitColumns } from "@/components/tableColumns/TransferTransitColumns";
 import { flattenTransfersData } from "@/utils/flattenTranferData";
+import MobileTransfersTransitList from "@/components/mobile/transfers/MobileTransfersTransitList";
 
 const TransferTransitListPage = () => {
   const navigate = useNavigate();
@@ -45,19 +46,17 @@ const TransferTransitListPage = () => {
     },
   });
 
-  // console.log("transferTransitDataList:", data);
+  // console.log("transit-data:", data);
 
   /**
    * Convert the rows have the data in the root object and not nested using the util
    * function flattenTransfersData
    */
-
   const rows = useMemo(
     () => flattenTransfersData(data, ["in-transit"]),
     [data],
   );
 
-  // console.log("flattenedInTransitRows:", rows);
   /* -------------------------------------------------------------------------- */
   /*                                   SORTING                                  */
   /* -------------------------------------------------------------------------- */
@@ -152,14 +151,17 @@ const TransferTransitListPage = () => {
           <div className="grid gap-2">
             <FormHeading
               className={cn(sharedStyles.headingForm, "px-0")}
-              heading="Transfers Register"
+              heading="Transfers - In Progress"
               redirect={true}
               redirectTo="/dashboard"
             />
-            {/* <MobileAssetsOverviewTable
+            <MobileTransfersTransitList
               className="flex lg:hidden"
               data={table.getRowModel().rows}
-            /> */}
+              setShowUpdateAssetDialog={setShowUpdateAssetDialog}
+              setSelectedRowId={setSelectedRowId}
+              openDeleteDialog={openDeleteDialog}
+            />
           </div>
         )}
       </div>
