@@ -1,9 +1,20 @@
 import { useState, useRef, useEffect } from "react";
 import type { AssetTableRow } from "@/schemas";
-import { ChevronDown, MoreVertical, Pencil, Eye, Trash2 } from "lucide-react";
+import {
+  ChevronDown,
+  MoreVertical,
+  Pencil,
+  Eye,
+  Trash2,
+  Barcode,
+  MapPin,
+} from "lucide-react";
 import type { Row } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
+import { CardRow } from "./CardRow";
 
 type Props = {
   row: Row<AssetTableRow>;
@@ -11,7 +22,8 @@ type Props = {
   onToggle: () => void;
 };
 
-export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
+export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
+  const item = row.original;
   const navigate = useNavigate();
   const { setSelectedRowId } = useGlobalContext();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -30,17 +42,42 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
   const handleNavigate = (e: React.MouseEvent) => {
     e.stopPropagation();
     setMenuOpen(false);
-    setSelectedRowId(row.original.id);
-    navigate(`/assets/${row.original.id}`);
+    setSelectedRowId(item.id);
+    navigate(`/assets/${item.id}`);
   };
 
   return (
     <div
-      className="hover:cursor-pointer dark:border rounded-md p-2 mb-2 bg-gray-100 dark:bg-(--bg-primary_dark) dark:border-gray-700"
+      className={cn(
+        sharedStyles.cardRowParent,
+        "flex flex-col overflow-visible",
+      )}
       onClick={onToggle}
     >
-      <div className="flex justify-between items-start dark:text-gray-400">
-        <p className="font-medium">{row.original.equipment}</p>
+      <div className={cn(sharedStyles.cardBtn, "gap-0")}>
+        <div className="flex flex-col flex-1 min-w-0 gap-1">
+          <CardRow
+            value={item.equipment}
+            // icon={Hammer}
+            className="capitalize text-(--clr-textLight) py-0"
+            valueStyles="text-md font-semibold dark:text-white/90"
+            iconStyles="w-4 h-4 text-purple-500 dark:text-purple-400"
+          />
+          <CardRow
+            value={item.assetID}
+            icon={Barcode}
+            className="capitalize dark:text-(--clr-textDark) text-(--clr-textLight) py-0"
+            valueStyles="text-xs text-gray-400 dark:text-gray-400 font-mono"
+            iconStyles="w-3.5 h-3.5 text-teal-500 dark:text-teal-400"
+          />
+          <CardRow
+            value={item.location}
+            icon={MapPin}
+            className="capitalize text-(--clr-textLight) py-0"
+            valueStyles="text-xs text-gray-400 dark:text-gray-400 font-mono"
+            iconStyles="w-3.5 h-3.5 text-blue-500 dark:text-blue-400"
+          />
+        </div>
 
         {/* Actions + chevron grouped on the right */}
         <div
@@ -59,7 +96,7 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
             </button>
 
             {menuOpen && (
-              <div className="absolute right-0 top-8 z-10 min-w-37.5 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm overflow-hidden">
+              <div className="absolute right-0 top-8 z-9999 min-w-37.5 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
                 <button
                   type="button"
                   className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-left text-green-700 dark:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700"
@@ -87,16 +124,13 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
           </div>
 
           {/* Chevron — expand/collapse only */}
-          <ChevronDown
-            size={18}
-            className={`text-gray-500 dark:text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
-          />
+          <button type="button" onClick={onToggle}>
+            <ChevronDown
+              size={18}
+              className={`text-gray-500 dark:text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
+            />
+          </button>
         </div>
-      </div>
-
-      <div className="flex justify-between text-xs mt-2 text-gray-500 dark:text-gray-400">
-        <span>{row.original.location}</span>
-        <span>{row.original.assetID}</span>
       </div>
 
       {isOpen && (
@@ -104,11 +138,11 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
           <ul className="grid gap-4 text-gray-400">
             <li className="flex gap-2 w-full justify-between">
               <span>Condition</span>
-              <span>{row.original.condition}</span>
+              <span>{item.condition}</span>
             </li>
             <li className="flex gap-2 w-full justify-between">
               <span>Serial Number</span>
-              <span>{row.original.serialNumber}</span>
+              <span>{item.serialNumber}</span>
             </li>
           </ul>
         </div>
@@ -129,7 +163,7 @@ export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
 //   onToggle: () => void;
 // };
 
-// export function MobileAssetViewRow({ row, isOpen, onToggle }: Props) {
+// export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
 //   const navigate = useNavigate();
 //   const { setSelectedRowId } = useGlobalContext();
 //   return (

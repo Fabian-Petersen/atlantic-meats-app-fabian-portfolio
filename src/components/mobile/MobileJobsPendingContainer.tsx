@@ -4,6 +4,7 @@ import type { JobAPIResponse } from "@/schemas";
 import { useState } from "react";
 import MobileJobsPendingCard from "./MobileJobsPendingCard";
 import type { Row } from "@tanstack/react-table";
+import { cn } from "@/lib/utils";
 
 type Props = {
   data: Row<JobAPIResponse>[];
@@ -13,7 +14,7 @@ type Props = {
 export function MobileJobsPendingContainer({ className, data }: Props) {
   const [openRowId, setOpenRowId] = useState<string | null>(null);
   return (
-    <div className={`${className} flex flex-col gap-2 w-full`}>
+    <div className={cn("flex flex-col gap-2 w-full", className)}>
       {data.map((row) => (
         <MobileJobsPendingCard
           key={row.id}

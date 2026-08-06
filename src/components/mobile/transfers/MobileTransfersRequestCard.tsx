@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Row } from "@tanstack/react-table";
 import {
@@ -9,6 +8,8 @@ import {
   User,
   FileText,
   MessageSquare,
+  Barcode,
+  Hammer,
 } from "lucide-react";
 
 import type { TransferPendingTableRow } from "@/schemas";
@@ -21,11 +22,16 @@ import { cn } from "@/lib/utils";
 
 type MobileTransferRequestCardProps = {
   row: Row<TransferPendingTableRow>;
+  isOpen: boolean;
+  onToggle: () => void;
 };
 
-function MobileTransferRequestCard({ row }: MobileTransferRequestCardProps) {
+function MobileTransferRequestCard({
+  row,
+  isOpen,
+  onToggle,
+}: MobileTransferRequestCardProps) {
   const item = row.original;
-  const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
   const { setSelectedRowId } = useGlobalContext();
 
@@ -41,16 +47,30 @@ function MobileTransferRequestCard({ row }: MobileTransferRequestCardProps) {
       {/* ── Header (always visible, toggles expansion) ── */}
       <button
         type="button"
-        onClick={() => setIsExpanded((prev) => !prev)}
-        className="flex items-center justify-between gap-2 w-full text-left"
+        onClick={onToggle}
+        className={cn(sharedStyles.cardBtn, "gap-0")}
       >
-        <div className="flex flex-col min-w-0">
-          <span className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize truncate">
-            {item.equipment}
-          </span>
-          <span className="text-xs text-gray-400 dark:text-gray-500 font-mono">
-            {item.assetID}
-          </span>
+        <div className="flex flex-col flex-1 min-w-0 gap-1">
+          <CardRow
+            value={item.equipment}
+            icon={Hammer}
+            className="capitalize text-(--clr-textLight) py-0"
+            valueStyles="text-md font-semibold dark:text-white/90"
+            iconStyles="w-3.5 h-3.5 text-purple-500 dark:text-purple-400"
+          />
+          <CardRow
+            value={item.assetID}
+            icon={Barcode}
+            className="capitalize dark:text-(--clr-textDark) text-(--clr-textLight) py-0"
+            valueStyles="text-xs text-gray-400 dark:text-gray-400 font-mono"
+            iconStyles="w-3.5 h-3.5 text-teal-500 dark:text-teal-400"
+          />
+          <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 mt-1 capitalize">
+            <MapPin className="w-3.5 h-3.5 shrink-0 text-blue-500" />
+            <span className="truncate">{item.locationFrom}</span>
+            <ArrowRight className="w-3 h-3 shrink-0 text-green-500" />
+            <span className="truncate">{item.locationTo}</span>
+          </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <Badge
@@ -61,22 +81,14 @@ function MobileTransferRequestCard({ row }: MobileTransferRequestCardProps) {
           <ChevronDown
             className={cn(
               "w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200",
-              isExpanded && "rotate-180",
+              isOpen && "rotate-180",
             )}
           />
         </div>
       </button>
 
-      {/* ── Collapsed summary ── */}
-      <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 mt-1.5 capitalize">
-        <MapPin className="w-3.5 h-3.5 shrink-0" />
-        <span className="truncate">{item.locationFrom}</span>
-        <ArrowRight className="w-3 h-3 shrink-0" />
-        <span className="truncate">{item.locationTo}</span>
-      </div>
-
       {/* ── Expanded details ── */}
-      {isExpanded && (
+      {isOpen && (
         <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700/60 flex flex-col gap-2">
           <CardRow
             icon={User}

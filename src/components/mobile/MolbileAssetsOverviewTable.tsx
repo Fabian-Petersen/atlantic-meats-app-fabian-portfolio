@@ -2,7 +2,7 @@
 
 import type { AssetTableRow } from "@/schemas";
 import { useState } from "react";
-import { MobileAssetViewRow } from "./MobileAssetViewRow";
+import { MobileAssetRegisterCard } from "./MobileAssetRegisterCard";
 import type { Row } from "@tanstack/react-table";
 
 type Props = {
@@ -15,7 +15,7 @@ export function MobileAssetsOverviewTable({ className, data }: Props) {
   return (
     <div className={`${className} flex flex-col gap-2 w-full`}>
       {data.map((row) => (
-        <MobileAssetViewRow
+        <MobileAssetRegisterCard
           key={row.id}
           row={row}
           isOpen={openRowId === row.id}

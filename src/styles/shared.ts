@@ -47,17 +47,26 @@ export const sharedStyles = {
     "rounded-md sticky top-0 z-10 bg-white dark:bg-primary_dark border border-gray-200 dark:border-gray-700/60 px-4 py-3 flex items-center justify-between gap-3",
   ),
   cardRowParent: cn(
-    "mt-4 rounded-md border border-gray-200  p-4 w-full",
+    // "mt-4 rounded-md border border-gray-200  p-4 w-full",
+    "rounded-md border border-gray-200 mb-2 overflow-hidden transition-shadow hover:shadow-sm py-2 px-4 w-full",
     // light
     "bg-white",
     // dark
     "dark:bg-(--bg-primary_dark) dark:border-gray-700/60",
   ),
   cardRow: cn(
-    "flex gap-3 py-3 items-center",
+    "flex gap-1 py-1.5 items-center",
     // light
     "",
     // dark
+    "",
+  ),
+  cardBtn: cn(
+    "flex justify-between gap-2 w-full text-left hover:bg-gray-50 transition-colors",
+    // light
+    "",
+    // dark
+    "dark:hover:bg-white/5",
     "",
   ),
   /* //$ ——— Buttons ———————————————————————————————————————————————————————— */
