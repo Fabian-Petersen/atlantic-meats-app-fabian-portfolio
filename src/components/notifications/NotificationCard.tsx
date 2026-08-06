@@ -151,7 +151,7 @@ export default function NotificationCard({
         <div className="flex justify-between items-start gap-4">
           <div className="flex justify-between gap-2 min-w-0 w-full flex-col">
             <span
-              className={`text-sm dark:text-gray-200 ${
+              className={`text-xs dark:text-gray-200 ${
                 status === "UNREAD" ? "font-semibold" : "font-medium"
               }`}
             >
@@ -163,6 +163,7 @@ export default function NotificationCard({
               value={formatNotificationDate(row.notificationCreated)}
               className="py-0"
               valueStyles="lowercase text-gray-400"
+              iconStyles="w-3.5 h-3.5 text-green-400 dark:text-green-500"
             />
           </div>
 

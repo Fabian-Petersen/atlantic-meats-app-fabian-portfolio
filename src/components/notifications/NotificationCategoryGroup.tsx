@@ -27,7 +27,7 @@ export default function NotificationCategoryGroup({
   if (notifications.length === 0) return null;
 
   return (
-    <div className="rounded-lg dark:bg-(--bg-primary_dark)">
+    <div className="rounded-md dark:bg-(--bg-primary_dark)">
       <button
         type="button"
         onClick={() => onToggle(category)}
@@ -62,7 +62,7 @@ export default function NotificationCategoryGroup({
             transition={{ duration: 0.2, ease: "easeInOut" }}
             className=""
           >
-            <div className="px-2 pb-2 space-y-2">
+            <div className="md:px-2 pb-2 space-y-2">
               {notifications.map((item) => (
                 <NotificationCard key={item.id} row={item} />
               ))}

@@ -135,7 +135,7 @@ const NotificationSidebar = () => {
               </div>
 
               {/* Grouped list */}
-              <div className="bg-gray-50 dark:bg-(--clr-bgItem) h-full overflow-y-scroll flex flex-col gap-2 no-scrollbar p-2 rounded-lg">
+              <div className="bg-gray-50 dark:bg-(--clr-bgItem) h-full overflow-y-scroll flex flex-col gap-2 no-scrollbar md:p-2 rounded-md">
                 {hasAnyResults ? (
                   categoryOrder.map((category) => {
                     const items = groupedByCategory.get(category);
