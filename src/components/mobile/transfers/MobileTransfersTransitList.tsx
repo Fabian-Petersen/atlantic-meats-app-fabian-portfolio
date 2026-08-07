@@ -3,6 +3,7 @@ import type { TransferWorkflowResponse } from "@/schemas";
 import type { Resource } from "@/utils/api";
 import MobileTransferTransitCard from "./MobileTransferTransitCard";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 type MobileTransferTransitListProps = {
   data: Row<TransferWorkflowResponse>[];
@@ -26,12 +27,15 @@ function MobileTransferTransitList({
   openDeleteDialog,
   className,
 }: MobileTransferTransitListProps) {
+  const [openRowId, setOpenRowId] = useState<string | null>(null);
   return (
     <div className={cn("flex flex-col", className)}>
       {data.map((row) => (
         <MobileTransferTransitCard
           key={row.id}
           row={row}
+          isOpen={openRowId === row.id}
+          onToggle={() => setOpenRowId(openRowId === row.id ? null : row.id)}
           setShowUpdateAssetDialog={setShowUpdateAssetDialog}
           setSelectedRowId={setSelectedRowId}
           openDeleteDialog={openDeleteDialog}

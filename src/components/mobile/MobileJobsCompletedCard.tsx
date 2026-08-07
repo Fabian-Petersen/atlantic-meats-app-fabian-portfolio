@@ -8,6 +8,8 @@ import { sharedStyles } from "@/styles/shared";
 import { CardRow } from "./CardRow";
 import { Badge } from "../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
+import { AnimatePresence, motion } from "motion/react";
+import { motionVariants } from "@/styles/motionStyles";
 
 type JobsActionedCardProps = {
   row: Row<ActionAPIResponse>;
@@ -25,7 +27,14 @@ export default function MobileJobsCompletedCard({
   const { setSelectedRowId } = useGlobalContext();
 
   return (
-    <div className={cn(sharedStyles.cardRowParent, "flex flex-col")}>
+    <div
+      className={cn(
+        sharedStyles.cardRowParent,
+        "flex flex-col",
+        isOpen && sharedStyles.cardIsOpen,
+      )}
+      onClick={onToggle}
+    >
       {/* Always-visible header — tap to expand */}
       <button
         type="button"
@@ -73,62 +82,76 @@ export default function MobileJobsCompletedCard({
       </button>
 
       {/* // $ ——— Expanded Section ——————————————————————————————————————————————————————*/}
-      {isOpen && (
-        <div className="border-t border-gray-100 dark:border-gray-700/60 px-4 py-3 flex flex-col gap-3">
-          {/* // $ ——— Technician ———————————————————————————————————————————————————————— */}
-          <div className="flex justify-between items-center">
-            <CardRow
-              label="Actioned By"
-              className="py-0"
-              valueStyles="hidden"
-            />
-            <CardRow
-              icon={User}
-              className="py-0"
-              value={item.actioned_by}
-              iconStyles="dark:text-blue-500"
-            />
-          </div>
-          {/* // $ ——— Findings ———————————————————————————————————————————————————————— */}
-          {item.findings && (
-            <div className="flex flex-col">
-              <CardRow
-                label="findings"
-                labelStyles="text-sm"
-                valueStyles="hidden"
-                className="py-0"
-              />
-              <CardRow value={item.findings} className="py-1" />
-            </div>
-          )}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            variants={motionVariants.expandable}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            className="overflow-hidden"
+          >
+            <div className="border-t border-gray-100 dark:border-gray-700/60 py-3 flex flex-col gap-3">
+              {/* // $ ——— Technician ———————————————————————————————————————————————————————— */}
+              <div className="flex justify-between items-center">
+                <CardRow
+                  label="Actioned By"
+                  className="py-0"
+                  valueStyles="hidden"
+                />
+                <CardRow
+                  icon={User}
+                  className="py-0"
+                  value={item.actioned_by}
+                  iconStyles="dark:text-blue-500"
+                />
+              </div>
+              {/* // $ ——— Findings ———————————————————————————————————————————————————————— */}
+              {item.findings && (
+                <div className="flex flex-col">
+                  <CardRow
+                    label="findings"
+                    labelStyles="text-sm"
+                    valueStyles="hidden"
+                    className="py-0"
+                  />
+                  <CardRow value={item.findings} className="py-1" />
+                </div>
+              )}
 
-          {item.work_completed && (
-            <div className="flex flex-col border-t border-gray-100 dark:border-gray-700/60 pt-2">
-              <CardRow
-                label="Work Completed"
-                labelStyles="text-sm"
-                valueStyles="hidden"
-                className="py-0"
-              />
-              <CardRow value={item.work_completed} className="py-1" />
+              {item.work_completed && (
+                <div className="flex flex-col border-t border-gray-100 dark:border-gray-700/60 pt-2">
+                  <CardRow
+                    label="Work Completed"
+                    labelStyles="text-sm"
+                    valueStyles="hidden"
+                    className="py-0"
+                  />
+                  <CardRow value={item.work_completed} className="py-1" />
+                </div>
+              )}
+              {/* // $ ——— Actions ———————————————————————————————————————————————————————— */}
+              <div className={cn(sharedStyles.btnParent)}>
+                <button
+                  type="button"
+                  className={cn(
+                    sharedStyles.btnSubmit,
+                    sharedStyles.btn,
+                    "py-3",
+                  )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedRowId(item.id);
+                    navigate(`/jobs/${item.id}/complete`);
+                  }}
+                >
+                  View Job Details
+                </button>
+              </div>
             </div>
-          )}
-          {/* // $ ——— Actions ———————————————————————————————————————————————————————— */}
-          <div className={cn(sharedStyles.btnParent)}>
-            <button
-              type="button"
-              className={cn(sharedStyles.btnSubmit, sharedStyles.btn, "py-3")}
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedRowId(item.id);
-                navigate(`/jobs/${item.id}/complete`);
-              }}
-            >
-              View Job Details
-            </button>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

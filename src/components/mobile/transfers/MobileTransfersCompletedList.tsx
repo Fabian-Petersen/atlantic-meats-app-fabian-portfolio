@@ -3,38 +3,29 @@ import type { TransferWorkflowResponse } from "@/schemas";
 // import type { Resource } from "@/utils/api";
 import MobileTransfersCompletedCard from "./MobileTransfersCompletedCard";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 type MobileTransferCompletedListProps = {
   data: Row<TransferWorkflowResponse>[];
   setSelectedRowId: (id: string) => void;
-  //   setShowUpdateAssetDialog: (v: boolean) => void;
-  //   openDeleteDialog: (
-  //     selectedRowId: string,
-  //     config: {
-  //       resourcePath: Resource;
-  //       queryKey: readonly unknown[];
-  //       resourceName?: string;
-  //     },
-  //   ) => void;
   className?: string;
 };
 
 function MobileTransferCompletedList({
   data,
   setSelectedRowId,
-  //   setShowUpdateAssetDialog,
-  //   openDeleteDialog,
   className,
 }: MobileTransferCompletedListProps) {
+  const [openRowId, setOpenRowId] = useState<string | null>(null);
   return (
-    <div className={cn("flex flex-col", className)}>
+    <div className={cn("flex flex-col gap-2 w-full", className)}>
       {data.map((row) => (
         <MobileTransfersCompletedCard
           key={row.id}
           row={row}
+          isOpen={openRowId === row.id}
+          onToggle={() => setOpenRowId(openRowId === row.id ? null : row.id)}
           setSelectedRowId={setSelectedRowId}
-          //   setShowUpdateAssetDialog={setShowUpdateAssetDialog}
-          //   openDeleteDialog={openDeleteDialog}
         />
       ))}
     </div>

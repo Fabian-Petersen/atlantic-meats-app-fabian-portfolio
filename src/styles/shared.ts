@@ -61,6 +61,13 @@ export const sharedStyles = {
     // dark
     "",
   ),
+  cardIsOpen: cn(
+    "bg-gray-200/10 border transition-all duration-200",
+    // light
+    "border-blue-400",
+    // dark
+    "dark:border-blue-500",
+  ),
   cardBtn: cn(
     "flex justify-between gap-2 w-full text-left hover:bg-gray-50 transition-colors",
     // light
@@ -168,8 +175,31 @@ export const sharedStyles = {
     "",
   ),
 
+  /**
+   * Tailwind classes used by the auto-resizing textarea:
+   *
+   * - `field-sizing-content`
+   *   Makes the textarea grow with its content while preventing it from
+   *   shrinking below its initial height.
+   *
+   * - `min-h-lh`
+   *   Sets the minimum height to one line of text, ensuring the textarea
+   *   never becomes smaller than a single line.
+   *
+   * - `resize-none`
+   *   Prevents the user from manually resizing the textarea.
+   *
+   * - `overflow-hidden`
+   *   Hides the scrollbar as the textarea expands with its content.
+   *
+   * - `focus:border-rose-600`
+   *   Changes the border color when the textarea receives focus.
+   *
+   * - `focus:dark:border-transparent`
+   *   Removes the focus border color when the application is in dark mode.
+   */
   formTextArea: cn(
-    "peer resize-none overflow-hidden",
+    "peer resize-none overflow-hidden field-sizing-content min-h-lh",
     // textarea-specific tweaks
     "focus:border-rose-600 focus:dark:transparent",
   ),

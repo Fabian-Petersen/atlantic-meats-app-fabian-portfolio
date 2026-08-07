@@ -15,6 +15,8 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 import { CardRow } from "./CardRow";
+import { AnimatePresence, motion } from "motion/react";
+import { motionVariants } from "@/styles/motionStyles";
 
 type Props = {
   row: Row<AssetTableRow>;
@@ -51,6 +53,7 @@ export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
       className={cn(
         sharedStyles.cardRowParent,
         "flex flex-col overflow-visible",
+        isOpen && sharedStyles.cardIsOpen, // Apply the cardIsOpen style when isOpen is true
       )}
       onClick={onToggle}
     >
@@ -132,21 +135,30 @@ export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
           </button>
         </div>
       </div>
-
-      {isOpen && (
-        <div className="mt-3 text-xs">
-          <ul className="grid gap-4 text-gray-400">
-            <li className="flex gap-2 w-full justify-between">
-              <span>Condition</span>
-              <span>{item.condition}</span>
-            </li>
-            <li className="flex gap-2 w-full justify-between">
-              <span>Serial Number</span>
-              <span>{item.serialNumber}</span>
-            </li>
-          </ul>
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            variants={motionVariants.expandable}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            className="overflow-hidden"
+          >
+            <div className="mt-3 text-xs">
+              <ul className="grid gap-4 text-gray-400">
+                <li className="flex gap-2 w-full justify-between">
+                  <span>Condition</span>
+                  <span>{item.condition}</span>
+                </li>
+                <li className="flex gap-2 w-full justify-between">
+                  <span>Serial Number</span>
+                  <span>{item.serialNumber}</span>
+                </li>
+              </ul>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

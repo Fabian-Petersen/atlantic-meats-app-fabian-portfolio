@@ -19,6 +19,8 @@ import { Badge } from "../../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import { motionVariants } from "@/styles/motionStyles";
 
 type MobileTransferRequestCardProps = {
   row: Row<TransferPendingTableRow>;
@@ -43,7 +45,14 @@ function MobileTransferRequestCard({
   };
 
   return (
-    <div className={cn(sharedStyles.cardRowParent, "flex flex-col")}>
+    <div
+      className={cn(
+        sharedStyles.cardRowParent,
+        "flex flex-col",
+        isOpen && sharedStyles.cardIsOpen,
+      )}
+      onClick={onToggle}
+    >
       {/* ── Header (always visible, toggles expansion) ── */}
       <button
         type="button"
@@ -88,63 +97,73 @@ function MobileTransferRequestCard({
       </button>
 
       {/* ── Expanded details ── */}
-      {isOpen && (
-        <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700/60 flex flex-col gap-2">
-          <CardRow
-            icon={User}
-            label="Requested by"
-            value={item.requestor_name || item.requested_by}
-          />
-          <CardRow
-            icon={Calendar}
-            label="Requested on"
-            value={item.transferCreated}
-          />
-          <CardRow
-            icon={Calendar}
-            label="Expected date"
-            value={item.expectedDate}
-          />
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            variants={motionVariants.expandable}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            className="overflow-hidden"
+          >
+            <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700/60 flex flex-col gap-2">
+              <CardRow
+                icon={User}
+                label="Requested by"
+                value={item.requestor_name || item.requested_by}
+              />
+              <CardRow
+                icon={Calendar}
+                label="Requested on"
+                value={item.transferCreated}
+              />
+              <CardRow
+                icon={Calendar}
+                label="Expected date"
+                value={item.expectedDate}
+              />
 
-          {item.description && (
-            <div className="flex flex-col gap-1 mt-1">
-              <div className="flex items-center gap-1.5 text-gray-400 dark:text-gray-500">
-                <FileText className="w-3.5 h-3.5" />
-                <span className="text-xs">Description</span>
-              </div>
-              <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed pl-5">
-                {item.description}
-              </p>
-            </div>
-          )}
-
-          {item.transferReason && (
-            <div className="flex flex-col gap-1 mt-1">
-              <div className="flex items-center gap-1.5 text-gray-400 dark:text-gray-500">
-                <MessageSquare className="w-3.5 h-3.5" />
-                <span className="text-xs">Reason</span>
-              </div>
-              <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed pl-5">
-                {item.transferReason}
-              </p>
-            </div>
-          )}
-
-          {isPending && (
-            <button
-              type="button"
-              onClick={handleReview}
-              className={cn(
-                sharedStyles.btnApprove,
-                sharedStyles.btn,
-                "mt-2 text-sm uppercase",
+              {item.description && (
+                <div className="flex flex-col gap-1 mt-1">
+                  <div className="flex items-center gap-1.5 text-gray-400 dark:text-gray-500">
+                    <FileText className="w-3.5 h-3.5" />
+                    <span className="text-xs">Description</span>
+                  </div>
+                  <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed pl-5">
+                    {item.description}
+                  </p>
+                </div>
               )}
-            >
-              Review Request
-            </button>
-          )}
-        </div>
-      )}
+
+              {item.transferReason && (
+                <div className="flex flex-col gap-1 mt-1">
+                  <div className="flex items-center gap-1.5 text-gray-400 dark:text-gray-500">
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span className="text-xs">Reason</span>
+                  </div>
+                  <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed pl-5">
+                    {item.transferReason}
+                  </p>
+                </div>
+              )}
+
+              {isPending && (
+                <button
+                  type="button"
+                  onClick={handleReview}
+                  className={cn(
+                    sharedStyles.btnApprove,
+                    sharedStyles.btn,
+                    "mt-2 text-sm uppercase",
+                  )}
+                >
+                  Review Request
+                </button>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

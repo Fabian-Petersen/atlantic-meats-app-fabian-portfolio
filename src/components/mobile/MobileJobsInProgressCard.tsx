@@ -3,6 +3,7 @@ import type { Row } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
 import { priorityConfig } from "@/lib/priorityConfig";
+import { AnimatePresence, motion } from "motion/react";
 import {
   ChevronDown,
   MapPin,
@@ -15,6 +16,9 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
+import { motionVariants } from "@/styles/motionStyles";
 
 type Props = {
   row: Row<JobApprovedAPIResponse>;
@@ -32,7 +36,11 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
 
   return (
     <div
-      className="rounded-md border border-gray-200 dark:border-(--clr-borderDark) bg-white dark:bg-(--bg-primary_dark) mb-2 overflow-hidden transition-shadow hover:shadow-sm"
+      className={cn(
+        sharedStyles.cardRowParent,
+        "flex flex-col",
+        isOpen && sharedStyles.cardIsOpen, // Apply the cardIsOpen style when isOpen is true
+      )}
       onClick={onToggle}
     >
       <button
@@ -81,70 +89,80 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
         </Badge>
       </button>
 
-      {isOpen && (
-        <div className="border-t border-gray-100 dark:border-gray-700/60 px-4 py-3 flex flex-col gap-3">
-          {/* Equipment + Asset ID */}
-          <div className="flex items-start gap-2">
-            <Wrench className="w-3.5 h-3.5 text-gray-400 mt-0.5 shrink-0" />
-            <div className="flex-1 flex items-center justify-between gap-2">
-              <span className="text-sm text-gray-800 dark:text-gray-200 capitalize font-medium">
-                {row.original.equipment}
-              </span>
-              <span className="text-xs text-gray-500 font-mono shrink-0 dark:text-green-500">
-                #{row.original.assetID}
-              </span>
-            </div>
-          </div>
-          {/* Target Date &Technician */}
-          <div className="flex items-start gap-2">
-            <User className="w-3.5 h-3.5 text-gray-400 mt-0.5 shrink-0" />
-            <div className="flex-1 flex items-center justify-between gap-2">
-              <span className="capitalize text-xs text-gray-500 font-mono shrink-0 dark:text-gray-200">
-                {row.original.assign_to_name}
-              </span>
-              <div className="flex gap-1 dark:text-gray-500">
-                <Clock2Icon className="w-3.5 h-3.5 mt-0.5 shrink-0" />
-                <span className="text-xs  capitalize font-medium">
-                  {row.original.jobCreated}
-                </span>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            variants={motionVariants.expandable}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            className="overflow-hidden"
+          >
+            <div className="border-t border-gray-100 dark:border-gray-700/60 px-4 py-3 flex flex-col gap-3">
+              {/* Equipment + Asset ID */}
+              <div className="flex items-start gap-2">
+                <Wrench className="w-3.5 h-3.5 text-gray-400 mt-0.5 shrink-0" />
+                <div className="flex-1 flex items-center justify-between gap-2">
+                  <span className="text-sm text-gray-800 dark:text-gray-200 capitalize font-medium">
+                    {row.original.equipment}
+                  </span>
+                  <span className="text-xs text-gray-500 font-mono shrink-0 dark:text-green-500">
+                    #{row.original.assetID}
+                  </span>
+                </div>
+              </div>
+              {/* Target Date &Technician */}
+              <div className="flex items-start gap-2">
+                <User className="w-3.5 h-3.5 text-gray-400 mt-0.5 shrink-0" />
+                <div className="flex-1 flex items-center justify-between gap-2">
+                  <span className="capitalize text-xs text-gray-500 font-mono shrink-0 dark:text-gray-200">
+                    {row.original.assign_to_name}
+                  </span>
+                  <div className="flex gap-1 dark:text-gray-500">
+                    <Clock2Icon className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                    <span className="text-xs  capitalize font-medium">
+                      {row.original.jobCreated}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Description */}
+              {row.original.jobComments && (
+                <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3">
+                  {row.original.jobComments}
+                </p>
+              )}
+
+              {/* // $ -------------------- Action Buttons -------------------------- */}
+              <div className="flex gap-2 pt-1">
+                <button
+                  type="button"
+                  className="flex-1 py-2 text-xs font-medium rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/jobs/${row.original.id}/in-progress`);
+                    setSelectedRowId(row.original.id);
+                  }}
+                >
+                  View Details
+                </button>
+                <button
+                  type="button"
+                  className="flex-1 py-2 text-xs font-medium rounded-lg dark:bg-green/20 bg-green-500/10 border-green/20 hover:bg-green-500/90 hover:shadow-md text-green-500 border dark:border-green/30 transition-colors "
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedRowId(row.original.id);
+                    navigate(`/jobs/${row.original.id}/action`);
+                  }}
+                >
+                  Action
+                </button>
               </div>
             </div>
-          </div>
-
-          {/* Description */}
-          {row.original.jobComments && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3">
-              {row.original.jobComments}
-            </p>
-          )}
-
-          {/* // $ -------------------- Action Buttons -------------------------- */}
-          <div className="flex gap-2 pt-1">
-            <button
-              type="button"
-              className="flex-1 py-2 text-xs font-medium rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/jobs/${row.original.id}/in-progress`);
-                setSelectedRowId(row.original.id);
-              }}
-            >
-              View Details
-            </button>
-            <button
-              type="button"
-              className="flex-1 py-2 text-xs font-medium rounded-lg dark:bg-green/20 bg-green-500/10 border-green/20 hover:bg-green-500/90 hover:shadow-md text-green-500 border dark:border-green/30 transition-colors "
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedRowId(row.original.id);
-                navigate(`/jobs/${row.original.id}/action`);
-              }}
-            >
-              Action
-            </button>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

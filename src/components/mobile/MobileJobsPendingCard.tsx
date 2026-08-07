@@ -11,6 +11,8 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 import { badgeStyles } from "@/styles/badgeStyles";
+import { AnimatePresence, motion } from "motion/react";
+import { motionVariants } from "@/styles/motionStyles";
 
 type MaintenanceRequestCardProps = {
   row: Row<JobAPIResponse>;
@@ -59,7 +61,13 @@ export default function MobileJobsPendingCard({
   // };
 
   return (
-    <div className={cn(sharedStyles.cardRowParent, "flex flex-col")}>
+    <div
+      className={cn(
+        sharedStyles.cardRowParent,
+        "flex flex-col",
+        isOpen && sharedStyles.cardIsOpen,
+      )}
+    >
       {/* Always-visible header — tap to expand */}
       <button
         type="button"
@@ -97,72 +105,82 @@ export default function MobileJobsPendingCard({
       </button>
 
       {/* Expanded section */}
-      {isOpen && (
-        <div className="border-t border-gray-100 dark:border-gray-700/60 px-4 py-3 flex flex-col gap-3">
-          {/* Equipment + Asset ID */}
-          <div className="flex items-start gap-2">
-            <Wrench className="w-3.5 h-3.5 text-gray-400 mt-0.5 shrink-0" />
-            <div className="flex-1 flex items-center justify-between gap-2">
-              <span className="text-sm text-gray-800 dark:text-gray-200 capitalize font-medium">
-                {item.equipment}
-              </span>
-              <span className="text-xs text-gray-500 font-mono shrink-0 dark:text-green-500">
-                #{item.assetID}
-              </span>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            variants={motionVariants.expandable}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            className="overflow-hidden"
+          >
+            <div className="border-t border-gray-100 dark:border-gray-700/60 px-4 py-3 flex flex-col gap-3">
+              {/* Equipment + Asset ID */}
+              <div className="flex items-start gap-2">
+                <Wrench className="w-3.5 h-3.5 text-gray-400 mt-0.5 shrink-0" />
+                <div className="flex-1 flex items-center justify-between gap-2">
+                  <span className="text-sm text-gray-800 dark:text-gray-200 capitalize font-medium">
+                    {item.equipment}
+                  </span>
+                  <span className="text-xs text-gray-500 font-mono shrink-0 dark:text-green-500">
+                    #{item.assetID}
+                  </span>
+                </div>
+              </div>
+
+              {/* Description */}
+              {item.jobComments && (
+                <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3">
+                  {item.jobComments}
+                </p>
+              )}
+
+              {/* Actions */}
+              <div className="flex gap-2 pt-1">
+                {/* View full details */}
+                <button
+                  type="button"
+                  className="flex-1 py-2 text-xs font-medium rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/jobs/${item.id}/pending-approval`);
+                    setSelectedRowId(item.id);
+                  }}
+                >
+                  View Details
+                </button>
+
+                {/* Reject */}
+                <button
+                  type="button"
+                  className="flex-1 py-2 text-xs font-medium rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors border dark:border-(--clr-borderDarkRed)"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowRejectRequestDialog(true);
+                    setSelectedRowId(item.id);
+                  }}
+                >
+                  Reject
+                </button>
+
+                {/* Approve */}
+                <button
+                  type="button"
+                  // disabled={isPending}
+                  className="flex-1 py-2 text-xs font-medium rounded-lg dark:bg-green/20 bg-green-500/10 border-green/20 hover:bg-green-500/90 hover:shadow-md text-green-500 border dark:border-green/30 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedRowId(item.id);
+                    setShowApproveRequestDialog(true);
+                  }}
+                >
+                  Approve
+                </button>
+              </div>
             </div>
-          </div>
-
-          {/* Description */}
-          {item.jobComments && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3">
-              {item.jobComments}
-            </p>
-          )}
-
-          {/* Actions */}
-          <div className="flex gap-2 pt-1">
-            {/* View full details */}
-            <button
-              type="button"
-              className="flex-1 py-2 text-xs font-medium rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/jobs/${item.id}/pending-approval`);
-                setSelectedRowId(item.id);
-              }}
-            >
-              View Details
-            </button>
-
-            {/* Reject */}
-            <button
-              type="button"
-              className="flex-1 py-2 text-xs font-medium rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors border dark:border-(--clr-borderDarkRed)"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowRejectRequestDialog(true);
-                setSelectedRowId(item.id);
-              }}
-            >
-              Reject
-            </button>
-
-            {/* Approve */}
-            <button
-              type="button"
-              // disabled={isPending}
-              className="flex-1 py-2 text-xs font-medium rounded-lg dark:bg-green/20 bg-green-500/10 border-green/20 hover:bg-green-500/90 hover:shadow-md text-green-500 border dark:border-green/30 transition-colors"
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedRowId(item.id);
-                setShowApproveRequestDialog(true);
-              }}
-            >
-              Approve
-            </button>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
