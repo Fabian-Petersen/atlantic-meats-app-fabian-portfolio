@@ -55,7 +55,7 @@ export const sharedStyles = {
     "dark:bg-(--bg-primary_dark) dark:border-gray-700/60",
   ),
   cardRow: cn(
-    "flex gap-1 py-1.5 items-center",
+    "flex gap-1 py-1.5 items-center hover:cursor-pointer",
     // light
     "",
     // dark

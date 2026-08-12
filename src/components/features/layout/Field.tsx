@@ -55,7 +55,7 @@ function Field({
       </span>
       <span
         className={cn(
-          "text-xs md:text-sm font-medium text-(--clr-textLight) dark:text-(--clr-textDark) capitalize",
+          "text-xs font-medium text-(--clr-textLight) dark:text-(--clr-textDark) capitalize",
           valueStyles,
         )}
       >

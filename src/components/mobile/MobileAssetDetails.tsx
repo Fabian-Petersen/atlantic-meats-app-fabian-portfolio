@@ -41,6 +41,7 @@ import Field from "../features/layout/Field";
 import DescriptionBox from "../features/layout/DescriptionBox";
 import SurfaceCard from "../features/layout/SurfaceCard";
 import PersonRow from "../features/layout/PersonRow";
+import MobileAssetTransferCard from "./MobileAssetTransferCard";
 
 // $ ————— utils ——————————————————————————————————————————————————————————————————
 import { formatDateTime } from "@/utils/formatDateTime";
@@ -59,16 +60,6 @@ type MaintenanceJob = {
   completedAt: string;
   actioned_by: string;
 };
-
-// type TransferRecord = {
-//   id: string;
-//   transfer_from: string;
-//   transfer_to: string;
-//   requested_by: string;
-//   approved_by: string;
-//   date_of_request: string;
-//   date_of_transfer: string;
-// };
 
 type Props = {
   item: AssetAPIResponse & {
@@ -99,6 +90,8 @@ const ASSET_TAB_CONFIG: {
 
 function MobileAssetDetails({ item }: Props) {
   const [activeTab, setActiveTab] = useState<AssetTab>("details");
+  const [openTransferId, setOpenTransferId] = useState<string | null>(null);
+
   const navigate = useNavigate();
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -108,6 +101,10 @@ function MobileAssetDetails({ item }: Props) {
   const handleTabChange = (tab: AssetTab) => {
     setActiveTab(tab);
     contentRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleTransferToggle = (id: string) => {
+    setOpenTransferId((current) => (current === id ? null : id));
   };
 
   return (
@@ -367,47 +364,12 @@ function MobileAssetDetails({ item }: Props) {
 
               {transfers.length > 0 ? (
                 transfers.map((transfer) => (
-                  <SurfaceCard key={transfer.id}>
-                    {/* From → To banner */}
-                    <div className="flex justify-between items-center mb-3">
-                      <div className="flex items-center gap-2 text-xs">
-                        <span className="font-medium text-gray-700 dark:text-gray-200 capitalize">
-                          {transfer?.pending?.locationFrom}
-                        </span>
-                        <ArrowLeftRight className="w-3.5 h-3.5 shrink-0 text-blue-500" />
-                        <span className="font-medium text-gray-700 dark:text-gray-200 capitalize">
-                          {transfer?.pending?.locationTo}
-                        </span>
-                      </div>
-                      <Badge
-                        value={transfer?.status}
-                        styleMap={badgeStyles.families.transfer_status}
-                      />
-                    </div>
-
-                    <div className="border-t border-gray-100 dark:border-gray-700/60 pt-3 flex flex-col gap-2">
-                      <Field
-                        label="Requested by"
-                        value={transfer?.pending?.requested_by}
-                      />
-                      <Field
-                        label="Approved by"
-                        value={transfer?.approved?.approvedBy}
-                      />
-                      <Field
-                        label="Date of request"
-                        value={transfer?.transferCreated ?? null}
-                      />
-                      <Field
-                        label="Date of transfer"
-                        value={transfer?.["in-transit"]?.transportDate ?? null}
-                      />
-                      <Field
-                        label="Transported By"
-                        value={transfer?.["in-transit"]?.transportName ?? null}
-                      />
-                    </div>
-                  </SurfaceCard>
+                  <MobileAssetTransferCard
+                    key={transfer.id}
+                    transfer={transfer}
+                    isOpen={openTransferId === transfer.id}
+                    onToggle={() => handleTransferToggle(transfer.id)}
+                  />
                 ))
               ) : (
                 <SurfaceCard>
