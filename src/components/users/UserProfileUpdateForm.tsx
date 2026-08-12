@@ -26,7 +26,7 @@ function UserProfileUpdateForm() {
   const {
     register,
     handleSubmit,
-    // control,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<UserAttributesFormValues>({
     defaultValues: { name: user?.name, email: user?.email },
@@ -50,6 +50,7 @@ function UserProfileUpdateForm() {
           name="name"
           register={register}
           error={errors.name}
+          control={control}
         />
         <FormRowInput
           label="Email"
@@ -57,6 +58,7 @@ function UserProfileUpdateForm() {
           name="email"
           register={register}
           error={errors.email}
+          control={control}
         />
       </div>
       <FormActionButtons

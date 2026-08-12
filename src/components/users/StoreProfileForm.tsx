@@ -45,6 +45,7 @@ function StoreProfileForm({ user }: UserProfileProps) {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, dirtyFields },
     getValues,
   } = useForm<UsersRequestFormValues>({
@@ -97,6 +98,7 @@ function StoreProfileForm({ user }: UserProfileProps) {
           label="Surname"
           name="family_name"
           readOnly={true}
+          control={control}
           register={register}
           className="capitalize"
         />
@@ -122,6 +124,7 @@ function StoreProfileForm({ user }: UserProfileProps) {
           type="email"
           name="email"
           readOnly={true}
+          control={control}
           register={register}
         />
         <FormRowInputEditable

@@ -164,6 +164,7 @@ const JobActionForm = ({ onCancel }: Props) => {
           className="col-span-2 md:col-span-1 mt-1"
           error={errors.start_time}
           required={true}
+          control={control}
         />
         <FormRowInput
           label="End Date/Time"
@@ -174,6 +175,7 @@ const JobActionForm = ({ onCancel }: Props) => {
           className="col-span-2 md:col-span-1 mt-2"
           error={errors.end_time}
           required={true}
+          control={control}
         />
         <FormRowInput
           // label="Kilometers"
@@ -183,6 +185,7 @@ const JobActionForm = ({ onCancel }: Props) => {
           register={register}
           className="col-span-2 md:col-span-1"
           error={errors.total_km}
+          control={control}
         />
         <FormRowInput
           // label="Work Order Number"
@@ -192,6 +195,7 @@ const JobActionForm = ({ onCancel }: Props) => {
           register={register}
           className="col-span-2 md:col-span-1"
           error={errors.work_order_number}
+          control={control}
         />
         <FormRowSelect
           // label="Root Cause"
@@ -241,36 +245,42 @@ const JobActionForm = ({ onCancel }: Props) => {
           label="Sundries Description"
           register={register}
           error={errors.sundries}
+          control={control}
         />
         <FormRowInput
           name="total_cost_sundries"
           label="Subtotal: Sundries"
           register={register}
           error={errors.total_cost_sundries}
+          control={control}
         />
         <FormRowInput
           name="parts"
           label="Parts & Materials Description"
           register={register}
           error={errors.parts}
+          control={control}
         />
         <FormRowInput
           name="total_cost_parts"
           label="Subtotal: Materials"
           register={register}
           error={errors.total_cost_parts}
+          control={control}
         />
         <FormRowInput
           name="contractor"
           label="Contractor Name"
           register={register}
           error={errors.contractor}
+          control={control}
         />
         <FormRowInput
           name="total_cost_contractor"
           label="Subtotal: Contractor"
           register={register}
           error={errors.total_cost_contractor}
+          control={control}
         />
         <FileInput
           label=""
@@ -292,6 +302,7 @@ const JobActionForm = ({ onCancel }: Props) => {
           className="col-span-2"
           register={register}
           error={errors.signedBy}
+          control={control}
         />
       </div>
       <Controller

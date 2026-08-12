@@ -45,6 +45,7 @@ const ApproveRequestForm = () => {
     register,
     reset,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<ApproveRequestFormValues>({
     defaultValues: {
@@ -144,6 +145,7 @@ const ApproveRequestForm = () => {
           name="targetDate"
           error={errors.targetDate}
           className=""
+          control={control}
         />
         <div className={cn(sharedStyles.btnParent)}>
           <button

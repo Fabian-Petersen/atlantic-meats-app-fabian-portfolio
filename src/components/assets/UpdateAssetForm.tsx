@@ -213,6 +213,7 @@ const UpdateAssetForm = () => {
           type="text"
           name="assetID"
           placeholder="Asset ID e.g. MX001"
+          control={control}
           register={register}
           error={errors.assetID}
         />
@@ -240,6 +241,7 @@ const UpdateAssetForm = () => {
           placeholder="Serial Number"
           register={register}
           error={errors.serialNumber}
+          control={control}
         />
         <FileInput
           label=""

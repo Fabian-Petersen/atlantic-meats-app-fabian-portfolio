@@ -74,6 +74,7 @@ const JobUpdateForm = () => {
           placeholder="Enter additional notes"
           register={register}
           error={errors.jobComments}
+          control={control}
         />
         <FormRowSelect
           name="location"

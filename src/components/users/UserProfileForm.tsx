@@ -25,6 +25,7 @@ function UserProfileForm({ user }: UserProfileProps) {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<UsersRequestFormValues>({
     defaultValues: user ?? undefined,
@@ -77,6 +78,7 @@ function UserProfileForm({ user }: UserProfileProps) {
           className="capitalize"
           readOnly={true}
           register={register}
+          control={control}
         />
         <FormRowInput
           label="Surname"
@@ -85,6 +87,7 @@ function UserProfileForm({ user }: UserProfileProps) {
           readOnly={true}
           register={register}
           className="capitalize"
+          control={control}
         />
         <FormRowInput
           label="Location"
@@ -92,6 +95,7 @@ function UserProfileForm({ user }: UserProfileProps) {
           readOnly={true}
           register={register}
           className="capitalize"
+          control={control}
         />
         <FormRowInput
           label="Group"
@@ -101,6 +105,7 @@ function UserProfileForm({ user }: UserProfileProps) {
           register={register}
           className="capitalize"
           // errors={error}
+          control={control}
         />
         <FormRowInput
           label="Position"
@@ -110,6 +115,7 @@ function UserProfileForm({ user }: UserProfileProps) {
           register={register}
           className="capitalize"
           // errors={error}
+          control={control}
         />
         <FormHeading
           heading="Contact Information"
@@ -125,6 +131,7 @@ function UserProfileForm({ user }: UserProfileProps) {
           // placeholder="Email"
           readOnly={true}
           register={register}
+          control={control}
         />
         <FormRowInputEditable
           label="Mobile Number"

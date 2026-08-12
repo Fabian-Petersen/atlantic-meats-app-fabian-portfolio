@@ -24,7 +24,7 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
   const {
     register,
     handleSubmit,
-    // control,
+    control,
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -47,6 +47,7 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
             placeholder="Enter your email"
             register={register}
             error={errors.email}
+            control={control}
           />
           <FormRowInput
             label="Password"
@@ -57,6 +58,7 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
             isVisible={isVisible("password")} // comes from the usePasswordVisibility hook
             register={register}
             error={errors.password}
+            control={control}
           />
         </div>
         <div className="flex justify-end pb-4">

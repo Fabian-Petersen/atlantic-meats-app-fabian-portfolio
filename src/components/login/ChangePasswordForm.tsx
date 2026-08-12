@@ -20,7 +20,7 @@ const ChangePasswordForm = ({
   const {
     register,
     handleSubmit,
-    // control,
+    control,
     formState: { errors },
   } = useForm<ChangePasswordFormValues>({
     resolver: zodResolver(changePasswordSchema),
@@ -43,6 +43,7 @@ const ChangePasswordForm = ({
           placeholder="Enter your email"
           register={register}
           error={errors.email}
+          control={control}
         />
         <FormRowInput
           label="Password"
@@ -53,6 +54,7 @@ const ChangePasswordForm = ({
           isVisible={isVisible("newPassword")} // comes from the usePasswordVisibility hook
           register={register}
           error={errors.newPassword}
+          control={control}
         />
         <FormRowInput
           label="Confirm Password"
@@ -63,6 +65,7 @@ const ChangePasswordForm = ({
           isVisible={isVisible("confirmPassword")} // comes from the usePasswordVisibility hook
           register={register}
           error={errors.confirmPassword}
+          control={control}
         />
         <Button
           className="bg-(--clr-primary) text-white leading-2 hover:bg-(--clr-primary)/90 hover:cursor-pointer uppercase tracking-wider py-6"

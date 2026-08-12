@@ -26,6 +26,7 @@ const ForgotPassword = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<ForgotFormValues>({
     defaultValues: {
@@ -46,7 +47,7 @@ const ForgotPassword = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-bgdark px-4">
-      <div className="w-full max-w-md rounded-xl bg-white dark:bg-(--bg-primary_dark) p-8 shadow-md flex flex-col gap-8 border dark:border-border-dark/20 border-gray-100 min-h-[300px]">
+      <div className="w-full max-w-md rounded-xl bg-white dark:bg-(--bg-primary_dark) p-8 shadow-md flex flex-col gap-8 border dark:border-border-dark/20 border-gray-100 min-h-75">
         {/* Header */}
         <div className="flex flex-col gap-1.5">
           <button
@@ -76,6 +77,7 @@ const ForgotPassword = () => {
             placeholder="Enter your email"
             register={register}
             error={errors.email}
+            control={control}
           />
 
           <Button

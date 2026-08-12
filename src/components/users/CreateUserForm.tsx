@@ -24,6 +24,7 @@ function CreateUserForm() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<UsersRequestFormValues>({
     resolver: zodResolver(
@@ -96,6 +97,7 @@ function CreateUserForm() {
           register={register}
           error={errors.name}
           required={true}
+          control={control}
         />
         <FormRowInput
           // label=""
@@ -105,6 +107,7 @@ function CreateUserForm() {
           className="capitalize"
           error={errors.family_name}
           required={true}
+          control={control}
         />
         <FormRowSelect
           // label=""
@@ -150,6 +153,7 @@ function CreateUserForm() {
           label="email"
           register={register}
           error={errors.email}
+          control={control}
         />
         <FormRowInput
           // label=""
@@ -159,6 +163,7 @@ function CreateUserForm() {
           register={register}
           className="capitalize"
           error={errors.mobile}
+          control={control}
         />
       </div>
       <FormActionButtons
