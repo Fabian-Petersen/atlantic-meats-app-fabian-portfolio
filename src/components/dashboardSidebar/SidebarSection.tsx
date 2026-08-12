@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 
 // $ React Hooks
-import { useState } from "react";
+// import { useState } from "react";
 
 // $ Icons
 import { ChevronDown } from "lucide-react";
@@ -28,6 +28,8 @@ type Props = {
   heading: string;
   userGroups: UserGroup[];
   defaultOpen?: boolean;
+  isOpen: boolean;
+  onToggle: () => void;
 };
 
 const toLabel = (item: NavlinkProps, userGroups: UserGroup[]) =>
@@ -41,16 +43,22 @@ const SidebarSection = ({
   data,
   heading,
   userGroups,
-  defaultOpen = true,
+  isOpen,
+  onToggle,
+  // defaultOpen = true,
 }: Props) => {
-  const { activeItem, setActiveItem, setIsOpen } = useGlobalContext();
-  const [isExpanded, setIsExpanded] = useState(defaultOpen);
+  const {
+    activeItem,
+    setActiveItem,
+    // setIsOpen
+  } = useGlobalContext();
+  // const [isOpen, setIsExpanded] = useState(defaultOpen);
 
   const handleSidebarLinkClick = (itemName: string) => {
     setActiveItem(itemName);
-    setTimeout(() => {
-      setIsOpen(false);
-    }, 500);
+    // setTimeout(() => {
+    //   setIsOpen(false);
+    // }, 500);
   };
 
   const visibleLinks = data.filter((item) => {
@@ -65,19 +73,20 @@ const SidebarSection = ({
       <button
         type="button"
         aria-label="sidebar toggle"
-        onClick={() => setIsExpanded((prev) => !prev)}
+        // onClick={() => setIsExpanded((prev) => !prev)}
+        onClick={onToggle}
         className="hover:cursor-pointer flex items-center justify-between w-full group"
       >
         <SectionHeading heading={heading} className="text-xs" />
         <motion.div
-          animate={{ rotate: isExpanded ? 0 : -90 }}
+          animate={{ rotate: isOpen ? 0 : -90 }}
           transition={{ duration: 0.2, ease: "easeInOut" }}
         >
           <ChevronDown className="w-4 h-4 text-muted-foreground group-hover:text-foreground dark:text-white" />
         </motion.div>
       </button>
       <AnimatePresence initial={false}>
-        {isExpanded && (
+        {isOpen && (
           <motion.ul
             key="sidebar-section-links"
             initial={{ height: 0, opacity: 0 }}

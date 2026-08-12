@@ -55,8 +55,21 @@ import { cn } from "@/lib/utils";
 
 const Sidebar = () => {
   const { isOpen, setIsOpen } = useGlobalContext();
+  // $ Decide which sections are open by default
+  const defaultOpenSections = {
+    Main: true,
+    Maintenance: true,
+    Assets: false,
+    "Asset Transfers": false,
+    "Stock Management": false,
+    Disposals: false,
+    Profile: false,
+  } as const;
+
   // $ Get the groups to display what the user is allowed to see
   const [userGroups, setUserGroups] = useState<UserGroup[]>([]);
+  const [openSections, setOpenSections] =
+    useState<Record<string, boolean>>(defaultOpenSections);
 
   useEffect(() => {
     const loadGroups = async () => {
@@ -66,6 +79,13 @@ const Sidebar = () => {
     };
     loadGroups();
   }, []);
+
+  const toggleSection = (heading: string) => {
+    setOpenSections((prev) => ({
+      ...prev,
+      [heading]: !prev[heading],
+    }));
+  };
 
   return (
     <>
@@ -97,7 +117,11 @@ const Sidebar = () => {
               transition={{ duration: 0.25, ease: "easeInOut" }}
               className={cn(sharedStyles.sidebar, sharedStyles.sidebarMobile)}
             >
-              <SidebarContent userGroups={userGroups} />
+              <SidebarContent
+                userGroups={userGroups}
+                openSections={openSections}
+                onToggleSection={toggleSection}
+              />
             </motion.div>
           </>
         )}
@@ -105,14 +129,28 @@ const Sidebar = () => {
 
       {/* Desktop sidebar - always visible, never animated away */}
       <div className={cn(sharedStyles.sidebarDesktop, sharedStyles.sidebar)}>
-        <SidebarContent userGroups={userGroups} />
+        <SidebarContent
+          userGroups={userGroups}
+          openSections={openSections}
+          onToggleSection={toggleSection}
+        />
       </div>
     </>
   );
 };
 
+type SidebarContentProps = {
+  userGroups: UserGroup[];
+  openSections: Record<string, boolean>;
+  onToggleSection: (heading: string) => void;
+};
+
 // Extract shared content to avoid duplication
-const SidebarContent = ({ userGroups }: { userGroups: UserGroup[] }) => (
+const SidebarContent = ({
+  userGroups,
+  openSections,
+  onToggleSection,
+}: SidebarContentProps) => (
   <div className="flex flex-col h-full gap-2 mt-6">
     {sidebarSectionData.map((section, index) => (
       <Fragment key={section.heading}>
@@ -120,6 +158,8 @@ const SidebarContent = ({ userGroups }: { userGroups: UserGroup[] }) => (
           data={section.data}
           heading={section.heading}
           userGroups={userGroups}
+          isOpen={openSections[section.heading] ?? false}
+          onToggle={() => onToggleSection(section.heading)}
         />
 
         {index !== sidebarSectionData.length - 1 && <Separator />}
