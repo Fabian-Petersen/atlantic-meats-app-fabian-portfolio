@@ -1,6 +1,17 @@
 import type { HTMLInputTypeAttribute } from "react";
 import PasswordToggle from "@/components/features/PasswordToggle";
 import type { LucideIcon } from "lucide-react";
+import {
+  type FieldError,
+  type UseFormRegister,
+  type FieldValues,
+  type Path,
+  type Control,
+  useWatch,
+} from "react-hook-form";
+
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
 type FormInputProps<TFieldValues extends FieldValues> = {
   label?: string;
@@ -8,7 +19,7 @@ type FormInputProps<TFieldValues extends FieldValues> = {
   type?: HTMLInputTypeAttribute;
   placeholder?: string;
   register?: UseFormRegister<TFieldValues>;
-  // control: Control<TFieldValues>;
+  control: Control<TFieldValues>;
   error?: FieldError;
   multiple?: boolean;
   readOnly?: boolean;
@@ -26,16 +37,6 @@ type FormInputProps<TFieldValues extends FieldValues> = {
   required?: boolean;
 };
 
-import type {
-  FieldError,
-  UseFormRegister,
-  FieldValues,
-  Path,
-  // Control,
-} from "react-hook-form";
-import { cn } from "@/lib/utils";
-import { sharedStyles } from "@/styles/shared";
-
 function FormRowInput<TFieldValues extends FieldValues>({
   label,
   name,
@@ -45,7 +46,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
   disabled,
   className,
   readOnly,
-  // control,
+  control,
   type,
   multiple = false,
   accept,
@@ -63,6 +64,14 @@ function FormRowInput<TFieldValues extends FieldValues>({
 
   // $ Manange the Password Visibility
   const isPassword = name.toLowerCase().includes("password");
+
+  // $ Watch when a date is added to change the text with hasValue
+  const fieldValue = useWatch({
+    control,
+    name,
+  });
+
+  const hasValue = Boolean(fieldValue);
 
   return (
     <div className={cn(className, "relative w-full mb-2 group")}>
@@ -86,6 +95,9 @@ function FormRowInput<TFieldValues extends FieldValues>({
           placeholder
             ? "placeholder:text-(--clr-textLight) dark:placeholder:text-(--clr-textDark)"
             : "placeholder-transparent",
+
+          hasValue && "has-value",
+
           sharedStyles.formInput,
           sharedStyles.formInputDefault,
           error && "border-red-300",

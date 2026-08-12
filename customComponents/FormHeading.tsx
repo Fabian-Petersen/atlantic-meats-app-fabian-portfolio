@@ -62,6 +62,7 @@ const FormHeading = ({
         sharedStyles.heading,
         sharedStyles.headingForm,
         sharedStyles.headingTable,
+
         className,
       )}
     >
@@ -73,7 +74,7 @@ const FormHeading = ({
             type="button"
             onClick={() => navigate(redirectTo ?? "")}
           >
-            <ChevronLeft className="size-6" />
+            <ChevronLeft className={cn(sharedStyles.chevronStyles)} />
           </button>
         )}
         {h2 ? <h2>{heading}</h2> : h3 ? <h3>{heading}</h3> : <h1>{heading}</h1>}

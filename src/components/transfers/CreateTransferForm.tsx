@@ -86,7 +86,7 @@ const CreateTransferForm = () => {
     <DynamicForm<TransferRequestFormValues>
       form={form}
       fields={fields}
-      formHeading="Transfers - Create New"
+      formHeading="Create Transfer"
       redirect={true}
       redirectTo="/transfers/requests"
       onSubmit={submit}

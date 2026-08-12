@@ -9,8 +9,9 @@ import type {
 import { Controller } from "react-hook-form";
 import { Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const MAX_FILE_SIZE = 15 * 1024 * 1024; // 15MB
 const MAX_FILES = 10;
 
 type FileInputProps<T extends FieldValues, TName extends Path<T>> = {
@@ -22,6 +23,8 @@ type FileInputProps<T extends FieldValues, TName extends Path<T>> = {
   className?: string;
   error?: FieldError;
   placeholder?: string;
+  labelStyles?: string;
+  required?: boolean;
 };
 
 function FileInput<T extends FieldValues, TName extends Path<T>>({
@@ -33,9 +36,13 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
   className,
   error,
   placeholder,
+  labelStyles,
+  required,
 }: FileInputProps<T, TName>) {
   const [files, setFiles] = useState<File[]>([]);
   const [localError, setLocalError] = useState<string | null>(null);
+
+  const hasValue = files.length > 0;
 
   return (
     <Controller<T, TName>
@@ -77,17 +84,6 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
 
         return (
           <div className={cn("w-full pb-1 mb-2 group", className)}>
-            {/* Static label above the field, e.g. "Images" / "Invoices" */}
-            {label && (
-              <label
-                htmlFor={String(name)}
-                className="block text-xs font-medium text-gray-600 dark:text-gray-200"
-              >
-                {label}
-              </label>
-            )}
-
-            {/* Hidden native input */}
             <input
               id={String(name)}
               type="file"
@@ -97,43 +93,74 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
               onChange={handleSelect}
             />
 
-            {/* Custom button */}
-            <label
-              htmlFor={String(name)}
+            <div
               className={cn(
-                "inline-flex cursor-pointer items-center rounded-md border text-xs py-3 px-2 min-h-10",
-                "bg-white hover:bg-gray-50 border-gray-300 w-full",
-                "dark:bg-(--bg-secondary_dark) dark:border-(--clr-borderDark) dark:text-(--clr-textDark) not-[]:dark:bg-[#2b3a5c] dark:hover:bg-[#34466e]",
+                "relative w-full rounded-md border",
+                "bg-white dark:bg-(--bg-secondary_dark)",
+                "border-gray-300 dark:border-(--clr-borderDark)",
                 (error || localError) && "border-red-500",
               )}
             >
-              <span className="capitalize">
-                {placeholder ? placeholder : "Add images"}
-              </span>
-            </label>
+              {/* Floating label */}
+              {label && (
+                <label
+                  htmlFor={String(name)}
+                  className={cn(labelStyles, sharedStyles.formLabel)}
+                >
+                  <span className="flex items-baseline gap-1 bg-white dark:bg-(--bg-primary_dark)">
+                    <span>{label}</span>
+                    {required && <span className="text-red-500">*</span>}
+                  </span>
+                </label>
+              )}
 
-            {/* File list */}
-            {files.length > 0 && (
-              <ul className="flex flex-col gap-2 text-sm text-gray-600 dark:text-gray-300 h-auto max-h-28 overflow-y-scroll">
-                {files.map((file, index) => (
-                  <li
-                    key={`${file.name}-${index}`}
-                    className="flex items-center justify-between gap-2 hover:bg-gray-200 py-0.5 rounded px-1 hover:cursor-pointer"
-                  >
-                    <span className="truncate text-xs">{file.name}</span>
-                    <button
-                      type="button"
-                      aria-label="remove image button"
-                      onClick={() => removeFile(index)}
-                      className="text-red-500 hover:underline hover:cursor-pointer"
-                    >
-                      <Trash2 size="12" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
+              <label
+                htmlFor={String(name)}
+                className={cn(
+                  "flex w-full cursor-pointer flex-col",
+                  "rounded-md px-2 py-2",
+                  "text-xs",
+                  "hover:bg-gray-50 dark:hover:bg-[#34466e]",
+                  hasValue
+                    ? "text-gray-900 dark:text-gray-100"
+                    : "text-gray-400 dark:text-gray-500",
+                )}
+              >
+                {/* Placeholder */}
+                {!hasValue && (
+                  <span className="min-h-6 flex items-center">
+                    {placeholder ?? "Add images"}
+                  </span>
+                )}
 
+                {/* Selected files */}
+                {hasValue && (
+                  <ul className="flex flex-col gap-1 max-h-28 overflow-y-auto">
+                    {files.map((file, index) => (
+                      <li
+                        key={`${file.name}-${index}`}
+                        className="flex items-center justify-between gap-2 rounded px-1 py-0.5 hover:bg-gray-200 dark:hover:bg-[#34466e]"
+                      >
+                        <span className="truncate text-xs">{file.name}</span>
+
+                        <button
+                          type="button"
+                          aria-label={`Remove ${file.name}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            removeFile(index);
+                          }}
+                          className="shrink-0 text-red-500 hover:underline"
+                        >
+                          <Trash2 size="12" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </label>
+            </div>
             {/* Errors */}
             {(localError || error) && (
               <p className="text-xs text-red-500">

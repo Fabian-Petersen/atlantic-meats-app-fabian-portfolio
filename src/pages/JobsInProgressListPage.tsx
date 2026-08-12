@@ -166,7 +166,7 @@ const JobsInProgressListPage = () => {
           columns={columns}
           rowPath="jobs"
           action="action"
-          tableHeading="Jobs - In Progress"
+          tableHeading="Jobs In Progress"
           className="hidden md:flex flex-col gap-2"
           searchPlaceholderText="search jobs"
           rowClassName={(row) => {
@@ -188,7 +188,7 @@ const JobsInProgressListPage = () => {
           <>
             <FormHeading
               className={cn(sharedStyles.headingForm, "px-0")}
-              heading="Jobs - In Progress"
+              heading="Jobs In Progress"
               redirect={true}
               redirectTo="/dashboard"
             />
@@ -202,7 +202,7 @@ const JobsInProgressListPage = () => {
           <div className="grid gap-2">
             <FormHeading
               className={cn(sharedStyles.headingForm, "px-0")}
-              heading="Jobs - In Progress"
+              heading="Jobs In Progress"
               redirect={true}
               redirectTo="/dashboard"
             />

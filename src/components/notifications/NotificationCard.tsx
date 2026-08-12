@@ -11,31 +11,32 @@ import type { Notification } from "@/schemas";
 import { Badge } from "../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { CardRow } from "../mobile/CardRow";
-import { usePOST, useUpdateItem } from "@/utils/api";
+import { useUpdateItem } from "@/utils/api";
 import { useDeleteItem } from "@/utils/api";
 import { formatNotificationDate } from "@/utils/formatNotificationDate";
 
 type NotificationCardProps = {
   row: Notification;
   onRemove?: (id: string) => void;
+  isOpen: boolean;
+  onToggle: (id: string) => void;
+  onMarkAsRead: (notification: Notification) => Promise<void>;
 };
 
 export default function NotificationCard({
   row,
   onRemove,
+  isOpen,
+  onToggle,
+  onMarkAsRead,
 }: NotificationCardProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [status, setStatus] = useState(row.status);
   const [isRemoving, setIsRemoving] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const menuRef = useRef<HTMLDivElement>(null);
+  const wasOpenedRef = useRef(false);
 
-  // $ Update the status from "UNREAD" to "READ"
-  const { mutateAsync: updateStatus } = usePOST({
-    resourcePath: "api/notifications",
-    queryKey: ["notifications", "user-notifications"],
-  });
-
+  // $ Dropdown Menu: Action functions
   const { mutateAsync: archiveItem } = useUpdateItem({
     resourcePath: "api/notifications",
     queryKey: ["notifications", "user-notifications"],
@@ -52,7 +53,7 @@ export default function NotificationCard({
     notificationCreated: row.notificationCreated,
   };
 
-  // Close the menu on outside click
+  // $ Close the menu on outside click
   useEffect(() => {
     if (!isMenuOpen) return;
 
@@ -66,21 +67,25 @@ export default function NotificationCard({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMenuOpen]);
 
-  const handleToggle = async () => {
-    const willExpand = !isExpanded;
-    setIsExpanded(willExpand);
-
-    if (willExpand && status === "UNREAD") {
-      setStatus("READ");
-      try {
-        await updateStatus({ ...basePayload, status: "READ" });
-      } catch (error) {
-        console.log("notification:", error);
-        setStatus("UNREAD");
-      }
+  // $ Mark notification as READ when the card is closed
+  useEffect(() => {
+    if (isOpen) {
+      wasOpenedRef.current = true;
+      return;
     }
-  };
 
+    if (wasOpenedRef.current && row.status === "UNREAD") {
+      wasOpenedRef.current = false;
+
+      onMarkAsRead(row).catch((error) => {
+        console.log("notification:", error);
+      });
+    }
+  }, [isOpen]);
+
+  const handleToggle = () => onToggle(row.id);
+
+  // $ Dropdown Menu Actions: Archive and Delete Notification
   const handleMenuButtonClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen((prev) => !prev);
@@ -105,9 +110,6 @@ export default function NotificationCard({
   const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(false);
-    // if (!window.confirm("Delete this notification? This can't be undone.")) {
-    //   return;
-    // }
     setIsRemoving(true);
     try {
       await deleteNotification({
@@ -138,7 +140,7 @@ export default function NotificationCard({
       <div
         role="button"
         onClick={handleToggle}
-        aria-expanded={isExpanded}
+        aria-expanded={isOpen}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
@@ -217,14 +219,14 @@ export default function NotificationCard({
             <ChevronDown
               size={16}
               className={`text-gray-400 transition-transform duration-200 ${
-                isExpanded ? "rotate-180" : ""
+                isOpen ? "rotate-180" : ""
               }`}
             />
           </div>
         </div>
 
         {/* Details — only rendered once the card is expanded */}
-        {isExpanded && (
+        {isOpen && (
           <div className="space-y-2">
             {row.location && (
               <CardRow

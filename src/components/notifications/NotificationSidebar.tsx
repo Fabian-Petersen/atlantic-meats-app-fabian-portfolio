@@ -1,8 +1,8 @@
 import useGlobalContext from "@/context/useGlobalContext";
-import { useGetAll } from "@/utils/api";
+import { useGetAll, usePOST } from "@/utils/api";
 import NotificationCategoryGroup from "./NotificationCategoryGroup";
 import NotificationTabs, { type NotificationTab } from "./NotificationTabs";
-import type { NotificationResponse } from "@/schemas";
+import type { NotificationResponse, Notification } from "@/schemas";
 import {
   getNotificationCategory,
   type NotificationCategory,
@@ -31,12 +31,21 @@ const NotificationSidebar = () => {
     },
   });
 
+  // $ Update the status from "UNREAD" to "READ"
+  const { mutateAsync: updateStatus } = usePOST({
+    resourcePath: "api/notifications",
+    queryKey: ["notifications", "user-notifications"],
+  });
+
   const unreadList = useMemo(() => data?.notifications?.unread ?? [], [data]);
 
   const statusFilteredList = useMemo(
     () => data?.notifications?.[activeTab] ?? [],
     [data, activeTab],
   );
+
+  // console.log("notifications:", data);
+  // console.log("filteredList:", statusFilteredList);
 
   // Unread count per category — shown as the badge regardless of which
   // status tab is active, since it represents "how many new" per group.
@@ -82,6 +91,15 @@ const NotificationSidebar = () => {
   };
 
   const hasAnyResults = groupedByCategory.size > 0;
+
+  const handleMarkAsRead = async (notification: Notification) => {
+    await updateStatus({
+      id: notification.id,
+      recipientSub: notification.recipientSub,
+      notificationCreated: notification.notificationCreated,
+      status: "READ",
+    });
+  };
 
   return (
     <AnimatePresence initial={false}>
@@ -150,6 +168,7 @@ const NotificationSidebar = () => {
                         isCollapsed={collapsedCategories.has(category)}
                         onToggle={toggleCategory}
                         userId={userId ?? ""}
+                        onMarkAsRead={handleMarkAsRead}
                       />
                     );
                   })

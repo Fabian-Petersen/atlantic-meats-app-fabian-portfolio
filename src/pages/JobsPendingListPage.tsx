@@ -79,7 +79,7 @@ const JobsPendingListPage = () => {
           columns={columns}
           rowPath="jobs"
           action="pending-approval"
-          tableHeading="Jobs - Pending Requests"
+          tableHeading="Pending Job Requests"
           addPageSelector={true}
           addPagination={true}
           addButton={true}
@@ -98,7 +98,7 @@ const JobsPendingListPage = () => {
           <>
             <FormHeading
               className={cn(sharedStyles.headingForm)}
-              heading="Jobs - Pending Requests"
+              heading="Pending Job Requests"
               redirect={true}
               redirectTo="/dashboard"
             />
@@ -112,7 +112,7 @@ const JobsPendingListPage = () => {
           <div className="grid gap-2">
             <FormHeading
               className={cn(sharedStyles.headingForm, "px-0")}
-              heading="Jobs - Pending Requests"
+              heading="Pending Job Requests"
               redirect={true}
               redirectTo="/dashboard"
             />

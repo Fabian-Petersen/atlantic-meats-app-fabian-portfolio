@@ -7,6 +7,7 @@ import {
   CATEGORY_LABELS,
   type NotificationCategory,
 } from "@/utils/notificationCategory";
+import { useState } from "react";
 
 type NotificationCategoryGroupProps = {
   category: NotificationCategory;
@@ -14,6 +15,7 @@ type NotificationCategoryGroupProps = {
   unreadCount: number;
   isCollapsed: boolean;
   onToggle: (category: NotificationCategory) => void;
+  onMarkAsRead: (notification: Notification) => Promise<void>;
   userId: string;
 };
 
@@ -23,8 +25,14 @@ export default function NotificationCategoryGroup({
   unreadCount,
   isCollapsed,
   onToggle,
+  onMarkAsRead,
 }: NotificationCategoryGroupProps) {
+  const [openId, setOpenId] = useState<string | null>(null);
+
   if (notifications.length === 0) return null;
+
+  const handleToggle = (id: string) =>
+    setOpenId((current) => (current === id ? null : id));
 
   return (
     <div className="rounded-md dark:bg-(--bg-primary_dark)">
@@ -64,7 +72,13 @@ export default function NotificationCategoryGroup({
           >
             <div className="md:px-2 pb-2 space-y-2">
               {notifications.map((item) => (
-                <NotificationCard key={item.id} row={item} />
+                <NotificationCard
+                  key={item.id}
+                  row={item}
+                  isOpen={openId === item.id}
+                  onToggle={handleToggle}
+                  onMarkAsRead={onMarkAsRead}
+                />
               ))}
             </div>
           </motion.div>

@@ -575,7 +575,7 @@ Confirm Receipt
 ### Architecture
 
 <p align="center">
-  <img src="./src/assets/transfer_request_29072026.svg" alt="Asset Transfer Architecture" width="1000">
+  <img src="./src/assets/transfer_request_11082026.svg" alt="Asset Transfer Architecture" width="1000">
 </p>
 <p align="center">
   <em>Figure 1: Asset Transfer Module Architecture</em>

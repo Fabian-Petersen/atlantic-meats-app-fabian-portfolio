@@ -12,6 +12,7 @@ export const useTransfersTransitFields = (
     control: form.control,
     name: "transportType",
   });
+
   // $ ─── Helpers ──────────────────────────────────────
   /**
    * Safely converts any option shape to plain string values.
@@ -85,15 +86,15 @@ export const useTransfersTransitFields = (
       fieldType: "file",
       name: "images",
       multiple: true,
-      label: "Upload Images",
-      className: "col-span-full",
+      label: "Select Images",
+      placeholder: "",
     },
     {
       fieldType: "file",
       name: "transportInvoices",
       multiple: true,
-      label: "Upload Invoice",
-      className: "col-span-full",
+      label: "Select Invoices",
+      placeholder: "",
     },
   ];
 

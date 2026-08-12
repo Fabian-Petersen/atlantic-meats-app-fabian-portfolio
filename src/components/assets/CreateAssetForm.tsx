@@ -74,7 +74,7 @@ const CreateAssetForm = () => {
     <DynamicForm<AssetRequestFormValues>
       form={form}
       fields={fields}
-      formHeading="Assets - Create New"
+      formHeading="Create New Asset"
       redirect={true}
       redirectTo="/assets/list"
       onSubmit={submit}

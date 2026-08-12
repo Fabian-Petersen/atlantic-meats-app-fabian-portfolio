@@ -140,7 +140,7 @@ const TransfersRequestsListPage = () => {
                 return "";
             }
           }}
-          tableHeading="Transfers - Requests"
+          tableHeading="Transfer Requests"
           addPageSelector={true}
           addPagination={true}
           addButton={true}
@@ -159,7 +159,7 @@ const TransfersRequestsListPage = () => {
           <>
             <FormHeading
               className={cn(sharedStyles.headingForm)}
-              heading="Transfers - Requests"
+              heading="Transfer Requests"
               redirect={true}
               redirectTo="/dashboard"
             />
@@ -173,7 +173,7 @@ const TransfersRequestsListPage = () => {
           <div className="grid gap-2">
             <FormHeading
               className={cn(sharedStyles.headingForm, "px-0")}
-              heading="Transfers - Requests"
+              heading="Transfer Requests"
               redirect={true}
               redirectTo="/dashboard"
             />

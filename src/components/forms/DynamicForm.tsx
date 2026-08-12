@@ -175,6 +175,7 @@ function DynamicForm<T extends FieldValues>({
             label={field.label}
             placeholder={field.placeholder}
             register={register}
+            control={control}
             error={fieldError(field.name)}
             className={field.className}
             required={field.required}
@@ -220,6 +221,10 @@ function DynamicForm<T extends FieldValues>({
             control={typedControl}
             label={field.label}
             multiple={field.multiple}
+            placeholder={field.placeholder}
+            className={field.className}
+            error={fieldError(field.name)}
+            required={field.required}
           />
         );
       case "controller":

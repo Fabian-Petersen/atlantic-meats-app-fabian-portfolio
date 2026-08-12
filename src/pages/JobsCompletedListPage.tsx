@@ -91,7 +91,7 @@ const JobsCompletedListPage = () => {
           columns={columns}
           rowPath="jobs"
           action="complete"
-          tableHeading="Jobs - Completed"
+          tableHeading="Completed Jobs"
           pageSize={10}
           addPageSelector={true}
           addPagination={true}

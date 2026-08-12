@@ -139,9 +139,12 @@ export const sharedStyles = {
   badge: cn(),
 
   /* //$ ——— Headings ———————————————————————————————————————————————————————— */
-  heading: cn("text-xl md:text-2xl capitalize w-full dark:text-gray-100"), // shared styles
+  heading: cn(
+    "font-semibold font-montserrat md:font-normal text-lg md:text-2xl capitalize w-full dark:text-gray-100",
+  ), // shared styles
   headingForm: cn("text-left px-2 text-gray-800"), // form headings
   headingTable: cn("text-left p-4 md:py-0"), // table headings
+  chevronStyles: cn("size-5 md:size-6"), // styles for the heading Back Button Chevron
 
   /* //$ ——— Forms ——————————————————————————————————————————————————————————— */
   form: cn(

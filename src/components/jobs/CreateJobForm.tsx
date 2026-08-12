@@ -93,7 +93,7 @@ const CreateJobForm = () => {
     <DynamicForm<JobRequestFormValues>
       form={form}
       fields={fields}
-      formHeading="Jobs - Create Request"
+      formHeading="Create Job Request"
       redirect={true}
       redirectTo="/dashboard"
       onSubmit={submit}

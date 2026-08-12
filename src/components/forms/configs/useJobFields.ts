@@ -170,6 +170,7 @@ export const useJobFields = (
       fieldType: "file",
       name: "images",
       label: "Upload Images",
+      placeholder: "",
       multiple: true,
     },
 
