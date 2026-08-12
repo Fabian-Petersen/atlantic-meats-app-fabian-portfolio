@@ -22,14 +22,43 @@
  * - `border-b last:border-0` Renders bottom dividers between adjacent rows automatically
  */
 
-function Field({ label, value }: { label: string; value?: string | null }) {
+import { cn } from "@/lib/utils";
+
+function Field({
+  label,
+  value,
+  className,
+  labelStyles,
+  valueStyles,
+}: {
+  label: string;
+  value?: string | null;
+  className?: string;
+  labelStyles?: string;
+  valueStyles?: string;
+}) {
   if (!value) return null;
   return (
-    <div className="flex items-start gap-2 py-2.5 border-b border-gray-100 dark:border-gray-700/60 last:border-0">
-      <span className="w-27.5 shrink-0 text-xs text-gray-400 dark:text-gray-500 pt-0.5">
+    <div
+      className={cn(
+        "flex items-start gap-2 py-2.5 border-b border-gray-100 dark:border-gray-700/60 last:border-0",
+        className,
+      )}
+    >
+      <span
+        className={cn(
+          "w-27.5 shrink-0 text-xs text-gray-400 dark:text-gray-500 pt-0.5",
+          labelStyles,
+        )}
+      >
         {label}
       </span>
-      <span className="text-sm font-medium text-gray-700 dark:text-gray-100 capitalize">
+      <span
+        className={cn(
+          "text-xs md:text-sm font-medium text-(--clr-textLight) dark:text-(--clr-textDark) capitalize",
+          valueStyles,
+        )}
+      >
         {value}
       </span>
     </div>

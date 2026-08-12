@@ -50,6 +50,8 @@ import type { AssetAPIResponse } from "@/schemas";
 
 type AssetTab = "details" | "verification" | "maintenance" | "transfers";
 
+import type { TransferWorkflowResponse } from "@/schemas/transfersSchemas";
+
 type MaintenanceJob = {
   id: string;
   jobcardNumber: string;
@@ -58,15 +60,15 @@ type MaintenanceJob = {
   actioned_by: string;
 };
 
-type TransferRecord = {
-  id: string;
-  transfer_from: string;
-  transfer_to: string;
-  requested_by: string;
-  approved_by: string;
-  date_of_request: string;
-  date_of_transfer: string;
-};
+// type TransferRecord = {
+//   id: string;
+//   transfer_from: string;
+//   transfer_to: string;
+//   requested_by: string;
+//   approved_by: string;
+//   date_of_request: string;
+//   date_of_transfer: string;
+// };
 
 type Props = {
   item: AssetAPIResponse & {
@@ -76,7 +78,7 @@ type Props = {
     next_verification_due?: string;
     verified_location?: { latitude: number; longitude: number };
     maintenanceHistory?: MaintenanceJob[];
-    transferHistory?: TransferRecord[];
+    transferHistory?: TransferWorkflowResponse[];
   };
 };
 
@@ -367,31 +369,42 @@ function MobileAssetDetails({ item }: Props) {
                 transfers.map((transfer) => (
                   <SurfaceCard key={transfer.id}>
                     {/* From → To banner */}
-                    <div className="flex items-center gap-2 text-xs mb-3">
-                      <span className="font-medium text-gray-700 dark:text-gray-200 capitalize">
-                        {transfer.transfer_from}
-                      </span>
-                      <ArrowLeftRight className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-                      <span className="font-medium text-gray-700 dark:text-gray-200 capitalize">
-                        {transfer.transfer_to}
-                      </span>
+                    <div className="flex justify-between items-center mb-3">
+                      <div className="flex items-center gap-2 text-xs">
+                        <span className="font-medium text-gray-700 dark:text-gray-200 capitalize">
+                          {transfer?.pending?.locationFrom}
+                        </span>
+                        <ArrowLeftRight className="w-3.5 h-3.5 shrink-0 text-blue-500" />
+                        <span className="font-medium text-gray-700 dark:text-gray-200 capitalize">
+                          {transfer?.pending?.locationTo}
+                        </span>
+                      </div>
+                      <Badge
+                        value={transfer?.status}
+                        styleMap={badgeStyles.families.transfer_status}
+                      />
                     </div>
 
                     <div className="border-t border-gray-100 dark:border-gray-700/60 pt-3 flex flex-col gap-2">
                       <Field
                         label="Requested by"
-                        value={transfer.requested_by}
+                        value={transfer?.pending?.requested_by}
                       />
-                      <Field label="Approved by" value={transfer.approved_by} />
+                      <Field
+                        label="Approved by"
+                        value={transfer?.approved?.approvedBy}
+                      />
                       <Field
                         label="Date of request"
-                        value={formatDateTime(transfer.date_of_request) ?? null}
+                        value={transfer?.transferCreated ?? null}
                       />
                       <Field
                         label="Date of transfer"
-                        value={
-                          formatDateTime(transfer.date_of_transfer) ?? null
-                        }
+                        value={transfer?.["in-transit"]?.transportDate ?? null}
+                      />
+                      <Field
+                        label="Transported By"
+                        value={transfer?.["in-transit"]?.transportName ?? null}
                       />
                     </div>
                   </SurfaceCard>
