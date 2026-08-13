@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { metricValuesSchema } from "@/schemas/dashboardSchema";
+import { metricValuesSchema } from "@/schemas/metricSchemas";
 
 // $ Schema to create a new asset
 export const assetRequestSchema = z.object({

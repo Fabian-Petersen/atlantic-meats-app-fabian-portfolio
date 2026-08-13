@@ -1,5 +1,6 @@
 import { MetricCardItem } from "./MetricsCardItem";
-import type { CardData, MetricValues } from "@/schemas/dashboardSchema";
+import type { CardData } from "@/schemas/dashboardSchema";
+import type { MetricValues } from "@/schemas/metricSchemas";
 
 export interface MetricCardConfig {
   cardData: CardData;

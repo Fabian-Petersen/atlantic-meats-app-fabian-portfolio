@@ -8,14 +8,15 @@ import { getUserGroups } from "@/auth/getUserGroups";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
-import { useDashboardJobsMetrics } from "@/hooks/useDashboardJobsMetrics";
+// import { useDashboardJobsMetrics } from "@/hooks/useDashboardJobsMetrics";
 import CardContainer from "../components/dashboard/CardContainer";
+import type { DashboardMetrics } from "@/schemas/dashboardSchema";
 
 /* -------------------------------- Animation ------------------------------- */
 // import { motion } from "framer-motion";
-import MaintenanceCost from "@/components/dashboard/components/MaintenanceCost";
+// import MaintenanceCost from "@/components/dashboard/components/MaintenanceCost";
 import VerificationStatus from "@/components/dashboard/components/VerificationStatus";
-import type { AssetVerificationSummary } from "@/schemas/dashboardSchema";
+// import type { AssetVerificationSummary } from "@/schemas/dashboardSchema";
 
 const Dashboard = () => {
   const columns = getDashboardJobColumns();
@@ -29,14 +30,14 @@ const Dashboard = () => {
     },
   });
 
-  const { data: metrics } = useGetAll<JobAPIResponse[]>({
+  const { data: metrics, isPending } = useGetAll<DashboardMetrics>({
     resourcePath: "api/dashboard/metrics",
     queryKey: ["metrics", "all"],
   });
 
   console.log("metrics:", metrics);
   // $ Hook pass the cards data to the CardContainer
-  const { cards, isPending } = useDashboardJobsMetrics();
+  // const { cards, isPending } = useDashboardJobsMetrics();
 
   useEffect(() => {
     const loadGroups = async () => {
@@ -45,30 +46,21 @@ const Dashboard = () => {
     loadGroups();
   }, []);
 
-  // Verification Data
-  const verificationData: AssetVerificationSummary = {
-    compliance: 45,
-    total: 100,
-    statuses: [
-      { name: "Verified", value: 45 },
-      { name: "Due", value: 30 },
-      { name: "Overdue", value: 15 },
-      { name: "Not Verified", value: 10 },
-    ],
-  };
-
   return (
     <main className="w-full h-full md:p-4 p-2">
       {/* <NotificationSidebar /> */}
       <div className={cn(sharedStyles.dashboard)}>
         {/* $ Cards */}
         <section className={cn(sharedStyles.dashboardCardsParent)}>
-          <CardContainer cards={cards} isPending={isPending} />
+          <CardContainer cards={metrics?.cards ?? []} isPending={isPending} />
         </section>
         {/* Revenue & Expense Chart Component */}
-        <MaintenanceCost />
+        {/* <MaintenanceCost /> */}
         {/* Asset Verification Pie Chart Component */}
-        <VerificationStatus isPending={isPending} data={verificationData} />
+        {/* <VerificationStatus
+          isPending={isPending}
+          data={metrics?.verification}
+        /> */}
         {/* Pending Requests Table */}
         <section className={cn(sharedStyles.chartTable)}>
           <ChartHeading

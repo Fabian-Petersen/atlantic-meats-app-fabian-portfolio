@@ -1,17 +1,15 @@
 import * as z from "zod";
 import type { LucideIcon } from "lucide-react";
 import { PureComponent } from "react";
+import { transferWorkflowResponseSchema } from "@/schemas/transfersSchemas";
+import { assetHistoryResponseSchema } from "@/schemas/assetSchemas";
+import { metricValuesSchema } from "./metricSchemas";
 
 // $ Schema to create card item
 export const cardItemSchema = z.object({
   title: z.string(),
   color: z.string(),
   bgColor: z.string(),
-});
-
-export const metricValuesSchema = z.object({
-  value: z.number(),
-  valueChange: z.number().optional(),
 });
 
 /* // $ ------------------ Dashboard Charts Schema & Types ------------------ */
@@ -41,6 +39,38 @@ export const verificationSummarySchema = z.object({
       value: z.number(),
     }),
   ),
+});
+
+export const dashboardMetricKeySchema = z.enum([
+  "pendingRequests",
+  "approvedRequests",
+  "overdueRequests",
+  "totalCompleted",
+  "inProgressRequests",
+  "completedRequests",
+  "totalAssets",
+  "total_cost",
+]);
+
+export const metricCardConfigSchema = z.object({
+  cardData: z.object({
+    id: dashboardMetricKeySchema,
+    title: z.string(),
+    color: z.string(),
+    bgColor: z.string(),
+    icon: z.custom<LucideIcon>(),
+    titleIcon: z.custom<LucideIcon>(),
+  }),
+  metrics: metricValuesSchema,
+});
+
+// schema for the dashboard metrics item: getDashboardMetrics
+export const dashboardMetricSchema = z.object({
+  storeCost: dbCostByYearResponseSchema,
+  cards: z.array(metricCardConfigSchema),
+  assets: assetHistoryResponseSchema,
+  transfers: transferWorkflowResponseSchema,
+  verification: verificationSummarySchema,
 });
 
 export type AssetVerificationSummary = z.infer<
@@ -75,6 +105,8 @@ export type LocationMonthlyCosts = {
   data: Record<string, MonthlyCostPoint[]>;
 };
 
+export type DashboardMetricKey = z.infer<typeof dashboardMetricKeySchema>;
+
 /* // $ ------------------- Dashboard Cards Schema & Types ------------------ */
 export type MetricValues = z.infer<typeof metricValuesSchema>;
 
@@ -87,21 +119,12 @@ export type CardData = {
   titleIcon: LucideIcon;
 };
 
-export type DashboardMetricKey =
-  | "pendingRequests"
-  | "approvedRequests"
-  | "overdueRequests"
-  | "totalCompleted"
-  // Assets History
-  | "inProgressRequests"
-  | "completedRequests"
-  | "totalAssets"
-  | "total_cost";
+// export type MetricCardConfig = {
+//   cardData: CardData;
+//   metrics: MetricValues;
+// };
 
-export type MetricCardConfig = {
-  cardData: CardData;
-  metrics: MetricValues;
-};
+export type MetricCardConfig = z.infer<typeof metricCardConfigSchema>;
 
 export type DashboardMetricsResponse = Record<DashboardMetricKey, MetricValues>;
 
@@ -128,6 +151,9 @@ export type AssetMetrics = Metrics<AssetMetricKey>;
 // $ Metrics Key for each action card
 export type ActionMetricKey = "totalCompleted";
 export type ActionMetrics = Metrics<ActionMetricKey>;
+
+// $ Metrics Key for all Metrics
+export type DashboardMetrics = z.infer<typeof dashboardMetricSchema>;
 
 export type PendingJobCardItem = z.infer<typeof cardItemSchema> & {
   id: PendingJobsMetricKey;
