@@ -38,6 +38,15 @@ Key objectives include:
 - [API Reference](#api-reference)
 - [Security](#security)
 - [Application Modules](#application-modules)
+  - [Dashboard Module](#dashboard-module)
+    - [Overview](#overview)
+    - [Problem](#problem)
+    - [Solution](#solution)
+    - [User Experience](#user-experience)
+    - [Scope](#scope)
+    - [Architecture](#architecture)
+    - [Infrastructure](#infrastructure)
+    - [Prerequisites](#prerequisites)
   - [Jobs Module](#jobs-module)
     - [Overview](#overview)
     - [Problem](#problem)
@@ -48,7 +57,6 @@ Key objectives include:
     - [Infrastructure](#infrastructure)
     - [Prerequisites](#prerequisites)
     - [Open Questions](#open-questions)
-
   - [Assets Module](#assets-module)
     - [Overview](#overview)
     - [Problem](#problem)
@@ -357,6 +365,92 @@ Given this is a portfolio project rather than a production system handling real 
 
 # Application Modules
 
+## Dashboard Module
+
+### Overview
+
+The Dashboard Module provides a centralized view of key application metrics and data through a single dashboard endpoint. The dashboard displays information from multiple domains, including jobs, transfers, charts, and asset verification.
+
+### Problem
+
+The dashboard requires data from multiple independent backend services. Exposing a separate API route for each metric would require the frontend to make multiple API requests and would increase the complexity of managing loading states, errors, and data fetching.
+
+Additionally, combining the metric logic into a single Lambda would result in a large and difficult-to-maintain function with responsibilities spanning multiple domains.
+
+### Solution
+
+The Dashboard Module will use a single API route that invokes multiple dedicated Lambda functions.
+
+Each Lambda remains responsible for retrieving and preparing data for its specific domain. A dedicated Dashboard Lambda acts as an orchestrator by invoking the required Lambda functions, aggregating their responses, and returning a single response to the frontend.
+
+The individual metric Lambdas remain logically separated while the frontend only needs to communicate with the Dashboard endpoint.
+
+### User Experience
+
+The frontend makes a single request when loading the dashboard.
+
+The response contains the data required by the different dashboard components. Each component receives only the relevant portion of the response.
+
+For example:
+
+- Jobs components receive the jobs data.
+- Chart components receive the chart data.
+- Transfer components receive the transfer data.
+- Asset verification components receive the verification data.
+
+This reduces the number of frontend API requests and provides a consistent loading and error-handling experience for the dashboard.
+
+### Scope
+
+The Dashboard Module includes:
+
+- Dashboard API endpoint.
+- Dashboard aggregation Lambda.
+- Dedicated Lambda functions for individual dashboard data domains.
+- Aggregation of Lambda responses into a single dashboard response.
+- Access control based on the authenticated user's permissions and scope.
+- Data required by dashboard cards, charts, and other dashboard components.
+
+The module does not combine the underlying business logic of the individual metric Lambdas. Each Lambda remains responsible for its own data retrieval and transformation.
+
+### Architecture
+
+The Dashboard Module follows an orchestration-based architecture.
+
+A single Dashboard API route invokes the Dashboard Lambda. The Dashboard Lambda invokes the required metric Lambdas and aggregates their responses into a single response.
+
+The high-level flow is:
+
+````text
+Frontend
+    │
+    │ GET /dashboard
+    ▼
+API Gateway
+    │
+    ▼
+Dashboard Lambda
+    │
+    ├── Jobs Metrics Lambda
+    │
+    ├── Charts Metrics Lambda
+    │
+    ├── Transfers Metrics Lambda
+    │
+    └── Asset Verification Lambda
+    │
+    ▼
+Aggregated Dashboard Response
+    │
+    ▼
+Frontend
+    │
+    ├── Jobs components
+    ├── Chart components
+    ├── Transfer components
+    └── Asset Verification components
+
+
 ## Jobs Module
 
 ### Overview
@@ -480,7 +574,7 @@ PENDING → EXPIRED
 APPROVED → CANCELLED
 APPROVED → IN_TRANSIT
 IN_TRANSIT → RECEIVED
-```
+````
 
 ---
 

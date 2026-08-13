@@ -25,6 +25,28 @@ export const dbCostByYearResponseSchema = z.record(
   ),
 );
 
+export const verificationStatusSchema = z.enum([
+  "Verified",
+  "Due",
+  "Overdue",
+  "Not Verified",
+]);
+
+export const verificationSummarySchema = z.object({
+  compliance: z.number(),
+  total: z.number(),
+  statuses: z.array(
+    z.object({
+      name: verificationStatusSchema,
+      value: z.number(),
+    }),
+  ),
+});
+
+export type AssetVerificationSummary = z.infer<
+  typeof verificationSummarySchema
+>;
+
 export type DashboardJobsStoreCostByYearResponse = z.infer<
   typeof dbCostByYearResponseSchema
 >;

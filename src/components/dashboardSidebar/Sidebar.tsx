@@ -58,7 +58,7 @@ const Sidebar = () => {
   // $ Decide which sections are open by default
   const defaultOpenSections = {
     Main: true,
-    Maintenance: true,
+    Maintenance: false,
     Assets: false,
     "Asset Transfers": false,
     "Stock Management": false,
