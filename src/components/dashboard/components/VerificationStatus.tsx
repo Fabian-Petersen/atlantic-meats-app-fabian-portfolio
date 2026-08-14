@@ -42,7 +42,7 @@ function VerificationStatus({ data, isPending }: Props) {
           <select
             value={selectedStore}
             onChange={(e) => setSelectedStore(e.target.value as StoreValue)}
-            className="text-sm rounded-md border border-(--clr-border) bg-transparent px-2 py-1"
+            className="text-sm base-select border border-gray-200 py-2 px-1 rounded-sm"
           >
             {STORE_OPTIONS.map((store) => (
               <option key={store.value} value={store.value}>
