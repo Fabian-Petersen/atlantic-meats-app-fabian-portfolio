@@ -23,15 +23,15 @@ export function JobRequestsChartSkeleton() {
   return (
     <div className="h-full w-full flex flex-col justify-end gap-2 p-4">
       {/* Bars */}
-      <div className="flex-1 flex items-end gap-2 bg-gray-100 dark:bg-(--bg-primary_dark) max-w-full">
+      <div className="flex-1 flex items-end gap-2 bg-gray-100 dark:bg-(--bg-primary_dark) w-full">
         {months.map((month, i) => (
           <div
             key={month}
-            className="flex flex-col items-center gap-1 overflow-hidden"
+            className="flex flex-col items-center gap-1 overflow-hidden w-full"
           >
             {/* Bar skeleton */}
             <Skeleton
-              className="w-full"
+              className="w-6"
               style={{ height: `${barHeights[i]}px` }}
             />
             {/* X-axis label skeleton */}

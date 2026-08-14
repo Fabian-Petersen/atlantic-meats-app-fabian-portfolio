@@ -5,11 +5,12 @@ import type { AssetVerificationSummary } from "@/schemas/dashboardSchema";
 
 const COLORS = ["#22c55e", "#eab308", "#ef4444", "#94a3b8"];
 
-export default function AssetVerificationStatusPieChart({
-  data,
-}: {
+type Props = {
   data: AssetVerificationSummary;
-}) {
+};
+
+export default function AssetVerificationStatusPieChart({ data }: Props) {
+  console.log("verificationData:", data);
   const [activeIndex, setActiveIndex] = useState(-1);
 
   const complianceColor =

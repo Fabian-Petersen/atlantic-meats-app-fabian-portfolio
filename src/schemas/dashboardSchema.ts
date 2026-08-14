@@ -1,9 +1,9 @@
 import * as z from "zod";
 import type { LucideIcon } from "lucide-react";
 import { PureComponent } from "react";
-import { transferWorkflowResponseSchema } from "@/schemas/transfersSchemas";
-import { assetHistoryResponseSchema } from "@/schemas/assetSchemas";
-import { metricValuesSchema } from "./metricSchemas";
+// import { transferWorkflowResponseSchema } from "@/schemas/transfersSchemas";
+// import { assetHistoryResponseSchema } from "@/schemas/assetSchemas";
+import { metricValuesSchema, cardMetricsSchema } from "./metricSchemas";
 
 // $ Schema to create card item
 export const cardItemSchema = z.object({
@@ -32,6 +32,7 @@ export const verificationStatusSchema = z.enum([
 
 export const verificationSummarySchema = z.object({
   compliance: z.number(),
+  location: z.string(),
   total: z.number(),
   statuses: z.array(
     z.object({
@@ -64,12 +65,61 @@ export const metricCardConfigSchema = z.object({
   metrics: metricValuesSchema,
 });
 
+/* -------------------------------------------------------------------------- */
+/*                   Maintenance Cost Chart Schema and Types                  */
+/* -------------------------------------------------------------------------- */
+
+export const storeCostSchema = z.object({
+  parts: z.number(),
+  sundries: z.number(),
+  contractor: z.number(),
+  total: z.number(),
+});
+
+export const storeByMonthSchema = z.object({
+  request_id: z.string(),
+  action_id: z.string(),
+  assetID: z.string(),
+  date: z.string(),
+  costs: storeCostSchema,
+});
+
+export const storeJobsByMonthSchema = z.object({
+  location: z.string(),
+  year: z.string(),
+  month: z.string(),
+  total_jobs: z.number(),
+  total_cost: z.number(),
+  jobs: z.array(storeByMonthSchema),
+});
+export type StoreJobsByMonth = z.infer<typeof storeJobsByMonthSchema>;
+
+export const jobSchema = storeByMonthSchema.pick({
+  assetID: true,
+  costs: true,
+});
+
+export type JobCostItem = z.infer<typeof jobSchema>;
+
+export const allYearlyCostPointSchema = z.object({
+  name: z.string(),
+  value: z.number(),
+});
+export type AllYearlyCostPoint = z.infer<typeof allYearlyCostPointSchema>;
+
+export const costByYearSchema = z.record(
+  z.string(),
+  z.array(allYearlyCostPointSchema),
+);
+
+export type CostByYear = Record<string, AllYearlyCostPoint[]>;
+
 // schema for the dashboard metrics item: getDashboardMetrics
 export const dashboardMetricSchema = z.object({
-  storeCost: dbCostByYearResponseSchema,
-  cards: z.array(metricCardConfigSchema),
-  assets: assetHistoryResponseSchema,
-  transfers: transferWorkflowResponseSchema,
+  storeCost: costByYearSchema,
+  cards: cardMetricsSchema,
+  // assets: assetHistoryResponseSchema,
+  // transfers: transferWorkflowResponseSchema,
   verification: verificationSummarySchema,
 });
 
@@ -77,19 +127,11 @@ export type AssetVerificationSummary = z.infer<
   typeof verificationSummarySchema
 >;
 
-export type DashboardJobsStoreCostByYearResponse = z.infer<
-  typeof dbCostByYearResponseSchema
->;
-
-export type AllYearlyCostPoint = {
-  name: string;
-  value: number;
-};
+export type StoreCostByYear = z.infer<typeof dbCostByYearResponseSchema>;
 
 /**
  * Type for the API response for all stores annual cost
  */
-export type CostByYear = Record<string, AllYearlyCostPoint[]>;
 
 export type MonthlyCostPoint = {
   name: string;

@@ -15,7 +15,9 @@ export type CostByYear = Record<string, AllYearlyCostPoint[]>;
 type Props = {
   data: CostByYear;
   selectedYear?: string;
-  onSelect?: (year: string, location: string) => void;
+
+  // Level 1: store selected
+  onSelect?: (year: string, name: string) => void;
 };
 
 /**
@@ -81,8 +83,9 @@ function CostChart({ data, onSelect, selectedYear }: Props) {
 
   const handleBarClick = (data: AllYearlyCostPoint) => {
     if (!selectedYear) return;
-    const location = data.name;
-    onSelect?.(selectedYear, location);
+
+    const label = data.name;
+    onSelect?.(selectedYear, label);
   };
 
   return (

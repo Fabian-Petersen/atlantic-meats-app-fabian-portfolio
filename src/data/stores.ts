@@ -20,6 +20,19 @@ export const allLocations: string[] = [
   "Middestad Mall",
 ];
 
+export const STORE_OPTIONS = [
+  { label: "All Stores", value: "all" },
+  { label: "Maitland", value: "maitland" },
+  { label: "Bellville", value: "bellville" },
+  { label: "Wynberg", value: "wynberg" },
+  { label: "Phillipi", value: "phillipi" },
+  { label: "Khayelitsha", value: "khayelitsha" },
+  { label: "Golden Acre", value: "golden-acre" },
+  { label: "Distribution", value: "distribution" },
+] as const;
+
+export type StoreValue = (typeof STORE_OPTIONS)[number]["value"];
+
 // export const locations = {
 //   Phillipi: "PHP",
 //   Bellville: "BTX",

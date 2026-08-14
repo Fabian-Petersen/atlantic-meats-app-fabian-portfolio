@@ -1,20 +1,34 @@
-import ChartHeading from "@/components/dashboard/ChartHeading";
-import { getDashboardJobColumns } from "@/components/maintenanceRequestTable/columns";
-import { useGetAll } from "@/utils/api";
-import type { JobAPIResponse } from "@/schemas";
-import { TableGeneric } from "@/components/features/TableGeneric";
-import { SkeletonTable } from "@/components/dashboard/SkeletonTable";
-import { getUserGroups } from "@/auth/getUserGroups";
 import { useEffect } from "react";
-import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
-// import { useDashboardJobsMetrics } from "@/hooks/useDashboardJobsMetrics";
-import CardContainer from "../components/dashboard/CardContainer";
-import type { DashboardMetrics } from "@/schemas/dashboardSchema";
 
-/* -------------------------------- Animation ------------------------------- */
+/* -------------------------------------------------------------------------- */
+/*                                 Components                                 */
+/* -------------------------------------------------------------------------- */
+import CardContainer from "../components/dashboard/CardContainer";
+import ChartHeading from "@/components/dashboard/ChartHeading";
+import MaintenanceCost from "@/components/dashboard/components/MaintenanceCost";
+import { SkeletonTable } from "@/components/dashboard/SkeletonTable";
+import { TableGeneric } from "@/components/features/TableGeneric";
+
+/* -------------------------------------------------------------------------- */
+/*                                Hooks & Utils                               */
+/* -------------------------------------------------------------------------- */
+import { getDashboardJobColumns } from "@/components/maintenanceRequestTable/columns";
+import { getUserGroups } from "@/auth/getUserGroups";
+import { useGetAll } from "@/utils/api";
+import { cn } from "@/lib/utils";
+import { useDashboardJobsMetrics } from "@/hooks/useDashboardJobsMetrics";
+
+/* -------------------------------------------------------------------------- */
+/*                                    Types                                   */
+/* -------------------------------------------------------------------------- */
+import type { DashboardMetrics } from "@/schemas/dashboardSchema";
+import type { JobAPIResponse } from "@/schemas";
+
+/* -------------------------------------------------------------------------- */
+/*                                  Animation                                 */
+/* -------------------------------------------------------------------------- */
 // import { motion } from "framer-motion";
-// import MaintenanceCost from "@/components/dashboard/components/MaintenanceCost";
 import VerificationStatus from "@/components/dashboard/components/VerificationStatus";
 // import type { AssetVerificationSummary } from "@/schemas/dashboardSchema";
 
@@ -35,9 +49,8 @@ const Dashboard = () => {
     queryKey: ["metrics", "all"],
   });
 
-  console.log("metrics:", metrics);
-  // $ Hook pass the cards data to the CardContainer
-  // const { cards, isPending } = useDashboardJobsMetrics();
+  // $ Hook combine backend and frontend data to generate a card
+  const cards = useDashboardJobsMetrics(metrics?.cards);
 
   useEffect(() => {
     const loadGroups = async () => {
@@ -46,21 +59,26 @@ const Dashboard = () => {
     loadGroups();
   }, []);
 
+  // console.log(metrics);
+
   return (
     <main className="w-full h-full md:p-4 p-2">
       {/* <NotificationSidebar /> */}
       <div className={cn(sharedStyles.dashboard)}>
         {/* $ Cards */}
         <section className={cn(sharedStyles.dashboardCardsParent)}>
-          <CardContainer cards={metrics?.cards ?? []} isPending={isPending} />
+          <CardContainer cards={cards ?? []} isPending={isPending} />
         </section>
         {/* Revenue & Expense Chart Component */}
-        {/* <MaintenanceCost /> */}
-        {/* Asset Verification Pie Chart Component */}
-        {/* <VerificationStatus
+        <MaintenanceCost
+          data={metrics?.storeCost ?? {}}
           isPending={isPending}
+        />
+        {/* Asset Verification Pie Chart Component */}
+        <VerificationStatus
           data={metrics?.verification}
-        /> */}
+          isPending={isPending}
+        />
         {/* Pending Requests Table */}
         <section className={cn(sharedStyles.chartTable)}>
           <ChartHeading

@@ -67,6 +67,7 @@ export type Resource =
   | `api/stocks/${string}` // GET, PUT, DELETE a single stock by id
   | "api/dashboard/metrics" // GET, the metrics for all dashboard items
   | "api/dashboard/metrics/jobs" // GET, the metrics data for jobs from the backend
+  | "api/dashboard/metrics/verification" // GET, the store verification data from the backend
   | "api/dashboard/metrics/charts"; // GET, the metrics data for store job charts from the backend
 
 // $ Frontend Routing Paths (for redirection after actions)
