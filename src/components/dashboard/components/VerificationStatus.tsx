@@ -32,6 +32,7 @@ function VerificationStatus({ data, isPending }: Props) {
         sharedStyles.chartParent,
         "xl:col-span-1 flex flex-col",
         "dark:text-(--clr-textDark) text-(--clr-textLight)",
+        "relative",
       )}
     >
       <div className="flex items-center justify-between shrink-0">
@@ -64,7 +65,7 @@ function VerificationStatus({ data, isPending }: Props) {
         )}
       </div>
 
-      <div className="w-full h-60 shrink-0">
+      <div className="w-full h-64 shrink-0">
         {activeIsPending || !activeData ? (
           <PieChartSkeleton />
         ) : (
