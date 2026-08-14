@@ -118,9 +118,9 @@ export type CostByYear = Record<string, AllYearlyCostPoint[]>;
 export const dashboardMetricSchema = z.object({
   storeCost: costByYearSchema,
   cards: cardMetricsSchema,
+  verification: verificationSummarySchema,
   // assets: assetHistoryResponseSchema,
   // transfers: transferWorkflowResponseSchema,
-  verification: verificationSummarySchema,
 });
 
 export type AssetVerificationSummary = z.infer<

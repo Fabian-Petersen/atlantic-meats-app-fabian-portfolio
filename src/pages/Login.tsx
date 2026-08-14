@@ -6,7 +6,6 @@ import { sharedStyles } from "@/styles/shared";
 
 const LoginPage = () => {
   return (
-    // <main className="h-screen bg-gray-100 dark:bg-bgdark flex items-center justify-center px-4"></main>
     <main
       className={cn(
         sharedStyles.pageContainer,

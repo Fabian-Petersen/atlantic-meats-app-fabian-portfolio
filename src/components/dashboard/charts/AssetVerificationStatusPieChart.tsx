@@ -10,7 +10,6 @@ type Props = {
 };
 
 export default function AssetVerificationStatusPieChart({ data }: Props) {
-  console.log("verificationData:", data);
   const [activeIndex, setActiveIndex] = useState(-1);
 
   const complianceColor =
