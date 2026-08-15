@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { sharedStyles } from "@/styles/shared";
+import { motion } from "framer-motion";
+
 /* -------------------------------------------------------------------------- */
 /*                                 Components                                 */
 /* -------------------------------------------------------------------------- */
@@ -9,11 +10,12 @@ import ChartHeading from "../ChartHeading";
 import { JobRequestsChartSkeleton } from "../charts/JobRequestsChartSkeleton";
 
 /* -------------------------------------------------------------------------- */
-/*                                Hooks & Utils                                */
+/*                                Hooks & Utils                               */
 /* -------------------------------------------------------------------------- */
 import { useStoreCostByMonth } from "@/hooks/useStoreCostByMonth";
 import { useStoreCostByYear } from "@/hooks/useStoreCostByYear";
 import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
 /* -------------------------------------------------------------------------- */
 /*                                    Types                                   */
@@ -23,10 +25,8 @@ import type {
   StoreJobsByMonth,
   CostByYear,
 } from "@/schemas/dashboardSchema";
-/* -------------------------------------------------------------------------- */
-/*                                  Animation                                 */
-/* -------------------------------------------------------------------------- */
-import { motion } from "framer-motion";
+
+type DrilldownLevel = "sites" | "months" | "jobs";
 
 type Props = {
   data: StoreCostByYear;
@@ -36,8 +36,8 @@ type Props = {
 };
 
 /**
- * Adapts the level-3 API response (a single month's job list) into the
- * CostByYear shape CostChart expects.
+ * Adapts the level-3 API response (a single month's job list)
+ * into the CostByYear shape expected by CostChart.
  */
 function toJobsChartData(
   jobsByMonth: StoreJobsByMonth | undefined,
@@ -53,20 +53,17 @@ function toJobsChartData(
 }
 
 /**
- * CostChart only reports back the clicked bar's `name` (assetID). To route
- * to a specific job's completion page we need its request_id, so we build
- * a lookup from the same jobs array the chart was rendered from.
- *
- * NOTE: assumes assetID is unique within a given month's job list. If the
- * same asset can have multiple jobs in one month, switch to composing a
- * unique bar name (e.g. `${assetID} (${index})`) and parse it back out here.
+ * Creates a lookup between the asset ID displayed by CostChart
+ * and the action ID required for navigation.
  */
 function useJobRequestIdLookup(jobsByMonth: StoreJobsByMonth | undefined) {
   return useMemo(() => {
     const map = new Map<string, string>();
+
     jobsByMonth?.jobs.forEach((job) => {
       map.set(job.assetID, job.action_id);
     });
+
     return map;
   }, [jobsByMonth]);
 }
@@ -79,105 +76,197 @@ function MaintenanceCost({
 }: Props) {
   const navigate = useNavigate();
 
-  console.log("admin:", isAdmin);
-  console.log("location:", userLocation);
-
   const [selectedYear, setSelectedYear] = useState<string>("");
-  // 👇 State to track which store/year was selected from the main chart
+
+  /**
+   * Admin only:
+   * Tracks the site selected from the first-level site-cost chart.
+   */
   const [selectedStore, setSelectedStore] = useState<{
     year: string;
     location: string;
   } | null>(null);
 
+  /**
+   * Tracks the month selected from the monthly cost chart.
+   */
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
+
+  /* -------------------------------------------------------------------------- */
+  /*                               Initial Data                                 */
+  /* -------------------------------------------------------------------------- */
+
+  /**
+   * The backend now returns different first-level data:
+   *
+   * Admin:
+   *   data.costAll     → total cost per site
+   *
+   * User/Manager:
+   *   data.costByStore → monthly cost for their location
+   *
+   * The parent passes the appropriate response as `data`.
+   */
+  const initialChartData = costByYear;
 
   /* -------------------------------------------------------------------------- */
   /*                               API Data Calls                               */
   /* -------------------------------------------------------------------------- */
 
+  /**
+   * Admin only:
+   *
+   * After clicking a site, fetch the monthly cost breakdown
+   * for that site/year.
+   */
   const { data: costPerStoreByYear, isPending: isCostPerStorePending } =
     useStoreCostByYear(
-      selectedStore?.year ?? null,
-      selectedStore?.location ?? null,
+      isAdmin ? (selectedStore?.year ?? null) : null,
+      isAdmin ? (selectedStore?.location ?? null) : null,
     );
 
+  /**
+   * Level 3:
+   *
+   * Admin:
+   *   selectedStore + selectedMonth
+   *
+   * User/Manager:
+   *   userLocation + selectedMonth
+   */
   const { data: jobsByMonth, isPending: isJobsByMonthPending } =
     useStoreCostByMonth(
-      selectedStore?.year ?? null,
-      selectedStore?.location ?? null,
+      isAdmin ? (selectedStore?.year ?? null) : selectedYear || null,
+      isAdmin ? (selectedStore?.location ?? null) : (userLocation ?? null),
       selectedMonth,
     );
 
   /* -------------------------------------------------------------------------- */
-  /*                               Drilldown Level                              */
+  /*                              Drilldown Level                               */
   /* -------------------------------------------------------------------------- */
 
-  const isStoreSelected = !!selectedStore;
-  const isMonthSelected = !!selectedMonth;
+  /**
+   * Admin:
+   *
+   * sites → months → jobs
+   *
+   * User/Manager:
+   *
+   * months → jobs
+   */
+  const drilldownLevel: DrilldownLevel = isAdmin
+    ? selectedMonth
+      ? "jobs"
+      : selectedStore
+        ? "months"
+        : "sites"
+    : selectedMonth
+      ? "jobs"
+      : "months";
 
-  const drilldownLevel = isMonthSelected
-    ? "jobs"
-    : isStoreSelected
-      ? "store"
-      : "overview";
+  /* -------------------------------------------------------------------------- */
+  /*                              Chart Data                                    */
+  /* -------------------------------------------------------------------------- */
 
   const jobsChartData = useMemo(
     () => toJobsChartData(jobsByMonth),
     [jobsByMonth],
   );
 
-  const jobRequestIdLookup = useJobRequestIdLookup(jobsByMonth);
-
+  /**
+   * Select the correct data for the current drilldown level.
+   */
   const chartData =
-    drilldownLevel === "overview"
-      ? (costByYear ?? {})
-      : drilldownLevel === "store"
-        ? (costPerStoreByYear?.data ?? {})
+    drilldownLevel === "sites"
+      ? initialChartData
+      : drilldownLevel === "months"
+        ? isAdmin
+          ? (costPerStoreByYear?.data ?? {})
+          : initialChartData
         : jobsChartData;
 
   const isLoading =
-    drilldownLevel === "overview"
+    drilldownLevel === "sites"
       ? isPending
-      : drilldownLevel === "store"
-        ? isCostPerStorePending
+      : drilldownLevel === "months"
+        ? isAdmin
+          ? isCostPerStorePending
+          : isPending
         : isJobsByMonthPending;
+
+  /* -------------------------------------------------------------------------- */
+  /*                              Year Handling                                 */
+  /* -------------------------------------------------------------------------- */
 
   const years = Object.keys(chartData).sort();
   const latestYear = years[years.length - 1] ?? "";
 
-  // Only the overview level respects the user's manual year selection.
-  // Drilled-down data (store or jobs) is already scoped to a single key
-  // (a year, or a month), so that key should always win.
+  /**
+   * Admin selects the year at the site level.
+   *
+   * For users/managers, the year is already represented by the
+   * costByStore response.
+   */
   const resolvedYear =
-    drilldownLevel === "overview" ? selectedYear || latestYear : latestYear;
+    drilldownLevel === "sites" ? selectedYear || latestYear : latestYear;
 
   /* -------------------------------------------------------------------------- */
-  /*                              Chart Interaction                             */
+  /*                              Job Lookup                                    */
   /* -------------------------------------------------------------------------- */
 
-  // CostChart always calls onSelect with (year, barLabel). What that pair
-  // means depends on the level we're currently viewing:
-  //   overview -> barLabel is a location -> drill into that store
-  //   store    -> barLabel is a month    -> drill into that month's jobs
-  //   jobs     -> barLabel is an assetID -> navigate to that job's page
+  const jobRequestIdLookup = useJobRequestIdLookup(jobsByMonth);
+
+  /* -------------------------------------------------------------------------- */
+  /*                             Chart Interaction                              */
+  /* -------------------------------------------------------------------------- */
+
+  /**
+   * CostChart returns:
+   *
+   * Admin:
+   *   sites  → location
+   *   months → month
+   *   jobs   → assetID
+   *
+   * User/Manager:
+   *   months → month
+   *   jobs   → assetID
+   */
   const handleChartSelect = (year: string, label: string) => {
-    if (drilldownLevel === "overview") {
-      setSelectedStore({ year, location: label });
+    if (drilldownLevel === "sites") {
+      setSelectedStore({
+        year,
+        location: label,
+      });
+
       setSelectedMonth(null);
       return;
     }
 
-    if (drilldownLevel === "store") {
+    if (drilldownLevel === "months") {
+      /**
+       * Both admin and non-admin users select a month here.
+       *
+       * For admins the store is already stored in selectedStore.
+       * For users/managers the location comes from userLocation.
+       */
       setSelectedMonth(label);
+      setSelectedYear(year);
       return;
     }
 
     if (drilldownLevel === "jobs") {
       const actionId = jobRequestIdLookup.get(label);
+
       if (!actionId) return;
+
       navigate(`/jobs/${actionId}/complete`);
     }
   };
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Rendering                                   */
+  /* -------------------------------------------------------------------------- */
 
   return (
     <div
@@ -189,34 +278,46 @@ function MaintenanceCost({
     >
       <motion.div
         layout
-        transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
+        transition={{
+          layout: {
+            duration: 0.3,
+            ease: "easeInOut",
+          },
+        }}
         className="flex flex-col gap-4 h-full"
       >
-        {/* Header (participates in layout animation) */}
+        {/* ------------------------------------------------------------------ */}
+        {/* Header                                                             */}
+        {/* ------------------------------------------------------------------ */}
+
         <div className="flex items-center justify-between">
           <ChartHeading
             title={
               drilldownLevel === "jobs"
-                ? `${selectedStore?.location} — ${selectedMonth} ${selectedStore?.year}`
-                : drilldownLevel === "store"
-                  ? `${selectedStore?.location} — Cost Breakdown ${selectedStore?.year}`
+                ? `${isAdmin ? selectedStore?.location : userLocation} — ${selectedMonth} ${resolvedYear}`
+                : drilldownLevel === "months"
+                  ? `${isAdmin ? selectedStore?.location : userLocation} — Cost Breakdown ${resolvedYear}`
                   : "Maintenance Cost YTD"
             }
-            returnAction={drilldownLevel !== "overview"}
+            returnAction={
+              drilldownLevel === "jobs" ||
+              (drilldownLevel === "months" && isAdmin)
+            }
             onClick={() => {
               if (drilldownLevel === "jobs") {
                 setSelectedMonth(null);
                 return;
               }
 
-              if (drilldownLevel === "store") {
+              if (drilldownLevel === "months" && isAdmin) {
                 setSelectedStore(null);
               }
             }}
             className={cn(sharedStyles.chartHeading, "capitalize")}
           />
-          {/* Selected Year Menu Dropdown — overview level only */}
-          {drilldownLevel === "overview" && (
+
+          {/* Year selector is only displayed for the admin site level. */}
+          {drilldownLevel === "sites" && (
             <select
               value={resolvedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
@@ -224,7 +325,7 @@ function MaintenanceCost({
               className="base-select text-sm"
             >
               {years.map((year) => (
-                <option key={year} value={year} className="">
+                <option key={year} value={year}>
                   {year}
                 </option>
               ))}
@@ -232,7 +333,10 @@ function MaintenanceCost({
           )}
         </div>
 
-        {/* Chart container (layout animated) */}
+        {/* ------------------------------------------------------------------ */}
+        {/* Chart                                                              */}
+        {/* ------------------------------------------------------------------ */}
+
         <motion.div layout className="flex-1 min-h-0">
           {isLoading ? (
             <JobRequestsChartSkeleton />
@@ -252,11 +356,12 @@ function MaintenanceCost({
 export default MaintenanceCost;
 
 // import { useMemo, useState } from "react";
+// import { useNavigate } from "react-router-dom";
 // import { sharedStyles } from "@/styles/shared";
 // /* -------------------------------------------------------------------------- */
 // /*                                 Components                                 */
 // /* -------------------------------------------------------------------------- */
-// import CostChart, { type CostByYear } from "../charts/CostChart";
+// import CostChart from "../charts/CostChart";
 // import ChartHeading from "../ChartHeading";
 // import { JobRequestsChartSkeleton } from "../charts/JobRequestsChartSkeleton";
 
@@ -273,7 +378,11 @@ export default MaintenanceCost;
 // import type {
 //   StoreCostByYear,
 //   StoreJobsByMonth,
+//   CostByYear,
 // } from "@/schemas/dashboardSchema";
+
+// type DrilldownLevel = "sites" | "months" | "jobs";
+
 // /* -------------------------------------------------------------------------- */
 // /*                                  Animation                                 */
 // /* -------------------------------------------------------------------------- */
@@ -282,13 +391,13 @@ export default MaintenanceCost;
 // type Props = {
 //   data: StoreCostByYear;
 //   isPending: boolean;
+//   isAdmin: boolean;
+//   userLocation?: string;
 // };
 
 // /**
 //  * Adapts the level-3 API response (a single month's job list) into the
-//  * CostByYear shape CostChart expects. Kept local to this component for now —
-//  * move to CostChart.tsx or a shared chartAdapters.ts if another view ends up
-//  * needing StoreJobsByMonth in chart form too.
+//  * CostByYear shape CostChart expects.
 //  */
 // function toJobsChartData(
 //   jobsByMonth: StoreJobsByMonth | undefined,
@@ -303,9 +412,37 @@ export default MaintenanceCost;
 //   };
 // }
 
-// function MaintenanceCost({ data: costByYear, isPending }: Props) {
+// /**
+//  * CostChart only reports back the clicked bar's `name` (assetID). To route
+//  * to a specific job's completion page we need its action_id, so we build
+//  * a lookup from the same jobs array the chart was rendered from.
+//  */
+// function useJobRequestIdLookup(jobsByMonth: StoreJobsByMonth | undefined) {
+//   return useMemo(() => {
+//     const map = new Map<string, string>();
+
+//     jobsByMonth?.jobs.forEach((job) => {
+//       map.set(job.assetID, job.action_id);
+//     });
+
+//     return map;
+//   }, [jobsByMonth]);
+// }
+
+// function MaintenanceCost({
+//   data: costByYear,
+//   isPending,
+//   isAdmin,
+//   userLocation,
+// }: Props) {
+//   const navigate = useNavigate();
+
+//   console.log("admin:", isAdmin);
+//   console.log("location:", userLocation);
+
 //   const [selectedYear, setSelectedYear] = useState<string>("");
-//   // 👇 State to track which store/year was selected from the main chart
+
+//   // State tracks the store/year selected from the admin's main chart.
 //   const [selectedStore, setSelectedStore] = useState<{
 //     year: string;
 //     location: string;
@@ -317,16 +454,25 @@ export default MaintenanceCost;
 //   /*                               API Data Calls                               */
 //   /* -------------------------------------------------------------------------- */
 
+//   /**
+//    * For admins, selectedStore comes from clicking a site.
+//    *
+//    * For non-admin users, their location is already known, so use their
+//    * location directly when requesting the year-level cost breakdown.
+//    */
+//   const location = isAdmin
+//     ? (selectedStore?.location ?? null)
+//     : (userLocation ?? null);
+
+//   const year = isAdmin ? (selectedStore?.year ?? null) : selectedYear || null;
+
 //   const { data: costPerStoreByYear, isPending: isCostPerStorePending } =
-//     useStoreCostByYear(
-//       selectedStore?.year ?? null,
-//       selectedStore?.location ?? null,
-//     );
+//     useStoreCostByYear(year, location);
 
 //   const { data: jobsByMonth, isPending: isJobsByMonthPending } =
 //     useStoreCostByMonth(
-//       selectedStore?.year ?? null,
-//       selectedStore?.location ?? null,
+//       isAdmin ? (selectedStore?.year ?? null) : year,
+//       location,
 //       selectedMonth,
 //     );
 
@@ -334,61 +480,92 @@ export default MaintenanceCost;
 //   /*                               Drilldown Level                              */
 //   /* -------------------------------------------------------------------------- */
 
-//   const isStoreSelected = !!selectedStore;
-//   const isMonthSelected = !!selectedMonth;
-
-//   const drilldownLevel = isMonthSelected
-//     ? "jobs"
-//     : isStoreSelected
-//       ? "store"
-//       : "overview";
+//   /**
+//    * Admin:
+//    *
+//    * sites → months → jobs
+//    *
+//    * Non-admin:
+//    *
+//    * months → jobs
+//    *
+//    * The non-admin user's location is already supplied by the parent,
+//    * so they do not need to select a site first.
+//    */
+//   const drilldownLevel: DrilldownLevel = isAdmin
+//     ? selectedMonth
+//       ? "jobs"
+//       : selectedStore
+//         ? "months"
+//         : "sites"
+//     : selectedMonth
+//       ? "jobs"
+//       : "months";
 
 //   const jobsChartData = useMemo(
 //     () => toJobsChartData(jobsByMonth),
 //     [jobsByMonth],
 //   );
 
+//   const jobRequestIdLookup = useJobRequestIdLookup(jobsByMonth);
+
 //   const chartData =
-//     drilldownLevel === "overview"
+//     drilldownLevel === "sites"
 //       ? (costByYear ?? {})
-//       : drilldownLevel === "store"
+//       : drilldownLevel === "months"
 //         ? (costPerStoreByYear?.data ?? {})
 //         : jobsChartData;
 
 //   const isLoading =
-//     drilldownLevel === "overview"
+//     drilldownLevel === "sites"
 //       ? isPending
-//       : drilldownLevel === "store"
+//       : drilldownLevel === "months"
 //         ? isCostPerStorePending
 //         : isJobsByMonthPending;
 
 //   const years = Object.keys(chartData).sort();
 //   const latestYear = years[years.length - 1] ?? "";
 
-//   // Only the overview level respects the user's manual year selection.
-//   // Drilled-down data (store or jobs) is already scoped to a single key
-//   // (a year, or a month), so that key should always win.
+//   /**
+//    * Only the sites level uses the manual year selection.
+//    * Once a store/month is selected, the API response is already scoped.
+//    */
 //   const resolvedYear =
-//     drilldownLevel === "overview" ? selectedYear || latestYear : latestYear;
+//     drilldownLevel === "sites" ? selectedYear || latestYear : latestYear;
 
 //   /* -------------------------------------------------------------------------- */
 //   /*                              Chart Interaction                             */
 //   /* -------------------------------------------------------------------------- */
 
-//   // CostChart always calls onSelect with (year, barLabel). What that pair
-//   // means depends on the level we're currently viewing:
-//   //   overview -> barLabel is a location  -> drill into that store
-//   //   store    -> barLabel is a month     -> drill into that month's jobs
-//   //   jobs     -> no further drilldown, CostChart gets no onSelect at all
+//   /**
+//    * CostChart always calls onSelect with (year, barLabel).
+//    *
+//    * sites  → barLabel is a location
+//    * months → barLabel is a month
+//    * jobs   → barLabel is an assetID
+//    */
 //   const handleChartSelect = (year: string, label: string) => {
-//     if (drilldownLevel === "overview") {
-//       setSelectedStore({ year, location: label });
+//     if (drilldownLevel === "sites") {
+//       setSelectedStore({
+//         year,
+//         location: label,
+//       });
+
 //       setSelectedMonth(null);
 //       return;
 //     }
 
-//     if (drilldownLevel === "store") {
+//     if (drilldownLevel === "months") {
 //       setSelectedMonth(label);
+//       return;
+//     }
+
+//     if (drilldownLevel === "jobs") {
+//       const actionId = jobRequestIdLookup.get(label);
+
+//       if (!actionId) return;
+
+//       navigate(`/jobs/${actionId}/complete`);
 //     }
 //   };
 
@@ -405,31 +582,32 @@ export default MaintenanceCost;
 //         transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
 //         className="flex flex-col gap-4 h-full"
 //       >
-//         {/* Header (participates in layout animation) */}
+//         {/* Header */}
 //         <div className="flex items-center justify-between">
 //           <ChartHeading
 //             title={
 //               drilldownLevel === "jobs"
-//                 ? `${selectedStore?.location} — ${selectedMonth} ${selectedStore?.year}`
-//                 : drilldownLevel === "store"
-//                   ? `${selectedStore?.location} — Cost Breakdown ${selectedStore?.year}`
+//                 ? `${location} — ${selectedMonth} ${year}`
+//                 : drilldownLevel === "months"
+//                   ? `${location} — Cost Breakdown ${year}`
 //                   : "Maintenance Cost YTD"
 //             }
-//             returnAction={drilldownLevel !== "overview"}
+//             returnAction={drilldownLevel !== "sites"}
 //             onClick={() => {
 //               if (drilldownLevel === "jobs") {
 //                 setSelectedMonth(null);
 //                 return;
 //               }
 
-//               if (drilldownLevel === "store") {
+//               if (drilldownLevel === "months" && isAdmin) {
 //                 setSelectedStore(null);
 //               }
 //             }}
 //             className={cn(sharedStyles.chartHeading, "capitalize")}
 //           />
-//           {/* Selected Year Menu Dropdown — overview level only */}
-//           {drilldownLevel === "overview" && (
+
+//           {/* Selected Year Menu Dropdown — sites level only */}
+//           {drilldownLevel === "sites" && (
 //             <select
 //               value={resolvedYear}
 //               onChange={(e) => setSelectedYear(e.target.value)}
@@ -437,7 +615,7 @@ export default MaintenanceCost;
 //               className="base-select text-sm"
 //             >
 //               {years.map((year) => (
-//                 <option key={year} value={year} className="">
+//                 <option key={year} value={year}>
 //                   {year}
 //                 </option>
 //               ))}
@@ -445,7 +623,7 @@ export default MaintenanceCost;
 //           )}
 //         </div>
 
-//         {/* Chart container (layout animated) */}
+//         {/* Chart */}
 //         <motion.div layout className="flex-1 min-h-0">
 //           {isLoading ? (
 //             <JobRequestsChartSkeleton />
@@ -453,9 +631,7 @@ export default MaintenanceCost;
 //             <CostChart
 //               data={chartData}
 //               selectedYear={resolvedYear}
-//               onSelect={
-//                 drilldownLevel === "jobs" ? undefined : handleChartSelect
-//               }
+//               onSelect={handleChartSelect}
 //             />
 //           )}
 //         </motion.div>

@@ -81,34 +81,3 @@ export const useDashboardJobsMetrics = (
     [data],
   );
 };
-// import { useMemo } from "react";
-// import { dashboardCardConfig } from "@/lib/dashboardCardConfig";
-// import type {
-//   DashboardMetrics,
-//   MetricCardConfig,
-// } from "@/schemas/dashboardSchema";
-// import { useGetAll } from "@/utils/api";
-
-// export const useDashboardJobsMetrics = (): {
-//   cards: MetricCardConfig[];
-//   isPending: boolean;
-// } => {
-//   const { data, isPending } = useGetAll<DashboardMetrics>({
-//     resourcePath: "api/dashboard/metrics/jobs",
-//     queryKey: ["dashboard", "metrics"],
-//   });
-
-//   const cards: MetricCardConfig[] = useMemo(
-//     () =>
-//       dashboardCardConfig.map((config) => ({
-//         cardData: config,
-//         metrics: data?.[config.id as keyof DashboardMetrics] ?? {
-//           value: 0,
-//           valueChange: 0,
-//         },
-//       })),
-//     [data],
-//   );
-
-//   return { cards, isPending };
-// };

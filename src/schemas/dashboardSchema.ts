@@ -97,6 +97,7 @@ export const userDashboardSchema = z.object({
   role: z.enum(["admin", "manager", "user", "maintenance"]),
   location: z.string(),
 });
+
 export type StoreJobsByMonth = z.infer<typeof storeJobsByMonthSchema>;
 
 export const jobSchema = storeByMonthSchema.pick({
