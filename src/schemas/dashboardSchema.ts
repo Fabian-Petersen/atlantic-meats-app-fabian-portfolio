@@ -92,6 +92,11 @@ export const storeJobsByMonthSchema = z.object({
   total_cost: z.number(),
   jobs: z.array(storeByMonthSchema),
 });
+
+export const userDashboardSchema = z.object({
+  role: z.enum(["admin", "manager", "user", "maintenance"]),
+  location: z.string(),
+});
 export type StoreJobsByMonth = z.infer<typeof storeJobsByMonthSchema>;
 
 export const jobSchema = storeByMonthSchema.pick({
@@ -116,6 +121,7 @@ export type CostByYear = Record<string, AllYearlyCostPoint[]>;
 
 // schema for the dashboard metrics item: getDashboardMetrics
 export const dashboardMetricSchema = z.object({
+  user: userDashboardSchema,
   storeCost: costByYearSchema,
   cards: cardMetricsSchema,
   verification: verificationSummarySchema,

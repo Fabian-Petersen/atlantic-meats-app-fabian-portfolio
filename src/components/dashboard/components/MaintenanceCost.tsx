@@ -31,6 +31,8 @@ import { motion } from "framer-motion";
 type Props = {
   data: StoreCostByYear;
   isPending: boolean;
+  isAdmin: boolean;
+  userLocation?: string;
 };
 
 /**
@@ -49,9 +51,6 @@ function toJobsChartData(
     })),
   };
 }
-
-// RT-0024: 5653498b-bb7c-412d-b456-2f229ee7be78
-// RT-0024: c21e3ce5-cb35-4931-ab78-fbdabb318364
 
 /**
  * CostChart only reports back the clicked bar's `name` (assetID). To route
@@ -72,8 +71,16 @@ function useJobRequestIdLookup(jobsByMonth: StoreJobsByMonth | undefined) {
   }, [jobsByMonth]);
 }
 
-function MaintenanceCost({ data: costByYear, isPending }: Props) {
+function MaintenanceCost({
+  data: costByYear,
+  isPending,
+  isAdmin,
+  userLocation,
+}: Props) {
   const navigate = useNavigate();
+
+  console.log("admin:", isAdmin);
+  console.log("location:", userLocation);
 
   const [selectedYear, setSelectedYear] = useState<string>("");
   // 👇 State to track which store/year was selected from the main chart

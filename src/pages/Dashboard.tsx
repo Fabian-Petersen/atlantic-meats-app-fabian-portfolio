@@ -49,6 +49,9 @@ const Dashboard = () => {
     queryKey: ["metrics", "all"],
   });
 
+  const isAdmin = metrics?.user.role === "admin";
+  const userLocation = metrics?.user.location;
+
   // $ Hook combine backend and frontend data to generate a card
   const cards = useDashboardJobsMetrics(metrics?.cards);
 
@@ -73,6 +76,8 @@ const Dashboard = () => {
         <MaintenanceCost
           data={metrics?.storeCost ?? {}}
           isPending={isPending}
+          isAdmin={isAdmin}
+          userLocation={userLocation}
         />
         {/* Asset Verification Pie Chart Component */}
         <VerificationStatus
