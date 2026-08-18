@@ -8,9 +8,9 @@ import {
 } from "recharts";
 import { useMemo } from "react";
 
-import type { AllYearlyCostPoint } from "@/schemas/dashboardSchema";
+import type { CostByYear, ChartPoint } from "@/schemas/dashboardSchema";
 
-export type CostByYear = Record<string, AllYearlyCostPoint[]>;
+// export type CostByYear = Record<string, ChartPoint[]>;
 
 type Props = {
   data: CostByYear;
@@ -81,7 +81,7 @@ function CostChart({ data, onSelect, selectedYear }: Props) {
     return data[selectedYear] || [];
   }, [selectedYear, data]);
 
-  const handleBarClick = (data: AllYearlyCostPoint) => {
+  const handleBarClick = (data: ChartPoint) => {
     if (!selectedYear) return;
 
     const label = data.name;
@@ -116,7 +116,7 @@ function CostChart({ data, onSelect, selectedYear }: Props) {
               strokeWidth: 0,
             }}
             style={{ cursor: "pointer", textTransform: "capitalize" }}
-            onClick={(data) => handleBarClick(data as AllYearlyCostPoint)}
+            onClick={(data) => handleBarClick(data as ChartPoint)}
           />
         </BarChart>
       </ResponsiveContainer>

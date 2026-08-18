@@ -322,7 +322,7 @@ function MaintenanceCost({
               value={resolvedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
               aria-label="year selector"
-              className="base-select text-sm"
+              className={cn(sharedStyles.chartSelectBtn)}
             >
               {years.map((year) => (
                 <option key={year} value={year}>

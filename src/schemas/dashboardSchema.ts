@@ -69,6 +69,14 @@ export const metricCardConfigSchema = z.object({
 /*                   Maintenance Cost Chart Schema and Types                  */
 /* -------------------------------------------------------------------------- */
 
+// Generic type for the Cost and JobsChart point
+export const chartPointSchema = z.object({
+  name: z.string(),
+  value: z.number(),
+});
+
+export type ChartPoint = z.infer<typeof chartPointSchema>;
+
 export const storeCostSchema = z.object({
   parts: z.number(),
   sundries: z.number(),
@@ -118,12 +126,54 @@ export const costByYearSchema = z.record(
   z.array(allYearlyCostPointSchema),
 );
 
-export type CostByYear = Record<string, AllYearlyCostPoint[]>;
+// export type CostByYear = Record<string, AllYearlyCostPoint[]>;
+export type CostByYear = Record<string, ChartPoint[]>;
 
-// schema for the dashboard metrics item: getDashboardMetrics
+export type JobsByYear = Record<string, ChartPoint[]>;
+
+/* -------------------------------------------------------------------------- */
+/*                   Maintenance Jobs Metrics Schema & Types                  */
+/* -------------------------------------------------------------------------- */
+
+// Individual chart data point
+export const jobMetricPointSchema = z.object({
+  name: z.string(),
+  value: z.number(),
+});
+
+// Data grouped by year
+export const jobMetricsByYearSchema = z.record(
+  z.string(),
+  z.array(jobMetricPointSchema),
+);
+
+// Job metrics grouped by status
+export const storeJobMetricsSchema = z.object({
+  pending: jobMetricsByYearSchema,
+  "in progress": jobMetricsByYearSchema,
+  complete: jobMetricsByYearSchema,
+  cancelled: jobMetricsByYearSchema,
+});
+
+// Level 2 Response Type
+export const storeJobMetricsByMonthSchema = z.object({
+  location: z.string(),
+  status: z.enum(["pending", "in progress", "complete", "cancelled"]),
+  year: z.string(),
+  data: jobMetricsByYearSchema,
+});
+
+export type StoreJobMetricsByMonth = z.infer<
+  typeof storeJobMetricsByMonthSchema
+>;
+
+/* -------------------------------------------------------------------------- */
+/*        // schema for the dashboard metrics item: getDashboardMetrics       */
+/* -------------------------------------------------------------------------- */
 export const dashboardMetricSchema = z.object({
   user: userDashboardSchema,
   storeCost: costByYearSchema,
+  storeJobs: storeJobMetricsSchema,
   cards: cardMetricsSchema,
   verification: verificationSummarySchema,
   // assets: assetHistoryResponseSchema,
@@ -133,6 +183,9 @@ export const dashboardMetricSchema = z.object({
 export type AssetVerificationSummary = z.infer<
   typeof verificationSummarySchema
 >;
+
+// Frontend type
+export type StoreJobMetrics = z.infer<typeof storeJobMetricsSchema>;
 
 export type StoreCostByYear = z.infer<typeof dbCostByYearResponseSchema>;
 

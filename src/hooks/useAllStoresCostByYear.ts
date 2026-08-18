@@ -1,5 +1,5 @@
 import { useGetAll } from "@/utils/api";
-import type { CostByYear } from "@/components/dashboard/charts/CostChart";
+import type { ChartPoint } from "@/schemas/dashboardSchema";
 
 /**
  * useAllStoresCostByYear
@@ -50,11 +50,11 @@ import type { CostByYear } from "@/components/dashboard/charts/CostChart";
  * );
  */
 export const useAllStoresCostByYear = (): {
-  data: CostByYear | undefined;
+  data: ChartPoint | undefined;
   isPending: boolean;
   isError: boolean;
 } => {
-  const { data, isPending, isError } = useGetAll<CostByYear>({
+  const { data, isPending, isError } = useGetAll<ChartPoint>({
     resourcePath: "api/dashboard/metrics/charts",
     queryKey: ["dashboard", "storeCostByYear", "charts"],
   });

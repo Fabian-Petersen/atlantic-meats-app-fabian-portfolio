@@ -74,7 +74,7 @@ select:not([multiple])::picker(select) {
     background-color: white;
     color: var(--clr-textLight);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    /* padding: 4px; */
+    padding: 10px;
     margin: 0.5em 0;
 
     /* Firefox */
@@ -122,18 +122,12 @@ select:not([multiple])::picker(select) {
 
   .dark select.base-select:not([multiple]) option:checked {
     color: var(--clr-textDark);
+    border-radius: 3px;
   }
 
-  selec.base-select selectedcontent {
-    /* color:; */
+  select.base-select selectedcontent {
+    backgound-color: transparent;
   }
-
-  /* scrollbar styles */
-  /* select:not([multiple])::picker(select) {
-    scrollbar-width: thin;
-    scrollbar-color: color-mix(in srgb, var(--clr-primary) 60%, white)
-      transparent;
-  } */
 
   select.base-select:not([multiple])::picker(select)::-webkit-scrollbar {
     width: 3px;

@@ -4,8 +4,10 @@ import type { TechnicianOption } from "@/schemas/technicianSchemas";
 // $ Get the list of technicians from the database
 
 export const useGetTechnicians = () => {
-  return useGetAll<TechnicianOption[]>({
+  const { data, isPending, isError } = useGetAll<TechnicianOption[]>({
     resourcePath: "api/users/technicians",
     queryKey: ["technicians"],
   });
+
+  return { data, isPending, isError };
 };

@@ -44,13 +44,12 @@ function VerificationStatus({ data, isPending }: Props) {
         {role === "admin" ? (
           <select
             value={selectedStore}
-            // onChange={(e) => setSelectedStore(e.target.value as StoreValue)}
             onChange={(e) => {
               const location = e.target.value as StoreValue;
-              console.log("SELECT CHANGED:", location);
+              // console.log("SELECT CHANGED:", location);
               setSelectedStore(location);
             }}
-            className="text-xs base-select border border-gray-200 p-2 rounded-lg bg-gray-100/50 hover:cursor-pointer"
+            className={sharedStyles.chartSelectBtn}
           >
             {STORE_OPTIONS.map((location) => (
               <option key={location.value} value={location.value}>

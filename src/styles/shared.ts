@@ -336,6 +336,11 @@ export const sharedStyles = {
     "flex flex-col gap-4 col-span-full lg:col-span-full xl:col-span-full self-start w-full min-w-0 h-full overflow-y-auto rounded-md bg-white dark:bg-(--bg-primary_dark) border border-white dark:border-gray-700/50 p-4 shadow-sm",
   ),
 
+  chartSelectBtn: cn(
+    "base-select text-xs border border-gray-200 p-2 rounded-lg bg-gray-100/50 hover:cursor-pointer",
+    "dark:border-(--clr-borderDark) dark:bg-(--bg-primary_dark)",
+  ),
+
   /* //$ ——— Description (Items) ——————————————————————————————————————————————————————————— */
   description: cn("rounded-md px-3 py-2.5 text-sm leading-relaxed"),
   DescriptionDefault: cn(
