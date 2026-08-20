@@ -56,7 +56,7 @@ const Dashboard = () => {
     loadGroups();
   }, []);
 
-  console.log(metrics);
+  // console.log(metrics);
 
   return (
     <main className="w-full h-full md:p-4 p-2">

@@ -10,6 +10,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { useVerificationData } from "@/hooks/useVerificationData";
 import { STORE_OPTIONS, type StoreValue } from "@/data/stores";
 import type { AssetVerificationSummary } from "@/schemas/dashboardSchema";
+import { HeadingSkeleton } from "../charts/HeadingSkeleton";
 
 type Props = {
   data?: AssetVerificationSummary;
@@ -36,27 +37,34 @@ function VerificationStatus({ data, isPending }: Props) {
       )}
     >
       <div className="flex items-center justify-between shrink-0">
-        <ChartHeading
-          title="Asset Verification Status"
-          className={cn(sharedStyles.chartHeading)}
-        />
-
+        {isPending ? (
+          <HeadingSkeleton className="w-48" />
+        ) : (
+          <ChartHeading
+            title="Asset Verification Status"
+            className={cn(sharedStyles.chartHeading)}
+          />
+        )}
         {role === "admin" ? (
-          <select
-            value={selectedStore}
-            onChange={(e) => {
-              const location = e.target.value as StoreValue;
-              // console.log("SELECT CHANGED:", location);
-              setSelectedStore(location);
-            }}
-            className={sharedStyles.chartSelectBtn}
-          >
-            {STORE_OPTIONS.map((location) => (
-              <option key={location.value} value={location.value}>
-                {location.label}
-              </option>
-            ))}
-          </select>
+          isPending ? (
+            <HeadingSkeleton className="w-12" />
+          ) : (
+            <select
+              value={selectedStore}
+              onChange={(e) => {
+                const location = e.target.value as StoreValue;
+                // console.log("SELECT CHANGED:", location);
+                setSelectedStore(location);
+              }}
+              className={sharedStyles.chartSelectBtn}
+            >
+              {STORE_OPTIONS.map((location) => (
+                <option key={location.value} value={location.value}>
+                  {location.label}
+                </option>
+              ))}
+            </select>
+          )
         ) : (
           <span className="text-sm text-(--clr-textMuted) capitalize">
             {data?.location}

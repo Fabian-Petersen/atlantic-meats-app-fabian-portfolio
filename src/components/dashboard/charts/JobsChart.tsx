@@ -10,7 +10,6 @@ import { useMemo } from "react";
 import useScreenSize from "@/customHooks/useScreenSize";
 
 import type { ChartPoint, JobsByYear } from "@/schemas/dashboardSchema";
-// import useGlobalContext from "@/context/useGlobalContext";
 
 type Props = {
   data: JobsByYear;
