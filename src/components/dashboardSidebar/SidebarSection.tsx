@@ -47,18 +47,14 @@ const SidebarSection = ({
   onToggle,
   // defaultOpen = true,
 }: Props) => {
-  const {
-    activeItem,
-    setActiveItem,
-    // setIsOpen
-  } = useGlobalContext();
+  const { activeItem, setActiveItem, setIsOpen } = useGlobalContext();
   // const [isOpen, setIsExpanded] = useState(defaultOpen);
 
   const handleSidebarLinkClick = (itemName: string) => {
     setActiveItem(itemName);
-    // setTimeout(() => {
-    //   setIsOpen(false);
-    // }, 500);
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 500);
   };
 
   const visibleLinks = data.filter((item) => {

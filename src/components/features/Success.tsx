@@ -1,6 +1,7 @@
 import useGlobalContext from "@/context/useGlobalContext";
 import { CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { modalVariants } from "@/styles/motionStyles";
 
 // $ Animation
 import { motion, AnimatePresence } from "motion/react";
@@ -35,30 +36,32 @@ export const Success = () => {
       {showSuccess && (
         <motion.div
           className={cn(sharedStyles.actionModalParent)}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          variants={modalVariants.parent}
+          initial="initial"
+          animate="animate"
+          exit="exit"
         >
           <motion.div
             className={cn(sharedStyles.actionModalContent)}
-            initial={{ opacity: 0, scale: 0.96, y: 8 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.98, y: 4 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+            variants={modalVariants.content}
+            initial="initial"
+            animate="animate"
+            exit="exit"
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.85 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1, duration: 0.25, ease: "easeOut" }}
+              variants={modalVariants.icon}
+              initial="initial"
+              animate="animate"
+              exit="exit"
             >
               <CheckCircle size={140} className="text-check" />
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15, duration: 0.2 }}
+              variants={modalVariants.text}
+              initial="initial"
+              animate="animate"
+              exit="exit"
             >
               <h1 className={cn(sharedStyles.actionModalTitle)}>
                 {config.title}
@@ -74,18 +77,17 @@ export const Success = () => {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.2 }}
+              variants={modalVariants.actions}
+              initial="initial"
+              animate="animate"
+              exit="exit"
               className="w-full"
             >
               <button
                 type="button"
                 onClick={handleClose}
-                // className="w-full rounded-full bg-check px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:opacity-90"
                 className={cn(
                   sharedStyles.btn,
-                  // sharedStyles.btnParent,
                   sharedStyles.btnSubmit,
                   "text-md w-3/4",
                 )}

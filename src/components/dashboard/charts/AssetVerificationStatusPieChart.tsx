@@ -14,7 +14,7 @@ export default function AssetVerificationStatusPieChart({ data }: Props) {
 
   const complianceColor =
     data.compliance < 50
-      ? "#ef4444"
+      ? "#f80606"
       : data.compliance < 80
         ? "#eab308"
         : "#22c55e";
@@ -39,7 +39,7 @@ export default function AssetVerificationStatusPieChart({ data }: Props) {
               y="50%"
               dy={32}
               textAnchor="middle"
-              fill="var(--chart-text)"
+              fill="var(--chart-axis)"
               fontSize={18}
               fontWeight={400}
             >
@@ -55,6 +55,7 @@ export default function AssetVerificationStatusPieChart({ data }: Props) {
           innerRadius={80}
           outerRadius={110}
           dataKey="value"
+          fill="var(--chart-axis)"
           onMouseEnter={(_, index) => setActiveIndex(index)}
           onMouseLeave={() => setActiveIndex(-1)}
           shape={(props) => (
@@ -62,6 +63,7 @@ export default function AssetVerificationStatusPieChart({ data }: Props) {
               {...props}
               fill={COLORS[props.index % COLORS.length]}
               isActive={props.index === activeIndex}
+              // textColor="var(--chart-axis)"
             />
           )}
         />

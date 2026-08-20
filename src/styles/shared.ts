@@ -15,6 +15,9 @@ export const sharedStyles = {
     "md:border md:border-gray-200/70 bg-white",
     "dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) md:dark:border-gray-700/50 md:dark:border",
   ),
+  pageMobile: cn(
+    "flex flex-col gap-4 px-4 py-1 md:py-8 min-h-[calc(100vh-var(--sm-navbarHeight))] md:h-[calc(100vh-var(--lg-navbarHeight))]",
+  ),
 
   /* //$ ——— Dashboards ————————————————————————————————————————————————————————— */
 
@@ -37,7 +40,7 @@ export const sharedStyles = {
 
   /* //$ ——— Modal Cards ———————————————————————————————————————————————————————— */
   cardParent: cn(
-    "flex flex-col min-h-screen lg:hidden w-full",
+    "flex flex-col min-h-screen lg:hidden w-full gap-2",
     // light
     "",
     //dark
@@ -48,7 +51,7 @@ export const sharedStyles = {
   ),
   cardRowParent: cn(
     // "mt-4 rounded-md border border-gray-200  p-4 w-full",
-    "rounded-md border border-gray-200 mb-2 overflow-hidden transition-shadow hover:shadow-sm py-2 px-4 w-full",
+    "rounded-md border border-gray-200 mb-2 overflow-hidden transition-shadow hover:shadow-sm py-2 px-2 w-full",
     // light
     "bg-white",
     // dark
@@ -142,7 +145,7 @@ export const sharedStyles = {
   heading: cn(
     "font-semibold font-montserrat md:font-normal text-lg md:text-2xl capitalize w-full dark:text-gray-100",
   ), // shared styles
-  headingForm: cn("text-left px-2 text-gray-800"), // form headings
+  headingForm: cn("px-2 text-gray-800"), // form headings
   headingTable: cn("text-left p-4 md:py-0"), // table headings
   chevronStyles: cn("size-5 md:size-6"), // styles for the heading Back Button Chevron
 

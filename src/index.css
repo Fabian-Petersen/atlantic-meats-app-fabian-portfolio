@@ -7,6 +7,7 @@
 
 :root {
   --radius: 10px;
+  --chart-axis: #1f2937;
 
   /* Layout  */
   --sm-navbarHeight: 5rem;
@@ -231,6 +232,7 @@ html {
   --clr-bgDark: #101827;
   --clr-borderDark: #364153;
   --clr-borderDarkRed: #9f0712;
+  --chart-axis: #f3f4f6;
 }
 
 .resizer {

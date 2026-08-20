@@ -216,7 +216,7 @@ function MaintenanceJobs({ data, isPending, isAdmin, userLocation }: Props) {
             title={
               drilldownLevel === "months"
                 ? `${location} — ${selectedStatus} Jobs ${resolvedYear}`
-                : "Maintenance Jobs"
+                : "Maintenance Jobs YTD"
             }
             returnAction={drilldownLevel === "months" && isAdmin}
             onClick={() => {

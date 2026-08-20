@@ -8,7 +8,9 @@ import {
 } from "recharts";
 import { useMemo } from "react";
 
+import useScreenSize from "@/customHooks/useScreenSize";
 import type { CostByYear, ChartPoint } from "@/schemas/dashboardSchema";
+// import useGlobalContext from "@/context/useGlobalContext";
 
 // export type CostByYear = Record<string, ChartPoint[]>;
 
@@ -76,6 +78,9 @@ type Props = {
  */
 
 function CostChart({ data, onSelect, selectedYear }: Props) {
+  const isMobile = useScreenSize(400);
+  // const { isDarkTheme } = useGlobalContext();
+
   const chartData = useMemo(() => {
     if (!selectedYear) return [];
     return data[selectedYear] || [];
@@ -84,25 +89,40 @@ function CostChart({ data, onSelect, selectedYear }: Props) {
   const handleBarClick = (data: ChartPoint) => {
     if (!selectedYear) return;
 
-    const label = data.name;
+    const label = isMobile ? (data?.code ?? "") : data?.name;
+
     onSelect?.(selectedYear, label);
   };
 
   return (
-    <div className="w-full h-full md:p-4 relative">
+    <div className="w-full h-full md:p-4 px-0 relative">
       {/* Chart fills full height */}
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}
-          barSize={25}
-          margin={{ top: 4, right: 4, bottom: 0, left: 0 }}
+          barSize={isMobile ? 15 : 25}
+          margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
         >
           <XAxis
-            dataKey="name"
-            // className="dark:text-gray-200 capitalize"
-            style={{ fontSize: "12px", textTransform: "capitalize" }}
+            dataKey={isMobile ? "code" : "name"}
+            tick={{
+              dx: 0,
+              fill: "var(--chart-axis)",
+            }}
+            style={{
+              fontSize: `${isMobile ? "10px" : "12px"}`,
+              textTransform: "capitalize",
+              color: "",
+            }}
           />
-          <YAxis style={{ fontSize: "12px" }} />
+          <YAxis
+            width={45}
+            tick={{
+              dx: 0,
+              fill: "var(--chart-axis)",
+            }}
+            style={{ fontSize: `${isMobile ? "10px" : "12px"}` }}
+          />
           <Tooltip
             cursor={{ fill: "#fcb53b40" }}
             labelStyle={{ textTransform: "capitalize" }}

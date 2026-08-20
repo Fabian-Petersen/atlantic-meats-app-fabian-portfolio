@@ -16,6 +16,8 @@ type FormHeadingProps = {
   redirect?: boolean;
   /** The relative path or URL destination string for the back button navigation. */
   redirectTo?: string;
+  /** Optional standard CSS class names to override or heading styles. */
+  headingStyles?: string;
 };
 
 /**
@@ -54,6 +56,7 @@ const FormHeading = ({
   h2,
   redirect,
   redirectTo,
+  headingStyles,
 }: FormHeadingProps) => {
   const navigate = useNavigate();
   return (
@@ -62,11 +65,10 @@ const FormHeading = ({
         sharedStyles.heading,
         sharedStyles.headingForm,
         sharedStyles.headingTable,
-
         className,
       )}
     >
-      <div className="flex gap-2 items-center">
+      <div className={cn("flex w-full gap-2 items-center", headingStyles)}>
         {redirect && (
           <button
             className="block md:hidden"

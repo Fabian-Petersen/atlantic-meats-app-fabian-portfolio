@@ -7,8 +7,10 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useMemo } from "react";
+import useScreenSize from "@/customHooks/useScreenSize";
 
 import type { ChartPoint, JobsByYear } from "@/schemas/dashboardSchema";
+// import useGlobalContext from "@/context/useGlobalContext";
 
 type Props = {
   data: JobsByYear;
@@ -81,6 +83,8 @@ type Props = {
  * Callback fired when a site bar is clicked.
  */
 function JobsChart({ data, onSelect, selectedYear }: Props) {
+  const isMobile = useScreenSize(400);
+  // const { isDarkTheme } = useGlobalContext();
   const chartData = useMemo(() => {
     if (!selectedYear) return [];
 
@@ -90,7 +94,7 @@ function JobsChart({ data, onSelect, selectedYear }: Props) {
   const handleBarClick = (data: ChartPoint) => {
     if (!selectedYear) return;
 
-    const label = data.name;
+    const label = isMobile ? (data?.code ?? "") : data?.name;
 
     onSelect?.(selectedYear, label);
   };
@@ -100,7 +104,7 @@ function JobsChart({ data, onSelect, selectedYear }: Props) {
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}
-          barSize={25}
+          barSize={isMobile ? 15 : 25}
           margin={{
             top: 4,
             right: 4,
@@ -109,17 +113,27 @@ function JobsChart({ data, onSelect, selectedYear }: Props) {
           }}
         >
           <XAxis
-            dataKey="name"
+            dataKey={isMobile ? "code" : "name"}
+            tick={{
+              dx: 0,
+              // fill: isDarkTheme ? "#f3f4f6" : "#1f2937",
+              fill: "var(--chart-axis)",
+            }}
             style={{
-              fontSize: "12px",
+              fontSize: `${isMobile ? "10px" : "12px"}`,
               textTransform: "capitalize",
             }}
           />
 
           <YAxis
             allowDecimals={false}
+            width={45}
+            tick={{
+              dx: 0,
+              fill: "var(--chart-axis)",
+            }}
             style={{
-              fontSize: "12px",
+              fontSize: `${isMobile ? "10px" : "12px"}`,
             }}
           />
 

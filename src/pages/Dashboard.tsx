@@ -79,7 +79,7 @@ const Dashboard = () => {
           isPending={isPending}
         />
         {/* Pending Requests Table */}
-        <section className={cn(sharedStyles.chartTable)}>
+        <section className={cn(sharedStyles.chartTable, "p-0")}>
           <MaintenanceJobs
             data={metrics?.storeJobs ?? emptyStoreJobMetrics}
             isPending={isPending}

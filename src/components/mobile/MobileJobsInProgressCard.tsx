@@ -45,16 +45,9 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
     >
       <button
         type="button"
-        className="w-full text-left px-4 py-3 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+        className="w-full text-left py-3 flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
         onClick={onToggle}
       >
-        {/* Chevron */}
-        <ChevronDown
-          className={`w-4 h-4 text-gray-400 shrink-0 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
-
         {/* Location + meta row */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 mb-1">
@@ -82,11 +75,19 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
         </div>
 
         {/* Priority badge */}
-        <Badge
-          className={`shrink-0 text-xs font-medium px-2.5 py-0.5 rounded-full ${priority.className}`}
-        >
-          {priority.label}
-        </Badge>
+        <div className="flex gap-2 items-center">
+          <Badge
+            className={`shrink-0 text-xs font-medium px-2.5 py-0.5 rounded-full ${priority.className}`}
+          >
+            {priority.label}
+          </Badge>
+          {/* Chevron */}
+          <ChevronDown
+            className={`w-4 h-4 text-gray-400 shrink-0 transition-transform duration-200 ${
+              isOpen ? "rotate-180" : ""
+            }`}
+          />
+        </div>
       </button>
 
       <AnimatePresence initial={false}>

@@ -109,7 +109,9 @@ export function TableGeneric<T extends { id: string }>({
 
   return (
     <div className={cn(sharedStyles.table)}>
-      {tableHeading && <FormHeading heading={tableHeading} />}
+      {tableHeading && (
+        <FormHeading heading={tableHeading} className="text-left w-full" />
+      )}
       {location.pathname === "/dashboard" ? undefined : (
         <div className="flex gap-4 items-end w-full h-11">
           <SearchInput

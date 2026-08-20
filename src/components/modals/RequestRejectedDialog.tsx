@@ -16,20 +16,22 @@ function RejectRequestDialog() {
       open={showRejectRequestDialog}
       onOpenChange={setShowRejectRequestDialog}
     >
-      <DialogContent className={cn(sharedStyles.modal)}>
+      <DialogContent className="sm:max-w-lg bg-white z-10000 dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) dark:border-gray-700/50 px-2 py-2 md:py-4 h-auto">
         <div className={cn(sharedStyles.modalParent)}>
           <div className="flex justify-center items-center">
             <div className="rounded-full p-4 text-red-500 bg-red-500/20">
               <OctagonX className="size-12 md:size-16" />
             </div>
           </div>
-          <DialogTitle className="md:mx-auto">
+          <DialogTitle>
             <FormHeading
-              heading="Reject Request"
+              arial-label="Reject Request"
+              heading="Reject Job Request"
               className={cn(
                 sharedStyles.headingForm,
-                "md:text-center font-normal",
+                "text-center font-normal",
               )}
+              headingStyles="justify-center"
             />
           </DialogTitle>
           <DialogDescription>

@@ -73,6 +73,7 @@ export const metricCardConfigSchema = z.object({
 export const chartPointSchema = z.object({
   name: z.string(),
   value: z.number(),
+  code: z.string().optional(),
 });
 
 export type ChartPoint = z.infer<typeof chartPointSchema>;

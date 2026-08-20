@@ -39,7 +39,6 @@ const ApproveRequestForm = () => {
   } = useGlobalContext();
 
   const { data: technicians = [] } = useGetTechnicians();
-  console.log("technicians:", technicians);
   // $ Form Schema
   const {
     register,

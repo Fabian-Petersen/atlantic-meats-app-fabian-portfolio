@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
+import { modalVariants } from "@/styles/motionStyles";
 
 /**
  * Error Component
@@ -87,30 +88,32 @@ export const Error = () => {
       {showError ? (
         <motion.div
           className={cn(sharedStyles.actionModalParent)}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          variants={modalVariants.parent}
+          initial="initial"
+          animate="animate"
+          exit="exit"
         >
           <motion.div
             className={cn(sharedStyles.actionModalContent)}
-            initial={{ opacity: 0, scale: 0.96, y: 8 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.98, y: 4 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+            variants={modalVariants.content}
+            initial="initial"
+            animate="animate"
+            exit="exit"
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.85 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1, duration: 0.25, ease: "easeOut" }}
+              variants={modalVariants.icon}
+              initial="initial"
+              animate="animate"
+              exit="exit"
             >
               <AlertTriangle size={140} className="text-red-500" />
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15, duration: 0.2 }}
+              variants={modalVariants.text}
+              initial="initial"
+              animate="animate"
+              exit="exit"
             >
               <h1 className={cn(sharedStyles.actionModalTitle)}>
                 {config.title}

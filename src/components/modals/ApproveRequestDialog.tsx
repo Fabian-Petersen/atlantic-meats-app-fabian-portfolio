@@ -15,7 +15,7 @@ function ApproveRequestDialog() {
       onOpenChange={setShowApproveRequestDialog}
     >
       <DialogContent className="sm:max-w-lg bg-white z-10000 dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) dark:border-gray-700/50 px-2 py-2 md:py-4 h-auto">
-        <DialogTitle className="">
+        <DialogTitle>
           <FormHeading
             arial-label="Approve Request"
             className={cn(
