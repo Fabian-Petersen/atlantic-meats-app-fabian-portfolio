@@ -3,96 +3,156 @@
  *
  */
 
-import {
-  type TransferRequestFormValues,
-  type AssetRequestFormValues,
-} from "@/schemas";
-import { useWatch, type UseFormReturn } from "react-hook-form";
+import { type TransferRequestFormValues } from "@/schemas";
+import { type UseFormReturn } from "react-hook-form";
 
 import type { DynamicFormField } from "../DynamicForm";
 
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
-import { useAssetFilterReset } from "@/customHooks/useAssetFilterReset";
 
-// $ ——— Hook ─────────────────────────────────────────────────────
+// $ ————————————————————————————————————————————————————————————————
+// $ Helpers
+// $ ————————————————————————————————————————————————————————————————
+
+/**
+ * Converts the option format returned by useAssetFilters into the
+ * string[] format expected by DynamicForm select fields.
+ *
+ * The backend returns objects such as:
+ *
+ * {
+ *   label: "Maitland",
+ *   value: "Maitland"
+ * }
+ *
+ * DynamicForm expects:
+ *
+ * ["Maitland"]
+ *
+ * Keeping this conversion here means the asset hook can retain a
+ * richer API response without coupling itself to DynamicForm.
+ */
+const normalizeOptions = (
+  options:
+    | Array<string>
+    | Array<{ label: string; value: string }>
+    | undefined
+    | null,
+): string[] => {
+  if (!options) {
+    return [];
+  }
+
+  return options.map((option) =>
+    typeof option === "string" ? option : option.value,
+  );
+};
+
+// $ ————————————————————————————————————————————————————————————————
+// $ Hook
+// $ ————————————————————————————————————————————————————————————————
 export const useTransfersFields = (
   form: UseFormReturn<TransferRequestFormValues>,
-  assetsArray: AssetRequestFormValues[],
 ) => {
-  // $ ─── Watch Dependent Values ─────────────────────────────────
-  const selectedLocation = useWatch({
-    control: form.control,
-    name: "locationFrom",
-  });
+  const assetIssueReason = form.watch("assetIssueReason");
 
-  const selectedArea = useWatch({
-    control: form.control,
-    name: "area",
-  });
+  // $ ─── Backend Asset Options ─────────────────────────────────────
+  //
+  // useAssetFilters watches the relevant form values and requests
+  // the appropriate data from the backend.
+  //
+  // No complete asset array is passed into this hook anymore.
 
-  const selectedEquipment = useWatch({
-    control: form.control,
-    name: "equipment",
-  });
-
-  const selectedAssetID = useWatch({
-    control: form.control,
-    name: "assetID",
-  });
-
-  // $ ─── Dynamic Asset Filters ─────────────────────────────────────
   const {
     equipmentOptions,
     assetIdOptions,
     locationOptions,
     areaOptions,
-    isFieldValid,
+
+    // $ Asset identification state
+    hasVerifiedAssets,
+    allowUnidentifiedAsset,
+
+    // $ Query state
+    isPending,
+    isError,
+
+    // $ Individual query states
+    isLocationsPending,
+    // isLocationPending,
+    // isAreaPending,
+    isAssetPending,
   } = useAssetFilters({
-    assets: assetsArray || [], // ✅ default to empty array if assets is undefined
-    location: selectedLocation,
-    area: selectedArea,
-    equipment: selectedEquipment,
-    assetID: selectedAssetID,
+    form,
   });
 
-  /* ------------------ RESET LOGIC ------------------ */
-  useAssetFilterReset({
-    resetArea: () => {
-      form.setValue("area", "");
-      form.setValue("equipment", "");
-      form.setValue("assetID", "");
-    },
-    resetEquipment: () => {
-      form.setValue("equipment", "");
-      form.setValue("assetID", "");
-    },
-    resetAssetID: () => {
-      form.setValue("assetID", "");
-    },
-    validity: isFieldValid,
-  });
+  // $ ─── Asset Select Options ──────────────────────────────────────
 
-  // $ ─── Helpers ──────────────────────────────────────
-  /**
-   * Safely converts any option shape to plain string values.
-   * Returns [] if the source array is undefined/null so that
-   * FormRowSelect never receives undefined and tries to .map() it.
-   */
-  const normalizeOptions = (
-    options:
-      | Array<string>
-      | Array<{ label: string; value: string }>
-      | undefined
-      | null,
-  ): string[] => {
-    if (!options) return []; // ✅ guard against undefined/null from async data
-    return options.map((option) =>
-      typeof option === "string" ? option : option.value,
-    );
-  };
+  const locationSelectOptions = normalizeOptions(locationOptions);
+  const areaSelectOptions = normalizeOptions(areaOptions);
+  const equipmentSelectOptions = normalizeOptions(equipmentOptions);
+  const assetIdSelectOptions = normalizeOptions(assetIdOptions);
+
+  // $ ─── Field Configuration ───────────────────────────────────────
+
+  const showUnidentifiedAssetWorkflow =
+    !!form.watch("equipment") && !hasVerifiedAssets && allowUnidentifiedAsset;
+
+  const assetSectionFields: DynamicFormField<TransferRequestFormValues>[] =
+    showUnidentifiedAssetWorkflow
+      ? [
+          {
+            fieldType: "select",
+            name: "assetIssueReason",
+            label: "No Asset ID Unavailable — Reason",
+            placeholder: "Select a reason",
+            options: [
+              "No barcode visible",
+              "barcode damaged",
+              "rental unit",
+              "other",
+            ],
+            required: true,
+            disabled:
+              !form.watch("locationFrom") ||
+              !form.watch("area") ||
+              !form.watch("equipment"),
+          },
+          ...(assetIssueReason === "other"
+            ? [
+                {
+                  fieldType: "textarea",
+                  name: "assetIssueDetails",
+                  label: "Please describe the issue",
+                  rows: 2,
+                  required: true,
+                  className: "md:col-span-2",
+                } as DynamicFormField<TransferRequestFormValues>,
+              ]
+            : []),
+        ]
+      : [
+          {
+            fieldType: "select",
+            name: "assetID",
+            label: "Asset ID",
+            placeholder: "Select Asset ID",
+            options: assetIdSelectOptions,
+            required: false,
+            disabled:
+              !form.watch("locationFrom") ||
+              !form.watch("area") ||
+              !form.watch("equipment") ||
+              isAssetPending,
+          },
+        ];
 
   // $ ─── Field Config ─────────────────────────────────
   const fields: DynamicFormField<TransferRequestFormValues>[] = [
+    // ========================================================================
+    // Transfer Description / Reason
+    // ========================================================================
+
     {
       fieldType: "textarea",
       name: "transferReason",
@@ -101,28 +161,45 @@ export const useTransfersFields = (
       className: "md:col-span-2",
       label: "Reason for transfer",
     },
+
+    // ========================================================================
+    // Location From
+    // ========================================================================
+
     {
       fieldType: "select",
       name: "locationFrom",
       label: "Location From",
       placeholder: "Select Location From",
-      options: normalizeOptions(locationOptions),
+      options: locationSelectOptions,
       required: true,
     },
+
+    // ========================================================================
+    // Location To
+    // ========================================================================
+
     {
       fieldType: "select",
       name: "locationTo",
       label: "Location To",
       placeholder: "Select Location To",
-      options: normalizeOptions(locationOptions),
+      options: locationSelectOptions,
       required: true,
     },
+
+    // ========================================================================
+    // Area
+    // ========================================================================
+
     {
       fieldType: "select",
       name: "area",
       label: "Area",
       placeholder: "Select Area",
-      options: normalizeOptions(areaOptions),
+      options: areaSelectOptions,
+      // Area cannot be selected until a location has been selected.
+      disabled: !form.watch("locationFrom") || isLocationsPending,
       required: true,
     },
     {
@@ -130,26 +207,17 @@ export const useTransfersFields = (
       name: "equipment",
       label: "Equipment",
       placeholder: "Select Equipment",
-      options: normalizeOptions(equipmentOptions),
+      options: equipmentSelectOptions,
       required: true,
     },
-    // $ Add logic where a asset dont have a barcode to be transferred
-    // {
-    //   fieldType: "radio",
-    //   name: "hasBarcode",
-    //   label: "Does the asset have a valid barcode ID",
-    //   options: [
-    //     { label: "Yes", value: "yes" },
-    //     { label: "No", value: "no" },
-    //   ],
-    // },
-    {
-      fieldType: "select",
-      name: "assetID",
-      label: "Asset ID",
-      placeholder: "Select Asset ID",
-      options: normalizeOptions(assetIdOptions),
-    },
+    // ========================================================================
+    // Asset ID
+    // ========================================================================
+    ...assetSectionFields,
+
+    // ========================================================================
+    // Expected Date of Transfer
+    // ========================================================================
     {
       fieldType: "input",
       type: "date",
@@ -157,7 +225,26 @@ export const useTransfersFields = (
       label: "Expected Transit Date",
       // placeholder: "Expected Transfer Date",
     },
+
+    // ========================================================================
+    // Images
+    // ========================================================================
     {
+      /*
+       * I would make this REQUIRED for the unidentified-asset
+       * workflow at the schema/business-rule level rather than
+       * simply making the field universally required here.
+       *
+       * This allows:
+       *
+       * 1. Normal asset:
+       *      assetID = AST-123
+       *      images optional
+       *
+       * 2. Missing/damaged barcode:
+       *      assetID = ""
+       *      images REQUIRED
+       */
       fieldType: "file",
       name: "images",
       multiple: true,
@@ -168,5 +255,9 @@ export const useTransfersFields = (
 
   return {
     fields,
+    isPending,
+    isError,
+    hasVerifiedAssets,
+    allowUnidentifiedAsset,
   };
 };

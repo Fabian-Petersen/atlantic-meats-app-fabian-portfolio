@@ -24,7 +24,6 @@ export const transferRequestBaseSchema = assetRequestSchema
     equipment: true,
   })
   .extend({
-    assetID: z.string().optional(), // override assetID to make it optional
     locationFrom: z.string().min(1, { message: "Please select a location" }),
     locationTo: z.string().min(1, { message: "Please select a location" }),
     description: z.string().optional(),
@@ -34,11 +33,43 @@ export const transferRequestBaseSchema = assetRequestSchema
     transferReason: z.string().min(1, {
       message: "Give a brief reason for transfer request",
     }),
+    assetID: z.string().optional(), // override assetID to make it optional
+    assetIssueReason: z
+      .union([
+        z.enum([
+          "No barcode visible",
+          "barcode damaged",
+          "rental unit",
+          "",
+          "other",
+        ]),
+        z.literal(""),
+      ])
+      .optional(),
+    assetIssueDetails: z.string().optional().default(""),
     transportInvoices: z.array(z.instanceof(File)).default([]),
   });
 
 export const transferRequestSchema = transferRequestBaseSchema.superRefine(
   (data, ctx) => {
+    const reason = data.assetIssueReason || undefined;
+
+    if (reason === "other" && !data.assetIssueDetails?.trim()) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["assetIssueDetails"],
+        message: "Please describe the issue with the asset ID",
+      });
+    }
+
+    if (reason && (data.images?.length ?? 0) === 0) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["images"],
+        message: "Images are compulsory if no barcode is supplied",
+      });
+    }
+
     if (data.locationFrom === data.locationTo) {
       ctx.addIssue({
         code: "custom",

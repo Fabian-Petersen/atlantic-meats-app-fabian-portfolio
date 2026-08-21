@@ -10,6 +10,7 @@ import { Controller } from "react-hook-form";
 import { Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
+import { SkeletonInput } from "@/components/skeletons/SkeletonInput";
 
 const MAX_FILE_SIZE = 15 * 1024 * 1024; // 15MB
 const MAX_FILES = 10;
@@ -25,6 +26,8 @@ type FileInputProps<T extends FieldValues, TName extends Path<T>> = {
   placeholder?: string;
   labelStyles?: string;
   required?: boolean;
+  isLoading?: boolean;
+  disabled?: boolean;
 };
 
 function FileInput<T extends FieldValues, TName extends Path<T>>({
@@ -38,6 +41,8 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
   placeholder,
   labelStyles,
   required,
+  isLoading,
+  disabled,
 }: FileInputProps<T, TName>) {
   const [files, setFiles] = useState<File[]>([]);
   const [localError, setLocalError] = useState<string | null>(null);
@@ -82,7 +87,9 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
           updateForm(updated);
         };
 
-        return (
+        return isLoading ? (
+          <SkeletonInput />
+        ) : (
           <div className={cn("w-full pb-1 mb-2 group", className)}>
             <input
               id={String(name)}
@@ -91,6 +98,7 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
               accept={accept}
               className="hidden"
               onChange={handleSelect}
+              disabled={disabled}
             />
 
             <div

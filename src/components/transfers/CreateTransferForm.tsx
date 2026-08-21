@@ -7,17 +7,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Resolver } from "react-hook-form";
 
 // $ Import schemas
-import type {
-  AssetRequestFormValues,
-  TransferRequestFormValues,
-} from "../../schemas/index";
+import type { TransferRequestFormValues } from "../../schemas/index";
 import { transferRequestSchema } from "../../schemas/index";
 
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useTransfersFields } from "../forms/configs/useTransfersFields";
 import DynamicForm from "../forms/DynamicForm";
-import { useGetAll } from "@/utils/api";
 
 const CreateTransferForm = () => {
   const navigate = useNavigate();
@@ -53,15 +49,6 @@ const CreateTransferForm = () => {
     },
   });
 
-  const { data, isPending: isLoading } = useGetAll<AssetRequestFormValues[]>({
-    resourcePath: "api/assets",
-    queryKey: ["assets", "create-job-form"],
-  });
-
-  // data looks like { assets: Array(107) }
-  const assetsArray: AssetRequestFormValues[] = Array.isArray(data) ? data : [];
-  // $ Custom hook that manages the select input options based on asset data
-
   // $ Form Instance passed to the Dynamic Form
   const form = useForm<TransferRequestFormValues>({
     resolver: zodResolver(
@@ -79,7 +66,7 @@ const CreateTransferForm = () => {
   });
 
   // $ Hook creating the fields to be displayed by the Dynamic Form
-  const { fields } = useTransfersFields(form, assetsArray);
+  const { fields } = useTransfersFields(form);
 
   // $  ─── Render ─────────────────────────────────────────────────────────────────
   return (
@@ -96,7 +83,6 @@ const CreateTransferForm = () => {
       onCancel={() => navigate("/transfers/requests")}
       className=""
       gridClassName="gap-6"
-      isLoading={isLoading}
     />
   );
 };

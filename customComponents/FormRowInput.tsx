@@ -12,6 +12,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
+import { SkeletonInput } from "@/components/skeletons/SkeletonInput";
 
 type FormInputProps<TFieldValues extends FieldValues> = {
   label?: string;
@@ -35,6 +36,7 @@ type FormInputProps<TFieldValues extends FieldValues> = {
   iconStyles?: string;
   labelStyles?: string;
   required?: boolean;
+  isLoading?: boolean;
 };
 
 function FormRowInput<TFieldValues extends FieldValues>({
@@ -57,6 +59,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
   iconStyles,
   labelStyles,
   required,
+  isLoading,
 }: FormInputProps<TFieldValues>) {
   {
     /* import type {Control} from "react-hook-form"; */
@@ -73,7 +76,9 @@ function FormRowInput<TFieldValues extends FieldValues>({
 
   const hasValue = Boolean(fieldValue);
 
-  return (
+  return isLoading ? (
+    <SkeletonInput />
+  ) : (
     <div className={cn(className, "relative w-full mb-2 group")}>
       {Icon && (
         <span

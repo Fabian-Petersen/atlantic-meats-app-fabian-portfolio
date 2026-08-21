@@ -34,6 +34,7 @@ export type Resource =
   // $ Assets ROUTES
   | "api/assets" // "assets-list" GET all assets assets/{assetId} to DELETE, PUT, GET assetById
   | "api/assets/location" // NOT in use : Get all assets by location
+  | "api/assets/options" // Get select options for jobs request form by location
   | `api/assets/${string}/history`
   | `api/assets/${string}/history/metrics` // GET, asset history metrics
   | `api/assets/${string}/verify`

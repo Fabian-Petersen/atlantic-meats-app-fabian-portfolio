@@ -127,7 +127,7 @@ select:not([multiple])::picker(select) {
   }
 
   select.base-select selectedcontent {
-    backgound-color: transparent;
+    background-color: transparent;
   }
 
   select.base-select:not([multiple])::picker(select)::-webkit-scrollbar {

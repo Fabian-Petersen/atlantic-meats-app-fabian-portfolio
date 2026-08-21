@@ -1,93 +1,200 @@
-import { useWatch, type UseFormReturn } from "react-hook-form";
-import {
-  type JobRequestFormValues,
-  type AssetRequestFormValues,
-} from "@/schemas";
-
+import { type UseFormReturn } from "react-hook-form";
+import type { JobRequestFormValues } from "@/schemas";
 import type { DynamicFormField } from "../DynamicForm";
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
 import { impact, priority, type } from "@/data/maintenanceRequestFormData";
-import { useAssetFilterReset } from "@/customHooks/useAssetFilterReset";
 
-// $ ——— Hook ─────────────────────────────────────────────────────
-export const useJobFields = (
-  form: UseFormReturn<JobRequestFormValues>,
-  assetsArray: AssetRequestFormValues[],
-) => {
-  // $ ─── Watch Dependent Values ─────────────────────────────────
-  const selectedLocation = useWatch({
-    control: form.control,
-    name: "location",
-  });
+// $ ————————————————————————————————————————————————————————————————
+// $ Helpers
+// $ ————————————————————————————————————————————————————————————————
 
-  const selectedArea = useWatch({
-    control: form.control,
-    name: "area",
-  });
+/**
+ * Converts the option format returned by useAssetFilters into the
+ * string[] format expected by DynamicForm select fields.
+ *
+ * The backend returns objects such as:
+ *
+ * {
+ *   label: "Maitland",
+ *   value: "Maitland"
+ * }
+ *
+ * DynamicForm expects:
+ *
+ * ["Maitland"]
+ *
+ * Keeping this conversion here means the asset hook can retain a
+ * richer API response without coupling itself to DynamicForm.
+ */
+const normalizeOptions = (
+  options:
+    | Array<string>
+    | Array<{ label: string; value: string }>
+    | undefined
+    | null,
+): string[] => {
+  if (!options) {
+    return [];
+  }
 
-  const selectedEquipment = useWatch({
-    control: form.control,
-    name: "equipment",
-  });
+  return options.map((option) =>
+    typeof option === "string" ? option : option.value,
+  );
+};
 
-  const selectedAssetID = useWatch({
-    control: form.control,
-    name: "assetID",
-  });
+// $ ————————————————————————————————————————————————————————————————
+// $ Hook
+// $ ————————————————————————————————————————————————————————————————
 
-  // $ ─── Dynamic Asset Filters ─────────────────────────────────────
+/**
+ * Builds the field configuration for the Create Job Request form.
+ *
+ * Asset-related fields are populated by the backend-driven
+ * `useAssetFilters` hook.
+ *
+ * The asset selection hierarchy is:
+ *
+ *     Location
+ *        ↓
+ *     Area
+ *        ↓
+ *     Equipment
+ *        ↓
+ *     Asset ID
+ *
+ * The frontend no longer downloads the complete asset table.
+ * Instead, useAssetFilters requests the appropriate asset options
+ * from the backend based on the current form selections.
+ *
+ * ----------------------------------------------------------------------------
+ * @param form
+ * React Hook Form instance for JobRequestFormValues.
+ *
+ * ----------------------------------------------------------------------------
+ * @example
+ *
+ * const form = useForm<JobRequestFormValues>({
+ *   defaultValues: {
+ *     location: "",
+ *     area: "",
+ *     equipment: "",
+ *     assetID: "",
+ *   },
+ * });
+ *
+ * const { fields } = useJobFields(form);
+ *
+ * <DynamicForm
+ *   form={form}
+ *   fields={fields}
+ * />
+ *
+ * ----------------------------------------------------------------------------
+ * @returns
+ *
+ * {
+ *   fields: DynamicFormField<JobRequestFormValues>[]
+ * }
+ */
+export const useJobFields = (form: UseFormReturn<JobRequestFormValues>) => {
+  const assetIssueReason = form.watch("assetIssueReason");
+
+  // $ ─── Backend Asset Options ─────────────────────────────────────
+  //
+  // useAssetFilters watches the relevant form values and requests
+  // the appropriate data from the backend.
+  //
+  // No complete asset array is passed into this hook anymore.
+
   const {
     equipmentOptions,
     assetIdOptions,
     locationOptions,
     areaOptions,
-    isFieldValid,
+
+    // $ Asset identification state
+    hasVerifiedAssets,
+    allowUnidentifiedAsset,
+
+    // $ Query state
+    isPending,
+    isError,
+
+    // $ Individual query states
+    isLocationsPending,
+    isLocationPending,
+    isAreaPending,
+    isAssetPending,
   } = useAssetFilters({
-    assets: assetsArray || [], // ✅ default to empty array if assets is undefined
-    location: selectedLocation,
-    area: selectedArea,
-    equipment: selectedEquipment,
-    assetID: selectedAssetID,
+    form,
   });
 
-  /* ------------------ RESET LOGIC ------------------ */
-  useAssetFilterReset({
-    resetArea: () => {
-      form.setValue("area", "");
-      form.setValue("equipment", "");
-      form.setValue("assetID", "");
-    },
-    resetEquipment: () => {
-      form.setValue("equipment", "");
-      form.setValue("assetID", "");
-    },
-    resetAssetID: () => {
-      form.setValue("assetID", "");
-    },
-    validity: isFieldValid,
-  });
+  // $ ─── Asset Select Options ──────────────────────────────────────
 
-  // $ ─── Helpers ──────────────────────────────────────
-  /**
-   * Safely converts any option shape to plain string values.
-   * Returns [] if the source array is undefined/null so that
-   * FormRowSelect never receives undefined and tries to .map() it.
-   */
-  const normalizeOptions = (
-    options:
-      | Array<string>
-      | Array<{ label: string; value: string }>
-      | undefined
-      | null,
-  ): string[] => {
-    if (!options) return []; // ✅ guard against undefined/null from async data
-    return options.map((option) =>
-      typeof option === "string" ? option : option.value,
-    );
-  };
+  const locationSelectOptions = normalizeOptions(locationOptions);
+  const areaSelectOptions = normalizeOptions(areaOptions);
+  const equipmentSelectOptions = normalizeOptions(equipmentOptions);
+  const assetIdSelectOptions = normalizeOptions(assetIdOptions);
 
-  // $ ─── Field Config ─────────────────────────────────
+  // $ ─── Field Configuration ───────────────────────────────────────
+
+  const showUnidentifiedAssetWorkflow =
+    !!form.watch("equipment") && !hasVerifiedAssets && allowUnidentifiedAsset;
+
+  const assetSectionFields: DynamicFormField<JobRequestFormValues>[] =
+    showUnidentifiedAssetWorkflow
+      ? [
+          {
+            fieldType: "select",
+            name: "assetIssueReason",
+            label: "No Asset ID Unavailable — Reason",
+            placeholder: "Select a reason",
+            options: [
+              "No barcode visible",
+              "barcode damaged",
+              "rental unit",
+              "other",
+            ],
+            required: true,
+            disabled:
+              !form.watch("location") ||
+              !form.watch("area") ||
+              !form.watch("equipment"),
+          },
+          ...(assetIssueReason === "other"
+            ? [
+                {
+                  fieldType: "textarea",
+                  name: "assetIssueDetails",
+                  label: "Please describe the issue",
+                  rows: 2,
+                  required: true,
+                  className: "md:col-span-2",
+                } as DynamicFormField<JobRequestFormValues>,
+              ]
+            : []),
+        ]
+      : [
+          {
+            fieldType: "select",
+            name: "assetID",
+            label: "Asset ID",
+            placeholder: "Select Asset ID",
+            options: assetIdSelectOptions,
+            required: false,
+            disabled:
+              !form.watch("location") ||
+              !form.watch("area") ||
+              !form.watch("equipment") ||
+              isAssetPending,
+          },
+        ];
+
   const fields: DynamicFormField<JobRequestFormValues>[] = [
+    // ========================================================================
+    // Job Description
+    // ========================================================================
+
     {
       fieldType: "textarea",
       name: "description",
@@ -96,40 +203,62 @@ export const useJobFields = (
       className: "md:col-span-2",
       required: true,
     },
+
+    // ========================================================================
+    // Location
+    // ========================================================================
+
     {
       fieldType: "select",
       name: "location",
       label: "Location",
       placeholder: "Select Location",
-      // ✅ always an array, even when assets haven't loaded yet
-      options: normalizeOptions(locationOptions),
+      options: locationSelectOptions,
       required: true,
+      // Optional loading support if DynamicForm supports these properties.
+      // Remove these two properties if DynamicFormField does not define them.
+      // isLoading: isLocationsPending,
+      disabled: isLocationsPending,
     },
+
+    // ========================================================================
+    // Area
+    // ========================================================================
 
     {
       fieldType: "select",
       name: "area",
       label: "Area",
       placeholder: "Select Area",
-      options: normalizeOptions(areaOptions),
+      options: areaSelectOptions,
+      // Area cannot be selected until a location has been selected.
+      disabled: !form.watch("location") || isLocationPending,
+      // isLoading: isLocationPending,
     },
 
+    // ========================================================================
+    // Equipment
+    // ========================================================================
     {
       fieldType: "select",
       name: "equipment",
       label: "Equipment",
       placeholder: "Select Equipment",
-      options: normalizeOptions(equipmentOptions),
+      options: equipmentSelectOptions,
       required: true,
+      disabled: !form.watch("location") || !form.watch("area") || isAreaPending,
+      // isLoading: !isAreaPending,
     },
 
-    {
-      fieldType: "select",
-      name: "assetID",
-      label: "Asset ID",
-      placeholder: "Select Asset ID",
-      options: normalizeOptions(assetIdOptions),
-    },
+    // ========================================================================
+    // Asset ID
+    // ========================================================================
+    ...assetSectionFields,
+
+    // ========================================================================
+    // Breakdown Time
+    // ========================================================================
+
     {
       fieldType: "input",
       type: "datetime-local",
@@ -138,6 +267,10 @@ export const useJobFields = (
       required: true,
       placeholder: "",
     },
+
+    // ========================================================================
+    // Job Type
+    // ========================================================================
 
     {
       fieldType: "select",
@@ -148,6 +281,10 @@ export const useJobFields = (
       required: true,
     },
 
+    // ========================================================================
+    // Impact
+    // ========================================================================
+
     {
       fieldType: "select",
       name: "impact",
@@ -156,6 +293,10 @@ export const useJobFields = (
       options: normalizeOptions(impact),
       required: true,
     },
+
+    // ========================================================================
+    // Priority
+    // ========================================================================
 
     {
       fieldType: "select",
@@ -166,13 +307,37 @@ export const useJobFields = (
       required: true,
     },
 
+    // ========================================================================
+    // Images
+    // ========================================================================
+
     {
       fieldType: "file",
       name: "images",
       label: "Upload Images",
       placeholder: "",
       multiple: true,
+
+      /*
+       * I would make this REQUIRED for the unidentified-asset
+       * workflow at the schema/business-rule level rather than
+       * simply making the field universally required here.
+       *
+       * This allows:
+       *
+       * 1. Normal asset:
+       *      assetID = AST-123
+       *      images optional
+       *
+       * 2. Missing/damaged barcode:
+       *      assetID = ""
+       *      images REQUIRED
+       */
     },
+
+    // ========================================================================
+    // Additional Information
+    // ========================================================================
 
     {
       fieldType: "textarea",
@@ -183,29 +348,18 @@ export const useJobFields = (
     },
   ];
 
+  // $ ─── Return ────────────────────────────────────────────────────
+
   return {
     fields,
+
+    // Useful to the parent component if it needs to display
+    // loading/error states outside DynamicForm.
+    isPending,
+    isError,
+
+    // Asset identification state.
+    hasVerifiedAssets,
+    allowUnidentifiedAsset,
   };
-};
-
-export const total_cost_by_store = [
-  {
-    "2025": {
-      maitland: "8000",
-      bellville: "6500",
-    },
-  },
-  {
-    "2026": {
-      maitland: "8000",
-      bellville: "6500",
-    },
-  },
-];
-
-export const costs = {
-  "2026": [
-    { name: "maitland", value: 18740.0 },
-    { name: "bellville", value: 12620.0 },
-  ],
 };

@@ -7,6 +7,7 @@ import type {
 } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
+import { Spinner } from "@/components/ui/spinner";
 
 type RadioOption = {
   label: string;
@@ -25,6 +26,7 @@ type FormRowRadioProps<TFieldValues extends FieldValues> = {
   labelStyles?: string;
   required?: boolean;
   orientation?: "row" | "column";
+  isLoading?: boolean;
 };
 
 function FormRowRadio<TFieldValues extends FieldValues>({
@@ -38,9 +40,12 @@ function FormRowRadio<TFieldValues extends FieldValues>({
   optionStyles,
   labelStyles,
   required,
+  isLoading,
   orientation = "row",
 }: FormRowRadioProps<TFieldValues>) {
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <div className={cn(className, "relative w-full mb-2 group")}>
       {label && (
         <span

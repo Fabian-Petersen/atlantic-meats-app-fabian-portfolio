@@ -15,7 +15,7 @@ export const presignedURLSchema = z.object({
 export type PresignedUrls = z.infer<typeof presignedURLSchema>;
 
 // $ Schema to create a maintenance request
-export const jobRequestSchema = z.object({
+export const jobRequestBaseSchema = z.object({
   location: z.string().min(1, { message: "Please select a location" }),
   type: z.string().min(1, { message: "Please select maintenance type" }),
   priority: z.string().min(1, { message: "Please select a priority" }),
@@ -30,14 +30,51 @@ export const jobRequestSchema = z.object({
     .min(1, { message: "Give a brief description of the works required" }),
   area: z.string().optional(),
   assetID: z.string().optional(),
+  // "" represents "not yet selected" for a controlled select input.
+  assetIssueReason: z
+    .union([
+      z.enum([
+        "No barcode visible",
+        "barcode damaged",
+        "rental unit",
+        "",
+        "other",
+      ]),
+      z.literal(""),
+    ])
+    .optional(),
+  assetIssueDetails: z.string().optional().default(""),
   // NEW uploads only
   images: z.array(z.instanceof(File)).default([]).optional(),
 });
 
+export const jobRequestSchema = jobRequestBaseSchema.superRefine(
+  (data, ctx) => {
+    // Treat "" the same as unset.
+    const reason = data.assetIssueReason || undefined;
+
+    if (reason === "other" && !data.assetIssueDetails?.trim()) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["assetIssueDetails"],
+        message: "Please describe the issue with the asset ID",
+      });
+    }
+
+    if (reason && (data.images?.length ?? 0) === 0) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["images"],
+        message: "Images are compulsory if no barcode is supplied",
+      });
+    }
+  },
+);
+
 export type JobRequestFormValues = z.infer<typeof jobRequestSchema>;
 
 // $ Schema for the API Response from the database when fetching the maintenance requests
-export const jobRequestAPIResponseSchema = jobRequestSchema
+export const jobRequestAPIResponseSchema = jobRequestBaseSchema
   .omit({
     images: true,
   })
@@ -74,7 +111,7 @@ export const completedJobSchemaResponse = jobRequestAPIResponseSchema
 
 export type CompletedJobResponse = z.infer<typeof completedJobSchemaResponse>;
 
-export const jobApprovedAPIResponseSchema = jobRequestSchema
+export const jobApprovedAPIResponseSchema = jobRequestBaseSchema
   .omit({
     images: true,
   })

@@ -3,11 +3,7 @@
 import { useNavigate } from "react-router-dom";
 
 // $ ——— Types ————————————————————————————————————————————————————————
-import type {
-  AssetRequestFormValues,
-  JobRequestFormValues,
-  // AssetRequestFormValues,
-} from "../../schemas/index";
+import type { JobRequestFormValues } from "../../schemas/index";
 
 // $ ——— RHF & zod ————————————————————————————————————————————————————
 import { useForm, type Resolver } from "react-hook-form";
@@ -15,14 +11,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { jobRequestSchema } from "../../schemas/index";
 
 // $ ——— api & Custom Hooks ———————————————————————————————————————————
-// import { useGetAll } from "@/utils/api";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useJobFields } from "../forms/configs/useJobFields";
 
 // $ ——— Dependency Components ————————————————————————————————————————
 import DynamicForm from "../forms/DynamicForm";
-import { useGetAll } from "@/utils/api";
 
 // $ ——— Component ————————————————————————————————————————————————————
 const CreateJobForm = () => {
@@ -51,22 +45,14 @@ const CreateJobForm = () => {
     },
     onError: () => {
       setErrorConfig({
-        title: "User Creation Failed",
-        message: "Could not create the job request. Please try again.",
-        redirectPath: "jobs/create-job",
+        title: "Job Request Creation Failed",
+        message:
+          "Could not create the job request. Please check with your admin.",
+        redirectPath: "dashboard",
       });
       setShowError(true);
     },
   });
-
-  const { data, isPending: isLoading } = useGetAll<AssetRequestFormValues[]>({
-    resourcePath: "api/assets",
-    queryKey: ["assets", "create-job-form"],
-  });
-
-  // data looks like { assets: Array(107) }
-  const assetsArray: AssetRequestFormValues[] = Array.isArray(data) ? data : [];
-  // $ Custom hook that manages the select input options based on asset data
 
   const form = useForm<JobRequestFormValues>({
     resolver: zodResolver(
@@ -86,7 +72,7 @@ const CreateJobForm = () => {
     },
   });
 
-  const { fields } = useJobFields(form, assetsArray);
+  const { fields } = useJobFields(form);
 
   // $  ─── Render ─────────────────────────────────────────────────────────────────
   return (
@@ -103,7 +89,6 @@ const CreateJobForm = () => {
       onCancel={() => navigate("/dashboard")}
       className=""
       gridClassName="gap-6"
-      isLoading={isLoading}
     />
   );
 };

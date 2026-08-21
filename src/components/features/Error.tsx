@@ -1,7 +1,6 @@
 import useGlobalContext from "@/context/useGlobalContext";
 import type { RedirectResource } from "@/utils/api";
 import { AlertTriangle } from "lucide-react";
-import { useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -67,19 +66,13 @@ export const Error = () => {
 
   const config = errorConfig ?? DEFAULT_ERROR_CONFIG;
 
-  // $ Show the Success Component when the request was successful
-  useEffect(() => {
-    if (!showError) return;
-
-    const timer = setTimeout(() => {
-      setShowError(false);
-      if (config.redirectPath) {
-        navigate(`/${config.redirectPath}`);
-      }
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, [showError, config.redirectPath, navigate, setShowError]);
+  // $ Close the Error Component when the user is ready
+  const handleClose = () => {
+    setShowError(false);
+    if (config.redirectPath) {
+      navigate(`/${config.redirectPath}`);
+    }
+  };
 
   if (!showError) return null;
 
@@ -118,11 +111,35 @@ export const Error = () => {
               <h1 className={cn(sharedStyles.actionModalTitle)}>
                 {config.title}
               </h1>
-              <p className={cn(sharedStyles.actionModalMessage)}>
+              <p
+                className={cn(
+                  sharedStyles.actionModalMessage,
+                  "text-xs lg:text-sm",
+                )}
+              >
                 {config.message}
               </p>
             </motion.div>
-            <div className="flex gap-2"></div>
+
+            <motion.div
+              variants={modalVariants.actions}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="w-full"
+            >
+              <button
+                type="button"
+                onClick={handleClose}
+                className={cn(
+                  sharedStyles.btn,
+                  sharedStyles.btnSubmit,
+                  "text-md w-3/4",
+                )}
+              >
+                Continue
+              </button>
+            </motion.div>
           </motion.div>
         </motion.div>
       ) : undefined}

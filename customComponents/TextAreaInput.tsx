@@ -7,6 +7,7 @@ import type {
 } from "react-hook-form";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
+import { SkeletonInput } from "@/components/skeletons/SkeletonInput";
 
 type FormRowTextAreaProps<T extends FieldValues> = {
   name: Path<T>;
@@ -22,6 +23,7 @@ type FormRowTextAreaProps<T extends FieldValues> = {
   labelStyles?: string;
   textAreaStyles?: string;
   required?: boolean;
+  isLoading?: boolean;
 };
 
 const TextAreaInput = <T extends FieldValues>({
@@ -37,9 +39,12 @@ const TextAreaInput = <T extends FieldValues>({
   labelStyles,
   textAreaStyles,
   required,
+  isLoading,
 }: FormRowTextAreaProps<T>) => {
   const registered = register(name);
-  return (
+  return isLoading ? (
+    <SkeletonInput />
+  ) : (
     <div className={`relative w-full mb-2 group ${className}`}>
       <textarea
         {...registered}

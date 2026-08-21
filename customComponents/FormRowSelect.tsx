@@ -19,13 +19,16 @@ type FormSelectProps<T extends FieldValues> = {
   onChange?: (selectedValues: string[]) => void;
   required?: boolean;
   multiple?: boolean;
+  disabled?: boolean;
   selectStyles?: string;
   labelStyles?: string;
+  isLoading?: boolean;
 };
 
 import { cn } from "@/lib/utils";
 import { ChevronDownIcon } from "lucide-react";
 import { sharedStyles } from "@/styles/shared";
+import { SkeletonInput } from "@/components/skeletons/SkeletonInput";
 
 function FormRowSelect<T extends FieldValues>({
   name,
@@ -33,13 +36,14 @@ function FormRowSelect<T extends FieldValues>({
   options = [],
   error,
   multiple,
-  // placeholder,
+  disabled,
   register,
   onChange,
   required,
   className,
   selectStyles,
   labelStyles,
+  isLoading,
 }: FormSelectProps<T>) {
   const { onChange: rhfOnChange, ...restRegister } = register(name);
 
@@ -51,7 +55,9 @@ function FormRowSelect<T extends FieldValues>({
       typeof option === "string" ? { label: option, value: option } : option,
     );
 
-  return (
+  return isLoading ? (
+    <SkeletonInput />
+  ) : (
     // ✅ `relative` on the wrapper lets the chevron icon be positioned
     //    absolutely over the select without living inside it.
     <div className={cn(className, "relative w-full mb-2 group")}>
@@ -59,6 +65,7 @@ function FormRowSelect<T extends FieldValues>({
         {...restRegister}
         id={String(name)}
         data-multiple={multiple || undefined}
+        disabled={disabled}
         className={cn(
           selectStyles,
           sharedStyles.formInputDefault,

@@ -76,6 +76,24 @@ export const getJobPendingColumns = (
     enableColumnFilter: true,
   },
   {
+    accessorKey: "assetIssueReason",
+    header: "No AssetID Reason",
+    enableColumnFilter: false,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
+    accessorKey: "assetIssueDetails",
+    header: "No AssetID Details",
+    enableColumnFilter: false,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
+  },
+  {
     accessorKey: "requested_by",
     header: "Requested By",
     enableColumnFilter: true,
