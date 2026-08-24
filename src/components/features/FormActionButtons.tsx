@@ -11,6 +11,7 @@ type Props = {
   submitText: string;
   isPending?: boolean;
   className?: string;
+  formId?: string;
 };
 
 /**
@@ -44,6 +45,7 @@ function FormActionButtons({
   onCancel,
   isPending,
   className,
+  formId,
 }: Props) {
   return (
     <div className={cn(sharedStyles.btnParent, className)}>
@@ -62,6 +64,7 @@ function FormActionButtons({
       </Button>
       <Button
         disabled={isPending}
+        form={formId}
         type="submit"
         variant="submit"
         size="lg"

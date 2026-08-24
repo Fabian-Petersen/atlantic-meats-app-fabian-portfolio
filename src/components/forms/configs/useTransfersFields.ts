@@ -53,8 +53,13 @@ const normalizeOptions = (
 // $ ————————————————————————————————————————————————————————————————
 export const useTransfersFields = (
   form: UseFormReturn<TransferRequestFormValues>,
+  assetIndex: number,
 ) => {
-  const assetIssueReason = form.watch("assetIssueReason");
+  const assetIssueReason = form.watch(`assets.${assetIndex}.assetIssueReason`);
+
+  const locationFrom = form.watch("locationFrom");
+  const area = form.watch(`assets.${assetIndex}.area`);
+  const equipment = form.watch(`assets.${assetIndex}.equipment`);
 
   // $ ─── Backend Asset Options ─────────────────────────────────────
   //
@@ -96,15 +101,15 @@ export const useTransfersFields = (
   // $ ─── Field Configuration ───────────────────────────────────────
 
   const showUnidentifiedAssetWorkflow =
-    !!form.watch("equipment") && !hasVerifiedAssets && allowUnidentifiedAsset;
+    !!equipment && !hasVerifiedAssets && allowUnidentifiedAsset;
 
   const assetSectionFields: DynamicFormField<TransferRequestFormValues>[] =
     showUnidentifiedAssetWorkflow
       ? [
           {
             fieldType: "select",
-            name: "assetIssueReason",
-            label: "No Asset ID Unavailable — Reason",
+            name: `assets.${assetIndex}.assetIssueReason`,
+            label: "No Asset ID Available — Reason",
             placeholder: "Select a reason",
             options: [
               "No barcode visible",
@@ -113,16 +118,14 @@ export const useTransfersFields = (
               "other",
             ],
             required: true,
-            disabled:
-              !form.watch("locationFrom") ||
-              !form.watch("area") ||
-              !form.watch("equipment"),
+            disabled: !locationFrom || !area || !equipment,
           },
+
           ...(assetIssueReason === "other"
             ? [
                 {
                   fieldType: "textarea",
-                  name: "assetIssueDetails",
+                  name: `assets.${assetIndex}.assetIssueDetails`,
                   label: "Please describe the issue",
                   rows: 2,
                   required: true,
@@ -134,19 +137,14 @@ export const useTransfersFields = (
       : [
           {
             fieldType: "select",
-            name: "assetID",
+            name: `assets.${assetIndex}.assetID`,
             label: "Asset ID",
             placeholder: "Select Asset ID",
             options: assetIdSelectOptions,
             required: false,
-            disabled:
-              !form.watch("locationFrom") ||
-              !form.watch("area") ||
-              !form.watch("equipment") ||
-              isAssetPending,
+            disabled: !locationFrom || !area || !equipment || isAssetPending,
           },
         ];
-
   // $ ─── Field Config ─────────────────────────────────
   const fields: DynamicFormField<TransferRequestFormValues>[] = [
     // ========================================================================
@@ -194,7 +192,7 @@ export const useTransfersFields = (
 
     {
       fieldType: "select",
-      name: "area",
+      name: `assets.${assetIndex}.area`,
       label: "Area",
       placeholder: "Select Area",
       options: areaSelectOptions,
@@ -204,7 +202,7 @@ export const useTransfersFields = (
     },
     {
       fieldType: "select",
-      name: "equipment",
+      name: `assets.${assetIndex}.equipment`,
       label: "Equipment",
       placeholder: "Select Equipment",
       options: equipmentSelectOptions,
@@ -246,7 +244,7 @@ export const useTransfersFields = (
        *      images REQUIRED
        */
       fieldType: "file",
-      name: "images",
+      name: `assets.${assetIndex}.images`,
       multiple: true,
       label: "Upload Images",
       className: "",

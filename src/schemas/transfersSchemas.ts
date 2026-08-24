@@ -15,8 +15,9 @@ export const transferStatusSchema = z.object({
 
 export type TransferStatus = z.infer<typeof transferStatusSchema.shape.status>;
 
-// $ Schema to create a maintenance request
-export const transferRequestBaseSchema = assetRequestSchema
+// $  ─── Individual asset being transferred ──────────────────────────────────────
+
+export const transferAssetBaseSchema = assetRequestSchema
   .pick({
     assetID: true,
     area: true,
@@ -24,16 +25,9 @@ export const transferRequestBaseSchema = assetRequestSchema
     equipment: true,
   })
   .extend({
-    locationFrom: z.string().min(1, { message: "Please select a location" }),
-    locationTo: z.string().min(1, { message: "Please select a location" }),
-    description: z.string().optional(),
-    expectedDate: z
-      .string()
-      .min(1, { message: "Please enter expected date for transfer" }),
-    transferReason: z.string().min(1, {
-      message: "Give a brief reason for transfer request",
-    }),
-    assetID: z.string().optional(), // override assetID to make it optional
+    // Asset ID is optional because an asset can follow the
+    // unidentified-asset workflow.
+    assetID: z.string().optional(),
     assetIssueReason: z
       .union([
         z.enum([
@@ -50,7 +44,7 @@ export const transferRequestBaseSchema = assetRequestSchema
     transportInvoices: z.array(z.instanceof(File)).default([]),
   });
 
-export const transferRequestSchema = transferRequestBaseSchema.superRefine(
+export const transferAssetSchema = transferAssetBaseSchema.superRefine(
   (data, ctx) => {
     const reason = data.assetIssueReason || undefined;
 
@@ -69,7 +63,29 @@ export const transferRequestSchema = transferRequestBaseSchema.superRefine(
         message: "Images are compulsory if no barcode is supplied",
       });
     }
+  },
+);
 
+// $ ─── Transfer request ────────────────────────────────────────────────────────
+
+export const transferRequestBaseSchema = z.object({
+  locationFrom: z.string().min(1, { message: "Please select a location" }),
+  locationTo: z.string().min(1, { message: "Please select a location" }),
+  description: z.string().optional(),
+  expectedDate: z
+    .string()
+    .min(1, { message: "Please enter expected date for transfer" }),
+  transferReason: z.string().min(1, {
+    message: "Give a brief reason for transfer request",
+  }),
+  // One transfer request can contain multiple assets.
+  assets: z.array(transferAssetSchema).min(1, {
+    message: "Please add at least one asset to the transfer",
+  }),
+});
+
+export const transferRequestSchema = transferRequestBaseSchema.superRefine(
+  (data, ctx) => {
     if (data.locationFrom === data.locationTo) {
       ctx.addIssue({
         code: "custom",
@@ -94,18 +110,68 @@ export const transferRequestSchema = transferRequestBaseSchema.superRefine(
   },
 );
 
-export const transferRequestResponseSchema = transferRequestBaseSchema
+/* -------------------------------------------------------------------------- */
+/*                         TRANSFER REQUEST PAYLOAD                           */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * File metadata sent to the backend.
+ *
+ * The actual File object is never included in the API request.
+ * The backend uses this metadata to generate presigned S3 URLs.
+ */
+export const transferFileMetadataSchema = z.object({
+  filename: z.string(),
+  content_type: z.string(),
+});
+
+/**
+ * Asset payload sent to the backend when creating a transfer request.
+ *
+ * Images and transport invoices contain file metadata only.
+ * The actual files are uploaded directly to S3 by the frontend
+ * after receiving presigned URLs from the backend.
+ */
+export const transferAssetRequestPayloadSchema = transferAssetBaseSchema
   .omit({
-    images: true, // Omit images from the response schema
+    images: true,
+    transportInvoices: true,
   })
   .extend({
-    requested_by: z.string(),
-    requestor_name: z.string(),
-    requestor_email: z.email(),
-    requestor_sub: z.string(),
-    schedule_name: z.string(),
+    images: z.array(transferFileMetadataSchema).default([]),
+    transportInvoices: z.array(transferFileMetadataSchema).default([]),
+  });
+
+/**
+ * Payload sent to the backend when creating a transfer request.
+ *
+ * This differs from TransferRequestFormValues because the form
+ * contains browser File objects while the API receives only
+ * file metadata.
+ */
+export const transferRequestPayloadSchema = transferRequestBaseSchema.extend({
+  assets: z.array(transferAssetRequestPayloadSchema),
+});
+
+// $ ─── Transfer Asset Response ────────────────────────────────────────────────────────
+
+export const transferAssetResponseSchema = transferAssetBaseSchema
+  .omit({
+    images: true,
+  })
+  .extend({
     images: z.array(presignedURLSchema).default([]),
   });
+
+export const transferRequestResponseSchema = transferRequestBaseSchema.extend({
+  assets: z.array(transferAssetResponseSchema),
+  requested_by: z.string(),
+  requestor_name: z.string(),
+  requestor_email: z.email(),
+  requestor_sub: z.string(),
+  schedule_name: z.string(),
+  images: z.array(presignedURLSchema).default([]),
+});
 
 /* -------------------------------------------------------------------------- */
 /*                                   APPROVAL                                 */
@@ -318,6 +384,10 @@ export type TransferResponseSchema = z.infer<
 export type TransferRequestFormValues = z.infer<typeof transferRequestSchema>;
 export type TransferResponseValues = z.infer<
   typeof transferRequestResponseSchema
+>;
+
+export type TransferRequestPayload = z.infer<
+  typeof transferRequestPayloadSchema
 >;
 export type TransferInTransitRequestValues = z.infer<
   typeof transferInTransitRequestSchema
