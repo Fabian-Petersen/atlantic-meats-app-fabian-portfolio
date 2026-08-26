@@ -3,6 +3,7 @@
 // Pass a `fields` config array to declaratively render any form layout.
 
 import {
+  get,
   type FieldValues,
   type Path,
   type FieldError,
@@ -216,7 +217,7 @@ function DynamicForm<T extends FieldValues>({
   // FieldErrors<T>[Path<T>] is a wide union type; narrow it to
   // FieldError for the individual input components.
   const fieldError = (name: Path<T>): FieldError | undefined =>
-    errors[name] as FieldError | undefined;
+    get(errors, name) as FieldError | undefined;
 
   // Control<T, any> → Control<T> mismatch:
   // cast once here, use typed local.

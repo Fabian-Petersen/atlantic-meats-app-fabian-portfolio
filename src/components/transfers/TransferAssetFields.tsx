@@ -90,8 +90,6 @@ const TransferAssetFields = ({
     assetIndex,
   });
 
-  console.log("isPending:", isPending);
-
   // ---------------------------------------------------------------------------
   // Options
   // ---------------------------------------------------------------------------
@@ -211,7 +209,7 @@ const TransferAssetFields = ({
                       area ||
                       "Asset details not completed"}
                   </span>
-                  <span>-</span>
+                  <span>{area && equipment && assetID && "-"}</span>
                   <span>{assetID}</span>
                 </p>
               )}
@@ -247,7 +245,7 @@ const TransferAssetFields = ({
             initial="closed"
             animate="open"
             exit="closed"
-            className="md:overflow-hidden"
+            className="overflow-hidden py-2"
           >
             <DynamicForm
               form={form}

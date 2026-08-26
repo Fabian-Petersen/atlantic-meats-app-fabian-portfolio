@@ -1,4 +1,4 @@
-import type { Variants } from "motion/react";
+import { type Variants } from "motion/react";
 
 /**
  * Styles to open and close a mobile card with a smooth transition.
@@ -8,7 +8,6 @@ export const motionVariants = {
     open: {
       height: "auto",
       opacity: 1,
-      // marginTop: 12,
       transition: {
         height: {
           duration: 0.3,
@@ -24,7 +23,6 @@ export const motionVariants = {
     closed: {
       height: 0,
       opacity: 0,
-      marginTop: 0,
       transition: {
         height: {
           duration: 0.25,

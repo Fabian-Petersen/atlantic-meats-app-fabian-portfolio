@@ -85,6 +85,9 @@ export const transferRequestBaseSchema = z.object({
 });
 
 export const transferRequestSchema = transferRequestBaseSchema.superRefine(
+  // -------------------------------------------------------------------------
+  // Location validation
+  // -------------------------------------------------------------------------
   (data, ctx) => {
     if (data.locationFrom === data.locationTo) {
       ctx.addIssue({
@@ -93,6 +96,10 @@ export const transferRequestSchema = transferRequestBaseSchema.superRefine(
         message: "The location To must be different from the current location.",
       });
     }
+
+    // -------------------------------------------------------------------------
+    // Expected date validation
+    // -------------------------------------------------------------------------
 
     const selectedDate = new Date(data.expectedDate);
 
@@ -107,6 +114,34 @@ export const transferRequestSchema = transferRequestBaseSchema.superRefine(
         message: "The expected transit date cannot be in the past.",
       });
     }
+
+    // -------------------------------------------------------------------------
+    // Duplicate asset validation
+    // -------------------------------------------------------------------------
+
+    const assetIDIndexes = new Map<string, number[]>();
+
+    data.assets.forEach((asset, index) => {
+      const assetID = asset.assetID?.trim();
+
+      if (!assetID) return;
+
+      const indexes = assetIDIndexes.get(assetID) ?? [];
+      indexes.push(index);
+      assetIDIndexes.set(assetID, indexes);
+    });
+
+    assetIDIndexes.forEach((indexes) => {
+      if (indexes.length > 1) {
+        indexes.forEach((index) => {
+          ctx.addIssue({
+            code: "custom",
+            path: ["assets", index, "assetID"],
+            message: "Please ensure assets are not duplicated",
+          });
+        });
+      }
+    });
   },
 );
 

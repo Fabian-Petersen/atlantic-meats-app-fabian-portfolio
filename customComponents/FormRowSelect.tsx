@@ -60,7 +60,12 @@ function FormRowSelect<T extends FieldValues>({
   ) : (
     // ✅ `relative` on the wrapper lets the chevron icon be positioned
     //    absolutely over the select without living inside it.
-    <div className={cn(className, "relative w-full mb-2 group")}>
+    <div
+      className={cn(
+        className,
+        "relative w-full mb-2 group flex flex-col gap-1",
+      )}
+    >
       <select
         {...restRegister}
         id={String(name)}
@@ -116,7 +121,13 @@ function FormRowSelect<T extends FieldValues>({
        *    is invalid HTML and silently stripped by most browsers.
        *    pointer-events-none lets clicks pass through to the select.
        */}
-      <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground dark:text-(--clr-textDark)">
+      <span
+        className={cn(
+          error
+            ? "absolute right-2 top-1 translate-y-3"
+            : "pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground dark:text-(--clr-textDark)",
+        )}
+      >
         <ChevronDownIcon size={14} />
       </span>
 
