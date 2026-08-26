@@ -24,7 +24,7 @@ export default function BackButton({
       className={cn(
         "group inline-flex items-center gap-2 text-md font-medium text-gray-500",
         "transition-all duration-200 hover:text-gray-900 hover:cursor-pointer",
-        "dark:text-(--clr-textDark)",
+        "dark:text-(--clr-textDark) w-fit",
         parentStyles,
       )}
     >

@@ -7,7 +7,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Resolver } from "react-hook-form";
 
 // $ Import schemas
-import type { AssetRequestFormValues } from "../../schemas/index";
+import type {
+  AssetRequestFormValues,
+  CreateAssetPayload,
+} from "../../schemas/index";
 import { assetRequestSchema } from "../../schemas/index";
 
 import { useFormSubmit } from "@/hooks/useFormSubmit";
@@ -21,7 +24,10 @@ const CreateAssetForm = () => {
     useGlobalContext();
 
   // $ Hook handling the data send to the backend
-  const { submit, isPending } = useFormSubmit({
+  const { submit, isPending } = useFormSubmit<
+    AssetRequestFormValues,
+    CreateAssetPayload
+  >({
     resourcePath: "api/assets",
     queryKey: ["assets", "create-asset"],
     buildPayload: (values, compressed) => ({

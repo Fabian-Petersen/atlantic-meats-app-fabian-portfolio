@@ -118,7 +118,8 @@ function TransferItemDetails({ item }: Props) {
           </p>
           <div className="flex justify-between items-center">
             <h1 className="text-lg md:text-xl font-semibold capitalize leading-tight">
-              {request?.equipment}
+              {/* This will change when assets changed to array */}
+              {request?.assets[0]?.equipment}
             </h1>
             <button
               type="button"
@@ -239,8 +240,8 @@ function TransferItemDetails({ item }: Props) {
             <div className="flex flex-col gap-3">
               <SectionTitle>Transfer details</SectionTitle>
               <Field label="Asset ID" value={item.assetID} />
-              <Field label="Equipment" value={request?.equipment} />
-              <Field label="Area" value={request?.area} />
+              <Field label="Equipment" value={request?.assets[0]?.equipment} />
+              <Field label="Area" value={request?.assets[0]?.area} />
               <Field label="From" value={request?.locationFrom} />
               <Field label="To" value={request?.locationTo} />
               <Field label="Expected date" value={request?.expectedDate} />

@@ -51,7 +51,10 @@ function CreateUserForm() {
     setErrorConfig,
   } = useGlobalContext();
 
-  const { submit, isPending } = useFormSubmit({
+  const { submit, isPending } = useFormSubmit<
+    UsersRequestFormValues,
+    UsersRequestFormValues
+  >({
     resourcePath: "api/users",
     queryKey: ["users"],
     buildPayload: (values) => values,

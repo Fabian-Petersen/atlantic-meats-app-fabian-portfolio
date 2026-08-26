@@ -31,14 +31,17 @@ const CreateStockItemForm = () => {
   const { fields } = useStockFields();
 
   // Hook into shared submit logic (mirrors CreateAssetForm pattern)
-  const { submit, isPending } = useFormSubmit({
+  const { submit, isPending } = useFormSubmit<
+    StockRequestFormValues,
+    StockRequestFormValues
+  >({
     resourcePath: "api/stocks/create-new-stock",
     queryKey: ["stock", "create-stock-item"],
     buildPayload: (values) => ({ ...values }),
-    onSuccess: (values) => {
+    onSuccess: () => {
       setSuccessConfig({
         title: "Success",
-        message: `Stock item "${values.stockCode}" was successfully created.`,
+        message: `Stock item successfully created.`,
         redirectPath: "stocks/list",
       });
       setShowSuccess(true);

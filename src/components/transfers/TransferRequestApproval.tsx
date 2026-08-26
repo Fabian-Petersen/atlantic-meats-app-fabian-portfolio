@@ -117,10 +117,10 @@ function TransferRequestApproval() {
       <div className="flex flex-col gap-2">
         <p className="text-[11px] uppercase tracking-widest text-gray-400 dark:text-gray-500 font-medium select-none">
           Transfer No ·{""}
-          {/* {item?.jobcardNumber ?? `${item?.location}-${formattedNumber}`} */}
         </p>
+        {/* Here i'm only showing the first equipment, will change when adding the list */}
         <h1 className="text-lg md:text-xl font-semibold capitalize leading-tight">
-          {item?.pending?.equipment}
+          {item?.pending?.assets[0].equipment}
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">
           Asset ID: {item?.assetID}

@@ -117,7 +117,7 @@ function MobileTransfersItemDetails({ item }: Props) {
           </button>
         </div>
         <h1 className="text-lg font-semibold capitalize leading-tight text-(--clr-textLight) dark:text-(--clr-textDark)">
-          {request?.equipment}
+          {request?.assets[0]?.equipment}
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Asset ID: {item.assetID ?? "—"}
@@ -227,8 +227,8 @@ function MobileTransfersItemDetails({ item }: Props) {
             <div className="flex flex-col gap-3">
               <SectionTitle>Transfer details</SectionTitle>
               <Field label="Asset ID" value={item.assetID} />
-              <Field label="Equipment" value={request?.equipment} />
-              <Field label="Area" value={request?.area} />
+              <Field label="Equipment" value={request?.assets[0]?.equipment} />
+              <Field label="Area" value={request?.assets[0]?.area} />
               <Field label="From" value={request?.locationFrom} />
               <Field label="To" value={request?.locationTo} />
               <Field label="Expected date" value={request?.expectedDate} />

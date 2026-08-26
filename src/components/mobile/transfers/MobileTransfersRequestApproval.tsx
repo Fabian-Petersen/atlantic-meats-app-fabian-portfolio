@@ -149,7 +149,7 @@ export default function MobileTransferRequestApproval({
             </div>
             <div className="flex justify-between items-center">
               <CardRow
-                value={item?.pending?.equipment}
+                value={item?.pending?.assets[0]?.equipment}
                 className="py-0"
                 valueStyles="dark:text-gray-400"
               />

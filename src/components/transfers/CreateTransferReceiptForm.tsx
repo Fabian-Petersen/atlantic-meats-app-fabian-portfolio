@@ -11,7 +11,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Resolver } from "react-hook-form";
 
 // $ Import schemas
-import type { TransferReceiptRequestValues } from "../../schemas/index";
+import type {
+  TransferReceiptRequestValues,
+  TransferReceiptRequestPayload,
+  TransferWorkflowResponse,
+} from "../../schemas/index";
 import { transferReceiptRequestSchema } from "../../schemas/index";
 
 import { useFormSubmit } from "@/hooks/useFormSubmit";
@@ -19,7 +23,11 @@ import useGlobalContext from "@/context/useGlobalContext";
 import DynamicForm from "../forms/DynamicForm";
 import { useTransfersReceiptFields } from "../forms/configs/useTransfersReceiptFields";
 
-const CreateTransferForm = () => {
+type Props = {
+  data?: TransferWorkflowResponse;
+};
+
+const CreateTransferForm = ({ data }: Props) => {
   const navigate = useNavigate();
 
   /* -------------------------------------------------------------------------- */
@@ -38,7 +46,10 @@ const CreateTransferForm = () => {
   /* -------------------------------------------------------------------------- */
 
   // $ Hook handling the data send to the backend
-  const { submit, isPending } = useFormSubmit({
+  const { submit, isPending } = useFormSubmit<
+    TransferReceiptRequestValues,
+    TransferReceiptRequestPayload
+  >({
     id: selectedRowId ?? "",
     resourcePath: "api/transfers",
     queryKey: ["transfers", "receipt-transfer"],
@@ -55,10 +66,10 @@ const CreateTransferForm = () => {
         content_type: f.type,
       })),
     }),
-    onSuccess: (values) => {
+    onSuccess: () => {
       setSuccessConfig({
         title: "Success",
-        message: `The asset with ID ${values.assetID} was successfully received at destination ${values.locationTo}.`,
+        message: `The asset with ID ${data?.assetID} was successfully received at destination ${data?.pending?.locationTo}.`,
         redirectPath: "transfers/in-transit",
       });
       setShowSuccess(true);

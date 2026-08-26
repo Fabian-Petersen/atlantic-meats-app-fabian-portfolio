@@ -275,6 +275,19 @@ export const transferReceiptRequestSchema =
     }
   });
 
+export const transferReceiptPayloadSchema = transferReceiptBaseSchema
+  .omit({
+    images: true,
+    deliveryNote: true,
+  })
+  .extend({
+    images: z.array(transferFileMetadataSchema).default([]),
+    deliveryNote: z.array(transferFileMetadataSchema).default([]),
+  })
+  .extend({
+    status: z.string(),
+  });
+
 export const transferReceiptResponseSchema = transferReceiptBaseSchema
   .omit({
     images: true,
@@ -392,9 +405,28 @@ export type TransferRequestPayload = z.infer<
 export type TransferInTransitRequestValues = z.infer<
   typeof transferInTransitRequestSchema
 >;
+
+/**
+ * The actual on-the-wire shape sent to the API.
+ * Diverges from the form values: adds `status`, and
+ * `images` is metadata (post-upload) rather than raw File[].
+ */
+export type TransferInTransitRequestPayload = Omit<
+  TransferInTransitRequestValues,
+  "images"
+> & {
+  status: "in-transit";
+  images: { filename: string; content_type: string }[];
+};
+
 export type TransferInTransitResponse = z.infer<
   typeof transferInTransitResponseSchema
 >;
+
+/* -------------------------------------------------------------------------- */
+/*                                RECEIPT TYPES                                */
+/* -------------------------------------------------------------------------- */
+
 export type TransferReceiptRequestValues = z.infer<
   typeof transferReceiptRequestSchema
 >;
@@ -403,6 +435,14 @@ export type TransferReceiptResponse = z.infer<
   typeof transferReceiptResponseSchema
 >;
 
+export type TransferReceiptRequestPayload = z.infer<
+  typeof transferReceiptPayloadSchema
+>;
+
+/* -------------------------------------------------------------------------- */
+/*                             TABLE TYPES                                    */
+/* -------------------------------------------------------------------------- */
+
 // export type TransferTransitTableRow = z.infer<typeof transitTableRowSchema>;
 export type TransferPendingTableRow = z.infer<typeof pendingTableRowSchema>;
 export type TransferTransitTableRow = z.infer<typeof transitTableRowSchema>;
@@ -410,6 +450,10 @@ export type TransferTransitTableRow = z.infer<typeof transitTableRowSchema>;
 export type TransferWorkflowResponse = z.infer<
   typeof transferWorkflowResponseSchema
 >;
+
+/* -------------------------------------------------------------------------- */
+/*                             REJECT FORM TYPES                              */
+/* -------------------------------------------------------------------------- */
 
 export type RejectRequestFormValues = z.infer<
   typeof transferRejectedRequestSchema

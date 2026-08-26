@@ -7,7 +7,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Resolver } from "react-hook-form";
 
 // $ Import schemas
-import type { TransferInTransitRequestValues } from "../../schemas/index";
+import type {
+  TransferInTransitRequestValues,
+  TransferInTransitRequestPayload,
+  TransferWorkflowResponse,
+} from "../../schemas/index";
 import { transferInTransitRequestSchema } from "../../schemas/index";
 
 import { useFormSubmit } from "@/hooks/useFormSubmit";
@@ -15,9 +19,13 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { useTransfersTransitFields } from "../forms/configs/useTransfersTransitFields";
 import DynamicForm from "../forms/DynamicForm";
 
-const CreateTransferForm = () => {
-  const navigate = useNavigate();
+type Props = {
+  data?: TransferWorkflowResponse;
+};
 
+const CreateTransferForm = ({ data }: Props) => {
+  const navigate = useNavigate();
+  // console.log("transferItem:", data);
   /* -------------------------------------------------------------------------- */
   /*                              Global Context                                */
   /* -------------------------------------------------------------------------- */
@@ -34,7 +42,10 @@ const CreateTransferForm = () => {
   /* -------------------------------------------------------------------------- */
 
   // $ Hook handling the data send to the backend
-  const { submit, isPending } = useFormSubmit({
+  const { submit, isPending } = useFormSubmit<
+    TransferInTransitRequestValues,
+    TransferInTransitRequestPayload
+  >({
     id: selectedRowId ?? "",
     resourcePath: "api/transfers",
     queryKey: ["transfers", "create-transfer"],
@@ -47,10 +58,10 @@ const CreateTransferForm = () => {
         content_type: f.type,
       })),
     }),
-    onSuccess: (values) => {
+    onSuccess: () => {
       setSuccessConfig({
         title: "Success",
-        message: `The asset with ID ${values.assetID} was successfully placed in transit to ${values.locationTo}.`,
+        message: `The asset: ${data?.assetID} transit request successfully placed.`,
         redirectPath: "transfers/in-transit",
       });
       setShowSuccess(true);
