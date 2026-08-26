@@ -121,10 +121,10 @@ export const useJobFields = (form: UseFormReturn<JobRequestFormValues>) => {
     isError,
 
     // $ Individual query states
-    isLocationsPending,
-    isLocationPending,
-    isAreaPending,
-    isAssetPending,
+    isLocationsLoading,
+    isLocationLoading,
+    isAreaLoading,
+    isAssetLoading,
   } = useAssetFilters({
     form,
   });
@@ -186,7 +186,7 @@ export const useJobFields = (form: UseFormReturn<JobRequestFormValues>) => {
               !form.watch("location") ||
               !form.watch("area") ||
               !form.watch("equipment") ||
-              isAssetPending,
+              isAssetLoading,
           },
         ];
 
@@ -217,8 +217,8 @@ export const useJobFields = (form: UseFormReturn<JobRequestFormValues>) => {
       required: true,
       // Optional loading support if DynamicForm supports these properties.
       // Remove these two properties if DynamicFormField does not define them.
-      // isLoading: isLocationsPending,
-      disabled: isLocationsPending,
+      // isLoading: isLocationsLoading,
+      disabled: isLocationsLoading,
     },
 
     // ========================================================================
@@ -232,8 +232,8 @@ export const useJobFields = (form: UseFormReturn<JobRequestFormValues>) => {
       placeholder: "Select Area",
       options: areaSelectOptions,
       // Area cannot be selected until a location has been selected.
-      disabled: !form.watch("location") || isLocationPending,
-      // isLoading: isLocationPending,
+      disabled: !form.watch("location") || isLocationLoading,
+      // isLoading: isLocationLoading,
     },
 
     // ========================================================================
@@ -246,8 +246,8 @@ export const useJobFields = (form: UseFormReturn<JobRequestFormValues>) => {
       placeholder: "Select Equipment",
       options: equipmentSelectOptions,
       required: true,
-      disabled: !form.watch("location") || !form.watch("area") || isAreaPending,
-      // isLoading: !isAreaPending,
+      disabled: !form.watch("location") || !form.watch("area") || isAreaLoading,
+      // isLoading: !isAreaLoading,
     },
 
     // ========================================================================

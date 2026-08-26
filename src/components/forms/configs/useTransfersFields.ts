@@ -83,10 +83,10 @@ export const useTransfersFields = (
     isError,
 
     // $ Individual query states
-    isLocationsPending,
+    isLocationsLoading,
     // isLocationPending,
     // isAreaPending,
-    isAssetPending,
+    isAssetLoading,
   } = useAssetFilters({
     form,
   });
@@ -142,7 +142,7 @@ export const useTransfersFields = (
             placeholder: "Select Asset ID",
             options: assetIdSelectOptions,
             required: false,
-            disabled: !locationFrom || !area || !equipment || isAssetPending,
+            disabled: !locationFrom || !area || !equipment || isAssetLoading,
           },
         ];
   // $ ─── Field Config ─────────────────────────────────
@@ -197,7 +197,7 @@ export const useTransfersFields = (
       placeholder: "Select Area",
       options: areaSelectOptions,
       // Area cannot be selected until a location has been selected.
-      disabled: !form.watch("locationFrom") || isLocationsPending,
+      disabled: !form.watch("locationFrom") || isLocationsLoading,
       required: true,
     },
     {
