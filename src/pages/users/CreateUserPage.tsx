@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import FormHeading from "../../customComponents/FormHeading";
+import FormHeading from "../../../customComponents/FormHeading";
 import { sharedStyles } from "@/styles/shared";
 import CreateUserForm from "@/components/users/CreateUserForm";
 

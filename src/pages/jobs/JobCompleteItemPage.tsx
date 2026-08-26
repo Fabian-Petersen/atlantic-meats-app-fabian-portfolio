@@ -1,7 +1,7 @@
 // $ This page renders the full details of an completed job with information and pictures
 // import { useParams } from "react-router-dom";
 // import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-import { useById } from "../utils/api";
+import { useById } from "../../utils/api";
 import { type CompletedJobResponse } from "@/schemas/jobSchemas";
 import BackButton from "@/components/features/BackButton";
 import CompletedJobDetails from "@/components/jobs/CompletedJobDetails";

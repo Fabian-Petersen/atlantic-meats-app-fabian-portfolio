@@ -1,7 +1,7 @@
 // $ This page renders the full details of an approved request with information and pictures
 // import { useParams } from "react-router-dom";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-import { useById } from "../utils/api";
+import { useById } from "../../utils/api";
 import { type JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
 import JobApprovedItemInfo from "@/components/jobs/JobApprovedItemInfo";

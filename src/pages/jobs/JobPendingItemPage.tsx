@@ -1,7 +1,7 @@
 // $ This page renders the full details of a maintenance request for approval with the information and the supporting pictures.
 
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-import { useById } from "../utils/api";
+import { useById } from "../../utils/api";
 import { type JobAPIResponse } from "@/schemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
 import RequestApproval from "@/components/modal_request_actions/RequestApproval";

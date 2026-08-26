@@ -1,7 +1,7 @@
 // $ This component renders the page for the assets register in a table format.
 // $ The list is from a Get request to the getAssetsRegister.py lambda function.
 
-import FormHeading from "../../customComponents/FormHeading";
+import FormHeading from "../../../customComponents/FormHeading";
 import { useGetAll } from "@/utils/api";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { MobileAssetsOverviewTable } from "@/components/mobile/MolbileAssetsOverviewTable";
@@ -19,7 +19,7 @@ import {
   type PaginationState,
 } from "@tanstack/react-table";
 
-import { getAssetColumns } from "../components/tableColumns/AssetColumns";
+import { getAssetColumns } from "../../components/tableColumns/AssetColumns";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState, useMemo } from "react";
 import type { AssetAPIResponse, AssetTableRow } from "@/schemas";

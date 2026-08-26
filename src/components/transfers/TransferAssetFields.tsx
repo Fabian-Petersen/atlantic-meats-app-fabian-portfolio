@@ -83,8 +83,8 @@ const TransferAssetFields = ({
     isPending,
     isError,
 
-    isLocationsPending,
-    isAssetPending,
+    isLocationsLoading,
+    isAssetLoading,
   } = useAssetFilters({
     form,
     assetIndex,
@@ -150,7 +150,7 @@ const TransferAssetFields = ({
             placeholder: "Select Asset ID",
             options: assetIdSelectOptions,
             required: false,
-            disabled: !area || !equipment || isAssetPending,
+            disabled: !area || !equipment || isAssetLoading,
           },
         ];
 
@@ -161,7 +161,7 @@ const TransferAssetFields = ({
       label: "Area",
       placeholder: "Select Area",
       options: areaSelectOptions,
-      disabled: !form.watch("locationFrom") || isLocationsPending,
+      disabled: !form.watch("locationFrom") || isLocationsLoading,
       required: true,
     },
 
@@ -247,7 +247,7 @@ const TransferAssetFields = ({
             initial="closed"
             animate="open"
             exit="closed"
-            className="overflow-hidden"
+            className="md:overflow-hidden"
           >
             <DynamicForm
               form={form}
@@ -275,216 +275,3 @@ const TransferAssetFields = ({
 };
 
 export default TransferAssetFields;
-
-/* -------------------------------------------------------------------------- */
-/*                                  OLD FORM                                  */
-/* -------------------------------------------------------------------------- */
-
-// import type { UseFormReturn } from "react-hook-form";
-
-// import type { TransferRequestFormValues } from "../../schemas";
-// import { useAssetFilters } from "@/customHooks/useAssetFilters";
-// import DynamicForm from "../forms/DynamicForm";
-// import type { DynamicFormField } from "../forms/DynamicForm";
-
-// interface TransferAssetFieldsProps {
-//   form: UseFormReturn<TransferRequestFormValues>;
-//   assetIndex: number;
-//   onRemove: () => void;
-//   canRemove: boolean;
-// }
-
-// const TransferAssetFields = ({
-//   form,
-//   assetIndex,
-//   onRemove,
-//   canRemove,
-// }: TransferAssetFieldsProps) => {
-//   // ---------------------------------------------------------------------------
-//   // Asset-specific values
-//   // ---------------------------------------------------------------------------
-
-//   const area = form.watch(`assets.${assetIndex}.area`);
-//   const equipment = form.watch(`assets.${assetIndex}.equipment`);
-//   const assetIssueReason = form.watch(`assets.${assetIndex}.assetIssueReason`);
-
-//   // ---------------------------------------------------------------------------
-//   // Asset filters
-//   // ---------------------------------------------------------------------------
-
-//   const {
-//     equipmentOptions,
-//     assetIdOptions,
-//     areaOptions,
-
-//     hasVerifiedAssets,
-//     allowUnidentifiedAsset,
-
-//     isPending,
-//     isError,
-
-//     isLocationsPending,
-//     isAssetPending,
-//   } = useAssetFilters({
-//     form,
-//     assetIndex,
-//   });
-
-//   // $ ————————————————————————————————————————————————————————————————
-//   // $ Helpers
-//   // $ ————————————————————————————————————————————————————————————————
-
-//   /**
-//    * Converts the option format returned by useAssetFilters into the
-//    * string[] format expected by DynamicForm select fields.
-//    */
-//   const normalizeOptions = (
-//     options:
-//       | Array<string>
-//       | Array<{ label: string; value: string }>
-//       | undefined
-//       | null,
-//   ): string[] => {
-//     if (!options) return [];
-//     return options.map((option) =>
-//       typeof option === "string" ? option : option.value,
-//     );
-//   };
-
-//   // ---------------------------------------------------------------------------
-//   // Options
-//   // ---------------------------------------------------------------------------
-
-//   const areaSelectOptions = normalizeOptions(areaOptions);
-//   const equipmentSelectOptions = normalizeOptions(equipmentOptions);
-//   const assetIdSelectOptions = normalizeOptions(assetIdOptions);
-
-//   // ---------------------------------------------------------------------------
-//   // Unidentified asset workflow
-//   // ---------------------------------------------------------------------------
-
-//   const showUnidentifiedAssetWorkflow =
-//     !!equipment && !hasVerifiedAssets && allowUnidentifiedAsset;
-
-//   // ---------------------------------------------------------------------------
-//   // Fields
-//   // ---------------------------------------------------------------------------
-
-//   const assetSectionFields: DynamicFormField<TransferRequestFormValues>[] =
-//     showUnidentifiedAssetWorkflow
-//       ? [
-//           {
-//             fieldType: "select",
-//             name: `assets.${assetIndex}.assetIssueReason`,
-//             label: "No Asset ID Available — Reason",
-//             placeholder: "Select a reason",
-//             options: [
-//               "No barcode visible",
-//               "barcode damaged",
-//               "rental unit",
-//               "other",
-//             ],
-//             required: true,
-//             disabled: !area || !equipment,
-//           },
-
-//           ...(assetIssueReason === "other"
-//             ? [
-//                 {
-//                   fieldType: "textarea",
-//                   name: `assets.${assetIndex}.assetIssueDetails`,
-//                   label: "Please describe the issue",
-//                   rows: 2,
-//                   required: true,
-//                   className: "md:col-span-2",
-//                 } as DynamicFormField<TransferRequestFormValues>,
-//               ]
-//             : []),
-//         ]
-//       : [
-//           {
-//             fieldType: "select",
-//             name: `assets.${assetIndex}.assetID`,
-//             label: "Asset ID",
-//             placeholder: "Select Asset ID",
-//             options: assetIdSelectOptions,
-//             required: false,
-//             disabled: !area || !equipment || isAssetPending,
-//           },
-//         ];
-
-//   const fields: DynamicFormField<TransferRequestFormValues>[] = [
-//     {
-//       fieldType: "select",
-//       name: `assets.${assetIndex}.area`,
-//       label: "Area",
-//       placeholder: "Select Area",
-//       options: areaSelectOptions,
-//       disabled: !form.watch("locationFrom") || isLocationsPending,
-//       required: true,
-//     },
-
-//     {
-//       fieldType: "select",
-//       name: `assets.${assetIndex}.equipment`,
-//       label: "Equipment",
-//       placeholder: "Select Equipment",
-//       options: equipmentSelectOptions,
-//       disabled: !area,
-//       required: true,
-//     },
-
-//     ...assetSectionFields,
-
-//     {
-//       fieldType: "file",
-//       name: `assets.${assetIndex}.images`,
-//       multiple: true,
-//       label: "Upload Images",
-//       className: "md:col-span-2",
-//     },
-//   ];
-
-//   return (
-//     <div className="rounded-lg border p-4 space-y-4">
-//       {/* --------------------------------------------------------------------- */}
-//       {/* Header                                                                */}
-//       {/* --------------------------------------------------------------------- */}
-
-//       <div className="flex items-center justify-between">
-//         <h3 className="font-semibold">Asset {assetIndex + 1}</h3>
-
-//         {canRemove && (
-//           <button
-//             type="button"
-//             onClick={onRemove}
-//             className="text-sm text-red-600 hover:underline"
-//           >
-//             Remove
-//           </button>
-//         )}
-//       </div>
-
-//       {/* --------------------------------------------------------------------- */}
-//       {/* Asset fields                                                          */}
-//       {/* --------------------------------------------------------------------- */}
-
-//       <DynamicForm
-//         form={form}
-//         fields={fields}
-//         renderFieldsOnly
-//         gridClassName="gap-6"
-//       />
-//       {isError && (
-//         <p className="text-sm text-red-600">Failed to load asset options.</p>
-//       )}
-//       {isPending && (
-//         <p className="text-sm text-muted-foreground">
-//           Loading asset options...
-//         </p>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default TransferAssetFields;

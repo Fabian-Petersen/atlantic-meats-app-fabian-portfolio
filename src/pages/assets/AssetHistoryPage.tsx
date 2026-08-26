@@ -4,7 +4,7 @@ import { useAssetJobsHistory } from "@/hooks/useAssetJobsHistory";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import { useEffect, useMemo, useState } from "react";
-import FormHeading from "../../customComponents/FormHeading";
+import FormHeading from "../../../customComponents/FormHeading";
 import { TableGeneric } from "@/components/features/TableGeneric";
 import { getAssetHistoryColumns } from "@/components/tableColumns/AssetHistoryColumns";
 import { useNavigate } from "react-router-dom";

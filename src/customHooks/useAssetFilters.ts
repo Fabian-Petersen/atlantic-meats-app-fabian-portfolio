@@ -188,7 +188,7 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
 
   const {
     data: locationsData,
-    isPending: isLocationsPending,
+    isLoading: isLocationsLoading,
     isError: isLocationsError,
   } = useGetAll<AssetLocationsResponse>({
     resourcePath: RESOURCE_PATH,
@@ -202,7 +202,7 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
 
   const {
     data: locationData,
-    isPending: isLocationPending,
+    isLoading: isLocationLoading,
     isError: isLocationError,
   } = useGetAll<AssetLocationHierarchyResponse>({
     resourcePath: RESOURCE_PATH,
@@ -219,7 +219,7 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
 
   const {
     data: areaData,
-    isPending: isAreaPending,
+    isLoading: isAreaLoading,
     isError: isAreaError,
   } = useGetAll<AssetEquipmentResponse>({
     resourcePath: RESOURCE_PATH,
@@ -237,7 +237,7 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
 
   const {
     data: assetData,
-    isPending: isAssetPending,
+    isLoading: isAssetLoading,
     isError: isAssetError,
   } = useGetAll<AssetOptionsResponse>({
     resourcePath: RESOURCE_PATH,
@@ -451,7 +451,7 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
   // ==========================================================================
 
   const isPending =
-    isLocationsPending || isLocationPending || isAreaPending || isAssetPending;
+    isLocationsLoading || isLocationLoading || isAreaLoading || isAssetLoading;
 
   const isError =
     isLocationsError || isLocationError || isAreaError || isAssetError;
@@ -474,10 +474,10 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
     isPending,
     isError,
 
-    isLocationsPending,
-    isLocationPending,
-    isAreaPending,
-    isAssetPending,
+    isLocationsLoading,
+    isLocationLoading,
+    isAreaLoading,
+    isAssetLoading,
 
     locationsData,
     locationData,
@@ -640,7 +640,7 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
 
 //   const {
 //     data: locationsData,
-//     isPending: isLocationsPending,
+//     isPending: isLocationsLoading,
 //     isError: isLocationsError,
 //   } = useGetAll<AssetLocationsResponse>({
 //     resourcePath: RESOURCE_PATH,
@@ -654,7 +654,7 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
 
 //   const {
 //     data: locationData,
-//     isPending: isLocationPending,
+//     isPending: isLocationLoading,
 //     isError: isLocationError,
 //   } = useGetAll<AssetLocationHierarchyResponse>({
 //     resourcePath: RESOURCE_PATH,
@@ -671,7 +671,7 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
 
 //   const {
 //     data: areaData,
-//     isPending: isAreaPending,
+//     isPending: isAreaLoading,
 //     isError: isAreaError,
 //   } = useGetAll<AssetEquipmentResponse>({
 //     resourcePath: RESOURCE_PATH,
@@ -690,7 +690,7 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
 
 //   const {
 //     data: assetData,
-//     isPending: isAssetPending,
+//     isPending: isAssetLoading,
 //     isError: isAssetError,
 //   } = useGetAll<AssetOptionsResponse>({
 //     resourcePath: RESOURCE_PATH,
@@ -891,7 +891,7 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
 //   // ==========================================================================
 
 //   const isPending =
-//     isLocationsPending || isLocationPending || isAreaPending || isAssetPending;
+//     isLocationsLoading || isLocationLoading || isAreaLoading || isAssetLoading;
 
 //   const isError =
 //     isLocationsError || isLocationError || isAreaError || isAssetError;
@@ -919,10 +919,10 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
 //     isError,
 
 //     // Individual loading states
-//     isLocationsPending,
-//     isLocationPending,
-//     isAreaPending,
-//     isAssetPending,
+//     isLocationsLoading,
+//     isLocationLoading,
+//     isAreaLoading,
+//     isAssetLoading,
 
 //     // Raw responses
 //     locationsData,

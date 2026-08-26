@@ -1,4 +1,4 @@
-import FormHeading from "../../customComponents/FormHeading";
+import FormHeading from "../../../customComponents/FormHeading";
 import UserProfileForm from "@/components/users/UserProfileForm";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { Error } from "@/components/features/Error";

@@ -7,8 +7,8 @@ import { PublicOnlyRoute } from "./routes/PublicOnlyRoute";
 
 //$ Protected Routes
 import DashboardPage from "./pages/Dashboard";
-import CreateJobPage from "./pages/CreateJobPage";
-import AssetsOverviewPage from "./pages/AssetsOverviewPage";
+import CreateJobPage from "./pages/jobs/CreateJobPage";
+import AssetsOverviewPage from "./pages/assets/AssetsOverviewPage";
 
 import { AppLayout } from "./routes/AppLayout";
 
@@ -19,32 +19,32 @@ import RoleGaurdRoute from "./routes/RoleGaurdRoute";
 //$ Page Layouts
 // import JobItemPage from "./pages/JobApprovedItemPage";
 // import JobActionItemPage from "./pages/JobActionPage";
-import JobActionPage from "./pages/JobActionPage";
+import JobActionPage from "./pages/jobs/JobActionPage";
 
 // $ Assets Pages
-import CreateAssetPage from "./pages/CreateAssetPage";
-import AssetItemPage from "./pages/AssetItemPage";
-import AssetHistoryPage from "./pages/AssetHistoryPage";
-import AssetVerification from "./pages/AssetVerification";
+import CreateAssetPage from "./pages/assets/CreateAssetPage";
+import AssetItemPage from "./pages/assets/AssetItemPage";
+import AssetHistoryPage from "./pages/assets/AssetHistoryPage";
+import AssetVerification from "./pages/assets/AssetVerification";
 
 // $ User Management Pages
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import UserProfilePage from "./pages/UserProfilePage";
+import UserProfilePage from "./pages/users/UserProfilePage";
 import StoreProfilePage from "./pages/StoreProfilePage";
 
 // $ Job Management Pages for single items
-import JobPendingItemPage from "./pages/JobPendingItemPage";
-import JobInProgressItemPage from "./pages/JobInProgressItemPage";
-import JobCompleteItemPage from "./pages/JobCompleteItemPage";
-import JobsCompletedListPage from "./pages/JobsCompletedListPage";
+import JobPendingItemPage from "./pages/jobs/JobPendingItemPage";
+import JobInProgressItemPage from "./pages/jobs/JobInProgressItemPage";
+import JobCompleteItemPage from "./pages/jobs/JobCompleteItemPage";
+import JobsCompletedListPage from "./pages/jobs/JobsCompletedListPage";
 
 // $ Pages display the list of items in a table
-import JobsPendingListPage from "./pages/JobsPendingListPage";
-import JobsInProgressListPage from "./pages/JobsInProgressListPage";
+import JobsPendingListPage from "./pages/jobs/JobsPendingListPage";
+import JobsInProgressListPage from "./pages/jobs/JobsInProgressListPage";
 import { PageLoadingSpinner } from "./components/features/PageLoadingSpinner";
-import UsersListPage from "./pages/UsersListPage";
+import UsersListPage from "./pages/users/UsersListPage";
 import { useAuth } from "./auth/useAuth";
-import CreateUserPage from "./pages/CreateUserPage";
+import CreateUserPage from "./pages/users/CreateUserPage";
 
 // $ Transfer Asset Pages
 // # ——————— Create Pages ————————————————————————————————————————————————————————
