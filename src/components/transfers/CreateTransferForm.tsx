@@ -40,7 +40,7 @@ const CreateTransferForm = () => {
       locationTo: "",
       expectedDate: "",
       transferReason: "",
-      description: "",
+      transportInvoices: [],
 
       assets: [
         {
@@ -50,7 +50,6 @@ const CreateTransferForm = () => {
           images: [],
           assetIssueReason: "",
           assetIssueDetails: "",
-          transportInvoices: [],
         },
       ],
     },
@@ -132,6 +131,12 @@ const CreateTransferForm = () => {
       name: "expectedDate" as const,
       label: "Expected Transit Date",
     },
+    {
+      fieldType: "file" as const,
+      name: "transportInvoices" as const,
+      label: "Transport Invoice",
+      placeholder: "",
+    },
   ];
 
   // ---------------------------------------------------------------------------
@@ -145,22 +150,39 @@ const CreateTransferForm = () => {
     resourcePath: "api/transfers/requests",
     queryKey: ["transfers", "create-transfer"],
 
-    buildPayload: (values) => ({
-      ...values,
-      assets: values.assets.map((asset) => ({
-        ...asset,
-        images: asset.images.map((file) => ({
+    buildPayload: (values, compressedFiles, invoices) => {
+      let cursor = 0;
+
+      const assets = values.assets.map((asset) => {
+        const count = asset.images.length;
+        const assetImages = compressedFiles.slice(cursor, cursor + count);
+        cursor += count;
+
+        return {
+          assetID: asset.assetID,
+          area: asset.area,
+          equipment: asset.equipment,
+          assetIssueReason: asset.assetIssueReason ?? "",
+          assetIssueDetails: asset.assetIssueDetails ?? "",
+          images: assetImages.map((file) => ({
+            filename: file.name,
+            content_type: file.type,
+          })),
+        };
+      });
+
+      return {
+        locationFrom: values.locationFrom,
+        locationTo: values.locationTo,
+        expectedDate: values.expectedDate,
+        transferReason: values.transferReason,
+        transportInvoices: invoices.map((file) => ({
           filename: file.name,
           content_type: file.type,
         })),
-
-        transportInvoices: asset.transportInvoices.map((file) => ({
-          filename: file.name,
-          content_type: file.type,
-        })),
-      })),
-    }),
-
+        assets,
+      };
+    },
     onSuccess: (values) => {
       setSuccessConfig({
         title: "Success",
@@ -230,7 +252,6 @@ const CreateTransferForm = () => {
                 images: [],
                 assetIssueReason: "",
                 assetIssueDetails: "",
-                transportInvoices: [],
               })
             }
             className="text-sm font-medium text-blue-600 hover:cursor-pointer"

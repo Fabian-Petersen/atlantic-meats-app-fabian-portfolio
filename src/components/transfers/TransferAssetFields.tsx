@@ -68,6 +68,12 @@ const TransferAssetFields = ({
   const assetID = form.watch(`assets.${assetIndex}.assetID`);
   const assetIssueReason = form.watch(`assets.${assetIndex}.assetIssueReason`);
 
+  // const images = form.watch(`assets.${assetIndex}.images`);
+  // const invoices = form.watch("transportInvoices");
+
+  // console.log("invoices:", invoices);
+  // console.log(`Asset ${assetIndex + 1} images:`, images);
+
   // ---------------------------------------------------------------------------
   // Asset filters
   // ---------------------------------------------------------------------------
@@ -180,7 +186,8 @@ const TransferAssetFields = ({
       name: `assets.${assetIndex}.images`,
       multiple: true,
       label: "Upload Images",
-      className: "md:col-span-2",
+      className: "md:col-span-1",
+      placeholder: "",
     },
   ];
 

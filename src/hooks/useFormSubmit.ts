@@ -92,12 +92,19 @@ const extractRootFiles = <TForm extends object>(
   const values = formValues as TForm & {
     images?: File[];
     invoices?: File[];
+    transportInvoices?: File[];
+    assets?: { images?: File[] }[];
   };
 
-  return {
-    images: values.images ?? [],
-    invoices: values.invoices ?? [],
-  };
+  // Root-level images/invoices (existing forms) take priority when present.
+  const images =
+    values.images ??
+    values.assets?.flatMap((asset) => asset.images ?? []) ??
+    [];
+
+  const invoices = values.invoices ?? values.transportInvoices ?? [];
+
+  return { images, invoices };
 };
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
@@ -139,7 +146,7 @@ export const useFormSubmit = <TForm extends object, TPayload>({
   });
 
   const submit = async (formValues: TForm): Promise<void> => {
-    console.log("formvalues:", formValues);
+    // console.log("formvalues:", formValues);
 
     try {
       // ── 1. Extract files ──────────────────────────────────────────────────
@@ -152,6 +159,9 @@ export const useFormSubmit = <TForm extends object, TPayload>({
       const hasImages = rawFiles.length > 0;
       const hasInvoices = rawInvoices.length > 0;
 
+      // console.log("hasImages:", hasImages);
+      // console.log("hasInvoices:", hasInvoices);
+
       // ── 2. Compress images ────────────────────────────────────────────────
       //
       // Invoices are deliberately kept as the original files.
@@ -159,14 +169,18 @@ export const useFormSubmit = <TForm extends object, TPayload>({
         ? await compressImagesToWebpv1(rawFiles)
         : [];
 
+      // console.log("compressedFiles:", compressedFiles);
+
       // ── 3. Build the typed API payload ────────────────────────────────────
       //
       // buildPayload decides how the files are represented in the API payload.
       // The actual File objects are never sent to the backend.
       const payload = buildPayload(formValues, compressedFiles, rawInvoices);
+      console.log("payload:", payload);
 
       // ── 4. POST metadata to the API ───────────────────────────────────────
       const response = await mutateAsync(payload);
+      console.log("response-payload:", response);
 
       // ── 5. Upload files directly to S3 ───────────────────────────────────
       //
@@ -180,42 +194,45 @@ export const useFormSubmit = <TForm extends object, TPayload>({
         }
 
         await Promise.all(
-          presigned_urls.map((item: PresignedUrlResponse[number]) => {
+          presigned_urls.map(async (item: PresignedUrlResponse[number]) => {
             /*
              * Images use the compressed file.
              * Invoices use the original file.
              */
             const file =
-              compressedFiles.find((f) => f.name === item.filename) ??
-              rawInvoices.find((f) => f.name === item.filename);
+              item.type === "images"
+                ? compressedFiles.find((file) => file.name === item.filename)
+                : item.type === "invoices"
+                  ? rawInvoices.find((file) => file.name === item.filename)
+                  : undefined;
 
             if (!file) {
               throw new Error(`Could not find local file for ${item.filename}`);
             }
 
-            return fetch(item.url, {
+            const uploadResponse = await fetch(item.url, {
               method: "PUT",
               headers: {
                 "Content-Type": item.content_type,
               },
               body: file,
-            }).then(async (res) => {
-              if (!res.ok) {
-                const errorText = await res.text();
-
-                console.error("S3 upload failed:", {
-                  status: res.status,
-                  filename: item.filename,
-                  content_type: item.content_type,
-                  file_type: file.type,
-                  error: errorText,
-                });
-
-                throw new Error(`S3 upload failed for ${item.filename}`);
-              }
-
-              return res;
             });
+            console.log("file:", file);
+            console.log("uploadResponse:", uploadResponse);
+
+            if (!uploadResponse.ok) {
+              const errorBody = await uploadResponse.text().catch(() => "");
+              console.error("S3 upload failed:", {
+                status: uploadResponse.status,
+                filename: item.filename,
+                content_type: item.content_type,
+                file_type: file.type,
+                body: errorBody,
+              });
+              throw new Error(
+                `Failed to upload ${item.filename} to S3 (${uploadResponse.status})`,
+              );
+            }
           }),
         );
       }

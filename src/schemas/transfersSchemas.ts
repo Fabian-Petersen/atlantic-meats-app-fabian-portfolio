@@ -41,7 +41,6 @@ export const transferAssetBaseSchema = assetRequestSchema
       ])
       .optional(),
     assetIssueDetails: z.string().optional().default(""),
-    transportInvoices: z.array(z.instanceof(File)).default([]),
   });
 
 export const transferAssetSchema = transferAssetBaseSchema.superRefine(
@@ -71,7 +70,7 @@ export const transferAssetSchema = transferAssetBaseSchema.superRefine(
 export const transferRequestBaseSchema = z.object({
   locationFrom: z.string().min(1, { message: "Please select a location" }),
   locationTo: z.string().min(1, { message: "Please select a location" }),
-  description: z.string().optional(),
+  transportInvoices: z.array(z.instanceof(File)).optional().default([]),
   expectedDate: z
     .string()
     .min(1, { message: "Please enter expected date for transfer" }),
@@ -152,8 +151,8 @@ export const transferRequestSchema = transferRequestBaseSchema.superRefine(
 /**
  * File metadata sent to the backend.
  *
- * The actual File object is never included in the API request.
- * The backend uses this metadata to generate presigned S3 URLs.
+ * The actual File object is uploaded directly to S3.
+ * Only the metadata is included in the API payload.
  */
 export const transferFileMetadataSchema = z.object({
   filename: z.string(),
@@ -161,32 +160,41 @@ export const transferFileMetadataSchema = z.object({
 });
 
 /**
- * Asset payload sent to the backend when creating a transfer request.
+ * Individual asset payload.
  *
- * Images and transport invoices contain file metadata only.
- * The actual files are uploaded directly to S3 by the frontend
- * after receiving presigned URLs from the backend.
+ * This is the API representation of an asset.
+ * Unlike transferAssetSchema, `images` contains metadata
+ * instead of browser File objects.
  */
 export const transferAssetRequestPayloadSchema = transferAssetBaseSchema
   .omit({
     images: true,
-    transportInvoices: true,
   })
   .extend({
     images: z.array(transferFileMetadataSchema).default([]),
-    transportInvoices: z.array(transferFileMetadataSchema).default([]),
   });
 
 /**
- * Payload sent to the backend when creating a transfer request.
+ * Transfer request payload.
  *
- * This differs from TransferRequestFormValues because the form
- * contains browser File objects while the API receives only
- * file metadata.
+ * `transportInvoices` belongs to the transfer itself because
+ * one invoice can cover the movement of all assets.
  */
-export const transferRequestPayloadSchema = transferRequestBaseSchema.extend({
-  assets: z.array(transferAssetRequestPayloadSchema),
-});
+export const transferRequestPayloadSchema = transferRequestBaseSchema
+  .omit({
+    transportInvoices: true,
+    assets: true,
+  })
+  .extend({
+    transportInvoices: z
+      .array(transferFileMetadataSchema)
+      .optional()
+      .default([]),
+
+    assets: z.array(transferAssetRequestPayloadSchema).min(1, {
+      message: "Please add at least one asset to the transfer",
+    }),
+  });
 
 // $ ─── Transfer Asset Response ────────────────────────────────────────────────────────
 
@@ -205,7 +213,7 @@ export const transferRequestResponseSchema = transferRequestBaseSchema.extend({
   requestor_email: z.email(),
   requestor_sub: z.string(),
   schedule_name: z.string(),
-  images: z.array(presignedURLSchema).default([]),
+  // images: z.array(presignedURLSchema).default([]),
 });
 
 /* -------------------------------------------------------------------------- */
@@ -371,10 +379,9 @@ export const transferRejectedResponseSchema = z.object({
 
 export const transferWorkflowResponseSchema = z.object({
   id: z.string(),
-  assetID: z.string(),
+  assets: z.array(transferAssetResponseSchema),
   transferCreated: z.string(),
   status: transferStatusSchema.shape.status,
-  equipment: z.string(),
 
   pending: transferRequestResponseSchema.nullable(),
   approved: transferApprovalResponseSchema.nullable(),
@@ -394,26 +401,19 @@ export const transferWorkflowResponseSchema = z.object({
 export const pendingTableRowSchema = transferWorkflowResponseSchema
   .pick({
     id: true,
-    assetID: true,
     transferCreated: true,
     status: true,
-    equipment: true,
   })
-  .extend(transferRequestResponseSchema.shape)
-  .omit({
-    images: true,
-  });
+  .extend(transferRequestResponseSchema.shape);
 
 export const transitTableRowSchema = transferWorkflowResponseSchema
   .pick({
     id: true,
-    assetID: true,
+    assets: true,
     status: true,
-    equipment: true,
   })
   .extend(transferInTransitResponseSchema.shape)
   .omit({
-    images: true,
     transportInvoices: true,
   });
 

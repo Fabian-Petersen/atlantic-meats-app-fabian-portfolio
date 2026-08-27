@@ -216,6 +216,7 @@ export type {
 export type GlobalData = JobRequestFormValues | AssetRequestFormValues;
 
 export type PresignedUrlResponse = {
+  type: "images" | "invoices";
   filename: string;
   url: string;
   key: string;
