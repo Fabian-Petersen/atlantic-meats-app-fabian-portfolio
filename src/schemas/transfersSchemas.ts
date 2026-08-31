@@ -287,7 +287,7 @@ export const transferInTransitResponseSchema = transferInTransitBaseSchema
   })
   .extend({
     transitId: z.string(), // Backend-generated transit record ID
-    dateCreated: z.string(), // Backend-generated timestamp
+    dateTransitCreated: z.string(), // Backend-generated timestamp
     inTransitSub: z.string(), // Cognito user who marked the transfer in transit
     inTransitBy: z.string(), // Cognito user name who made the transfer in transit
     images: z.array(presignedURLSchema).default([]),

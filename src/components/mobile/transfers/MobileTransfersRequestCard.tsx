@@ -19,6 +19,8 @@ import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { motionVariants } from "@/styles/motionStyles";
+import { DropdownMenuButtonDialog } from "@/components/modals/DropdownMenuButtonDialog";
+import { getTableMenuItems } from "@/lib/getTableMenuItems";
 
 type MobileTransferRequestCardProps = {
   row: Row<TransferPendingTableRow>;
@@ -33,11 +35,39 @@ function MobileTransferRequestCard({
 }: MobileTransferRequestCardProps) {
   const item = row.original;
   const navigate = useNavigate();
-  const { setSelectedRowId } = useGlobalContext();
+  const { setSelectedRowId, setShowUpdateAssetDialog } = useGlobalContext();
 
-  const isPending = item.status === "pending";
+  const rowId = item.id;
+  const isStatusPending = item.status === "pending";
   const hasAsset = item.assets?.length > 0;
   // const hasMultipleAssets = item.assets?.length > 1;
+
+  const menuItems = getTableMenuItems({
+    rowId: item.id,
+    status: item.status,
+    setSelectedRowId,
+    transit: {
+      url: `api/transfers/${rowId}/in-transit`,
+      onOpen: () => {
+        setSelectedRowId(rowId);
+        navigate(`/transfers/${rowId}/in-transit`);
+      },
+    },
+    edit: {
+      url: `api/transfers/${rowId}`,
+      onOpen: () => {
+        setShowUpdateAssetDialog(true);
+        setSelectedRowId(rowId);
+      },
+    },
+    view: {
+      url: `api/transfers/${rowId}`,
+      onOpen: () => {
+        setSelectedRowId(rowId);
+        navigate(`/transfers/${rowId}`);
+      },
+    },
+  });
 
   const handleReview = () => {
     setSelectedRowId(item.id);
@@ -80,13 +110,35 @@ function MobileTransferRequestCard({
             styleMap={badgeStyles.families.transfer_status}
             className={cn("capitalize")}
           />
+          <div onClick={(e) => e.stopPropagation()}>
+            <DropdownMenuButtonDialog menuItems={menuItems} />
+          </div>
+          <button
+            type="button"
+            onClick={onToggle}
+            aria-label={isOpen ? "Collapse" : "Expand"}
+          >
+            <ChevronDown
+              className={cn(
+                "w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200",
+                isOpen && "rotate-180",
+              )}
+            />
+          </button>
+        </div>
+        {/* <div className="flex items-center gap-2 shrink-0">
+          <Badge
+            value={item.status}
+            styleMap={badgeStyles.families.transfer_status}
+            className={cn("capitalize")}
+          />
           <ChevronDown
             className={cn(
               "w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200",
               isOpen && "rotate-180",
             )}
           />
-        </div>
+        </div> */}
       </button>
 
       {/* ── Expanded details ── */}
@@ -149,7 +201,7 @@ function MobileTransferRequestCard({
                 </div>
               )}
 
-              {isPending && (
+              {isStatusPending && (
                 <button
                   type="button"
                   onClick={handleReview}

@@ -41,7 +41,7 @@ function MobileTransferTransitCard({
   const item = row.original;
   const navigate = useNavigate();
 
-  //   console.log("itemTransit:", item);
+  console.log("itemTransit:", item);
   const rowId = item.id;
 
   const menuItems = getTableMenuItems({
@@ -156,7 +156,7 @@ function MobileTransferTransitCard({
                 icon={Calendar}
                 label="Date created"
                 value={new Date(
-                  item["in-transit"]?.dateCreated ?? "",
+                  item["in-transit"]?.dateTransitCreated ?? "",
                 ).toLocaleString("en-GB", {
                   day: "2-digit",
                   month: "2-digit",
