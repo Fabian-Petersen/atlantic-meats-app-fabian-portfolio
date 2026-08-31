@@ -15,15 +15,6 @@ import type { AssetItem } from "@/schemas/transfersSchemas";
 export function AssetsDropdownCell({ assets }: { assets: AssetItem[] }) {
   if (assets.length === 0) return <p>—</p>;
 
-  if (assets.length === 1) {
-    const { equipment, assetID } = assets[0];
-    return (
-      <p className="capitalize">
-        {equipment} <span className="text-muted-foreground">({assetID})</span>
-      </p>
-    );
-  }
-
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -33,7 +24,9 @@ export function AssetsDropdownCell({ assets }: { assets: AssetItem[] }) {
           onClick={(e) => e.stopPropagation()}
           className="text-cxs capitalize hover:cursor-pointer"
         >
-          {assets.length} assets
+          {assets.length > 1
+            ? `${assets.length} assets`
+            : `${assets.length} asset`}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
