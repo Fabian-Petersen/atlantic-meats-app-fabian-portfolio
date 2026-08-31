@@ -28,7 +28,7 @@ import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
 import { getInProgressColumns } from "@/components/tableColumns/InProgressColumns";
 
 // $ ———————— Components ————————————————————————————————————————————————————————————————
-import { TableGeneric } from "@/components/features/TableGeneric";
+import { TableGeneric } from "@/components/features/tables/TableGeneric";
 import { SearchInput } from "@/components/features/SearchInput";
 import { MobileJobsInProgressContainer } from "@/components/mobile/MobileJobsInProgressContainer";
 import FormHeading from "@/../customComponents/FormHeading";

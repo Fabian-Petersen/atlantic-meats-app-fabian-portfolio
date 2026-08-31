@@ -69,7 +69,7 @@ function TransferItemDetails({ item }: Props) {
   const cancelled = item.cancelled;
 
   // A transfer request can bundle multiple assets — pick the one currently selected
-  const assets = request?.assets ?? [];
+  const assets = item?.assets ?? [];
   const currentAsset = assets[selectedAssetIndex] ?? assets[0];
 
   // NOTE: the API always sends `"in-transit": { images: [] }` and

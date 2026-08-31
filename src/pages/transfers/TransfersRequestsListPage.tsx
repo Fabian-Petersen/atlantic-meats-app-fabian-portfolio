@@ -26,7 +26,7 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Error } from "@/components/features/Error";
 import { type TransferWorkflowResponse } from "@/schemas";
-import { TableGeneric } from "@/components/features/TableGeneric";
+import { TableGeneric } from "@/components/features/tables/TableGeneric";
 // import { getJobPendingColumns } from "@/components/tableColumns/PendingColumns";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { SearchInput } from "@/components/features/SearchInput";

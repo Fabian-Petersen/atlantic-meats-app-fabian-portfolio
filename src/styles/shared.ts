@@ -16,7 +16,7 @@ export const sharedStyles = {
     "dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) md:dark:border-gray-700/50 md:dark:border",
   ),
   pageMobile: cn(
-    "flex flex-col gap-4 px-4 py-1 md:py-8 min-h-[calc(100vh-var(--sm-navbarHeight))] md:h-[calc(100vh-var(--lg-navbarHeight))]",
+    "flex flex-col gap-4 px-1 py-2 md:hidden md:py-8 min-h-[calc(100vh-var(--sm-navbarHeight))] md:h-[calc(100vh-var(--lg-navbarHeight))]",
   ),
 
   /* //$ ——— Dashboards ————————————————————————————————————————————————————————— */

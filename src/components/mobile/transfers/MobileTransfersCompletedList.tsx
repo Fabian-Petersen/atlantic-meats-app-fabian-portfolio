@@ -8,12 +8,14 @@ import { useState } from "react";
 type MobileTransferCompletedListProps = {
   data: Row<TransferWorkflowResponse>[];
   setSelectedRowId: (id: string) => void;
+  selectedRowId: string;
   className?: string;
 };
 
 function MobileTransferCompletedList({
   data,
   setSelectedRowId,
+  selectedRowId,
   className,
 }: MobileTransferCompletedListProps) {
   const [openRowId, setOpenRowId] = useState<string | null>(null);
@@ -26,6 +28,7 @@ function MobileTransferCompletedList({
           isOpen={openRowId === row.id}
           onToggle={() => setOpenRowId(openRowId === row.id ? null : row.id)}
           setSelectedRowId={setSelectedRowId}
+          selectedRowId={selectedRowId}
         />
       ))}
     </div>

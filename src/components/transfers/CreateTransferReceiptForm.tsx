@@ -69,7 +69,7 @@ const CreateTransferForm = ({ data }: Props) => {
     onSuccess: () => {
       setSuccessConfig({
         title: "Success",
-        message: `The asset with ID ${data?.assetID} was successfully received at destination ${data?.pending?.locationTo}.`,
+        message: `The assets starting with ID ${data?.assets[0]?.assetID} was successfully received at destination ${data?.pending?.locationTo}.`,
         redirectPath: "transfers/in-transit",
       });
       setShowSuccess(true);

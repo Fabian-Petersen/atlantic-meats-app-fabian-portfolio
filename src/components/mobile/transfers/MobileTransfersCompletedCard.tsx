@@ -20,12 +20,15 @@ import { badgeStyles } from "@/styles/badgeStyles";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 import { motionVariants } from "@/styles/motionStyles";
+import { useState } from "react";
+import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 
 type MobileTransferTransitCardProps = {
   row: Row<TransferWorkflowResponse>;
   isOpen: boolean;
   onToggle: () => void;
   setSelectedRowId: (id: string) => void;
+  selectedRowId: string;
 };
 
 function MobileTransfersCompletedCard({
@@ -33,9 +36,30 @@ function MobileTransfersCompletedCard({
   isOpen,
   onToggle,
   setSelectedRowId,
+  selectedRowId,
 }: MobileTransferTransitCardProps) {
   const item = row.original;
   const navigate = useNavigate();
+
+  // Which asset (of possibly many) in this transfer is currently being viewed/approved
+  const [selectedAssetIndex, setSelectedAssetIndex] = useState(0);
+
+  // Jump back to the first asset whenever a different transfer request is opened.
+  // Adjusted during render (not in an effect) per React's guidance on resetting
+  // state when a prop changes — see https://react.dev/learn/you-might-not-need-an-effect
+  const [prevRowId, setPrevRowId] = useState(selectedRowId);
+  if (selectedRowId !== prevRowId) {
+    setPrevRowId(selectedRowId);
+    setSelectedAssetIndex(0);
+  }
+
+  if (!selectedRowId || !item) {
+    return <PageLoadingSpinner />;
+  }
+
+  const assets = item?.assets ?? [];
+  const selectedAsset = assets[selectedAssetIndex] ?? assets[0];
+  // const images = selectedAsset?.images ?? [];
 
   //   console.log("itemTransit:", item);
   const rowId = item.id;
@@ -85,11 +109,11 @@ function MobileTransfersCompletedCard({
           <div className="flex flex-col flex-1 min-w-0 gap-1">
             <CardRow
               className="py-0"
-              value={item.equipment}
+              value={selectedAsset?.equipment}
               valueStyles="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize truncate"
             />
             <CardRow
-              value={item.assetID}
+              value={selectedAsset?.assetID}
               icon={Barcode}
               className="capitalize dark:text-(--clr-textDark) text-(--clr-textLight) py-0"
               valueStyles="text-xs text-gray-400 dark:text-gray-400"

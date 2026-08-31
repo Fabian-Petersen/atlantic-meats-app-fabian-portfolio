@@ -6,7 +6,6 @@ import {
   ArrowRight,
   Calendar,
   User,
-  FileText,
   MessageSquare,
   Barcode,
   Hammer,
@@ -61,14 +60,14 @@ function MobileTransferRequestCard({
       >
         <div className="flex flex-col flex-1 min-w-0 gap-1">
           <CardRow
-            value={item.equipment}
+            value={item?.assets[0]?.equipment}
             icon={Hammer}
             className="capitalize text-(--clr-textLight) py-0"
             valueStyles="text-md font-semibold dark:text-white/90"
             iconStyles="w-3.5 h-3.5 text-purple-500 dark:text-purple-400"
           />
           <CardRow
-            value={item.assetID}
+            value={item?.assets[0]?.assetID}
             icon={Barcode}
             className="capitalize dark:text-(--clr-textDark) text-(--clr-textLight) py-0"
             valueStyles="text-xs text-gray-400 dark:text-gray-400 font-mono"
@@ -106,42 +105,32 @@ function MobileTransferRequestCard({
             exit="closed"
             className="overflow-hidden"
           >
-            <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700/60 flex flex-col gap-2">
+            <div className="mt-3 pt-3 border-t border-gray-300/80 dark:border-gray-700/60 flex flex-col gap-2 divide-y divide-gray-300/80 dark:divide-gray-700/60">
               <CardRow
                 icon={User}
                 label="Requested by"
                 value={item.requestor_name || item.requested_by}
+                className="py-3"
               />
               <CardRow
                 icon={Calendar}
                 label="Requested on"
                 value={item.transferCreated}
+                className="py-3 divide-gray-300/80 dark:divide-gray-700/60"
               />
               <CardRow
                 icon={Calendar}
                 label="Expected date"
                 value={item.expectedDate}
+                className="py-3"
               />
-
-              {item.description && (
-                <div className="flex flex-col gap-1 mt-1">
-                  <div className="flex items-center gap-1.5 text-gray-400 dark:text-gray-500">
-                    <FileText className="w-3.5 h-3.5" />
-                    <span className="text-xs">Description</span>
-                  </div>
-                  <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed pl-5">
-                    {item.description}
-                  </p>
-                </div>
-              )}
-
               {item.transferReason && (
-                <div className="flex flex-col gap-1 mt-1">
+                <div className="flex flex-col gap-1 mt-1 pb-3">
                   <div className="flex items-center gap-1.5 text-gray-400 dark:text-gray-500">
                     <MessageSquare className="w-3.5 h-3.5" />
                     <span className="text-xs">Reason</span>
                   </div>
-                  <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed pl-5">
+                  <p className="text-xs text-gray-800 dark:text-gray-200 leading-relaxed pl-5">
                     {item.transferReason}
                   </p>
                 </div>

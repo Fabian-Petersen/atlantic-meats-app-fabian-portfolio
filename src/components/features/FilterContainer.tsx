@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { ColumnFilterItem } from "./ColumnFilterItem";
+import { ColumnFilterItem } from "./tables/ColumnFilterItem";
 import { type Table } from "@tanstack/react-table";
 
 type Props<T extends Record<string, unknown>> = {

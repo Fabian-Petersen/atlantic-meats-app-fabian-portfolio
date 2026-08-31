@@ -50,10 +50,15 @@ const CreateTransferForm = ({ data }: Props) => {
     resourcePath: "api/transfers",
     queryKey: ["transfers", "create-transfer"],
     action: "in-transit",
-    buildPayload: (values, compressed) => ({
+
+    buildPayload: (values, compressedFiles, invoices) => ({
       status: "in-transit",
       ...values,
-      images: compressed.map((f) => ({
+      images: compressedFiles.map((f) => ({
+        filename: f.name,
+        content_type: f.type,
+      })),
+      transportInvoices: invoices.map((f) => ({
         filename: f.name,
         content_type: f.type,
       })),
@@ -61,7 +66,7 @@ const CreateTransferForm = ({ data }: Props) => {
     onSuccess: () => {
       setSuccessConfig({
         title: "Success",
-        message: `The asset: ${data?.assetID} transit request successfully placed.`,
+        message: `The assets with starting ID ${data?.assets[0]?.assetID} transit request successfully placed.`,
         redirectPath: "transfers/in-transit",
       });
       setShowSuccess(true);

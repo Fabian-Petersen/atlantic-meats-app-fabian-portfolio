@@ -74,12 +74,14 @@ function MobileTransfersItemDetails({ item }: Props) {
 
   const isDamaged = completed?.receiptCondition.toLowerCase() === "damaged";
 
+  // Update this to toggle bewteen assets (selectedAsset by state)
+  const assets = item?.assets ?? [];
   const activeImages =
     activeTab === "in-transit"
       ? (inTransit?.images ?? [])
       : activeTab === "completed"
         ? (completed?.receiptImages ?? [])
-        : (request?.images ?? []);
+        : (assets[0]?.images ?? []);
 
   return (
     <div
@@ -102,7 +104,7 @@ function MobileTransfersItemDetails({ item }: Props) {
             Back
           </button>
           <p className="text-[11px] uppercase tracking-widest text-gray-400 dark:text-gray-500 font-medium select-none">
-            Transfer · {item.assetID ?? "—"}
+            Transfer · {item?.assets[0]?.assetID ?? "—"}
           </p>
           <button
             type="button"
@@ -117,10 +119,10 @@ function MobileTransfersItemDetails({ item }: Props) {
           </button>
         </div>
         <h1 className="text-lg font-semibold capitalize leading-tight text-(--clr-textLight) dark:text-(--clr-textDark)">
-          {request?.assets[0]?.equipment}
+          {item?.assets[0]?.equipment}
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Asset ID: {item.assetID ?? "—"}
+          Asset ID: {item?.assets[0]?.assetID ?? "—"}
         </p>
       </div>
 
@@ -226,9 +228,9 @@ function MobileTransfersItemDetails({ item }: Props) {
 
             <div className="flex flex-col gap-3">
               <SectionTitle>Transfer details</SectionTitle>
-              <Field label="Asset ID" value={item.assetID} />
-              <Field label="Equipment" value={request?.assets[0]?.equipment} />
-              <Field label="Area" value={request?.assets[0]?.area} />
+              <Field label="Asset ID" value={item?.assets[0]?.assetID} />
+              <Field label="Equipment" value={item?.assets[0]?.equipment} />
+              <Field label="Area" value={item?.assets[0]?.area} />
               <Field label="From" value={request?.locationFrom} />
               <Field label="To" value={request?.locationTo} />
               <Field label="Expected date" value={request?.expectedDate} />
@@ -255,14 +257,6 @@ function MobileTransfersItemDetails({ item }: Props) {
 
             <SectionTitle>Reason for transfer</SectionTitle>
             <DescriptionBox>{request?.transferReason}</DescriptionBox>
-
-            {request?.description && (
-              <>
-                <Separator width="100%" className="my-1" />
-                <SectionTitle>Description</SectionTitle>
-                <DescriptionBox>{request.description}</DescriptionBox>
-              </>
-            )}
           </div>
         )}
 

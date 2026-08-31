@@ -18,7 +18,7 @@ import { useMemo, useState } from "react";
 import { Error } from "@/components/features/Error";
 import type { UsersAPIResponse } from "@/schemas";
 
-import { TableGeneric } from "@/components/features/TableGeneric";
+import { TableGeneric } from "@/components/features/tables/TableGeneric";
 import FormHeading from "@/../customComponents/FormHeading";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { SearchInput } from "@/components/features/SearchInput";

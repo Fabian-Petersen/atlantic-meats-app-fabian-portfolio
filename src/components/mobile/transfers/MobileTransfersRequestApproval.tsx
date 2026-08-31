@@ -110,7 +110,7 @@ export default function MobileTransferRequestApproval({
   }
 
   return (
-    <div className={cn(sharedStyles.cardParent)}>
+    <div className={cn(sharedStyles.cardParent, "")}>
       {/* ── Sticky top bar ── */}
       <div className={cn(sharedStyles.cardTopBar)}>
         <button
@@ -154,14 +154,14 @@ export default function MobileTransferRequestApproval({
                   type="button"
                   onClick={() => onSelectAsset(index)}
                   className={cn(
-                    "shrink-0 rounded-md border p-1.5 text-[0.75rem] font-medium capitalize transition-colors",
+                    "shrink-0 rounded-md border p-1.5 text-[0.75rem] font-medium capitalize transition-all",
                     index === selectedAssetIndex
-                      ? "border-green-500 bg-green-400/10 text-green-400"
+                      ? "border-green-400 bg-green-400/10 text-green-600"
                       : "border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400",
                   )}
                 >
                   {/* {asset.equipment} · {asset.assetID} */}
-                  {`Asset ${index + 1} · ${asset.assetID}`}
+                  {`Asset ${index + 1} · ${asset?.assetID || "No ID"}`}
                 </button>
               ))}
             </div>
@@ -201,39 +201,33 @@ export default function MobileTransferRequestApproval({
             icon={User}
             label="Requested by"
             value={item?.pending?.requestor_name || item?.pending?.requested_by}
+            className={cn("py-3")}
           />
-          <CardRow icon={MapPin} label="Area" value={currentAsset.area} />
+          <CardRow
+            icon={MapPin}
+            label="Area"
+            value={currentAsset.area}
+            className={cn("py-3")}
+          />
           <CardRow
             icon={MapPin}
             label="From"
             value={item?.pending?.locationFrom}
+            className={cn("py-3")}
           />
           <CardRow
             icon={ArrowRight}
             label="To"
             value={item?.pending?.locationTo}
+            className={cn("py-3")}
           />
           <CardRow
             icon={Calendar}
             label="Expected date"
             value={item?.pending?.expectedDate}
+            className={cn("py-3")}
           />
         </div>
-
-        {/* Description card */}
-        {/* {item?.pending?.description && (
-          <div className={cn(sharedStyles.cardRowParent)}>
-            <div className="flex items-center gap-2 mb-2">
-              <FileText className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-              <p className="text-xs text-gray-400 dark:text-gray-500">
-                Description
-              </p>
-            </div>
-            <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
-              {item?.pending?.description}
-            </p>
-          </div>
-        )} */}
 
         {/* Reason card */}
         {item?.pending?.transferReason && (
@@ -242,7 +236,7 @@ export default function MobileTransferRequestApproval({
               <MessageSquare className="w-4 h-4 text-gray-400 dark:text-gray-500" />
               <p className="text-xs text-gray-400 dark:text-gray-500">Reason</p>
             </div>
-            <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
+            <p className="text-xs text-gray-800 dark:text-gray-200 leading-relaxed">
               {item?.pending?.transferReason}
             </p>
           </div>

@@ -16,8 +16,6 @@ const CreateTransferTransitPage = () => {
     queryKey: ["transfer", id],
   });
 
-  console.log("transferItemPage:", data);
-
   return (
     <div className={cn(sharedStyles.pageContainer)}>
       <div className={cn(sharedStyles.pageContent)}>

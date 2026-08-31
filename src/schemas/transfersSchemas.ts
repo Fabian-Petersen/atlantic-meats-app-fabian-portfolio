@@ -206,15 +206,16 @@ export const transferAssetResponseSchema = transferAssetBaseSchema
     images: z.array(presignedURLSchema).default([]),
   });
 
-export const transferRequestResponseSchema = transferRequestBaseSchema.extend({
-  assets: z.array(transferAssetResponseSchema),
-  requested_by: z.string(),
-  requestor_name: z.string(),
-  requestor_email: z.email(),
-  requestor_sub: z.string(),
-  schedule_name: z.string(),
-  // images: z.array(presignedURLSchema).default([]),
-});
+export const transferRequestResponseSchema = transferRequestBaseSchema
+  .omit({ assets: true })
+  .extend({
+    requested_by: z.string(),
+    requestor_name: z.string(),
+    requestor_email: z.email(),
+    requestor_sub: z.string(),
+    schedule_name: z.string(),
+    // images: z.array(presignedURLSchema).default([]),
+  });
 
 /* -------------------------------------------------------------------------- */
 /*                                   APPROVAL                                 */
@@ -403,6 +404,7 @@ export const pendingTableRowSchema = transferWorkflowResponseSchema
     id: true,
     transferCreated: true,
     status: true,
+    assets: true,
   })
   .extend(transferRequestResponseSchema.shape);
 
@@ -448,10 +450,11 @@ export type TransferInTransitRequestValues = z.infer<
  */
 export type TransferInTransitRequestPayload = Omit<
   TransferInTransitRequestValues,
-  "images"
+  "images" | "transportInvoices"
 > & {
   status: "in-transit";
   images: { filename: string; content_type: string }[];
+  transportInvoices: { filename: string; content_type: string }[];
 };
 
 export type TransferInTransitResponse = z.infer<
@@ -480,6 +483,12 @@ export type TransferReceiptRequestPayload = z.infer<
 
 // export type TransferTransitTableRow = z.infer<typeof transitTableRowSchema>;
 export type TransferPendingTableRow = z.infer<typeof pendingTableRowSchema>;
+// Grabs the array element type from the existing `assets` field,
+// then narrows to just the two fields the dropdown cell needs.
+export type AssetItem = Pick<
+  TransferPendingTableRow["assets"][number],
+  "equipment" | "assetID"
+>;
 export type TransferTransitTableRow = z.infer<typeof transitTableRowSchema>;
 
 export type TransferWorkflowResponse = z.infer<

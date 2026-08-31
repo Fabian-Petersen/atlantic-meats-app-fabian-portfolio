@@ -17,14 +17,14 @@ import {
 } from "@tanstack/react-table";
 
 import FormHeading from "@/../customComponents/FormHeading";
-import AddNewItemButton from "./AddNewItemButton";
-import { SearchInput } from "./SearchInput";
-import EmptyTablePlaceholder from "./EmptyTablePlaceholder";
+import AddNewItemButton from "../AddNewItemButton";
+import { SearchInput } from "../SearchInput";
+import EmptyTablePlaceholder from "../EmptyTablePlaceholder";
 import TablePaginationControls from "./TablePaginationControls";
 import TablePageSizeSelector from "./TablePageSizeSelector";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
-import FilterContainer from "./FilterContainer";
+import FilterContainer from "../FilterContainer";
 
 type Props<T extends { id: string }> = {
   data: T[];

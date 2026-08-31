@@ -5,10 +5,10 @@ import type { TransferPendingTableRow } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { NavigateFunction } from "react-router-dom";
+import { AssetsDropdownCell } from "../features/tables/AssetsDropdownCell";
+import type { AssetItem } from "@/schemas/transfersSchemas";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-type EquipmentCondition = "operational" | "new" | "poor" | "broken";
+type TransferStatus = "pending" | "approved" | "rejected" | "cancelled";
 
 import type { Resource } from "@/utils/api";
 import { Badge } from "../features/Badge";
@@ -52,24 +52,25 @@ export const getTransferColumns = (
     },
   },
   {
-    accessorKey: "area",
-    header: "Area",
+    accessorKey: "assets",
+    header: "Equipment / Asset ID",
     cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
+      const assets = getValue<AssetItem[]>() ?? [];
+
+      if (assets.length === 0) return <p>—</p>;
+
+      if (assets.length === 1) {
+        const { equipment, assetID } = assets[0];
+        return (
+          <p className="capitalize">
+            {equipment}{" "}
+            <span className="text-muted-foreground">({assetID})</span>
+          </p>
+        );
+      }
+
+      return <AssetsDropdownCell assets={assets} />;
     },
-  },
-  {
-    accessorKey: "equipment",
-    header: "Equipment",
-    enableColumnFilter: true,
-  },
-  {
-    accessorKey: "assetID",
-    header: "Asset ID",
-    size: 120,
-    minSize: 100,
-    maxSize: 140,
   },
   {
     accessorKey: "requested_by",
@@ -100,7 +101,7 @@ export const getTransferColumns = (
       const value = getValue<string>();
       return (
         <Badge
-          value={value as EquipmentCondition}
+          value={value as TransferStatus}
           styleMap={badgeStyles.families.transfer_status}
           className="capitalize"
         />

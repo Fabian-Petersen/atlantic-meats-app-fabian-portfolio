@@ -23,7 +23,7 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { useMemo, useState } from "react";
 import type { TransferWorkflowResponse } from "@/schemas";
 // import { Error } from "@/components/features/Error";
-import { TableGeneric } from "@/components/features/TableGeneric";
+import { TableGeneric } from "@/components/features/tables/TableGeneric";
 import { SearchInput } from "@/components/features/SearchInput";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { cn } from "@/lib/utils";
@@ -71,8 +71,12 @@ const TransferCompleteListPage = () => {
     pageSize: 10, // 👈 this controls "10 items per page"
   });
 
-  const { setShowUpdateAssetDialog, setSelectedRowId, openDeleteDialog } =
-    useGlobalContext();
+  const {
+    setShowUpdateAssetDialog,
+    setSelectedRowId,
+    selectedRowId,
+    openDeleteDialog,
+  } = useGlobalContext();
 
   /* -------------------------------------------------------------------------- */
   /*                                   COLUMNS                                  */
@@ -155,6 +159,7 @@ const TransferCompleteListPage = () => {
               className="flex lg:hidden"
               data={table.getRowModel().rows}
               setSelectedRowId={setSelectedRowId}
+              selectedRowId={selectedRowId ?? ""}
             />
           </div>
         )}

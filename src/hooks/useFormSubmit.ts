@@ -176,11 +176,11 @@ export const useFormSubmit = <TForm extends object, TPayload>({
       // buildPayload decides how the files are represented in the API payload.
       // The actual File objects are never sent to the backend.
       const payload = buildPayload(formValues, compressedFiles, rawInvoices);
-      console.log("payload:", payload);
+      // console.log("payload:", payload);
 
       // ── 4. POST metadata to the API ───────────────────────────────────────
       const response = await mutateAsync(payload);
-      console.log("response-payload:", response);
+      // console.log("response-payload:", response);
 
       // ── 5. Upload files directly to S3 ───────────────────────────────────
       //
@@ -202,7 +202,7 @@ export const useFormSubmit = <TForm extends object, TPayload>({
             const file =
               item.type === "images"
                 ? compressedFiles.find((file) => file.name === item.filename)
-                : item.type === "invoices"
+                : item.type === "invoices" || item.type === "transportInvoices"
                   ? rawInvoices.find((file) => file.name === item.filename)
                   : undefined;
 
@@ -217,8 +217,9 @@ export const useFormSubmit = <TForm extends object, TPayload>({
               },
               body: file,
             });
-            console.log("file:", file);
-            console.log("uploadResponse:", uploadResponse);
+            // console.log("presignedURLS:", presigned_urls);
+            // console.log("file:", file);
+            // console.log("uploadResponse:", uploadResponse);
 
             if (!uploadResponse.ok) {
               const errorBody = await uploadResponse.text().catch(() => "");

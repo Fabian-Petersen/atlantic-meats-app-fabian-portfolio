@@ -96,10 +96,10 @@ function MobileTransferTransitCard({
         >
           <div className="flex flex-col min-w-0">
             <span className="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize truncate">
-              {item.equipment}
+              {item?.assets[0]?.equipment}
             </span>
             <span className="text-xs text-gray-400 dark:text-gray-500 font-mono">
-              {item.assetID}
+              {item?.assets[0]?.assetID}
             </span>
           </div>
         </button>

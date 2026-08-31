@@ -13,7 +13,7 @@ import useGlobalContext from "@/context/useGlobalContext";
 import type { ActionAPIResponse } from "@/schemas";
 import { Error } from "@/components/features/Error";
 // import type { ActionTableRow } from "@/schemas/actionSchemas";
-import { TableGeneric } from "@/components/features/TableGeneric";
+import { TableGeneric } from "@/components/features/tables/TableGeneric";
 import FormHeading from "@/../customComponents/FormHeading";
 import { getJobCompletedColumns } from "@/components/tableColumns/CompletedColumns";
 import { cn } from "@/lib/utils";

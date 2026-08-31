@@ -18,7 +18,7 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { useState } from "react";
 import { Error } from "@/components/features/Error";
 import type { JobAPIResponse } from "@/schemas";
-import { TableGeneric } from "@/components/features/TableGeneric";
+import { TableGeneric } from "@/components/features/tables/TableGeneric";
 import { getJobPendingColumns } from "@/components/tableColumns/PendingColumns";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { SearchInput } from "@/components/features/SearchInput";

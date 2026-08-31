@@ -86,7 +86,7 @@ const TransferAssetFields = ({
     hasVerifiedAssets,
     allowUnidentifiedAsset,
 
-    isPending,
+    // isPending,
     isError,
 
     isLocationsLoading,
@@ -267,11 +267,11 @@ const TransferAssetFields = ({
               </p>
             )}
 
-            {isPending && (
+            {/* {isPending && (
               <p className="mt-3 text-sm text-muted-foreground">
                 Loading asset options...
               </p>
-            )}
+            )} */}
           </motion.div>
         )}
       </AnimatePresence>

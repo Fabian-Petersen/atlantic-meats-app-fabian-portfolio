@@ -7,6 +7,8 @@ import { ChevronDown } from "lucide-react";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { Badge } from "../features/Badge";
 import type { NavigateFunction } from "react-router-dom";
+import { AssetsDropdownCell } from "../features/tables/AssetsDropdownCell";
+import type { AssetItem } from "@/schemas/transfersSchemas";
 
 export const getTransferRequestsColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
@@ -67,24 +69,11 @@ export const getTransferRequestsColumns = (
     },
   },
   {
-    accessorKey: "area",
-    header: "Area",
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-  },
-  {
-    accessorKey: "equipment",
-    header: "Equipment",
-    enableColumnFilter: true,
-  },
-  {
-    accessorKey: "assetID",
-    header: "Asset ID",
-    size: 120,
-    minSize: 100,
-    maxSize: 140,
+    accessorKey: "assets",
+    header: "Equipment | Asset ID",
+    cell: ({ getValue }) => (
+      <AssetsDropdownCell assets={getValue<AssetItem[]>()} />
+    ),
   },
   {
     accessorKey: "expectedDate",
