@@ -69,7 +69,7 @@ function MobileTransfersItemDetails({ item }: Props) {
   // `"completed": { images: [] }` placeholders even when that stage hasn't
   // happened yet, so `!!inTransit` / `!!completed` are always true. Check a
   // field that only exists once the stage has actually occurred instead.
-  const hasInTransitData = !!inTransit?.dateCreated;
+  const hasInTransitData = !!inTransit?.dateTransitCreated;
   const hasReceivedData = !!completed?.receiptDate;
 
   const isDamaged = completed?.receiptCondition.toLowerCase() === "damaged";
@@ -271,7 +271,7 @@ function MobileTransfersItemDetails({ item }: Props) {
                   <SectionTitle>Marked in transit by</SectionTitle>
                   <PersonRow
                     name={inTransit.inTransitBy}
-                    sub={formatDateTime(inTransit.dateCreated) ?? ""}
+                    sub={formatDateTime(inTransit.dateTransitCreated) ?? ""}
                   />
                 </div>
 

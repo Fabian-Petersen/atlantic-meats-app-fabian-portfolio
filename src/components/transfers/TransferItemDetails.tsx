@@ -76,7 +76,7 @@ function TransferItemDetails({ item }: Props) {
   // `"completed": { images: [] }` placeholders even when that stage hasn't
   // happened yet, so `!!inTransit` / `!!completed` are always true. Check a
   // field that only exists once the stage has actually occurred instead.
-  const hasInTransitData = !!inTransit?.dateCreated;
+  const hasInTransitData = !!inTransit?.dateTransitCreated;
   const hasReceivedData = !!completed?.receiptDate;
 
   // Tabs are always shown (keeps the nav layout stable); each panel renders
@@ -312,7 +312,7 @@ function TransferItemDetails({ item }: Props) {
                   {/* Add the name of the person that put the asset in transit */}
                   <PersonRow
                     name={inTransit.inTransitBy}
-                    sub={formatDateTime(inTransit.dateCreated) ?? ""}
+                    sub={formatDateTime(inTransit.dateTransitCreated) ?? ""}
                   />
                 </div>
 
@@ -563,7 +563,7 @@ export default TransferItemDetails;
 //   // `"completed": { images: [] }` placeholders even when that stage hasn't
 //   // happened yet, so `!!inTransit` / `!!completed` are always true. Check a
 //   // field that only exists once the stage has actually occurred instead.
-//   const hasInTransitData = !!inTransit?.dateCreated;
+//   const hasInTransitData = !!inTransit?.dateTransitCreated;
 //   const hasReceivedData = !!completed?.receiptDate;
 //   console.log("receiptDate:", completed?.receiptDate);
 
@@ -785,7 +785,7 @@ export default TransferItemDetails;
 //                   {/* Add the name of the person that put the asset in transit */}
 //                   <PersonRow
 //                     name={inTransit.inTransitBy}
-//                     sub={formatDateTime(inTransit.dateCreated) ?? ""}
+//                     sub={formatDateTime(inTransit.dateTransitCreated) ?? ""}
 //                   />
 //                 </div>
 
@@ -1039,7 +1039,7 @@ export default TransferItemDetails;
 // //   // `"completed": { images: [] }` placeholders even when that stage hasn't
 // //   // happened yet, so `!!inTransit` / `!!completed` are always true. Check a
 // //   // field that only exists once the stage has actually occurred instead.
-// //   const hasInTransitData = !!inTransit?.dateCreated;
+// //   const hasInTransitData = !!inTransit?.dateTransitCreated;
 // //   const hasReceivedData = !!completed?.dateReceived;
 
 // //   const hasInTransitTab = !!approved || !!inTransit;
@@ -1278,7 +1278,7 @@ export default TransferItemDetails;
 // //                   {/* Add the name of the person that put the asset in transit */}
 // //                   <PersonRow
 // //                     name={inTransit.inTransitBy}
-// //                     sub={formatDateTime(inTransit.dateCreated) ?? ""}
+// //                     sub={formatDateTime(inTransit.dateTransitCreated) ?? ""}
 // //                   />
 // //                 </div>
 
