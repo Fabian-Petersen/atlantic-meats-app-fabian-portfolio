@@ -168,7 +168,7 @@ Confirm Receipt
 ### Architecture
 
 <p align="center">
-  <img src="./src/assets/transfer_request_25062026.svg" alt="Asset Transfer Architecture" width="1000">
+  <img src="./src/assets/transfer_request_11082026.svg" alt="Asset Transfer Architecture" width="1000">
 </p>
 <p align="center">
   <em>Figure 1: Asset Transfer Module Architecture</em>
@@ -313,43 +313,43 @@ Fields fall into two categories:
 
 ```json
 {
-  "id": "string (PK)",
-  "assetId": "string (PK)",
+  "assetID": "string (PK)",
+  "id": "string (UUID)",
   "transferCreated": "string (ISO 8601, backend-derived) (SK)",
   "status": "PENDING | APPROVED | REJECTED | EXPIRED | CANCELLED | IN_TRANSIT | RECEIVED",
 
   "requestorSub": "string (backend-derived from Cognito claim)",
   "approverSub": "string | null (intended/assigned approver, set at request time)",
   "recipientSub": "string (client-supplied)",
-
   "description": "string",
   "transferReason": "string",
   "locationFrom": "string",
   "locationTo": "string",
   "expectedDate": "string (ISO 8601, client-supplied)",
+  "schedule_name": "string (transfer-transferId-timeout)",
 
   "approval": {
+    "approvalId": "string(UUID)",
     "dateApproved": "string (ISO 8601, backend-derived)",
     "approvedBySub": "string (backend-derived from Cognito claim)",
-    "status": "APPROVED | REJECTED"
+    "approval_reminder_count": "number (initial count == 0)"
   },
 
   "inTransit": {
+    "transitId": "string (UUID)",
     "dateCreated": "string (ISO 8601, backend-derived)",
     "inTransitSub": "string (backend-derived from Cognito claim)",
-    "status": "IN_TRANSIT",
-    "transferDate": "string (ISO 8601, client-supplied)",
+    "transportDate": "string (ISO 8601, client-supplied)",
     "transportType": "company | courier | contractor | individual",
     "transportName": "string",
     "transportCost": "number | null",
-    "invoiceUrl": "string | null (optional attachment)",
-    "imageUrls": "string[] | null (optional)"
+    "transitInvoices": "string[] | null (optional attachment)",
+    "transitImages": "string[] | null (optional)"
   },
 
   "receipt": {
     "dateReceived": "string (ISO 8601, backend-derived)",
     "receivedBySub": "string (backend-derived from Cognito claim)",
-    "status": "RECEIVED",
     "condition": "excellent | damaged",
     "damageDetails": "string | null (required if condition = damaged)",
     "imageUrls": "string[] | null (optional)",
@@ -360,19 +360,31 @@ Fields fall into two categories:
     "dateReceived": "string (ISO 8601, backend-derived)",
     "cancelledBySub": "string (backend-derived from Cognito claim)",
     "cancelReason": "string"
-    "status": "CANCELLED"
   }
 }
 ```
 
 #### `notifications_table`
 
+The attributes for a notification stored in the database table. The partition key is the user sub where a user can retrieve his/her data including the status update to "READ":
+
 ```json
 {
-  "notificationId": "string (PK)",
-  "status": "PENDING | APPROVED | REJECTED | EXPIRED | CANCEL | IN_TRANSIT | RECEIVED",
+  "recipientSub": "string (PK)",
+  "notificationCreated": "string (SK)",
+  "id": "string",
+  "transferId": "",
+  "recipientEmail": "string",
+  "assetId": "string",
+  " type": "string",
+  " title:": "string",
+  "message": "string",
+  "location": "string",
+  "status": "UNREAD | READ | ARCHIVED",
+  "priority": "LOW | NORMAL | HIGH | URGENT",
   "sub": "string (Cognito sub of the recipient of this notification)",
-  "notificationDate": "string (ISO 8601, backend-derived)"
+  "channels": "IN_APP  | EMAIL  | PUSH  | SMS",
+  "dateRead": "string"
 }
 ```
 
@@ -495,23 +507,17 @@ The points below were identified and evaluated against AWS best practices for ev
 
 **Recommendation**: <br/> Have notification Lambdas check/record an idempotency key (e.g. `transferId#status` written to a small DynamoDB idempotency table with a TTL, or conditional-put against `notifications_table`) before publishing to SNS, to avoid double-notifying a recipient on retried events. This is cheap to add now versus a confusing "why did I get two emails" bug report later.
 
-#### 1. Approval cancellation path needs an explicit notification rule
+#### 1. Observability: no mention of structured logging, tracing, or alarms
 
-The status diagram now includes `APPROVED → CANCEL`, but it's not clear from the diagram which EventBridge Rule/Lambda picks up `CANCEL` for notification purposes — it doesn't appear to map cleanly to `assetTransferApproval` (which seems oriented around APPROVED/REJECTED) or any other existing topic.
-
-**Recommendation**: <br/> Decide explicitly whether `CANCEL` reuses the `assetTransferApproval` topic (with a distinguishing message attribute) or needs its own rule/topic, and document it. This is one of the nine discrepancies worth nailing down before Terraform, since IAM policies and SNS filter policies need to know about it upfront.
-
-#### 2. Observability: no mention of structured logging, tracing, or alarms
-
-The architecture has six EventBridge Rules, an EventBridge Pipe, a Scheduler, SQS+DLQ, and nine Lambdas. With this much asynchronous fan-out, **AWS X-Ray tracing** (or at minimum correlation IDs propagated through `detail` payloads) becomes important for debugging "why didn't the recipient get notified" support questions.
+The architecture has six EventBridge Rules, an EventBridge Pipe, a Scheduler, SQS+DLQ, and twelve Lambdas. With this much asynchronous fan-out, **AWS X-Ray tracing** (or at minimum correlation IDs propagated through `detail` payloads) becomes important for debugging "why didn't the recipient get notified" support questions.
 
 **Recommendation**: <br/> Add a `transferId`-keyed correlation ID to every event `detail` payload from the source Lambda all the way through to SNS message attributes, and enable X-Ray active tracing on the API Gateway → Lambda → EventBridge chain. Also add a CloudWatch Alarm on the DLQ's `ApproximateNumberOfMessagesVisible` (you already have the DLQ — alarming on it is the missing half) so failed transit notifications surface immediately rather than being discovered during an audit.
 
-#### 3. Least-privilege IAM scoping given prior `EntityAlreadyExists` history
+#### 2. Least-privilege IAM scoping given prior `EntityAlreadyExists` history
 
 Given the noted history of `EntityAlreadyExists` IAM issues, when writing the Terraform for these ~9 Lambdas it's worth scoping each Lambda's execution role to only the specific table/topic/queue ARNs it touches (rather than a shared broad role), both for security and to reduce the chance of cross-module naming collisions during `terraform plan`/`apply`.
 A `for_each`-driven module per Lambda with explicit `dynamodb:Query`/`PutItem`/`UpdateItem` actions scoped to the specific table ARN (and index ARN where GSIs are used) will also make future audits straightforward given how central auditability is to this module's purpose.
 
-#### 4. Confirm EventBridge Scheduler cleanup
+#### 3. Confirm EventBridge Scheduler cleanup
 
 One-time schedules created per transfer request for `checkApprovalTimeout` should be deleted once a transfer leaves `PENDING` (either by being approved, rejected, or expiring) — otherwise stale schedules accumulate. Worth confirming the approval/rejection Lambda also deletes the corresponding Scheduler schedule, not just the expiry Lambda consuming it.

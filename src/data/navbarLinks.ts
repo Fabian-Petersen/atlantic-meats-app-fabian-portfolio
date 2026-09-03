@@ -98,7 +98,7 @@ export const assetLinks: NavlinkProps[] = [
 export const transferLinks: NavlinkProps[] = [
   {
     name: "create transfer",
-    icon: Truck,
+    icon: FileClock,
     url: "/transfers/create-new-transfer",
     allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
@@ -109,8 +109,8 @@ export const transferLinks: NavlinkProps[] = [
     allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
   {
-    name: "open transfers",
-    icon: FileClock,
+    name: "in transit",
+    icon: Truck,
     url: "/transfers/in-transit",
     allowedGroups: ["admin", "user", "maintenance", "manager"],
   },

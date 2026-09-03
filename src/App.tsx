@@ -63,6 +63,7 @@ import CreateStockPage from "./pages/stocks/CreateStockPage";
 import StocksListPage from "./pages/stocks/StocksListPage";
 import CreateTransferReceiptPage from "./pages/transfers/CreateTransferReceiptPage";
 import TransferCompleteListPage from "./pages/transfers/TransferCompleteListPage";
+import CreateDisposalPage from "./pages/disposals/CreateDisposalPage";
 
 function App() {
   const { loading } = useAuth();
@@ -130,6 +131,11 @@ function App() {
             <Route
               path="/transfers/completed"
               element={<TransferCompleteListPage />}
+            />
+            {/* // $ Disposal of an Asset Pages  */}
+            <Route
+              path="/disposals/create-new-disposal"
+              element={<CreateDisposalPage />}
             />
           </Route>
           {/* // % Admin only Routes */}

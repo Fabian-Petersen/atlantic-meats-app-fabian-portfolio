@@ -126,19 +126,6 @@ function MobileTransferRequestCard({
             />
           </button>
         </div>
-        {/* <div className="flex items-center gap-2 shrink-0">
-          <Badge
-            value={item.status}
-            styleMap={badgeStyles.families.transfer_status}
-            className={cn("capitalize")}
-          />
-          <ChevronDown
-            className={cn(
-              "w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200",
-              isOpen && "rotate-180",
-            )}
-          />
-        </div> */}
       </button>
 
       {/* ── Expanded details ── */}
@@ -177,12 +164,6 @@ function MobileTransferRequestCard({
                 value={item.requestor_name || item.requested_by}
                 className="py-3"
               />
-              {/* <CardRow
-                icon={Calendar}
-                label="Requested on"
-                value={item.transferCreated}
-                className="py-3 divide-gray-300/80 dark:divide-gray-700/60"
-              /> */}
               <CardRow
                 icon={Calendar}
                 label="Expected date"

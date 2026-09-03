@@ -46,7 +46,7 @@ const TransferTransitListPage = () => {
     },
   });
 
-  // console.log("transit-data:", data);
+  console.log("transit-data:", data);
 
   /**
    * Convert the rows have the data in the root object and not nested using the util
@@ -151,7 +151,7 @@ const TransferTransitListPage = () => {
           <div className="grid gap-2">
             <FormHeading
               className={cn(sharedStyles.headingForm, "px-0")}
-              heading="Transfers - In Progress"
+              heading="Transfers - In Transit"
               redirect={true}
               redirectTo="/dashboard"
             />

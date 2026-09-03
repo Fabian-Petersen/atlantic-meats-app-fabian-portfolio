@@ -61,6 +61,14 @@ export type Resource =
   | `api/transfers/${string}/cancel` // "POST: status === `cancel`
   | `api/transfers/metrics` // "GET: Dashboard metrics for transfer requests"
   | `api/transfers/my-transfers` // "GET: Transfers by user sub"
+  // $ Disposal ROUTES
+  | "api/disposals" // "POST: Transfer request" | "GET: All disposals"
+  | `api/disposals/${string}` // "GET: Transfer request"
+  | "api/disposals/requests" // "POST: Job request" | "GET: All jobs enum["pending", "approved",
+  | `api/disposals/${string}/approve` // "POST: status === `approve`
+  | `api/disposals/${string}/reject` // "POST: status === `reject`
+  | `api/disposals/${string}/cancel` // "POST: status === `cancel`
+  | `api/disposals/my-disposals` // "GET: Transfers by user sub"
   // $ Notifications
   | "api/notifications" // "GET: All notifications by user id
   // $ Stocks ROUTES
@@ -91,10 +99,15 @@ export type RedirectResource =
   | "stocks/create-new-stock" // Page with the form to create a new stock item
   | "stocks/list" // Page showing all stock items
   | `stocks/${string}` // Page showing the details of a stock item by id
+  // $ TRANSFERS
   | "transfers/in-transit" // List of All transfer requests by group (admin: All, users: CreatedBySub)
   | `/transfers/${string}/in-transit` // "POST: status === `in-transit`
   | "transfers/requests" // List of all pending, approved and rejected transfer requests
-  | "transfers/list"; // List of All transfer requests by group (admin: All, users: CreatedBySub)
+  | "transfers/list" // List of All transfer requests by group (admin: All, users: CreatedBySub)
+  // $ DISPOSALS
+  | `/disposals/${string}/` // "POST: status === `in-transit`
+  | "disposals/requests" // List of all pending, approved and rejected transfer requests
+  | "disposals/list"; // List of All transfer requests by group (admin: All, users: CreatedBySub)
 
 // $ Combine the types into a union type for the generic functions
 export type RequestType =

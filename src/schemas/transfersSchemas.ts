@@ -214,7 +214,6 @@ export const transferRequestResponseSchema = transferRequestBaseSchema
     requestor_email: z.email(),
     requestor_sub: z.string(),
     schedule_name: z.string(),
-    // images: z.array(presignedURLSchema).default([]),
   });
 
 /* -------------------------------------------------------------------------- */
