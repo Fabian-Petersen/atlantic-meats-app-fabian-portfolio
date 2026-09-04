@@ -5,7 +5,13 @@ import { useState } from "react";
 
 // $ React-Hook-Form, zod & schema
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm, type Resolver } from "react-hook-form";
+import {
+  useFieldArray,
+  useForm,
+  useWatch,
+  type Resolver,
+} from "react-hook-form";
+import { Info } from "lucide-react";
 
 // $ Import schemas
 import type { TransferRequestFormValues } from "../../schemas/index";
@@ -53,6 +59,11 @@ const CreateTransferForm = () => {
         },
       ],
     },
+  });
+
+  const locationFrom = useWatch({
+    control: form.control,
+    name: "locationFrom",
   });
 
   // ---------------------------------------------------------------------------
@@ -237,28 +248,42 @@ const CreateTransferForm = () => {
       {/* Asset fields                                                          */}
       {/* --------------------------------------------------------------------- */}
 
-      <div className="space-y-2">
+      <div className={locationFrom ? "space-y-2" : "space-y-3"}>
         {/* ------------------------------------------------------------------- */}
         {/* Add Asset                                                           */}
         {/* ------------------------------------------------------------------- */}
-        <div className="flex items-center justify-end px-4">
-          <button
-            type="button"
-            onClick={() =>
-              append({
-                area: "",
-                equipment: "",
-                assetID: "",
-                images: [],
-                assetIssueReason: "",
-                assetIssueDetails: "",
-              })
-            }
-            className="text-sm font-medium text-blue-600 hover:cursor-pointer"
+        {locationFrom && (
+          <div className="flex items-center justify-end px-4">
+            <button
+              type="button"
+              onClick={() =>
+                append({
+                  area: "",
+                  equipment: "",
+                  assetID: "",
+                  images: [],
+                  assetIssueReason: "",
+                  assetIssueDetails: "",
+                })
+              }
+              className="text-sm font-medium text-blue-600 hover:cursor-pointer"
+            >
+              + Add
+            </button>
+          </div>
+        )}
+        {!locationFrom && (
+          <div
+            role="status"
+            className="mx-0 flex items-start gap-2 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-800"
           >
-            + Add
-          </button>
-        </div>
+            <Info className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+            <p>
+              Select a <strong>Location From</strong> before selecting assets
+              for this transfer.
+            </p>
+          </div>
+        )}
         {/* Asset list — gets its own top margin + internal spacing */}
         <div className="space-y-6">
           {assetFields.map((field, index) => (

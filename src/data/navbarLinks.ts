@@ -131,9 +131,9 @@ export const disposalLinks: NavlinkProps[] = [
     allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
   {
-    name: "pending approval",
+    name: "disposal requests",
     icon: Hourglass,
-    url: "/disposals/pending-approval",
+    url: "/disposals/requests",
     allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
   {

@@ -146,7 +146,7 @@ export const useFormSubmit = <TForm extends object, TPayload>({
   });
 
   const submit = async (formValues: TForm): Promise<void> => {
-    // console.log("formvalues:", formValues);
+    console.log("formvalues:", formValues);
 
     try {
       // ── 1. Extract files ──────────────────────────────────────────────────

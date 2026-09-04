@@ -64,6 +64,7 @@ import StocksListPage from "./pages/stocks/StocksListPage";
 import CreateTransferReceiptPage from "./pages/transfers/CreateTransferReceiptPage";
 import TransferCompleteListPage from "./pages/transfers/TransferCompleteListPage";
 import CreateDisposalPage from "./pages/disposals/CreateDisposalPage";
+import DisposalRequestsListPage from "./pages/disposals/DisposalRequestsListPage";
 
 function App() {
   const { loading } = useAuth();
@@ -147,6 +148,10 @@ function App() {
             <Route
               path="/transfers/requests"
               element={<TransfersRequestsListPage />}
+            />
+            <Route
+              path="/disposals/requests"
+              element={<DisposalRequestsListPage />}
             />
             <Route path="/assets/list" element={<AssetsOverviewPage />} />
             {/* // $ Page to list an asset by id */}

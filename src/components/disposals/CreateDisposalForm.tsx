@@ -5,10 +5,15 @@ import { useState } from "react";
 
 // $ React-Hook-Form, zod & schema
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm, type Resolver } from "react-hook-form";
+import {
+  useFieldArray,
+  useForm,
+  useWatch,
+  type Resolver,
+} from "react-hook-form";
+import { Info } from "lucide-react";
 
 // $ Import schemas
-// import type { TransferRequestFormValues } from "../../schemas/index";
 
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import useGlobalContext from "@/context/useGlobalContext";
@@ -17,6 +22,7 @@ import DisposalAssetFields from "./DisposalAssetFields";
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
 import {
   disposalRequestSchema,
+  disposalReasons,
   type DisposalRequestFormValues,
   type DisposalRequestPayload,
 } from "@/schemas/disposalsSchemas";
@@ -43,6 +49,7 @@ const CreateDisposalForm = () => {
       location: "",
       expectedDisposalDate: "",
       disposalReason: "",
+      description: "",
 
       assets: [
         {
@@ -55,6 +62,12 @@ const CreateDisposalForm = () => {
         },
       ],
     },
+  });
+
+  // After creating `form`
+  const location = useWatch({
+    control: form.control,
+    name: "location",
   });
 
   // ---------------------------------------------------------------------------
@@ -102,13 +115,19 @@ const CreateDisposalForm = () => {
   const disposalFields = [
     {
       fieldType: "textarea" as const,
-      name: "disposalReason" as const,
+      name: "description" as const,
       required: true,
       rows: 1,
       className: "md:col-span-2",
-      label: "Reason for disposal",
+      label: "Description",
     },
-
+    {
+      fieldType: "select" as const,
+      name: "disposalReason" as const,
+      required: true,
+      label: "Reason for disposal",
+      options: normalizeOptions([...disposalReasons]),
+    },
     {
       fieldType: "select" as const,
       name: "location" as const,
@@ -117,21 +136,11 @@ const CreateDisposalForm = () => {
       options: normalizeOptions(locationOptions),
       required: true,
     },
-
-    {
-      fieldType: "select" as const,
-      name: "location" as const,
-      label: "Location To",
-      placeholder: "Select Location To",
-      options: normalizeOptions(locationOptions),
-      required: true,
-    },
-
     {
       fieldType: "input" as const,
       type: "date" as const,
       name: "expectedDisposalDate" as const,
-      label: "Expected Transit Date",
+      label: "Expected Disposal Date",
     },
   ];
 
@@ -174,6 +183,7 @@ const CreateDisposalForm = () => {
         location: values.location,
         expectedDisposalDate: values.expectedDisposalDate,
         disposalReason: values.disposalReason,
+        description: values.description,
         assets,
       };
     },
@@ -214,7 +224,7 @@ const CreateDisposalForm = () => {
         form={form}
         formId="disposal-request-form"
         fields={disposalFields}
-        formHeading="Create Transfer"
+        formHeading="Create Disposal"
         redirect={true}
         redirectTo="/disposals/requests"
         onSubmit={submit}
@@ -231,29 +241,44 @@ const CreateDisposalForm = () => {
       {/* Asset fields                                                          */}
       {/* --------------------------------------------------------------------- */}
 
-      <div className="space-y-2">
+      <div className={location ? "space-y-2" : "space-y-3"}>
         {/* ------------------------------------------------------------------- */}
         {/* Add Asset                                                           */}
         {/* ------------------------------------------------------------------- */}
-        <div className="flex items-center justify-end px-4">
-          <button
-            type="button"
-            onClick={() =>
-              append({
-                area: "",
-                // assetIndex: 0,
-                equipment: "",
-                assetID: "",
-                images: [],
-                assetIssueReason: "",
-                assetIssueDetails: "",
-              })
-            }
-            className="text-sm font-medium text-blue-600 hover:cursor-pointer"
+
+        {location && (
+          <div className="flex items-center justify-end px-4">
+            <button
+              type="button"
+              onClick={() =>
+                append({
+                  area: "",
+                  // assetIndex: 0,
+                  equipment: "",
+                  assetID: "",
+                  images: [],
+                  assetIssueReason: "",
+                  assetIssueDetails: "",
+                })
+              }
+              className="text-sm font-medium text-blue-600 hover:cursor-pointer"
+            >
+              + Add
+            </button>
+          </div>
+        )}
+        {!location && (
+          <div
+            role="status"
+            className="mx-0 flex items-center gap-2 rounded-md border border-blue-200 bg-blue-50 p-3 text-xs text-blue-800"
           >
-            + Add
-          </button>
-        </div>
+            <Info className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+            <p>
+              Select a <strong>Location</strong> before selecting assets for
+              disposal.
+            </p>
+          </div>
+        )}
         {/* Asset list — gets its own top margin + internal spacing */}
         <div className="space-y-6">
           {assetFields.map((field, index) => (

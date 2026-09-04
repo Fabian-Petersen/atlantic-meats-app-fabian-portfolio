@@ -13,6 +13,25 @@ export const disposalStatusSchema = z.enum([
 
 export type DisposalStatus = z.infer<typeof disposalStatusSchema>;
 
+export const disposalReasons = [
+  "scrap",
+  "sell",
+  "trade-in",
+  "obsolete",
+  "end-of-life",
+  "beyond-economic-repair",
+  "damaged",
+  "surplus",
+  "replacement",
+  "donation",
+  "return-to-supplier",
+  "lost",
+  "stolen",
+  "other",
+] as const;
+
+export const disposalReasonSchema = z.enum(disposalReasons);
+
 // $  ─── Individual asset being disposed ──────────────────────────────────────
 
 export const disposalAssetBaseSchema = assetRequestSchema
@@ -71,15 +90,13 @@ export const disposalAssetSchema = disposalAssetBaseSchema.superRefine(
  */
 export const disposalRequestBaseSchema = z.object({
   location: z.string().min(1, { message: "Please select a location" }),
-  disposalReason: z.string().min(1, {
-    message: "Please provide a disposal reason",
+  disposalReason: z.union([disposalReasonSchema, z.literal("")]),
+  description: z.string().min(1, {
+    message: "Please provide a disposal description",
   }),
   expectedDisposalDate: z.string().min(1, {
     message: "Please enter an expected disposal date",
   }),
-  // description: z.string().min(1, {
-  //   message: "Please provide a disposal description",
-  // }),
   assets: z.array(disposalAssetSchema).min(1, {
     message: "Please add at least one asset to the disposal request",
   }),
@@ -91,6 +108,14 @@ export const disposalRequestBaseSchema = z.object({
 
 export const disposalRequestSchema = disposalRequestBaseSchema.superRefine(
   (data, ctx) => {
+    if (!data.disposalReason) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["disposalReason"],
+        message: "Please select a disposal reason",
+      });
+    }
+
     // -------------------------------------------------------------------------
     // Expected date validation
     // -------------------------------------------------------------------------
@@ -287,7 +312,7 @@ const disposalExpiredSchema = z.object({
 });
 
 /** Complete progressive disposal item returned by the list/detail endpoints. */
-export const disposalWorkflowResponseSchema = disposalRequestSchema
+export const disposalWorkflowResponseSchema = disposalRequestBaseSchema
   .omit({ assets: true })
   .extend({
     assetID: z.string(),

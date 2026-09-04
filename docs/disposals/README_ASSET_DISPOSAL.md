@@ -593,10 +593,9 @@ The following structure should be used for both single-asset and multiple-asset 
 
 ```json
 {
-  "assetID": "string (PK / primary asset reference)",
-  "id": "string (UUID)",
+  "disposalId": "string (PK / UUID disposal request reference)",
   "disposalCreated": "string (ISO 8601, backend-derived) (SK)",
-  "status": "PENDING | APPROVED | REJECTED | EXPIRED | CANCELLED | DISPOSED",
+  "status": "pending | approved | rejected | expired | cancelled | disposed",
 
   "requestorSub": "string (backend-derived from Cognito claim)",
   "approverSub": "string | null (intended/assigned approver)",

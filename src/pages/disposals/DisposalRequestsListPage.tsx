@@ -1,0 +1,191 @@
+/**
+ * This component renders the table for the asset transfer requests that was created ["pending", "approved", "rejected", "cancelled"]
+ *
+ * ROUTE: /transfers/requests
+ *
+ * PATH: /api/transfers/requests?status[]="pending" & status[]="approved" & status[]="rejected" & status[]="cancelled"
+ * The list is from a Get request to the getTransfersList.py lambda function.
+ *
+ * */
+
+import FormHeading from "../../../customComponents/FormHeading";
+import { useGetAll } from "@/utils/api";
+
+import {
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type SortingState,
+} from "@tanstack/react-table";
+
+import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
+// import MobileTransfersRequestsList from "@/components/mobile/transfers/MobileTransfersRequestsList";
+import useGlobalContext from "@/context/useGlobalContext";
+import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { Error } from "@/components/features/Error";
+import { type DisposalWorkflowResponse } from "@/schemas/disposalsSchemas";
+import { TableGeneric } from "@/components/features/tables/TableGeneric";
+// import { getJobPendingColumns } from "@/components/tableColumns/PendingColumns";
+import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
+import { SearchInput } from "@/components/features/SearchInput";
+import { sharedStyles } from "@/styles/shared";
+import { cn } from "@/lib/utils";
+import { getDisposalRequestsColumns } from "@/components/tableColumns/DisposalRequestsColumns";
+import { flattenTransferData } from "@/utils/flattenTranferData";
+
+const DisposalRequestsListPage = () => {
+  const navigate = useNavigate();
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    DATA                                    */
+  /* -------------------------------------------------------------------------- */
+  const { data, isError, isPending } = useGetAll<DisposalWorkflowResponse[]>({
+    resourcePath: "api/disposals/requests",
+    queryKey: ["disposals", ["pending", "approved", "rejected", "cancelled"]],
+    params: {
+      status: ["pending", "approved", "rejected", "cancelled"],
+    },
+  });
+
+  console.log("disposalData:", data);
+
+  /**
+   * Convert the rows have the data in the root object and not nested using the util
+   * function flattenTransferData
+   */
+
+  const rows = useMemo(
+    () =>
+      flattenTransferData(data, [
+        "pending",
+        "approved",
+        "rejected",
+        "cancelled",
+      ]),
+    [data],
+  );
+  // console.log("flattenedPendingRows:", rows);
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   SORTING                                  */
+  /* -------------------------------------------------------------------------- */
+
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "disposalCreated", desc: false },
+  ]);
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   FILTERING                                */
+  /* -------------------------------------------------------------------------- */
+
+  const [globalFilter, setGlobalFilter] = useState("");
+
+  const {
+    setShowUpdateMaintenanceDialog,
+    setSelectedRowId,
+    openDeleteDialog,
+    setOpenChatSidebar,
+  } = useGlobalContext();
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   COLUMNS                                  */
+  /* -------------------------------------------------------------------------- */
+
+  const columns = getDisposalRequestsColumns(
+    setShowUpdateMaintenanceDialog,
+    setSelectedRowId,
+    openDeleteDialog,
+    setOpenChatSidebar,
+    navigate,
+  );
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    TABLE                                   */
+  /* -------------------------------------------------------------------------- */
+
+  // $ This data is passed into the mobile component
+  const table = useReactTable({
+    data: rows,
+    columns: columns,
+    state: { sorting, globalFilter },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    globalFilterFn: "includesString",
+  });
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  LOADING STATE                             */
+  /* -------------------------------------------------------------------------- */
+
+  if (isPending) return <PageLoadingSpinner />;
+  if (isError) return <Error />;
+
+  return (
+    <div className="flex w-full md:p-4 min-h-0">
+      {/* // $ Desktop View */}
+      <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
+        <TableGeneric
+          data={rows}
+          columns={columns}
+          rowPath="disposals"
+          action={(row) => {
+            switch (row.status) {
+              case "pending":
+                return "pending-approval";
+              default:
+                return "";
+            }
+          }}
+          tableHeading="Disposal Requests"
+          addPageSelector={true}
+          addPagination={true}
+          addButton={true}
+          addButtonPath="/disposals/create-new-disposal"
+        />
+      </div>
+      {/* // $ Mobile View */}
+      <div className="grid lg:hidden gap-2 w-full p-2">
+        <SearchInput
+          enableMobile={true}
+          value={globalFilter}
+          onChange={setGlobalFilter}
+          placeholder="Search Requests"
+        />
+        {data.length === 0 ? (
+          <>
+            <FormHeading
+              className={cn(sharedStyles.headingForm)}
+              heading="Disposal Requests"
+              redirect={true}
+              redirectTo="/dashboard"
+            />
+            <EmptyMobilePlaceholder message="No disposal requests yet" />
+          </>
+        ) : table.getRowModel().rows.length === 0 ? (
+          <EmptyMobilePlaceholder
+            message={`No results for "${globalFilter}"`}
+          />
+        ) : (
+          <div className="grid gap-2">
+            {/* <FormHeading
+              className={cn(sharedStyles.headingForm, "px-0")}
+              heading="Transfer Requests"
+              redirect={true}
+              redirectTo="/dashboard"
+            />
+            <MobileTransfersRequestsList
+              className="flex md:hidden"
+              data={table.getRowModel().rows}
+            /> */}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default DisposalRequestsListPage;

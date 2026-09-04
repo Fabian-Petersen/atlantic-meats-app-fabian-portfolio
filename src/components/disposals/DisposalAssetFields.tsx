@@ -51,7 +51,7 @@ const normalizeOptions = (
   );
 };
 
-const TransferAssetFields = ({
+const DisposalAssetFields = ({
   form,
   assetIndex,
   isOpen,
@@ -266,12 +266,6 @@ const TransferAssetFields = ({
                 Failed to load asset options.
               </p>
             )}
-
-            {/* {isPending && (
-              <p className="mt-3 text-sm text-muted-foreground">
-                Loading asset options...
-              </p>
-            )} */}
           </motion.div>
         )}
       </AnimatePresence>
@@ -279,4 +273,4 @@ const TransferAssetFields = ({
   );
 };
 
-export default TransferAssetFields;
+export default DisposalAssetFields;
