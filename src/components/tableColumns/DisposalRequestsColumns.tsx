@@ -3,8 +3,8 @@ import type { NavigateFunction } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 
 import type {
+  DisposalPendingTableRow,
   DisposalStatus,
-  DisposalWorkflowResponse,
 } from "@/schemas/disposalsSchemas";
 import { AssetsDropdownCell } from "@/components/features/tables/AssetsDropdownCell";
 import { Badge } from "@/components/features/Badge";
@@ -22,7 +22,7 @@ export const getDisposalRequestsColumns = (
   ) => void,
   setOpenChatSidebar: (value: boolean) => void,
   navigate: NavigateFunction,
-): ColumnDef<DisposalWorkflowResponse>[] => [
+): ColumnDef<DisposalPendingTableRow>[] => [
   {
     accessorKey: "disposalCreated",
     header: ({ column }) => {
@@ -70,7 +70,7 @@ export const getDisposalRequestsColumns = (
     header: "Equipment | Asset ID",
     cell: ({ getValue }) => (
       <AssetsDropdownCell
-        assets={getValue<DisposalWorkflowResponse["assets"]>()}
+        assets={getValue<DisposalPendingTableRow["assets"]>()}
       />
     ),
   },

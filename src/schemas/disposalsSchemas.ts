@@ -338,6 +338,17 @@ export const disposalWorkflowResponseSchema = disposalRequestBaseSchema
     expired: disposalExpiredSchema.nullable(),
   });
 
+/** Row shape used by the pending disposal requests table and mobile list. */
+export const disposalPendingTableRowSchema = disposalWorkflowResponseSchema
+  .pick({
+    id: true,
+    disposalCreated: true,
+    status: true,
+    assets: true,
+    description: true,
+  })
+  .extend(disposalPendingSchema.shape);
+
 export type DisposalFileMetadata = z.infer<typeof disposalFileMetadataSchema>;
 export type DisposalAssetFormValues = z.infer<typeof disposalAssetFormSchema>;
 export type DisposalAssetResponse = z.infer<typeof disposalAssetResponseSchema>;
@@ -357,4 +368,7 @@ export type DisposalCancellationFormValues = z.infer<
 >;
 export type DisposalWorkflowResponse = z.infer<
   typeof disposalWorkflowResponseSchema
+>;
+export type DisposalPendingTableRow = z.infer<
+  typeof disposalPendingTableRowSchema
 >;

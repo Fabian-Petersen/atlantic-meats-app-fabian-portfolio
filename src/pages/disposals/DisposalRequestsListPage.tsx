@@ -25,7 +25,10 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Error } from "@/components/features/Error";
-import { type DisposalWorkflowResponse } from "@/schemas/disposalsSchemas";
+import type {
+  DisposalPendingTableRow,
+  DisposalWorkflowResponse,
+} from "@/schemas/disposalsSchemas";
 import { TableGeneric } from "@/components/features/tables/TableGeneric";
 // import { getJobPendingColumns } from "@/components/tableColumns/PendingColumns";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
@@ -33,7 +36,7 @@ import { SearchInput } from "@/components/features/SearchInput";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 import { getDisposalRequestsColumns } from "@/components/tableColumns/DisposalRequestsColumns";
-import { flattenTransferData } from "@/utils/flattenTranferData";
+import MobileDisposalRequestsList from "@/components/mobile/disposals/MobileDisposalRequestsList";
 
 const DisposalRequestsListPage = () => {
   const navigate = useNavigate();
@@ -56,14 +59,15 @@ const DisposalRequestsListPage = () => {
    * function flattenTransferData
    */
 
-  const rows = useMemo(
+  const rows = useMemo<DisposalPendingTableRow[]>(
     () =>
-      flattenTransferData(data, [
-        "pending",
-        "approved",
-        "rejected",
-        "cancelled",
-      ]),
+      (data ?? []).map((workflow) => ({
+        ...workflow,
+        ...workflow.pending,
+        ...(workflow.approved ?? {}),
+        ...(workflow.rejected ?? {}),
+        ...(workflow.cancelled ?? {}),
+      })),
     [data],
   );
   // console.log("flattenedPendingRows:", rows);
@@ -171,16 +175,16 @@ const DisposalRequestsListPage = () => {
           />
         ) : (
           <div className="grid gap-2">
-            {/* <FormHeading
+            <FormHeading
               className={cn(sharedStyles.headingForm, "px-0")}
-              heading="Transfer Requests"
+              heading="Disposal Requests"
               redirect={true}
               redirectTo="/dashboard"
             />
-            <MobileTransfersRequestsList
+            <MobileDisposalRequestsList
               className="flex md:hidden"
               data={table.getRowModel().rows}
-            /> */}
+            />
           </div>
         )}
       </div>
