@@ -52,7 +52,7 @@ const DisposalRequestsListPage = () => {
     },
   });
 
-  console.log("disposalData:", data);
+  // console.log("disposalData:", data);
 
   /**
    * Convert the rows have the data in the root object and not nested using the util

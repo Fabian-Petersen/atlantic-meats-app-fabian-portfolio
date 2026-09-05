@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { assetRequestSchema } from "./assetSchemas";
+import { presignedURLSchema } from "./jobSchemas";
 
 /** Workflow states stored by the disposal backend. */
 export const disposalStatusSchema = z.enum([
@@ -226,7 +227,7 @@ export const disposalAssetFormSchema = disposalAssetBaseSchema.extend({
 export const disposalAssetResponseSchema = disposalAssetFormSchema
   .omit({ images: true })
   .extend({
-    images: z.array(disposalFileMetadataSchema).default([]),
+    images: z.array(presignedURLSchema).default([]),
   });
 
 /** Form values for POST /asset-disposals/{disposalId}/approval. */

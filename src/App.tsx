@@ -65,6 +65,7 @@ import CreateTransferReceiptPage from "./pages/transfers/CreateTransferReceiptPa
 import TransferCompleteListPage from "./pages/transfers/TransferCompleteListPage";
 import CreateDisposalPage from "./pages/disposals/CreateDisposalPage";
 import DisposalRequestsListPage from "./pages/disposals/DisposalRequestsListPage";
+import DisposalPendingItemPage from "./pages/disposals/DisposalPendingItemPage";
 
 function App() {
   const { loading } = useAuth();
@@ -163,6 +164,10 @@ function App() {
             <Route
               path="/transfers/:id/pending-approval"
               element={<TransferPendingItemPage />}
+            />
+            <Route
+              path="/disposals/:id/pending-approval"
+              element={<DisposalPendingItemPage />}
             />
             <Route
               path="/assets/create-new-asset"
