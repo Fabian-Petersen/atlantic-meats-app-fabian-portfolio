@@ -63,9 +63,9 @@ import CreateStockPage from "./pages/stocks/CreateStockPage";
 import StocksListPage from "./pages/stocks/StocksListPage";
 import CreateTransferReceiptPage from "./pages/transfers/CreateTransferReceiptPage";
 import TransferCompleteListPage from "./pages/transfers/TransferCompleteListPage";
-import CreateDisposalPage from "./pages/disposals/CreateDisposalPage";
 import DisposalRequestsListPage from "./pages/disposals/DisposalRequestsListPage";
 import DisposalPendingItemPage from "./pages/disposals/DisposalPendingItemPage";
+import DisposalInProgressListPage from "./pages/disposals/DisposalInProgressListPage";
 
 function App() {
   const { loading } = useAuth();
@@ -136,8 +136,12 @@ function App() {
             />
             {/* // $ Disposal of an Asset Pages  */}
             <Route
-              path="/disposals/create-new-disposal"
-              element={<CreateDisposalPage />}
+              path="/disposals/in-progress"
+              element={<DisposalInProgressListPage />}
+            />
+            <Route
+              path="/disposals/in-transit"
+              element={<TransferTransitListPage />}
             />
           </Route>
           {/* // % Admin only Routes */}
