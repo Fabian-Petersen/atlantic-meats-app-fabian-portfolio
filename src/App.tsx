@@ -58,14 +58,24 @@ import TransfersRequestsListPage from "./pages/transfers/TransfersRequestsListPa
 import TransferItemPage from "./pages/transfers/TransferItemPage";
 import TransferPendingItemPage from "./pages/transfers/TransferPendingItemPage";
 
+// $ Disposal Asset Pages
+// # ——————— Create Pages ————————————————————————————————————————————————————————
+import CreateDisposalPage from "./pages/disposals/CreateDisposalPage";
+import CreateDisposalCompletePage from "./pages/disposals/CreateDisposalCompletePage";
+import CreateTransferReceiptPage from "./pages/transfers/CreateTransferReceiptPage";
+
+// # ——————— Tables Pages ————————————————————————————————————————————————————————
+import DisposalRequestsListPage from "./pages/disposals/DisposalRequestsListPage";
+import DisposalInProgressListPage from "./pages/disposals/DisposalInProgressListPage";
+import TransferCompleteListPage from "./pages/transfers/TransferCompleteListPage";
+
+// # ——————— Display Item Pages ——————————————————————————————————————————————————
+import DisposalItemPage from "./pages/disposals/DisposalItemPage";
+import DisposalPendingItemPage from "./pages/disposals/DisposalPendingItemPage";
+
 // $ Stock Pages
 import CreateStockPage from "./pages/stocks/CreateStockPage";
 import StocksListPage from "./pages/stocks/StocksListPage";
-import CreateTransferReceiptPage from "./pages/transfers/CreateTransferReceiptPage";
-import TransferCompleteListPage from "./pages/transfers/TransferCompleteListPage";
-import DisposalRequestsListPage from "./pages/disposals/DisposalRequestsListPage";
-import DisposalPendingItemPage from "./pages/disposals/DisposalPendingItemPage";
-import DisposalInProgressListPage from "./pages/disposals/DisposalInProgressListPage";
 
 function App() {
   const { loading } = useAuth();
@@ -135,6 +145,15 @@ function App() {
               element={<TransferCompleteListPage />}
             />
             {/* // $ Disposal of an Asset Pages  */}
+            <Route
+              path="/disposals/create-new-disposal"
+              element={<CreateDisposalPage />}
+            />
+            <Route path="/disposals/:id" element={<DisposalItemPage />} />
+            <Route
+              path="/disposals/:id/completed"
+              element={<CreateDisposalCompletePage />}
+            />
             <Route
               path="/disposals/in-progress"
               element={<DisposalInProgressListPage />}

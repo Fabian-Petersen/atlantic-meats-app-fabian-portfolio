@@ -8,13 +8,13 @@ import {
   Library,
   Hammer,
   Clock,
-  Bolt,
+  // Bolt,
   // MoveHorizontal,
   Truck,
   Users2,
   Hourglass,
   FileClock,
-  List,
+  // List,
   ArchiveX,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -136,12 +136,12 @@ export const disposalLinks: NavlinkProps[] = [
     url: "/disposals/requests",
     allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
-  {
-    name: "open disposals",
-    icon: FileClock,
-    url: "/disposals/in-progress",
-    allowedGroups: ["admin", "user", "maintenance", "manager"],
-  },
+  // {
+  //   name: "open disposals",
+  //   icon: FileClock,
+  //   url: "/disposals/in-progress",
+  //   allowedGroups: ["admin", "user", "maintenance", "manager"],
+  // },
   {
     name: ({ groups }) =>
       groups.includes("admin") ? "Completed Disposals" : "My Disposals",
@@ -167,21 +167,21 @@ export const profileLinks: NavlinkProps[] = [
   },
 ];
 
-export const stockLinks: NavlinkProps[] = [
-  // { name: "Settings", icon: Settings, url: "/settings" },
-  {
-    name: "Create Stock Item",
-    icon: Bolt,
-    url: "/stocks/create-new-stock", // frontend routes only, POST: /stocks for backend
-    allowedGroups: ["admin"],
-  },
-  {
-    name: "Stock Register",
-    icon: List,
-    url: "/stocks/list", // frontend routes only, GET: /stocks for backend
-    allowedGroups: ["admin", "user", "maintenance", "manager"],
-  },
-];
+// export const stockLinks: NavlinkProps[] = [
+//   // { name: "Settings", icon: Settings, url: "/settings" },
+//   {
+//     name: "Create Stock Item",
+//     icon: Bolt,
+//     url: "/stocks/create-new-stock", // frontend routes only, POST: /stocks for backend
+//     allowedGroups: ["admin"],
+//   },
+//   {
+//     name: "Stock Register",
+//     icon: List,
+//     url: "/stocks/list", // frontend routes only, GET: /stocks for backend
+//     allowedGroups: ["admin", "user", "maintenance", "manager"],
+//   },
+// ];
 
 /**
  * This structure allows us to easily map over sections and their respective links in the Sidebar component, while keeping all related data organized in one place. Each section has a heading and an array of links, which can be rendered conditionally based on user groups.
@@ -210,7 +210,7 @@ export const sidebarSectionData = [
   { heading: "Maintenance", data: maintenanceLinks },
   { heading: "Assets", data: assetLinks },
   { heading: "Asset Transfers", data: transferLinks },
-  { heading: "Stock Management", data: stockLinks },
+  // { heading: "Stock Management", data: stockLinks },
   { heading: "Disposals", data: disposalLinks },
   { heading: "Profile", data: profileLinks },
 ];

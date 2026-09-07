@@ -43,12 +43,8 @@ function DisposalRequestApproval({
   selectedAssetIndex,
   onSelectAsset,
 }: DisposalRequestApprovalProps) {
-  const {
-    selectedRowId,
-    // showRejectRequestDialogGeneric,
-    setShowRejectRequestDialogGeneric,
-    setRejectConfig,
-  } = useGlobalContext();
+  const { selectedRowId, setShowRejectRequestDialogGeneric, setRejectConfig } =
+    useGlobalContext();
 
   /* -------------------------------------------------------------------------- */
   /*                          Item Data                                         */

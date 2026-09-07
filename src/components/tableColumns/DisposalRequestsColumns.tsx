@@ -121,6 +121,13 @@ export const getDisposalRequestsColumns = (
         rowId,
         status: row.original.status,
         setSelectedRowId,
+        dispose: {
+          url: `/disposals/${rowId}/completed`,
+          onOpen: () => {
+            setSelectedRowId(rowId);
+            navigate(`/disposals/${rowId}/completed`);
+          },
+        },
         edit: {
           url: "/disposals/update-request",
           onOpen: () => {

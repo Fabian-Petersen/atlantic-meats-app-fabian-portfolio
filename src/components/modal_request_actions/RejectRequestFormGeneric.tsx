@@ -68,7 +68,7 @@ const RejectRequestFormGeneric = ({ rejectConfig }: Props) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className={cn(sharedStyles.modalForm)}
+      className={cn(sharedStyles.modalForm, "")}
     >
       <TextAreaInput
         register={register}
@@ -79,12 +79,18 @@ const RejectRequestFormGeneric = ({ rejectConfig }: Props) => {
         className="placeholder-black resize-none overflow-hidden no-scrollbar placeholder:text-lg"
       />
       {/* Actions */}
-      <div className={cn(sharedStyles.btnParent, sharedStyles.modalBtnParent)}>
+      <div
+        className={cn(
+          sharedStyles.btnParent,
+          sharedStyles.modalBtnParent,
+          "min-w-full",
+        )}
+      >
         <button
           type="button"
           disabled={isPending}
           onClick={() => setShowRejectRequestDialogGeneric(false)}
-          className={cn(sharedStyles.btnCancel, sharedStyles.btn)}
+          className={cn(sharedStyles.btnCancel, sharedStyles.btn, "size-10")}
         >
           Cancel
         </button>

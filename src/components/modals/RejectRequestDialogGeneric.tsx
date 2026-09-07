@@ -73,7 +73,7 @@ function RejectRequestDialogGeneric() {
       onClick={handleBackdropClick}
       aria-labelledby="reject-dialog-title"
       aria-describedby="reject-dialog-message"
-      className={cn("app-dialog", sharedStyles.modal)}
+      className={cn("app-dialog", sharedStyles.modal, "overflow-hidden")}
     >
       {/* stopPropagation so clicks inside the content don't bubble up
           to the backdrop-click handler above */}

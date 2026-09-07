@@ -11,6 +11,7 @@ import {
   type LucideIcon,
   History,
   Truck,
+  ArchiveX,
   Eye,
 } from "lucide-react";
 
@@ -58,6 +59,12 @@ type GetTableMenuItemsProps = {
   };
 
   transit?: {
+    label?: string;
+    url?: string;
+    onOpen: () => void;
+  };
+
+  dispose?: {
     label?: string;
     url?: string;
     onOpen: () => void;
@@ -125,6 +132,7 @@ export const getTableMenuItems = ({
   resend,
   userStatus,
   history,
+  dispose,
 }: GetTableMenuItemsProps): TableActionLinks[] => {
   const items: TableActionLinks[] = [];
 
@@ -188,6 +196,19 @@ export const getTableMenuItems = ({
       onClick: () => {
         setSelectedRowId(rowId);
         transit.onOpen();
+      },
+    });
+  }
+
+  if (dispose && status === "approved") {
+    items.push({
+      id: "dispose",
+      label: dispose.label ?? "Dispose",
+      icon: ArchiveX,
+      url: dispose.url,
+      onClick: () => {
+        setSelectedRowId(rowId);
+        dispose.onOpen();
       },
     });
   }
