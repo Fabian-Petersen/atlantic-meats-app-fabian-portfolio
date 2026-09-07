@@ -17,8 +17,6 @@ import { ProtectedRoute } from "./routes/ProtectedRoute";
 import RoleGaurdRoute from "./routes/RoleGaurdRoute";
 
 //$ Page Layouts
-// import JobItemPage from "./pages/JobApprovedItemPage";
-// import JobActionItemPage from "./pages/JobActionPage";
 import JobActionPage from "./pages/jobs/JobActionPage";
 
 // $ Assets Pages
@@ -66,7 +64,6 @@ import CreateTransferReceiptPage from "./pages/transfers/CreateTransferReceiptPa
 
 // # ——————— Tables Pages ————————————————————————————————————————————————————————
 import DisposalRequestsListPage from "./pages/disposals/DisposalRequestsListPage";
-import DisposalInProgressListPage from "./pages/disposals/DisposalInProgressListPage";
 import TransferCompleteListPage from "./pages/transfers/TransferCompleteListPage";
 
 // # ——————— Display Item Pages ——————————————————————————————————————————————————
@@ -153,14 +150,6 @@ function App() {
             <Route
               path="/disposals/:id/completed"
               element={<CreateDisposalCompletePage />}
-            />
-            <Route
-              path="/disposals/in-progress"
-              element={<DisposalInProgressListPage />}
-            />
-            <Route
-              path="/disposals/in-transit"
-              element={<TransferTransitListPage />}
             />
           </Route>
           {/* // % Admin only Routes */}
