@@ -52,6 +52,7 @@ import CreateTransferTransitPage from "./pages/transfers/CreateTransferTransitPa
 // import TransfersListPage from "./pages/transfers/TransfersListPage";
 import TransferTransitListPage from "./pages/transfers/TransferTransitListPage";
 import TransfersRequestsListPage from "./pages/transfers/TransfersRequestsListPage";
+import TransferCompleteListPage from "./pages/transfers/TransferCompleteListPage";
 // # ——————— Display Item Pages ——————————————————————————————————————————————————
 import TransferItemPage from "./pages/transfers/TransferItemPage";
 import TransferPendingItemPage from "./pages/transfers/TransferPendingItemPage";
@@ -64,7 +65,7 @@ import CreateTransferReceiptPage from "./pages/transfers/CreateTransferReceiptPa
 
 // # ——————— Tables Pages ————————————————————————————————————————————————————————
 import DisposalRequestsListPage from "./pages/disposals/DisposalRequestsListPage";
-import TransferCompleteListPage from "./pages/transfers/TransferCompleteListPage";
+import DisposalCompletedListPage from "./pages/disposals/DisposalCompletedListPage";
 
 // # ——————— Display Item Pages ——————————————————————————————————————————————————
 import DisposalItemPage from "./pages/disposals/DisposalItemPage";
@@ -150,6 +151,10 @@ function App() {
             <Route
               path="/disposals/:id/completed"
               element={<CreateDisposalCompletePage />}
+            />
+            <Route
+              path="/disposals/completed"
+              element={<DisposalCompletedListPage />}
             />
           </Route>
           {/* // % Admin only Routes */}

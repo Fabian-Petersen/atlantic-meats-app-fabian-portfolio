@@ -68,6 +68,7 @@ export type Resource =
   | `api/disposals/${string}/approve` // "POST: status === `approve`
   | `api/disposals/${string}/reject` // "POST: status === `reject`
   | `api/disposals/${string}/cancel` // "POST: status === `cancel`
+  | `api/disposals/${string}/download` // GET: Download disposal details from backend
   | `api/disposals/my-disposals` // "GET: Transfers by user sub"
   // $ Notifications
   | "api/notifications" // "GET: All notifications by user id
