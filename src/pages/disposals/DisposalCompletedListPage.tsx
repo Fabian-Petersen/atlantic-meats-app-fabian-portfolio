@@ -1,7 +1,7 @@
 // Completed disposal requests and their recorded completion details.
 
 import FormHeading from "../../../customComponents/FormHeading";
-import { useGetAll } from "@/utils/api";
+import { useDownloadPdf, useGetAll } from "@/utils/api";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import MobileDisposalsCompletedList from "@/components/mobile/disposals/MobileDisposalsCompletedList";
 
@@ -21,6 +21,7 @@ import {
 import useGlobalContext from "@/context/useGlobalContext";
 import { useMemo, useState } from "react";
 import type { DisposalWorkflowResponse } from "@/schemas/disposalsSchemas";
+import type { DocumentPresignedUrlResponse } from "@/schemas";
 // import { Error } from "@/components/features/Error";
 import { TableGeneric } from "@/components/features/tables/TableGeneric";
 import { SearchInput } from "@/components/features/SearchInput";
@@ -45,12 +46,15 @@ const DisposalCompletedListPage = () => {
     },
   });
 
+  // console.log("Completed Disposals Data:", data);
+
   const rows = useMemo<DisposalCompletedTableRow[]>(
-    () => (data ?? []).flatMap((disposal) =>
-      disposal.status === "disposed" && disposal.disposed
-        ? [{ ...disposal, ...disposal.disposed }]
-        : [],
-    ),
+    () =>
+      (data ?? []).flatMap((disposal) =>
+        disposal.status === "disposed" && disposal.disposed
+          ? [{ ...disposal, ...disposal.disposed }]
+          : [],
+      ),
     [data],
   );
 
@@ -78,9 +82,17 @@ const DisposalCompletedListPage = () => {
   /*                                   COLUMNS                                  */
   /* -------------------------------------------------------------------------- */
 
+  const { mutateAsync: downloadItem } =
+    useDownloadPdf<DocumentPresignedUrlResponse>({
+      resourcePath: "api/disposals",
+      path: "disposal-document",
+      getDownloadUrl: (data) => data.document_url,
+    });
+
   const columns = getDisposalCompletedColumns(
     setSelectedRowId,
     navigate,
+    downloadItem,
   );
 
   /* -------------------------------------------------------------------------- */

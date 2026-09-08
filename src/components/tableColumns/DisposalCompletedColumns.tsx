@@ -6,6 +6,7 @@ import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { NavigateFunction } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
+import { AssetsDropdownCell } from "@/components/features/tables/AssetsDropdownCell";
 
 // Derive completion fields directly from the API schema without duplicating it.
 export type DisposalCompletedTableRow = DisposalWorkflowResponse &
@@ -17,6 +18,7 @@ import { badgeStyles } from "@/styles/badgeStyles";
 export const getDisposalCompletedColumns = (
   setSelectedRowId: (id: string) => void,
   navigate: NavigateFunction,
+  downloadItem: (id: string) => Promise<unknown>,
 ): ColumnDef<DisposalCompletedTableRow>[] => [
   {
     accessorKey: "disposalCreated",
@@ -53,18 +55,9 @@ export const getDisposalCompletedColumns = (
       new Date(b.getValue<string>(id)).getTime(),
   },
   {
-    id: "assetID",
-    accessorFn: (row) =>
-      row.assets.map((asset) => asset.assetID || "Unidentified").join(", "),
-    header: "Asset ID",
-    size: 120,
-    minSize: 100,
-    maxSize: 140,
-  },
-  {
-    id: "equipment",
-    accessorFn: (row) => row.assets.map((asset) => asset.equipment).join(", "),
-    header: "Equipment",
+    accessorKey: "disposalLocation",
+    accessorFn: (row) => row.pending.location || "Unknown",
+    header: "Location",
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return <p className="capitalize">{value || "-"}</p>;
@@ -79,20 +72,16 @@ export const getDisposalCompletedColumns = (
     },
   },
   {
-    accessorKey: "disposalLocation",
-    header: "Disposal Location",
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value || "-"}</p>;
-    },
-  },
-  {
-    accessorKey: "disposalNotes",
-    header: "Disposal Notes",
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value || "-"}</p>;
-    },
+    id: "assets",
+    accessorFn: (row) =>
+      row.assets
+        .map(
+          (asset) =>
+            `${asset.equipment} ${asset.assetID?.trim() || "Unidentified"}`,
+        )
+        .join(", "),
+    header: "Equipment | Asset ID",
+    cell: ({ row }) => <AssetsDropdownCell assets={row.original.assets} />,
   },
   {
     accessorKey: "disposalCost",
@@ -141,20 +130,10 @@ export const getDisposalCompletedColumns = (
   {
     accessorKey: "disposedBy",
     header: "Disposed By",
-  },
-  {
-    id: "disposalImages",
-    accessorFn: (row) =>
-      row.disposalImages.map((file) => file.filename).join(", "),
-    header: "Disposal Photos",
-    cell: ({ getValue }) => getValue<string>() || "-",
-  },
-  {
-    id: "disposalDocuments",
-    accessorFn: (row) =>
-      row.disposalDocuments.map((file) => file.filename).join(", "),
-    header: "Supporting Documents",
-    cell: ({ getValue }) => getValue<string>() || "-",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value || "-"}</p>;
+    },
   },
   {
     accessorKey: "status",
@@ -193,6 +172,12 @@ export const getDisposalCompletedColumns = (
           onOpen: () => {
             setSelectedRowId(rowId);
             navigate(`/disposals/${rowId}`);
+          },
+        },
+        download: {
+          url: `api/disposals/${rowId}/disposal-document`,
+          onDownload: () => {
+            downloadItem(rowId);
           },
         },
       });

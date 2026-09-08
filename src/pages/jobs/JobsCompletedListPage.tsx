@@ -38,11 +38,11 @@ const JobsCompletedListPage = () => {
     //   group: "technician",
     // },
   });
-  const { setSelectedRowId, selectedRowId, setOpenChatSidebar } =
+  const { setSelectedRowId, setOpenChatSidebar } =
     useGlobalContext();
 
   const { mutateAsync: downloadItem } = useDownloadPdf({
-    resourcePath: `api/jobs/${selectedRowId}/jobcard`,
+    resourcePath: "api/jobs",
   });
 
   const [sorting, setSorting] = useState<SortingState>([

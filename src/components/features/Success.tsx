@@ -69,7 +69,7 @@ export const Success = () => {
               <p
                 className={cn(
                   sharedStyles.actionModalMessage,
-                  "text-xs lg:text-sm",
+                  "text-xs xl:text-sm",
                 )}
               >
                 {config.message}
@@ -89,7 +89,7 @@ export const Success = () => {
                 className={cn(
                   sharedStyles.btn,
                   sharedStyles.btnSubmit,
-                  "text-md w-3/4",
+                  "text-md w-full md:w-3/4",
                 )}
               >
                 Continue

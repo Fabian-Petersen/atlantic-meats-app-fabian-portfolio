@@ -111,12 +111,7 @@ export const Error = () => {
               <h1 className={cn(sharedStyles.actionModalTitle)}>
                 {config.title}
               </h1>
-              <p
-                className={cn(
-                  sharedStyles.actionModalMessage,
-                  "text-xs lg:text-sm",
-                )}
-              >
+              <p className={cn(sharedStyles.actionModalMessage)}>
                 {config.message}
               </p>
             </motion.div>
@@ -134,7 +129,7 @@ export const Error = () => {
                 className={cn(
                   sharedStyles.btn,
                   sharedStyles.btnSubmit,
-                  "text-md w-3/4",
+                  "text-md w-full md:w-3/4",
                 )}
               >
                 Continue

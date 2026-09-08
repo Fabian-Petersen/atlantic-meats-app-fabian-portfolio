@@ -29,7 +29,7 @@ function TablePageSizeSelector<T>({ table, className }: Props<T>) {
           sharedStyles.formInputDefault,
           sharedStyles.formSelect,
           "base-select",
-          "hover:cursor-pointer h-full w-26",
+          "h-full w-26 cursor-pointer rounded-lg border-slate-200 bg-white text-xs font-medium text-slate-700 shadow-none transition-none hover:border-amber-300 hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary/60 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-200 dark:hover:border-amber-600 dark:hover:bg-primary/20",
         )}
       >
         {[5, 10, 20, 50].map((size) => (

@@ -74,7 +74,7 @@ export function AssetsOverviewTable({ table, className }: Props) {
                     // console.log("Navigating to ID:", row.original.id);
                     navigate(`/assets/${row.original.id}`);
                   }}
-                  className="cursor-pointer hover:bg-primary/20 dark:bg-[#1d2739] dark:text-gray-200"
+                  className="cursor-pointer hover:bg-primary/20 dark:bg-[#1d2739] dark:hover:bg-primary/20 dark:text-gray-200"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className="px-4 py-3 text-gray-700">

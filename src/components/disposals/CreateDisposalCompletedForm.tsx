@@ -52,7 +52,7 @@ const CreateDisposalCompletedForm = () => {
     ) as Resolver<DisposalCompletionFormValues>,
     defaultValues: {
       disposalMethod: "",
-      disposalLocation: "",
+      // disposalLocation: "",
       disposalCost: null,
       disposalNotes: "",
       disposalImages: [],

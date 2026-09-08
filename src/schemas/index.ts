@@ -223,9 +223,11 @@ export type PresignedUrlResponse = {
   content_type: string;
 }[];
 
-export type JobcardPresignedUrlResponse = {
-  jobcard_url: string;
-};
+export type DocumentPresignedUrlResponse<TUrlKey extends string = "document_url"> =
+  Record<TUrlKey, string>;
+
+export type JobcardPresignedUrlResponse =
+  DocumentPresignedUrlResponse<"jobcard_url">;
 
 // $ General types for Badges
 export type Priority = "critical" | "high" | "medium" | "low";

@@ -164,8 +164,13 @@ export const badgeStyles = {
         "dark:border-amber-500 dark:bg-amber-300/20 dark:text-amber-300",
       ),
     },
+    // disposals use the same status as transfer_status
     transfer_status: {
       completed: cn(
+        "text-green-600 bg-green-300/30 border-green-300",
+        "dark:border-green-500 dark:bg-green-300/20 dark:text-green-300",
+      ),
+      disposed: cn(
         "text-green-600 bg-green-300/30 border-green-300",
         "dark:border-green-500 dark:bg-green-300/20 dark:text-green-300",
       ),

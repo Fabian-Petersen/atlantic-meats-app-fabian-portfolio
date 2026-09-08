@@ -175,30 +175,6 @@ export const useGetAll = <ResponseType>(options: {
   });
 };
 
-// $ Generic: GET All without query params
-// export const useGetAll = <ResponseType>(
-//   options: {
-//     resourcePath: Resource;
-//     queryKey: readonly unknown[];
-//   },
-//   // enabled: boolean = true,
-// ) => {
-//   const { resourcePath, queryKey } = options;
-//   return useQuery({
-//     queryKey,
-//     queryFn: async (): Promise<ResponseType> => {
-//       try {
-//         const response = await apiClient.get<ResponseType>(`/${resourcePath}`);
-//         return response.data as ResponseType;
-//       } catch (error) {
-//         console.error(`Error fetching ${resourcePath}:`, error);
-//         throw error;
-//       }
-//     },
-//     // enabled: enabled && !!resourcePath,
-//   });
-// };
-
 // $ Generic: GET by ID
 export const useById = <ResponseType>(options: {
   id: string;
@@ -378,29 +354,50 @@ export const useDeleteItem = <TPayload = unknown>(options: {
   });
 };
 
-export const useDownloadPdf = (options: { resourcePath: Resource }) => {
-  const { resourcePath } = options;
-
-  return useMutation({
-    mutationFn: async (id: string): Promise<JobcardPresignedUrlResponse> => {
-      const { data } = await apiClient.get<JobcardPresignedUrlResponse>(
-        `/${resourcePath}/${id}/jobcard`,
-      );
-      return data;
-    },
-
-    onSuccess: (data) => {
-      // $ Option 1: trigger a download in the same tab
-      window.location.href = data.jobcard_url;
-
-      // $ Option 2 (alternative): open in new tab
-      // window.open(jobcard_url, "_blank", "noopener,noreferrer");
-    },
-  });
+type DownloadPdfPathOptions = {
+  resourcePath: Resource;
+  // Endpoint suffix after the ID. Defaults to the existing jobcard route.
+  path?: string;
 };
 
-//  await queryClient.invalidateQueries({ queryKey: COMMENTS_KEY });
-// await queryClient.refetchQueries({ queryKey: COMMENTS_KEY, type: "active" });
+type DownloadPdfOptions<TResponse> = DownloadPdfPathOptions & {
+  getDownloadUrl: (data: TResponse) => string;
+};
+
+// Existing base-path callers retain the jobcard endpoint and response type.
+export function useDownloadPdf(options: DownloadPdfPathOptions): ReturnType<
+  typeof useMutation<JobcardPresignedUrlResponse, Error, string>
+>;
+export function useDownloadPdf<TResponse>(
+  options: DownloadPdfOptions<TResponse>,
+): ReturnType<typeof useMutation<TResponse, Error, string>>;
+export function useDownloadPdf<TResponse>(
+  options: DownloadPdfPathOptions | DownloadPdfOptions<TResponse>,
+) {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const urlPath = `/${options.resourcePath}/${id}/${options.path ?? "jobcard"}`;
+      if (!("getDownloadUrl" in options)) {
+        const { data } = await apiClient.get<JobcardPresignedUrlResponse>(
+          urlPath,
+        );
+        if (!data.jobcard_url?.trim()) {
+          throw new Error("The document response did not contain a download URL.");
+        }
+        window.location.href = data.jobcard_url;
+        return data;
+      }
+
+      const { data } = await apiClient.get<TResponse>(urlPath);
+      const url = options.getDownloadUrl(data);
+      if (typeof url !== "string" || !url.trim()) {
+        throw new Error("The document response did not contain a download URL.");
+      }
+      window.location.href = url;
+      return data;
+    },
+  });
+}
 
 export const useCreateMaintenanceRequest = () => {
   const queryClient = useQueryClient();

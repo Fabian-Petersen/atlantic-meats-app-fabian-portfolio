@@ -319,13 +319,13 @@ export const sharedStyles = {
     "fixed z-2000 h-screen top-0 left-0 w-full flex items-center justify-center px-4 bg-black/50 outline-0 border-0",
   ),
   actionModalContent: cn(
-    "flex flex-col items-center justify-center gap-6 w-full max-w-sm rounded-2xl h-80 md:h-90 dark:border-[rgba(55,65,81,0.5)] border border-gray-100 dark:bg-(--bg-primary_dark) bg-white p-2 text-center shadow-sm",
+    "flex flex-col items-center justify-center gap-6 w-full max-w-md rounded-2xl h-95 md:h-100 dark:border-[rgba(55,65,81,0.5)] border border-gray-100 dark:bg-(--bg-primary_dark) bg-white p-4 md:p-2 text-center shadow-sm",
   ),
   actionModalTitle: cn(
-    "mb-2 text-2xl tracking-wide font-semibold text-(--clr-textLight) dark:text-(--clr-textDark)",
+    "mb-2 text-2xl tracking-wide font-semibold text-(--clr-textLight) dark:text-(--clr-textDark) capitalize",
   ),
   actionModalMessage: cn(
-    "text-sm md:text-md tracking-wide text-(--clr-textLight) dark:text-(--clr-textDark)",
+    "text-xs xl:text-sm tracking-wide text-(--clr-textLight) dark:text-(--clr-textDark)",
   ),
   /* //$ ——— Charts ——————————————————————————————————————————————————————————— */
   chartParent: cn(

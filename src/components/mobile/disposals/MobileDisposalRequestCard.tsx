@@ -93,7 +93,7 @@ function MobileDisposalRequestCard({
           <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 dark:text-textDark capitalize">
             <MapPin className="w-3.5 h-3.5 shrink-0 text-blue-500" />
             <span className="truncate">{item.location}</span>
-            <ArrowRight className="w-3 h-3 shrink-0 text-green-500" />
+            <ArrowRight className="w-3 h-3 shrink-0 text-red-500" />
             <span className="truncate">{item.disposalReason}</span>
           </div>{" "}
           <CardRow

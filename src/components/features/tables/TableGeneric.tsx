@@ -223,7 +223,7 @@ export function TableGeneric<T extends { id: string }>({
                           `/${rowPath}/${row.original.id}${rowAction ? `/${rowAction}` : ""}`,
                         );
                       }}
-                      className={`text-cxs cursor-pointer hover:bg-primary/20 dark:bg-(--bg-secondary_dark) bg-gray-50/90 ${customRowClass}`}
+                      className={`text-cxs cursor-pointer hover:bg-primary/20 dark:bg-(--bg-secondary_dark) dark:hover:bg-primary/20 bg-gray-50/90 ${customRowClass}`}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <td key={cell.id} className="px-2 py-3">
