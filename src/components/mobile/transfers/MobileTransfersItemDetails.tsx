@@ -118,12 +118,6 @@ function MobileTransfersItemDetails({ item }: Props) {
             <MessageSquare className="w-5 h-5" />
           </button>
         </div>
-        <h1 className="text-lg font-semibold capitalize leading-tight text-(--clr-textLight) dark:text-(--clr-textDark)">
-          {item?.assets[0]?.equipment}
-        </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          Asset ID: {item?.assets[0]?.assetID ?? "—"}
-        </p>
       </div>
 
       {/* ── Tab nav: horizontal scroll ── */}
@@ -152,14 +146,9 @@ function MobileTransfersItemDetails({ item }: Props) {
       <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto custom-scrollbar px-4 pb-4">
         {/* ── Tab: Request ── */}
         {activeTab === "request" && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 pt-2">
             <>
-              {approved ? (
-                <div className="flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/40 rounded-md px-3 py-2 max-w-fit">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                  Approved · {formatDateTime(approved.approvedDate)}
-                </div>
-              ) : rejected ? (
+              {rejected ? (
                 <div className="flex items-center gap-2 text-xs text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/40 rounded-md px-3 py-2 max-w-fit">
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
                   Rejected · {formatDateTime(rejected.dateRejected)}
@@ -172,12 +161,15 @@ function MobileTransfersItemDetails({ item }: Props) {
               ) : null}
 
               {approved && (
-                <div className="flex flex-col gap-3">
-                  <SectionTitle>Approved by</SectionTitle>
-                  <PersonRow
-                    name={approved.approvedBy}
-                    sub={`Approval ID · ${approved.approvalId}`}
-                  />
+                <div className="flex flex-col gap-2 py-2">
+                  <SectionTitle className="mb-0">Approved by</SectionTitle>
+                  <div className="flex items-center justify-between w-full">
+                    <PersonRow name={approved.approvedBy} />
+                    <div className="flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/40 rounded-md px-3 py-2 max-w-fit">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                      {formatDateTime(approved.approvedDate)}
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -361,7 +353,10 @@ function MobileTransfersItemDetails({ item }: Props) {
 
                 {completed.receiptNotes && (
                   <>
-                    <Separator width="100%" />
+                    <Separator
+                      width="100%"
+                      className="dark:border-gray-500/20"
+                    />
                     <SectionTitle>Notes</SectionTitle>
                     <DescriptionBox>{completed.receiptNotes}</DescriptionBox>
                   </>

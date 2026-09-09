@@ -13,6 +13,7 @@ import {
   Truck,
   ArchiveX,
   Eye,
+  CheckCircle,
 } from "lucide-react";
 
 import type { Resource } from "@/utils/api";
@@ -35,6 +36,12 @@ type GetTableMenuItemsProps = {
   setSelectedRowId: (id: string) => void;
 
   create?: {
+    label?: string;
+    url?: string;
+    onOpen: () => void;
+  };
+
+  approve?: {
     label?: string;
     url?: string;
     onOpen: () => void;
@@ -120,6 +127,7 @@ export const getTableMenuItems = ({
   request_id,
   status,
   setSelectedRowId,
+  approve,
   edit,
   view,
   transit,
@@ -183,6 +191,19 @@ export const getTableMenuItems = ({
       onClick: () => {
         setSelectedRowId(rowId);
         receipt.onOpen();
+      },
+    });
+  }
+
+  if (approve && status === "pending") {
+    items.push({
+      id: "approve",
+      label: approve.label ?? "Approve",
+      icon: CheckCircle,
+      url: approve.url,
+      onClick: () => {
+        setSelectedRowId(rowId);
+        approve.onOpen();
       },
     });
   }

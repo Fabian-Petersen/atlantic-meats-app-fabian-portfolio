@@ -1,4 +1,12 @@
-import { ChevronDown, MapPin, Calendar, Wrench } from "lucide-react";
+import {
+  CheckCircle2,
+  ChevronDown,
+  Eye,
+  MapPin,
+  Calendar,
+  Wrench,
+  XCircle,
+} from "lucide-react";
 import { Badge } from "../features/Badge";
 import type { JobAPIResponse } from "@/schemas";
 import type { Row } from "@tanstack/react-table";
@@ -13,6 +21,7 @@ import { cn } from "@/lib/utils";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { AnimatePresence, motion } from "motion/react";
 import { motionVariants } from "@/styles/motionStyles";
+import { DropdownMenuButtonDialog } from "@/components/modals/DropdownMenuButtonDialog";
 
 type MaintenanceRequestCardProps = {
   row: Row<JobAPIResponse>;
@@ -35,6 +44,36 @@ export default function MobileJobsPendingCard({
     setShowRejectRequestDialog,
     setShowApproveRequestDialog,
   } = useGlobalContext();
+
+  const menuItems = [
+    {
+      id: "view",
+      label: "View Details",
+      icon: Eye,
+      onClick: () => {
+        navigate(`/jobs/${item.id}/pending-approval`);
+        setSelectedRowId(item.id);
+      },
+    },
+    {
+      id: "reject",
+      label: "Reject",
+      icon: XCircle,
+      onClick: () => {
+        setShowRejectRequestDialog(true);
+        setSelectedRowId(item.id);
+      },
+    },
+    {
+      id: "approve",
+      label: "Approve",
+      icon: CheckCircle2,
+      onClick: () => {
+        setSelectedRowId(item.id);
+        setShowApproveRequestDialog(true);
+      },
+    },
+  ];
 
   // const { mutateAsync: approveRequest, isPending } = usePOST({
   //   id: selectedRowId ?? "",
@@ -69,16 +108,15 @@ export default function MobileJobsPendingCard({
       )}
     >
       {/* Always-visible header — tap to expand */}
-      <button
-        type="button"
+      <div
         className={cn(sharedStyles.cardBtn)}
         onClick={onToggle}
       >
         {/* Location + meta row */}
-        <div className="flex-1 min-w-0 gap-1 flex flex-col">
+        <div className={sharedStyles.mobileCardHeaderContent}>
           <div className="flex items-center gap-1.5 mb-1">
             <MapPin className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate capitalize">
+            <p className={sharedStyles.mobileCardTitle}>
               {item.location}
             </p>
           </div>
@@ -89,20 +127,23 @@ export default function MobileJobsPendingCard({
             </span>
           </div>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className={sharedStyles.mobileCardActions}>
           <Badge
             value={item.priority}
             styleMap={badgeStyles.families.priority}
-            className={cn("capitalize")}
+            className={sharedStyles.mobileCardBadge}
           />
+          <div onClick={(e) => e.stopPropagation()}>
+            <DropdownMenuButtonDialog menuItems={menuItems} />
+          </div>
           <ChevronDown
             className={cn(
-              "w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200",
+              sharedStyles.mobileCardChevron,
               isOpen && "rotate-180",
             )}
           />
         </div>
-      </button>
+      </div>
 
       {/* Expanded section */}
       <AnimatePresence initial={false}>
@@ -135,48 +176,6 @@ export default function MobileJobsPendingCard({
                 </p>
               )}
 
-              {/* Actions */}
-              <div className="flex gap-2 pt-1">
-                {/* View full details */}
-                <button
-                  type="button"
-                  className="flex-1 py-2 text-xs font-medium rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`/jobs/${item.id}/pending-approval`);
-                    setSelectedRowId(item.id);
-                  }}
-                >
-                  View Details
-                </button>
-
-                {/* Reject */}
-                <button
-                  type="button"
-                  className="flex-1 py-2 text-xs font-medium rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors border dark:border-(--clr-borderDarkRed)"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowRejectRequestDialog(true);
-                    setSelectedRowId(item.id);
-                  }}
-                >
-                  Reject
-                </button>
-
-                {/* Approve */}
-                <button
-                  type="button"
-                  // disabled={isPending}
-                  className="flex-1 py-2 text-xs font-medium rounded-lg dark:bg-green/20 bg-green-500/10 border-green/20 hover:bg-green-500/90 hover:shadow-md text-green-500 border dark:border-green/30 transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedRowId(item.id);
-                    setShowApproveRequestDialog(true);
-                  }}
-                >
-                  Approve
-                </button>
-              </div>
             </div>
           </motion.div>
         )}

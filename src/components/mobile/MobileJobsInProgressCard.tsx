@@ -2,7 +2,6 @@ import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 import type { Row } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
-import { priorityConfig } from "@/lib/priorityConfig";
 import { AnimatePresence, motion } from "motion/react";
 import {
   ChevronDown,
@@ -12,13 +11,16 @@ import {
   FileClock,
   User,
   Clock2Icon,
+  Eye,
 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/features/Badge";
+import { badgeStyles } from "@/styles/badgeStyles";
 import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import { motionVariants } from "@/styles/motionStyles";
+import { DropdownMenuButtonDialog } from "@/components/modals/DropdownMenuButtonDialog";
 
 type Props = {
   row: Row<JobApprovedAPIResponse>;
@@ -27,12 +29,30 @@ type Props = {
 };
 
 export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
-  const priority =
-    priorityConfig[row.original.priority?.toLowerCase()] ?? priorityConfig.low;
-
   const navigate = useNavigate();
 
   const { setSelectedRowId } = useGlobalContext();
+
+  const menuItems = [
+    {
+      id: "view",
+      label: "View Details",
+      icon: Eye,
+      onClick: () => {
+        navigate(`/jobs/${row.original.id}/in-progress`);
+        setSelectedRowId(row.original.id);
+      },
+    },
+    {
+      id: "action",
+      label: "Action",
+      icon: Wrench,
+      onClick: () => {
+        setSelectedRowId(row.original.id);
+        navigate(`/jobs/${row.original.id}/action`);
+      },
+    },
+  ];
 
   return (
     <div
@@ -43,16 +63,15 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
       )}
       onClick={onToggle}
     >
-      <button
-        type="button"
+      <div
         className="w-full text-left py-3 flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
         onClick={onToggle}
       >
         {/* Location + meta row */}
-        <div className="flex-1 min-w-0">
+        <div className={sharedStyles.mobileCardHeaderContent}>
           <div className="flex items-center gap-1.5 mb-1">
             <MapPin className="w-3 h-3 text-gray-400 shrink-0" />
-            <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate capitalize">
+            <p className={sharedStyles.mobileCardTitle}>
               {row.original.location}
             </p>
           </div>
@@ -75,20 +94,24 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
         </div>
 
         {/* Priority badge */}
-        <div className="flex gap-2 items-center">
+        <div className={sharedStyles.mobileCardActions}>
           <Badge
-            className={`shrink-0 text-xs font-medium px-2.5 py-0.5 rounded-full ${priority.className}`}
-          >
-            {priority.label}
-          </Badge>
+            value={row.original.priority}
+            styleMap={badgeStyles.families.priority}
+            className={sharedStyles.mobileCardBadge}
+          />
+          <div onClick={(e) => e.stopPropagation()}>
+            <DropdownMenuButtonDialog menuItems={menuItems} />
+          </div>
           {/* Chevron */}
           <ChevronDown
-            className={`w-4 h-4 text-gray-400 shrink-0 transition-transform duration-200 ${
-              isOpen ? "rotate-180" : ""
-            }`}
+            className={cn(
+              sharedStyles.mobileCardChevron,
+              isOpen && "rotate-180",
+            )}
           />
         </div>
-      </button>
+      </div>
 
       <AnimatePresence initial={false}>
         {isOpen && (
@@ -135,31 +158,6 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
                 </p>
               )}
 
-              {/* // $ -------------------- Action Buttons -------------------------- */}
-              <div className="flex gap-2 pt-1">
-                <button
-                  type="button"
-                  className="flex-1 py-2 text-xs font-medium rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`/jobs/${row.original.id}/in-progress`);
-                    setSelectedRowId(row.original.id);
-                  }}
-                >
-                  View Details
-                </button>
-                <button
-                  type="button"
-                  className="flex-1 py-2 text-xs font-medium rounded-lg dark:bg-green/20 bg-green-500/10 border-green/20 hover:bg-green-500/90 hover:shadow-md text-green-500 border dark:border-green/30 transition-colors "
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedRowId(row.original.id);
-                    navigate(`/jobs/${row.original.id}/action`);
-                  }}
-                >
-                  Action
-                </button>
-              </div>
             </div>
           </motion.div>
         )}

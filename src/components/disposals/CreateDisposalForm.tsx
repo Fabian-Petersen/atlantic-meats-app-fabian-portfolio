@@ -11,7 +11,7 @@ import {
   useWatch,
   type Resolver,
 } from "react-hook-form";
-import { Info } from "lucide-react";
+// import { Info } from "lucide-react";
 
 // $ Import schemas
 
@@ -20,6 +20,8 @@ import useGlobalContext from "@/context/useGlobalContext";
 import DynamicForm, { DynamicFormActions } from "../forms/DynamicForm";
 import DisposalAssetFields from "./DisposalAssetFields";
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
+import FormInfo from "../features/forms/FormInfo";
+
 import {
   disposalRequestSchema,
   disposalReasons,
@@ -268,16 +270,13 @@ const CreateDisposalForm = () => {
           </div>
         )}
         {!location && (
-          <div
-            role="status"
-            className="mx-0 flex items-center gap-2 rounded-md border border-blue-200 bg-blue-50 p-3 text-xs text-blue-800 dark:border-blue-700 dark:bg-blue-900/40 dark:text-blue-200"
-          >
-            <Info className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-            <p>
-              Select a <strong>Location</strong> before selecting assets for
-              disposal.
-            </p>
-          </div>
+          <FormInfo
+            message={
+              <>
+                Select a <strong>Location</strong> before selecting the assets.
+              </>
+            }
+          />
         )}
         {/* Asset list — gets its own top margin + internal spacing */}
         <div className="space-y-6">

@@ -1,4 +1,11 @@
-import { ChevronDown, MapPin, Calendar, User, FileText } from "lucide-react";
+import {
+  ChevronDown,
+  MapPin,
+  Calendar,
+  User,
+  FileText,
+  Eye,
+} from "lucide-react";
 import type { ActionAPIResponse } from "@/schemas";
 import type { Row } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +17,7 @@ import { Badge } from "../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { AnimatePresence, motion } from "motion/react";
 import { motionVariants } from "@/styles/motionStyles";
+import { DropdownMenuButtonDialog } from "@/components/modals/DropdownMenuButtonDialog";
 
 type JobsActionedCardProps = {
   row: Row<ActionAPIResponse>;
@@ -26,6 +34,18 @@ export default function MobileJobsCompletedCard({
   const navigate = useNavigate();
   const { setSelectedRowId } = useGlobalContext();
 
+  const menuItems = [
+    {
+      id: "view",
+      label: "View Job Details",
+      icon: Eye,
+      onClick: () => {
+        setSelectedRowId(item.id);
+        navigate(`/jobs/${item.id}/complete`);
+      },
+    },
+  ];
+
   return (
     <div
       className={cn(
@@ -36,25 +56,24 @@ export default function MobileJobsCompletedCard({
       onClick={onToggle}
     >
       {/* Always-visible header — tap to expand */}
-      <button
-        type="button"
+      <div
         className={cn(sharedStyles.cardBtn, "gap-0")}
         onClick={onToggle}
       >
         {/* // $ ——— Location + Meta Row —————————————————————————————————————————————————— */}
-        <div className="flex flex-col flex-1 min-w-0">
+        <div className={sharedStyles.mobileCardHeaderContent}>
           <CardRow
             icon={MapPin}
             value={item.location}
             className="capitalize text-(--clr-textLight) py-0"
-            valueStyles="text-md font-semibold dark:text-white/90"
+            valueStyles={sharedStyles.mobileCardTitle}
             iconStyles="w-3.5 h-3.5 text-blue-500 dark:text-blue-400"
           />
           <CardRow
             value={item.jobcardNumber}
             icon={FileText}
             className=""
-            valueStyles="text-cxs"
+            valueStyles={sharedStyles.mobileCardMeta}
             iconStyles="w-3.5 h-3.5 text-teal-500 dark:text-teal-400"
           />
           <CardRow
@@ -62,24 +81,27 @@ export default function MobileJobsCompletedCard({
             value={item.completed_at}
             className=""
             labelStyles=""
-            valueStyles="text-cxs"
+            valueStyles={sharedStyles.mobileCardMeta}
             iconStyles="w-3.5 h-3.5 text-purple-500 dark:text-purple-400"
           />
         </div>
-        <div className="flex gap-2 items-center shrink-0">
+        <div className={sharedStyles.mobileCardActions}>
           <Badge
             value={item.status}
             styleMap={badgeStyles.families.status}
-            className={cn("capitalize")}
+            className={sharedStyles.mobileCardBadge}
           />
+          <div onClick={(e) => e.stopPropagation()}>
+            <DropdownMenuButtonDialog menuItems={menuItems} />
+          </div>
           <ChevronDown
             className={cn(
-              "w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200",
+              sharedStyles.mobileCardChevron,
               isOpen && "rotate-180",
             )}
           />
         </div>
-      </button>
+      </div>
 
       {/* // $ ——— Expanded Section ——————————————————————————————————————————————————————*/}
       <AnimatePresence initial={false}>
@@ -130,24 +152,6 @@ export default function MobileJobsCompletedCard({
                   <CardRow value={item.work_completed} className="py-1" />
                 </div>
               )}
-              {/* // $ ——— Actions ———————————————————————————————————————————————————————— */}
-              <div className={cn(sharedStyles.btnParent)}>
-                <button
-                  type="button"
-                  className={cn(
-                    sharedStyles.btnSubmit,
-                    sharedStyles.btn,
-                    "py-3",
-                  )}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedRowId(item.id);
-                    navigate(`/jobs/${item.id}/complete`);
-                  }}
-                >
-                  View Job Details
-                </button>
-              </div>
             </div>
           </motion.div>
         )}

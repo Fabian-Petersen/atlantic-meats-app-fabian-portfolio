@@ -21,11 +21,17 @@ function VerificationStatus({ data, isPending }: Props) {
   const role = useUserRole();
   const [selectedStore, setSelectedStore] = useState<StoreValue>("all");
 
-  const { data: adminStoreData, isPending: isAdminPending } =
-    useVerificationData(role === "admin" ? selectedStore : undefined);
+  const selectedAdminStore =
+    role === "admin" && selectedStore !== "all" ? selectedStore : undefined;
 
-  const activeData = role === "admin" ? adminStoreData : data;
-  const activeIsPending = role === "admin" ? isAdminPending : isPending;
+  const { data: adminStoreData, isPending: isAdminPending } =
+    useVerificationData(selectedAdminStore);
+
+  const isViewingAdminStore = selectedAdminStore !== undefined;
+  const activeData = isViewingAdminStore ? adminStoreData : data;
+  const activeIsPending = isViewingAdminStore ? isAdminPending : isPending;
+
+  // console.log("verification chart data:", activeData);
 
   return (
     <section

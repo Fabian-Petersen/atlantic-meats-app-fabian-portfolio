@@ -47,26 +47,26 @@ export function MobileUsersCard({ row, isOpen, setOpen, onToggle }: Props) {
         onClick={onToggle}
       >
         {/* Location + meta row */}
-        <div className="flex flex-col flex-1 min-w-0 gap-2">
+        <div className={sharedStyles.mobileCardHeaderContent}>
           <CardRow
             icon={User}
             value={`${item.name} ${item.family_name}`}
             className="capitalize text-(--clr-textLight) py-0"
-            valueStyles="text-md font-semibold dark:text-white/90"
+            valueStyles={sharedStyles.mobileCardTitle}
             iconStyles="w-3.5 h-3.5 text-blue-500 dark:text-blue-400"
           />
           <CardRow
             icon={MapPin}
             value={item.location}
             className="capitalize text-(--clr-textLight) py-0"
-            valueStyles="text-xs"
+            valueStyles={sharedStyles.mobileCardMeta}
             iconStyles="w-3.5 h-3.5 text-green-500 dark:text-green-400"
           />
         </div>
-        <div className="flex gap-2 items-center shrink-0">
+        <div className={sharedStyles.mobileCardActions}>
           <ChevronDown
             className={cn(
-              "w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200",
+              sharedStyles.mobileCardChevron,
               isOpen && "rotate-180",
             )}
           />

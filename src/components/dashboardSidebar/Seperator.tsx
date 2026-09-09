@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 type Props = { height?: string; width?: string; className?: string };
 
 export default function Separator({
@@ -7,9 +9,11 @@ export default function Separator({
 }: Props) {
   return (
     <div
-      className={`mx-auto border-t dark:border-gray-100/20 border-gray-500/50 ${
-        className || ""
-      }`}
+      className={cn(
+        `mx-auto border-t dark:border-gray-100/20 border-gray-400/20 ${
+          className
+        }`,
+      )}
       style={{ height, width }}
     />
   );

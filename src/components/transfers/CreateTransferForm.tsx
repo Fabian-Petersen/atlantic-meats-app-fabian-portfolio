@@ -11,7 +11,6 @@ import {
   useWatch,
   type Resolver,
 } from "react-hook-form";
-import { Info } from "lucide-react";
 
 // $ Import schemas
 import type { TransferRequestFormValues } from "../../schemas/index";
@@ -23,6 +22,7 @@ import DynamicForm, { DynamicFormActions } from "../forms/DynamicForm";
 import TransferAssetFields from "./TransferAssetFields";
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
 import type { TransferRequestPayload } from "@/schemas/transfersSchemas";
+import FormInfo from "../features/forms/FormInfo";
 
 const CreateTransferForm = () => {
   const navigate = useNavigate();
@@ -273,16 +273,13 @@ const CreateTransferForm = () => {
           </div>
         )}
         {!locationFrom && (
-          <div
-            role="status"
-            className="mx-0 flex items-start gap-2 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-800"
-          >
-            <Info className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-            <p>
-              Select a <strong>Location From</strong> before selecting assets
-              for this transfer.
-            </p>
-          </div>
+          <FormInfo
+            message={
+              <>
+                Select a <strong>Location From</strong> before selecting assets.
+              </>
+            }
+          />
         )}
         {/* Asset list — gets its own top margin + internal spacing */}
         <div className="space-y-6">

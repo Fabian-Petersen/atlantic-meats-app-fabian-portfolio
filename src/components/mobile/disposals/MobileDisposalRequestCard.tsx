@@ -38,7 +38,7 @@ function MobileDisposalRequestCard({
   const { setSelectedRowId, setShowUpdateAssetDialog } = useGlobalContext();
 
   const rowId = item.id;
-  const isStatusPending = item.status === "pending";
+  // const isStatusPending = item.status === "pending";
   const hasAsset = item.assets?.length > 0;
   // const hasMultipleAssets = item.assets?.length > 1;
 
@@ -46,33 +46,40 @@ function MobileDisposalRequestCard({
     rowId: item.id,
     status: item.status,
     setSelectedRowId,
-    transit: {
-      url: `api/transfers/${rowId}/in-transit`,
+    approve: {
+      url: `api/disposals/${rowId}/pending-approval`,
       onOpen: () => {
         setSelectedRowId(rowId);
-        navigate(`/transfers/${rowId}/in-transit`);
+        navigate(`/disposals/${rowId}/pending-approval`);
+      },
+    },
+    dispose: {
+      url: `api/disposals/${rowId}/completed`,
+      onOpen: () => {
+        setSelectedRowId(rowId);
+        navigate(`/disposals/${rowId}/completed`);
       },
     },
     edit: {
-      url: `api/transfers/${rowId}`,
+      url: `api/disposals/${rowId}`,
       onOpen: () => {
         setShowUpdateAssetDialog(true);
         setSelectedRowId(rowId);
       },
     },
     view: {
-      url: `api/transfers/${rowId}`,
+      url: `api/disposals/${rowId}`,
       onOpen: () => {
         setSelectedRowId(rowId);
-        navigate(`/transfers/${rowId}`);
+        navigate(`/disposals/${rowId}`);
       },
     },
   });
 
-  const handleReview = () => {
-    setSelectedRowId(item.id);
-    navigate(`/transfers/${item.id}/pending-approval`);
-  };
+  // const handleReview = () => {
+  //   setSelectedRowId(item.id);
+  //   navigate(`/disposals/${item.id}/pending-approval`);
+  // };
 
   return (
     <div
@@ -89,8 +96,13 @@ function MobileDisposalRequestCard({
         onClick={onToggle}
         className={cn(sharedStyles.cardBtn, "gap-0")}
       >
-        <div className="flex flex-col flex-1 min-w-0 gap-1.5">
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 dark:text-textDark capitalize">
+        <div className={sharedStyles.mobileCardHeaderContent}>
+          <div
+            className={cn(
+              sharedStyles.mobileCardTitle,
+              "flex items-center gap-1.5",
+            )}
+          >
             <MapPin className="w-3.5 h-3.5 shrink-0 text-blue-500" />
             <span className="truncate">{item.location}</span>
             <ArrowRight className="w-3 h-3 shrink-0 text-red-500" />
@@ -100,15 +112,15 @@ function MobileDisposalRequestCard({
             value={item?.disposalCreated}
             icon={Calendar}
             className="capitalize dark:text-(--clr-textDark) text-(--clr-textLight) py-0"
-            valueStyles="text-xs text-gray-400 dark:text-gray-400 font-mono"
+            valueStyles={sharedStyles.mobileCardMeta}
             iconStyles="w-3.5 h-3.5 text-teal-500 dark:text-teal-400"
           />
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className={sharedStyles.mobileCardActions}>
           <Badge
             value={item.status}
             styleMap={badgeStyles.families.transfer_status}
-            className={cn("capitalize")}
+            className={sharedStyles.mobileCardBadge}
           />
           <div onClick={(e) => e.stopPropagation()}>
             <DropdownMenuButtonDialog menuItems={menuItems} />
@@ -120,7 +132,7 @@ function MobileDisposalRequestCard({
           >
             <ChevronDown
               className={cn(
-                "w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200",
+                sharedStyles.mobileCardChevron,
                 isOpen && "rotate-180",
               )}
             />
@@ -182,7 +194,7 @@ function MobileDisposalRequestCard({
                 </div>
               )}
 
-              {isStatusPending && (
+              {/* {isStatusPending && (
                 <button
                   type="button"
                   onClick={handleReview}
@@ -194,7 +206,7 @@ function MobileDisposalRequestCard({
                 >
                   Review Request
                 </button>
-              )}
+              )} */}
             </div>
           </motion.div>
         )}

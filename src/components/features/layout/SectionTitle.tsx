@@ -23,9 +23,21 @@
  * - `mb-3` Margin bottom spacing
  */
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
+import { cn } from "@/lib/utils";
+
+function SectionTitle({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <p className="text-[10px] uppercase tracking-widest font-medium text-gray-400 dark:text-gray-500 mb-3">
+    <p
+      className={cn(
+        `text-[10px] uppercase tracking-widest font-medium text-gray-400 dark:text-gray-500 mb-3, ${className}`,
+      )}
+    >
       {children}
     </p>
   );

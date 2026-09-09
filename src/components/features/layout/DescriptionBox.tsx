@@ -35,7 +35,15 @@ function DescriptionBox({
   className?: string;
 }) {
   return (
-    <div className={cn(sharedStyles.description, className)}>{children}</div>
+    <div
+      className={cn(
+        sharedStyles.DescriptionDefault,
+        sharedStyles.description,
+        className,
+      )}
+    >
+      {children}
+    </div>
   );
 }
 

@@ -28,8 +28,10 @@ function PersonRow({ name, sub }: { name: string; sub?: string }) {
     <div className="flex items-center gap-3 dark:text-(--clr-textDark) capitalize">
       <Avatar name={name} isFullName={true} />
       <div className="flex flex-col leading-snug">
-        <span className="text-sm font-medium capitalize">{name}</span>
-        <span className="text-xs text-gray-500 dark:text-gray-400">{sub}</span>
+        <span className="text-sm font-medium capitalize text-gray-500 dark:text-gray-300">
+          {name}
+        </span>
+        <span className="text-xs text-gray-500 dark:text-gray-300">{sub}</span>
       </div>
     </div>
   );

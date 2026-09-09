@@ -97,14 +97,19 @@ function MobileTransferTransitCard({
       )}
     >
       {/* ── Header (always visible, toggles expansion) ── */}
-      <div className="flex items-center justify-between gap-2 w-full">
+      <div className={sharedStyles.mobileCardHeader}>
         <button
           type="button"
           onClick={onToggle}
           className="flex items-center justify-between gap-2 flex-1 min-w-0 text-left"
         >
-          <div className="flex flex-col flex-1 min-w-0 gap-1.5">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 dark:text-textDark capitalize">
+          <div className={sharedStyles.mobileCardHeaderContent}>
+            <div
+              className={cn(
+                sharedStyles.mobileCardTitle,
+                "flex items-center gap-1.5",
+              )}
+            >
               <MapPin className="w-3.5 h-3.5 shrink-0 text-blue-500" />
               <span className="truncate">{item?.pending?.locationFrom}</span>
               <ArrowRight className="w-3 h-3 shrink-0 text-green-500" />
@@ -114,12 +119,12 @@ function MobileTransferTransitCard({
               value={item?.pending?.expectedDate}
               icon={Calendar}
               className="capitalize dark:text-(--clr-textDark) text-(--clr-textLight) py-0"
-              valueStyles="text-xs text-gray-400 dark:text-gray-400 font-mono"
+              valueStyles={sharedStyles.mobileCardMeta}
               iconStyles="w-3.5 h-3.5 text-teal-500 dark:text-teal-400"
             />
           </div>
         </button>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className={sharedStyles.mobileCardActions}>
           {/* <Badge
             value={item.status}
             styleMap={badgeStyles.families.transfer_status}
@@ -135,7 +140,7 @@ function MobileTransferTransitCard({
           >
             <ChevronDown
               className={cn(
-                "w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200",
+                sharedStyles.mobileCardChevron,
                 isOpen && "rotate-180",
               )}
             />
@@ -223,7 +228,7 @@ function MobileTransferTransitCard({
               <CardRow
                 icon={DollarSign}
                 label="Cost"
-                className="py-3 border border-red-500 dark:border-red-400"
+                className="py-3"
                 iconStyles="dark:text-red-400"
                 value={String(item["in-transit"]?.transportCost ?? "")}
               />

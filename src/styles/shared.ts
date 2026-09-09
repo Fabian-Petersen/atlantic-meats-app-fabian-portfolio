@@ -79,6 +79,17 @@ export const sharedStyles = {
     "dark:hover:bg-white/5",
     "",
   ),
+  mobileCardHeader: cn("flex w-full items-center justify-between gap-2"),
+  mobileCardHeaderContent: cn("flex min-w-0 flex-1 flex-col gap-1.5"),
+  mobileCardTitle: cn(
+    "truncate text-xs font-semibold capitalize text-gray-500 dark:text-(--clr-textDark)",
+  ),
+  mobileCardMeta: cn("text-xs text-gray-400 dark:text-gray-400 font-mono"),
+  mobileCardActions: cn("flex shrink-0 items-center gap-2"),
+  mobileCardBadge: cn("capitalize"),
+  mobileCardChevron: cn(
+    "size-4 shrink-0 text-gray-400 transition-transform duration-200 dark:text-gray-500",
+  ),
   /* //$ ——— Buttons ———————————————————————————————————————————————————————— */
   btnParent: cn("flex w-full md:max-w-1/2 ml-auto gap-2 md:w-72"), // container for the buttons
   btn: cn(
@@ -345,10 +356,10 @@ export const sharedStyles = {
   ),
 
   /* //$ ——— Description (Items) ——————————————————————————————————————————————————————————— */
-  description: cn("rounded-md px-3 py-2.5 text-sm leading-relaxed"),
   DescriptionDefault: cn(
     "bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700 text-gray-800 dark:text-gray-200",
   ),
+  description: cn("rounded-md px-2 py-2.5 text-xs lg:text-sm leading-relaxed"),
   descriptionReject: cn(
     "bg-red-100/80 dark:bg-red-900/20 border border-red-100 dark:border-red-800/40 text-red-700 dark:text-red-400",
   ),

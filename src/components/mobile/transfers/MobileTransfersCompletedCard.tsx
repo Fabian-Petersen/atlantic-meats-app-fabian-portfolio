@@ -100,39 +100,39 @@ function MobileTransfersCompletedCard({
       )}
     >
       {/* ── Header (always visible, toggles expansion) ── */}
-      <div className="flex items-center justify-between gap-2 w-full">
+      <div className={sharedStyles.mobileCardHeader}>
         <button
           type="button"
           onClick={onToggle}
           className="flex items-center justify-between gap-2 flex-1 min-w-0 text-left"
         >
-          <div className="flex flex-col flex-1 min-w-0 gap-1">
+          <div className={sharedStyles.mobileCardHeaderContent}>
             <CardRow
               className="py-0"
               value={selectedAsset?.equipment}
-              valueStyles="text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize truncate"
+              valueStyles={sharedStyles.mobileCardTitle}
             />
             <CardRow
               value={selectedAsset?.assetID}
               icon={Barcode}
               className="capitalize dark:text-(--clr-textDark) text-(--clr-textLight) py-0"
-              valueStyles="text-xs text-gray-400 dark:text-gray-400"
+              valueStyles={sharedStyles.mobileCardMeta}
               iconStyles="w-3.5 h-3.5 text-teal-500 dark:text-teal-400"
             />
             <CardRow
               value={item["in-transit"]?.transportType}
               icon={Truck}
               className="capitalize dark:text-(--clr-textDark) text-(--clr-textLight) py-0"
-              valueStyles="text-xs text-gray-400 dark:text-gray-400"
+              valueStyles={sharedStyles.mobileCardMeta}
               iconStyles="w-3.5 h-3.5 text-teal-500 dark:text-teal-400"
             />
           </div>
         </button>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className={sharedStyles.mobileCardActions}>
           <Badge
             value={item.status}
             styleMap={badgeStyles.families.transfer_status}
-            className={cn("capitalize")}
+            className={sharedStyles.mobileCardBadge}
           />
           <div onClick={(e) => e.stopPropagation()}>
             <DropdownMenuButtonDialog menuItems={menuItems} />
@@ -144,7 +144,7 @@ function MobileTransfersCompletedCard({
           >
             <ChevronDown
               className={cn(
-                "w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200",
+                sharedStyles.mobileCardChevron,
                 isOpen && "rotate-180",
               )}
             />

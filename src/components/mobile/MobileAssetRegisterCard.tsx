@@ -1,8 +1,6 @@
-import { useState, useRef, useEffect } from "react";
 import type { AssetTableRow } from "@/schemas";
 import {
   ChevronDown,
-  MoreVertical,
   Pencil,
   Eye,
   Trash2,
@@ -17,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { CardRow } from "./CardRow";
 import { AnimatePresence, motion } from "motion/react";
 import { motionVariants } from "@/styles/motionStyles";
+import { DropdownMenuButtonDialog } from "@/components/modals/DropdownMenuButtonDialog";
 
 type Props = {
   row: Row<AssetTableRow>;
@@ -28,25 +27,17 @@ export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
   const item = row.original;
   const navigate = useNavigate();
   const { setSelectedRowId } = useGlobalContext();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleNavigate = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setMenuOpen(false);
+  const handleNavigate = () => {
     setSelectedRowId(item.id);
     navigate(`/assets/${item.id}`);
   };
+
+  const menuItems = [
+    { id: "edit", label: "Edit", icon: Pencil, onClick: handleNavigate },
+    { id: "view", label: "View", icon: Eye, onClick: handleNavigate },
+    { id: "delete", label: "Delete", icon: Trash2, onClick: handleNavigate },
+  ];
 
   return (
     <div
@@ -58,79 +49,45 @@ export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
       onClick={onToggle}
     >
       <div className={cn(sharedStyles.cardBtn, "gap-0")}>
-        <div className="flex flex-col flex-1 min-w-0 gap-1">
+        <div className={sharedStyles.mobileCardHeaderContent}>
           <CardRow
             value={item.equipment}
             // icon={Hammer}
             className="capitalize text-(--clr-textLight) py-0"
-            valueStyles="text-md font-semibold dark:text-white/90"
+            valueStyles={sharedStyles.mobileCardTitle}
             iconStyles="w-4 h-4 text-purple-500 dark:text-purple-400"
           />
           <CardRow
             value={item.assetID}
             icon={Barcode}
             className="capitalize dark:text-(--clr-textDark) text-(--clr-textLight) py-0"
-            valueStyles="text-xs text-gray-400 dark:text-gray-400 font-mono"
+            valueStyles={sharedStyles.mobileCardMeta}
             iconStyles="w-3.5 h-3.5 text-teal-500 dark:text-teal-400"
           />
           <CardRow
             value={item.location}
             icon={MapPin}
             className="capitalize text-(--clr-textLight) py-0"
-            valueStyles="text-xs text-gray-400 dark:text-gray-400 font-mono"
+            valueStyles={sharedStyles.mobileCardMeta}
             iconStyles="w-3.5 h-3.5 text-blue-500 dark:text-blue-400"
           />
         </div>
 
         {/* Actions + chevron grouped on the right */}
         <div
-          className="flex items-center gap-1"
+          className={sharedStyles.mobileCardActions}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Kebab menu */}
-          <div className="relative" ref={menuRef}>
-            <button
-              type="button"
-              className="p-1 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
-              onClick={() => setMenuOpen((prev) => !prev)}
-              aria-label="Asset actions"
-            >
-              <MoreVertical size={18} />
-            </button>
-
-            {menuOpen && (
-              <div className="absolute right-0 top-8 z-9999 min-w-37.5 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
-                <button
-                  type="button"
-                  className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-left text-green-700 dark:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-700"
-                  onClick={handleNavigate}
-                >
-                  <Pencil size={15} /> Edit
-                </button>
-                <button
-                  type="button"
-                  className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
-                  onClick={handleNavigate}
-                >
-                  <Eye size={15} /> View
-                </button>
-                <div className="h-px bg-gray-100 dark:bg-gray-700" />
-                <button
-                  type="button"
-                  className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-left text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
-                  onClick={handleNavigate}
-                >
-                  <Trash2 size={15} /> Delete
-                </button>
-              </div>
-            )}
-          </div>
+          <DropdownMenuButtonDialog menuItems={menuItems} />
 
           {/* Chevron — expand/collapse only */}
           <button type="button" onClick={onToggle}>
             <ChevronDown
               size={18}
-              className={`text-gray-500 dark:text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
+              className={cn(
+                sharedStyles.mobileCardChevron,
+                isOpen && "rotate-180",
+              )}
             />
           </button>
         </div>

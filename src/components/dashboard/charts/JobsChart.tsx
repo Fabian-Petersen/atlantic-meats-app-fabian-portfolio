@@ -100,7 +100,11 @@ function JobsChart({ data, onSelect, selectedYear }: Props) {
 
   return (
     <div className="w-full h-full md:p-4 relative">
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer
+        width="100%"
+        height="100%"
+        initialDimension={{ width: 300, height: 256 }}
+      >
         <BarChart
           data={chartData}
           barSize={isMobile ? 15 : 25}
