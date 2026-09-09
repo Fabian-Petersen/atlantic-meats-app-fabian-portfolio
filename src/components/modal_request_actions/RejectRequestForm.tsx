@@ -100,10 +100,10 @@ const RequestRejectedForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex w-full flex-col gap-5 text-(--clr-textLight) dark:text-(--clr-textDark)"
+      className="flex w-full flex-col gap-4 text-(--clr-textLight) md:gap-5 dark:text-(--clr-textDark)"
     >
-      <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 dark:border-slate-700/70 dark:bg-slate-800/30">
-        <div className="mb-5 flex items-start gap-3">
+      <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-2.5 md:p-4 dark:border-slate-700/70 dark:bg-slate-800/30">
+        <div className="mb-4 flex items-start gap-3 md:mb-5">
           <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-white text-slate-500 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700">
             <MessageSquareWarning className="size-4" aria-hidden="true" />
           </div>
