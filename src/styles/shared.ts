@@ -290,7 +290,9 @@ export const sharedStyles = {
     "dark:bg-(--bg-secondary_dark) border-none dark:border-(--clr-borderDark) dark:text-(--clr-textDark)",
     "overflow-y-auto",
   ),
-  modalForm: cn("flex flex-col items-center justify-center px-2"), // form housing the content
+  modalForm: cn(
+    "flex flex-col items-center justify-center px-2 dark:bg-(--bg-secondary_dark)",
+  ), // form housing the content
   modalParent: cn(
     "flex flex-col gap-2 md:gap-4 w-full rounded-lg",
     "bg-white p-4 shadow-xl",

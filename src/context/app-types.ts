@@ -1,5 +1,9 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { GlobalData, PendingTableAction } from "../schemas";
+import type {
+  GlobalData,
+  PendingTableAction,
+  UsersAPIResponse,
+} from "../schemas";
 
 import type { Resource, RedirectResource } from "@/utils/api";
 
@@ -199,6 +203,9 @@ export type AppContextType = {
   // $ User
   setUserId: (v: string) => void;
   userId: string | null;
+
+  user: UsersAPIResponse | null;
+  setUser: Dispatch<SetStateAction<UsersAPIResponse | null>>;
 };
 
 export type DeleteModalPayload = {

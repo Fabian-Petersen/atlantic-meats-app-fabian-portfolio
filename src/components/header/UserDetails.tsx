@@ -1,9 +1,18 @@
 import { useGetUser } from "@/utils/getUser";
 import { Spinner } from "../ui/spinner";
 import { MapPin, User } from "lucide-react";
+import useGlobalContext from "@/context/useGlobalContext";
+import { useEffect } from "react";
 
 const UserDetails = () => {
   const { data: user, isPending } = useGetUser(); // user from database
+
+  const { setUser } = useGlobalContext();
+
+  // set the user to the GlobalContext to use in components that needs user specific data
+  useEffect(() => {
+    if (user) setUser(user);
+  }, [user, setUser]);
 
   return isPending ? (
     <div className="flex justify-center items-center text-primary w-36">

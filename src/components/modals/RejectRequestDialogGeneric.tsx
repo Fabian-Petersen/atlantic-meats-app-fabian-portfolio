@@ -78,7 +78,7 @@ function RejectRequestDialogGeneric() {
       {/* stopPropagation so clicks inside the content don't bubble up
           to the backdrop-click handler above */}
       <div
-        className={cn(sharedStyles.modalParent)}
+        className={cn(sharedStyles.modalParent, "")}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-center items-center">

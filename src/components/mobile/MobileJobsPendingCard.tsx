@@ -6,6 +6,7 @@ import {
   Calendar,
   Wrench,
   XCircle,
+  Pen,
 } from "lucide-react";
 import { Badge } from "../features/Badge";
 import type { JobAPIResponse } from "@/schemas";
@@ -43,6 +44,7 @@ export default function MobileJobsPendingCard({
     setSelectedRowId,
     setShowRejectRequestDialog,
     setShowApproveRequestDialog,
+    setShowUpdateMaintenanceDialog,
   } = useGlobalContext();
 
   const menuItems = [
@@ -52,6 +54,16 @@ export default function MobileJobsPendingCard({
       icon: Eye,
       onClick: () => {
         navigate(`/jobs/${item.id}/pending-approval`);
+        setSelectedRowId(item.id);
+      },
+    },
+    {
+      id: "edit",
+      label: "Edit",
+      icon: Pen,
+      onClick: () => {
+        // navigate(`/jobs/${item.id}/pending-edit`);
+        setShowUpdateMaintenanceDialog(true);
         setSelectedRowId(item.id);
       },
     },
@@ -108,17 +120,12 @@ export default function MobileJobsPendingCard({
       )}
     >
       {/* Always-visible header — tap to expand */}
-      <div
-        className={cn(sharedStyles.cardBtn)}
-        onClick={onToggle}
-      >
+      <div className={cn(sharedStyles.cardBtn)} onClick={onToggle}>
         {/* Location + meta row */}
         <div className={sharedStyles.mobileCardHeaderContent}>
           <div className="flex items-center gap-1.5 mb-1">
             <MapPin className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-            <p className={sharedStyles.mobileCardTitle}>
-              {item.location}
-            </p>
+            <p className={sharedStyles.mobileCardTitle}>{item.location}</p>
           </div>
           <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
             <span className="flex items-center gap-1">
@@ -175,7 +182,6 @@ export default function MobileJobsPendingCard({
                   {item.jobComments}
                 </p>
               )}
-
             </div>
           </motion.div>
         )}

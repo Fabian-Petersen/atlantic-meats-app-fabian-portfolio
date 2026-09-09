@@ -3,9 +3,10 @@ import type { JobAPIResponse, Priority } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { Resource } from "@/utils/api";
-import { ChevronDown } from "lucide-react";
+import { CheckCircle2, ChevronDown, XCircle } from "lucide-react";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { Badge } from "../features/Badge";
+import { AssetsDropdownCell } from "../features/tables/AssetsDropdownCell";
 
 export const getJobPendingColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
@@ -15,6 +16,8 @@ export const getJobPendingColumns = (
     config: { resourcePath: Resource; queryKey: readonly unknown[] },
   ) => void,
   setOpenChatSidebar: (v: boolean) => void,
+  setShowApproveRequestDialog: (v: boolean) => void,
+  setShowRejectRequestDialog: (v: boolean) => void,
 ): ColumnDef<JobAPIResponse>[] => [
   {
     accessorKey: "jobCreated",
@@ -62,35 +65,20 @@ export const getJobPendingColumns = (
     header: "Description",
   },
   {
-    accessorKey: "equipment",
-    header: "Equipment",
+    accessorKey: "assets",
+    header: "Equipment | Asset ID",
     enableColumnFilter: false,
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-  },
-  {
-    accessorKey: "assetID",
-    header: "AssetID",
-    enableColumnFilter: true,
-  },
-  {
-    accessorKey: "assetIssueReason",
-    header: "No AssetID Reason",
-    enableColumnFilter: false,
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-  },
-  {
-    accessorKey: "assetIssueDetails",
-    header: "No AssetID Details",
-    enableColumnFilter: false,
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
+    cell: ({ row }) => {
+      const assets = row.original.assets?.length
+        ? row.original.assets
+        : [
+            {
+              equipment: row.original.equipment,
+              assetID: row.original.assetID,
+            },
+          ];
+
+      return <AssetsDropdownCell assets={assets} />;
     },
   },
   {
@@ -105,15 +93,6 @@ export const getJobPendingColumns = (
   {
     accessorKey: "impact",
     header: "Impact",
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    enableColumnFilter: true,
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;
@@ -176,6 +155,27 @@ export const getJobPendingColumns = (
           },
         },
       });
+
+      menuItems.unshift(
+        {
+          id: "approve",
+          label: "Approve",
+          icon: CheckCircle2,
+          onClick: () => {
+            setSelectedRowId(rowId);
+            setShowApproveRequestDialog(true);
+          },
+        },
+        {
+          id: "reject",
+          label: "Reject",
+          icon: XCircle,
+          onClick: () => {
+            setSelectedRowId(rowId);
+            setShowRejectRequestDialog(true);
+          },
+        },
+      );
 
       return (
         <div className="tex-center" onClick={(e) => e.stopPropagation()}>

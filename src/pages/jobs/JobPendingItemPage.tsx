@@ -10,7 +10,6 @@ import useGlobalContext from "@/context/useGlobalContext";
 import MobileRequestApproval from "@/components/mobile/MobileRequestApproval";
 import BackButton from "@/components/features/BackButton";
 import { cn } from "@/lib/utils";
-import { sharedStyles } from "@/styles/shared";
 
 export type PresignedUrlResponse = {
   key: string;
@@ -37,12 +36,12 @@ const JobPendingItemPage = () => {
   const images = item.images;
 
   return (
-    <div className={cn(sharedStyles.pageMobile)}>
+    <div className="flex min-h-[calc(100vh-var(--sm-navbarHeight))] flex-col gap-4 px-1 py-2 md:h-[calc(100vh-var(--lg-navbarHeight))] md:py-8">
       {showSuccess ? <Success /> : undefined}
       <BackButton to="/jobs/pending-approval" parentStyles="hidden md:flex" />
       <div
         className={cn(
-          "flex-1 min-h-0 hidden bg-(--bg-primary-light) border-gray-700/70 rounded-md lg:grid md:grid-cols-2 gap-2 text-gray-100 dark:text-gray-800",
+          "hidden min-h-0 flex-1 gap-2 rounded-md border-gray-700/70 bg-(--bg-primary-light) text-gray-100 md:grid md:grid-cols-2 dark:text-gray-800",
           "dark:bg-(--bg-secondary_dark)",
         )}
       >
@@ -53,7 +52,9 @@ const JobPendingItemPage = () => {
           <RequestApproval />
         </div>
       </div>
-      <MobileRequestApproval item={item} />
+      <div className="md:hidden">
+        <MobileRequestApproval item={item} />
+      </div>
     </div>
   );
 };

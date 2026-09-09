@@ -73,6 +73,68 @@ export const jobRequestSchema = jobRequestBaseSchema.superRefine(
 
 export type JobRequestFormValues = z.infer<typeof jobRequestSchema>;
 
+// Create-job requests group the existing asset fields so one request can
+// contain multiple assets while keeping the persisted job response shape
+// unchanged for the existing list, detail, and update screens.
+export const createJobAssetSchema = jobRequestBaseSchema
+  .pick({
+    area: true,
+    equipment: true,
+    assetID: true,
+    assetIssueReason: true,
+    assetIssueDetails: true,
+    images: true,
+  })
+  .superRefine((data, ctx) => {
+    const reason = data.assetIssueReason || undefined;
+
+    if (reason === "other" && !data.assetIssueDetails?.trim()) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["assetIssueDetails"],
+        message: "Please describe the issue with the asset ID",
+      });
+    }
+
+    if (reason && (data.images?.length ?? 0) === 0) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["images"],
+        message: "Images are compulsory if no barcode is supplied",
+      });
+    }
+  });
+
+export const createJobRequestSchema = jobRequestBaseSchema
+  .omit({
+    area: true,
+    equipment: true,
+    assetID: true,
+    assetIssueReason: true,
+    assetIssueDetails: true,
+    images: true,
+  })
+  .extend({
+    assets: z.array(createJobAssetSchema).min(1, {
+      message: "Please add at least one asset to the job request",
+    }),
+  });
+
+export type CreateJobRequestFormValues = z.infer<
+  typeof createJobRequestSchema
+>;
+
+export type CreateJobRequestPayload = Omit<
+  CreateJobRequestFormValues,
+  "assets"
+> & {
+  assets: Array<
+    Omit<CreateJobRequestFormValues["assets"][number], "images"> & {
+      images: Array<{ filename: string; content_type: string }>;
+    }
+  >;
+};
+
 // $ Schema for the API Response from the database when fetching the maintenance requests
 export const jobRequestAPIResponseSchema = jobRequestBaseSchema
   .omit({
@@ -95,6 +157,16 @@ export const jobRequestAPIResponseSchema = jobRequestBaseSchema
     assign_to_group: z.string().optional(),
     approved_by: z.string().optional(),
     approved_at: z.string().optional(),
+    // New job requests can contain multiple assets. The root-level asset
+    // fields remain in this response schema for existing job records/screens.
+    assets: z
+      .array(
+        z.object({
+          equipment: z.string(),
+          assetID: z.string().optional(),
+        }),
+      )
+      .optional(),
   });
 
 // $ Schema for the API Response for a completed job from the database tables action and request

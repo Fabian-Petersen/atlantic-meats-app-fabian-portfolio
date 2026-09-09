@@ -45,6 +45,8 @@ const JobsPendingListPage = () => {
     setSelectedRowId,
     openDeleteDialog,
     setOpenChatSidebar,
+    setShowApproveRequestDialog,
+    setShowRejectRequestDialog,
   } = useGlobalContext();
 
   // $ Pass the props to the function generating the columns to be used in the table
@@ -53,6 +55,8 @@ const JobsPendingListPage = () => {
     setSelectedRowId,
     openDeleteDialog,
     setOpenChatSidebar,
+    setShowApproveRequestDialog,
+    setShowRejectRequestDialog,
   );
 
   // $ This data is passed into the mobile component
@@ -73,7 +77,7 @@ const JobsPendingListPage = () => {
   return (
     <div className="flex w-full md:p-4 min-h-0">
       {/* // $ Desktop View */}
-      <div className="bg-white dark:bg-(--bg-primary_dark) lg:flex flex-col gap-1 w-full rounded-xl shadow-lg p-4 h-auto hidden">
+      <div className="hidden h-auto w-full flex-col gap-1 rounded-xl bg-white p-4 shadow-lg md:flex dark:bg-(--bg-primary_dark)">
         <TableGeneric
           data={data}
           columns={columns}
@@ -87,7 +91,7 @@ const JobsPendingListPage = () => {
         />
       </div>
       {/* // $ Mobile View */}
-      <div className="grid lg:hidden gap-2 w-full p-2">
+      <div className="grid w-full gap-2 p-2 md:hidden">
         <SearchInput
           enableMobile={true}
           value={globalFilter}

@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { AppContext } from "./app-context";
-import type { GlobalData, PendingTableAction } from "../schemas";
+import type {
+  GlobalData,
+  PendingTableAction,
+  UsersAPIResponse,
+} from "../schemas";
 import type {
   DeleteConfig,
   ErrorConfig,
@@ -95,10 +99,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   // $ State for the User
   const [userId, setUserId] = useState<string | null>(null);
-
-  // const [assetsData, setAssetsData] = useState<AssetFormValues | undefined>(
-  //   undefined
-  // ); // Set the data for Assets
+  const [user, setUser] = useState<UsersAPIResponse | null>(null);
 
   return (
     <AppContext.Provider
@@ -151,6 +152,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setShowCreateUserDialog,
         openNotificationSidebar,
         setOpenNotificationSidebar,
+        user,
+        setUser,
         userId,
         setUserId,
         errorConfig,
