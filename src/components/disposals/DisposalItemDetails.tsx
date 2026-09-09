@@ -24,15 +24,28 @@ const TAB_CONFIG = [
 function signedFiles(files: { filename: string }[] = []) {
   return files.flatMap((file) =>
     "url" in file && typeof file.url === "string" && file.url
-      ? [{ filename: file.filename, url: file.url,
-          key: "key" in file && typeof file.key === "string" ? file.key : file.url }]
+      ? [
+          {
+            filename: file.filename,
+            url: file.url,
+            key:
+              "key" in file && typeof file.key === "string"
+                ? file.key
+                : file.url,
+          },
+        ]
       : [],
   );
 }
 
 // $ ————— utils ——————————————————————————————————————————————————————————————————
 import { formatDateTime } from "@/utils/formatDateTime";
-import { MessageSquare, ClipboardList, PackageCheck, Receipt } from "lucide-react";
+import {
+  MessageSquare,
+  ClipboardList,
+  PackageCheck,
+  Receipt,
+} from "lucide-react";
 import useGlobalContext from "@/context/useGlobalContext";
 import { sharedStyles } from "@/styles/shared";
 
@@ -56,11 +69,15 @@ function DisposalItemDetails({ item }: Props) {
   const assets = item.assets ?? [];
   const activeTab = rawActiveTab;
   const currentAsset = assets[selectedAssetIndex] ?? assets[0];
-  const activeImages = activeTab === "disposed"
-    ? signedFiles(disposed?.disposalImages) : (currentAsset?.images ?? []);
+  const activeImages =
+    activeTab === "disposed"
+      ? signedFiles(disposed?.disposalImages)
+      : (currentAsset?.images ?? []);
   const documents = disposed?.disposalDocuments ?? [];
-  const description = "description" in request && typeof request.description === "string"
-    ? request.description : item.description;
+  const description =
+    "description" in request && typeof request.description === "string"
+      ? request.description
+      : item.description;
 
   return (
     <div
@@ -73,7 +90,8 @@ function DisposalItemDetails({ item }: Props) {
     >
       {/* ── LEFT: Image panel ── */}
       <div className="h-full overflow-hidden object-cover gap-2">
-        <ImageGallery key={`${activeTab}-${selectedAssetIndex}`}
+        <ImageGallery
+          key={`${activeTab}-${selectedAssetIndex}`}
           images={activeImages}
           className="p-0"
         />
@@ -82,7 +100,7 @@ function DisposalItemDetails({ item }: Props) {
       {/* ── RIGHT: Detail panel ── */}
       <div
         className="relative flex flex-col flex-1 gap-4 text-font dark:text-gray-100 rounded-md p-4 border border-gray-100 dark:border-gray-700/50 min-h-0 overflow-y-auto 
-      custom-scrollbar pr-1 dark:bg-(--bg-primary_dark)"
+      custom-scrollbar pr-4 dark:bg-(--bg-primary_dark)"
       >
         {/* Header */}
         <div className="flex flex-col gap-2 sticky">
@@ -155,40 +173,32 @@ function DisposalItemDetails({ item }: Props) {
         {activeTab === "request" && (
           <div className="flex flex-col gap-4">
             <>
-              {approved ? (
-                <div className="flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/40 rounded-md px-3 py-2 max-w-fit">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                  Approved · {formatDateTime(approved.approvedDate)}
-                </div>
-              ) : rejected ? (
-                <div className="flex items-center gap-2 text-xs text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/40 rounded-md px-3 py-2 max-w-fit">
-                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
-                  Rejected · {formatDateTime(rejected.rejectedDate)}
-                </div>
-              ) : cancelled ? (
-                <div className="flex items-center gap-2 text-xs text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/40 rounded-md px-3 py-2 max-w-fit">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
-                  Cancelled · {formatDateTime(cancelled.cancelledDate)}
-                </div>
-              ) : null}
-
               {approved && (
                 <div className="flex flex-col gap-3">
                   <SectionTitle>Approved by</SectionTitle>
-                  <PersonRow
-                    name={approved.approvedBy}
-                    sub={`Approval ID · ${approved.approvalId}`}
-                  />
+                  <div className="flex items-center gap-2 justify-between">
+                    <PersonRow
+                      name={approved.approvedBy}
+                      // sub={`Approval ID · ${approved.approvalId}`}
+                    />
+                    <div className="flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/40 rounded-md px-3 py-2 max-w-fit">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                      Approved · {formatDateTime(approved.approvedDate)}
+                    </div>
+                  </div>
                 </div>
               )}
 
               {rejected && (
                 <div className="flex flex-col gap-3">
                   <SectionTitle>Rejected by</SectionTitle>
-                  <PersonRow
-                    name={rejected.rejectedBy}
-                    sub={formatDateTime(rejected.rejectedDate) ?? ""}
-                  />
+                  <div className="flex items-center gap-2 justify-between">
+                    <PersonRow name={rejected.rejectedBy} />
+                    <div className="flex items-center gap-2 text-xs text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/40 rounded-md px-3 py-2 max-w-fit">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
+                      Rejected · {formatDateTime(rejected.rejectedDate)}
+                    </div>
+                  </div>
                   {rejected.rejectionReason && (
                     <>
                       <SectionTitle>Reason for rejection</SectionTitle>
@@ -205,10 +215,15 @@ function DisposalItemDetails({ item }: Props) {
               {cancelled && (
                 <div className="flex flex-col gap-3">
                   <SectionTitle>Cancelled by</SectionTitle>
-                  <PersonRow
-                    name={cancelled.cancelledBy || cancelled.cancelledBySub}
-                    sub={formatDateTime(cancelled.cancelledDate) ?? ""}
-                  />
+                  <div className="flex items-center gap-2 justify-between">
+                    <PersonRow
+                      name={cancelled.cancelledBy || cancelled.cancelledBySub}
+                    />
+                    <div className="flex items-center gap-2 text-xs text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/40 rounded-md px-3 py-2 max-w-fit">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
+                      Cancelled · {formatDateTime(cancelled.cancelledDate)}
+                    </div>
+                  </div>
                   {cancelled.cancelReason && (
                     <>
                       <SectionTitle>Reason for cancellation</SectionTitle>
@@ -232,7 +247,10 @@ function DisposalItemDetails({ item }: Props) {
                 value={currentAsset?.assetIssueDetails}
               />
               <Field label="Location" value={request?.location} />
-              <Field label="Expected disposal date" value={request?.expectedDisposalDate} />
+              <Field
+                label="Expected disposal date"
+                value={request?.expectedDisposalDate}
+              />
               <Field label="Schedule name" value={item.schedule_name} />
               <Field
                 label="Created"
@@ -257,52 +275,109 @@ function DisposalItemDetails({ item }: Props) {
 
             <SectionTitle>Reason for disposal</SectionTitle>
             <DescriptionBox>{request?.disposalReason}</DescriptionBox>
-            {description && <><SectionTitle>Description</SectionTitle><DescriptionBox>{description}</DescriptionBox></>}
-            {item.expired && <>
-              <SectionTitle>Expired</SectionTitle>
-              <Field label="Expired date" value={formatDateTime(item.expired.expiredDate)} />
-              <DescriptionBox>{item.expired.reason}</DescriptionBox>
-            </>}
+            {description && (
+              <>
+                <SectionTitle>Description</SectionTitle>
+                <DescriptionBox>{description}</DescriptionBox>
+              </>
+            )}
+            {item.expired && (
+              <>
+                <SectionTitle>Expired</SectionTitle>
+                <Field
+                  label="Expired date"
+                  value={formatDateTime(item.expired.expiredDate)}
+                />
+                <DescriptionBox>{item.expired.reason}</DescriptionBox>
+              </>
+            )}
           </div>
         )}
 
         {activeTab === "disposed" && (
           <div className="flex flex-col gap-4 w-full h-full">
-            {disposed ? <>
-              <SectionTitle>Disposed by</SectionTitle>
-              <PersonRow name={disposed.disposedBy} sub={formatDateTime(disposed.disposedDate) ?? ""} />
-              <Separator width="100%" />
-              <SectionTitle>Disposal details</SectionTitle>
-              <Field label="Disposal method" value={disposed.disposalMethod} />
-              <Field label="Disposal location" value={disposed.disposalLocation} />
-              <Field label="Disposed date" value={formatDateTime(disposed.disposedDate)} />
-              {disposed.disposalNotes && <>
-                <SectionTitle>Notes</SectionTitle>
-                <DescriptionBox>{disposed.disposalNotes}</DescriptionBox>
-              </>}
-              <Separator width="100%" />
-              <SectionTitle>Documents</SectionTitle>
-              {documents.length ? documents.map((doc, index) => {
-                const file = signedFiles([doc])[0];
-                return file
-                  ? <Link key={index} to={file.url} className="text-sm text-blue-500 hover:underline">{doc.filename}</Link>
-                  : <p key={index} className="text-sm text-gray-500">{doc.filename}</p>;
-              }) : <p className="text-sm text-gray-400">No documents attached</p>}
-            </> : <EmptyDataState icon={PackageCheck} heading="Not yet disposed" message="Disposal details will appear here once the assets have been disposed of." />}
+            {disposed ? (
+              <>
+                <SectionTitle>Disposed by</SectionTitle>
+                <PersonRow
+                  name={disposed.disposedBy}
+                  sub={formatDateTime(disposed.disposedDate) ?? ""}
+                />
+                <Separator width="100%" />
+                <SectionTitle>Disposal details</SectionTitle>
+                <Field
+                  label="Disposal method"
+                  value={disposed.disposalMethod}
+                />
+                <Field
+                  label="Disposal location"
+                  value={disposed.disposalLocation}
+                />
+                <Field
+                  label="Disposed date"
+                  value={formatDateTime(disposed.disposedDate)}
+                />
+                {disposed.disposalNotes && (
+                  <>
+                    <SectionTitle>Notes</SectionTitle>
+                    <DescriptionBox>{disposed.disposalNotes}</DescriptionBox>
+                  </>
+                )}
+                <Separator width="100%" />
+                <SectionTitle>Documents</SectionTitle>
+                {documents.length ? (
+                  documents.map((doc, index) => {
+                    const file = signedFiles([doc])[0];
+                    return file ? (
+                      <Link
+                        key={index}
+                        to={file.url}
+                        className="text-sm text-blue-500 hover:underline"
+                      >
+                        {doc.filename}
+                      </Link>
+                    ) : (
+                      <p key={index} className="text-sm text-gray-500">
+                        {doc.filename}
+                      </p>
+                    );
+                  })
+                ) : (
+                  <p className="text-sm text-gray-400">No documents attached</p>
+                )}
+              </>
+            ) : (
+              <EmptyDataState
+                icon={PackageCheck}
+                heading="Not yet disposed"
+                message="Disposal details will appear here once the assets have been disposed of."
+              />
+            )}
           </div>
         )}
         {activeTab === "costs" && (
           <div className="flex flex-col gap-4 w-full h-full">
-            {disposed?.disposalCost != null ? <>
-              <SectionTitle>Cost breakdown</SectionTitle>
-              <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700 rounded-md px-4 py-3">
-                <span className="text-sm text-gray-500 dark:text-gray-400">Total disposal cost</span>
-                <span className="text-xl font-semibold">R {disposed.disposalCost.toLocaleString()}</span>
-              </div>
-            </> : <EmptyDataState icon={Receipt} heading="No cost data yet" message="Disposal costs will appear here once they have been recorded." />}
+            {disposed?.disposalCost != null ? (
+              <>
+                <SectionTitle>Cost breakdown</SectionTitle>
+                <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700 rounded-md px-4 py-3">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                    Total disposal cost
+                  </span>
+                  <span className="text-xl font-semibold">
+                    R {disposed.disposalCost.toLocaleString()}
+                  </span>
+                </div>
+              </>
+            ) : (
+              <EmptyDataState
+                icon={Receipt}
+                heading="No cost data yet"
+                message="Disposal costs will appear here once they have been recorded."
+              />
+            )}
           </div>
         )}
-
       </div>
     </div>
   );

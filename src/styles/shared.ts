@@ -4,16 +4,16 @@ import { cn } from "@/lib/utils";
 export const sharedStyles = {
   /* //$ ——— Pages —————————————————————————————————————————————————————————————— */
   appLayout: cn(
-    "min-h-screen w-full grid grid-cols-1 lg:grid-rows-[var(--lg-navbarHeight)_1fr] lg:grid-cols-[15rem_1fr] grid-rows-[var(--sm-navbarHeight)_1fr] bg-(--pageLight) md:dark:bg-(--pageDark) dark:bg-gray-900",
+    "min-h-screen w-full grid grid-cols-1 lg:grid-rows-[var(--lg-navbarHeight)_1fr] lg:grid-cols-[15rem_1fr] grid-rows-[var(--sm-navbarHeight)_1fr] bg-(--pageLight) dark:bg-(--pageDark) custom-scrollbar",
   ),
   pageContainer: cn(
     "flex items-center justify-center w-full h-full p-2 h-[calc(h-screen - var(--lg-navbarHeight)]",
-    "custom-scrollbar",
+    "dark:bg-(--bg-pageDark)",
   ),
   pageContent: cn(
     "flex flex-col gap-4 w-full lg:max-w-3xl h-auto md:rounded-xl md:shadow-lg md:p-6 p-1",
     "md:border md:border-gray-200/70 bg-white",
-    "dark:bg-(--bg-primary_dark) dark:text-(--clr-textDark) md:dark:border-gray-700/50 md:dark:border",
+    "dark:bg-(--bg-secondary_dark) dark:text-(--clr-textDark) md:dark:border-gray-700/50 md:dark:border",
   ),
   pageMobile: cn(
     "flex flex-col gap-4 px-1 py-2 md:hidden md:py-8 min-h-[calc(100vh-var(--sm-navbarHeight))] md:h-[calc(100vh-var(--lg-navbarHeight))]",
@@ -30,7 +30,7 @@ export const sharedStyles = {
   ),
   dashboardCard: cn(
     "flex flex-col justify-between gap-2 w-full rounded-md shadow-md",
-    "bg-white dark:bg-(--bg-primary_dark) text-gray-600 dark:text-white",
+    "bg-white dark:bg-(--bg-secondary_dark) text-gray-600 dark:text-white",
     "p-[0.325rem] xl:p-1.5 border border-white",
     "dark:border-[rgba(55,65,81,0.5)]",
   ),
@@ -162,7 +162,7 @@ export const sharedStyles = {
 
   /* //$ ——— Forms ——————————————————————————————————————————————————————————— */
   form: cn(
-    "flex flex-col md:rounded-lg md:w-full text-(--clr-textLight) bg-white dark:bg-(--bg-primary_dark)",
+    "flex flex-col md:rounded-lg md:w-full text-(--clr-textLight) bg-white dark:bg-(--bg-secondary_dark)",
   ),
   formParent: cn("grid grid-cols-1 md:grid-cols-2 gap-4 w-full pb-1 md:py-2"),
 
@@ -234,6 +234,10 @@ export const sharedStyles = {
     "text-gray-700",
     //dark
     "dark:peer-focus:text-gray-100 dark:peer-placeholder-shown:text-fontLight dark:text-gray-300/90",
+  ),
+
+  formLabelRequired: cn(
+    "flex items-baseline gap-1 bg-white dark:bg-(--bg-secondary_dark)",
   ),
   formLabelAnimate: cn(
     //animation
