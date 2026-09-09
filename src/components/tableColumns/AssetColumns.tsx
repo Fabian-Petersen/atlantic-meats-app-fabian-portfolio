@@ -58,6 +58,14 @@ export const getAssetColumns = (
     size: 120,
     minSize: 100,
     maxSize: 140,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return !value || value === "nan" ? (
+        <p className="capitalize">-</p>
+      ) : (
+        <p className="capitalize">{value}</p>
+      );
+    },
   },
   {
     accessorKey: "last_verified_at",
@@ -65,6 +73,14 @@ export const getAssetColumns = (
     size: 120,
     minSize: 100,
     maxSize: 140,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return !value ? (
+        <p className="capitalize">-</p>
+      ) : (
+        <p className="capitalize">{value}</p>
+      );
+    },
   },
   {
     accessorKey: "next_verification_due",
@@ -72,6 +88,14 @@ export const getAssetColumns = (
     size: 120,
     minSize: 100,
     maxSize: 140,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return !value ? (
+        <p className="capitalize">-</p>
+      ) : (
+        <p className="capitalize">{value}</p>
+      );
+    },
   },
   {
     accessorKey: "verified_by",
@@ -81,7 +105,11 @@ export const getAssetColumns = (
     maxSize: 140,
     cell: ({ getValue }) => {
       const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
+      return !value ? (
+        <p className="capitalize">-</p>
+      ) : (
+        <p className="capitalize">{value}</p>
+      );
     },
   },
   {
@@ -92,11 +120,13 @@ export const getAssetColumns = (
     maxSize: 140,
     cell: ({ getValue }) => {
       const value = getValue<string>();
-      return (
+      return !value || value === "unverified" ? (
         <Badge
-          value={value as EquipmentCondition}
+          value="unverified"
           styleMap={badgeStyles.families.verification}
         />
+      ) : (
+        <Badge value={value} styleMap={badgeStyles.families.verification} />
       );
     },
   },

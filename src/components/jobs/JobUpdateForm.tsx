@@ -3,41 +3,125 @@
 // $ React-Hook-Form, zod & schema
 import { jobRequestSchema } from "../../schemas/index";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { useForm, useWatch, type Resolver } from "react-hook-form";
 
 // $ Form Components
 import FormRowInput from "../../../customComponents/FormRowInput";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
 import FileInput from "../../../customComponents/FileInput";
-import { Button } from "../ui/button";
+import FormActionButtons from "../features/FormActionButtons";
+import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 import useGlobalContext from "@/context/useGlobalContext";
 
 // $ Import schemas
-import type { JobRequestFormValues } from "../../schemas/index";
+import type { JobAPIResponse, JobRequestFormValues } from "../../schemas/index";
+import type { AssetEquipmentResponse } from "@/schemas/assetSchemas";
 
 import { priority, type, impact } from "@/data/maintenanceRequestFormData";
 import { stores } from "@/data/stores";
+import { useById, useGetAll } from "@/utils/api";
 
 // import assets from "@/data/assets.json";
 // import { useCreateMaintenanceRequest } from "@/utils/maintenanceRequests";
 
 const JobUpdateForm = () => {
   // const { mutateAsync } = useCreateMaintenanceRequest();
-  const { genericData: initialData, setShowUpdateMaintenanceDialog } =
-    useGlobalContext();
+  const { selectedRowId, setShowUpdateMaintenanceDialog } = useGlobalContext();
   //   const navigate = useNavigate();
+
+  const { data: item, isPending } = useById<JobAPIResponse>({
+    id: selectedRowId ?? "",
+    resourcePath: "api/jobs",
+    queryKey: ["jobs", "pending-approval-job"],
+    params: {
+      status: "pending",
+    },
+  });
 
   // $ Form Schema
   const {
     register,
+    reset,
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm({
-    defaultValues: initialData as JobRequestFormValues,
-    resolver: zodResolver(jobRequestSchema),
+  } = useForm<JobRequestFormValues>({
+    defaultValues: {
+      location: "",
+      type: "",
+      priority: "",
+      equipment: "",
+      breakdown_time: "",
+      impact: "",
+      jobComments: "",
+      description: "",
+      area: "",
+      assetID: "",
+      assetIssueReason: "",
+      assetIssueDetails: "",
+      images: [],
+    },
+    resolver: zodResolver(
+      jobRequestSchema,
+    ) as unknown as Resolver<JobRequestFormValues>,
   });
+
+  useEffect(() => {
+    if (!item) return;
+
+    reset({
+      location: item.location,
+      type: item.type,
+      priority: item.priority,
+      equipment: item.equipment,
+      breakdown_time: item.breakdown_time,
+      impact: item.impact,
+      jobComments: item.jobComments ?? "",
+      description: item.description,
+      area: item.area ?? "",
+      assetID: item.assetID ?? "",
+      assetIssueReason: item.assetIssueReason ?? "",
+      assetIssueDetails: item.assetIssueDetails ?? "",
+      images: [],
+    });
+  }, [item, reset]);
+
+  const selectedLocation = useWatch({ control, name: "location" });
+  const selectedArea = useWatch({ control, name: "area" });
+  const selectedEquipment = useWatch({ control, name: "equipment" });
+  const selectedType = useWatch({ control, name: "type" });
+  const selectedImpact = useWatch({ control, name: "impact" });
+  const selectedPriority = useWatch({ control, name: "priority" });
+
+  const { data: equipmentData } = useGetAll<AssetEquipmentResponse>({
+    resourcePath: "api/assets/options",
+    queryKey: [
+      "assets",
+      "options",
+      "edit-job-equipment",
+      selectedLocation,
+      selectedArea,
+    ],
+    params: {
+      location: selectedLocation,
+      area: selectedArea,
+    },
+    enabled: !!selectedLocation && !!selectedArea,
+  });
+
+  const equipmentOptions = Array.from(
+    new Set(
+      [
+        selectedEquipment,
+        ...(equipmentData?.equipment.map((equipment) => equipment.name) ?? []),
+      ].filter((equipment): equipment is string => !!equipment),
+    ),
+  );
+
+  const includeSelectedOption = (options: string[], selected: string) =>
+    selected && !options.includes(selected) ? [selected, ...options] : options;
 
   const onSubmit = async (data: JobRequestFormValues) => {
     try {
@@ -60,9 +144,13 @@ const JobUpdateForm = () => {
     }
   };
 
+  if (!selectedRowId || isPending || !item) {
+    return <PageLoadingSpinner />;
+  }
+
   return (
     <form
-      className="flex flex-col rounded-lg lg:w-full text-font dark:bg-[#1d2739] gap-6"
+      className="flex flex-col rounded-lg lg:w-full text-font dark:bg-(--bg-secondary_dark) gap-6"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
@@ -79,7 +167,7 @@ const JobUpdateForm = () => {
         <FormRowSelect
           name="location"
           label="Location"
-          options={stores}
+          options={includeSelectedOption(stores, selectedLocation)}
           // control={control}
           placeholder="Select Store"
           register={register}
@@ -89,7 +177,7 @@ const JobUpdateForm = () => {
         <FormRowSelect
           name="type"
           label="Type"
-          options={type}
+          options={includeSelectedOption(type, selectedType)}
           // control={control}
           placeholder="Select Type"
           register={register}
@@ -98,7 +186,7 @@ const JobUpdateForm = () => {
         <FormRowSelect
           name="impact"
           label="Impact"
-          options={impact}
+          options={includeSelectedOption(impact, selectedImpact)}
           // control={control}
           placeholder="Select Impact"
           register={register}
@@ -107,7 +195,7 @@ const JobUpdateForm = () => {
         <FormRowSelect
           name="priority"
           label="Priority"
-          options={priority}
+          options={includeSelectedOption(priority, selectedPriority)}
           // control={control}
           placeholder="Select Priority"
           register={register}
@@ -116,11 +204,7 @@ const JobUpdateForm = () => {
         <FormRowSelect
           name="equipment"
           label="Equipment"
-          options={[]}
-          // options={assets.assets.map((a) => ({
-          //   label: a.equipment,
-          //   value: a.equipment,
-          // }))}
+          options={equipmentOptions}
           // control={control}
           placeholder="Select Equipment"
           register={register}
@@ -128,48 +212,15 @@ const JobUpdateForm = () => {
         />
         <FileInput control={control} name="images" multiple={true} />
       </div>
-      <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72">
-        <Button
-          className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
-          onClick={() => setShowUpdateMaintenanceDialog(false)}
-          variant={"cancel"}
-          size="lg"
-          type="button"
-        >
-          Cancel
-        </Button>
-        <Button
-          disabled={isSubmitting}
-          type="submit"
-          variant="submit"
-          size="lg"
-          className="flex-1"
-        >
-          {isSubmitting ? "Updating..." : "Update"}
-        </Button>
-      </div>
+      <FormActionButtons
+        cancelText="Cancel"
+        submitText="Update"
+        isPending={isSubmitting}
+        onCancel={() => setShowUpdateMaintenanceDialog(false)}
+        className="border-0"
+      />
     </form>
   );
 };
 
 export default JobUpdateForm;
-
-// <div className="flex lg:w-1/2 ml-auto gap-2 max-w-72">
-//       <Button
-//         className="flex-1 hover:bg-red-500/90 hover:cursor-pointer hover:text-white"
-//         variant="cancel"
-//         size="lg"
-//         type="button"
-//         onClick={onCancel}
-//       >
-//         Cancel
-//       </Button>
-//       <Button
-//         disabled={isSubmitting}
-//         type="submit"
-//         variant="submit"
-//         size="lg"
-//         className="flex-1"
-//       >
-//         {isSubmitting ? "Submitting..." : "Submit"}
-//       </Button>
