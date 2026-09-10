@@ -23,7 +23,9 @@ const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042"];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
-function formatMetricValue(name: string, value: number) {
+function formatMetricValue(name: string, value: number | null) {
+  if (value === null) return "N/A";
+
   if (name === "Availability") {
     return `${value.toFixed(0)}%`;
   }
@@ -111,6 +113,13 @@ export class PieChartGeneric extends PureComponent<Props> {
 
     const active = activeIndex >= 0 ? reliability[activeIndex] : null;
 
+    // Recharts expects numeric values. Preserve null for the displayed label,
+    // while drawing unavailable metrics as zero-sized segments.
+    const chartReliability = reliability.map((item) => ({
+      ...item,
+      value: item.value ?? 0,
+    }));
+
     const availabilityMetric = reliability.find(
       (item) => item.name === "Availability",
     );
@@ -180,7 +189,7 @@ export class PieChartGeneric extends PureComponent<Props> {
 
             {/* Pie */}
             <Pie
-              data={reliability}
+              data={chartReliability}
               cx="50%"
               cy="45%"
               innerRadius={innerRadius}

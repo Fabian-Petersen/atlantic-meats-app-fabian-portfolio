@@ -14,6 +14,8 @@ type EquipmentCondition = "operational" | "new" | "poor" | "broken";
 import type { Resource } from "@/utils/api";
 import { Badge } from "../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
+import { AssetsDropdownCell } from "../features/tables/AssetsDropdownCell";
+import type { AssetItem } from "@/schemas/transfersSchemas";
 
 export const getTransferTransitColumns = (
   setShowUpdateAssetDialog: (v: boolean) => void,
@@ -61,21 +63,6 @@ export const getTransferTransitColumns = (
     sortingFn: "datetime",
   },
   {
-    accessorKey: "assetID",
-    header: "Asset ID",
-    size: 120,
-    minSize: 100,
-    maxSize: 140,
-  },
-  {
-    accessorKey: "equipment",
-    header: "Equipment",
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
-  },
-  {
     accessorKey: "transportType",
     header: "Transport Type",
     cell: ({ getValue }) => {
@@ -90,6 +77,16 @@ export const getTransferTransitColumns = (
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;
     },
+  },
+  {
+    accessorKey: "assets",
+    header: "Assets",
+    cell: ({ getValue }) => (
+      <AssetsDropdownCell assets={getValue<AssetItem[]>() ?? []} />
+    ),
+    size: 140,
+    minSize: 120,
+    maxSize: 180,
   },
   {
     accessorKey: "trackingNumber",

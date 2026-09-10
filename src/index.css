@@ -225,7 +225,7 @@ html {
 .dark {
   --pageDark: #030712; /* bg of the pages: tailwind bg-gray-950 */
   --bg-primary_dark: #001427; /* bg color of a container */
-  --bg-secondary_dark: #101828; /*bg of the container content #1b64f1*/
+  --bg-secondary_dark: #001427; /*bg of the container content #1b64f1*/
   /* Light Mode Colors */
   --pageLight: #f9fafb;
   --bg-primary-light: #fff; /* bg color of a container */

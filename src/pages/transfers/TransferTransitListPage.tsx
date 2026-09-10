@@ -130,7 +130,7 @@ const TransferTransitListPage = () => {
           pageSize={10}
           addPagination={true}
           addPageSelector={true}
-          tableHeading="Transfers - Open"
+          tableHeading="Transfers - In Transit"
         />
       </div>
       {/* // $ Mobile View */}

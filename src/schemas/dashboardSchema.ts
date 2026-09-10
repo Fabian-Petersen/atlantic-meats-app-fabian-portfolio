@@ -1,8 +1,6 @@
 import * as z from "zod";
 import type { LucideIcon } from "lucide-react";
 import { PureComponent } from "react";
-// import { transferWorkflowResponseSchema } from "@/schemas/transfersSchemas";
-// import { assetHistoryResponseSchema } from "@/schemas/assetSchemas";
 import { metricValuesSchema, cardMetricsSchema } from "./metricSchemas";
 
 // $ Schema to create card item
@@ -177,8 +175,6 @@ export const dashboardMetricSchema = z.object({
   storeJobs: storeJobMetricsSchema,
   cards: cardMetricsSchema,
   verification: verificationSummarySchema,
-  // assets: assetHistoryResponseSchema,
-  // transfers: transferWorkflowResponseSchema,
 });
 
 export type AssetVerificationSummary = z.infer<
@@ -221,11 +217,6 @@ export type CardData = {
   icon: LucideIcon;
   titleIcon: LucideIcon;
 };
-
-// export type MetricCardConfig = {
-//   cardData: CardData;
-//   metrics: MetricValues;
-// };
 
 export type MetricCardConfig = z.infer<typeof metricCardConfigSchema>;
 

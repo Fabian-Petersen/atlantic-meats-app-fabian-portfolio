@@ -4,7 +4,6 @@ import type { CardData, MetricValues } from "@/schemas/dashboardSchema";
 import type { AssetHistoryResponse } from "@/schemas/assetSchemas";
 
 import { useGetAll } from "@/utils/api";
-import useGlobalContext from "@/context/useGlobalContext";
 
 type AssetHistoryCardConfig = {
   cardData: CardData;
@@ -17,17 +16,19 @@ type AssetHistoryProps = {
   hasHistory: boolean;
   isError: boolean;
   data: AssetHistoryResponse | undefined;
+  retry: () => void;
 };
-export const useAssetJobsHistory = (): AssetHistoryProps => {
-  const { selectedRowId } = useGlobalContext();
-
-  const { data, isPending, isError } = useGetAll<AssetHistoryResponse>({
-    resourcePath: `api/assets/${selectedRowId}/history`,
-    queryKey: ["asset", "jobs-history", selectedRowId],
-  });
+export const useAssetJobsHistory = (assetId?: string): AssetHistoryProps => {
+  const { data, isPending, isError, refetch } = useGetAll<AssetHistoryResponse>(
+    {
+      resourcePath: `api/assets/${encodeURIComponent(assetId ?? "")}/history`,
+      queryKey: ["asset", "jobs-history", assetId],
+      enabled: Boolean(assetId),
+    },
+  );
 
   const hasHistory = (data?.history?.length ?? 0) > 0;
-  console.log("hook-assets-history:", data);
+  // console.log("hook-assets-history:", data);
 
   const cards: AssetHistoryCardConfig[] = useMemo(
     () =>
@@ -40,5 +41,14 @@ export const useAssetJobsHistory = (): AssetHistoryProps => {
     [data],
   );
 
-  return { cards, isPending, hasHistory, isError, data };
+  return {
+    cards,
+    isPending,
+    hasHistory,
+    isError,
+    data,
+    retry: () => {
+      void refetch();
+    },
+  };
 };

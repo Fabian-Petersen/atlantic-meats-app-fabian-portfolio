@@ -85,12 +85,13 @@ export type CreateAssetPayload = Omit<AssetRequestFormValues, "images"> & {
 
 export const assetHistoryItemSchema = z.object({
   // From requests table
-  id: z.string(),
+  request_id: z.string(),
   jobCreated: z.string().nullable(),
   description: z.string().nullable(),
   equipment: z.string().nullable(),
 
   // From actions table
+  id: z.string(), // action_id
   location: z.string(),
   assetID: z.string(),
   jobcardNumber: z.string().nullable(),
@@ -107,7 +108,7 @@ export const assetHistoryItemSchema = z.object({
 export const reliabilitySchema = z.array(
   z.object({
     name: z.enum(["MTBF", "MTTR", "Availability", "Failure Count"]),
-    value: z.number(),
+    value: z.number().nullable(),
   }),
 );
 
@@ -116,8 +117,11 @@ export type Reliability = z.infer<typeof reliabilitySchema>[number];
 export type AssetHistoryItem = z.infer<typeof assetHistoryItemSchema>;
 
 export const assetHistoryResponseSchema = z.object({
-  assetID: z.string(),
-  last_completed_job: z.string(),
+  assetId: z.string(),
+  assetID: z.string().nullable(),
+  last_completed_job: z.string().nullable(),
+  location: z.string(),
+  equipment: z.string(),
 
   metrics: {
     completedRequests: metricValuesSchema,

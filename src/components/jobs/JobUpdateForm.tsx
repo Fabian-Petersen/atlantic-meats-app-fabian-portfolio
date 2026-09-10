@@ -11,7 +11,7 @@ import FormRowInput from "../../../customComponents/FormRowInput";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
 import FileInput from "../../../customComponents/FileInput";
 import FormActionButtons from "../features/FormActionButtons";
-import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
+import FormSkeleton from "../forms/FormSkeleton";
 
 import useGlobalContext from "@/context/useGlobalContext";
 
@@ -145,7 +145,7 @@ const JobUpdateForm = () => {
   };
 
   if (!selectedRowId || isPending || !item) {
-    return <PageLoadingSpinner />;
+    return <FormSkeleton />;
   }
 
   return (

@@ -84,8 +84,8 @@ function MobileTransferRequestCard({
       onClick={onToggle}
     >
       {/* ── Header (always visible, toggles expansion) ── */}
-      <button
-        type="button"
+      <div
+        role="button"
         onClick={onToggle}
         className={cn(sharedStyles.cardBtn, "gap-0")}
       >
@@ -131,7 +131,7 @@ function MobileTransferRequestCard({
             />
           </button>
         </div>
-      </button>
+      </div>
 
       {/* ── Expanded details ── */}
       <AnimatePresence initial={false}>

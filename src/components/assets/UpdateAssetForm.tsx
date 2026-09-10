@@ -28,7 +28,7 @@ import FileInput from "../../../customComponents/FileInput";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
 import FormRowInput from "../../../customComponents/FormRowInput";
 import TextAreaInput from "../../../customComponents/TextAreaInput";
-import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
+import FormSkeleton from "../forms/FormSkeleton";
 
 // $ Context
 import useGlobalContext from "@/context/useGlobalContext";
@@ -109,7 +109,7 @@ const UpdateAssetForm = () => {
   }, [item, reset]);
 
   if (!id || isPending || !item) {
-    return <PageLoadingSpinner />;
+    return <FormSkeleton />;
   }
 
   const DATA = CeateAssetFormOptionsData;

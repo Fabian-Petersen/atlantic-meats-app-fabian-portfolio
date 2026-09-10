@@ -155,10 +155,11 @@ export const getAssetHistoryColumns = (
         rowId: row.original.id,
         setSelectedRowId,
 
-        action: {
-          url: `/api/jobs/${rowId}/action`,
+        view: {
+          label: "View details",
+          url: `/jobs/${rowId}/complete`,
           onOpen: () => {
-            navigate(`/jobs/${rowId}/action`);
+            navigate(`/jobs/${rowId}/complete`);
             setSelectedRowId(rowId);
           },
         },
