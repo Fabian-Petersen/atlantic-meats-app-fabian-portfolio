@@ -23,6 +23,7 @@ import DynamicForm, {
 } from "../forms/DynamicForm";
 import FormInfo from "../features/forms/FormInfo";
 import JobAssetFields from "./JobAssetFields";
+import { AddAssetButton } from "../forms/AddAssetButton";
 
 const normalizeOptions = (
   options:
@@ -67,7 +68,11 @@ const CreateJobForm = () => {
   });
 
   const location = useWatch({ control: form.control, name: "location" });
-  const { fields: assetFields, append, remove } = useFieldArray({
+  const {
+    fields: assetFields,
+    append,
+    remove,
+  } = useFieldArray({
     control: form.control,
     name: "assets",
   });
@@ -198,9 +203,8 @@ const CreateJobForm = () => {
 
       <div className={location ? "space-y-2" : "space-y-3"}>
         {location ? (
-          <div className="flex items-center justify-end px-4">
-            <button
-              type="button"
+          <div className="flex items-center justify-end px-0">
+            <AddAssetButton
               onClick={() =>
                 append({
                   area: "",
@@ -211,10 +215,7 @@ const CreateJobForm = () => {
                   images: [],
                 })
               }
-              className="text-sm font-medium text-blue-600 hover:cursor-pointer"
-            >
-              + Add
-            </button>
+            />
           </div>
         ) : (
           <FormInfo

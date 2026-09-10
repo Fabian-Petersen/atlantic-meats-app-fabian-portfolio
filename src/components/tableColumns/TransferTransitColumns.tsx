@@ -90,7 +90,7 @@ export const getTransferTransitColumns = (
   },
   {
     accessorKey: "trackingNumber",
-    header: "Trancking Number",
+    header: "Tracking Number",
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;

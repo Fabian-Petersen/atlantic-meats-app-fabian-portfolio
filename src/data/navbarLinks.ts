@@ -7,7 +7,7 @@ import {
   User2,
   Library,
   Hammer,
-  Clock,
+  // Clock,
   // Bolt,
   // MoveHorizontal,
   Truck,
@@ -16,6 +16,7 @@ import {
   FileClock,
   // List,
   ArchiveX,
+  ScanBarcode,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { UserGroup } from "@/schemas/usersSchema";
@@ -57,12 +58,12 @@ export const maintenanceLinks: NavlinkProps[] = [
     url: "/jobs/completed",
     allowedGroups: ["admin", "maintenance", "manager", "contractor"],
   },
-  {
-    name: "schedule task",
-    icon: Clock,
-    url: "#",
-    allowedGroups: ["admin"],
-  },
+  // {
+  //   name: "schedule task",
+  //   icon: Clock,
+  //   url: "#",
+  //   allowedGroups: ["admin"],
+  // },
 ] as const;
 
 export const actionLinks: NavlinkProps[] = [
@@ -89,7 +90,7 @@ export const assetLinks: NavlinkProps[] = [
   },
   {
     name: "assets verification",
-    icon: Library,
+    icon: ScanBarcode,
     url: "/assets/verification", // frontend routes only, GET: /assets for backend
     allowedGroups: ["admin", "manager"],
   },

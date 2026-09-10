@@ -114,7 +114,9 @@ export const getTransferColumns = (
     header: "Actions", // or "Actions"
     enableSorting: false,
     enableHiding: false,
-    size: 10,
+    size: 48,
+    minSize: 44,
+    maxSize: 56,
     cell: ({ row }) => {
       const rowId = row.original.id;
 

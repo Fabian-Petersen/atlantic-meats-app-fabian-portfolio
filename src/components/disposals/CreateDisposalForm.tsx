@@ -19,6 +19,7 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
 import useGlobalContext from "@/context/useGlobalContext";
 import DynamicForm, { DynamicFormActions } from "../forms/DynamicForm";
 import DisposalAssetFields from "./DisposalAssetFields";
+import { AddAssetButton } from "../forms/AddAssetButton";
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
 import FormInfo from "../features/forms/FormInfo";
 
@@ -249,9 +250,8 @@ const CreateDisposalForm = () => {
         {/* ------------------------------------------------------------------- */}
 
         {location && (
-          <div className="flex items-center justify-end px-4">
-            <button
-              type="button"
+          <div className="flex items-center justify-end px-0">
+            <AddAssetButton
               onClick={() =>
                 append({
                   area: "",
@@ -263,10 +263,7 @@ const CreateDisposalForm = () => {
                   assetIssueDetails: "",
                 })
               }
-              className="text-sm font-medium text-blue-600 hover:cursor-pointer"
-            >
-              + Add
-            </button>
+            />
           </div>
         )}
         {!location && (

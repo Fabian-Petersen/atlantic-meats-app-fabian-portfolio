@@ -46,7 +46,7 @@ const TransferTransitListPage = () => {
     },
   });
 
-  console.log("transit-data:", data);
+  // console.log("transit-data:", data);
 
   /**
    * Convert the rows have the data in the root object and not nested using the util

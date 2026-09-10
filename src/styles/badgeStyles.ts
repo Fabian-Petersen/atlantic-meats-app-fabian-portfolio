@@ -218,5 +218,23 @@ export const badgeStyles = {
         "dark:border-red-500 dark:bg-red-300/20 dark:text-red-300",
       ),
     },
+    user_group_status: {
+      user: cn(
+        "text-green-600 bg-green-300/30 border-green-300",
+        "dark:border-green-500 dark:bg-green-300/20 dark:text-green-300",
+      ),
+      manager: cn(
+        "text-blue-600 bg-blue-300/30 border-blue-300",
+        "dark:border-blue-500 dark:bg-blue-300/20 dark:text-blue-300",
+      ),
+      maintenance: cn(
+        "text-amber-600 bg-amber-300/30 border-amber-300",
+        "dark:border-amber-500 dark:bg-amber-300/20 dark:text-amber-300",
+      ),
+      admin: cn(
+        "text-cyan-600 bg-cyan-300/30 border-cyan-300",
+        "dark:border-cyan-500 dark:bg-cyan-300/20 dark:text-cyan-300",
+      ),
+    },
   },
 };

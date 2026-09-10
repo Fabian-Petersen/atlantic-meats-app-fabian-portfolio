@@ -1,4 +1,3 @@
-import { ChevronDown, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { UseFormReturn } from "react-hook-form";
 
@@ -8,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { motionVariants } from "@/styles/motionStyles";
 import { sharedStyles } from "@/styles/shared";
 import DynamicForm, { type DynamicFormField } from "../forms/DynamicForm";
+import { AssetSectionHeader } from "../forms/AssetSectionHeader";
 
 interface JobAssetFieldsProps {
   form: UseFormReturn<CreateJobRequestFormValues>;
@@ -134,46 +134,18 @@ const JobAssetFields = ({
   ];
 
   return (
-    <div className={cn(sharedStyles.formInputDefault, "py-0")}>
-      <div className="flex items-center gap-2 px-4 py-3">
-        <button
-          type="button"
-          onClick={onToggle}
-          aria-expanded={isOpen}
-          className="flex min-w-0 flex-1 items-center gap-3 text-left"
-        >
-          <div className="flex w-full items-center justify-between">
-            <div className="min-w-0">
-              <h3 className="font-semibold">Asset {assetIndex + 1}</h3>
-              {!isOpen && (
-                <p className="mt-1 flex gap-2 truncate text-xs text-gray-500">
-                  <span>
-                    {equipment || assetID || area || "Asset details not completed"}
-                  </span>
-                  <span>{area && equipment && assetID && "-"}</span>
-                  <span>{assetID}</span>
-                </p>
-              )}
-            </div>
-            <ChevronDown
-              className={`h-5 w-5 shrink-0 transition-transform duration-200 hover:cursor-pointer ${
-                isOpen ? "rotate-180" : ""
-              }`}
-            />
-          </div>
-        </button>
-
-        {canRemove && (
-          <button
-            type="button"
-            onClick={onRemove}
-            aria-label={`Remove asset ${assetIndex + 1}`}
-            className="shrink-0 rounded-md p-2 text-red-500 hover:cursor-pointer hover:bg-red-50"
-          >
-            <Trash2 className="h-4 w-4" />
-          </button>
-        )}
-      </div>
+    <div className={cn(sharedStyles.formInputDefault, "px-0 py-0")}>
+      <AssetSectionHeader
+        assetNumber={assetIndex + 1}
+        isOpen={isOpen}
+        summary={
+          [equipment, assetID || area].filter(Boolean).join(" • ") ||
+          "Asset details not completed"
+        }
+        onToggle={onToggle}
+        onRemove={onRemove}
+        canRemove={canRemove}
+      />
 
       <AnimatePresence initial={false}>
         {isOpen && (
@@ -182,7 +154,7 @@ const JobAssetFields = ({
             initial="closed"
             animate="open"
             exit="closed"
-            className="overflow-hidden py-2"
+            className="overflow-hidden px-2 py-2"
           >
             <DynamicForm
               form={form}

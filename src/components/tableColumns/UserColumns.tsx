@@ -4,6 +4,11 @@ import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { Resource } from "@/utils/api";
 import type { SuccessConfig } from "@/context/app-types";
+import { Badge } from "../features/Badge";
+import { badgeStyles } from "@/styles/badgeStyles";
+import type { NavigateFunction } from "react-router-dom";
+
+type UserGroupStatus = "user" | "manager" | "maintenance" | "admin";
 
 export const getUserColumns = (
   setSelectedRowId: (id: string) => void,
@@ -18,6 +23,7 @@ export const getUserColumns = (
   resend: (email: string) => Promise<void>,
   setShowSuccess: (v: boolean) => void,
   setSuccessConfig: (v: SuccessConfig) => void,
+  navigate: NavigateFunction,
 ): ColumnDef<UsersAPIResponse>[] => [
   {
     accessorKey: "userCreated",
@@ -31,24 +37,20 @@ export const getUserColumns = (
         minute: "2-digit",
         hour12: false,
       }),
-    // sortingFn: "datetime",
   },
   {
-    accessorKey: "name",
-    header: "Name",
+    id: "fullName",
+    accessorFn: (user) =>
+      [user.name, user.family_name].filter(Boolean).join(" "),
+    header: "Full Name",
     enableColumnFilter: true,
     cell: ({ getValue }) => {
       const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
+      return <p className="capitalize">{value || "—"}</p>;
     },
-  },
-  {
-    accessorKey: "family_name",
-    header: "Last Name",
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
+    size: 160,
+    minSize: 140,
+    maxSize: 160,
   },
   {
     accessorKey: "location",
@@ -56,15 +58,6 @@ export const getUserColumns = (
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;
-    },
-  },
-  {
-    accessorKey: "group",
-    header: "Group",
-    enableColumnFilter: false,
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="">{value}</p>;
     },
   },
   {
@@ -93,6 +86,21 @@ export const getUserColumns = (
     },
   },
   {
+    accessorKey: "group",
+    header: "Group",
+    enableColumnFilter: false,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return (
+        <Badge
+          value={value as UserGroupStatus}
+          styleMap={badgeStyles.families.user_group_status}
+          className="capitalize"
+        />
+      );
+    },
+  },
+  {
     accessorKey: "status",
     header: "Status",
     cell: ({ getValue }) => {
@@ -113,6 +121,9 @@ export const getUserColumns = (
     header: "Actions",
     enableSorting: false,
     enableHiding: false,
+    size: 56,
+    minSize: 56,
+    maxSize: 56,
     cell: ({ row }) => {
       const rowId = row.original.id;
       const menuItems = getTableMenuItems({
@@ -123,14 +134,12 @@ export const getUserColumns = (
         create: {
           url: "/users/create-user",
           onOpen: () => {
-            // navigate("/users/create-user");
-            // setShowCreateUserDialog(true);
+            navigate("/users/create-user");
           },
         },
         edit: {
           url: `/users/profile`,
           onOpen: () => {
-            // setShowUpdateUserDialog(true);
             setSelectedRowId(rowId);
           },
         },

@@ -76,6 +76,7 @@ const UsersListPage = () => {
         resend,
         setShowSuccess,
         setSuccessConfig,
+        navigate,
       ),
     [
       // setShowCreateUserDialog,
@@ -84,6 +85,7 @@ const UsersListPage = () => {
       resend,
       setShowSuccess,
       setSuccessConfig,
+      navigate,
     ],
   );
 

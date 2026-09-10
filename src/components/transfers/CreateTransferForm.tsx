@@ -20,6 +20,7 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
 import useGlobalContext from "@/context/useGlobalContext";
 import DynamicForm, { DynamicFormActions } from "../forms/DynamicForm";
 import TransferAssetFields from "./TransferAssetFields";
+import { AddAssetButton } from "../forms/AddAssetButton";
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
 import type { TransferRequestPayload } from "@/schemas/transfersSchemas";
 import FormInfo from "../features/forms/FormInfo";
@@ -253,9 +254,8 @@ const CreateTransferForm = () => {
         {/* Add Asset                                                           */}
         {/* ------------------------------------------------------------------- */}
         {locationFrom && (
-          <div className="flex items-center justify-end px-4">
-            <button
-              type="button"
+          <div className="flex items-center justify-end px-0">
+            <AddAssetButton
               onClick={() =>
                 append({
                   area: "",
@@ -266,10 +266,7 @@ const CreateTransferForm = () => {
                   assetIssueDetails: "",
                 })
               }
-              className="text-sm font-medium text-blue-600 hover:cursor-pointer"
-            >
-              + Add
-            </button>
+            />
           </div>
         )}
         {!locationFrom && (
