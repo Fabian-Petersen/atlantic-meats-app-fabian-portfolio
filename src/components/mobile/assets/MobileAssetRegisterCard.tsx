@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
-import { CardRow } from "./CardRow";
+import { CardRow } from "../CardRow";
 import { AnimatePresence, motion } from "motion/react";
 import { motionVariants } from "@/styles/motionStyles";
 import { DropdownMenuButtonDialog } from "@/components/modals/DropdownMenuButtonDialog";

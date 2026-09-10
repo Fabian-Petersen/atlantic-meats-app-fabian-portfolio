@@ -12,8 +12,8 @@ import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
-import { CardRow } from "./CardRow";
-import { Badge } from "../features/Badge";
+import { CardRow } from "../CardRow";
+import { Badge } from "../../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { AnimatePresence, motion } from "motion/react";
 import { motionVariants } from "@/styles/motionStyles";
@@ -56,10 +56,7 @@ export default function MobileJobsCompletedCard({
       onClick={onToggle}
     >
       {/* Always-visible header — tap to expand */}
-      <div
-        className={cn(sharedStyles.cardBtn, "gap-0")}
-        onClick={onToggle}
-      >
+      <div className={cn(sharedStyles.cardBtn, "gap-0")} onClick={onToggle}>
         {/* // $ ——— Location + Meta Row —————————————————————————————————————————————————— */}
         <div className={sharedStyles.mobileCardHeaderContent}>
           <CardRow

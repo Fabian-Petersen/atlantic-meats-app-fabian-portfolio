@@ -1,7 +1,7 @@
 import useGlobalContext from "@/context/useGlobalContext";
 import type { JobApprovedAPIResponse } from "@/schemas";
-import { MobileImageModal } from "./MobileImageModal";
-import { CardRow } from "./CardRow";
+import { MobileImageModal } from "../MobileImageModal";
+import { CardRow } from "../CardRow";
 import {
   MessageSquare,
   MapPin,
@@ -14,7 +14,7 @@ import {
   ImageOff,
   CalendarClock,
 } from "lucide-react";
-import { Badge } from "../features/Badge";
+import { Badge } from "../../features/Badge";
 
 // $ ─── React Hooks ──────────────────────────────────────────────────────────────
 import { useNavigate } from "react-router-dom";

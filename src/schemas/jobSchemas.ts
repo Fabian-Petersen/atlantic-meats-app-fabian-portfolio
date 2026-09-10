@@ -164,6 +164,10 @@ export const jobRequestAPIResponseSchema = jobRequestBaseSchema
         z.object({
           equipment: z.string(),
           assetID: z.string().optional(),
+          area: z.string().optional(),
+          assetIssueReason: z.string().optional(),
+          assetIssueDetails: z.string().optional(),
+          images: z.array(presignedURLSchema).default([]),
         }),
       )
       .optional(),

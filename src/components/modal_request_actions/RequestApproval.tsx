@@ -35,7 +35,15 @@ function Field({ label, value }: { label: string; value?: string | null }) {
   );
 }
 
-function RequestApproval() {
+type RequestApprovalProps = {
+  selectedAssetIndex: number;
+  onSelectAsset: (index: number) => void;
+};
+
+function RequestApproval({
+  selectedAssetIndex,
+  onSelectAsset,
+}: RequestApprovalProps) {
   const {
     selectedRowId,
     setShowRejectRequestDialog,
@@ -55,6 +63,22 @@ function RequestApproval() {
     },
   });
 
+  const assets = item
+    ? item.assets?.length
+      ? item.assets
+      : [
+          {
+            equipment: item.equipment,
+            assetID: item.assetID,
+            area: item.area,
+            assetIssueReason: item.assetIssueReason,
+            assetIssueDetails: item.assetIssueDetails,
+            images: item.images ?? [],
+          },
+        ]
+    : [];
+  const currentAsset = assets[selectedAssetIndex] ?? assets[0];
+
   // console.log("item", item);
 
   if (isPending) {
@@ -62,7 +86,7 @@ function RequestApproval() {
   }
 
   // fallback UI if timeout reached
-  if (!item) {
+  if (!item || !currentAsset) {
     return <Error />;
   }
 
@@ -80,12 +104,32 @@ function RequestApproval() {
           {item?.jobcardNumber ?? `${item?.location}-${formattedNumber}`}
         </p>
         <h1 className="text-lg md:text-xl font-semibold capitalize leading-tight">
-          {item?.equipment}
+          {currentAsset.equipment}
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">
-          Asset ID: {item?.assetID}
+          Asset ID: {currentAsset.assetID}
         </p>
       </div>
+
+      {assets.length > 1 && (
+        <div className="flex flex-wrap gap-2">
+          {assets.map((asset, index) => (
+            <button
+              key={`${asset.assetID ?? "asset"}-${index}`}
+              type="button"
+              onClick={() => onSelectAsset(index)}
+              className={cn(
+                "rounded-md border p-1.5 text-xs font-medium capitalize transition-colors hover:cursor-pointer",
+                index === selectedAssetIndex
+                  ? "border-green-500 bg-green-400/10 text-green-400"
+                  : "border-gray-200 text-gray-500 hover:border-gray-300 dark:border-gray-700 dark:text-gray-400 dark:hover:border-gray-600",
+              )}
+            >
+              {`Asset ${index + 1}`}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* ── Status badges ── */}
       <div className="flex flex-wrap gap-2 text-cxs">
@@ -124,7 +168,10 @@ function RequestApproval() {
 
       {/* ── Structured fields ── */}
       <div className="flex flex-col gap-3">
+        <Field label="Area" value={currentAsset.area} />
         <Field label="Location" value={item.location} />
+        <Field label="Issue reason" value={currentAsset.assetIssueReason} />
+        <Field label="Issue details" value={currentAsset.assetIssueDetails} />
         <Field label="Type" value={item.type} />
         <Field label="Impact" value={item.impact} />
         <Field label="Priority" value={item.priority} />

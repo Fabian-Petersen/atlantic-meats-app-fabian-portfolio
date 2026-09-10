@@ -22,7 +22,7 @@ import { TableGeneric } from "@/components/features/tables/TableGeneric";
 import FormHeading from "@/../customComponents/FormHeading";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { SearchInput } from "@/components/features/SearchInput";
-import { MobileUsersContainer } from "@/components/mobile/MobileUsersContainer";
+import { MobileUsersContainer } from "@/components/mobile/users/MobileUsersContainer";
 import { useResendTemporaryPassword } from "@/utils/useResendTemporaryPassword";
 import { PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";

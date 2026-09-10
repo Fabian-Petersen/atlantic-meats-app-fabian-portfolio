@@ -1,5 +1,6 @@
 // $ This page renders the full details of a maintenance request for approval with the information and the supporting pictures.
 
+import { useState } from "react";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../../utils/api";
 import { type JobAPIResponse } from "@/schemas";
@@ -7,7 +8,7 @@ import { ImageGallery } from "@/components/features/ImageGallery";
 import RequestApproval from "@/components/modal_request_actions/RequestApproval";
 import { Success } from "@/components/features/Success";
 import useGlobalContext from "@/context/useGlobalContext";
-import MobileRequestApproval from "@/components/mobile/MobileRequestApproval";
+import MobileRequestApproval from "@/components/mobile/jobs/MobileRequestApproval";
 import BackButton from "@/components/features/BackButton";
 import { cn } from "@/lib/utils";
 
@@ -29,11 +30,31 @@ const JobPendingItemPage = () => {
     },
   });
 
+  const [selectedAssetIndex, setSelectedAssetIndex] = useState(0);
+  const [prevRowId, setPrevRowId] = useState(selectedRowId);
+  if (selectedRowId !== prevRowId) {
+    setPrevRowId(selectedRowId);
+    setSelectedAssetIndex(0);
+  }
+
   if (!selectedRowId || !item) {
     return <PageLoadingSpinner />;
   }
 
-  const images = item.images;
+  const assets = item.assets?.length
+    ? item.assets
+    : [
+        {
+          equipment: item.equipment,
+          assetID: item.assetID,
+          area: item.area,
+          assetIssueReason: item.assetIssueReason,
+          assetIssueDetails: item.assetIssueDetails,
+          images: item.images ?? [],
+        },
+      ];
+  const selectedAsset = assets[selectedAssetIndex] ?? assets[0];
+  const images = selectedAsset?.images ?? [];
 
   return (
     <div className="flex min-h-[calc(100vh-var(--sm-navbarHeight))] flex-col gap-4 px-1 py-2 md:h-[calc(100vh-var(--lg-navbarHeight))] md:py-8">
@@ -46,14 +67,21 @@ const JobPendingItemPage = () => {
         )}
       >
         <div className="flex flex-col gap-2 min-h-0">
-          <ImageGallery images={images ?? []} />
+          <ImageGallery images={images} />
         </div>
         <div>
-          <RequestApproval />
+          <RequestApproval
+            selectedAssetIndex={selectedAssetIndex}
+            onSelectAsset={setSelectedAssetIndex}
+          />
         </div>
       </div>
       <div className="md:hidden">
-        <MobileRequestApproval item={item} />
+        <MobileRequestApproval
+          item={item}
+          selectedAssetIndex={selectedAssetIndex}
+          onSelectAsset={setSelectedAssetIndex}
+        />
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { useById } from "@/utils/api";
 import AssetDetails from "@/components/assets/AssetDetails";
 import type { AssetAPIResponse } from "@/schemas";
 import BackButton from "@/components/features/BackButton";
-import MobileAssetDetails from "@/components/mobile/MobileAssetDetails";
+import MobileAssetDetails from "@/components/mobile/assets/MobileAssetDetails";
 
 const AssetItemPage = () => {
   const { id } = useParams<{ id: string }>();

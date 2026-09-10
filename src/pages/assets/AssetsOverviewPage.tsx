@@ -4,7 +4,7 @@
 import FormHeading from "../../../customComponents/FormHeading";
 import { useGetAll } from "@/utils/api";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-import { MobileAssetsOverviewTable } from "@/components/mobile/MolbileAssetsOverviewTable";
+import { MobileAssetsOverviewTable } from "@/components/mobile/assets/MolbileAssetsOverviewTable";
 
 import { useNavigate } from "react-router-dom";
 

@@ -1,7 +1,11 @@
 // $ This model is to open a modal from a button using ShadCN Dropdown and Dialog components
 
 import { MoreVertical } from "lucide-react";
-import type { TableActionLinks } from "@/lib/getTableMenuItems";
+import {
+  tableActionStyles,
+  type TableActionLinks,
+} from "@/lib/getTableMenuItems";
+import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -41,19 +45,32 @@ export function DropdownMenuButtonDialog({
           <DropdownMenuLabel className="rounded-t-[inherit] border-b border-slate-200 bg-gray-100 px-4.5 py-3 text-xs font-semibold tracking-wide text-slate-600 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-200">
             Item Actions
           </DropdownMenuLabel>
-          <DropdownMenuGroup className="space-y-1 border-none p-1.5">
+          <DropdownMenuGroup className="space-y-1 p-1">
             {menuItems.map((item) => {
               const Icon = item.icon;
+              const actionStyle = tableActionStyles[item.id];
               return (
                 <DropdownMenuItem
                   key={item.id}
-                  className="min-h-10 cursor-pointer rounded-lg px-3 py-2 text-slate-700 focus:bg-primary/15 focus:text-slate-900 dark:text-slate-200 dark:focus:bg-primary/20 dark:focus:text-white"
+                  className="min-h-10 cursor-pointer rounded-lg px-1 py-2 text-slate-700 focus:bg-primary/15 focus:text-slate-900 dark:text-slate-200 dark:focus:bg-primary/20 dark:focus:text-white"
                   onClick={item.onClick}
                 >
-                  <div className="flex w-full items-center gap-3 text-sm font-medium">
-                    <span className="flex size-7 shrink-0 items-center justify-center">
+                  <div className="flex w-full items-center gap-2 text-sm font-medium">
+                    <span
+                      className={cn(
+                        "flex size-8 shrink-0 items-center justify-center rounded-lg p-1.5",
+                        item.bgColor ??
+                          actionStyle?.bgColor ??
+                          "bg-slate-100 dark:bg-slate-800",
+                      )}
+                    >
                       <Icon
-                        className="size-4 text-slate-500 dark:text-slate-400"
+                        className={cn(
+                          "size-4",
+                          item.color ??
+                            actionStyle?.color ??
+                            "text-slate-500 dark:text-slate-400",
+                        )}
                         aria-hidden="true"
                       />
                     </span>

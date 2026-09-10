@@ -8,7 +8,7 @@ import {
   XCircle,
   Pen,
 } from "lucide-react";
-import { Badge } from "../features/Badge";
+import { Badge } from "../../features/Badge";
 import type { JobAPIResponse } from "@/schemas";
 import type { Row } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";

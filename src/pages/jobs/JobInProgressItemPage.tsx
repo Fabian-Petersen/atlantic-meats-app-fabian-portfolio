@@ -8,7 +8,7 @@ import JobApprovedItemInfo from "@/components/jobs/JobApprovedItemInfo";
 import useGlobalContext from "@/context/useGlobalContext";
 
 // % Mobile
-import MobileInProgressPage from "@/components/mobile/MobileInProgressPage";
+import MobileInProgressPage from "@/components/mobile/jobs/MobileInProgressPage";
 
 const JobInProgressItemPage = () => {
   // const { id } = useParams<{ id: string }>();

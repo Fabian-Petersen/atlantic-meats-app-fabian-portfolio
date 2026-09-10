@@ -13,7 +13,7 @@ import {
 } from "@tanstack/react-table";
 
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-import { MobileJobsPendingContainer } from "@/components/mobile/MobileJobsPendingContainer";
+import { MobileJobsPendingContainer } from "@/components/mobile/jobs/MobileJobsPendingContainer";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState } from "react";
 import { Error } from "@/components/features/Error";

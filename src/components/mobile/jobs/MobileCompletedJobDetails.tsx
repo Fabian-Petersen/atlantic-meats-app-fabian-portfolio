@@ -24,20 +24,20 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Badge } from "../features/Badge";
+import { Badge } from "../../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
-import { ImageGallery } from "../features/ImageGallery";
+import { ImageGallery } from "../../features/ImageGallery";
 import { ChevronLeft, FileText } from "lucide-react";
 import type { CompletedJobResponse, PresignedUrls } from "@/schemas/jobSchemas";
 
 // $ ————— Feature Components ——————————————————————————————————————————————————————
-import SectionTitle from "../features/layout/SectionTitle";
-import Field from "../features/layout/Field";
-import DescriptionBox from "../features/layout/DescriptionBox";
-import SurfaceCard from "../features/layout/SurfaceCard";
-import TimeChip from "../features/layout/TimeChip";
-import CostCard from "../features/layout/CostCard";
-import PersonRow from "../features/layout/PersonRow";
+import SectionTitle from "../../features/layout/SectionTitle";
+import Field from "../../features/layout/Field";
+import DescriptionBox from "../../features/layout/DescriptionBox";
+import SurfaceCard from "../../features/layout/SurfaceCard";
+import TimeChip from "../../features/layout/TimeChip";
+import CostCard from "../../features/layout/CostCard";
+import PersonRow from "../../features/layout/PersonRow";
 
 // $ ————— config ——————————————————————————————————————————————————————————————————
 import { TAB_CONFIG, type Tab } from "@/lib/tabConfig";

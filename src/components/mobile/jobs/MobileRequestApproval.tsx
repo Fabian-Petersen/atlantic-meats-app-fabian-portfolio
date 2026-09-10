@@ -1,8 +1,8 @@
 import useGlobalContext from "@/context/useGlobalContext";
 import type { JobAPIResponse } from "@/schemas";
 import { usePOST } from "@/utils/api";
-import { CardRow } from "./CardRow";
-import { MobileImageModal } from "./MobileImageModal";
+import { CardRow } from "../CardRow";
+import { MobileImageModal } from "../MobileImageModal";
 import {
   X,
   Check,
@@ -22,7 +22,7 @@ import { toast } from "sonner";
 // $ ─── Styles ───────────────────────────────────────────────────────────────────
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
-import { Spinner } from "../ui/spinner";
+import { Spinner } from "../../ui/spinner";
 import { impactStyles } from "@/styles/impactStyles";
 import { priorityStyles } from "@/styles/priorityStyles";
 import { useState } from "react";
@@ -33,6 +33,8 @@ import { useState } from "react";
 
 type MobileRequestApprovalProps = {
   item: JobAPIResponse;
+  selectedAssetIndex: number;
+  onSelectAsset: (index: number) => void;
 };
 
 function Badge({
@@ -59,6 +61,8 @@ function Badge({
 
 export default function MobileRequestApproval({
   item,
+  selectedAssetIndex,
+  onSelectAsset,
 }: MobileRequestApprovalProps) {
   const {
     selectedRowId,
@@ -67,7 +71,21 @@ export default function MobileRequestApproval({
     setOpenChatSidebar,
     setIsOpen,
   } = useGlobalContext();
-  const hasImages = item.images && item.images.length > 0;
+  const assets = item.assets?.length
+    ? item.assets
+    : [
+        {
+          equipment: item.equipment,
+          assetID: item.assetID,
+          area: item.area,
+          assetIssueReason: item.assetIssueReason,
+          assetIssueDetails: item.assetIssueDetails,
+          images: item.images ?? [],
+        },
+      ];
+  const currentAsset = assets[selectedAssetIndex] ?? assets[0];
+  const hasImages =
+    !!currentAsset?.images && currentAsset.images.length > 0;
   const navigate = useNavigate();
 
   // Image State
@@ -133,6 +151,28 @@ export default function MobileRequestApproval({
 
       {/* ── Scrollable content ── */}
       <div className="flex-1 overflow-y-auto pb-32">
+        {assets.length > 1 && (
+          <div className={cn(sharedStyles.cardRowParent)}>
+            <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+              {assets.map((asset, index) => (
+                <button
+                  key={`${asset.assetID ?? "asset"}-${index}`}
+                  type="button"
+                  onClick={() => onSelectAsset(index)}
+                  className={cn(
+                    "shrink-0 rounded-md border p-1.5 text-[0.75rem] font-medium capitalize transition-all",
+                    index === selectedAssetIndex
+                      ? "border-green-400 bg-green-400/10 text-green-600"
+                      : "border-gray-200 text-gray-500 dark:border-gray-700 dark:text-gray-400",
+                  )}
+                >
+                  {`Asset ${index + 1} · ${asset.assetID || "No ID"}`}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Header card */}
         <div className={cn(sharedStyles.cardRowParent)}>
           <div className="">
@@ -146,11 +186,11 @@ export default function MobileRequestApproval({
             </div>
             <div className="flex justify-between items-center">
               <CardRow
-                value={item?.equipment}
+                value={currentAsset?.equipment}
                 className="py-0"
                 valueStyles="dark:text-gray-400"
               />
-              <CardRow value={item?.assetID} className="py-0" />
+              <CardRow value={currentAsset?.assetID} className="py-0" />
             </div>
           </div>
         </div>
@@ -168,6 +208,17 @@ export default function MobileRequestApproval({
             value={item?.requested_by}
           />
           <CardRow icon={MapPin} label="Location" value={item?.location} />
+          <CardRow icon={MapPin} label="Area" value={currentAsset?.area} />
+          <CardRow
+            icon={Tag}
+            label="Issue reason"
+            value={currentAsset?.assetIssueReason}
+          />
+          <CardRow
+            icon={FileText}
+            label="Issue details"
+            value={currentAsset?.assetIssueDetails}
+          />
           <CardRow icon={Tag} label="Type" value={item?.type} />
           <CardRow icon={Zap} label="Impact">
             <Badge value={item?.impact} styleMap={impactStyles} />
@@ -209,7 +260,7 @@ export default function MobileRequestApproval({
 
         {imageIndex !== null && (
           <MobileImageModal
-            images={item.images!}
+            images={currentAsset!.images}
             initialIndex={imageIndex}
             onClose={() => setImageIndex(null)}
           />
@@ -218,11 +269,11 @@ export default function MobileRequestApproval({
         {/* Images */}
         <div className={cn(sharedStyles.cardRowParent)}>
           <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">
-            Attached photos {hasImages ? `(${item.images!.length})` : ""}
+            Attached photos {hasImages ? `(${currentAsset!.images.length})` : ""}
           </p>
           {hasImages ? (
             <div className="grid grid-cols-2 gap-2">
-              {item.images!.map((image, i) => (
+              {currentAsset!.images.map((image, i) => (
                 <button
                   aria-label="image button to open images"
                   type="button"

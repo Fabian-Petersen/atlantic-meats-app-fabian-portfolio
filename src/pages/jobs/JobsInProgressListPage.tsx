@@ -30,7 +30,7 @@ import { getInProgressColumns } from "@/components/tableColumns/InProgressColumn
 // $ ———————— Components ————————————————————————————————————————————————————————————————
 import { TableGeneric } from "@/components/features/tables/TableGeneric";
 import { SearchInput } from "@/components/features/SearchInput";
-import { MobileJobsInProgressContainer } from "@/components/mobile/MobileJobsInProgressContainer";
+import { MobileJobsInProgressContainer } from "@/components/mobile/jobs/MobileJobsInProgressContainer";
 import FormHeading from "@/../customComponents/FormHeading";
 import { Error } from "@/components/features/Error";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";

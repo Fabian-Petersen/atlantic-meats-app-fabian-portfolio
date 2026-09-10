@@ -22,9 +22,9 @@
 import { useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Badge } from "../features/Badge";
+import { Badge } from "../../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
-import { ImageGallery } from "../features/ImageGallery";
+import { ImageGallery } from "../../features/ImageGallery";
 import {
   ChevronLeft,
   ClipboardList,
@@ -36,11 +36,11 @@ import {
 } from "lucide-react";
 
 // $ ————— Feature Components ——————————————————————————————————————————————————————
-import SectionTitle from "../features/layout/SectionTitle";
-import Field from "../features/layout/Field";
-import DescriptionBox from "../features/layout/DescriptionBox";
-import SurfaceCard from "../features/layout/SurfaceCard";
-import PersonRow from "../features/layout/PersonRow";
+import SectionTitle from "../../features/layout/SectionTitle";
+import Field from "../../features/layout/Field";
+import DescriptionBox from "../../features/layout/DescriptionBox";
+import SurfaceCard from "../../features/layout/SurfaceCard";
+import PersonRow from "../../features/layout/PersonRow";
 import MobileAssetTransferCard from "./MobileAssetTransferCard";
 
 // $ ————— utils ——————————————————————————————————————————————————————————————————

@@ -28,7 +28,7 @@ import {
   type SortingState,
   type PaginationState,
 } from "@tanstack/react-table";
-import { MobileJobsCompletedParent } from "@/components/mobile/MobileJobsCompletedParent";
+import { MobileJobsCompletedParent } from "@/components/mobile/jobs/MobileJobsCompletedParent";
 
 const JobsCompletedListPage = () => {
   const { data, isError, isPending } = useGetAll<ActionAPIResponse[]>({
@@ -38,8 +38,7 @@ const JobsCompletedListPage = () => {
     //   group: "technician",
     // },
   });
-  const { setSelectedRowId, setOpenChatSidebar } =
-    useGlobalContext();
+  const { setSelectedRowId, setOpenChatSidebar } = useGlobalContext();
 
   const { mutateAsync: downloadItem } = useDownloadPdf({
     resourcePath: "api/jobs",

@@ -14,7 +14,7 @@ import {
 import clsx from "clsx";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
-import { CardRow } from "./CardRow";
+import { CardRow } from "../CardRow";
 import { AnimatePresence, motion } from "framer-motion";
 import { motionVariants } from "@/styles/motionStyles";
 
