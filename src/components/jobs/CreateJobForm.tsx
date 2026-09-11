@@ -52,7 +52,6 @@ const CreateJobForm = () => {
       type: "",
       impact: "",
       priority: "",
-      jobComments: "",
       breakdown_time: "",
       assets: [
         {
@@ -130,13 +129,6 @@ const CreateJobForm = () => {
       placeholder: "Select Priority",
       options: normalizeOptions(priority),
       required: true,
-    },
-    {
-      fieldType: "textarea",
-      name: "jobComments",
-      label: "Additional Information",
-      rows: 4,
-      className: "lg:col-span-2",
     },
   ];
 

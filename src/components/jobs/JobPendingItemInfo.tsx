@@ -77,10 +77,6 @@ function JobPendingSingleItemInfo() {
           <span>Priority : </span>
           <span>{job?.priority}</span>
         </li>
-        <li className="flex gap-2">
-          <span>Comments: </span>
-          <span>{job?.jobComments}</span>
-        </li>
       </ul>
       <div className="flex w-full justify-end pt-6">
         <div className="flex gap-4 w-1/2">

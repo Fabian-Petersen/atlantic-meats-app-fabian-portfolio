@@ -154,22 +154,6 @@ export default function MobileInProgressPage({
             </p>
           </div>
         )}
-
-        {/* Comments card */}
-        {item?.jobComments && (
-          <div className={cn(sharedStyles.cardRowParent)}>
-            <div className="flex items-center gap-2 mb-2">
-              <MessageSquare className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-              <p className="text-xs text-gray-400 dark:text-gray-500">
-                Job comments
-              </p>
-            </div>
-            <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
-              {item.jobComments}
-            </p>
-          </div>
-        )}
-
         {imageIndex !== null && (
           <MobileImageModal
             images={item.images!}

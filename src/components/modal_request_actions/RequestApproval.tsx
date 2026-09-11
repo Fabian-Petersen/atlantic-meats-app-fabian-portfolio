@@ -188,24 +188,6 @@ function RequestApproval({
           </div>
         </div>
       )}
-
-      {/* ── Comments ── */}
-      {item.jobComments && (
-        <div className="flex flex-col gap-1.5">
-          <span className="text-xs text-gray-400 dark:text-gray-500">
-            Comments
-          </span>
-          <div className="bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700 rounded-md px-3 py-2.5">
-            <p className="text-xs text-gray-400 dark:text-gray-500 mb-1 capitalize">
-              {item.requested_by}
-            </p>
-            <p className="text-sm text-gray-800 dark:text-gray-200">
-              {item.jobComments}
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* ── Actions ── */}
       <div className="mt-auto pt-4 flex flex-col gap-6">
         <p className="text-xs text-center text-gray-400 dark:text-gray-500">

@@ -62,10 +62,6 @@ function JobApprovedItemInfo({ item }: Props) {
           <span>Priority : </span>
           <span>{item?.priority}</span>
         </li>
-        <li className="flex gap-2">
-          <span>Comments: </span>
-          <span>{item?.jobComments}</span>
-        </li>
       </ul>
       <div className="flex w-full justify-end pt-6">
         <div className="flex gap-4 w-1/2">

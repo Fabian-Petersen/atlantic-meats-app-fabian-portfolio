@@ -334,18 +334,6 @@ export const useJobFields = (form: UseFormReturn<JobRequestFormValues>) => {
        *      images REQUIRED
        */
     },
-
-    // ========================================================================
-    // Additional Information
-    // ========================================================================
-
-    {
-      fieldType: "textarea",
-      name: "jobComments",
-      label: "Additional Information",
-      rows: 4,
-      className: "lg:col-span-2",
-    },
   ];
 
   // $ ─── Return ────────────────────────────────────────────────────

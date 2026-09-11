@@ -247,20 +247,6 @@ function MobileCompletedJobDetails({ item }: Props) {
                   />
                 </SurfaceCard>
               )}
-
-              {item.jobComments && (
-                <SurfaceCard>
-                  <SectionTitle>Comments</SectionTitle>
-                  <div className="bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700 rounded-md px-3 py-2.5">
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-1 capitalize">
-                      {item.requested_by}
-                    </p>
-                    <p className="text-sm text-gray-800 dark:text-gray-200">
-                      {item.jobComments}
-                    </p>
-                  </div>
-                </SurfaceCard>
-              )}
             </>
           )}
 

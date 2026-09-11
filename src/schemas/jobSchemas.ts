@@ -24,7 +24,6 @@ export const jobRequestBaseSchema = z.object({
     .string()
     .min(1, { message: "Please enter time of breakdown" }),
   impact: z.string().min(1, { message: "Please select impact" }),
-  jobComments: z.string().optional().default(""),
   description: z
     .string()
     .min(1, { message: "Give a brief description of the works required" }),
@@ -120,9 +119,7 @@ export const createJobRequestSchema = jobRequestBaseSchema
     }),
   });
 
-export type CreateJobRequestFormValues = z.infer<
-  typeof createJobRequestSchema
->;
+export type CreateJobRequestFormValues = z.infer<typeof createJobRequestSchema>;
 
 export type CreateJobRequestPayload = Omit<
   CreateJobRequestFormValues,

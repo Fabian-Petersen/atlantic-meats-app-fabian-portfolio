@@ -150,14 +150,6 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
                   </div>
                 </div>
               </div>
-
-              {/* Description */}
-              {row.original.jobComments && (
-                <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3">
-                  {row.original.jobComments}
-                </p>
-              )}
-
             </div>
           </motion.div>
         )}

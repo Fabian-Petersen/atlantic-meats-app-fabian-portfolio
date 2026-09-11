@@ -175,13 +175,6 @@ export default function MobileJobsPendingCard({
                   </span>
                 </div>
               </div>
-
-              {/* Description */}
-              {item.jobComments && (
-                <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3">
-                  {item.jobComments}
-                </p>
-              )}
             </div>
           </motion.div>
         )}

@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import { useForm, useWatch, type Resolver } from "react-hook-form";
 
 // $ Form Components
-import FormRowInput from "../../../customComponents/FormRowInput";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
 import FileInput from "../../../customComponents/FileInput";
 import FormActionButtons from "../features/FormActionButtons";
@@ -55,7 +54,6 @@ const JobUpdateForm = () => {
       equipment: "",
       breakdown_time: "",
       impact: "",
-      jobComments: "",
       description: "",
       area: "",
       assetID: "",
@@ -78,7 +76,6 @@ const JobUpdateForm = () => {
       equipment: item.equipment,
       breakdown_time: item.breakdown_time,
       impact: item.impact,
-      jobComments: item.jobComments ?? "",
       description: item.description,
       area: item.area ?? "",
       assetID: item.assetID ?? "",
@@ -154,16 +151,6 @@ const JobUpdateForm = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
-        <FormRowInput
-          label="Additional Notes"
-          type="text"
-          name="jobComments"
-          // control={control}
-          placeholder="Enter additional notes"
-          register={register}
-          error={errors.jobComments}
-          control={control}
-        />
         <FormRowSelect
           name="location"
           label="Location"

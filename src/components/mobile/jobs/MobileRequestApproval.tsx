@@ -84,8 +84,7 @@ export default function MobileRequestApproval({
         },
       ];
   const currentAsset = assets[selectedAssetIndex] ?? assets[0];
-  const hasImages =
-    !!currentAsset?.images && currentAsset.images.length > 0;
+  const hasImages = !!currentAsset?.images && currentAsset.images.length > 0;
   const navigate = useNavigate();
 
   // Image State
@@ -243,21 +242,6 @@ export default function MobileRequestApproval({
           </div>
         )}
 
-        {/* Comments card */}
-        {item?.jobComments && (
-          <div className={cn(sharedStyles.cardRowParent)}>
-            <div className="flex items-center gap-2 mb-2">
-              <MessageSquare className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-              <p className="text-xs text-gray-400 dark:text-gray-500">
-                Job comments
-              </p>
-            </div>
-            <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
-              {item.jobComments}
-            </p>
-          </div>
-        )}
-
         {imageIndex !== null && (
           <MobileImageModal
             images={currentAsset!.images}
@@ -269,7 +253,8 @@ export default function MobileRequestApproval({
         {/* Images */}
         <div className={cn(sharedStyles.cardRowParent)}>
           <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">
-            Attached photos {hasImages ? `(${currentAsset!.images.length})` : ""}
+            Attached photos{" "}
+            {hasImages ? `(${currentAsset!.images.length})` : ""}
           </p>
           {hasImages ? (
             <div className="grid grid-cols-2 gap-2">
