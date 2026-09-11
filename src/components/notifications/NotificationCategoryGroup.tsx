@@ -35,28 +35,28 @@ export default function NotificationCategoryGroup({
     setOpenId((current) => (current === id ? null : id));
 
   return (
-    <div className="rounded-md dark:bg-(--bg-primary_dark)">
+    <div className="py-1.5">
       <button
         type="button"
         onClick={() => onToggle(category)}
         aria-expanded={!isCollapsed}
-        className="w-full flex items-center justify-between px-3 py-2 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors hover:cursor-pointer"
+        className="flex w-full items-center justify-between rounded-md px-2 py-2 transition-colors hover:cursor-pointer hover:bg-gray-100/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:bg-white/5"
       >
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold tracking-wide text-gray-600 dark:text-gray-400 uppercase">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-gray-500 dark:text-gray-400">
             {CATEGORY_LABELS[category]}
           </span>
           {unreadCount > 0 && (
-            <span className="flex items-center justify-center min-w-4.5 h-4.5 px-1 rounded-full bg-blue-500 text-white text-[10px] font-medium">
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-100 px-1.5 text-[10px] font-semibold text-blue-700 dark:bg-blue-500/20 dark:text-blue-300">
               {unreadCount}
             </span>
           )}
         </div>
 
         {isCollapsed ? (
-          <Plus size={14} className="text-gray-600" />
+          <Plus size={15} className="text-gray-400" />
         ) : (
-          <Minus size={14} className="text-gray-600" />
+          <Minus size={15} className="text-gray-400" />
         )}
       </button>
 
@@ -67,10 +67,10 @@ export default function NotificationCategoryGroup({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
-            className=""
+            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+            className="overflow-hidden"
           >
-            <div className="md:px-2 pb-2 space-y-2">
+            <div className="space-y-2 pb-1">
               {notifications.map((item) => (
                 <NotificationCard
                   key={item.id}

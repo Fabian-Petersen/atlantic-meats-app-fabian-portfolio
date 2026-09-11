@@ -110,7 +110,7 @@ const NotificationSidebar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
             onClick={() => setOpenNotificationSidebar(false)}
             className={cn(
               sharedStyles.sidebarOverlay,
@@ -122,29 +122,34 @@ const NotificationSidebar = () => {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
+            transition={{ type: "spring", stiffness: 360, damping: 36 }}
             className={cn(
               sharedStyles.sidebar,
               sharedStyles.sidebarNotification,
             )}
           >
-            <div className="flex flex-col gap-1 h-full md:px-1 md:py-2 p-2">
+            <div className="flex h-full min-h-0 flex-col">
               {/* Header */}
-              <div className="flex items-center justify-between px-2 pb-3">
-                <h2 className="text-xs font-semibold tracking-wide text-gray-500 dark:text-gray-400">
-                  NOTIFICATIONS
-                </h2>
+              <div className="flex items-center justify-between border-b border-gray-200/80 px-4 py-4 dark:border-(--clr-borderDark)">
+                <div>
+                  <h2 className="text-base font-semibold tracking-tight text-gray-900 dark:text-gray-100">
+                    Notifications
+                  </h2>
+                  <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                    Stay up to date with recent activity
+                  </p>
+                </div>
                 <button
                   type="button"
                   onClick={() => setOpenNotificationSidebar(false)}
-                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:cursor-pointer"
+                  className="grid size-9 place-items-center rounded-full text-gray-500 transition-colors hover:cursor-pointer hover:bg-gray-100 hover:text-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-gray-100 dark:focus-visible:ring-offset-(--bg-primary_dark)"
                   aria-label="Close notifications"
                 >
-                  <X size={18} />
+                  <X size={19} strokeWidth={2} />
                 </button>
               </div>
 
-              <div>
+              <div className="px-4 pt-3">
                 <NotificationTabs
                   activeTab={activeTab}
                   onTabChange={setActiveTab}
@@ -153,7 +158,7 @@ const NotificationSidebar = () => {
               </div>
 
               {/* Grouped list */}
-              <div className="bg-gray-50 dark:bg-(--clr-bgItem) h-full overflow-y-scroll flex flex-col gap-2 no-scrollbar md:p-2 rounded-md">
+              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-gray-50/70 px-3 pb-5 pt-1 custom-scrollbar dark:bg-black/10">
                 {hasAnyResults ? (
                   categoryOrder.map((category) => {
                     const items = groupedByCategory.get(category);
@@ -173,9 +178,17 @@ const NotificationSidebar = () => {
                     );
                   })
                 ) : (
-                  <p className="text-sm text-gray-400 text-center py-6">
-                    No {activeTab} notifications
-                  </p>
+                  <div className="flex h-full min-h-48 flex-col items-center justify-center px-6 text-center">
+                    <div className="mb-3 grid size-11 place-items-center rounded-full bg-gray-100 text-gray-400 dark:bg-white/5 dark:text-gray-500">
+                      <span className="text-lg">✓</span>
+                    </div>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                      You're all caught up
+                    </p>
+                    <p className="mt-1 text-xs text-gray-400">
+                      No {activeTab} notifications
+                    </p>
+                  </div>
                 )}
               </div>
             </div>

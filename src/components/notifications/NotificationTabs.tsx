@@ -27,7 +27,7 @@ export default function NotificationTabs({
   counts,
 }: NotificationTabsProps) {
   return (
-    <div className="flex items-center gap-4 border-b border-gray-200 dark:border-(--clr-borderDark) px-2 mb-2">
+    <div className="grid grid-cols-2 rounded-lg bg-gray-100 p-1 dark:bg-white/5">
       {TABS.map((tab) => {
         const isActive = activeTab === tab.key;
         const count = counts?.[tab.key] ?? 0;
@@ -38,35 +38,24 @@ export default function NotificationTabs({
             type="button"
             onClick={() => onTabChange(tab.key)}
             className={cn(
-              "relative pb-2 text-sm w-16 hover:cursor-pointer transition-colors max-w-18",
+              "flex min-h-9 items-center justify-center gap-2 rounded-md px-3 text-xs font-medium transition-all duration-200 hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
               isActive
-                ? "text-blue-600 dark:text-blue-400 font-medium"
-                : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300",
+                ? "bg-white text-gray-900 shadow-sm dark:bg-white/10 dark:text-white"
+                : "text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200",
             )}
           >
             {tab.label}
             {count > 0 && (
               <span
                 className={cn(
-                  "ml-2 text-xs",
+                  "inline-flex min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] leading-none",
                   isActive
-                    ? "text-blue-600 dark:text-blue-400"
-                    : "text-gray-400",
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-600 dark:bg-white/10 dark:text-gray-300",
                 )}
               >
-                {tab.label.toLowerCase() === "all" ? (
-                  <span className="bg-blue-500 rounded-sm px-1 py-0.5 text-white">
-                    {count}
-                  </span>
-                ) : (
-                  <span className="bg-blue-100 rounded-sm px-1 py-0.5 text-blue-500">
-                    {count}
-                  </span>
-                )}
+                {count}
               </span>
-            )}
-            {isActive && (
-              <span className="w-full absolute left-0 right-0 -bottom-px h-0.5 bg-blue-500 rounded-full" />
             )}
           </button>
         );

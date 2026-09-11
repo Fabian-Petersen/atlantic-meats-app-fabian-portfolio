@@ -302,7 +302,7 @@ export const sharedStyles = {
   modalOverlay: cn("bg-black/60 dark:bg-black/30 backdrop-blur-xs"),
 
   /* //$ ——— Sidebars ——————————————————————————————————————————————————————————— */
-  sidebarOverlay: cn("fixed inset-0 z-10 bg-black/5"),
+  sidebarOverlay: cn("fixed inset-0 z-40 bg-gray-950/25 backdrop-blur-[1px]"),
   sidebar: cn(
     "z-50 w-(--sidebarWidth) fixed",
     "overflow-auto no-scrollbar",
@@ -323,9 +323,9 @@ export const sharedStyles = {
     "dark:border-l-[rgba(55,65,81,0.5)]",
   ),
   sidebarNotification: cn(
-    "right-0 w-80 lg:w-96",
-    "overflow-y-scroll custom-scrollbar",
-    "border-l border-l-gray-200",
+    "right-0 w-[min(100vw,26rem)]",
+    "overflow-hidden shadow-2xl shadow-gray-950/15 will-change-transform",
+    "border-l border-l-gray-200/80",
     "dark:border-l-[rgba(55,65,81,0.5)]",
   ),
 

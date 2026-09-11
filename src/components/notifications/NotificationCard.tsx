@@ -14,6 +14,7 @@ import { CardRow } from "../mobile/CardRow";
 import { useUpdateItem } from "@/utils/api";
 import { useDeleteItem } from "@/utils/api";
 import { formatNotificationDate } from "@/utils/formatNotificationDate";
+import { AnimatePresence, motion } from "framer-motion";
 
 type NotificationCardProps = {
   row: Notification;
@@ -129,14 +130,17 @@ export default function NotificationCard({
 
   return (
     <div
-      className={`group relative rounded-md bg-white dark:bg-(--bg-primary_dark) mb-2 transition-shadow hover:shadow-sm border ${
-        status === "UNREAD"
-          ? "border-l-4 border-l-blue-500 border-blue-400 dark:border-l-blue-500"
-          : status === "READ"
-            ? "border-l-4 border-l-gray-300 dark:border-l-gray-400 border-gray-200 dark:border-(--clr-borderDark)"
+      className={`group relative overflow-visible rounded-xl border bg-white shadow-xs transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-md dark:bg-(--bg-primary_dark) ${
+        row.status === "UNREAD"
+          ? "border-blue-200 ring-1 ring-blue-500/10 dark:border-blue-500/40"
+          : row.status === "READ"
+            ? "border-gray-200 dark:border-(--clr-borderDark)"
             : "border-gray-200 dark:border-(--clr-borderDark)"
       }`}
     >
+      {row.status === "UNREAD" && (
+        <span className="absolute left-0 top-4 h-8 w-0.5 rounded-r-full bg-blue-500" />
+      )}
       <div
         role="button"
         onClick={handleToggle}
@@ -147,14 +151,14 @@ export default function NotificationCard({
             handleToggle();
           }
         }}
-        className="hover:cursor-pointer w-full text-left px-4 py-3 flex flex-col hover:bg-gray-50 dark:hover:bg-white/5 transition-colors space-y-4 rounded-md"
+        className="w-full rounded-xl px-3.5 py-3 text-left transition-colors hover:cursor-pointer hover:bg-gray-50/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 dark:hover:bg-white/5"
       >
         {/* Header */}
-        <div className="flex justify-between items-start gap-4">
-          <div className="flex justify-between gap-2 min-w-0 w-full flex-col">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
             <span
-              className={`text-xs dark:text-gray-200 ${
-                status === "UNREAD" ? "font-semibold" : "font-medium"
+              className={`truncate text-sm leading-5 text-gray-800 dark:text-gray-100 ${
+                row.status === "UNREAD" ? "font-semibold" : "font-medium"
               }`}
             >
               {row.title}
@@ -164,8 +168,8 @@ export default function NotificationCard({
               icon={Calendar}
               value={formatNotificationDate(row.notificationCreated)}
               className="py-0"
-              valueStyles="lowercase text-gray-400"
-              iconStyles="w-3.5 h-3.5 text-green-400 dark:text-green-500"
+              valueStyles="lowercase text-[11px] text-gray-400 dark:text-gray-500"
+              iconStyles="size-3.5 text-gray-400 dark:text-gray-500"
             />
           </div>
 
@@ -180,7 +184,7 @@ export default function NotificationCard({
               ""
             )}
 
-            {status !== "UNREAD" && (
+            {row.status !== "UNREAD" && (
               <div className="relative" ref={menuRef}>
                 <button
                   type="button"
@@ -188,17 +192,17 @@ export default function NotificationCard({
                   aria-label="Notification options"
                   aria-haspopup="true"
                   aria-expanded={isMenuOpen}
-                  className="p-1 rounded hover:bg-gray-100 dark:hover:bg-white/10 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:cursor-pointer"
+                  className="grid size-7 place-items-center rounded-md text-gray-400 transition-colors hover:cursor-pointer hover:bg-gray-100 hover:text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:bg-white/10 dark:hover:text-gray-200"
                 >
                   <MoreVertical size={15} />
                 </button>
 
                 {isMenuOpen && (
-                  <div className="absolute right-0 top-full mt-1 w-36 rounded-md bg-white dark:bg-(--bg-primary_dark) border border-gray-200 dark:border-(--clr-borderDark) shadow-lg z-9000 overflow-hidden">
+                  <div className="absolute right-0 top-full z-9000 mt-1.5 w-36 overflow-hidden rounded-lg border border-gray-200 bg-white p-1 shadow-xl dark:border-(--clr-borderDark) dark:bg-(--bg-primary_dark)">
                     <button
                       type="button"
                       onClick={handleArchive}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:cursor-pointer text-left"
+                      className="flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-xs text-gray-600 transition-colors hover:cursor-pointer hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5"
                     >
                       <Archive size={13} />
                       Archive
@@ -206,7 +210,7 @@ export default function NotificationCard({
                     <button
                       type="button"
                       onClick={handleDelete}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 hover:cursor-pointer text-left"
+                      className="flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-xs text-red-500 transition-colors hover:cursor-pointer hover:bg-red-50 dark:hover:bg-red-500/10"
                     >
                       <Trash2 size={13} />
                       Delete
@@ -218,7 +222,7 @@ export default function NotificationCard({
 
             <ChevronDown
               size={16}
-              className={`text-gray-400 transition-transform duration-200 ${
+              className={`text-gray-400 transition-transform duration-300 ${
                 isOpen ? "rotate-180" : ""
               }`}
             />
@@ -226,22 +230,36 @@ export default function NotificationCard({
         </div>
 
         {/* Details — only rendered once the card is expanded */}
-        {isOpen && (
-          <div className="space-y-2">
-            {row.location && (
-              <CardRow
-                icon={MapPin}
-                value={row.location}
-                valueStyles="text-sm dark:text-white"
-                iconStyles="text-green-500"
-                className="py-0"
-              />
-            )}
-            {row.message && (
-              <CardRow value={row.message} className="w-full py-0" />
-            )}
-          </div>
-        )}
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <motion.div
+              key="details"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="mt-3 space-y-2 border-t border-gray-100 pt-3 dark:border-white/10">
+                {row.location && (
+                  <CardRow
+                    icon={MapPin}
+                    value={row.location}
+                    valueStyles="text-xs text-gray-600 dark:text-gray-300"
+                    iconStyles="size-3.5 text-blue-500"
+                    className="py-0"
+                  />
+                )}
+                {row.message && (
+                  <CardRow
+                    value={row.message}
+                    className="w-full py-0 text-xs leading-relaxed text-gray-600 dark:text-gray-300"
+                  />
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

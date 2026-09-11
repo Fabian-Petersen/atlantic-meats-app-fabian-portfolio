@@ -1,156 +1,284 @@
-## Updated production audit
+# Updated production performance audit
 
-The previous TypeScript errors are resolved. The repository is clean at commit `5d91573`, and `npm run build` now succeeds.
+The application now passes its code-quality gates, but it still has several significant production performance and configuration issues.
 
-However, several production risks remain.
+Audit performed against clean commit `d259135`.
 
-### Build results
+## Current build health
 
+- `npm run lint`: **Passed — zero findings**
 - `npm run build`: **Passed**
-- `npm run lint`: **Failed — 2 errors, 14 warnings**
-- JavaScript bundle: **2,154 kB minified / 628.58 kB gzip**
-- CSS bundle: **145.58 kB / 23.48 kB gzip**
-- Vite reports the JavaScript chunk exceeds its 500 kB warning threshold.
-- 3,955 modules are transformed during the build.
-- Four CSS optimizer warnings originate from the `::picker(select)::-webkit-scrollbar` selectors in [index.css](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/index.css:134>).
+- JavaScript: **2,154.43 kB minified / 628.66 kB gzip / 501.08 kB Brotli**
+- CSS: **143.72 kB / 23.30 kB gzip**
+- Modules transformed: **3,955**
+- Vite large-chunk warning: **Present**
+- CSS optimizer warnings: **4**
+- Previous `useReactTable` warnings: **Resolved**
 
-## Findings
+## Must fix before production
 
-### 1. Critical: Production API environment-variable conflict remains
+### 1. Production API URL mismatch
 
-The deployment workflow provides `VITE_PUBLIC_API_URL`:
+The deployment workflow supplies:
+
+```text
+VITE_PUBLIC_API_URL
+```
 
 [deploy.yml](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/.github/workflows/deploy.yml:7>)
 
-Axios reads `VITE_SITE_URL`:
+Axios reads:
+
+```text
+VITE_SITE_URL
+```
 
 [apiClient.ts](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/utils/apiClient.ts:6>)
 
-Unless `VITE_SITE_URL` is supplied through an untracked production mechanism, deployed API requests will use an undefined base URL. Standardize the variable and validate it during the CI build.
+A local `.env` exists, which explains why local builds can work, but `.env` files are not available in GitHub Actions. The deployed application may therefore have no API base URL.
 
-### 2. Critical: Invalid `/login` redirects remain
+Fix by standardizing one variable and adding build-time validation that fails when it is missing.
 
-The application’s public login route is `/`, but two places navigate to `/login`:
+### 2. Invalid `/login` redirect
+
+The registered login route is `/`, but the application redirects to `/login`:
 
 - [apiClient.ts](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/utils/apiClient.ts:31>)
 - [LoginButton.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/components/login/LoginButton.tsx:22>)
 
-There is no `/login` route in [App.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/App.tsx:87>). Session expiry could therefore leave users on an unmatched route.
+A 401 response can therefore send the user to an unmatched route. Either add `/login` or consistently redirect to `/`.
 
-### 3. High: Initial JavaScript bundle remains very large
+### 3. Initial JavaScript bundle is too large
 
-All route pages are statically imported from [App.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/App.tsx:5>), producing one 2.15 MB JavaScript chunk.
+All pages are eagerly imported from [App.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/App.tsx:5>), producing one 2.15 MB JavaScript file.
 
-This affects initial download, JavaScript parsing and execution, particularly on mobile devices.
+Users downloading the login page also receive code for:
 
-Recommended correction:
+- Dashboard charts
+- Barcode scanning
+- Admin asset management
+- Transfers and disposals
+- Job forms
+- User management
+- Signature and image processing
+- Every modal and responsive variant
 
-- Lazy-load route components.
-- Split dashboard charts, barcode scanning, admin pages and complex forms.
-- Load modal content only when opened.
-- Keep React Query Devtools development-only; it is currently unconditional in [main.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/main.tsx:13>).
+Fix with `React.lazy()` and dynamic imports. Split at least by route/domain:
 
-### 4. High: Desktop and mobile tables are still processed together
+- Authentication
+- Dashboard
+- Jobs
+- Assets and barcode scanner
+- Transfers
+- Disposals
+- Users
+- Stocks
 
-At least nine list pages construct a mobile `useReactTable` instance and also render a separate desktop `TableGeneric`. CSS hiding does not prevent the hidden implementation from performing React and table calculations.
+This is the most important end-user performance improvement.
+
+### 4. Desktop and mobile tables still run simultaneously
+
+The table memoization work prevents unnecessary model rebuilding, but each list page still constructs a mobile `useReactTable` instance and renders a separate desktop `TableGeneric` instance.
 
 Examples:
 
-- [AssetsOverviewPage.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/pages/assets/AssetsOverviewPage.tsx:81>)
-- [JobsInProgressListPage.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/pages/jobs/JobsInProgressListPage.tsx:143>)
-- [TransfersRequestsListPage.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/pages/transfers/TransfersRequestsListPage.tsx:109>)
-- [UsersListPage.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/pages/users/UsersListPage.tsx:92>)
+- [AssetsOverviewPage.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/pages/assets/AssetsOverviewPage.tsx:90>)
+- [JobsInProgressListPage.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/pages/jobs/JobsInProgressListPage.tsx:156>)
+- [TransfersRequestsListPage.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/pages/transfers/TransfersRequestsListPage.tsx:119>)
+- [DisposalRequestsListPage.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/pages/disposals/DisposalRequestsListPage.tsx:123>)
+- [UsersListPage.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/pages/users/UsersListPage.tsx:90>)
 
-Render only the active responsive version or share one table instance.
+CSS `hidden` only hides DOM output; it does not stop React hooks and table calculations.
 
-### 5. High: Large global context causes broad rerenders
+Fix by sharing a single table instance between the desktop and mobile renderers, or mounting only the renderer matching the active breakpoint.
 
-[AppProvider.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/context/AppProvider.tsx:18>) combines theme, searches, users, sidebars, dialogs, selected rows and feedback state. Its provider value is recreated at [line 105](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/context/AppProvider.tsx:105>).
+## High-priority improvements
 
-A search-field update can consequently rerender unrelated navigation, modal and sidebar consumers.
+### 5. Global context causes widespread rerenders
 
-Split the provider by domain and memoize values and callbacks.
+`useGlobalContext` is referenced in approximately 94 source files. The provider combines search state, theme, users, sidebars, notifications, dialogs, selected rows and feedback into one un-memoized value:
 
-### 6. High: Query refetching and cache-key fragmentation remain
+[AppProvider.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/context/AppProvider.tsx:105>)
 
-Queries have zero default `staleTime` and `refetchOnMount: true`:
+Any context state update changes the provider value and rerenders every consumer—even components that use an unrelated field.
+
+Split it into focused providers:
+
+- Theme
+- Current user
+- Navigation and sidebars
+- Modals
+- Table actions
+- Feedback messages
+
+Memoize each provider value.
+
+### 6. React Query refetches too aggressively
+
+The query client has no active `staleTime` and uses `refetchOnMount: true`:
 
 [main.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/main.tsx:22>)
 
-Navigation therefore makes cached queries immediately eligible for refetching. Query and invalidation keys also remain inconsistent across assets, jobs, transfers, disposals and comments.
+Because queries are stale immediately, navigating away and back can trigger repeated API requests.
 
-Recommended correction:
+Suggested starting points:
 
-- Add resource-appropriate `staleTime` values.
-- Establish query-key factories.
-- Ensure mutations invalidate list and affected detail keys.
-- Include filters, IDs and pagination parameters consistently in keys.
+- Current user and Cognito attributes: 5–15 minutes
+- Static form options: 15–60 minutes
+- Dashboard metrics: 1–5 minutes
+- Workflow lists: 30–60 seconds
+- Detail records: 30–60 seconds
 
-### 7. Medium: Duplicate authentication work remains
+Use mutation invalidation for immediate updates.
 
-Authentication/session information is independently resolved by the auth provider, route guards, sidebar, dashboard and role hooks. Every Axios request also resolves the Cognito token in [apiClient.ts](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/utils/apiClient.ts:13>).
+### 7. Query keys remain inconsistent
 
-Centralize user groups, role, user ID and session data in the auth provider. Remove the unused group lookup in [Dashboard.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/pages/Dashboard.tsx:52>).
+Examples include:
 
-### 8. Medium: Dependency duplication remains
+- Asset list: `["assets", "list"]`
+- Asset deletion: `["assetRequests"]` or `["assets", "asset-elete"]`
+- Job list: `["jobs", "pending"]`
+- Job deletion: `["jobs", "delete-pending"]`
+- User list: `["users", "list"]`
+- User update: `["userRequests", "user"]`
 
-The bundle includes competing or overlapping dependency families:
+Because invalidation uses the supplied key in [api.ts](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/utils/api.ts:237>), many mutations do not invalidate the corresponding list.
+
+Some `useById` callers also put the ID into the supplied key even though `useById` appends it again at [api.ts](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/utils/api.ts:188>).
+
+Create centralized key factories:
+
+```ts
+assetKeys.list();
+assetKeys.detail(id);
+jobKeys.list(status);
+jobKeys.detail(id);
+transferKeys.list(status);
+```
+
+### 8. Tables use client-side pagination
+
+List endpoints fetch full arrays and then paginate, filter and sort in the browser. Page size is only a TanStack Table setting; it is not sent to the API.
+
+This will become progressively slower as asset, job and history records grow.
+
+Add backend pagination with:
+
+- `limit`
+- cursor or offset
+- sort field and direction
+- search/filter parameters
+
+Include those values in the React Query key.
+
+### 9. Authentication state is resolved repeatedly
+
+Cognito session/group information is independently requested by:
+
+- `AuthProvider`
+- `RoleGaurdRoute`
+- Sidebar
+- Dashboard
+- `useUserRole`
+- Store profile
+- Every Axios request
+
+The dashboard call at [Dashboard.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/pages/Dashboard.tsx:52>) discards its result.
+
+Store user ID, role and groups once in the authentication provider. Remove redundant session lookups. API token access can remain centralized in Axios, but avoid separately resolving the same group information throughout the component tree.
+
+### 10. Notifications can query before the user ID is available
+
+Both notification components query using the same cache key while `userId` may still be `null`:
+
+- [NotificationSidebar.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/components/notifications/NotificationSidebar.tsx:26>)
+- [NotificationButton.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/components/notifications/NotificationButton.tsx:17>)
+
+The user ID is not part of the query key, and the query is not conditionally enabled.
+
+Use:
+
+```ts
+queryKey: ["notifications", userId],
+enabled: Boolean(userId),
+```
+
+This prevents an unnecessary null-user request and avoids sharing cached notifications between user sessions.
+
+## Medium-priority improvements
+
+### 11. Modal and sidebar code is eagerly bundled
+
+[AppLayout.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/routes/AppLayout.tsx:4>) statically imports chat, notifications and the complete modal manager. The modal manager then statically imports every dialog even though it normally returns `null`.
+
+Lazy-load large dialog content when the relevant dialog opens.
+
+### 12. Duplicate dependency families remain
+
+The project mixes:
 
 - `motion` and `framer-motion`
-- Individual Radix packages and the `radix-ui` umbrella package
+- `radix-ui` and individual `@radix-ui/*` packages
 - `html5-qrcode`, `@zxing/browser` and `@zxing/library`
 
-Application imports mix `motion/react` and `framer-motion`. Standardize one import source and remove confirmed-unused direct dependencies before measuring the bundle again.
+No active source imports of the two direct ZXing packages were found. Consolidate Motion imports and remove direct dependencies only after confirming they are not intentionally used by tooling.
 
-### 9. Medium: Client-side table scaling remains
+Also consider replacing `moment`—used by one formatter—with `Intl.DateTimeFormat` or a small native helper.
 
-Lists are fetched as complete arrays and filtered, sorted and paginated in the browser. Search filtering runs immediately on every keystroke.
+### 13. Images load eagerly
 
-For growing job, asset and history tables, introduce:
+No active image element uses `loading="lazy"` or `decoding="async"`.
 
-- Backend pagination
-- Backend filtering/sorting
-- Debounced search
-- Row virtualization where necessary
+Affected areas include:
 
-### 10. Medium: Duplicate route remains
+- [ImageGallery.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/components/features/ImageGallery.tsx:56>)
+- Mobile job, transfer and disposal views
+- Full-screen image modals
+- Avatars
+
+Use lazy loading for below-the-fold thumbnails, explicit dimensions/aspect ratios, and appropriately sized thumbnail URLs rather than loading full-resolution S3 images into small cards.
+
+### 14. Approximately 18 MB of sample images are deployed
+
+`public/images` contains six 2.7–3.5 MB JPEG files with no active application references. They are copied to `dist` and uploaded during every deployment.
+
+They do not affect initial page download unless requested, but they increase deployment time, storage and cache invalidation work. Move them outside `public` or remove them from the production package.
+
+### 15. Duplicate route definition
 
 `/jobs/:id/complete` is declared twice under overlapping role guards:
 
 - [App.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/App.tsx:117>)
 - [App.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/App.tsx:216>)
 
-Consolidate it into one route with the combined allowed roles.
+Consolidate the route with the complete allowed-role set.
 
-### 11. Medium: Images are not lazily decoded
+### 16. React Query Devtools is unconditional
 
-No active image components use `loading="lazy"` or `decoding="async"`. The gallery loads its main image and thumbnails immediately:
+[main.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/main.tsx:13>) imports and renders React Query Devtools for every build.
 
-[ImageGallery.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/components/features/ImageGallery.tsx:56>)
+Make it development-only and dynamically import it.
 
-Additionally, `public/images` contains approximately **18 MB** of apparently unused sample photos that are copied into every production deployment.
+### 17. CSS optimizer warnings
 
-### 12. Quality gate still fails
+The four warnings originate from chained customizable-select and WebKit scrollbar selectors:
 
-Lint reports:
+[index.css](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/index.css:134>)
 
-- Error: cascading render warning in [AuthProvider.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/auth/AuthProvider.tsx:35>)
-- Error: mixed component/helper exports in [form.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/components/ui/form.tsx:159>)
-- Missing effect dependencies in [NotificationCard.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/components/notifications/NotificationCard.tsx:71>) and [AssetVerification.tsx](<C:/Users/user/Documents/Atlantic Meat/frontend/atlantic-meats-app-fabian-portfolio/src/pages/assets/AssetVerification.tsx:76>)
-- Ten React Compiler compatibility warnings involving TanStack Table
-- One React Hook Form compiler warning
+These do not fail the build, but the affected scrollbar rules may be discarded or behave inconsistently. Separate/remove the unsupported selector combinations and retest the select styling.
 
-The TanStack warnings are mainly optimization limitations, but the effect dependency warnings could cause stale behavior.
+## Recommended implementation order
 
-## Recommended release order
+1. Fix the API environment variable and invalid login redirect.
+2. Add route-level lazy loading.
+3. Stop running separate desktop and mobile table instances.
+4. Split the global context.
+5. Standardize React Query keys and freshness settings.
+6. Add backend pagination.
+7. Centralize session, role and group state.
+8. Fix notification query identity/enabling.
+9. Lazy-load images and modal content.
+10. Consolidate dependencies and remove unused public assets.
+11. Resolve the duplicate route and CSS warnings.
 
-1. Correct the API environment variable and `/login` redirects.
-2. Make lint pass.
-3. Add route-level code splitting.
-4. Eliminate double desktop/mobile table processing.
-5. Split the global context.
-6. Standardize React Query keys and freshness.
-7. Consolidate auth/session lookups and dependencies.
-8. Add server pagination and image lazy loading.
-
-The successful build resolves the immediate TypeScript blocker, but I would still treat items 1–4 as pre-production priorities.
+The application now builds cleanly and its table references are substantially more stable, but the bundle size, duplicated responsive rendering and data/cache architecture are the main remaining performance constraints.
