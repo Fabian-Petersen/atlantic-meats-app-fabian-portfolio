@@ -82,11 +82,15 @@ const TransferCompleteListPage = () => {
   /*                                   COLUMNS                                  */
   /* -------------------------------------------------------------------------- */
 
-  const columns = getTransferCompletedColumns(
-    setShowUpdateAssetDialog,
-    setSelectedRowId,
-    openDeleteDialog,
-    navigate,
+  const columns = useMemo(
+    () =>
+      getTransferCompletedColumns(
+        setShowUpdateAssetDialog,
+        setSelectedRowId,
+        openDeleteDialog,
+        navigate,
+      ),
+    [setShowUpdateAssetDialog, setSelectedRowId, openDeleteDialog, navigate],
   );
 
   /* -------------------------------------------------------------------------- */
@@ -96,7 +100,7 @@ const TransferCompleteListPage = () => {
   // $ This data is passed into the mobile component
   const table = useReactTable({
     data: rows,
-    columns: columns,
+    columns,
     columnResizeMode: "onChange",
     state: { sorting, pagination, globalFilter },
     onSortingChange: setSorting,

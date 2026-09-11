@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { AppContext } from "./app-context";
 import type {
   GlobalData,
@@ -53,21 +53,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [showUpdateAssetDialog, setShowUpdateAssetDialog] =
     useState<boolean>(false);
 
-  // $ Delete Modal
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [deleteConfig, setDeleteConfig] = useState<DeleteConfig | null>(null);
-  const openDeleteDialog = (id: string, config: DeleteConfig) => {
-    setSelectedRowId(id);
-    setDeleteConfig(config);
-    setShowDeleteDialog(true);
-  };
-
-  const closeDeleteDialog = () => {
-    setShowDeleteDialog(false);
-    setSelectedRowId(null);
-    setDeleteConfig(null);
-  };
-
   // $ Reject Request Modal
   const [showRejectRequestDialog, setShowRejectRequestDialog] = useState(false);
   const [showRejectRequestDialogGeneric, setShowRejectRequestDialogGeneric] =
@@ -86,6 +71,22 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   // $ State for the TableMenuItems
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
+
+  // $ Delete Modal
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleteConfig, setDeleteConfig] = useState<DeleteConfig | null>(null);
+  const openDeleteDialog = useCallback((id: string, config: DeleteConfig) => {
+    setSelectedRowId(id);
+    setDeleteConfig(config);
+    setShowDeleteDialog(true);
+  }, []);
+
+  const closeDeleteDialog = useCallback(() => {
+    setShowDeleteDialog(false);
+    setSelectedRowId(null);
+    setDeleteConfig(null);
+  }, []);
+
   // $ State for the data to update/delete an items
   const [genericData, setGenericData] = useState<GlobalData | undefined>(
     undefined,

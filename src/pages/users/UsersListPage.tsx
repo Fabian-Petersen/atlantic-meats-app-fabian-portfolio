@@ -29,13 +29,11 @@ import { useNavigate } from "react-router-dom";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 
-const UsersListPage = () => {
-  // $ Opt out of React Compiler memoization — useReactTable returns unstable
-  // $ function references that cannot be safely memoized by the compiler.
-  "use no memo";
+const EMPTY_USERS: UsersAPIResponse[] = [];
 
+const UsersListPage = () => {
   const {
-    data: users = [],
+    data: users = EMPTY_USERS,
     isError,
     isPending,
   } = useGetAll<UsersAPIResponse[]>({

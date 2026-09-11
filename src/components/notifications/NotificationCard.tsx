@@ -81,7 +81,7 @@ export default function NotificationCard({
         console.log("notification:", error);
       });
     }
-  }, [isOpen]);
+  }, [isOpen, onMarkAsRead, row]);
 
   const handleToggle = () => onToggle(row.id);
 

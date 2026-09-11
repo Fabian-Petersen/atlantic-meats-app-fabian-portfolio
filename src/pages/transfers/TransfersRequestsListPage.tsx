@@ -93,12 +93,22 @@ const TransfersRequestsListPage = () => {
   /*                                   COLUMNS                                  */
   /* -------------------------------------------------------------------------- */
 
-  const columns = getTransferRequestsColumns(
-    setShowUpdateMaintenanceDialog,
-    setSelectedRowId,
-    openDeleteDialog,
-    setOpenChatSidebar,
-    navigate,
+  const columns = useMemo(
+    () =>
+      getTransferRequestsColumns(
+        setShowUpdateMaintenanceDialog,
+        setSelectedRowId,
+        openDeleteDialog,
+        setOpenChatSidebar,
+        navigate,
+      ),
+    [
+      setShowUpdateMaintenanceDialog,
+      setSelectedRowId,
+      openDeleteDialog,
+      setOpenChatSidebar,
+      navigate,
+    ],
   );
 
   /* -------------------------------------------------------------------------- */
@@ -108,7 +118,7 @@ const TransfersRequestsListPage = () => {
   // $ This data is passed into the mobile component
   const table = useReactTable({
     data: rows,
-    columns: columns,
+    columns,
     state: { sorting, globalFilter },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),

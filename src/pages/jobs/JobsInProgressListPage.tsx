@@ -2,7 +2,7 @@
 // $ The list is from a Get request to the getJobsList.py lambda function.
 
 // $ ———————— React Hooks ———————————————————————————————————————————————————————————————
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // $ ———————— Tanstack Table ————————————————————————————————————————————————————————————
@@ -37,6 +37,8 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
+
+const EMPTY_JOBS: JobApprovedAPIResponse[] = [];
 
 /**
  * JobsInProgressListPage
@@ -102,13 +104,14 @@ import { cn } from "@/lib/utils";
  */
 
 const JobsInProgressListPage = () => {
-  const { data, isError, isPending } = useGetAll<JobApprovedAPIResponse[]>({
+  const { data = EMPTY_JOBS, isError, isPending } =
+    useGetAll<JobApprovedAPIResponse[]>({
     resourcePath: "api/jobs/requests",
     queryKey: ["jobs", "in_progress"],
     params: {
       status: "in progress",
     },
-  });
+    });
   const navigate = useNavigate();
 
   // console.log("data:", data);
@@ -132,17 +135,27 @@ const JobsInProgressListPage = () => {
   } = useGlobalContext();
 
   // $ Pass the props to the function generating the columns to be used in the table
-  const columns = getInProgressColumns(
-    setShowUpdateMaintenanceDialog,
-    navigate,
-    setSelectedRowId,
-    openDeleteDialog,
-    setOpenChatSidebar,
+  const columns = useMemo(
+    () =>
+      getInProgressColumns(
+        setShowUpdateMaintenanceDialog,
+        navigate,
+        setSelectedRowId,
+        openDeleteDialog,
+        setOpenChatSidebar,
+      ),
+    [
+      setShowUpdateMaintenanceDialog,
+      navigate,
+      setSelectedRowId,
+      openDeleteDialog,
+      setOpenChatSidebar,
+    ],
   );
 
   const table = useReactTable({
-    data: data ?? [],
-    columns: columns,
+    data,
+    columns,
     onGlobalFilterChange: setGlobalFilter,
     state: { sorting, globalFilter, pagination },
     onSortingChange: setSorting,

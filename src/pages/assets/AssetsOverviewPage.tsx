@@ -71,16 +71,25 @@ const AssetsOverviewPage = () => {
     [data],
   );
 
-  const columns = getAssetColumns(
-    setShowUpdateAssetDialog,
-    setSelectedRowId,
-    openDeleteDialog,
-    navigate,
+  const columns = useMemo(
+    () =>
+      getAssetColumns(
+        setShowUpdateAssetDialog,
+        setSelectedRowId,
+        openDeleteDialog,
+        navigate,
+      ),
+    [
+      setShowUpdateAssetDialog,
+      setSelectedRowId,
+      openDeleteDialog,
+      navigate,
+    ],
   );
   // $ This data is passed into the mobile component
   const table = useReactTable({
-    data: rows ?? [],
-    columns: columns,
+    data: rows,
+    columns,
     columnResizeMode: "onChange",
     state: { sorting, pagination, globalFilter },
     onSortingChange: setSorting,

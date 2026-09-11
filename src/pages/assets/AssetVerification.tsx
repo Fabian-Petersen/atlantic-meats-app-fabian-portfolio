@@ -1,5 +1,5 @@
 // $ No Custom Overlay
-import { useState, useEffect, useRef } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { toast } from "sonner";
 
@@ -12,6 +12,29 @@ import { useNavigate } from "react-router-dom";
 
 type VerifyAssetResponse = {
   message: string;
+};
+
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) return error.message;
+
+  if (!axios.isAxiosError(error)) return "Unexpected error";
+
+  const data = error.response?.data;
+
+  // Lambda proxy envelope: body is a JSON string
+  if (typeof data?.body === "string") {
+    try {
+      const parsed = JSON.parse(data.body);
+      if (parsed?.message) return parsed.message;
+    } catch {
+      // fall through
+    }
+  }
+
+  // Direct message on the data object
+  if (data?.message) return data.message;
+
+  return error.message || "Unknown error";
 };
 
 export default function ScannerPage() {
@@ -32,46 +55,26 @@ export default function ScannerPage() {
     queryKey: ["assets"],
   });
 
-  const getErrorMessage = (error: unknown): string => {
-    if (error instanceof Error) return error.message;
-
-    if (!axios.isAxiosError(error)) return "Unexpected error";
-
-    const data = error.response?.data;
-
-    // Lambda proxy envelope: body is a JSON string
-    if (typeof data?.body === "string") {
+  const handleVerify = useCallback(
+    async (value: string) => {
+      setStarted(false);
       try {
-        const parsed = JSON.parse(data.body);
-        if (parsed?.message) return parsed.message;
-      } catch {
-        // fall through
+        const position = await getCurrentPosition();
+
+        const response = await postVerify({
+          assetID: value,
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+        // setDebug(response);
+
+        toast.success(response?.message, { duration: 1500 });
+      } catch (error) {
+        toast.error(getErrorMessage(error), { duration: 1500 });
       }
-    }
-
-    // Direct message on the data object
-    if (data?.message) return data.message;
-
-    return error.message || "Unknown error";
-  };
-
-  const handleVerify = async (value: string) => {
-    setStarted(false);
-    try {
-      const position = await getCurrentPosition();
-
-      const response = await postVerify({
-        assetID: value,
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      });
-      // setDebug(response);
-
-      toast.success(response?.message, { duration: 1500 });
-    } catch (error) {
-      toast.error(getErrorMessage(error), { duration: 1500 });
-    }
-  };
+    },
+    [postVerify],
+  );
 
   useEffect(() => {
     // Only init scanner when started and #reader div exists
@@ -107,7 +110,7 @@ export default function ScannerPage() {
     return () => {
       scannerRef.current?.clear().catch(console.error);
     };
-  }, [started]); // runs when `started` flips to true
+  }, [started, handleVerify, navigate]); // runs when `started` flips to true
 
   if (isVerifying) return <PageLoadingSpinner />;
 
@@ -161,132 +164,3 @@ export default function ScannerPage() {
     </div>
   );
 }
-
-// $ Custom Overlay
-// import { useCallback } from "react";
-// import { X } from "lucide-react";
-// import { toast } from "sonner";
-
-// import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
-// import { usePOST } from "@/utils/api";
-// import { getCurrentPosition } from "@/utils/getCurrentPosition";
-// import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
-
-// export default function ScannerPage() {
-//   const { start, stop, status, error, isScanning, isBusy } =
-//     useBarcodeScanner();
-
-//   // barcode is no longer stored in state — usePOST id can be a ref or
-//   // passed directly since we call postVerify immediately on scan
-//   const { mutateAsync: postVerify, isPending } = usePOST({
-//     id: "", // not needed for POST — keep your existing signature
-//     resourcePath: "api/assets",
-//     action: "verify",
-//     queryKey: ["assets"],
-//   });
-
-//   const handleScan = useCallback(
-//     async (decodedText: string) => {
-//       // Stop the camera immediately so it doesn't keep firing
-//       await stop();
-
-//       try {
-//         const position = await getCurrentPosition();
-//         await postVerify({
-//           assetID: decodedText,
-//           latitude: position.coords.latitude,
-//           longitude: position.coords.longitude,
-//         });
-//         toast.success(`Asset ${decodedText} verified`, { duration: 2000 });
-//       } catch (err) {
-//         console.error("Verification failed:", err);
-//         toast.error(`Asset ${decodedText} verification failed`, {
-//           duration: 2000,
-//         });
-//       }
-//     },
-//     [stop, postVerify],
-//   );
-
-//   if (isPending) return <PageLoadingSpinner />;
-
-//   return (
-//     <div className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-white/20 dark:bg-gray-900">
-//       {/* Close / stop button */}
-//       {isScanning && (
-//         <button
-//           type="button"
-//           aria-label="Close"
-//           onClick={stop}
-//           disabled={isBusy}
-//           className="absolute top-8 right-10 text-gray-400 z-50 hover:bg-white/30 hover:rounded-full p-2"
-//         >
-//           <X size={24} />
-//         </button>
-//       )}
-
-//       {/* Covers #reader when camera is inactive */}
-//       {!isScanning && status !== "starting" && (
-//         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/20 dark:bg-gray-900">
-//           <p className="text-gray-600 text-sm capitalize dark:text-gray-300">
-//             Camera inactive
-//           </p>
-//         </div>
-//       )}
-
-//       {/* Error message */}
-//       {error && (
-//         <p className="absolute top-20 text-red-400 text-sm text-center px-4">
-//           {error}
-//         </p>
-//       )}
-
-//       {/*
-//         IMPORTANT: #reader must always be in the DOM.
-//         Html5Qrcode writes a <video> directly into this node.
-//         Hide with CSS — never conditionally render it.
-//       */}
-//       {/* // $ Scanner target */}
-//       <div id="reader" className="absolute inset-0 w-screen h-screen" />
-
-//       {/* // $ Your custom scanning overlay — positioned over #reader */}
-//       {isScanning && (
-//         <>
-//           <div className="pointer-events-none h-full w-full absolute inset-0 z-10 flex items-center justify-center">
-//             <div className="relative w-64 h-64">
-//               {/* Corner accents*/}
-//               <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-white" />
-//               <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-white" />
-//               <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-white" />
-//               <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-white" />
-//               {/* Scan line*/}
-//               <div className="absolute left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-red-400 to-transparent animate-scanLine" />
-//             </div>
-//           </div>
-//           <p className="absolute bottom-24 md:bottom-36 text-white/70 text-sm">
-//             Point camera at barcode
-//           </p>
-//         </>
-//       )}
-
-//       {/* Start button */}
-//       {status === "idle" && (
-//         <button
-//           type="button"
-//           aria-label="Start scanning"
-//           onClick={() => start(handleScan)}
-//           className="absolute bottom-10 w-14 h-14 rounded-full outline-2 text-white bg-black dark:bg-white outline-black dark:outline-white outline-offset-4 z-9999"
-//         >
-//           Scan
-//         </button>
-//       )}
-
-//       {/* Starting spinner feedback */}
-//       {status === "starting" && (
-//         <p className="absolute bottom-12 text-white/60 text-sm animate-pulse">
-//           Starting camera...
-//         </p>
-//       )}
-//     </div>
-//   );
-// }

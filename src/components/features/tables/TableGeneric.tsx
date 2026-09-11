@@ -80,8 +80,8 @@ export function TableGeneric<T extends { id: string }>({
   const location = useLocation();
 
   const table = useReactTable({
-    data: data ?? [],
-    columns: columns ?? [],
+    data,
+    columns,
     state: { sorting, globalFilter, pagination },
     onSortingChange: setSorting,
     onPaginationChange: setPagination,

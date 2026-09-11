@@ -2,7 +2,7 @@
 // $ The list display the items created by a user and all items for the admin
 
 import { useDownloadPdf, useGetAll } from "@/utils/api";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 // import { MobileAssetsOverviewTable } from "@/components/mobile/MolbileAssetsOverviewTable";
 
@@ -30,14 +30,17 @@ import {
 } from "@tanstack/react-table";
 import { MobileJobsCompletedParent } from "@/components/mobile/jobs/MobileJobsCompletedParent";
 
+const EMPTY_JOBS: ActionAPIResponse[] = [];
+
 const JobsCompletedListPage = () => {
-  const { data, isError, isPending } = useGetAll<ActionAPIResponse[]>({
+  const { data = EMPTY_JOBS, isError, isPending } =
+    useGetAll<ActionAPIResponse[]>({
     resourcePath: "api/jobs/completed",
     queryKey: ["jobs", "all", "status: complete"],
     // params: {
     //   group: "technician",
     // },
-  });
+    });
   const { setSelectedRowId, setOpenChatSidebar } = useGlobalContext();
 
   const { mutateAsync: downloadItem } = useDownloadPdf({
@@ -55,16 +58,20 @@ const JobsCompletedListPage = () => {
     pageSize: 10, // 👈 this controls "10 items per page"
   });
 
-  const columns = getJobCompletedColumns(
-    setSelectedRowId,
-    downloadItem,
-    setOpenChatSidebar,
+  const columns = useMemo(
+    () =>
+      getJobCompletedColumns(
+        setSelectedRowId,
+        downloadItem,
+        setOpenChatSidebar,
+      ),
+    [setSelectedRowId, downloadItem, setOpenChatSidebar],
   );
 
   // $ This data is passed into the mobile component
   const table = useReactTable({
-    data: data ?? [],
-    columns: columns,
+    data,
+    columns,
     state: { sorting, pagination, globalFilter },
     onSortingChange: setSorting,
     onPaginationChange: setPagination,

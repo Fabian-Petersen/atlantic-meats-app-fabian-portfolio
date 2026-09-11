@@ -89,10 +89,9 @@ const DisposalCompletedListPage = () => {
       getDownloadUrl: (data) => data.document_url,
     });
 
-  const columns = getDisposalCompletedColumns(
-    setSelectedRowId,
-    navigate,
-    downloadItem,
+  const columns = useMemo(
+    () => getDisposalCompletedColumns(setSelectedRowId, navigate, downloadItem),
+    [setSelectedRowId, navigate, downloadItem],
   );
 
   /* -------------------------------------------------------------------------- */
@@ -102,7 +101,7 @@ const DisposalCompletedListPage = () => {
   // $ This data is passed into the mobile component
   const table = useReactTable({
     data: rows,
-    columns: columns,
+    columns,
     columnResizeMode: "onChange",
     state: { sorting, pagination, globalFilter },
     onSortingChange: setSorting,

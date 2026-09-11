@@ -19,5 +19,11 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      // TanStack Table uses an intentionally mutable table instance. The
+      // React Compiler is not enabled in this Vite project, so this compiler
+      // compatibility diagnostic is not actionable here.
+      'react-hooks/incompatible-library': 'off',
+    },
   },
 ])

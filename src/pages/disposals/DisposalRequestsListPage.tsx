@@ -97,12 +97,22 @@ const DisposalRequestsListPage = () => {
   /*                                   COLUMNS                                  */
   /* -------------------------------------------------------------------------- */
 
-  const columns = getDisposalRequestsColumns(
-    setShowUpdateMaintenanceDialog,
-    setSelectedRowId,
-    openDeleteDialog,
-    setOpenChatSidebar,
-    navigate,
+  const columns = useMemo(
+    () =>
+      getDisposalRequestsColumns(
+        setShowUpdateMaintenanceDialog,
+        setSelectedRowId,
+        openDeleteDialog,
+        setOpenChatSidebar,
+        navigate,
+      ),
+    [
+      setShowUpdateMaintenanceDialog,
+      setSelectedRowId,
+      openDeleteDialog,
+      setOpenChatSidebar,
+      navigate,
+    ],
   );
 
   /* -------------------------------------------------------------------------- */
@@ -112,7 +122,7 @@ const DisposalRequestsListPage = () => {
   // $ This data is passed into the mobile component
   const table = useReactTable({
     data: rows,
-    columns: columns,
+    columns,
     state: { sorting, globalFilter },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),

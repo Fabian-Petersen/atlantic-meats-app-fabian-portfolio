@@ -15,7 +15,7 @@ import {
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { MobileJobsPendingContainer } from "@/components/mobile/jobs/MobileJobsPendingContainer";
 import useGlobalContext from "@/context/useGlobalContext";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Error } from "@/components/features/Error";
 import type { JobAPIResponse } from "@/schemas";
 import { TableGeneric } from "@/components/features/tables/TableGeneric";
@@ -25,8 +25,10 @@ import { SearchInput } from "@/components/features/SearchInput";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 
+const EMPTY_JOBS: JobAPIResponse[] = [];
+
 const JobsPendingListPage = () => {
-  const { data, isError, isPending } = useGetAll<JobAPIResponse[]>({
+  const { data = EMPTY_JOBS, isError, isPending } = useGetAll<JobAPIResponse[]>({
     resourcePath: "api/jobs/requests",
     queryKey: ["jobs", "pending"],
     params: {
@@ -50,19 +52,30 @@ const JobsPendingListPage = () => {
   } = useGlobalContext();
 
   // $ Pass the props to the function generating the columns to be used in the table
-  const columns = getJobPendingColumns(
-    setShowUpdateMaintenanceDialog,
-    setSelectedRowId,
-    openDeleteDialog,
-    setOpenChatSidebar,
-    setShowApproveRequestDialog,
-    setShowRejectRequestDialog,
+  const columns = useMemo(
+    () =>
+      getJobPendingColumns(
+        setShowUpdateMaintenanceDialog,
+        setSelectedRowId,
+        openDeleteDialog,
+        setOpenChatSidebar,
+        setShowApproveRequestDialog,
+        setShowRejectRequestDialog,
+      ),
+    [
+      setShowUpdateMaintenanceDialog,
+      setSelectedRowId,
+      openDeleteDialog,
+      setOpenChatSidebar,
+      setShowApproveRequestDialog,
+      setShowRejectRequestDialog,
+    ],
   );
 
   // $ This data is passed into the mobile component
   const table = useReactTable({
-    data: data ?? [],
-    columns: columns,
+    data,
+    columns,
     state: { sorting, globalFilter },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
