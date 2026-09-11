@@ -315,11 +315,11 @@ export const sharedStyles = {
   ),
   sidebarChat: cn(
     // Layout (chat-specific)
-    "right-0 w-80 lg:w-96",
-    "overflow-y-scroll custom-scrollbar",
+    "right-0 w-[min(100vw,26rem)]",
+    "overflow-hidden shadow-2xl shadow-gray-950/15 will-change-transform",
 
     // Appearance (only what differs from sidebarMain)
-    "border-l border-l-gray-200",
+    "border-l border-l-gray-200/80",
     "dark:border-l-[rgba(55,65,81,0.5)]",
   ),
   sidebarNotification: cn(

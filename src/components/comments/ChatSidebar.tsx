@@ -39,7 +39,7 @@ const ChatSidebar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
             onClick={() => setOpenChatSidebar(false)}
             className={cn(
               sharedStyles.sidebarOverlay,
@@ -51,10 +51,10 @@ const ChatSidebar = () => {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
+            transition={{ type: "spring", stiffness: 360, damping: 36 }}
             className={cn(sharedStyles.sidebar, sharedStyles.sidebarChat)}
           >
-            <div className="flex flex-col h-full gap-4 lg:p-1 p-2">
+            <div className="flex h-full min-h-0 flex-col bg-gray-50/60 dark:bg-black/10">
               {selectedRowId && (
                 <CommentForm
                   disabled={isDisabled}
@@ -62,7 +62,7 @@ const ChatSidebar = () => {
                   setOpenChatSidebar={setOpenChatSidebar}
                 />
               )}
-              <div className="overflow-y-scroll flex flex-col gap-4 custom-scrollbar p-2 rounded-lg h-auto">
+              <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overscroll-contain px-4 py-5 custom-scrollbar">
                 {Array.isArray(comments) &&
                   comments.map((comment, index) => (
                     <CommentItem

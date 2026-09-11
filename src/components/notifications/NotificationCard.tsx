@@ -184,7 +184,7 @@ export default function NotificationCard({
               ""
             )}
 
-            {row.status !== "UNREAD" && (
+            {status !== "UNREAD" && (
               <div className="relative" ref={menuRef}>
                 <button
                   type="button"

@@ -18,14 +18,14 @@ const CommentAvatar = ({
     <div
       className={cn(
         className,
-        "rounded-full size-10 tracking-wider bg-gray-200 p-1 flex items-center justify-center text-sm",
+        "flex size-9 items-center justify-center rounded-full border-2 border-white bg-gray-200 p-1 text-xs font-semibold tracking-wider text-gray-600 shadow-sm dark:border-(--bg-primary_dark) dark:bg-gray-700 dark:text-gray-200",
       )}
     >
       {imageUrl ? (
         <img
           src={imageUrl}
           alt="User avatar"
-          className="rounded-full w-full h-full object-cover"
+          className="h-full w-full rounded-full object-cover"
         />
       ) : (
         getInitialsElement({
