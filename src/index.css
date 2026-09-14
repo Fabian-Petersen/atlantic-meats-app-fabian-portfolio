@@ -29,7 +29,8 @@
   --bg-secondary_dark: #1d2739; /*bg of the container content*/
   /* --bg-secondary_dark: #1b64f1; */
   /* Light Mode Colors */
-  --pageLight: #f9fafb;
+  /* --pageLight: #f9fafb; */
+  --pageLight: rgba(248, 249, 250, 1);
   --bg-primary-light: #fff; /* bg color of a container */
   --bg-secondary_light: #fafafa; /*bg of the container content #1b64f1*/
 

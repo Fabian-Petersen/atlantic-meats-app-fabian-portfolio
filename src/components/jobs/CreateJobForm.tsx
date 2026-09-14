@@ -178,7 +178,7 @@ const CreateJobForm = () => {
   });
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 dark:bg-(--bg-secondary_dark) p-1">
       <DynamicForm<CreateJobRequestFormValues>
         form={form}
         formId="job-request-form"

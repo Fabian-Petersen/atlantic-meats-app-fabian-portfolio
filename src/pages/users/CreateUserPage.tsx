@@ -19,6 +19,8 @@ const CreateUserPage = () => {
         <FormHeading
           className={cn(sharedStyles.headingForm)}
           heading="Create User"
+          redirect={true}
+          redirectTo="/users"
         />
         <CreateUserForm />
       </div>

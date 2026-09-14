@@ -177,7 +177,7 @@ export function TableGeneric<T extends { id: string }>({
                           {/* Visual indicator — a thin bar that widens on hover/drag */}
                           <span
                             className={[
-                              "block h-2/3 w-0.75 rounded-full transition-all duration-150",
+                              "block h-2/3 w-0.75 rounded-full transition-[width,height,opacity] duration-150",
                               header.column.getIsResizing()
                                 ? "bg-amber-500 dark:bg-amber-400 w-1 h-full opacity-100"
                                 : "bg-gray-300 dark:bg-gray-600 opacity-0 group-hover:opacity-100",

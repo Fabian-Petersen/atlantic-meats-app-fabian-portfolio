@@ -8,10 +8,10 @@ export const sharedStyles = {
   ),
   pageContainer: cn(
     "flex items-center justify-center w-full h-full p-2 h-[calc(h-screen - var(--lg-navbarHeight)]",
-    "dark:bg-(--bg-pageDark)",
+    "dark:bg-(--pageDark) bg-(--pageLight)",
   ),
   pageContent: cn(
-    "flex flex-col gap-4 w-full lg:max-w-3xl h-auto md:rounded-xl md:shadow-lg md:p-6 p-1",
+    "flex flex-col gap-4 w-full lg:max-w-3xl h-auto rounded-lg md:rounded-xl md:shadow-lg md:p-6 p-1",
     "md:border md:border-gray-200/70 bg-white",
     "dark:bg-(--bg-secondary_dark) dark:text-(--clr-textDark) md:dark:border-gray-700/50 md:dark:border",
   ),
@@ -164,7 +164,9 @@ export const sharedStyles = {
   form: cn(
     "flex flex-col md:rounded-lg md:w-full text-(--clr-textLight) bg-white dark:bg-(--bg-secondary_dark)",
   ),
-  formParent: cn("grid grid-cols-1 md:grid-cols-2 gap-4 w-full pb-1 md:py-2"),
+  formParent: cn(
+    "grid grid-cols-1 md:grid-cols-2 gap-4 w-full pb-1 md:py-2 dark:bg-(--bg-secondary_dark)",
+  ),
 
   formInputDefault: cn(
     // layout & sizing

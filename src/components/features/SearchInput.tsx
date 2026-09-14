@@ -44,7 +44,7 @@ export function SearchInput({
       {/* ── Desktop search (md+) ── */}
       <div className="hidden md:block relative h-full w-full lg:w-1/4">
         <Search
-          className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none transition-colors ${
+          className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none ${
             value
               ? "text-blue-600 dark:text-blue-400"
               : "text-gray-400 dark:text-gray-500"
@@ -60,7 +60,7 @@ export function SearchInput({
             bg-white dark:bg-gray-900
             text-gray-900 dark:text-gray-100
             placeholder:text-gray-400 dark:placeholder:text-gray-500
-            border transition-all outline-none
+            border outline-none
             ${
               value
                 ? "border-blue-500 dark:border-blue-500 ring-2 ring-blue-500/10"
@@ -73,7 +73,7 @@ export function SearchInput({
             type="button"
             aria-label="Clear search"
             onClick={() => onChange("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
           >
             <X className="w-3 h-3 text-gray-500 dark:text-gray-400" />
           </button>
@@ -110,7 +110,7 @@ export function SearchInput({
           >
             <div className="relative w-full">
               <Search
-                className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none transition-colors ${
+                className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none ${
                   value
                     ? "text-blue-600 dark:text-blue-400"
                     : "text-gray-400 dark:text-gray-500"
@@ -128,7 +128,7 @@ export function SearchInput({
                   bg-gray-50 dark:bg-gray-800
                   text-gray-900 dark:text-gray-100
                   placeholder:text-gray-400 dark:placeholder:text-gray-500
-                  border transition-all outline-none
+                  border outline-none
                   ${
                     value
                       ? "border-blue-500 dark:border-blue-500 ring-2 ring-blue-500/10"
@@ -142,7 +142,7 @@ export function SearchInput({
                   type="button"
                   aria-label="Clear search"
                   onClick={() => onChange("")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
                 >
                   <X className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
                 </button>

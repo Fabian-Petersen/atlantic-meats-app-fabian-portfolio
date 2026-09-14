@@ -22,7 +22,7 @@ export function AssetsDropdownCell({ assets }: { assets: AssetItem[] }) {
           size="sm"
           variant="ghost"
           onClick={(e) => e.stopPropagation()}
-          className="gap-2 rounded-lg border border-emerald-200 bg-emerald-100 text-xs font-medium text-emerald-800 hover:bg-emerald-200 hover:text-emerald-900 hover:cursor-pointer dark:border-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-200 dark:hover:bg-emerald-800 dark:hover:text-emerald-100 capitalize"
+          className="gap-2 rounded-lg border border-emerald-200 bg-emerald-100 text-xs font-medium text-emerald-800 transition-none hover:bg-emerald-200 hover:text-emerald-900 hover:cursor-pointer dark:border-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-200 dark:hover:bg-emerald-800 dark:hover:text-emerald-100 capitalize"
         >
           <Package className="size-3.5" aria-hidden="true" />
           {assets.length > 1
