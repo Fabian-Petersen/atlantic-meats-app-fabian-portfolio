@@ -15,6 +15,12 @@ import { useUpdateItem } from "@/utils/api";
 import { useDeleteItem } from "@/utils/api";
 import { formatNotificationDate } from "@/utils/formatNotificationDate";
 import { AnimatePresence, motion } from "framer-motion";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type NotificationCardProps = {
   row: Notification;
@@ -34,7 +40,6 @@ export default function NotificationCard({
   const [isRemoving, setIsRemoving] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const menuRef = useRef<HTMLDivElement>(null);
   const wasOpenedRef = useRef(false);
 
   // $ Dropdown Menu: Action functions
@@ -53,20 +58,6 @@ export default function NotificationCard({
     recipientSub: row.recipientSub,
     notificationCreated: row.notificationCreated,
   };
-
-  // $ Close the menu on outside click
-  useEffect(() => {
-    if (!isMenuOpen) return;
-
-    const handleClickOutside = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isMenuOpen]);
 
   // $ Mark notification as READ when the card is closed
   useEffect(() => {
@@ -89,11 +80,9 @@ export default function NotificationCard({
   // $ Dropdown Menu Actions: Archive and Delete Notification
   const handleMenuButtonClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsMenuOpen((prev) => !prev);
   };
 
-  const handleArchive = async (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleArchive = async () => {
     setIsMenuOpen(false);
     setIsRemoving(true);
     try {
@@ -108,8 +97,7 @@ export default function NotificationCard({
     }
   };
 
-  const handleDelete = async (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleDelete = async () => {
     setIsMenuOpen(false);
     setIsRemoving(true);
     try {
@@ -184,40 +172,45 @@ export default function NotificationCard({
               ""
             )}
 
-            {status !== "UNREAD" && (
-              <div className="relative" ref={menuRef}>
-                <button
-                  type="button"
-                  onClick={handleMenuButtonClick}
-                  aria-label="Notification options"
-                  aria-haspopup="true"
-                  aria-expanded={isMenuOpen}
-                  className="grid size-7 place-items-center rounded-md text-gray-400 transition-colors hover:cursor-pointer hover:bg-gray-100 hover:text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:bg-white/10 dark:hover:text-gray-200"
+            {row.status !== "UNREAD" && (
+              <DropdownMenu
+                modal={false}
+                open={isMenuOpen}
+                onOpenChange={setIsMenuOpen}
+              >
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={handleMenuButtonClick}
+                    aria-label="Notification options"
+                    className="grid size-7 place-items-center rounded-md text-gray-400 transition-colors hover:cursor-pointer hover:bg-gray-100 hover:text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:bg-white/10 dark:hover:text-gray-200"
+                  >
+                    <MoreVertical size={15} />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  sideOffset={6}
+                  collisionPadding={12}
+                  onClick={(event) => event.stopPropagation()}
+                  className="z-[70] w-36 rounded-lg border-gray-200 bg-white p-1 shadow-xl dark:border-(--clr-borderDark) dark:bg-(--bg-primary_dark)"
                 >
-                  <MoreVertical size={15} />
-                </button>
-
-                {isMenuOpen && (
-                  <div className="absolute right-0 top-full z-9000 mt-1.5 w-36 overflow-visible rounded-lg border border-gray-200 bg-white p-1 shadow-xl dark:border-(--clr-borderDark) dark:bg-(--bg-primary_dark)">
-                    <button
-                      type="button"
-                      onClick={handleArchive}
-                      className="flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-xs text-gray-600 transition-colors hover:cursor-pointer hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5"
-                    >
-                      <Archive size={13} />
-                      Archive
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleDelete}
-                      className="flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-xs text-red-500 transition-colors hover:cursor-pointer hover:bg-red-50 dark:hover:bg-red-500/10"
-                    >
-                      <Trash2 size={13} />
-                      Delete
-                    </button>
-                  </div>
-                )}
-              </div>
+                  <DropdownMenuItem
+                    onSelect={() => void handleArchive()}
+                    className="flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-2 text-xs text-gray-600 focus:bg-gray-100 focus:text-gray-700 dark:text-gray-300 dark:focus:bg-white/5 dark:focus:text-gray-200"
+                  >
+                    <Archive size={13} />
+                    Archive
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => void handleDelete()}
+                    className="flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-2 text-xs text-red-500 focus:bg-red-50 focus:text-red-600 dark:focus:bg-red-500/10 dark:focus:text-red-400"
+                  >
+                    <Trash2 size={13} />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
 
             <ChevronDown

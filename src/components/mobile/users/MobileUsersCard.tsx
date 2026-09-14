@@ -17,6 +17,8 @@ import { cn } from "@/lib/utils";
 import { CardRow } from "../CardRow";
 import { AnimatePresence, motion } from "framer-motion";
 import { motionVariants } from "@/styles/motionStyles";
+import { DropdownMenuButtonDialog } from "@/components/modals/DropdownMenuButtonDialog";
+import { getTableMenuItems } from "@/lib/getTableMenuItems";
 
 type Props = {
   row: Row<UsersAPIResponse>;
@@ -29,8 +31,26 @@ export function MobileUsersCard({ row, isOpen, setOpen, onToggle }: Props) {
   const item = row.original;
   const navigate = useNavigate();
 
-  const { setSelectedRowId, setShowDeleteDialog, setDeleteConfig } =
-    useGlobalContext();
+  const { setSelectedRowId, openDeleteDialog } = useGlobalContext();
+
+  const menuItems = getTableMenuItems({
+    rowId: item.id,
+    setSelectedRowId,
+    edit: {
+      onOpen: () => navigate(`/users/${item.id}`),
+    },
+    delete: {
+      config: {
+        resourcePath: "api/users",
+        queryKey: ["userRequests"],
+        resourceName: "user",
+      },
+      onDelete: (id, config) => {
+        setOpen?.(null);
+        openDeleteDialog(id, config);
+      },
+    },
+  });
 
   return (
     <div
@@ -39,12 +59,18 @@ export function MobileUsersCard({ row, isOpen, setOpen, onToggle }: Props) {
         "flex flex-col",
         isOpen && sharedStyles.cardIsOpen,
       )}
-      onClick={onToggle}
     >
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         className={cn(sharedStyles.cardBtn, "gap-0")}
         onClick={onToggle}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            onToggle();
+          }
+        }}
       >
         {/* Location + meta row */}
         <div className={sharedStyles.mobileCardHeaderContent}>
@@ -64,6 +90,9 @@ export function MobileUsersCard({ row, isOpen, setOpen, onToggle }: Props) {
           />
         </div>
         <div className={sharedStyles.mobileCardActions}>
+          <div onClick={(event) => event.stopPropagation()}>
+            <DropdownMenuButtonDialog menuItems={menuItems} />
+          </div>
           <ChevronDown
             className={cn(
               sharedStyles.mobileCardChevron,
@@ -71,7 +100,7 @@ export function MobileUsersCard({ row, isOpen, setOpen, onToggle }: Props) {
             )}
           />
         </div>
-      </button>
+      </div>
 
       <AnimatePresence initial={false}>
         {isOpen && (
@@ -137,37 +166,6 @@ export function MobileUsersCard({ row, isOpen, setOpen, onToggle }: Props) {
                     value={item.mobile}
                   />
                 </div>
-              </div>
-
-              {/* // $ -------------------- Action Buttons -------------------------- */}
-              <div className="flex gap-2 mt-3 pt-3 px-0 md:px-4">
-                <button
-                  type="button"
-                  className="flex-1 py-2 text-xs font-medium rounded-lg border border-red-200 dark:border-red-500 text-red-600 dark:bg-red-300/20 dark:text-red-300 hover:bg-gray-50 dark:hover:bg-red/5 transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setDeleteConfig({
-                      resourcePath: `api/users`,
-                      queryKey: ["userRequests"],
-                      resourceName: "user",
-                    });
-                    setOpen?.(null);
-                    setShowDeleteDialog(true);
-                  }}
-                >
-                  Delete
-                </button>
-                <button
-                  type="button"
-                  className="flex-1 py-2 text-xs font-medium rounded-lg dark:bg-green/20 bg-green-500/10 border-green/20 hover:bg-green-500/90 hover:shadow-md text-green-500 border dark:border-green/30 transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedRowId(item.id);
-                    navigate(`/users/${item.id}`);
-                  }}
-                >
-                  Update
-                </button>
               </div>
             </div>
           </motion.div>

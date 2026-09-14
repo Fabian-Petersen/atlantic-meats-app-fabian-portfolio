@@ -44,15 +44,25 @@ function StoreProfilePage() {
 
   if (showUserProfileDialog) return null;
   return (
-    // <div className="flex items-center justify-center w-full h-full p-4 dark:bg-bgdark bg-gray-100">
-    //   <div className="bg-white flex flex-col gap-4 w-full lg:max-w-3xl h-auto rounded-xl shadow-lg p-4 dark:bg-[#1d2739] dark:text-gray-100 dark:border-gray-700/50 dark:border capitalize">
-    <div className={cn(sharedStyles.pageContainer)}>
-      <div className={cn(sharedStyles.pageContent, "gap-2")}>
+    <div
+      className={cn(
+        sharedStyles.pageContainer,
+        "min-h-[calc(100vh-var(--sm-navbarHeight))] items-start bg-(--pageLight) p-2 md:min-h-[calc(100vh-var(--lg-navbarHeight))] md:items-center dark:bg-(--pageDark)",
+      )}
+    >
+      <div
+        className={cn(
+          sharedStyles.pageContent,
+          "gap-3 p-0 shadow-none md:p-6 dark:bg-(--pageDark) md:dark:bg-(--bg-secondary_dark)",
+        )}
+      >
         <FormHeading
           heading={
             isStoreUser ? "Store Account Profile" : "User Account Profile"
           }
-          className={sharedStyles.headingForm}
+          className={cn(sharedStyles.headingForm, "px-1")}
+          redirect={true}
+          redirectTo="/users"
         />
         <StoreProfileForm user={user ?? null} />
       </div>

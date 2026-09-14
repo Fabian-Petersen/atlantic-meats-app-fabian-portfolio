@@ -80,67 +80,81 @@ function StoreProfileForm({ user }: UserProfileProps) {
 
   return (
     <form
-      className={cn(sharedStyles.form, "gap-4")}
+      className={cn(
+        sharedStyles.form,
+        "gap-4 dark:bg-(--pageDark) md:dark:bg-transparent",
+      )}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className={cn(sharedStyles.formParent, "gap-6 md:gap-8")}>
-        <FormHeading
-          heading="Profile Information"
-          className="col-span-full text-md lg:text-md"
-        />
-        <FormRowInputEditable
-          label="Name"
-          name="name"
-          className="capitalize"
-          register={register}
-        />
-        <FormRowInput
-          label="Surname"
-          name="family_name"
-          readOnly={true}
-          control={control}
-          register={register}
-          className="capitalize"
-        />
-        <FormRowInputEditable
-          label="Location"
-          name="location"
-          register={register}
-          className="capitalize"
-        />
-        <FormRowInputEditable
-          label="Group"
-          name="group"
-          register={register}
-          className="capitalize"
-          // errors={error}
-        />
-        <FormHeading
-          heading="Contact Information"
-          className="col-span-full text-md lg:text-md"
-        />
-        <FormRowInput
-          label="Email"
-          type="email"
-          name="email"
-          readOnly={true}
-          control={control}
-          register={register}
-        />
-        <FormRowInputEditable
-          label="Mobile"
-          type="text"
-          name="mobile"
-          register={register}
-          className="capitalize"
-          error={errors.mobile}
-        />
+      <div
+        className={cn(
+          sharedStyles.formParent,
+          "gap-4 md:gap-6 dark:bg-(--pageDark) md:dark:bg-transparent",
+        )}
+      >
+        <section className="col-span-full grid grid-cols-1 gap-4 rounded-xl md:border-none border border-gray-200/80 bg-white p-2 shadow-sm md:grid-cols-2 md:gap-6 dark:border-gray-700/60 dark:bg-(--bg-secondary_dark)">
+          <FormHeading
+            heading="Profile Information"
+            className="col-span-full px-0 text-sm md:text-base md:font-semibold"
+          />
+          <FormRowInputEditable
+            label="Name"
+            name="name"
+            className="capitalize"
+            register={register}
+            capitalizeValue={true}
+          />
+          <FormRowInput
+            label="Surname"
+            name="family_name"
+            readOnly={true}
+            control={control}
+            register={register}
+            inputStyles="capitalize"
+          />
+          <FormRowInputEditable
+            label="Location"
+            name="location"
+            register={register}
+            className="capitalize"
+            capitalizeValue={true}
+          />
+          <FormRowInputEditable
+            label="Group"
+            name="group"
+            register={register}
+            className="capitalize"
+          />
+        </section>
+
+        <section className="col-span-full grid grid-cols-1 gap-4 rounded-xl border md:border-none border-gray-200/80 bg-white p-2 shadow-sm md:grid-cols-2 md:gap-6 dark:border-gray-700/60 dark:bg-(--bg-secondary_dark)">
+          <FormHeading
+            heading="Contact Information"
+            className="col-span-full px-0 text-sm md:text-base md:font-semibold"
+          />
+          <FormRowInput
+            label="Email"
+            type="email"
+            name="email"
+            readOnly={true}
+            control={control}
+            register={register}
+          />
+          <FormRowInputEditable
+            label="Mobile"
+            type="text"
+            name="mobile"
+            register={register}
+            error={errors.mobile}
+          />
+        </section>
       </div>
       <FormActionButtons
         cancelText="Cancel"
         isPending={isPending}
         onCancel={() => navigate("/users")}
         submitText={"Update"}
+        className="sticky bottom-0 w-full py-2 backdrop-blur-sm md:static md:w-72 md:py-0"
       />
     </form>
   );

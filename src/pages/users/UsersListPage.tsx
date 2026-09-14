@@ -24,7 +24,7 @@ import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder
 import { SearchInput } from "@/components/features/SearchInput";
 import { MobileUsersContainer } from "@/components/mobile/users/MobileUsersContainer";
 import { useResendTemporaryPassword } from "@/utils/useResendTemporaryPassword";
-import { PlusCircle } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
@@ -68,7 +68,6 @@ const UsersListPage = () => {
   const columns = useMemo(
     () =>
       getUserColumns(
-        // setShowCreateUserDialog,
         setSelectedRowId,
         openDeleteDialog,
         resend,
@@ -77,7 +76,6 @@ const UsersListPage = () => {
         navigate,
       ),
     [
-      // setShowCreateUserDialog,
       setSelectedRowId,
       openDeleteDialog,
       resend,
@@ -145,11 +143,11 @@ const UsersListPage = () => {
               />
               <button
                 type="button"
-                aria-label="create new user"
-                className="text-primary"
+                className="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-green-500/30 bg-green-500/10 px-3 text-xs font-semibold text-green-500 shadow-sm transition-colors hover:cursor-pointer hover:border-green-500/50 hover:bg-green-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500/60"
                 onClick={() => navigate("/users/create-user")}
               >
-                <PlusCircle />
+                <Plus className="size-4" aria-hidden="true" />
+                <span>Add User</span>
               </button>
             </div>
 
