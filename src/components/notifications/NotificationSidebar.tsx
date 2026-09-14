@@ -12,6 +12,7 @@ import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
+import { sidebarMotion } from "@/styles/motionStyles";
 import { useMemo, useState } from "react";
 
 const NotificationSidebar = () => {
@@ -102,31 +103,32 @@ const NotificationSidebar = () => {
   };
 
   return (
-    <AnimatePresence initial={false}>
+    <AnimatePresence initial={false} mode="sync">
       {openNotificationSidebar && (
         <>
           <motion.div
             key="overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+            variants={sidebarMotion.overlay}
+            initial="initial"
+            animate="animate"
+            exit="exit"
             onClick={() => setOpenNotificationSidebar(false)}
-            className={cn(
-              sharedStyles.sidebarOverlay,
-              openNotificationSidebar ? "block" : "hidden",
-            )}
+            className={sharedStyles.sidebarOverlay}
+            aria-hidden="true"
           />
-          <motion.div
+          <motion.aside
             key="notificationSidebar"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 360, damping: 36 }}
+            variants={sidebarMotion.panel}
+            initial="initial"
+            animate="animate"
+            exit="exit"
             className={cn(
               sharedStyles.sidebar,
               sharedStyles.sidebarNotification,
             )}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Notifications"
           >
             <div className="flex h-full min-h-0 flex-col">
               {/* Header */}
@@ -179,8 +181,8 @@ const NotificationSidebar = () => {
                   })
                 ) : (
                   <div className="flex h-full min-h-48 flex-col items-center justify-center px-6 text-center">
-                    <div className="mb-3 grid size-11 place-items-center rounded-full bg-gray-100 text-gray-400 dark:bg-white/5 dark:text-gray-500">
-                      <span className="text-lg">✓</span>
+                    <div className="mb-3 grid size-18 place-items-center rounded-full bg-green-100 text-green-500 dark:bg-green-300/40 dark:text-green-500">
+                      <span className="text-3xl">✓</span>
                     </div>
                     <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                       You're all caught up
@@ -192,7 +194,7 @@ const NotificationSidebar = () => {
                 )}
               </div>
             </div>
-          </motion.div>
+          </motion.aside>
         </>
       )}
     </AnimatePresence>

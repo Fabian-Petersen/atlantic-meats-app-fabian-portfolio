@@ -11,7 +11,6 @@ import {
   FileClock,
   User,
   Clock2Icon,
-  Eye,
 } from "lucide-react";
 
 import { Badge } from "@/components/features/Badge";
@@ -21,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import { motionVariants } from "@/styles/motionStyles";
 import { DropdownMenuButtonDialog } from "@/components/modals/DropdownMenuButtonDialog";
+import { getTableMenuItems } from "@/lib/getTableMenuItems";
 
 type Props = {
   row: Row<JobApprovedAPIResponse>;
@@ -31,28 +31,39 @@ type Props = {
 export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
   const navigate = useNavigate();
 
-  const { setSelectedRowId } = useGlobalContext();
+  const {
+    setSelectedRowId,
+    setShowUpdateMaintenanceDialog,
+    openDeleteDialog,
+    setOpenChatSidebar,
+  } = useGlobalContext();
 
-  const menuItems = [
-    {
-      id: "view",
+  const rowId = row.original.id;
+  const menuItems = getTableMenuItems({
+    rowId,
+    setSelectedRowId,
+    action: {
+      onOpen: () => navigate(`/jobs/${rowId}/action`),
+    },
+    edit: {
+      onOpen: () => setShowUpdateMaintenanceDialog(true),
+    },
+    view: {
       label: "View Details",
-      icon: Eye,
-      onClick: () => {
-        navigate(`/jobs/${row.original.id}/in-progress`);
-        setSelectedRowId(row.original.id);
-      },
+      onOpen: () => navigate(`/jobs/${rowId}/in-progress`),
     },
-    {
-      id: "action",
-      label: "Action",
-      icon: Wrench,
-      onClick: () => {
-        setSelectedRowId(row.original.id);
-        navigate(`/jobs/${row.original.id}/action`);
+    delete: {
+      config: {
+        resourcePath: "api/jobs",
+        queryKey: ["jobs", "delete-inProgess-job"],
+        resourceName: "job",
       },
+      onDelete: openDeleteDialog,
     },
-  ];
+    comments: {
+      onOpen: () => setOpenChatSidebar(true),
+    },
+  });
 
   return (
     <div

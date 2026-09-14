@@ -6,6 +6,7 @@ import { useById } from "@/utils/api";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 import { useMatch } from "react-router-dom";
+import { sidebarMotion } from "@/styles/motionStyles";
 // import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 // $ Animation
@@ -31,28 +32,29 @@ const ChatSidebar = () => {
   }
 
   return (
-    <AnimatePresence initial={false}>
+    <AnimatePresence initial={false} mode="sync">
       {openChatSidebar && (
         <>
           <motion.div
             key="overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+            variants={sidebarMotion.overlay}
+            initial="initial"
+            animate="animate"
+            exit="exit"
             onClick={() => setOpenChatSidebar(false)}
-            className={cn(
-              sharedStyles.sidebarOverlay,
-              openChatSidebar ? "block" : "hidden",
-            )}
+            className={sharedStyles.sidebarOverlay}
+            aria-hidden="true"
           />
-          <motion.div
+          <motion.aside
             key="chatSidebar"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 360, damping: 36 }}
+            variants={sidebarMotion.panel}
+            initial="initial"
+            animate="animate"
+            exit="exit"
             className={cn(sharedStyles.sidebar, sharedStyles.sidebarChat)}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Comments"
           >
             <div className="flex h-full min-h-0 flex-col bg-gray-50/60 dark:bg-black/10">
               {selectedRowId && (
@@ -73,7 +75,7 @@ const ChatSidebar = () => {
                   ))}
               </div>
             </div>
-          </motion.div>
+          </motion.aside>
         </>
       )}
     </AnimatePresence>

@@ -66,14 +66,14 @@ const CommentForm = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit, onInvalid)}
-      className="relative z-10 flex h-auto w-full flex-col gap-3 border-b border-gray-200/80 bg-white px-4 py-4 shadow-sm dark:border-(--clr-borderDark) dark:bg-(--bg-primary_dark)"
+      className="relative z-10 flex h-auto w-full flex-col gap-4 border-b border-gray-200/80 bg-white px-3 py-2 shadow-sm md:gap-3 md:px-4 md:py-4 dark:border-(--clr-borderDark) dark:bg-(--bg-primary_dark)"
     >
       <div className="flex h-auto w-full items-center justify-between gap-2">
-        <p className="text-base font-semibold tracking-tight text-gray-900 dark:text-gray-100">
+        <p className="text-sm font-semibold tracking-tight text-gray-900 md:text-base dark:text-gray-100">
           Add a comment
         </p>
         <button
-          className="grid size-9 place-items-center rounded-full text-gray-500 transition-colors hover:cursor-pointer hover:bg-gray-100 hover:text-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-gray-100 dark:focus-visible:ring-offset-(--bg-primary_dark)"
+          className="grid size-8 place-items-center rounded-full text-gray-500 transition-colors hover:cursor-pointer hover:bg-gray-100 hover:text-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 md:size-9 dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-gray-100 dark:focus-visible:ring-offset-(--bg-primary_dark)"
           type="button"
           aria-label="close button"
           onClick={() => setOpenChatSidebar(false)}
@@ -93,7 +93,7 @@ const CommentForm = ({
         className={cn(
           sharedStyles.formInputDefault,
           sharedStyles.formTextArea,
-          "max-h-32 min-h-11 rounded-xl bg-gray-50 px-3 py-3 leading-relaxed shadow-inner transition-[border-color,box-shadow] placeholder:text-gray-400 focus:bg-white focus:shadow-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400 dark:bg-white/5 dark:focus:bg-white/8 dark:disabled:bg-white/5",
+          "max-h-32 min-h-9 rounded-xl bg-gray-50 px-3 py-2 leading-relaxed shadow-inner transition-[border-color,box-shadow] placeholder:text-gray-400 focus:bg-white focus:shadow-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400 md:min-h-11 md:py-3 dark:bg-white/5 dark:focus:bg-white/8 dark:disabled:bg-white/5",
         )}
       />
       {errors.comment && (

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, type Dispatch, type SetStateAction } from "react";
 import { AppContext } from "./app-context";
 import type {
   GlobalData,
@@ -35,11 +35,25 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
   // $ State for the Comments Sidebar behavior
-  const [openChatSidebar, setOpenChatSidebar] = useState<boolean>(false);
+  const [openChatSidebar, setOpenChatSidebarState] = useState<boolean>(false);
 
   // $ State for the Notifications Sidebar behavior
-  const [openNotificationSidebar, setOpenNotificationSidebar] =
+  const [openNotificationSidebar, setOpenNotificationSidebarState] =
     useState<boolean>(false);
+
+  const setOpenChatSidebar = useCallback<
+    Dispatch<SetStateAction<boolean>>
+  >((value) => {
+    if (value === true) setOpenNotificationSidebarState(false);
+    setOpenChatSidebarState(value);
+  }, []);
+
+  const setOpenNotificationSidebar = useCallback<
+    Dispatch<SetStateAction<boolean>>
+  >((value) => {
+    if (value === true) setOpenChatSidebarState(false);
+    setOpenNotificationSidebarState(value);
+  }, []);
 
   // $ State for the Search Input behavior
   const [openSearchInput, setOpenSearchInput] = useState<boolean>(false);

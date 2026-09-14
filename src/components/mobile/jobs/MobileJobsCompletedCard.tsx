@@ -4,9 +4,11 @@ import {
   Calendar,
   User,
   FileText,
-  Eye,
 } from "lucide-react";
-import type { ActionAPIResponse } from "@/schemas";
+import type {
+  ActionAPIResponse,
+  JobcardPresignedUrlResponse,
+} from "@/schemas";
 import type { Row } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
@@ -18,33 +20,40 @@ import { badgeStyles } from "@/styles/badgeStyles";
 import { AnimatePresence, motion } from "motion/react";
 import { motionVariants } from "@/styles/motionStyles";
 import { DropdownMenuButtonDialog } from "@/components/modals/DropdownMenuButtonDialog";
+import { getTableMenuItems } from "@/lib/getTableMenuItems";
 
 type JobsActionedCardProps = {
   row: Row<ActionAPIResponse>;
   isOpen: boolean;
   onToggle: () => void;
+  downloadItem: (id: string) => Promise<JobcardPresignedUrlResponse>;
 };
 
 export default function MobileJobsCompletedCard({
   row,
   isOpen,
   onToggle,
+  downloadItem,
 }: JobsActionedCardProps) {
   const item = row.original;
   const navigate = useNavigate();
-  const { setSelectedRowId } = useGlobalContext();
+  const { setSelectedRowId, setOpenChatSidebar } = useGlobalContext();
 
-  const menuItems = [
-    {
-      id: "view",
+  const menuItems = getTableMenuItems({
+    rowId: item.id,
+    request_id: item.request_id,
+    setSelectedRowId,
+    view: {
       label: "View Job Details",
-      icon: Eye,
-      onClick: () => {
-        setSelectedRowId(item.id);
-        navigate(`/jobs/${item.id}/complete`);
-      },
+      onOpen: () => navigate(`/jobs/${item.id}/complete`),
     },
-  ];
+    download: {
+      onDownload: downloadItem,
+    },
+    comments: {
+      onOpen: () => setOpenChatSidebar(true),
+    },
+  });
 
   return (
     <div

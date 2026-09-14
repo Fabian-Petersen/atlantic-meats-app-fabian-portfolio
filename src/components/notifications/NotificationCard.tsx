@@ -198,7 +198,7 @@ export default function NotificationCard({
                 </button>
 
                 {isMenuOpen && (
-                  <div className="absolute right-0 top-full z-9000 mt-1.5 w-36 overflow-hidden rounded-lg border border-gray-200 bg-white p-1 shadow-xl dark:border-(--clr-borderDark) dark:bg-(--bg-primary_dark)">
+                  <div className="absolute right-0 top-full z-9000 mt-1.5 w-36 overflow-visible rounded-lg border border-gray-200 bg-white p-1 shadow-xl dark:border-(--clr-borderDark) dark:bg-(--bg-primary_dark)">
                     <button
                       type="button"
                       onClick={handleArchive}

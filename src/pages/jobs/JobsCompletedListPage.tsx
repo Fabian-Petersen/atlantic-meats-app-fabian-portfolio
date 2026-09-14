@@ -128,6 +128,7 @@ const JobsCompletedListPage = () => {
             <MobileJobsCompletedParent
               className="flex md:hidden"
               data={table.getRowModel().rows}
+              downloadItem={downloadItem}
             />
           </div>
         )}

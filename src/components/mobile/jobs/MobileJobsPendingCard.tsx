@@ -1,12 +1,10 @@
 import {
   CheckCircle2,
   ChevronDown,
-  Eye,
   MapPin,
   Calendar,
   Wrench,
   XCircle,
-  Pen,
 } from "lucide-react";
 import { Badge } from "../../features/Badge";
 import type { JobAPIResponse } from "@/schemas";
@@ -23,6 +21,7 @@ import { badgeStyles } from "@/styles/badgeStyles";
 import { AnimatePresence, motion } from "motion/react";
 import { motionVariants } from "@/styles/motionStyles";
 import { DropdownMenuButtonDialog } from "@/components/modals/DropdownMenuButtonDialog";
+import { getTableMenuItems } from "@/lib/getTableMenuItems";
 
 type MaintenanceRequestCardProps = {
   row: Row<JobAPIResponse>;
@@ -45,28 +44,34 @@ export default function MobileJobsPendingCard({
     setShowRejectRequestDialog,
     setShowApproveRequestDialog,
     setShowUpdateMaintenanceDialog,
+    openDeleteDialog,
+    setOpenChatSidebar,
   } = useGlobalContext();
 
-  const menuItems = [
-    {
-      id: "view",
+  const menuItems = getTableMenuItems({
+    rowId: item.id,
+    setSelectedRowId,
+    view: {
       label: "View Details",
-      icon: Eye,
-      onClick: () => {
-        navigate(`/jobs/${item.id}/pending-approval`);
-        setSelectedRowId(item.id);
-      },
+      onOpen: () => navigate(`/jobs/${item.id}/pending-approval`),
     },
-    {
-      id: "edit",
-      label: "Edit",
-      icon: Pen,
-      onClick: () => {
-        // navigate(`/jobs/${item.id}/pending-edit`);
-        setShowUpdateMaintenanceDialog(true);
-        setSelectedRowId(item.id);
-      },
+    edit: {
+      onOpen: () => setShowUpdateMaintenanceDialog(true),
     },
+    delete: {
+      config: {
+        resourcePath: "api/jobs",
+        queryKey: ["jobs", "delete-pending"],
+        resourceName: "request",
+      },
+      onDelete: openDeleteDialog,
+    },
+    comments: {
+      onOpen: () => setOpenChatSidebar(true),
+    },
+  });
+
+  menuItems.push(
     {
       id: "reject",
       label: "Reject",
@@ -85,7 +90,7 @@ export default function MobileJobsPendingCard({
         setShowApproveRequestDialog(true);
       },
     },
-  ];
+  );
 
   // const { mutateAsync: approveRequest, isPending } = usePOST({
   //   id: selectedRowId ?? "",

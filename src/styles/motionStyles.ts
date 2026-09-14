@@ -37,6 +37,40 @@ export const motionVariants = {
   } satisfies Variants,
 };
 
+/** Shared motion for the comments and notifications drawers. */
+export const sidebarMotion = {
+  overlay: {
+    initial: { opacity: 0 },
+    animate: {
+      opacity: 1,
+      transition: { duration: 0.18, ease: "easeOut" },
+    },
+    exit: {
+      opacity: 0,
+      transition: { duration: 0.16, ease: "easeIn" },
+    },
+  },
+  panel: {
+    initial: { x: "100%" },
+    animate: {
+      x: 0,
+      transition: {
+        type: "tween",
+        duration: 0.3,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+    exit: {
+      x: "100%",
+      transition: {
+        type: "tween",
+        duration: 0.22,
+        ease: [0.4, 0, 1, 1],
+      },
+    },
+  },
+} satisfies Record<string, Variants>;
+
 export const modalVariants = {
   parent: {
     initial: {

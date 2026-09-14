@@ -302,7 +302,7 @@ export const sharedStyles = {
   modalOverlay: cn("bg-black/60 dark:bg-black/30 backdrop-blur-xs"),
 
   /* //$ ——— Sidebars ——————————————————————————————————————————————————————————— */
-  sidebarOverlay: cn("fixed inset-0 z-40 bg-gray-950/25 backdrop-blur-[1px]"),
+  sidebarOverlay: cn("fixed inset-0 z-40 bg-gray-950/25 will-change-opacity"),
   sidebar: cn(
     "z-50 w-(--sidebarWidth) fixed",
     "overflow-auto no-scrollbar",
@@ -316,7 +316,7 @@ export const sharedStyles = {
   sidebarChat: cn(
     // Layout (chat-specific)
     "right-0 w-[min(100vw,26rem)]",
-    "overflow-hidden shadow-2xl shadow-gray-950/15 will-change-transform",
+    "transform-gpu overflow-hidden shadow-2xl shadow-gray-950/15 will-change-transform [backface-visibility:hidden]",
 
     // Appearance (only what differs from sidebarMain)
     "border-l border-l-gray-200/80",
@@ -324,7 +324,7 @@ export const sharedStyles = {
   ),
   sidebarNotification: cn(
     "right-0 w-[min(100vw,26rem)]",
-    "overflow-hidden shadow-2xl shadow-gray-950/15 will-change-transform",
+    "transform-gpu overflow-hidden shadow-2xl shadow-gray-950/15 will-change-transform [backface-visibility:hidden]",
     "border-l border-l-gray-200/80",
     "dark:border-l-[rgba(55,65,81,0.5)]",
   ),
