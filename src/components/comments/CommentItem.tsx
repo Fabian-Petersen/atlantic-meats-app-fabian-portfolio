@@ -12,7 +12,10 @@ const CommentItem = ({ comment, align }: CommentItemProps) => {
     <div
       className={`flex items-end gap-2.5 ${isRight ? "justify-end" : "justify-start"}`}
     >
-      <CommentAvatar comment_by={comment.comment_by} className="shrink-0" />
+      <CommentAvatar
+        comment_by={comment.comment_by}
+        className={`shrink-0 ${isRight ? "order-2" : ""}`}
+      />
       <div
         className={`flex h-auto min-h-16 max-w-[78%] flex-col gap-2 rounded-2xl border px-3.5 py-3 shadow-xs ${
           isRight
