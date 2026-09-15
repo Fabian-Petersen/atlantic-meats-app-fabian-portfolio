@@ -21,6 +21,7 @@ type FormInputProps<TFieldValues extends FieldValues> = {
   placeholder?: string;
   min?: number | string;
   step?: number | string;
+  valueAsNumber?: boolean;
   register?: UseFormRegister<TFieldValues>;
   control: Control<TFieldValues>;
   error?: FieldError;
@@ -47,6 +48,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
   placeholder,
   min,
   step,
+  valueAsNumber,
   register,
   error,
   disabled,
@@ -96,7 +98,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
       )}
 
       <input
-        {...(register ? register(name) : {})}
+        {...(register ? register(name, { valueAsNumber }) : {})}
         id={String(name)}
         type={type}
         min={min}

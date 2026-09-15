@@ -5,22 +5,84 @@ import { metricValuesSchema } from "@/schemas/metricSchemas";
 // Asset Request
 // ============================================================================
 
+export const assetTypes = [
+  "low value asset",
+  "general",
+  "high capex asset",
+  "rental",
+] as const;
+
+export const category = [
+  "IT & technology",
+  "office furniture & fixtures",
+  "production machinery",
+  "vehicles & fleet",
+  "software & intangible assets",
+  "maintenance tools & equipment",
+  "commercial & retail equipment",
+] as const;
+
 // $ Schema to create a new asset
-export const assetRequestSchema = z.object({
+export const assetRequestBaseSchema = z.object({
   business_unit: z.string().min(1, { message: "Business unit required" }),
   area: z.string().min(1, { message: "Area is required" }),
   equipment: z.string().min(1, { message: "Please select a equipment" }),
   assetID: z.string().min(1, {
-    message: "Please enter asset id",
+    message: "Please enter asset barcode number",
   }),
   condition: z.string().min(1, { message: "Please select condition" }),
   location: z.string().min(1, { message: "Please select a location" }),
   serialNumber: z.string().optional(),
+  assetType: z.enum(assetTypes, {
+    error: "Please select an asset type",
+  }),
+  category: z.enum(category, { error: "Please select asset category" }),
   additional_notes: z.string().optional(),
+  replacementValue: z
+    .number()
+    .min(1, { message: "Please indicate the asset value" }),
 
   // NEW uploads only
   images: z.array(z.instanceof(File)).default([]),
 });
+
+export const assetRequestSchema = assetRequestBaseSchema
+  .extend({
+    assetID: z.string().optional(),
+    replacementValue: z.number().positive({
+      message: "Assets must have a replacement value greater than zero",
+    }),
+  })
+  .superRefine(({ assetID, assetType, replacementValue }, ctx) => {
+    const isLowValueAsset = assetType === "low value asset";
+    const isRental = assetType === "rental";
+    const isHighCapexAsset = assetType === "high capex asset";
+    const requiresAssetID = !isLowValueAsset && !isRental;
+
+    if (requiresAssetID && !assetID?.trim()) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["assetID"],
+        message: "Please enter asset barcode number",
+      });
+    }
+
+    if (isLowValueAsset && replacementValue >= 4999) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["replacementValue"],
+        message: "Low value assets cannot exceed R5 000",
+      });
+    }
+
+    if (isHighCapexAsset && replacementValue <= 49999) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["replacementValue"],
+        message: "High CAPEX assets must exceed R50 000",
+      });
+    }
+  });
 
 export type AssetRequestFormValues = z.infer<typeof assetRequestSchema>;
 
@@ -30,6 +92,7 @@ export type AssetRequestFormValues = z.infer<typeof assetRequestSchema>;
 
 // $ Schema for the PresignedURL's
 export const presignedURLSchema = z.object({
+  type: z.enum(["images", "invoices"]),
   bucket: z.string(),
   filename: z.string(),
   url: z.string(),
@@ -43,7 +106,7 @@ export const presignedURLSchema = z.object({
 
 // $ Schema for the API Response from the database when fetching
 // the assets with image urls
-export const assetApiResponseSchema = assetRequestSchema
+export const assetApiResponseSchema = assetRequestBaseSchema
   .omit({ images: true })
   .extend({
     id: z.string(),
@@ -156,6 +219,16 @@ export const assetVerificationSchema = z.object({
   longitude: z.number(),
 });
 
+// $ Schema for manually verifying an asset when its barcode cannot be scanned
+export const manualAssetVerificationSchema = z.object({
+  id: z.string().min(1, { message: "Asset is required" }),
+  location: z.string().min(1, { message: "Please select the current location" }),
+  reason: z
+    .string()
+    .trim()
+    .min(1, { message: "Please enter a reason for manual verification" }),
+});
+
 // $ Schema for the Asset Verification History API response
 export const assetVerificationHistorySchema = z.object({
   id: z.string(),
@@ -183,7 +256,7 @@ export const assetVerificationHistorySchema = z.object({
 // ============================================================================
 
 // $ Schema for the Asset Table Menu
-export const assetTableRowSchema = assetRequestSchema
+export const assetTableRowSchema = assetRequestBaseSchema
   .omit({
     business_unit: true,
     images: true,
@@ -206,6 +279,10 @@ export type AssetAPIVerificationHistory = z.infer<
 >;
 
 export type VerifyAssetRequest = z.infer<typeof assetVerificationSchema>;
+
+export type ManualAssetVerificationRequest = z.infer<
+  typeof manualAssetVerificationSchema
+>;
 
 export type VerifyAssetResponse = z.infer<
   typeof assetVerificationResponseSchema
@@ -451,7 +528,7 @@ export type AssetIdentificationStatus = z.infer<
 // import { metricValuesSchema } from "@/schemas/metricSchemas";
 
 // // $ Schema to create a new asset
-// export const assetRequestSchema = z.object({
+// export const assetRequestBaseSchema = z.object({
 //   business_unit: z.string().min(1, { message: "Business unit required" }),
 //   area: z.string().min(1, { message: "Area is required" }),
 //   equipment: z.string().min(1, { message: "Please select a equipment" }),
@@ -467,7 +544,7 @@ export type AssetIdentificationStatus = z.infer<
 //   images: z.array(z.instanceof(File)).default([]),
 // });
 
-// export type AssetRequestFormValues = z.infer<typeof assetRequestSchema>;
+// export type AssetRequestFormValues = z.infer<typeof assetRequestBaseSchema>;
 
 // // $ Schema for the PresignedURL's
 // export const presignedURLSchema = z.object({
@@ -479,7 +556,7 @@ export type AssetIdentificationStatus = z.infer<
 // });
 
 // // $ Schema for the API Response from the database when fetching the assets with image urls
-// export const assetApiResponseSchema = assetRequestSchema
+// export const assetApiResponseSchema = assetRequestBaseSchema
 //   .omit({ images: true })
 //   .extend({
 //     id: z.string(),
@@ -591,7 +668,7 @@ export type AssetIdentificationStatus = z.infer<
 // });
 
 // // $ Schema for the Asset Table Menu
-// export const assetTableRowSchema = assetRequestSchema
+// export const assetTableRowSchema = assetRequestBaseSchema
 //   .omit({
 //     business_unit: true,
 //     images: true,

@@ -97,11 +97,7 @@ function FormRowSelect<T extends FieldValues>({
         required={required}
       >
         {/* Placeholder option — single-select only */}
-        {!multiple && (
-          <option value="" disabled>
-            {/* {placeholder ?? ""} */}
-          </option>
-        )}
+        {!multiple && <option value="">--select--</option>}
 
         {/* ✅ normalised is always an array so .map() never throws */}
         {normalised.map(({ value, label }, index) => (

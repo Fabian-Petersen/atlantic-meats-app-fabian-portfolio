@@ -172,6 +172,10 @@ function App() {
               element={<DisposalRequestsListPage />}
             />
             <Route path="/assets/list" element={<AssetsOverviewPage />} />
+            <Route
+              path="/assets/verification/manual"
+              element={<AssetsOverviewPage />}
+            />
             {/* // $ Page to list an asset by id */}
             <Route path="/assets/:id" element={<AssetItemPage />} />
             <Route

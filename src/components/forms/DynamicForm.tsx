@@ -75,6 +75,9 @@ type BaseField<T extends FieldValues> = {
 export type InputField<T extends FieldValues> = BaseField<T> & {
   fieldType: "input";
   type?: React.HTMLInputTypeAttribute;
+  min?: number | string;
+  step?: number | string;
+  valueAsNumber?: boolean;
 };
 
 export type SelectField<T extends FieldValues> = BaseField<T> & {
@@ -236,6 +239,9 @@ function DynamicForm<T extends FieldValues>({
           <FormRowInput
             key={field.name}
             type={field.type ?? "text"}
+            min={field.min}
+            step={field.step}
+            valueAsNumber={field.valueAsNumber}
             name={field.name}
             label={field.label}
             placeholder={field.placeholder}

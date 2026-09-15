@@ -66,6 +66,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     useState<boolean>(false);
   const [showUpdateAssetDialog, setShowUpdateAssetDialog] =
     useState<boolean>(false);
+  const [showManualVerificationDialog, setShowManualVerificationDialog] =
+    useState<boolean>(false);
 
   // $ Reject Request Modal
   const [showRejectRequestDialog, setShowRejectRequestDialog] = useState(false);
@@ -133,6 +135,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setShowUpdateMaintenanceDialog,
         showUpdateAssetDialog,
         setShowUpdateAssetDialog,
+        showManualVerificationDialog,
+        setShowManualVerificationDialog,
         showActionDialog,
         setShowActionDialog,
         showDeleteDialog,

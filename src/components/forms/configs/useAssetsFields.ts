@@ -8,6 +8,10 @@ import {
 
 import type { DynamicFormField } from "../DynamicForm";
 import { useState } from "react";
+import {
+  assetTypes,
+  category as assetCategories,
+} from "@/schemas/assetSchemas";
 type BusinessUnit = keyof typeof CeateAssetFormOptionsData.business_unit;
 
 // $ ——— Hook ─────────────────────────────────────────────────────
@@ -51,6 +55,13 @@ export const useAssetsFields = () => {
   const fields: DynamicFormField<AssetRequestFormValues>[] = [
     {
       fieldType: "select",
+      name: "location",
+      label: "Location",
+      placeholder: "Select Location",
+      options: normalizeOptions(sortedLocations),
+    },
+    {
+      fieldType: "select",
       name: "business_unit",
       label: "Business Unit",
       placeholder: "Select Business Unit",
@@ -81,21 +92,37 @@ export const useAssetsFields = () => {
       options: normalizeOptions(itemOptions),
       required: true,
     },
-
+    {
+      fieldType: "select",
+      name: "assetType",
+      label: "Asset Type",
+      placeholder: "Select Asset Type",
+      options: [...assetTypes],
+      required: true,
+    },
+    {
+      fieldType: "select",
+      name: "category",
+      label: "Asset Category",
+      placeholder: "Select Asset Category",
+      options: [...assetCategories],
+      required: true,
+    },
+    {
+      fieldType: "input",
+      type: "number",
+      name: "replacementValue",
+      label: "Replacement Value",
+      min: 0,
+      step: 0.01,
+      valueAsNumber: true,
+      required: true,
+    },
     {
       fieldType: "input",
       type: "text",
       name: "assetID",
       label: "Asset ID",
-      required: true,
-    },
-
-    {
-      fieldType: "select",
-      name: "location",
-      label: "Location",
-      placeholder: "Select Location",
-      options: normalizeOptions(sortedLocations),
     },
 
     {

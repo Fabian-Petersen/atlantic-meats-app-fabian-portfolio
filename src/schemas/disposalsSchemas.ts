@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { assetRequestSchema } from "./assetSchemas";
+import { assetRequestBaseSchema } from "./assetSchemas";
 import { presignedURLSchema } from "./jobSchemas";
 
 /** Workflow states stored by the disposal backend. */
@@ -35,7 +35,7 @@ export const disposalReasonSchema = z.enum(disposalReasons);
 
 // $  ─── Individual asset being disposed ──────────────────────────────────────
 
-export const disposalAssetBaseSchema = assetRequestSchema
+export const disposalAssetBaseSchema = assetRequestBaseSchema
   .pick({
     assetID: true,
     area: true,

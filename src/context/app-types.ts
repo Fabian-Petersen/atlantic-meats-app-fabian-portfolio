@@ -137,6 +137,8 @@ export type AppContextType = {
   setShowActionDialog: (v: boolean) => void;
   setShowUpdateAssetDialog: (v: boolean) => void;
   showUpdateAssetDialog: boolean;
+  showManualVerificationDialog: boolean;
+  setShowManualVerificationDialog: (v: boolean) => void;
   showUserProfileDialog: boolean;
   setShowUserProfileDialog: (v: boolean) => void;
 

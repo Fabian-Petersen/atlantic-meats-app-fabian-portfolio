@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { assetRequestSchema } from "./assetSchemas";
+import { assetRequestBaseSchema } from "./assetSchemas";
 import { presignedURLSchema } from "./jobSchemas";
 
 export const transferStatusSchema = z.object({
@@ -17,7 +17,7 @@ export type TransferStatus = z.infer<typeof transferStatusSchema.shape.status>;
 
 // $  ─── Individual asset being transferred ──────────────────────────────────────
 
-export const transferAssetBaseSchema = assetRequestSchema
+export const transferAssetBaseSchema = assetRequestBaseSchema
   .pick({
     assetID: true,
     area: true,

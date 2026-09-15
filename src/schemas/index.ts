@@ -215,13 +215,7 @@ export type {
 // GlobalContext.ts
 export type GlobalData = JobRequestFormValues | AssetRequestFormValues;
 
-export type PresignedUrlResponse = {
-  type: "images" | "invoices";
-  filename: string;
-  url: string;
-  key: string;
-  content_type: string;
-}[];
+export type PresignedUrlResponse = PresignedURL[];
 
 export type DocumentPresignedUrlResponse<TUrlKey extends string = "document_url"> =
   Record<TUrlKey, string>;

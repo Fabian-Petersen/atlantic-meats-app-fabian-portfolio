@@ -52,8 +52,12 @@ const AssetsOverviewPage = () => {
     pageSize: 10, // 👈 this controls "10 items per page"
   });
 
-  const { setShowUpdateAssetDialog, setSelectedRowId, openDeleteDialog } =
-    useGlobalContext();
+  const {
+    setShowUpdateAssetDialog,
+    setShowManualVerificationDialog,
+    setSelectedRowId,
+    openDeleteDialog,
+  } = useGlobalContext();
 
   // $ Map through the data returned to match the TableRow Data Schema
   const rows: AssetTableRow[] = useMemo(
@@ -67,6 +71,9 @@ const AssetsOverviewPage = () => {
         assetID: asset.assetID,
         serialNumber: asset.serialNumber,
         condition: asset.condition,
+        assetType: asset.assetType,
+        replacementValue: asset.replacementValue,
+        category: asset.category,
       })),
     [data],
   );
@@ -75,12 +82,14 @@ const AssetsOverviewPage = () => {
     () =>
       getAssetColumns(
         setShowUpdateAssetDialog,
+        setShowManualVerificationDialog,
         setSelectedRowId,
         openDeleteDialog,
         navigate,
       ),
     [
       setShowUpdateAssetDialog,
+      setShowManualVerificationDialog,
       setSelectedRowId,
       openDeleteDialog,
       navigate,

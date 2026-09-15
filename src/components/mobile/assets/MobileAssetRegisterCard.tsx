@@ -4,6 +4,7 @@ import {
   Pencil,
   Eye,
   Trash2,
+  ShieldCheck,
   Barcode,
   MapPin,
 } from "lucide-react";
@@ -26,7 +27,8 @@ type Props = {
 export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
   const item = row.original;
   const navigate = useNavigate();
-  const { setSelectedRowId } = useGlobalContext();
+  const { setSelectedRowId, setShowManualVerificationDialog } =
+    useGlobalContext();
 
   const handleNavigate = () => {
     setSelectedRowId(item.id);
@@ -36,6 +38,16 @@ export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
   const menuItems = [
     { id: "edit", label: "Edit", icon: Pencil, onClick: handleNavigate },
     { id: "view", label: "View", icon: Eye, onClick: handleNavigate },
+    {
+      id: "manual-verification",
+      label: "Manual Verification",
+      icon: ShieldCheck,
+      onClick: () => {
+        setSelectedRowId(item.id);
+        setShowManualVerificationDialog(true);
+        navigate("/assets/verification/manual");
+      },
+    },
     { id: "delete", label: "Delete", icon: Trash2, onClick: handleNavigate },
   ];
 

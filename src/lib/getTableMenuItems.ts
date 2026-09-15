@@ -14,6 +14,7 @@ import {
   ArchiveX,
   Eye,
   CheckCircle,
+  ShieldCheck,
 } from "lucide-react";
 
 import type { Resource } from "@/utils/api";
@@ -90,6 +91,10 @@ export const tableActionStyles: Record<
     color: "text-fuchsia-600 dark:text-fuchsia-400",
     bgColor: "bg-fuchsia-50 dark:bg-fuchsia-950/50",
   },
+  "manual-verification": {
+    color: "text-emerald-600 dark:text-emerald-400",
+    bgColor: "bg-emerald-50 dark:bg-emerald-950/50",
+  },
 };
 
 type GetTableMenuItemsProps = {
@@ -118,6 +123,12 @@ type GetTableMenuItemsProps = {
   };
 
   edit?: {
+    label?: string;
+    url?: string;
+    onOpen: () => void;
+  };
+
+  manualVerification?: {
     label?: string;
     url?: string;
     onOpen: () => void;
@@ -205,6 +216,7 @@ export const getTableMenuItems = ({
   userStatus,
   history,
   dispose,
+  manualVerification,
 }: GetTableMenuItemsProps): TableActionLinks[] => {
   const items: TableActionLinks[] = [];
 
@@ -329,6 +341,20 @@ export const getTableMenuItems = ({
       onClick: () => {
         setSelectedRowId(rowId);
         view.onOpen();
+      },
+    });
+  }
+
+  if (manualVerification) {
+    items.push({
+      id: "manual-verification",
+      label: manualVerification.label ?? "Manual Verification",
+      icon: ShieldCheck,
+      ...tableActionStyles["manual-verification"],
+      url: manualVerification.url,
+      onClick: () => {
+        setSelectedRowId(rowId);
+        manualVerification.onOpen();
       },
     });
   }

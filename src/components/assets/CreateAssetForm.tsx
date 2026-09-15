@@ -69,6 +69,8 @@ const CreateAssetForm = () => {
       condition: "",
       images: [],
       assetID: "",
+      assetType: undefined,
+      replacementValue: 0,
     },
   });
 

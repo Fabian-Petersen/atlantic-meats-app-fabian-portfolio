@@ -16,6 +16,7 @@ import { badgeStyles } from "@/styles/badgeStyles";
 
 export const getAssetColumns = (
   setShowUpdateAssetDialog: (v: boolean) => void,
+  setShowManualVerificationDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (
     selectedRowId: string,
@@ -179,6 +180,13 @@ export const getAssetColumns = (
             setSelectedRowId(rowId);
             navigate(`/assets/${rowId}/history`);
             // console.log("history:", rowId);
+          },
+        },
+        manualVerification: {
+          url: "/assets/verification/manual",
+          onOpen: () => {
+            setShowManualVerificationDialog(true);
+            navigate("/assets/verification/manual");
           },
         },
         delete: {

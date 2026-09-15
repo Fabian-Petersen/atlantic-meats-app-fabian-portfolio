@@ -38,6 +38,7 @@ export type Resource =
   | `api/assets/${string}/history`
   | `api/assets/${string}/history/metrics` // GET, asset history metrics
   | `api/assets/${string}/verify`
+  | `api/assets/${string}/verify-manual`
   | `api/assets/${string}/transfer`
   // $ Users ROUTES
   | "api/users/get-current-user" // Get user details by id
