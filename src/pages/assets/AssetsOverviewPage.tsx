@@ -74,6 +74,10 @@ const AssetsOverviewPage = () => {
         assetType: asset.assetType,
         replacementValue: asset.replacementValue,
         category: asset.category,
+        verified_by: asset.verified_by,
+        last_verified_at: asset.last_verified_at,
+        next_verification_due: asset.next_verification_due,
+        verify_status: asset.verify_status,
       })),
     [data],
   );

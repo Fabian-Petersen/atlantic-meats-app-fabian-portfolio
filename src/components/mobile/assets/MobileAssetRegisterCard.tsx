@@ -17,6 +17,9 @@ import { CardRow } from "../CardRow";
 import { AnimatePresence, motion } from "motion/react";
 import { motionVariants } from "@/styles/motionStyles";
 import { DropdownMenuButtonDialog } from "@/components/modals/DropdownMenuButtonDialog";
+import { Badge } from "@/components/features/Badge";
+import { badgeStyles } from "@/styles/badgeStyles";
+import { formatDateTime } from "@/utils/formatDateTime";
 
 type Props = {
   row: Row<AssetTableRow>;
@@ -90,6 +93,11 @@ export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
           className={sharedStyles.mobileCardActions}
           onClick={(e) => e.stopPropagation()}
         >
+          <Badge
+            value={item.verify_status ?? "unverified"}
+            styleMap={badgeStyles.families.verification}
+            className={sharedStyles.mobileCardBadge}
+          />
           <DropdownMenuButtonDialog menuItems={menuItems} />
 
           {/* Chevron — expand/collapse only */}
@@ -121,7 +129,21 @@ export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
                 </li>
                 <li className="flex gap-2 w-full justify-between">
                   <span>Serial Number</span>
-                  <span>{item.serialNumber}</span>
+                  <span>{item.serialNumber || "-"}</span>
+                </li>
+                <li className="flex gap-2 w-full justify-between">
+                  <span>Last Verified</span>
+                  <span>{formatDateTime(item.last_verified_at) ?? "-"}</span>
+                </li>
+                <li className="flex gap-2 w-full justify-between">
+                  <span>Verification Due</span>
+                  <span>
+                    {formatDateTime(item.next_verification_due) ?? "-"}
+                  </span>
+                </li>
+                <li className="flex gap-2 w-full justify-between">
+                  <span>Verified By</span>
+                  <span>{item.verified_by || "-"}</span>
                 </li>
               </ul>
             </div>

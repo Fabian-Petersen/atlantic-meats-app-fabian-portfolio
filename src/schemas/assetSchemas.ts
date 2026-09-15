@@ -227,6 +227,9 @@ export const manualAssetVerificationSchema = z.object({
     .string()
     .trim()
     .min(1, { message: "Please enter a reason for manual verification" }),
+  images: z
+    .array(z.instanceof(File))
+    .min(1, { message: "At least one verification image is required" }),
 });
 
 // $ Schema for the Asset Verification History API response
@@ -264,6 +267,19 @@ export const assetTableRowSchema = assetRequestBaseSchema
   .extend({
     id: z.string(),
     createdAt: z.string(),
+    verified_by: z.string().optional(),
+    last_verified_at: z.string().optional(),
+    next_verification_due: z.string().optional(),
+    verify_status: z
+      .enum([
+        "verified",
+        "overdue",
+        "due soon",
+        "not found",
+        "pending",
+        "unverified",
+      ])
+      .optional(),
   });
 
 // ============================================================================
@@ -283,6 +299,13 @@ export type VerifyAssetRequest = z.infer<typeof assetVerificationSchema>;
 export type ManualAssetVerificationRequest = z.infer<
   typeof manualAssetVerificationSchema
 >;
+
+export type ManualAssetVerificationPayload = Omit<
+  ManualAssetVerificationRequest,
+  "images"
+> & {
+  images: { filename: string; content_type: string }[];
+};
 
 export type VerifyAssetResponse = z.infer<
   typeof assetVerificationResponseSchema

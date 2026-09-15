@@ -1,21 +1,22 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch, type FieldError } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ShieldCheck } from "lucide-react";
-
+import FormInfo from "@/components/features/forms/FormInfo";
 import TextAreaInput from "../../../customComponents/TextAreaInput";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
+import FileInput from "../../../customComponents/FileInput";
 import FormHeading from "../../../customComponents/FormHeading";
 import FormActionButtons from "@/components/features/FormActionButtons";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import useGlobalContext from "@/context/useGlobalContext";
 import {
   manualAssetVerificationSchema,
+  type ManualAssetVerificationPayload,
   type ManualAssetVerificationRequest,
-  type VerifyAssetResponse,
 } from "@/schemas/assetSchemas";
-import { usePOST } from "@/utils/api";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { location } from "@/data/assetSelectOptions";
 
 const ManualVerificationDialog = () => {
@@ -28,6 +29,7 @@ const ManualVerificationDialog = () => {
 
   const {
     register,
+    control,
     handleSubmit,
     reset,
     formState: { errors },
@@ -36,39 +38,41 @@ const ManualVerificationDialog = () => {
       id: selectedRowId ?? "",
       location: "",
       reason: "",
+      images: [],
     },
     resolver: zodResolver(manualAssetVerificationSchema),
   });
 
-  const { mutateAsync: verifyManually, isPending } = usePOST<
+  const images = useWatch({ control, name: "images" });
+
+  const { submit: verifyManually, isPending } = useFormSubmit<
     ManualAssetVerificationRequest,
-    VerifyAssetResponse
+    ManualAssetVerificationPayload
   >({
     resourcePath: `api/assets/${selectedRowId ?? ""}/verify-manual`,
     queryKey: ["assets"],
+    buildPayload: (values, compressedImages) => ({
+      id: selectedRowId ?? values.id,
+      location: values.location,
+      reason: values.reason,
+      images: compressedImages.map((file) => ({
+        filename: file.name,
+        content_type: file.type,
+      })),
+    }),
+    onSuccess: () => {
+      toast.success("Asset manually verified", { duration: 1500 });
+      closeDialog();
+    },
+    onError: () => {
+      toast.error("Failed to verify asset manually", { duration: 1500 });
+    },
   });
 
   const closeDialog = () => {
     setShowManualVerificationDialog(false);
     reset();
     navigate("/assets/list");
-  };
-
-  const onSubmit = async (data: ManualAssetVerificationRequest) => {
-    try {
-      const response = await verifyManually({
-        ...data,
-        id: selectedRowId ?? data.id,
-      });
-
-      toast.success(response.message || "Asset manually verified", {
-        duration: 1500,
-      });
-      closeDialog();
-    } catch (error) {
-      console.error("Manual asset verification failed", error);
-      toast.error("Failed to verify asset manually", { duration: 1500 });
-    }
   };
 
   if (!selectedRowId) return null;
@@ -82,7 +86,7 @@ const ManualVerificationDialog = () => {
         if (!open) closeDialog();
       }}
     >
-      <DialogContent className="sm:max-w-[625px] bg-white z-3000 dark:bg-[#1d2739] border-none dark:text-gray-100 dark:border-gray-700/50">
+      <DialogContent className="sm:max-w-156 bg-white z-3000 dark:bg-[#1d2739] border-none dark:text-gray-100 dark:border-gray-700/50">
         <div className="flex justify-center items-center">
           <div className="rounded-full bg-green-100 p-4 text-green-600 dark:bg-green-950/50 dark:text-green-400">
             <ShieldCheck className="size-12 md:size-16" aria-hidden="true" />
@@ -99,7 +103,7 @@ const ManualVerificationDialog = () => {
         <form
           id="manual-verification-form"
           className="flex flex-col rounded-lg w-full text-(--clr-font) dark:bg-[#1d2739]"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(verifyManually)}
         >
           <div className="grid gap-5">
             <FormRowSelect
@@ -119,6 +123,18 @@ const ManualVerificationDialog = () => {
               error={errors.reason}
               disabled={isPending}
               required
+            />
+            {images.length === 0 && (
+              <FormInfo message="Add at least one clear image as evidence of the asset's identity and condition when its barcode cannot be scanned." />
+            )}
+            <FileInput
+              name="images"
+              control={control}
+              label="Verification Images"
+              error={errors.images as FieldError | undefined}
+              disabled={isPending}
+              required
+              multiple
             />
           </div>
           <FormActionButtons
