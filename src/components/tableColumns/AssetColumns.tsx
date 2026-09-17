@@ -39,6 +39,10 @@ export const getAssetColumns = (
   {
     accessorKey: "location",
     header: "Location",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
   },
   {
     accessorKey: "area",
@@ -52,6 +56,10 @@ export const getAssetColumns = (
     accessorKey: "equipment",
     header: "Equipment",
     enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      return <p className="capitalize">{value}</p>;
+    },
   },
   {
     accessorKey: "assetID",
@@ -100,7 +108,7 @@ export const getAssetColumns = (
   },
   {
     accessorKey: "verified_by",
-    header: "verified _by",
+    header: "Verified By",
     size: 120,
     minSize: 100,
     maxSize: 140,

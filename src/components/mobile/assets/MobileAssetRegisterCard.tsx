@@ -6,6 +6,7 @@ import {
   Trash2,
   ShieldCheck,
   Barcode,
+  Box,
   MapPin,
 } from "lucide-react";
 import type { Row } from "@tanstack/react-table";
@@ -67,7 +68,7 @@ export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
         <div className={sharedStyles.mobileCardHeaderContent}>
           <CardRow
             value={item.equipment}
-            // icon={Hammer}
+            icon={Box}
             className="capitalize text-(--clr-textLight) py-0"
             valueStyles={sharedStyles.mobileCardTitle}
             iconStyles="w-4 h-4 text-purple-500 dark:text-purple-400"
@@ -121,8 +122,12 @@ export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
             exit="closed"
             className="overflow-hidden"
           >
-            <div className="mt-3 text-xs">
-              <ul className="grid gap-4 text-gray-400">
+            <div className="mt-3 text-xs pl-1">
+              <ul className="grid gap-4 text-gray-500 capitalize">
+                <li className="flex gap-2 w-full justify-between">
+                  <span>Area</span>
+                  <span>{item.area}</span>
+                </li>
                 <li className="flex gap-2 w-full justify-between">
                   <span>Condition</span>
                   <span>{item.condition}</span>
@@ -141,10 +146,10 @@ export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
                     {formatDateTime(item.next_verification_due) ?? "-"}
                   </span>
                 </li>
-                <li className="flex gap-2 w-full justify-between">
+                {/* <li className="flex gap-2 w-full justify-between">
                   <span>Verified By</span>
                   <span>{item.verified_by || "-"}</span>
-                </li>
+                </li> */}
               </ul>
             </div>
           </motion.div>
