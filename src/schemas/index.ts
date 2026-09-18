@@ -95,6 +95,7 @@ import type {
   AssetRequestFormValues,
   AssetTableRow,
   CreateAssetPayload,
+  UpdateAssetPayload,
   AssetAPIResponse,
   PresignedURL,
 } from "./assetSchemas";
@@ -171,6 +172,7 @@ export type {
   AssetRequestFormValues,
   AssetTableRow,
   CreateAssetPayload,
+  UpdateAssetPayload,
   AssetAPIResponse,
   // Comment
   CommentAPIResponse,

@@ -39,8 +39,13 @@ export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
     navigate(`/assets/${item.id}`);
   };
 
+  const handleEdit = () => {
+    setSelectedRowId(item.id);
+    navigate(`/assets/${item.id}/update-asset`);
+  };
+
   const menuItems = [
-    { id: "edit", label: "Edit", icon: Pencil, onClick: handleNavigate },
+    { id: "edit", label: "Edit", icon: Pencil, onClick: handleEdit },
     { id: "view", label: "View", icon: Eye, onClick: handleNavigate },
     {
       id: "manual-verification",

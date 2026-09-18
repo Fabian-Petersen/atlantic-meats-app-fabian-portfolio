@@ -7,14 +7,20 @@ import { useState } from "react";
 type Props<T> = {
   table: Table<T>;
   className?: string;
+  compact?: boolean;
 };
 
-function TablePageSizeSelector<T>({ table, className }: Props<T>) {
+function TablePageSizeSelector<T>({
+  table,
+  className,
+  compact = false,
+}: Props<T>) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className={`${className} relative h-full`}>
       <select
-        title="PageSelect"
+        title="Items per page"
+        aria-label="Items per page"
         value={table.getState().pagination.pageSize}
         onBlur={() => setIsOpen(false)} // closes when focus is lost
         onMouseDown={() => setIsOpen((prev) => !prev)}
@@ -29,12 +35,13 @@ function TablePageSizeSelector<T>({ table, className }: Props<T>) {
           sharedStyles.formInputDefault,
           sharedStyles.formSelect,
           "base-select",
-          "h-full w-26 cursor-pointer rounded-lg border-slate-200 bg-white text-xs font-medium text-slate-700 shadow-none transition-none hover:border-amber-300 hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary/60 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-200 dark:hover:border-amber-600 dark:hover:bg-primary/20",
+          "h-full cursor-pointer rounded-lg border-slate-200 bg-white text-xs font-medium text-slate-700 shadow-none transition-none hover:border-amber-300 hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary/60 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-200 dark:hover:border-amber-600 dark:hover:bg-primary/20",
+          compact ? "w-full pl-2 pr-6 text-center" : "w-26",
         )}
       >
         {[5, 10, 20, 50].map((size) => (
           <option key={size} value={size} className="p-2 hover:cursor-pointer">
-            Show {size}
+            {compact ? size : `Show ${size}`}
           </option>
         ))}
       </select>

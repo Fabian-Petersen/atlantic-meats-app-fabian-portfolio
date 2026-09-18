@@ -20,6 +20,7 @@ export const category = [
   "software & intangible assets",
   "maintenance tools & equipment",
   "commercial & retail equipment",
+  "security systems",
 ] as const;
 
 // $ Schema to create a new asset
@@ -142,6 +143,10 @@ export type CreateAssetPayload = Omit<AssetRequestFormValues, "images"> & {
   }[];
 };
 
+export type UpdateAssetPayload = CreateAssetPayload & {
+  deleted_image_keys: string[];
+};
+
 // ============================================================================
 // Asset History
 // ============================================================================
@@ -222,7 +227,9 @@ export const assetVerificationSchema = z.object({
 // $ Schema for manually verifying an asset when its barcode cannot be scanned
 export const manualAssetVerificationSchema = z.object({
   id: z.string().min(1, { message: "Asset is required" }),
-  location: z.string().min(1, { message: "Please select the current location" }),
+  location: z
+    .string()
+    .min(1, { message: "Please select the current location" }),
   reason: z
     .string()
     .trim()

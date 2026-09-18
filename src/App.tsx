@@ -74,6 +74,7 @@ import DisposalPendingItemPage from "./pages/disposals/DisposalPendingItemPage";
 // $ Stock Pages
 import CreateStockPage from "./pages/stocks/CreateStockPage";
 import StocksListPage from "./pages/stocks/StocksListPage";
+import UpdateAssetPage from "./pages/assets/UpdateAssetPage";
 
 function App() {
   const { loading } = useAuth();
@@ -193,6 +194,10 @@ function App() {
             <Route
               path="/assets/create-new-asset"
               element={<CreateAssetPage />}
+            />
+            <Route
+              path="/assets/:id/update-asset"
+              element={<UpdateAssetPage />}
             />
             <Route path="/assets/:id/history" element={<AssetHistoryPage />} />
             {/* // $ Page to create a new stock item */}

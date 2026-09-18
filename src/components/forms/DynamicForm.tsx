@@ -103,6 +103,12 @@ export type TextAreaField<T extends FieldValues> = BaseField<T> & {
 export type FileField<T extends FieldValues> = BaseField<T> & {
   fieldType: "file";
   multiple?: boolean;
+  existingFiles?: { key: string; filename: string; url: string }[];
+  onRemoveExisting?: (file: {
+    key: string;
+    filename: string;
+    url: string;
+  }) => void;
 };
 
 export type RadioField<T extends FieldValues> = BaseField<T> & {
@@ -313,6 +319,8 @@ function DynamicForm<T extends FieldValues>({
             control={typedControl}
             label={field.label}
             multiple={field.multiple}
+            existingFiles={field.existingFiles}
+            onRemoveExisting={field.onRemoveExisting}
             placeholder={field.placeholder}
             className={field.className}
             error={fieldError(field.name)}

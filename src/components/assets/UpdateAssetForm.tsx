@@ -1,275 +1,184 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useForm, type Resolver } from "react-hook-form";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { useForm, type Resolver } from "react-hook-form";
 
-// $ API hooks
-import { useById, useUpdateItem } from "@/utils/api";
-
-// $ Schema & types
-import { assetRequestSchema } from "@/schemas";
-import type {
-  AssetAPIResponse,
-  AssetRequestFormValues,
-  CreateAssetPayload,
-  PresignedUrlResponse,
-} from "@/schemas";
-
-// $ Select options
-import {
-  condition,
-  location,
-  CeateAssetFormOptionsData,
-} from "@/data/assetSelectOptions";
-
-// $ Components
-import FileInput from "../../../customComponents/FileInput";
-import FormRowSelect from "../../../customComponents/FormRowSelect";
-import FormRowInput from "../../../customComponents/FormRowInput";
-import TextAreaInput from "../../../customComponents/TextAreaInput";
-import FormSkeleton from "../forms/FormSkeleton";
-
-// $ Context
 import useGlobalContext from "@/context/useGlobalContext";
-import FormActionButtons from "../features/FormActionButtons";
+import {
+  assetRequestSchema,
+  type AssetAPIResponse,
+  type AssetRequestFormValues,
+  type PresignedUrlResponse,
+  type UpdateAssetPayload,
+} from "@/schemas";
+import { compressImagesToWebpv1 } from "@/utils/compressImagesToWebpv1";
+import { useById, useUpdateItem } from "@/utils/api";
+import DynamicForm from "@/components/forms/DynamicForm";
+import { FormSkeleton } from "@/components/forms/FormSkeleton";
+import { useAssetsFields } from "@/components/forms/configs/useAssetsFields";
 
-type BusinessUnit = keyof typeof CeateAssetFormOptionsData.business_unit;
+const ASSETS_QUERY_KEY = ["assets", "list"] as const;
 
-const ASSETS_KEY = ["assetRequests"];
+type UpdateAssetEditorProps = {
+  id: string;
+  item: AssetAPIResponse;
+};
 
-const UpdateAssetForm = () => {
+const UpdateAssetEditor = ({ id, item }: UpdateAssetEditorProps) => {
   const navigate = useNavigate();
-  const { setShowUpdateAssetDialog, selectedRowId: id } = useGlobalContext();
-  // console.log("selectedRowId:", id);
+  const { setSuccessConfig, setShowSuccess, setErrorConfig, setShowError } =
+    useGlobalContext();
+  const [existingImages, setExistingImages] = useState(item.images);
+  const [deletedImageKeys, setDeletedImageKeys] = useState<string[]>([]);
 
-  const [businessUnit, setBusinessUnit] = useState<BusinessUnit | null>(null);
-  const [category, setCategory] = useState<string | null>(null);
-
-  // $ Fetch asset
-  const { data: item, isPending } = useById<AssetAPIResponse>({
-    id: id ?? "",
-    queryKey: ASSETS_KEY,
-    resourcePath: "api/assets",
-  });
-
-  // $ Update hook
-  const updateAsset = useUpdateItem<
-    CreateAssetPayload,
-    { presigned_urls?: PresignedUrlResponse }
-  >({
-    resourcePath: "assets",
-    queryKey: ASSETS_KEY,
-  });
-
-  // $ Form
-  const {
-    register,
-    reset,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<AssetRequestFormValues>({
-    defaultValues: {
-      business_unit: "",
-      area: "",
-      equipment: "",
-      assetID: "",
-      condition: "",
-      location: "",
-      serialNumber: "",
-      additional_notes: "",
-      images: [],
-    },
+  const form = useForm<AssetRequestFormValues>({
     resolver: zodResolver(
       assetRequestSchema,
     ) as unknown as Resolver<AssetRequestFormValues>,
-    values: item
-      ? {
-          ...item,
-          images: [], // cannot hydrate File[]
-        }
-      : undefined,
+    defaultValues: {
+      business_unit: item.business_unit ?? "",
+      area: item.area ?? "",
+      equipment: item.equipment ?? "",
+      serialNumber: item.serialNumber ?? "",
+      location: item.location ?? "",
+      condition: item.condition ?? "",
+      images: [],
+      assetID: item.assetID ?? "",
+      assetType: item.assetType,
+      category: item.category,
+      replacementValue: item.replacementValue,
+      additional_notes: item.additional_notes ?? "",
+    },
   });
 
-  useEffect(() => {
-    if (!item) return;
+  const { fields } = useAssetsFields({
+    business_unit: item.business_unit,
+    area: item.area,
+    equipment: item.equipment,
+    location: item.location,
+    condition: item.condition,
+    existingImages: existingImages.map(({ key, filename, url }) => ({
+      key,
+      filename,
+      url,
+    })),
+    onRemoveExistingImage: (image) => {
+      setExistingImages((current) =>
+        current.filter((existingImage) => existingImage.key !== image.key),
+      );
+      setDeletedImageKeys((current) =>
+        current.includes(image.key) ? current : [...current, image.key],
+      );
+    },
+  });
 
-    reset({
-      business_unit: item.business_unit,
-      area: item.area,
-      equipment: item.equipment,
-      assetID: item.assetID,
-      condition: item.condition,
-      location: item.location,
-      serialNumber: item.serialNumber,
-      additional_notes: item.additional_notes,
-      images: [], // File[] cannot be hydrated
-    });
-  }, [item, reset]);
+  const { mutateAsync, isPending } = useUpdateItem<
+    UpdateAssetPayload,
+    { presigned_urls?: PresignedUrlResponse }
+  >({
+    resourcePath: "api/assets",
+    queryKey: ASSETS_QUERY_KEY,
+  });
 
-  if (!id || isPending || !item) {
-    return <FormSkeleton />;
-  }
-
-  const DATA = CeateAssetFormOptionsData;
-
-  const businessUnitOptions = Object.keys(DATA.business_unit) as BusinessUnit[];
-
-  const categoryOptions = businessUnit
-    ? Object.keys(DATA.business_unit[businessUnit].category)
-    : [];
-
-  const itemOptions =
-    businessUnit && category
-      ? DATA.business_unit[businessUnit].category[
-          category as keyof (typeof DATA.business_unit)[typeof businessUnit]["category"]
-        ]
-      : [];
-
-  const sortedLocations = [...location].sort((a, b) => a.localeCompare(b));
-
-  // $ Submit
-  const onSubmit = async (data: AssetRequestFormValues) => {
+  const onSubmit = async (values: AssetRequestFormValues) => {
     try {
-      const payload: CreateAssetPayload = {
-        ...data,
-        images: (data.images ?? []).map((file) => ({
+      const { images, ...assetValues } = values;
+      const compressedImages = images.length
+        ? await compressImagesToWebpv1(images)
+        : [];
+      const payload: UpdateAssetPayload = {
+        ...assetValues,
+        images: compressedImages.map((file) => ({
           filename: file.name,
           content_type: file.type,
         })),
+        deleted_image_keys: deletedImageKeys,
       };
 
-      const response = await updateAsset.mutateAsync({
-        id,
-        payload,
-      });
+      const response = await mutateAsync({ id, payload });
 
-      const { presigned_urls } = response ?? {};
+      if (compressedImages.length) {
+        if (!response.presigned_urls) {
+          throw new Error("Expected upload URLs but none were returned.");
+        }
 
-      if (presigned_urls?.length) {
         await Promise.all(
-          presigned_urls.map((item) => {
-            const file = data.images?.find((f) => f.name === item.filename);
+          response.presigned_urls.map(async (upload) => {
+            const file = compressedImages.find(
+              (image) => image.name === upload.filename,
+            );
 
-            if (!file) return Promise.resolve();
+            if (!file) {
+              throw new Error(`Could not find local file for ${upload.filename}.`);
+            }
 
-            return fetch(item.url, {
+            const uploadResponse = await fetch(upload.url, {
               method: "PUT",
-              headers: {
-                "Content-Type": item.content_type,
-              },
+              headers: { "Content-Type": upload.content_type },
               body: file,
             });
+
+            if (!uploadResponse.ok) {
+              throw new Error(`Image upload failed for ${upload.filename}.`);
+            }
           }),
         );
       }
 
-      toast.success("Asset successfully updated", { duration: 1000 });
-      navigate("/asset");
+      setSuccessConfig({
+        title: "Asset Updated",
+        message: `Asset ${values.assetID || item.id} was successfully updated.`,
+        redirectPath: "assets/list",
+      });
+      setShowSuccess(true);
     } catch (error) {
-      console.error("Update failed", error);
-      toast.error("Failed to update asset");
+      console.error("Asset update failed:", error);
+      setErrorConfig({
+        title: "Asset Update Failed",
+        message: "Could not update the asset. Please try again.",
+        redirectPath: "assets/list",
+      });
+      setShowError(true);
     }
   };
 
   return (
-    <form
-      className="flex flex-col rounded-lg lg:w-full text-(--clr-font) dark:bg-[#1d2739]"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
-        <FormRowSelect
-          name="business_unit"
-          label="Business Unit"
-          placeholder="Select business unit"
-          register={register}
-          options={businessUnitOptions}
-          onChange={([value]) => {
-            setBusinessUnit(value as BusinessUnit);
-            setCategory(null);
-          }}
-          required
-        />
-        <FormRowSelect
-          name="area"
-          label="Area"
-          placeholder="Select Area"
-          register={register}
-          options={categoryOptions}
-          onChange={([value]) => setCategory(value)}
-          required
-        />
-        <FormRowSelect
-          label="Equipment"
-          name="equipment"
-          options={itemOptions}
-          placeholder="Select Equipment"
-          register={register}
-          error={errors.equipment}
-        />
-        <FormRowInput
-          label="Asset ID"
-          type="text"
-          name="assetID"
-          placeholder="Asset ID e.g. MX001"
-          control={control}
-          register={register}
-          error={errors.assetID}
-        />
-        <FormRowSelect
-          label="Location"
-          name="location"
-          options={sortedLocations}
-          placeholder="Select Location"
-          register={register}
-          error={errors.location}
-          className="capitalize"
-        />
-        <FormRowSelect
-          label="Condition"
-          name="condition"
-          options={condition}
-          placeholder="Select Condition"
-          register={register}
-          error={errors.condition}
-        />
-        <FormRowInput
-          label="Serial Number"
-          type="text"
-          name="serialNumber"
-          placeholder="Serial Number"
-          register={register}
-          error={errors.serialNumber}
-          control={control}
-        />
-        <FileInput
-          label=""
-          control={control}
-          name="images"
-          multiple={true}
-          className="col-span-2"
-          // error={errors.images}
-        />
-        <TextAreaInput
-          // label="Comments"
-          name="additional_notes"
-          placeholder="Comments"
-          register={register}
-          className="md:col-span-2"
-          rows={3}
-        />
-      </div>
-      <FormActionButtons
-        cancelText="Cancel"
-        isPending={isPending}
-        onCancel={() => {
-          setShowUpdateAssetDialog(false);
-        }}
-        submitText="Submit"
-      />
-    </form>
+    <DynamicForm<AssetRequestFormValues>
+      form={form}
+      fields={fields}
+      formHeading="Update Asset"
+      redirect
+      redirectTo="/assets/list"
+      onSubmit={onSubmit}
+      isPending={isPending}
+      submitText="Update Asset"
+      cancelText="Cancel"
+      onCancel={() => navigate("/assets/list")}
+      gridClassName="gap-6"
+    />
   );
+};
+
+const UpdateAssetForm = () => {
+  const { id = "" } = useParams<{ id: string }>();
+  const { data, isLoading, isError } = useById<AssetAPIResponse>({
+    id,
+    resourcePath: "api/assets",
+    queryKey: ["assets", "detail"],
+  });
+
+  if (isLoading) return <FormSkeleton />;
+
+  if (!id || isError || !data) {
+    return (
+      <p className="py-8 text-center text-sm text-destructive">
+        The asset could not be loaded. Please return to the asset list and try
+        again.
+      </p>
+    );
+  }
+
+  return <UpdateAssetEditor key={id} id={id} item={data} />;
 };
 
 export default UpdateAssetForm;

@@ -23,12 +23,11 @@ import { getAssetColumns } from "../../components/tableColumns/AssetColumns";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState, useMemo } from "react";
 import type { AssetAPIResponse, AssetTableRow } from "@/schemas";
-// import { Error } from "@/components/features/Error";
 import { TableGeneric } from "@/components/features/tables/TableGeneric";
+import TablePaginationControls from "@/components/features/tables/TablePaginationControls";
 import { SearchInput } from "@/components/features/SearchInput";
 import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder";
-// import { Breadcrumbs } from "@/components/features/Breadcrumbs";
-// import { assetOverviewPageRouteConfig } from "@/lib/routeConfig";
+import { MobileAssetFilterToolbar } from "@/components/mobile/assets/MobileAssetFilterToolbar";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 
@@ -53,7 +52,6 @@ const AssetsOverviewPage = () => {
   });
 
   const {
-    setShowUpdateAssetDialog,
     setShowManualVerificationDialog,
     setSelectedRowId,
     openDeleteDialog,
@@ -82,17 +80,27 @@ const AssetsOverviewPage = () => {
     [data],
   );
 
+  const mobileFilterOptions = useMemo(
+    () => ({
+      locations: Array.from(new Set(rows.map((asset) => asset.location))).sort(
+        (a, b) => a.localeCompare(b),
+      ),
+      equipment: Array.from(
+        new Set(rows.map((asset) => asset.equipment)),
+      ).sort((a, b) => a.localeCompare(b)),
+    }),
+    [rows],
+  );
+
   const columns = useMemo(
     () =>
       getAssetColumns(
-        setShowUpdateAssetDialog,
         setShowManualVerificationDialog,
         setSelectedRowId,
         openDeleteDialog,
         navigate,
       ),
     [
-      setShowUpdateAssetDialog,
       setShowManualVerificationDialog,
       setSelectedRowId,
       openDeleteDialog,
@@ -150,22 +158,40 @@ const AssetsOverviewPage = () => {
         />{" "}
         {data.length === 0 ? (
           <EmptyMobilePlaceholder message="No Assets available yet" />
-        ) : table.getRowModel().rows.length === 0 ? (
-          <EmptyMobilePlaceholder
-            message={`No results for "${globalFilter}"`}
-          />
         ) : (
           <div className="grid gap-2">
             <FormHeading
-              className={cn(sharedStyles.headingForm, "px-0")}
+              className={cn(sharedStyles.headingForm, "px-0 py-0")}
               heading="Assets Register"
               redirect={true}
               redirectTo="/dashboard"
             />
-            <MobileAssetsOverviewTable
-              className="flex lg:hidden"
-              data={table.getRowModel().rows}
+            <MobileAssetFilterToolbar
+              table={table}
+              locations={mobileFilterOptions.locations}
+              equipment={mobileFilterOptions.equipment}
             />
+            {table.getRowModel().rows.length === 0 ? (
+              <EmptyMobilePlaceholder
+                message={
+                  globalFilter
+                    ? `No results for "${globalFilter}"`
+                    : "No assets match the selected filters"
+                }
+              />
+            ) : (
+              <>
+                <MobileAssetsOverviewTable
+                  className="flex lg:hidden"
+                  data={table.getRowModel().rows}
+                />
+                <TablePaginationControls
+                  table={table}
+                  showPageSizeSelector
+                  compact
+                />
+              </>
+            )}
           </div>
         )}
       </div>

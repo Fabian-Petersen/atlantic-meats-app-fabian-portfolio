@@ -15,25 +15,66 @@ import {
 type BusinessUnit = keyof typeof CeateAssetFormOptionsData.business_unit;
 
 // $ ——— Hook ─────────────────────────────────────────────────────
-export const useAssetsFields = () => {
-  // $ Use cascading (dependent) select inputs driven directly from the data structure.
-  const [businessUnit, setBusinessUnit] = useState<BusinessUnit | null>(null);
-  const [category, setCategory] = useState<string | null>(null);
+type InitialAssetFieldValues = Pick<
+  AssetRequestFormValues,
+  "business_unit" | "area" | "equipment" | "location" | "condition"
+> & {
+  existingImages?: { key: string; filename: string; url: string }[];
+  onRemoveExistingImage?: (file: {
+    key: string;
+    filename: string;
+    url: string;
+  }) => void;
+};
 
+export const useAssetsFields = (initialValues?: InitialAssetFieldValues) => {
+  // $ Use cascading (dependent) select inputs driven directly from the data structure.
   const DATA = CeateAssetFormOptionsData;
+  const initialBusinessUnit = initialValues?.business_unit;
+  const [businessUnit, setBusinessUnit] = useState<BusinessUnit | null>(() =>
+    initialBusinessUnit && initialBusinessUnit in DATA.business_unit
+      ? (initialBusinessUnit as BusinessUnit)
+      : null,
+  );
+  const [category, setCategory] = useState<string | null>(
+    initialValues?.area ?? null,
+  );
 
   const businessUnitOptions = Object.keys(DATA.business_unit) as BusinessUnit[];
 
-  const categoryOptions = businessUnit
+  const includeCurrentValue = (
+    options: readonly string[] | undefined | null,
+    currentValue?: string,
+  ): string[] => {
+    const availableOptions = options ?? [];
+
+    if (!currentValue || availableOptions.includes(currentValue)) {
+      return [...availableOptions];
+    }
+
+    return [currentValue, ...availableOptions];
+  };
+
+  const availableCategoryOptions = businessUnit
     ? Object.keys(DATA.business_unit[businessUnit].category)
     : [];
 
-  const itemOptions =
+  const categoryOptions = includeCurrentValue(
+    availableCategoryOptions,
+    initialValues?.area,
+  );
+
+  const availableItemOptions =
     businessUnit && category
       ? DATA.business_unit[businessUnit].category[
           category as keyof (typeof DATA.business_unit)[typeof businessUnit]["category"]
         ]
       : [];
+
+  const itemOptions = includeCurrentValue(
+    availableItemOptions,
+    initialValues?.equipment,
+  );
 
   // $ sort the locations in alphabetical order
   const sortedLocations = [...location].sort((a, b) => a.localeCompare(b));
@@ -58,7 +99,9 @@ export const useAssetsFields = () => {
       name: "location",
       label: "Location",
       placeholder: "Select Location",
-      options: normalizeOptions(sortedLocations),
+      options: normalizeOptions(
+        includeCurrentValue(sortedLocations, initialValues?.location),
+      ),
     },
     {
       fieldType: "select",
@@ -129,7 +172,7 @@ export const useAssetsFields = () => {
       fieldType: "select",
       name: "condition",
       label: "condition",
-      options: condition,
+      options: includeCurrentValue(condition, initialValues?.condition),
       placeholder: "Select Condition",
       required: true,
     },
@@ -144,6 +187,10 @@ export const useAssetsFields = () => {
       name: "images",
       multiple: true,
       label: "Upload Images",
+      placeholder: "",
+      existingFiles: initialValues?.existingImages,
+      onRemoveExisting: initialValues?.onRemoveExistingImage,
+      className: "col-span-full",
     },
     {
       fieldType: "textarea",

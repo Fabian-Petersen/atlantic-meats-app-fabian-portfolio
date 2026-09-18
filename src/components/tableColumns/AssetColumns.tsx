@@ -15,7 +15,6 @@ import { Badge } from "../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 
 export const getAssetColumns = (
-  setShowUpdateAssetDialog: (v: boolean) => void,
   setShowManualVerificationDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (
@@ -39,6 +38,7 @@ export const getAssetColumns = (
   {
     accessorKey: "location",
     header: "Location",
+    enableColumnFilter: true,
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;
@@ -169,12 +169,10 @@ export const getAssetColumns = (
         rowId: row.original.id,
         setSelectedRowId,
         edit: {
-          url: "/asset",
+          url: `/assets/${rowId}/update-asset`,
           onOpen: () => {
-            setShowUpdateAssetDialog(true);
-            // console.log(showUpdateAssetDialog);
-            // console.log("rowId:", rowId);
             setSelectedRowId(rowId);
+            navigate(`/assets/${rowId}/update-asset`);
           },
         },
         history: {
@@ -187,7 +185,6 @@ export const getAssetColumns = (
           onOpen: () => {
             setSelectedRowId(rowId);
             navigate(`/assets/${rowId}/history`);
-            // console.log("history:", rowId);
           },
         },
         manualVerification: {
