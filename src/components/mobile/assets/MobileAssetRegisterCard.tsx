@@ -21,6 +21,7 @@ import { DropdownMenuButtonDialog } from "@/components/modals/DropdownMenuButton
 import { Badge } from "@/components/features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { formatDateTime } from "@/utils/formatDateTime";
+import { formatDate } from "@/utils/formatDate";
 
 type Props = {
   row: Row<AssetTableRow>;
@@ -148,13 +149,15 @@ export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
                 <li className="flex gap-2 w-full justify-between">
                   <span>Verification Due</span>
                   <span>
-                    {formatDateTime(item.next_verification_due) ?? "-"}
+                    {item.next_verification_due
+                      ? formatDate(item.next_verification_due) || "-"
+                      : "-"}
                   </span>
                 </li>
-                {/* <li className="flex gap-2 w-full justify-between">
+                <li className="flex gap-2 w-full justify-between">
                   <span>Verified By</span>
                   <span>{item.verified_by || "-"}</span>
-                </li> */}
+                </li>
               </ul>
             </div>
           </motion.div>

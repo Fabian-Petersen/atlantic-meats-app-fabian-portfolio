@@ -9,7 +9,12 @@ import FormRowSelect from "../../../customComponents/FormRowSelect";
 import FileInput from "../../../customComponents/FileInput";
 import FormHeading from "../../../customComponents/FormHeading";
 import FormActionButtons from "@/components/features/FormActionButtons";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import useGlobalContext from "@/context/useGlobalContext";
 import {
   manualAssetVerificationSchema,
@@ -86,13 +91,13 @@ const ManualVerificationDialog = () => {
         if (!open) closeDialog();
       }}
     >
-      <DialogContent className="sm:max-w-156 bg-white z-3000 dark:bg-[#1d2739] border-none dark:text-gray-100 dark:border-gray-700/50">
+      <DialogContent className="top-auto bottom-0 left-0 max-h-[92dvh] max-w-none translate-x-0 translate-y-0 overflow-y-auto rounded-t-3xl rounded-b-none border-none bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] dark:bg-[#1d2739] dark:text-gray-100 dark:border-gray-700/50 z-3000 sm:top-[50%] sm:bottom-auto sm:left-[50%] sm:max-w-156 sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg sm:p-6">
         <div className="flex justify-center items-center">
-          <div className="rounded-full bg-green-100 p-4 text-green-600 dark:bg-green-950/50 dark:text-green-400">
-            <ShieldCheck className="size-12 md:size-16" aria-hidden="true" />
+          <div className="rounded-full bg-green-100 p-3 text-green-600 dark:bg-green-950/50 dark:text-green-400 md:p-4">
+            <ShieldCheck className="size-9 md:size-16" aria-hidden="true" />
           </div>
         </div>
-        <DialogTitle className="py-4">
+        <DialogTitle className="pt-2 md:py-4">
           <FormHeading
             arial-label="manual asset verification modal"
             headingStyles="justify-center"
@@ -100,12 +105,15 @@ const ManualVerificationDialog = () => {
             heading="Manual Verification"
           />
         </DialogTitle>
+        <DialogDescription className="-mt-2 text-center text-xs leading-5 md:text-sm">
+          Confirm the asset's current location and add photographic evidence.
+        </DialogDescription>
         <form
           id="manual-verification-form"
           className="flex flex-col rounded-lg w-full text-(--clr-font) dark:bg-[#1d2739]"
           onSubmit={handleSubmit(verifyManually)}
         >
-          <div className="grid gap-5">
+          <div className="grid gap-4 md:gap-5">
             <FormRowSelect
               name="location"
               label="Current Location"
@@ -143,6 +151,8 @@ const ManualVerificationDialog = () => {
             submitText="Verify Asset"
             isPending={isPending}
             onCancel={closeDialog}
+            showCancelOnMobile
+            className="sticky bottom-0 z-10 mt-2 bg-white py-3 dark:bg-[#1d2739] md:static md:bg-transparent md:py-0 dark:md:bg-transparent"
           />
         </form>
       </DialogContent>

@@ -8,7 +8,7 @@ export function useVerificationData(location: string | undefined) {
     resourcePath: "api/dashboard/metrics/verification",
     queryKey: ["dashboard", "verification", location ?? "self"],
     params: location && location !== "all" ? { location } : undefined,
-    enabled: !!location,
+    enabled: location !== undefined,
   });
 
   return { data, isPending };

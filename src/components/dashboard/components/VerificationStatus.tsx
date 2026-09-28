@@ -21,17 +21,16 @@ function VerificationStatus({ data, isPending }: Props) {
   const role = useUserRole();
   const [selectedStore, setSelectedStore] = useState<StoreValue>("all");
 
-  const selectedAdminStore =
-    role === "admin" && selectedStore !== "all" ? selectedStore : undefined;
+  const isAdmin = role === "admin";
+  const verificationLocation = isAdmin ? selectedStore : undefined;
 
-  const { data: adminStoreData, isPending: isAdminPending } =
-    useVerificationData(selectedAdminStore);
+  const { data: selectedVerificationData, isPending: isVerificationPending } =
+    useVerificationData(verificationLocation);
 
-  const isViewingAdminStore = selectedAdminStore !== undefined;
-  const activeData = isViewingAdminStore ? adminStoreData : data;
-  const activeIsPending = isViewingAdminStore ? isAdminPending : isPending;
+  const activeData = isAdmin ? selectedVerificationData : data;
+  const activeIsPending = isAdmin ? isVerificationPending : isPending;
 
-  // console.log("verification chart data:", activeData);
+  console.log("verification activeData:", activeData);
 
   return (
     <section
@@ -51,7 +50,7 @@ function VerificationStatus({ data, isPending }: Props) {
             className={cn(sharedStyles.chartHeading)}
           />
         )}
-        {role === "admin" ? (
+        {isAdmin ? (
           isPending ? (
             <HeadingSkeleton className="w-12" />
           ) : (

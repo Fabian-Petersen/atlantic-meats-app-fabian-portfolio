@@ -12,6 +12,7 @@ type Props = {
   isPending?: boolean;
   className?: string;
   formId?: string;
+  showCancelOnMobile?: boolean;
 };
 
 /**
@@ -46,6 +47,7 @@ function FormActionButtons({
   isPending,
   className,
   formId,
+  showCancelOnMobile = false,
 }: Props) {
   return (
     <div className={cn(sharedStyles.btnParent, className)}>
@@ -57,7 +59,8 @@ function FormActionButtons({
         className={cn(
           sharedStyles.btn,
           sharedStyles.btnCancel,
-          "capitalize hidden md:block",
+          "capitalize",
+          showCancelOnMobile ? "block" : "hidden md:block",
         )}
       >
         {cancelText}

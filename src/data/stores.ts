@@ -22,13 +22,13 @@ export const allLocations: string[] = [
 
 export const STORE_OPTIONS = [
   { label: "All Stores", value: "all" },
-  { label: "Maitland", value: "maitland" },
-  { label: "Bellville", value: "bellville" },
-  { label: "Wynberg", value: "wynberg" },
-  { label: "Phillipi", value: "phillipi" },
-  { label: "Khayelitsha", value: "khayelitsha" },
-  { label: "Golden Acre", value: "golden-acre" },
-  { label: "Distribution", value: "distribution" },
+  { label: "Maitland", value: "Maitland" },
+  { label: "Bellville", value: "Bellville" },
+  { label: "Wynberg", value: "Wynberg" },
+  { label: "Phillipi", value: "Phillipi" },
+  { label: "Khayelitsha", value: "Khayelitsha" },
+  { label: "Golden Acre", value: "Golden Acre" },
+  { label: "Distribution", value: "Distribution Centre" },
 ] as const;
 
 export type StoreValue = (typeof STORE_OPTIONS)[number]["value"];

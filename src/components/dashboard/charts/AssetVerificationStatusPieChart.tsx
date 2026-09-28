@@ -25,16 +25,42 @@ export default function AssetVerificationStatusPieChart({ data }: Props) {
   const [activeIndex, setActiveIndex] = useState(-1);
 
   const statuses = Array.isArray(data.statuses) ? data.statuses : [];
-  const compliance = Number.isFinite(data.compliance) ? data.compliance : 0;
-  const populatedStatuses = statuses.filter((status) => status.value > 0);
+  const normalizedStatuses: ChartSector[] = statuses
+    .map((status, index) => {
+      const value = Number(status.value);
+      const numericValue = Number.isFinite(value) ? value : 0;
+
+      return {
+        name: status.name,
+        value: numericValue,
+        chartValue: numericValue,
+        fill: COLORS[index % COLORS.length],
+      };
+    });
+  const statusTotal = normalizedStatuses.reduce(
+    (total, status) => total + status.value,
+    0,
+  );
+  const verifiedTotal = normalizedStatuses.reduce(
+    (total, status) =>
+      status.name === "Verified" ? total + status.value : total,
+    0,
+  );
+  const fallbackCompliance =
+    statusTotal > 0
+      ? Math.round((verifiedTotal / statusTotal) * 100)
+      : 0;
+  const complianceValue = Number(data.compliance);
+  const compliance = Number.isFinite(complianceValue)
+    ? complianceValue
+    : fallbackCompliance;
+  const populatedStatuses = normalizedStatuses.filter(
+    (status) => status.value > 0,
+  );
 
   const chartData: ChartSector[] =
     populatedStatuses.length > 0
-      ? populatedStatuses.map((status) => ({
-          ...status,
-          chartValue: status.value,
-          fill: COLORS[statuses.indexOf(status) % COLORS.length],
-        }))
+      ? populatedStatuses
       : [
           {
             name: "Not Verified",
@@ -82,6 +108,24 @@ export default function AssetVerificationStatusPieChart({ data }: Props) {
             key={sector.name}
             onMouseEnter={() => setActiveIndex(index)}
             onMouseLeave={() => setActiveIndex(-1)}
+            onClick={() =>
+              setActiveIndex((currentIndex) =>
+                currentIndex === index ? -1 : index,
+              )
+            }
+            onFocus={() => setActiveIndex(index)}
+            onBlur={() => setActiveIndex(-1)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                setActiveIndex((currentIndex) =>
+                  currentIndex === index ? -1 : index,
+                );
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label={`${sector.name}: ${sector.value}`}
             className="cursor-pointer"
           >
             <title>{`${sector.name}: ${sector.value}`}</title>
