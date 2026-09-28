@@ -127,7 +127,10 @@ export default function ScannerPage() {
         aria-live="polite"
       >
         <div className="relative mb-6 flex size-24 items-center justify-center rounded-full bg-emerald-500/10 ring-1 ring-emerald-400/30">
-          <ShieldCheck className="size-11 text-emerald-400" aria-hidden="true" />
+          <ShieldCheck
+            className="size-11 text-emerald-400"
+            aria-hidden="true"
+          />
           <LoaderCircle
             className="absolute inset-0 size-24 animate-spin text-emerald-400/70"
             strokeWidth={1.5}
@@ -179,27 +182,36 @@ export default function ScannerPage() {
           <main className="relative flex flex-1 flex-col items-center justify-center py-8 text-center">
             <div className="relative mb-8 flex size-32 items-center justify-center rounded-4xl border border-white/10 bg-white/5 shadow-2xl shadow-emerald-950/30 backdrop-blur-sm">
               <div className="absolute inset-3 rounded-3xl border border-dashed border-emerald-400/40" />
-              <ScanLine className="size-16 text-emerald-400" aria-hidden="true" />
+              <ScanLine
+                className="size-16 text-emerald-400"
+                aria-hidden="true"
+              />
             </div>
 
             <h1 className="text-2xl font-semibold tracking-tight">
-              Scan the asset barcode
+              Scan Asset Barcode
             </h1>
-            <p className="mt-3 max-w-sm text-sm leading-6 text-slate-300">
+            <p className="mt-3 max-w-sm text-xs leading-6 text-slate-300">
               Hold the phone steady and place the full barcode inside the scan
               frame. Verification starts automatically after detection.
             </p>
 
             <div className="mt-8 grid w-full max-w-sm grid-cols-2 gap-3 text-left">
               <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
-                <Camera className="mb-2 size-5 text-emerald-400" aria-hidden="true" />
+                <Camera
+                  className="mb-2 size-5 text-emerald-400"
+                  aria-hidden="true"
+                />
                 <p className="text-xs font-medium">Camera access</p>
                 <p className="mt-1 text-[11px] leading-4 text-slate-400">
                   Required to read the barcode
                 </p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
-                <LocateFixed className="mb-2 size-5 text-emerald-400" aria-hidden="true" />
+                <LocateFixed
+                  className="mb-2 size-5 text-emerald-400"
+                  aria-hidden="true"
+                />
                 <p className="text-xs font-medium">Location access</p>
                 <p className="mt-1 text-[11px] leading-4 text-slate-400">
                   Recorded with verification
@@ -216,7 +228,7 @@ export default function ScannerPage() {
               className="flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-5 text-base font-semibold text-slate-950 shadow-lg shadow-emerald-950/30 transition-colors hover:bg-emerald-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 active:bg-emerald-600"
             >
               <ScanLine className="size-5" aria-hidden="true" />
-              Start scanning
+              Start Scanning
             </button>
             <p className="mt-3 text-center text-[11px] leading-4 text-slate-500">
               Camera and location are used only for this verification.
