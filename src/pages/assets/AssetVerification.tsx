@@ -94,6 +94,7 @@ export default function ScannerPage() {
           longitude: position.coords.longitude,
         });
         // setDebug(response);
+        console.log("response:", response);
 
         const result = unpackVerificationResponse(response);
 
