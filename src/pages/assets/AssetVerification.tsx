@@ -18,30 +18,74 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 type VerifyAssetResponse = {
-  message: string;
+  message?: string;
+  statusCode?: number;
+  body?: string | { message?: string };
 };
 
 const getErrorMessage = (error: unknown): string => {
-  if (error instanceof Error) return error.message;
+  if (axios.isAxiosError(error)) {
+    const data = error.response?.data;
 
-  if (!axios.isAxiosError(error)) return "Unexpected error";
-
-  const data = error.response?.data;
-
-  // Lambda proxy envelope: body is a JSON string
-  if (typeof data?.body === "string") {
-    try {
-      const parsed = JSON.parse(data.body);
-      if (parsed?.message) return parsed.message;
-    } catch {
-      // fall through
+    // Lambda proxy envelope: body is a JSON string
+    if (typeof data?.body === "string") {
+      try {
+        const parsed = JSON.parse(data.body);
+        if (parsed?.message) return parsed.message;
+      } catch {
+        // fall through
+      }
     }
+
+    // Direct message on the data object
+    if (data?.message) return data.message;
+
+    return error.message || "Unknown error";
   }
 
-  // Direct message on the data object
-  if (data?.message) return data.message;
+  if (error instanceof Error) return error.message;
 
-  return error.message || "Unknown error";
+  return "Unexpected error";
+};
+
+const getVerificationResult = (response: VerifyAssetResponse) => {
+  let bodyMessage: string | undefined;
+
+  if (typeof response.body === "string") {
+    try {
+      const parsed = JSON.parse(response.body);
+      bodyMessage =
+        typeof parsed?.message === "string" ? parsed.message : undefined;
+    } catch {
+      bodyMessage = undefined;
+    }
+  } else if (typeof response.body?.message === "string") {
+    bodyMessage = response.body.message;
+  }
+
+  return {
+    statusCode: response.statusCode ?? 200,
+    message: bodyMessage ?? response.message,
+  };
+};
+
+const isUserRelevantVerificationError = (message: string) =>
+  /not registered|not found/i.test(message);
+
+const showVerificationError = (message: string) => {
+  const isUserRelevant = isUserRelevantVerificationError(message);
+
+  toast.error(isUserRelevant ? message : "Unable to verify asset", {
+    description: isUserRelevant
+      ? "Check the barcode and try scanning again."
+      : `Debug response: ${message}`,
+    duration: 4500,
+    style: {
+      background: "#fef2f2",
+      color: "#991b1b",
+      border: "1px solid #fecaca",
+    },
+  });
 };
 
 export default function ScannerPage() {
@@ -75,9 +119,20 @@ export default function ScannerPage() {
         });
         // setDebug(response);
 
-        toast.success(response?.message, { duration: 1500 });
+        const result = getVerificationResult(response);
+        const message = result.message ?? "Verification response unavailable";
+
+        if (
+          result.statusCode >= 400 ||
+          isUserRelevantVerificationError(message)
+        ) {
+          showVerificationError(message);
+          return;
+        }
+
+        toast.success(message, { duration: 1500 });
       } catch (error) {
-        toast.error(getErrorMessage(error), { duration: 1500 });
+        showVerificationError(getErrorMessage(error));
       }
     },
     [postVerify],
@@ -122,7 +177,7 @@ export default function ScannerPage() {
   if (isVerifying) {
     return (
       <div
-        className="fixed inset-0 z-9999 flex min-h-100dvh flex-col items-center justify-center bg-slate-950 px-6 text-white"
+        className="fixed inset-0 z-9999 flex min-h-100dvh flex-col items-center justify-center bg-slate-50 px-6 text-slate-900 dark:bg-slate-950 dark:text-white"
         role="status"
         aria-live="polite"
       >
@@ -138,7 +193,7 @@ export default function ScannerPage() {
           />
         </div>
         <h1 className="text-xl font-semibold">Verifying asset</h1>
-        <p className="mt-2 max-w-xs text-center text-sm leading-6 text-slate-300">
+        <p className="mt-2 max-w-xs text-center text-sm leading-6 text-slate-600 dark:text-slate-300">
           Confirming the scanned barcode and verification location. Keep this
           screen open.
         </p>
@@ -147,7 +202,7 @@ export default function ScannerPage() {
   }
 
   return (
-    <div className="fixed inset-0 z-9999 min-h-100dvh overflow-hidden bg-slate-950 text-white">
+    <div className="fixed inset-0 z-9999 min-h-100dvh overflow-hidden bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-white">
       {/* {debug && (
         <div className="text-xs bg-black text-white p-2 absolute w-full h-full">
           {JSON.stringify(debug, null, 2)}
@@ -156,7 +211,15 @@ export default function ScannerPage() {
       {!started && (
         <div className="relative z-10 flex min-h-100dvh flex-col px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))]">
           <div
-            className="pointer-events-none absolute inset-0 opacity-80"
+            className="pointer-events-none absolute inset-0 opacity-80 dark:hidden"
+            style={{
+              background:
+                "radial-gradient(circle at 50% 35%, rgba(16, 185, 129, 0.12), transparent 38%)",
+            }}
+            aria-hidden="true"
+          />
+          <div
+            className="pointer-events-none absolute inset-0 hidden opacity-80 dark:block"
             style={{
               background:
                 "radial-gradient(circle at 50% 35%, rgba(16, 185, 129, 0.18), transparent 38%)",
@@ -168,19 +231,19 @@ export default function ScannerPage() {
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="absolute left-0 flex min-h-11 items-center gap-1 rounded-full px-2 text-sm text-slate-200 transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+              className="absolute left-0 flex min-h-11 items-center gap-1 rounded-full px-2 text-sm text-slate-700 transition-colors hover:bg-slate-200/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400 dark:text-slate-200 dark:hover:bg-white/10"
               aria-label="Go back"
             >
               <ChevronLeft className="size-5" aria-hidden="true" />
               Back
             </button>
-            <p className="text-sm font-medium tracking-wide text-slate-200">
+            <p className="text-sm font-medium tracking-wide text-slate-700 dark:text-slate-200">
               Asset verification
             </p>
           </header>
 
           <main className="relative flex flex-1 flex-col items-center justify-center py-8 text-center">
-            <div className="relative mb-8 flex size-32 items-center justify-center rounded-4xl border border-white/10 bg-white/5 shadow-2xl shadow-emerald-950/30 backdrop-blur-sm">
+            <div className="relative mb-8 flex size-32 items-center justify-center rounded-4xl border border-slate-200 bg-white shadow-2xl shadow-emerald-900/10 backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:shadow-emerald-950/30">
               <div className="absolute inset-3 rounded-3xl border border-dashed border-emerald-400/40" />
               <ScanLine
                 className="size-16 text-emerald-400"
@@ -191,29 +254,29 @@ export default function ScannerPage() {
             <h1 className="text-2xl font-semibold tracking-tight">
               Scan Asset Barcode
             </h1>
-            <p className="mt-3 max-w-sm text-xs leading-6 text-slate-300">
+            <p className="mt-3 max-w-sm text-xs leading-6 text-slate-600 dark:text-slate-300">
               Hold the phone steady and place the full barcode inside the scan
               frame. Verification starts automatically after detection.
             </p>
 
             <div className="mt-8 grid w-full max-w-sm grid-cols-2 gap-3 text-left">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
+              <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none">
                 <Camera
                   className="mb-2 size-5 text-emerald-400"
                   aria-hidden="true"
                 />
                 <p className="text-xs font-medium">Camera access</p>
-                <p className="mt-1 text-[11px] leading-4 text-slate-400">
+                <p className="mt-1 text-[11px] leading-4 text-slate-500 dark:text-slate-400">
                   Required to read the barcode
                 </p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
+              <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none">
                 <LocateFixed
                   className="mb-2 size-5 text-emerald-400"
                   aria-hidden="true"
                 />
                 <p className="text-xs font-medium">Location access</p>
-                <p className="mt-1 text-[11px] leading-4 text-slate-400">
+                <p className="mt-1 text-[11px] leading-4 text-slate-500 dark:text-slate-400">
                   Recorded with verification
                 </p>
               </div>
