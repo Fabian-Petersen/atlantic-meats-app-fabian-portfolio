@@ -24,8 +24,6 @@ type ChartSector = {
 export default function AssetVerificationStatusPieChart({ data }: Props) {
   const [activeIndex, setActiveIndex] = useState(-1);
 
-  console.log("verification-data:", data);
-
   const statuses = Array.isArray(data.statuses) ? data.statuses : [];
   const normalizedStatuses: ChartSector[] = statuses.map((status, index) => {
     const value = Number(status.value);
@@ -79,15 +77,6 @@ export default function AssetVerificationStatusPieChart({ data }: Props) {
 
   const complianceColor =
     compliance < 50 ? "#f80606" : compliance < 80 ? "#eab308" : "#22c55e";
-
-  // console.log({
-  //   rawCompliance: data.compliance,
-  //   complianceValue,
-  //   compliance,
-  //   verifiedTotal,
-  //   statusTotal,
-  //   fallbackCompliance,
-  // });
 
   return (
     <svg

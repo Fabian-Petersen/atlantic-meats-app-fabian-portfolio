@@ -3,6 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getUserGroups } from "@/auth/getUserGroups";
 import type { UserGroup } from "@/schemas/usersSchema";
+import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 
 type Props = {
   allowedGroups: UserGroup[];
@@ -28,7 +29,7 @@ export default function RoleGaurdRoute({ allowedGroups }: Props) {
     checkAccess();
   }, [allowedGroups]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <PageLoadingSpinner />;
 
   return isAllowed ? <Outlet /> : <Navigate to="/dashboard" replace />;
 }

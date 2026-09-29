@@ -35,20 +35,20 @@ function VerificationStatus({ data, isPending }: Props) {
   const activeIsPending =
     isAdmin && !isAllStores ? isVerificationPending : isPending;
 
-  console.log("VerificationStatus props:", {
-    data,
-    isPending,
-  });
+  // console.log("VerificationStatus props:", {
+  //   data,
+  //   isPending,
+  // });
 
-  console.log("VerificationStatus state:", {
-    role,
-    selectedStore,
-    isAdmin,
-    isAllStores,
-    verificationLocation,
-    selectedVerificationData,
-    activeData,
-  });
+  // console.log("VerificationStatus state:", {
+  //   role,
+  //   selectedStore,
+  //   isAdmin,
+  //   isAllStores,
+  //   verificationLocation,
+  //   selectedVerificationData,
+  //   activeData,
+  // });
 
   return (
     <section
