@@ -21,15 +21,6 @@ function VerificationStatus({ data, isPending }: Props) {
   const role = useUserRole();
   const [selectedStore, setSelectedStore] = useState<StoreValue>("all");
 
-  // const isAdmin = role === "admin";
-  // const verificationLocation = isAdmin ? selectedStore : undefined;
-
-  // const { data: selectedVerificationData, isPending: isVerificationPending } =
-  //   useVerificationData(verificationLocation);
-
-  // const activeData = isAdmin ? selectedVerificationData : data;
-  // const activeIsPending = isAdmin ? isVerificationPending : isPending;
-
   const isAdmin = role === "admin";
   const isAllStores = selectedStore === "all";
 

@@ -80,14 +80,14 @@ export default function AssetVerificationStatusPieChart({ data }: Props) {
   const complianceColor =
     compliance < 50 ? "#f80606" : compliance < 80 ? "#eab308" : "#22c55e";
 
-  console.log({
-    rawCompliance: data.compliance,
-    complianceValue,
-    compliance,
-    verifiedTotal,
-    statusTotal,
-    fallbackCompliance,
-  });
+  // console.log({
+  //   rawCompliance: data.compliance,
+  //   complianceValue,
+  //   compliance,
+  //   verifiedTotal,
+  //   statusTotal,
+  //   fallbackCompliance,
+  // });
 
   return (
     <svg
@@ -134,7 +134,7 @@ export default function AssetVerificationStatusPieChart({ data }: Props) {
             role="button"
             tabIndex={0}
             aria-label={`${sector.name}: ${sector.value}`}
-            className="cursor-pointer"
+            className="cursor-pointer outline-none"
           >
             <title>{`${sector.name}: ${sector.value}`}</title>
             <circle
