@@ -17,28 +17,66 @@ import { getCurrentPosition } from "@/utils/getCurrentPosition";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-type VerifyAssetResponse = {
+type VerificationResult = {
   message?: string;
   statusCode?: number;
-  body?: string | { message?: string };
+};
+
+const getVerificationResult = (
+  response: unknown,
+  depth = 0,
+): VerificationResult => {
+  if (depth > 4 || response == null) return {};
+
+  if (typeof response === "string") {
+    try {
+      return getVerificationResult(JSON.parse(response), depth + 1);
+    } catch {
+      return { message: response.trim() || undefined };
+    }
+  }
+
+  if (typeof response !== "object") return {};
+
+  const record = response as Record<string, unknown>;
+  const statusValue = record.statusCode ?? record.status;
+  const statusCode =
+    typeof statusValue === "number"
+      ? statusValue
+      : typeof statusValue === "string" && statusValue.trim() !== ""
+        ? Number(statusValue)
+        : undefined;
+  const directMessage =
+    typeof record.message === "string" ? record.message : undefined;
+
+  for (const key of ["body", "data", "response"] as const) {
+    if (record[key] == null) continue;
+
+    const nested = getVerificationResult(record[key], depth + 1);
+    if (nested.message || nested.statusCode !== undefined) {
+      return {
+        statusCode:
+          Number.isFinite(statusCode) && statusCode !== undefined
+            ? statusCode
+            : nested.statusCode,
+        message: directMessage ?? nested.message,
+      };
+    }
+  }
+
+  return {
+    statusCode:
+      Number.isFinite(statusCode) && statusCode !== undefined
+        ? statusCode
+        : undefined,
+    message: directMessage,
+  };
 };
 
 const getErrorMessage = (error: unknown): string => {
   if (axios.isAxiosError(error)) {
-    const data = error.response?.data;
-
-    // Lambda proxy envelope: body is a JSON string
-    if (typeof data?.body === "string") {
-      try {
-        const parsed = JSON.parse(data.body);
-        if (parsed?.message) return parsed.message;
-      } catch {
-        // fall through
-      }
-    }
-
-    // Direct message on the data object
-    if (data?.message) return data.message;
+    const result = getVerificationResult(error.response?.data);
+    if (result.message) return result.message;
 
     return error.message || "Unknown error";
   }
@@ -46,27 +84,6 @@ const getErrorMessage = (error: unknown): string => {
   if (error instanceof Error) return error.message;
 
   return "Unexpected error";
-};
-
-const getVerificationResult = (response: VerifyAssetResponse) => {
-  let bodyMessage: string | undefined;
-
-  if (typeof response.body === "string") {
-    try {
-      const parsed = JSON.parse(response.body);
-      bodyMessage =
-        typeof parsed?.message === "string" ? parsed.message : undefined;
-    } catch {
-      bodyMessage = undefined;
-    }
-  } else if (typeof response.body?.message === "string") {
-    bodyMessage = response.body.message;
-  }
-
-  return {
-    statusCode: response.statusCode ?? 200,
-    message: bodyMessage ?? response.message,
-  };
 };
 
 const isUserRelevantVerificationError = (message: string) =>
@@ -80,10 +97,12 @@ const showVerificationError = (message: string) => {
       ? "Check the barcode and try scanning again."
       : `Debug response: ${message}`,
     duration: 4500,
-    style: {
-      background: "#fef2f2",
-      color: "#991b1b",
-      border: "1px solid #fecaca",
+    classNames: {
+      toast:
+        "!border-red-200 !bg-red-50 dark:!border-red-800 dark:!bg-red-950",
+      title: "!text-red-800 dark:!text-red-100",
+      description: "!text-red-700 dark:!text-red-200",
+      icon: "!text-red-600 dark:!text-red-300",
     },
   });
 };
@@ -98,7 +117,7 @@ export default function ScannerPage() {
 
   const { mutateAsync: postVerify, isPending: isVerifying } = usePOST<
     unknown,
-    VerifyAssetResponse
+    unknown
   >({
     id: barcode ?? "",
     resourcePath: "api/assets",
@@ -120,10 +139,16 @@ export default function ScannerPage() {
         // setDebug(response);
 
         const result = getVerificationResult(response);
-        const message = result.message ?? "Verification response unavailable";
+
+        if (!result.message) {
+          showVerificationError(`Asset ${value} not found in database`);
+          return;
+        }
+
+        const message = result.message;
 
         if (
-          result.statusCode >= 400 ||
+          (result.statusCode ?? 0) >= 400 ||
           isUserRelevantVerificationError(message)
         ) {
           showVerificationError(message);
@@ -192,7 +217,10 @@ export default function ScannerPage() {
             aria-hidden="true"
           />
         </div>
-        <h1 className="text-xl font-semibold">Verifying asset</h1>
+        <h1 className="text-xl font-semibold">Verify Asset</h1>
+        <p className="mt-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 font-mono text-sm font-medium text-emerald-700 dark:text-emerald-300">
+          {barcode ?? "Scanned barcode"}
+        </p>
         <p className="mt-2 max-w-xs text-center text-sm leading-6 text-slate-600 dark:text-slate-300">
           Confirming the scanned barcode and verification location. Keep this
           screen open.
