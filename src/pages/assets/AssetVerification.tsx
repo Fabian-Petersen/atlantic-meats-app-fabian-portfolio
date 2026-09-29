@@ -251,10 +251,10 @@ export default function ScannerPage() {
               />
             </div>
 
-            <h1 className="text-2xl font-semibold tracking-tight">
+            <h1 className="text-2xl font-semibold tracking-tight capitalize">
               Scan Asset Barcode
             </h1>
-            <p className="mt-3 max-w-sm text-xs leading-6 text-slate-600 dark:text-slate-300">
+            <p className="mt-3 max-w-sm text-xs leading-6 text-slate-800 dark:text-slate-300">
               Hold the phone steady and place the full barcode inside the scan
               frame. Verification starts automatically after detection.
             </p>
@@ -306,32 +306,41 @@ export default function ScannerPage() {
       */}
       <div
         id="reader"
-        className={started ? "fixed inset-0 z-0 h-screen w-screen" : "hidden"}
+        className={
+          started
+            ? "asset-verification-reader fixed inset-0 z-0 h-screen w-screen"
+            : "hidden"
+        }
       />
 
       {started && (
         <>
           <div
-            className="pointer-events-none absolute inset-x-0 top-0 z-20 h-36 bg-linear-to-b from-black/80 to-transparent"
+            className="pointer-events-none absolute inset-x-0 top-0 z-20 h-36 bg-linear-to-b from-black/50 to-transparent w-full"
             aria-hidden="true"
           />
-          <header className="absolute inset-x-0 top-0 z-30 flex items-center justify-between px-4 pb-3 pt-[max(1rem,env(safe-area-inset-top))]">
-            <div>
-              <p className="text-sm font-semibold">Scan asset barcode</p>
-              <p className="mt-0.5 text-xs text-white/70">
+          <header className="absolute inset-x-0 top-5 z-30 grid grid-cols-[2.75rem_minmax(0,1fr)_2.75rem] items-center gap-2 px-4 pb-3 pt-[max(1rem,env(safe-area-inset-top))]">
+            <div aria-hidden="true" />
+
+            <div className="min-w-0 text-center">
+              <p className="text-sm font-semibold capitalize">
+                Scan asset barcode
+              </p>
+              <p className="mt-0.5 text-xs text-blue-800">
                 Align the barcode inside the frame
               </p>
             </div>
+
             <button
               type="button"
               aria-label="Stop scanning"
-              className="flex size-11 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="flex size-11 shrink-0 items-center justify-center rounded-full border border-red-200 bg-red-100/90 text-red-600 shadow-sm backdrop-blur-sm transition-colors hover:bg-red-100 active:bg-red-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400 dark:border-red-400/60 dark:bg-red-600 dark:text-white dark:shadow-lg dark:shadow-red-950/30 dark:hover:bg-red-500 dark:active:bg-red-700 dark:focus-visible:outline-red-300"
               onClick={() => setStarted(false)}
             >
               <X className="size-5" aria-hidden="true" />
             </button>
           </header>
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 bg-linear-to-t from-black/90 via-black/50 to-transparent px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-24 text-center">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 bg-linear-to-t from-black/80 via-black/50 to-transparent px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-24 text-center">
             <p className="text-sm font-medium">Scanning automatically</p>
             <p className="mt-1 text-xs text-white/70">
               Keep the barcode well lit and hold your phone steady.
