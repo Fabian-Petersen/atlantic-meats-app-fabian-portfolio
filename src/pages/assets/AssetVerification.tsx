@@ -17,94 +17,51 @@ import { getCurrentPosition } from "@/utils/getCurrentPosition";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-type VerificationResult = {
-  message?: string;
-  statusCode?: number;
+type VerifyAssetResponse = {
+  statusCode: number;
+  message: string;
 };
 
-const getVerificationResult = (
+const unpackVerificationResponse = (
   response: unknown,
-  depth = 0,
-): VerificationResult => {
-  if (depth > 4 || response == null) return {};
+): VerifyAssetResponse | null => {
+  if (!response || typeof response !== "object") return null;
 
-  if (typeof response === "string") {
-    try {
-      return getVerificationResult(JSON.parse(response), depth + 1);
-    } catch {
-      return { message: response.trim() || undefined };
-    }
-  }
-
-  if (typeof response !== "object") return {};
-
-  const record = response as Record<string, unknown>;
-  const statusValue = record.statusCode ?? record.status;
+  const data = response as Record<string, unknown>;
   const statusCode =
-    typeof statusValue === "number"
-      ? statusValue
-      : typeof statusValue === "string" && statusValue.trim() !== ""
-        ? Number(statusValue)
-        : undefined;
-  const directMessage =
-    typeof record.message === "string" ? record.message : undefined;
+    typeof data.statusCode === "number" ? data.statusCode : 200;
 
-  for (const key of ["body", "data", "response"] as const) {
-    if (record[key] == null) continue;
-
-    const nested = getVerificationResult(record[key], depth + 1);
-    if (nested.message || nested.statusCode !== undefined) {
-      return {
-        statusCode:
-          Number.isFinite(statusCode) && statusCode !== undefined
-            ? statusCode
-            : nested.statusCode,
-        message: directMessage ?? nested.message,
-      };
-    }
+  if (typeof data.message === "string") {
+    return { statusCode, message: data.message };
   }
 
-  return {
-    statusCode:
-      Number.isFinite(statusCode) && statusCode !== undefined
-        ? statusCode
-        : undefined,
-    message: directMessage,
-  };
-};
+  if (typeof data.body !== "string") return null;
 
-const getErrorMessage = (error: unknown): string => {
-  if (axios.isAxiosError(error)) {
-    const result = getVerificationResult(error.response?.data);
-    if (result.message) return result.message;
+  try {
+    const body = JSON.parse(data.body) as { message?: unknown };
 
-    return error.message || "Unknown error";
+    return typeof body.message === "string"
+      ? { statusCode, message: body.message }
+      : null;
+  } catch {
+    return null;
   }
-
-  if (error instanceof Error) return error.message;
-
-  return "Unexpected error";
 };
-
-const isUserRelevantVerificationError = (message: string) =>
-  /not registered|not found/i.test(message);
 
 const showVerificationError = (message: string) => {
-  const isUserRelevant = isUserRelevantVerificationError(message);
-
-  toast.error(isUserRelevant ? message : "Unable to verify asset", {
-    description: isUserRelevant
-      ? "Check the barcode and try scanning again."
-      : `Debug response: ${message}`,
+  toast.error(message, {
     duration: 4500,
     classNames: {
-      toast:
-        "!border-red-200 !bg-red-50 dark:!border-red-800 dark:!bg-red-950",
+      toast: "!border-red-200 !bg-red-50 dark:!border-red-800 dark:!bg-red-950",
       title: "!text-red-800 dark:!text-red-100",
       description: "!text-red-700 dark:!text-red-200",
       icon: "!text-red-600 dark:!text-red-300",
     },
   });
+};
+
+const showGenericVerificationError = () => {
+  showVerificationError("Unable to verify asset. Please try again.");
 };
 
 export default function ScannerPage() {
@@ -138,26 +95,41 @@ export default function ScannerPage() {
         });
         // setDebug(response);
 
-        const result = getVerificationResult(response);
+        const result = unpackVerificationResponse(response);
 
-        if (!result.message) {
-          showVerificationError(`Asset ${value} not found in database`);
+        if (!result) {
+          console.error("Invalid asset verification response:", response);
+          showGenericVerificationError();
           return;
         }
 
-        const message = result.message;
-
-        if (
-          (result.statusCode ?? 0) >= 400 ||
-          isUserRelevantVerificationError(message)
-        ) {
-          showVerificationError(message);
+        if (result.statusCode >= 400) {
+          if (result.statusCode === 404) {
+            showVerificationError(result.message);
+          } else {
+            console.error("Asset verification failed:", result);
+            showGenericVerificationError();
+          }
           return;
         }
 
-        toast.success(message, { duration: 1500 });
+        toast.success(result.message, { duration: 1500 });
       } catch (error) {
-        showVerificationError(getErrorMessage(error));
+        const isAxiosError = axios.isAxiosError(error);
+        const result = isAxiosError
+          ? unpackVerificationResponse(error.response?.data)
+          : null;
+        const httpStatus = isAxiosError ? error.response?.status : undefined;
+
+        if (result?.statusCode === 404 || httpStatus === 404) {
+          showVerificationError(
+            result?.message ?? `Asset ${value} not registered in the database`,
+          );
+          return;
+        }
+
+        console.error("Asset verification failed:", error);
+        showGenericVerificationError();
       }
     },
     [postVerify],
