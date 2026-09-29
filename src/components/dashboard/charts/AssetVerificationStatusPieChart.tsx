@@ -24,19 +24,20 @@ type ChartSector = {
 export default function AssetVerificationStatusPieChart({ data }: Props) {
   const [activeIndex, setActiveIndex] = useState(-1);
 
-  const statuses = Array.isArray(data.statuses) ? data.statuses : [];
-  const normalizedStatuses: ChartSector[] = statuses
-    .map((status, index) => {
-      const value = Number(status.value);
-      const numericValue = Number.isFinite(value) ? value : 0;
+  console.log("verification-data:", data);
 
-      return {
-        name: status.name,
-        value: numericValue,
-        chartValue: numericValue,
-        fill: COLORS[index % COLORS.length],
-      };
-    });
+  const statuses = Array.isArray(data.statuses) ? data.statuses : [];
+  const normalizedStatuses: ChartSector[] = statuses.map((status, index) => {
+    const value = Number(status.value);
+    const numericValue = Number.isFinite(value) ? value : 0;
+
+    return {
+      name: status.name,
+      value: numericValue,
+      chartValue: numericValue,
+      fill: COLORS[index % COLORS.length],
+    };
+  });
   const statusTotal = normalizedStatuses.reduce(
     (total, status) => total + status.value,
     0,
@@ -47,9 +48,7 @@ export default function AssetVerificationStatusPieChart({ data }: Props) {
     0,
   );
   const fallbackCompliance =
-    statusTotal > 0
-      ? Math.round((verifiedTotal / statusTotal) * 100)
-      : 0;
+    statusTotal > 0 ? Math.round((verifiedTotal / statusTotal) * 100) : 0;
   const complianceValue = Number(data.compliance);
   const compliance = Number.isFinite(complianceValue)
     ? complianceValue
@@ -80,6 +79,15 @@ export default function AssetVerificationStatusPieChart({ data }: Props) {
 
   const complianceColor =
     compliance < 50 ? "#f80606" : compliance < 80 ? "#eab308" : "#22c55e";
+
+  console.log({
+    rawCompliance: data.compliance,
+    complianceValue,
+    compliance,
+    verifiedTotal,
+    statusTotal,
+    fallbackCompliance,
+  });
 
   return (
     <svg
