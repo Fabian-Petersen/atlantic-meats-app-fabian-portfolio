@@ -31,6 +31,7 @@ import { sharedStyles } from "@/styles/shared";
 import { getDisposalCompletedColumns } from "@/components/tableColumns/DisposalCompletedColumns";
 import type { DisposalCompletedTableRow } from "@/components/tableColumns/DisposalCompletedColumns";
 import TablePaginationControls from "@/components/features/tables/TablePaginationControls";
+import { PageErrorState } from "@/components/features/PageErrorState";
 
 const DisposalCompletedListPage = () => {
   const navigate = useNavigate();
@@ -38,13 +39,14 @@ const DisposalCompletedListPage = () => {
   /* -------------------------------------------------------------------------- */
   /*                                    DATA                                    */
   /* -------------------------------------------------------------------------- */
-  const { data, isPending, isError } = useGetAll<DisposalWorkflowResponse[]>({
-    resourcePath: "api/disposals/requests",
-    queryKey: ["disposals", "completed-list"],
-    params: {
-      status: "disposed",
-    },
-  });
+  const { data, isPending, isError, isFetching, refetch } =
+    useGetAll<DisposalWorkflowResponse[]>({
+      resourcePath: "api/disposals/requests",
+      queryKey: ["disposals", "completed-list"],
+      params: {
+        status: "disposed",
+      },
+    });
 
   // console.log("Completed Disposals Data:", data);
 
@@ -117,9 +119,16 @@ const DisposalCompletedListPage = () => {
   /* -------------------------------------------------------------------------- */
 
   if (isPending) return <PageLoadingSpinner />;
-  if (isError) return <p>There was an error loading the completed disposals</p>;
-  if (!data) {
-    return <p>There was an error loading the completed disposals</p>;
+  if (isError || !data) {
+    return (
+      <PageErrorState
+        title="Could not load completed disposals"
+        message="The completed disposal records could not be retrieved. Check your connection and try again."
+        onRetry={() => void refetch()}
+        onBack={() => navigate("/dashboard")}
+        isRetrying={isFetching}
+      />
+    );
   }
 
   return (

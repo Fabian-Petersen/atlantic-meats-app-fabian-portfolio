@@ -75,10 +75,11 @@ const CreateJobForm = () => {
     control: form.control,
     name: "assets",
   });
+  // Keep the request-level lookup location-only. Each JobAssetFields row owns
+  // its backend-driven area, equipment, and asset ID cascade.
   const { locationOptions } = useAssetFilters({
     form,
     locationField: "location",
-    assetIndex: 0,
   });
 
   const requestFields: DynamicFormField<CreateJobRequestFormValues>[] = [

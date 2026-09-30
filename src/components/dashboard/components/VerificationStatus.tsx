@@ -6,7 +6,6 @@ import { PieChartSkeleton } from "../charts/PieChartSkeleton";
 import ChartHeading from "../ChartHeading";
 import AssetVerificationStatusPieChart from "../charts/AssetVerificationStatusPieChart";
 
-import { useUserRole } from "@/hooks/useUserRole";
 import { useVerificationData } from "@/hooks/useVerificationData";
 import { STORE_OPTIONS, type StoreValue } from "@/data/stores";
 import type { AssetVerificationSummary } from "@/schemas/dashboardSchema";
@@ -15,13 +14,12 @@ import { HeadingSkeleton } from "../charts/HeadingSkeleton";
 type Props = {
   data?: AssetVerificationSummary;
   isPending: boolean;
+  isAdmin: boolean;
 };
 
-function VerificationStatus({ data, isPending }: Props) {
-  const role = useUserRole();
+function VerificationStatus({ data, isPending, isAdmin }: Props) {
   const [selectedStore, setSelectedStore] = useState<StoreValue>("all");
 
-  const isAdmin = role === "admin";
   const isAllStores = selectedStore === "all";
 
   const verificationLocation =
@@ -60,14 +58,10 @@ function VerificationStatus({ data, isPending }: Props) {
       )}
     >
       <div className="flex items-center justify-between shrink-0">
-        {isPending ? (
-          <HeadingSkeleton className="w-48" />
-        ) : (
-          <ChartHeading
-            title="Asset Verification Status"
-            className={cn(sharedStyles.chartHeading)}
-          />
-        )}
+        <ChartHeading
+          title="Asset Verification Status"
+          className={cn(sharedStyles.chartHeading)}
+        />
         {isAdmin ? (
           isPending ? (
             <HeadingSkeleton className="w-12" />

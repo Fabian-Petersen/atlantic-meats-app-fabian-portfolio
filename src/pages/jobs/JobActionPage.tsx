@@ -42,6 +42,8 @@ const JobActionPage = () => {
         <FormHeading
           heading="Action Job"
           className={cn(sharedStyles.headingForm)}
+          redirect={true}
+          redirectTo="/jobs/in-progress"
         />
         <JobActionForm onCancel={() => navigate("/jobs/in-progress")} />
       </div>

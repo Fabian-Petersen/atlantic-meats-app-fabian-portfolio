@@ -24,7 +24,7 @@ import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import useGlobalContext from "@/context/useGlobalContext";
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { Error } from "@/components/features/Error";
+import { PageErrorState } from "@/components/features/PageErrorState";
 import type {
   DisposalPendingTableRow,
   DisposalWorkflowResponse,
@@ -44,13 +44,17 @@ const DisposalRequestsListPage = () => {
   /* -------------------------------------------------------------------------- */
   /*                                    DATA                                    */
   /* -------------------------------------------------------------------------- */
-  const { data, isError, isPending } = useGetAll<DisposalWorkflowResponse[]>({
-    resourcePath: "api/disposals/requests",
-    queryKey: ["disposals", ["pending", "approved", "rejected", "cancelled"]],
-    params: {
-      status: ["pending", "approved", "rejected", "cancelled"],
-    },
-  });
+  const { data, isError, isPending, isFetching, refetch } =
+    useGetAll<DisposalWorkflowResponse[]>({
+      resourcePath: "api/disposals/requests",
+      queryKey: [
+        "disposals",
+        ["pending", "approved", "rejected", "cancelled"],
+      ],
+      params: {
+        status: ["pending", "approved", "rejected", "cancelled"],
+      },
+    });
 
   // console.log("disposalData:", data);
 
@@ -136,7 +140,17 @@ const DisposalRequestsListPage = () => {
   /* -------------------------------------------------------------------------- */
 
   if (isPending) return <PageLoadingSpinner />;
-  if (isError) return <Error />;
+  if (isError || !data) {
+    return (
+      <PageErrorState
+        title="Could not load disposal requests"
+        message="The disposal requests could not be retrieved. Check your connection and try again."
+        onRetry={() => void refetch()}
+        onBack={() => navigate("/dashboard")}
+        isRetrying={isFetching}
+      />
+    );
+  }
 
   return (
     <div className="flex w-full md:p-4 min-h-0">

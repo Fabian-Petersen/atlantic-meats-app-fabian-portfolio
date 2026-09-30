@@ -15,12 +15,21 @@ export function useForgotPassword() {
     setError(null);
 
     try {
-      console.log("email:", email);
-      await resetPassword({ username: email });
-      setStep("CONFIRM");
+      const output = await resetPassword({ username: email });
+
+      if (
+        output.nextStep.resetPasswordStep ===
+        "CONFIRM_RESET_PASSWORD_WITH_CODE"
+      ) {
+        setStep("CONFIRM");
+      } else {
+        setStep("DONE");
+      }
+
+      return output;
     } catch (err) {
       setError("Failed to send reset code");
-      console.log(err);
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -44,7 +53,7 @@ export function useForgotPassword() {
       setStep("DONE");
     } catch (err) {
       setError("Failed to reset password");
-      console.log(err);
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -56,5 +65,9 @@ export function useForgotPassword() {
     error,
     sendResetCode,
     confirmNewPassword,
+    restart: () => {
+      setError(null);
+      setStep("REQUEST");
+    },
   };
 }

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 
 /* -------------------------------------------------------------------------- */
 /*                                 Components                                 */
@@ -198,23 +197,17 @@ function MaintenanceJobs({ data, isPending, isAdmin, userLocation }: Props) {
         "text-gray-600 dark:text-gray-100",
       )}
     >
-      <motion.div
-        layout
-        transition={{
-          layout: {
-            duration: 0.3,
-            ease: "easeInOut",
-          },
-        }}
-        className="flex flex-col gap-4 h-full"
-      >
+      <div className="flex flex-col gap-4 h-full">
         {/* ------------------------------------------------------------------ */}
         {/* Header                                                             */}
         {/* ------------------------------------------------------------------ */}
 
         <div className="flex items-center justify-between">
           {isLoading ? (
-            <HeadingSkeleton className="w-48" />
+            <ChartHeading
+              title="Maintenance Jobs YTD"
+              className={cn(sharedStyles.chartHeading)}
+            />
           ) : (
             <ChartHeading
               title={
@@ -281,7 +274,7 @@ function MaintenanceJobs({ data, isPending, isAdmin, userLocation }: Props) {
         {/* Chart                                                              */}
         {/* ------------------------------------------------------------------ */}
 
-        <motion.div layout className="flex-1 min-h-0">
+        <div className="flex-1 min-h-0">
           {isLoading ? (
             <JobRequestsChartSkeleton />
           ) : !hasChartData ? (
@@ -299,8 +292,8 @@ function MaintenanceJobs({ data, isPending, isAdmin, userLocation }: Props) {
               onSelect={handleChartSelect}
             />
           )}
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </div>
   );
 }

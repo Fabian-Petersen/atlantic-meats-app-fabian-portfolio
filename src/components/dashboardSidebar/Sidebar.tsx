@@ -1,6 +1,6 @@
 import { Separator } from "../ui/separator";
-import { getUserGroups } from "@/auth/getUserGroups";
 import type { UserGroup } from "@/schemas/usersSchema";
+import { useAuth } from "@/auth/useAuth";
 
 // $ Animation
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,7 +10,7 @@ import { sidebarSectionData } from "../../data/navbarLinks";
 import SidebarSection from "./SidebarSection";
 
 import useGlobalContext from "../../context/useGlobalContext";
-import { useState, useEffect, Fragment } from "react";
+import { useState, Fragment } from "react";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 
@@ -55,6 +55,7 @@ import { cn } from "@/lib/utils";
 
 const Sidebar = () => {
   const { isOpen, setIsOpen } = useGlobalContext();
+  const { userGroups } = useAuth();
   // $ Decide which sections are open by default
   const defaultOpenSections = {
     Main: true,
@@ -67,18 +68,8 @@ const Sidebar = () => {
   } as const;
 
   // $ Get the groups to display what the user is allowed to see
-  const [userGroups, setUserGroups] = useState<UserGroup[]>([]);
   const [openSections, setOpenSections] =
     useState<Record<string, boolean>>(defaultOpenSections);
-
-  useEffect(() => {
-    const loadGroups = async () => {
-      const groups = await getUserGroups();
-      setUserGroups(groups);
-      // console.log(groups);
-    };
-    loadGroups();
-  }, []);
 
   const toggleSection = (heading: string) => {
     setOpenSections((prev) => ({

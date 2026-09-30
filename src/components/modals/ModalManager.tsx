@@ -1,15 +1,25 @@
 import useGlobalContext from "@/context/useGlobalContext";
-import UpdateRequestDialog from "./UpdateRequestDialog";
-import DeleteItemModal from "./DeleteItemModal";
-import UpdateAssetDialog from "./UpdateAssetDialog";
-import UpdateUserDialog from "./UpdateUserDialog";
-import ActionRequestDialog from "./ActionRequestDialog";
-import RequestRejectedDialog from "./RequestRejectedDialog";
-import ApproveRequestDialog from "./ApproveRequestDialog";
-import CreateUserDialog from "./CreateUserDialog";
-import ApproveTransferRequestDialog from "./ApproveTransferRequestDialog";
-import RejectRequestDialogGeneric from "./RejectRequestDialogGeneric";
-import ManualVerificationDialog from "./ManualVerificationDialog";
+import { lazy, Suspense } from "react";
+
+const UpdateRequestDialog = lazy(() => import("./UpdateRequestDialog"));
+const DeleteItemModal = lazy(() => import("./DeleteItemModal"));
+const UpdateAssetDialog = lazy(() => import("./UpdateAssetDialog"));
+const UpdateUserDialog = lazy(() => import("./UpdateUserDialog"));
+const ActionRequestDialog = lazy(() => import("./ActionRequestDialog"));
+const RequestRejectedDialog = lazy(
+  () => import("./RequestRejectedDialog"),
+);
+const ApproveRequestDialog = lazy(() => import("./ApproveRequestDialog"));
+const CreateUserDialog = lazy(() => import("./CreateUserDialog"));
+const ApproveTransferRequestDialog = lazy(
+  () => import("./ApproveTransferRequestDialog"),
+);
+const RejectRequestDialogGeneric = lazy(
+  () => import("./RejectRequestDialogGeneric"),
+);
+const ManualVerificationDialog = lazy(
+  () => import("./ManualVerificationDialog"),
+);
 
 // $ Styles
 // import { sharedStyles } from "@/styles/shared";
@@ -45,7 +55,7 @@ const ModalManager = () => {
   if (!isAnyModalOpen) return null;
 
   return (
-    <>
+    <Suspense fallback={null}>
       {showUpdateMaintenanceDialog && <UpdateRequestDialog />}
       {showDeleteDialog && <DeleteItemModal />}
       {showUpdateAssetDialog && <UpdateAssetDialog />}
@@ -57,7 +67,7 @@ const ModalManager = () => {
       {showRejectRequestDialog && <RequestRejectedDialog />}
       {showRejectRequestDialogGeneric && <RejectRequestDialogGeneric />}
       {showManualVerificationDialog && <ManualVerificationDialog />}
-    </>
+    </Suspense>
   );
 };
 

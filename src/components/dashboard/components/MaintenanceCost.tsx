@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 
 /* -------------------------------------------------------------------------- */
 /*                                 Components                                 */
@@ -284,23 +283,17 @@ function MaintenanceCost({
         "text-gray-600 dark:text-gray-100",
       )}
     >
-      <motion.div
-        layout
-        transition={{
-          layout: {
-            duration: 0.3,
-            ease: "easeInOut",
-          },
-        }}
-        className="flex flex-col gap-4 h-full"
-      >
+      <div className="flex flex-col gap-4 h-full">
         {/* ------------------------------------------------------------------ */}
         {/* Header                                                             */}
         {/* ------------------------------------------------------------------ */}
 
         <div className="flex items-center justify-between">
           {isLoading ? (
-            <HeadingSkeleton className="w-48" />
+            <ChartHeading
+              title="Maintenance Cost YTD"
+              className={cn(sharedStyles.chartHeading)}
+            />
           ) : (
             <ChartHeading
               title={
@@ -352,7 +345,7 @@ function MaintenanceCost({
         {/* Chart                                                              */}
         {/* ------------------------------------------------------------------ */}
 
-        <motion.div layout className="flex-1 min-h-0">
+        <div className="flex-1 min-h-0">
           {isLoading ? (
             <JobRequestsChartSkeleton />
           ) : (
@@ -362,8 +355,8 @@ function MaintenanceCost({
               onSelect={handleChartSelect}
             />
           )}
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </div>
   );
 }

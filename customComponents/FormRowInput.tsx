@@ -28,6 +28,7 @@ type FormInputProps<TFieldValues extends FieldValues> = {
   multiple?: boolean;
   readOnly?: boolean;
   accept?: string;
+  autoComplete?: string;
   disabled?: boolean;
   value?: string;
   className?: string;
@@ -58,6 +59,7 @@ function FormRowInput<TFieldValues extends FieldValues>({
   type,
   multiple = false,
   accept,
+  autoComplete,
   isVisible,
   togglePassword,
   Icon,
@@ -86,63 +88,68 @@ function FormRowInput<TFieldValues extends FieldValues>({
     <SkeletonInput />
   ) : (
     <div className={cn(className, "relative w-full mb-2 group")}>
-      {Icon && (
-        <span
-          className={cn(
-            iconStyles,
-            "pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-gray-400 dark:text-(--clr-textDark)",
-          )}
-        >
-          <Icon size={16} />
-        </span>
-      )}
-
-      <input
-        {...(register ? register(name, { valueAsNumber }) : {})}
-        id={String(name)}
-        type={type}
-        min={min}
-        step={step}
-        className={cn(
-          inputStyles,
-          placeholder
-            ? "placeholder:text-(--clr-textLight) dark:placeholder:text-(--clr-textDark)"
-            : "placeholder-transparent",
-
-          hasValue && "has-value",
-
-          sharedStyles.formInput,
-          sharedStyles.formInputDefault,
-          error && "border-red-300",
-          Icon ? "pl-12" : "",
-        )}
-        placeholder={placeholder}
-        disabled={disabled}
-        readOnly={readOnly}
-        multiple={multiple}
-        accept={accept}
-      />
-      {isPassword && togglePassword && (
-        <PasswordToggle
-          visible={isVisible ?? false}
-          onToggle={togglePassword}
-        />
-      )}
-      {label && !placeholder && (
-        <label
-          htmlFor={String(name)}
-          className={cn(
-            labelStyles,
-            sharedStyles.formLabel,
-            Icon ? "left-8 peer-focus:left-3 peer-placeholder-shown:top-0" : "",
-          )}
-        >
-          <span className={cn(sharedStyles.formLabelRequired)}>
-            <span>{label}</span>
-            {required && <span className="text-red-500">*</span>}
+      <div className="relative">
+        {Icon && (
+          <span
+            className={cn(
+              iconStyles,
+              "pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-gray-400 dark:text-(--clr-textDark)",
+            )}
+          >
+            <Icon size={16} />
           </span>
-        </label>
-      )}
+        )}
+
+        <input
+          {...(register ? register(name, { valueAsNumber }) : {})}
+          id={String(name)}
+          type={type}
+          min={min}
+          step={step}
+          className={cn(
+            inputStyles,
+            placeholder
+              ? "placeholder:text-(--clr-textLight) dark:placeholder:text-(--clr-textDark)"
+              : "placeholder-transparent",
+
+            hasValue && "has-value",
+
+            sharedStyles.formInput,
+            sharedStyles.formInputDefault,
+            error && "border-red-300",
+            Icon ? "pl-12" : "",
+          )}
+          placeholder={placeholder}
+          disabled={disabled}
+          readOnly={readOnly}
+          multiple={multiple}
+          accept={accept}
+          autoComplete={autoComplete}
+        />
+        {isPassword && togglePassword && (
+          <PasswordToggle
+            visible={isVisible ?? false}
+            onToggle={togglePassword}
+          />
+        )}
+        {label && !placeholder && (
+          <label
+            htmlFor={String(name)}
+            className={cn(
+              labelStyles,
+              sharedStyles.formLabel,
+              Icon
+                ? "left-8 peer-focus:left-3 peer-placeholder-shown:top-0"
+                : "",
+            )}
+          >
+            <span className={cn(sharedStyles.formLabelRequired)}>
+              <span>{label}</span>
+              {required && <span className="text-red-500">*</span>}
+            </span>
+          </label>
+        )}
+      </div>
       {/* Show error message if validation fails */}
       {error && (
         <span className={cn(sharedStyles.formError)}>{error.message}</span>

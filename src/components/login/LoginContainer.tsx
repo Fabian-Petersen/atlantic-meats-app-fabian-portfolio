@@ -21,6 +21,7 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { usePOST } from "@/utils/api";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
+import { LockKeyhole } from "lucide-react";
 
 type Step = "LOGIN" | "NEW_PASSWORD";
 
@@ -30,7 +31,7 @@ export default function LoginContainer() {
   const navigate = useNavigate();
   const { refreshAuth, isAuthenticated } = useAuth();
   const { setShowSuccess, setSuccessConfig } = useGlobalContext();
-  const { refetch } = useUserAttributes();
+  const { refetch } = useUserAttributes({ enabled: false });
 
   const { mutateAsync: confirmUserSignup } = usePOST<void, void>({
     resourcePath: "api/admin/confirm-user-signup",
@@ -61,8 +62,8 @@ export default function LoginContainer() {
         return;
       }
 
-      await refreshAuth();
       const userData = await refetch();
+      await refreshAuth();
       if (userData.data?.name) {
         toast.success(`Welcome ${capitalize(userData.data.name)}`);
       }
@@ -88,11 +89,12 @@ export default function LoginContainer() {
         return;
       }
 
-      await refreshAuth();
       const userData = await refetch();
       // Update user status in DynamoDB
       const response = await confirmUserSignup();
       console.log(response);
+
+      await refreshAuth();
 
       setSuccessConfig({
         title: "Success",
@@ -117,19 +119,15 @@ export default function LoginContainer() {
     <>
       {step === "LOGIN" && (
         <div className="flex flex-col gap-2 md:gap-4">
-          <div className="flex justify-center items-center overflow-hidden w-full max-h-24">
-            <img
-              src="https://www.atlanticmeat.co.za/assets/images/am20loyalty20logo-472x214.webp"
-              alt="Logo"
-              className="w-1/2 h-full rounded-md"
-            />
+          <div className="flex justify-center" aria-hidden="true">
+            <div className="flex size-20 items-center justify-center rounded-full bg-(--clr-primary)/10 text-(--clr-primary) dark:bg-(--clr-primary)/20">
+              <LockKeyhole className="size-10" strokeWidth={1.75} />
+            </div>
           </div>
           <FormHeading
             heading="Login to your account"
-            className={cn(
-              sharedStyles.headingForm,
-              "md:text-center md:text-lg",
-            )}
+            className={cn(sharedStyles.headingForm, "text-center md:text-lg")}
+            headingStyles="text-center justify-center"
           />
           <LoginForm onSubmit={handleLogin} loading={loading} />
         </div>

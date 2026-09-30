@@ -2,46 +2,86 @@
 import { useCallback, useEffect, useState } from "react";
 import { fetchAuthSession, signOut } from "aws-amplify/auth";
 import { AuthContext } from "./AuthContext";
+import type { UserGroup } from "@/schemas/usersSchema";
 
 export type AuthContextType = {
   isAuthenticated: boolean;
+  userGroups: UserGroup[];
   loading: boolean;
   refreshAuth: () => Promise<void>;
   logout: () => Promise<void>;
 };
 
-const hasAuthenticatedSession = async () => {
+type AuthState = {
+  isAuthenticated: boolean;
+  userGroups: UserGroup[];
+};
+
+const validGroups: UserGroup[] = [
+  "admin",
+  "manager",
+  "user",
+  "maintenance",
+  "contractor",
+];
+
+const resolveAuthState = async (): Promise<AuthState> => {
   try {
     const session = await fetchAuthSession();
-    return !!session.tokens?.idToken;
+    const groupClaim = session.tokens?.accessToken?.payload["cognito:groups"];
+    const userGroups = Array.isArray(groupClaim)
+      ? groupClaim.filter(
+          (group): group is UserGroup =>
+            typeof group === "string" &&
+            validGroups.includes(group as UserGroup),
+        )
+      : [];
+
+    return {
+      isAuthenticated: !!session.tokens?.idToken,
+      userGroups,
+    };
   } catch (error) {
     console.error("❌ refreshAuth error:", error);
-    return false;
+    return { isAuthenticated: false, userGroups: [] };
   }
+};
+
+let initialAuthStatePromise: Promise<AuthState> | null = null;
+
+const getInitialAuthState = () => {
+  initialAuthStatePromise ??= resolveAuthState();
+  return initialAuthStatePromise;
 };
 
 //$ change back to false for production
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userGroups, setUserGroups] = useState<UserGroup[]>([]);
   const [loading, setLoading] = useState(true);
 
   const refreshAuth = useCallback(async () => {
-    const authenticated = await hasAuthenticatedSession();
-    setIsAuthenticated(authenticated);
+    const authState = await resolveAuthState();
+    initialAuthStatePromise = Promise.resolve(authState);
+    setIsAuthenticated(authState.isAuthenticated);
+    setUserGroups(authState.userGroups);
     setLoading(false);
   }, []);
 
   const logout = useCallback(async () => {
     await signOut();
     setIsAuthenticated(false);
+    setUserGroups([]);
+    initialAuthStatePromise = null;
   }, []);
 
   useEffect(() => {
     let isActive = true;
 
-    void hasAuthenticatedSession().then((authenticated) => {
+    void getInitialAuthState().then((authState) => {
       if (!isActive) return;
-      setIsAuthenticated(authenticated);
+      setIsAuthenticated(authState.isAuthenticated);
+      setUserGroups(authState.userGroups);
       setLoading(false);
     });
 
@@ -52,7 +92,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, loading, refreshAuth, logout }}
+      value={{ isAuthenticated, userGroups, loading, refreshAuth, logout }}
     >
       {children}
     </AuthContext.Provider>

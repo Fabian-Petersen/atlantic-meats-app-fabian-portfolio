@@ -23,7 +23,7 @@ export function JobRequestsChartSkeleton() {
   return (
     <div className="h-full w-full flex flex-col justify-end gap-2 p-4">
       {/* Bars */}
-      <div className="flex-1 flex items-end gap-2 bg-gray-100 dark:bg-(--bg-primary_dark) w-full">
+      <div className="flex-1 flex items-end gap-1 bg-gray-100 dark:bg-(--bg-primary_dark) w-full md:gap-2">
         {months.map((month, i) => (
           <div
             key={month}
@@ -31,7 +31,7 @@ export function JobRequestsChartSkeleton() {
           >
             {/* Bar skeleton */}
             <Skeleton
-              className="w-6"
+              className="w-full max-w-6"
               style={{ height: `${barHeights[i]}px` }}
             />
             {/* X-axis label skeleton */}

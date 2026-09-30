@@ -41,6 +41,7 @@ const ChangePasswordForm = ({
           name="email"
           // control={control}
           placeholder="Enter your email"
+          autoComplete="username"
           register={register}
           error={errors.email}
           control={control}
@@ -49,6 +50,7 @@ const ChangePasswordForm = ({
           label="Password"
           name="newPassword"
           placeholder="Enter your password"
+          autoComplete="new-password"
           type={type("newPassword")} // comes from the usePasswordVisibility hook
           togglePassword={() => toggle("newPassword")} // comes from the usePasswordVisibility hook
           isVisible={isVisible("newPassword")} // comes from the usePasswordVisibility hook
@@ -60,6 +62,7 @@ const ChangePasswordForm = ({
           label="Confirm Password"
           name="confirmPassword"
           placeholder="Confirm your password"
+          autoComplete="new-password"
           type={type("confirmPassword")} // comes from the usePasswordVisibility hook
           togglePassword={() => toggle("confirmPassword")} // comes from the usePasswordVisibility hook
           isVisible={isVisible("confirmPassword")} // comes from the usePasswordVisibility hook

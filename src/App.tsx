@@ -1,14 +1,17 @@
 // import "./index.css";
 import { Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
 
 //$ Public Routes
 import Login from "./pages/Login";
 import { PublicOnlyRoute } from "./routes/PublicOnlyRoute";
 
 //$ Protected Routes
-import DashboardPage from "./pages/Dashboard";
-import CreateJobPage from "./pages/jobs/CreateJobPage";
-import AssetsOverviewPage from "./pages/assets/AssetsOverviewPage";
+const DashboardPage = lazy(() => import("./pages/Dashboard"));
+const CreateJobPage = lazy(() => import("./pages/jobs/CreateJobPage"));
+const AssetsOverviewPage = lazy(
+  () => import("./pages/assets/AssetsOverviewPage"),
+);
 
 import { AppLayout } from "./routes/AppLayout";
 
@@ -17,64 +20,106 @@ import { ProtectedRoute } from "./routes/ProtectedRoute";
 import RoleGaurdRoute from "./routes/RoleGaurdRoute";
 
 //$ Page Layouts
-import JobActionPage from "./pages/jobs/JobActionPage";
+const JobActionPage = lazy(() => import("./pages/jobs/JobActionPage"));
 
 // $ Assets Pages
-import CreateAssetPage from "./pages/assets/CreateAssetPage";
-import AssetItemPage from "./pages/assets/AssetItemPage";
-import AssetHistoryPage from "./pages/assets/AssetHistoryPage";
-import AssetVerification from "./pages/assets/AssetVerification";
+const CreateAssetPage = lazy(() => import("./pages/assets/CreateAssetPage"));
+const AssetItemPage = lazy(() => import("./pages/assets/AssetItemPage"));
+const AssetHistoryPage = lazy(() => import("./pages/assets/AssetHistoryPage"));
+const AssetVerification = lazy(
+  () => import("./pages/assets/AssetVerification"),
+);
 
 // $ User Management Pages
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import UserProfilePage from "./pages/users/UserProfilePage";
-import StoreProfilePage from "./pages/StoreProfilePage";
+const UserProfilePage = lazy(() => import("./pages/users/UserProfilePage"));
+const StoreProfilePage = lazy(() => import("./pages/StoreProfilePage"));
 
 // $ Job Management Pages for single items
-import JobPendingItemPage from "./pages/jobs/JobPendingItemPage";
-import JobInProgressItemPage from "./pages/jobs/JobInProgressItemPage";
-import JobCompleteItemPage from "./pages/jobs/JobCompleteItemPage";
-import JobsCompletedListPage from "./pages/jobs/JobsCompletedListPage";
+const JobPendingItemPage = lazy(
+  () => import("./pages/jobs/JobPendingItemPage"),
+);
+const JobInProgressItemPage = lazy(
+  () => import("./pages/jobs/JobInProgressItemPage"),
+);
+const JobCompleteItemPage = lazy(
+  () => import("./pages/jobs/JobCompleteItemPage"),
+);
+const JobsCompletedListPage = lazy(
+  () => import("./pages/jobs/JobsCompletedListPage"),
+);
 
 // $ Pages display the list of items in a table
-import JobsPendingListPage from "./pages/jobs/JobsPendingListPage";
-import JobsInProgressListPage from "./pages/jobs/JobsInProgressListPage";
+const JobsPendingListPage = lazy(
+  () => import("./pages/jobs/JobsPendingListPage"),
+);
+const JobsInProgressListPage = lazy(
+  () => import("./pages/jobs/JobsInProgressListPage"),
+);
 import { PageLoadingSpinner } from "./components/features/PageLoadingSpinner";
-import UsersListPage from "./pages/users/UsersListPage";
+const UsersListPage = lazy(() => import("./pages/users/UsersListPage"));
 import { useAuth } from "./auth/useAuth";
-import CreateUserPage from "./pages/users/CreateUserPage";
+const CreateUserPage = lazy(() => import("./pages/users/CreateUserPage"));
 
 // $ Transfer Asset Pages
 // # ——————— Create Pages ————————————————————————————————————————————————————————
-import CreateTransferPage from "./pages/transfers/CreateTransferPage";
-import CreateTransferTransitPage from "./pages/transfers/CreateTransferTransitPage";
+const CreateTransferPage = lazy(
+  () => import("./pages/transfers/CreateTransferPage"),
+);
+const CreateTransferTransitPage = lazy(
+  () => import("./pages/transfers/CreateTransferTransitPage"),
+);
 // # ——————— Tables Pages ————————————————————————————————————————————————————————
 // import TransfersListPage from "./pages/transfers/TransfersListPage";
-import TransferTransitListPage from "./pages/transfers/TransferTransitListPage";
-import TransfersRequestsListPage from "./pages/transfers/TransfersRequestsListPage";
-import TransferCompleteListPage from "./pages/transfers/TransferCompleteListPage";
+const TransferTransitListPage = lazy(
+  () => import("./pages/transfers/TransferTransitListPage"),
+);
+const TransfersRequestsListPage = lazy(
+  () => import("./pages/transfers/TransfersRequestsListPage"),
+);
+const TransferCompleteListPage = lazy(
+  () => import("./pages/transfers/TransferCompleteListPage"),
+);
 // # ——————— Display Item Pages ——————————————————————————————————————————————————
-import TransferItemPage from "./pages/transfers/TransferItemPage";
-import TransferPendingItemPage from "./pages/transfers/TransferPendingItemPage";
+const TransferItemPage = lazy(
+  () => import("./pages/transfers/TransferItemPage"),
+);
+const TransferPendingItemPage = lazy(
+  () => import("./pages/transfers/TransferPendingItemPage"),
+);
 
 // $ Disposal Asset Pages
 // # ——————— Create Pages ————————————————————————————————————————————————————————
-import CreateDisposalPage from "./pages/disposals/CreateDisposalPage";
-import CreateDisposalCompletePage from "./pages/disposals/CreateDisposalCompletePage";
-import CreateTransferReceiptPage from "./pages/transfers/CreateTransferReceiptPage";
+const CreateDisposalPage = lazy(
+  () => import("./pages/disposals/CreateDisposalPage"),
+);
+const CreateDisposalCompletePage = lazy(
+  () => import("./pages/disposals/CreateDisposalCompletePage"),
+);
+const CreateTransferReceiptPage = lazy(
+  () => import("./pages/transfers/CreateTransferReceiptPage"),
+);
 
 // # ——————— Tables Pages ————————————————————————————————————————————————————————
-import DisposalRequestsListPage from "./pages/disposals/DisposalRequestsListPage";
-import DisposalCompletedListPage from "./pages/disposals/DisposalCompletedListPage";
+const DisposalRequestsListPage = lazy(
+  () => import("./pages/disposals/DisposalRequestsListPage"),
+);
+const DisposalCompletedListPage = lazy(
+  () => import("./pages/disposals/DisposalCompletedListPage"),
+);
 
 // # ——————— Display Item Pages ——————————————————————————————————————————————————
-import DisposalItemPage from "./pages/disposals/DisposalItemPage";
-import DisposalPendingItemPage from "./pages/disposals/DisposalPendingItemPage";
+const DisposalItemPage = lazy(
+  () => import("./pages/disposals/DisposalItemPage"),
+);
+const DisposalPendingItemPage = lazy(
+  () => import("./pages/disposals/DisposalPendingItemPage"),
+);
 
 // $ Stock Pages
-import CreateStockPage from "./pages/stocks/CreateStockPage";
-import StocksListPage from "./pages/stocks/StocksListPage";
-import UpdateAssetPage from "./pages/assets/UpdateAssetPage";
+const CreateStockPage = lazy(() => import("./pages/stocks/CreateStockPage"));
+const StocksListPage = lazy(() => import("./pages/stocks/StocksListPage"));
+const UpdateAssetPage = lazy(() => import("./pages/assets/UpdateAssetPage"));
 
 function App() {
   const { loading } = useAuth();
@@ -83,7 +128,8 @@ function App() {
   if (loading) return <PageLoadingSpinner />;
 
   return (
-    <Routes>
+    <Suspense fallback={<PageLoadingSpinner />}>
+      <Routes>
       {/* Login Route Only: Authenticated users must logout to direct to logout */}
       <Route element={<PublicOnlyRoute />}>
         <Route path="/" element={<Login />} />
@@ -233,7 +279,8 @@ function App() {
       <Route element={<RoleGaurdRoute allowedGroups={["admin", "manager"]} />}>
         <Route path="/assets/verification" element={<AssetVerification />} />
       </Route>
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 }
 

@@ -65,7 +65,7 @@ export const assets = [
     serialNumber: "14275654232323",
   },
   {
-    location: "Office",
+    location: "Head Office",
     assetID: "CS-00234",
     additional_notes: "Testing Pagination Asset 5",
     condition: "New",

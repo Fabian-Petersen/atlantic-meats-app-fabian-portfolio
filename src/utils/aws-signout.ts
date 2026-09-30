@@ -20,7 +20,7 @@ export async function awsCognitoSignOut() {
 // $ 2. Hook with the logic using the function calling the Cognito api, this custom hook can be called inside the components requiring the signout of a user, e.g. the signout button in the header and sidebar.
 
 export const useLogout = () => {
-  const { refreshAuth } = useAuth();
+  const { logout } = useAuth();
   const { data } = useUserAttributes();
   // console.log(data);
 
@@ -28,13 +28,12 @@ export const useLogout = () => {
 
   const handleLogout = async () => {
     try {
-      await awsCognitoSignOut();
+      await logout();
       sessionStorage.removeItem("formData");
       toast.success(`Goodbye ${capitalize(data?.name)}`, {
         className: "rounded-xl",
       });
       navigate("/");
-      await refreshAuth();
     } catch (error) {
       console.log(error);
       navigate("/");

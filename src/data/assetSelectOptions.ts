@@ -9,7 +9,7 @@ export const location: string[] = [
   "Khayelitsha",
   "Wynberg",
   "Maitland",
-  "Office",
+  "Head Office",
   "Distribution Centre",
   "Golden Acre",
 ];
@@ -105,7 +105,7 @@ export const CeateAssetFormOptionsData = {
     },
     "head office": {
       category: {
-        workstation: ["Desk", "Laptop", "Monitor"],
+        workstation: ["Desk", "Laptop", "Monitor", "Server", "LED TV"],
         appliances: ["Fridge", "Microwave", "Air conditioning"],
         security: [
           "Alarm System",

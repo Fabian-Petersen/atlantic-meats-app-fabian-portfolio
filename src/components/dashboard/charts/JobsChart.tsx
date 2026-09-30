@@ -1,13 +1,6 @@
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 import { useMemo } from "react";
 import useScreenSize from "@/customHooks/useScreenSize";
+import DashboardBarChart from "./DashboardBarChart";
 
 import type { ChartPoint, JobsByYear } from "@/schemas/dashboardSchema";
 
@@ -99,73 +92,11 @@ function JobsChart({ data, onSelect, selectedYear }: Props) {
   };
 
   return (
-    <div className="w-full h-full md:p-4 relative">
-      <ResponsiveContainer
-        width="100%"
-        height="100%"
-        initialDimension={{ width: 300, height: 256 }}
-      >
-        <BarChart
-          data={chartData}
-          barSize={isMobile ? 15 : 25}
-          margin={{
-            top: 4,
-            right: 4,
-            bottom: 0,
-            left: 0,
-          }}
-        >
-          <XAxis
-            dataKey={isMobile ? "code" : "name"}
-            tick={{
-              dx: 0,
-              // fill: isDarkTheme ? "#f3f4f6" : "#1f2937",
-              fill: "var(--chart-axis)",
-            }}
-            style={{
-              fontSize: `${isMobile ? "10px" : "12px"}`,
-              textTransform: "capitalize",
-            }}
-          />
-
-          <YAxis
-            allowDecimals={false}
-            width={45}
-            tick={{
-              dx: 0,
-              fill: "var(--chart-axis)",
-            }}
-            style={{
-              fontSize: `${isMobile ? "10px" : "12px"}`,
-            }}
-          />
-
-          <Tooltip
-            cursor={{
-              fill: "#fcb53b40",
-            }}
-            labelStyle={{
-              textTransform: "capitalize",
-            }}
-          />
-
-          <Bar
-            dataKey="value"
-            fill="#fcb53b"
-            activeBar={{
-              fill: "#fcb53b",
-              stroke: "none",
-              strokeWidth: 0,
-            }}
-            style={{
-              cursor: "pointer",
-              textTransform: "capitalize",
-            }}
-            onClick={(data) => handleBarClick(data as ChartPoint)}
-          />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+    <DashboardBarChart
+      data={chartData}
+      isMobile={isMobile}
+      onSelect={handleBarClick}
+    />
   );
 }
 

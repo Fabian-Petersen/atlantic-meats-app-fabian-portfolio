@@ -45,6 +45,7 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
             type="email"
             name="email"
             placeholder="Enter your email"
+            autoComplete="username"
             register={register}
             error={errors.email}
             control={control}
@@ -53,6 +54,7 @@ const LoginForm = ({ onSubmit, loading }: Props) => {
             label="Password"
             name="password"
             placeholder="Enter your password"
+            autoComplete="current-password"
             type={type("password")} // comes from the usePasswordVisibility hook
             togglePassword={() => toggle("password")} // comes from the usePasswordVisibility hook
             isVisible={isVisible("password")} // comes from the usePasswordVisibility hook

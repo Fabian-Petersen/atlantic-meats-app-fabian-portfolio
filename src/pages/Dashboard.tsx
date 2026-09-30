@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { sharedStyles } from "@/styles/shared";
 
 /* -------------------------------------------------------------------------- */
@@ -10,7 +9,6 @@ import MaintenanceCost from "@/components/dashboard/components/MaintenanceCost";
 /* -------------------------------------------------------------------------- */
 /*                                Hooks & Utils                               */
 /* -------------------------------------------------------------------------- */
-import { getUserGroups } from "@/auth/getUserGroups";
 import { useGetAll } from "@/utils/api";
 import { cn } from "@/lib/utils";
 import { useDashboardJobsMetrics } from "@/hooks/useDashboardJobsMetrics";
@@ -49,13 +47,6 @@ const Dashboard = () => {
   // $ Hook combine backend and frontend data to generate a card
   const cards = useDashboardJobsMetrics(metrics?.cards);
 
-  useEffect(() => {
-    const loadGroups = async () => {
-      await getUserGroups();
-    };
-    loadGroups();
-  }, []);
-
   // console.log("verification:", metrics?.verification);
 
   return (
@@ -77,6 +68,7 @@ const Dashboard = () => {
         <VerificationStatus
           data={metrics?.verification}
           isPending={isPending}
+          isAdmin={isAdmin}
         />
         {/* Pending Requests Table */}
         <section className={cn(sharedStyles.chartTable, "p-0")}>
