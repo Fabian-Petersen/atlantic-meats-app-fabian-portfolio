@@ -84,8 +84,19 @@ export const createJobAssetSchema = jobRequestBaseSchema
     assetIssueDetails: true,
     images: true,
   })
+  .extend({
+    area: z.string().min(1, { message: "Please select an area" }),
+  })
   .superRefine((data, ctx) => {
     const reason = data.assetIssueReason || undefined;
+
+    if (!data.assetID?.trim() && !reason) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["assetID"],
+        message: "Select an asset ID or provide a reason why it is unavailable",
+      });
+    }
 
     if (reason === "other" && !data.assetIssueDetails?.trim()) {
       ctx.addIssue({

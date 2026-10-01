@@ -2,19 +2,14 @@ import { useEffect, useMemo } from "react";
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 
 import { useAssetFilterReset } from "./useAssetFilterReset";
+import { useAssetOptions } from "@/hooks/useAssetOptions";
 
 import type {
-  AssetLocationsResponse,
-  AssetLocationHierarchyResponse,
-  AssetEquipmentResponse,
-  AssetOptionsResponse,
   AssetLocationOption,
   AssetAreaOption,
   AssetEquipmentOption,
   AssetOption,
 } from "@/schemas/assetSchemas";
-
-import { useGetAll } from "@/utils/api";
 
 // ============================================================================
 // Types
@@ -88,8 +83,6 @@ type Params<TForm extends AssetFilterForm> = {
 // ============================================================================
 // Constants
 // ============================================================================
-
-const RESOURCE_PATH = "api/assets/options";
 
 // ============================================================================
 // Helpers
@@ -187,14 +180,21 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
   // ==========================================================================
 
   const {
+    locationsQuery,
+    areasQuery,
+    equipmentQuery,
+    assetsQuery,
+  } = useAssetOptions({
+    location: selectedLocation,
+    area: selectedArea,
+    equipment: selectedEquipment,
+  });
+
+  const {
     data: locationsData,
     isLoading: isLocationsLoading,
     isError: isLocationsError,
-  } = useGetAll<AssetLocationsResponse>({
-    resourcePath: RESOURCE_PATH,
-    queryKey: ["assets", "options", "locations"],
-    enabled: true,
-  });
+  } = locationsQuery;
 
   // ==========================================================================
   // Level 2 — Location → Areas
@@ -204,14 +204,7 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
     data: locationData,
     isLoading: isLocationLoading,
     isError: isLocationError,
-  } = useGetAll<AssetLocationHierarchyResponse>({
-    resourcePath: RESOURCE_PATH,
-    queryKey: ["assets", "options", "location", selectedLocation],
-    params: {
-      location: selectedLocation,
-    },
-    enabled: !!selectedLocation,
-  });
+  } = areasQuery;
 
   // ==========================================================================
   // Level 3 — Area → Equipment
@@ -221,15 +214,7 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
     data: areaData,
     isLoading: isAreaLoading,
     isError: isAreaError,
-  } = useGetAll<AssetEquipmentResponse>({
-    resourcePath: RESOURCE_PATH,
-    queryKey: ["assets", "options", "area", selectedLocation, selectedArea],
-    params: {
-      location: selectedLocation,
-      area: selectedArea,
-    },
-    enabled: !!selectedLocation && !!selectedArea,
-  });
+  } = equipmentQuery;
 
   // ==========================================================================
   // Level 4 — Equipment → Asset IDs
@@ -239,23 +224,7 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
     data: assetData,
     isLoading: isAssetLoading,
     isError: isAssetError,
-  } = useGetAll<AssetOptionsResponse>({
-    resourcePath: RESOURCE_PATH,
-    queryKey: [
-      "assets",
-      "options",
-      "asset",
-      selectedLocation,
-      selectedArea,
-      selectedEquipment,
-    ],
-    params: {
-      location: selectedLocation,
-      area: selectedArea,
-      equipment: selectedEquipment,
-    },
-    enabled: !!selectedLocation && !!selectedArea && !!selectedEquipment,
-  });
+  } = assetsQuery;
 
   // ==========================================================================
   // Location Options

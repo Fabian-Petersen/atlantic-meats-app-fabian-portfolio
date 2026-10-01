@@ -1,6 +1,6 @@
-# Atlantic Meats Localhost Pre-Production Test Checklist
+# Atlantic Meat Pre-Production Test Checklist on Localhost
 
-Use this checklist to manually verify the application on localhost before a production migration. It is based on the routes, forms, role guards, responsive components, and workflows currently present in the source code.
+This checklist is to manually verify the application on localhost before a production migration. It is based on the routes, forms, role guards, responsive components, and workflows currently present in the source code.
 
 > **Important:** Run these tests against a dedicated non-production Cognito user pool, API, DynamoDB tables, S3 buckets, and notification services. Several tests create, update, or delete real backend records even though the frontend runs on localhost.
 
@@ -18,7 +18,7 @@ Use this checklist to manually verify the application on localhost before a prod
 | Item                    | Value                   |
 | ----------------------- | ----------------------- |
 | Date                    |                         |
-| Tester                  |                         |
+| Tester                  | Fabian Petersen         |
 | Git commit / build      |                         |
 | Frontend URL            | `http://localhost:5173` |
 | API environment         |                         |
@@ -110,7 +110,7 @@ Test both visible navigation and direct URL entry. Hiding a menu item is not suf
 
 ### User
 
-- [ ] User sees only intended links and can access Dashboard, create/open jobs, transfers/disposals, stock list if supported, and My Profile.
+- [ ] User sees only intended links and can access Dashboard, create/open jobs, transfers/disposals and My Profile.
 - [ ] User receives an access denial/redirect for admin-only routes and asset verification.
 
 ### Maintenance
@@ -425,21 +425,7 @@ Test both visible navigation and direct URL entry. Hiding a menu item is not suf
 - [ ] A user cannot alter disabled identity/authorization fields via the UI or crafted request.
 - [ ] A user cannot change another profile by modifying the route/request ID.
 
-## 11. Stock routes (currently limited/hidden in navigation)
-
-The stock sidebar section is currently commented out, but `/stocks/list` is routed for employee roles and `/stocks/create-new-stock` is routed for admin. Treat this section as an explicit release-scope decision.
-
-- [ ] Decide whether Stock is in scope for production; record `IN SCOPE` or `OUT OF SCOPE` here: **\_\_\_\_**.
-- [ ] If out of scope, direct URLs fail/redirect intentionally and no misleading stock links are exposed.
-- [ ] If in scope, add/test intended navigation visibility for each role.
-- [ ] `/stocks/list` displays real stock data rather than only a placeholder heading.
-- [ ] Create Stock validates Description, Unit, Category, Subcategory, Minimum Quantity, Reorder Quantity, Supplier, Cost per Unit, and Notes.
-- [ ] Category changes correctly reset/filter Subcategory.
-- [ ] Test zero, negative, decimal, and large quantities/prices.
-- [ ] Created stock appears once in the list and persists after refresh.
-- [ ] Test stock View/Edit/Delete and low-stock/reorder behavior if they are intended for this release.
-
-## 12. Notifications
+## 11. Notifications
 
 - [ ] Notification button opens/closes the sidebar and shows a correct unread count.
 - [ ] All, Unread, Read, and Archived tabs/categories show the correct notifications and counts.
@@ -454,7 +440,7 @@ The stock sidebar section is currently commented out, but `/stocks/list` is rout
 - [ ] Notification failure never blocks the underlying job/transfer/disposal transaction.
 - [ ] Users cannot fetch or mutate another recipient's notifications.
 
-## 13. Tables, search, filters, and data consistency
+## 12. Tables, search, filters, and data consistency
 
 Run these checks on Assets, Jobs, Transfers, Disposals, Users, and any supported Stock list.
 
@@ -471,7 +457,7 @@ Run these checks on Assets, Jobs, Transfers, Disposals, Users, and any supported
 - [ ] Dates, currency, names, statuses, and identifiers use consistent formatting across list, detail, PDF, and notification.
 - [ ] Null, missing, unusually long, and Unicode backend values do not crash or break layout.
 
-## 14. Responsive and cross-browser testing
+## 13. Responsive and cross-browser testing
 
 Test at approximately 320 px, 375 px, 768 px, 1024 px, and a wide desktop viewport.
 
@@ -484,7 +470,7 @@ Test at approximately 320 px, 375 px, 768 px, 1024 px, and a wide desktop viewpo
 - [ ] Browser Back/Forward preserves sensible route/state behavior without replaying mutations.
 - [ ] Zoom to 200%; content and controls remain usable.
 
-## 15. Accessibility and usability
+## 14. Accessibility and usability
 
 - [ ] Complete login and one full critical workflow using keyboard only.
 - [ ] Tab order follows the visual order; no keyboard trap occurs in dialogs or sidebars.
@@ -497,7 +483,7 @@ Test at approximately 320 px, 375 px, 768 px, 1024 px, and a wide desktop viewpo
 - [ ] Images have suitable alternative text; decorative images are ignored by screen readers.
 - [ ] Loading and success/error state changes are perceivable without relying only on animation.
 
-## 16. Reliability, security, and adverse conditions
+## 15. Reliability, security, and adverse conditions
 
 - [ ] Throttle the network to Slow 3G; loading states work and no request is submitted twice.
 - [ ] Go offline before loading a list and during a form submission/upload; the UI reports the problem and supports a safe retry.
@@ -515,7 +501,7 @@ Test at approximately 320 px, 375 px, 768 px, 1024 px, and a wide desktop viewpo
 - [ ] Submit the same mutation concurrently in two tabs; status transition and data remain idempotent/consistent.
 - [ ] Set the client clock/timezone incorrectly; server-owned audit timestamps and authorization remain trustworthy.
 
-## 17. Data integrity and end-to-end scenarios
+## 16. Data integrity and end-to-end scenarios
 
 ### Maintenance lifecycle
 
@@ -539,7 +525,7 @@ Test at approximately 320 px, 375 px, 768 px, 1024 px, and a wide desktop viewpo
 - [ ] Deleting or changing an upstream record does not leave broken links or misleading historical audit data.
 - [ ] Dashboard metrics reconcile after all lifecycle scenarios and a hard refresh.
 
-## 18. Known route/scope checks to resolve before release
+## 17. Known route/scope checks to resolve before release
 
 These are not assumed defects, but the current source makes them important acceptance decisions.
 
@@ -548,13 +534,12 @@ These are not assumed defects, but the current source makes them important accep
 - [ ] **Transfer Requests visibility:** The sidebar advertises Transfer Requests to several roles while the route is admin-guarded; align intended visibility and authorization.
 - [ ] **Disposal Requests visibility:** The sidebar advertises Disposal Requests to several roles while the route is admin-guarded; align intended visibility and authorization.
 - [ ] **Contractor profile:** Confirm contractor group recognition and `/users/profile` access agree with the intended policy.
-- [ ] **Stock:** Confirm whether the routed but hidden/placeholder stock feature is production scope.
 - [ ] **Manual verification URL:** Confirm `/assets/verification/manual` intentionally renders the asset register and opens the expected workflow.
 - [ ] **User update endpoint:** Confirm admin and self-service updates call the intended `/api/users...` routes consistently.
 - [ ] **Environment variable:** Confirm deployment and localhost use the same intended API variable (`VITE_SITE_URL` versus any `VITE_PUBLIC_API_URL` deployment setting).
 - [ ] **Unknown route:** Confirm there is an intentional Not Found/access-denied experience for invalid URLs.
 
-## 19. Production migration gate
+## 18. Production migration gate
 
 Do not migrate until every required item below is satisfied.
 

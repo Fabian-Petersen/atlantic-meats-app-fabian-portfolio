@@ -111,6 +111,7 @@ const JobAssetFields = ({
       label: "Area",
       placeholder: "Select Area",
       options: normalizeOptions(areaOptions),
+      required: true,
       disabled: !form.watch("location") || isLocationsLoading,
     },
     {
