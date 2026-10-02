@@ -11,6 +11,7 @@ import {
   FileClock,
   User,
   Clock2Icon,
+  AlertTriangle,
 } from "lucide-react";
 
 import { Badge } from "@/components/features/Badge";
@@ -39,6 +40,7 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
   } = useGlobalContext();
 
   const rowId = row.original.id;
+  const isOverdue = isTargetDateOverdue(row.original.targetDate);
   const menuItems = getTableMenuItems({
     rowId,
     setSelectedRowId,
@@ -55,7 +57,7 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
     delete: {
       config: {
         resourcePath: "api/jobs",
-        queryKey: ["jobs", "delete-inProgess-job"],
+        queryKey: ["jobs"],
         resourceName: "job",
       },
       onDelete: openDeleteDialog,
@@ -70,6 +72,8 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
       className={cn(
         sharedStyles.cardRowParent,
         "flex flex-col",
+        isOverdue &&
+          "border-l-4 border-l-red-500 bg-red-50/70 dark:bg-red-950/20",
         isOpen && sharedStyles.cardIsOpen, // Apply the cardIsOpen style when isOpen is true
       )}
       onClick={onToggle}
@@ -94,12 +98,18 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
               </span>
             </div>
             <div
-              className={`flex items-center gap-3 text-xs ${isTargetDateOverdue(row.original.targetDate) ? "text-red-500" : "dark:text-gray-500"}`}
+              className={`flex flex-wrap items-center gap-2 text-xs ${isOverdue ? "text-red-600 dark:text-red-400" : "dark:text-gray-500"}`}
             >
               <span className="flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
                 {row.original.targetDate}
               </span>
+              {isOverdue && (
+                <span className="inline-flex items-center gap-1 rounded-full border border-red-200 bg-red-100 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-red-700 dark:border-red-800 dark:bg-red-950/70 dark:text-red-300">
+                  <AlertTriangle className="size-3" aria-hidden="true" />
+                  Overdue
+                </span>
+              )}
             </div>
           </div>
         </div>

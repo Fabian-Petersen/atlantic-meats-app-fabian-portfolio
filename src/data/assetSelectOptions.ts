@@ -9,7 +9,7 @@ export const location: string[] = [
   "Khayelitsha",
   "Wynberg",
   "Maitland",
-  "Head Office",
+  "Central Services",
   "Distribution Centre",
   "Golden Acre",
 ];
@@ -31,7 +31,7 @@ export const areaOptions: string[] = [
 // Sales Floor
 // Deli Area
 // Back Counter Area
-// Staff Qaurters
+// Staff Quarters
 // Groceries Room
 // Locker Room
 // Receiving Area

@@ -16,9 +16,8 @@ import FormRowSelect from "../../../customComponents/FormRowSelect";
 // $ Import schemas
 import {
   actionRequestSchema,
-  // type ActionAPIResponse,
+  type ActionRequestPayload,
   type ActionRequestFormValues,
-  // type ActionRequestPayload,
   // type PresignedUrlResponse,
 } from "../../schemas/index";
 
@@ -38,6 +37,7 @@ import { sharedStyles } from "@/styles/shared";
 // import { Spinner } from "../ui/spinner";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import FormActionButtons from "../features/FormActionButtons";
+import ActionExpenseFields from "./ActionExpenseFields";
 
 type Props = {
   onCancel: () => void;
@@ -81,12 +81,7 @@ type Props = {
 
 const JobActionForm = ({ onCancel }: Props) => {
   // $ Form Schema
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<ActionRequestFormValues>({
+  const form = useForm<ActionRequestFormValues>({
     resolver: zodResolver(
       actionRequestSchema,
     ) as unknown as Resolver<ActionRequestFormValues>,
@@ -94,16 +89,26 @@ const JobActionForm = ({ onCancel }: Props) => {
       start_time: "",
       end_time: "",
       total_km: "",
-      total_cost_contractor: "",
-      total_cost_parts: "",
-      total_cost_sundries: "",
       work_completed: "",
       work_order_number: "",
       status: "",
       root_cause: "",
+      findings: "",
+      part_items: [],
+      sundry_items: [],
+      contractor_enabled: false,
+      contractor: "",
+      total_cost_contractor: "",
       signedBy: "",
     },
   });
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = form;
 
   const {
     selectedRowId,
@@ -116,23 +121,49 @@ const JobActionForm = ({ onCancel }: Props) => {
   // const navigate = useNavigate();
 
   // $ Hook that handles the file compression and form submission to backend with success and error modals
-  const { submit, isPending } = useFormSubmit({
+  const { submit, isPending } = useFormSubmit<
+    ActionRequestFormValues,
+    ActionRequestPayload
+  >({
     id: selectedRowId ?? "",
     resourcePath: "api/jobs",
-    queryKey: ["jobs", "action-job"],
+    queryKey: ["jobs"],
     action: "action",
-    buildPayload: (values, compressed, invoices) => ({
-      ...values,
-      selectedRowId: selectedRowId, // id expected by the backend
-      images: compressed.map((f) => ({
-        filename: f.name,
-        content_type: f.type,
-      })),
-      invoices: invoices.map((f) => ({
-        filename: f.name,
-        content_type: f.type || "application/octet-stream",
-      })),
-    }),
+    buildPayload: (values, compressed, invoices) => {
+      const {
+        part_items,
+        sundry_items,
+        contractor_enabled,
+        ...payloadValues
+      } = values;
+      const totalCost = (items: { cost: string }[]) =>
+        Number(
+          items
+            .reduce((total, item) => total + Number(item.cost || 0), 0)
+            .toFixed(2),
+        );
+
+      return {
+        ...payloadValues,
+        contractor: contractor_enabled ? values.contractor : "",
+        total_cost_contractor: contractor_enabled
+          ? values.total_cost_contractor
+          : "",
+        parts: part_items.map((item) => item.description.trim()),
+        total_cost_parts: totalCost(part_items),
+        sundries: sundry_items.map((item) => item.description.trim()),
+        total_cost_sundries: totalCost(sundry_items),
+        selectedRowId: selectedRowId ?? "", // id expected by the backend
+        images: compressed.map((f) => ({
+          filename: f.name,
+          content_type: f.type,
+        })),
+        invoices: invoices.map((f) => ({
+          filename: f.name,
+          content_type: f.type || "application/octet-stream",
+        })),
+      };
+    },
     onSuccess: () => {
       setShowActionDialog(false);
       setSuccessConfig({
@@ -153,7 +184,11 @@ const JobActionForm = ({ onCancel }: Props) => {
   });
 
   return (
-    <form className={cn(sharedStyles.form)} onSubmit={handleSubmit(submit)}>
+    <form
+      className={cn(sharedStyles.form)}
+      onSubmit={handleSubmit(submit)}
+      noValidate
+    >
       <div className={cn(sharedStyles.formParent)}>
         <FormRowInput
           label="Start Date/Time"
@@ -209,6 +244,7 @@ const JobActionForm = ({ onCancel }: Props) => {
           className="col-span-2 md:col-span-1"
           error={errors.root_cause}
           required={true}
+          nativeRequired={false}
         />
         <FormRowSelect
           // label="Status"
@@ -219,6 +255,7 @@ const JobActionForm = ({ onCancel }: Props) => {
           className="col-span-2 md:col-span-1"
           error={errors.status}
           required={true}
+          nativeRequired={false}
         />
         <TextAreaInput
           // label="Work Completed"
@@ -240,48 +277,7 @@ const JobActionForm = ({ onCancel }: Props) => {
           error={errors.findings}
           required={true}
         />
-        <FormRowInput
-          name="sundries"
-          label="Sundries Description"
-          register={register}
-          error={errors.sundries}
-          control={control}
-        />
-        <FormRowInput
-          name="total_cost_sundries"
-          label="Subtotal: Sundries"
-          register={register}
-          error={errors.total_cost_sundries}
-          control={control}
-        />
-        <FormRowInput
-          name="parts"
-          label="Parts & Materials Description"
-          register={register}
-          error={errors.parts}
-          control={control}
-        />
-        <FormRowInput
-          name="total_cost_parts"
-          label="Subtotal: Materials"
-          register={register}
-          error={errors.total_cost_parts}
-          control={control}
-        />
-        <FormRowInput
-          name="contractor"
-          label="Contractor Name"
-          register={register}
-          error={errors.contractor}
-          control={control}
-        />
-        <FormRowInput
-          name="total_cost_contractor"
-          label="Subtotal: Contractor"
-          register={register}
-          error={errors.total_cost_contractor}
-          control={control}
-        />
+        <ActionExpenseFields form={form} />
         <FileInput
           label=""
           placeholder="add invoices"

@@ -23,6 +23,8 @@ import FormRowSelect from "@/../customComponents/FormRowSelect";
 import { toast } from "sonner";
 import { Spinner } from "../ui/spinner";
 import { CalendarClock, Check, UserRoundCheck } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
 // $ Context
 import useGlobalContext from "@/context/useGlobalContext";
@@ -60,7 +62,7 @@ const ApproveRequestForm = () => {
   const { mutateAsync: approveItem, isPending } = usePOST({
     id: selectedRowId ?? "",
     resourcePath: "api/jobs" as Resource,
-    queryKey: ["jobs", "action: approve-request", selectedRowId] as const,
+    queryKey: ["jobs"] as const,
     action: "approve",
   });
 
@@ -112,6 +114,7 @@ const ApproveRequestForm = () => {
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="flex w-full flex-col gap-4 text-(--clr-textLight) md:gap-5 dark:text-(--clr-textDark)"
+      noValidate
     >
       <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-2.5 md:p-4 dark:border-slate-700/70 dark:bg-slate-800/30">
         <div className="mb-4 flex items-start gap-3 md:mb-5">
@@ -136,6 +139,7 @@ const ApproveRequestForm = () => {
             placeholder="Select a Group"
             label="Assign to group"
             required={true}
+            nativeRequired={false}
             error={errors.assign_to_group}
             className="mb-0"
           />
@@ -145,6 +149,7 @@ const ApproveRequestForm = () => {
             name="assign_to_sub"
             label="Assign to technician"
             required={true}
+            nativeRequired={false}
             options={technicians ?? []}
             placeholder="Assign To"
             error={errors.assign_to_sub}
@@ -165,19 +170,27 @@ const ApproveRequestForm = () => {
         </div>
       </div>
 
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+      <div className={cn(sharedStyles.btnParent, sharedStyles.modalBtnParent)}>
         <button
           type="button"
           disabled={isPending}
           onClick={() => setShowApproveRequestDialog(false)}
-          className="min-h-10 rounded-lg border border-slate-300 bg-white px-5 py-2 text-xs font-medium text-slate-700 transition-colors hover:cursor-pointer hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-28 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+          className={cn(
+            sharedStyles.btnCancel,
+            sharedStyles.btn,
+            "min-h-10 disabled:cursor-not-allowed disabled:opacity-50",
+          )}
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isPending}
-          className="flex min-h-10 items-center justify-center gap-2 rounded-lg border border-emerald-600 bg-emerald-600 px-5 py-2 text-xs font-semibold text-white transition-colors hover:cursor-pointer hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60 sm:min-w-36 dark:border-emerald-600 dark:bg-emerald-700 dark:hover:bg-emerald-600"
+          className={cn(
+            sharedStyles.btnApprove,
+            sharedStyles.btn,
+            "flex min-h-10 items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60",
+          )}
         >
           {isPending ? (
             <>

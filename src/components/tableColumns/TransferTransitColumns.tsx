@@ -178,7 +178,7 @@ export const getTransferTransitColumns = (
         delete: {
           config: {
             resourcePath: `api/transfers/${rowId}`,
-            queryKey: ["transfers", "transfer-delete"],
+            queryKey: ["transfers"],
             resourceName: "transfer",
           },
           onDelete: openDeleteDialog,

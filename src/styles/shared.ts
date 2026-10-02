@@ -111,12 +111,12 @@ export const sharedStyles = {
   btnApprove: cn(
     "flex-1",
     // light
-    "bg-green-500/10 border-green-500/40 text-green-700",
+    "bg-green-600 border-green-600 text-white",
     // dark
-    "dark:bg-green-500/15 dark:border-green-500/25 dark:text-green-300",
+    "dark:bg-green-600 dark:border-green-600 dark:text-white",
     // hover
-    "hover:bg-green-500/20 hover:border-green-500/60",
-    "dark:hover:bg-green-500/22 dark:hover:border-green-500/40",
+    "hover:bg-green-700 hover:border-green-700",
+    "dark:hover:bg-green-500 dark:hover:border-green-500",
   ),
   btnView: cn(
     "flex-1",
@@ -142,12 +142,24 @@ export const sharedStyles = {
   btnDelete: cn(
     "flex-1",
     // light
-    "bg-red-500/10 border-red-500/40 text-red-700",
+    "bg-red-600 border-red-600 text-white",
     // dark
-    "dark:bg-red-500/15 dark:border-red-500/30 dark:text-red-300",
+    "dark:bg-red-600 dark:border-red-600 dark:text-white",
     // hover
-    "hover:bg-red-500/20 hover:border-red-500/60",
-    "dark:hover:bg-red-500/22 dark:hover:border-red-500/40",
+    "hover:bg-red-700 hover:border-red-700",
+    "dark:hover:bg-red-500 dark:hover:border-red-500",
+    // disabled
+    "disabled:cursor-not-allowed disabled:opacity-60",
+  ),
+  btnCancelDelete: cn(
+    "flex-1",
+    // light
+    "bg-amber-50 border-amber-300 text-amber-900",
+    // dark
+    "dark:bg-amber-400/10 dark:border-amber-400/30 dark:text-amber-200",
+    // hover
+    "hover:bg-amber-100 hover:border-amber-400",
+    "dark:hover:bg-amber-400/20 dark:hover:border-amber-400/50",
   ),
   /* //$ ——— Badge Styles ———————————————————————————————————————————————————————— */
   badge: cn(),

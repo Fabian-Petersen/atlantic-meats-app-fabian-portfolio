@@ -230,10 +230,27 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
   // Location Options
   // ==========================================================================
 
-  const locationOptions = useMemo<SelectOption[]>(
-    () => locationsData?.locations?.map(toSelectOption) ?? [],
-    [locationsData],
-  );
+  const locationOptions = useMemo<SelectOption[]>(() => {
+    const uniqueLocations = new Map<string, SelectOption>();
+
+    for (const location of locationsData?.locations ?? []) {
+      const option = toSelectOption(location);
+      const value = option.value.trim();
+
+      if (!value) continue;
+
+      const key = value.toLocaleLowerCase();
+
+      if (!uniqueLocations.has(key)) {
+        uniqueLocations.set(key, {
+          label: option.label.trim() || value,
+          value,
+        });
+      }
+    }
+
+    return Array.from(uniqueLocations.values());
+  }, [locationsData]);
 
   // ==========================================================================
   // Area Options

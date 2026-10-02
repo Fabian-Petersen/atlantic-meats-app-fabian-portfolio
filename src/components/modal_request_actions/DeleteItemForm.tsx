@@ -45,14 +45,23 @@ const DeleteItemForm = () => {
   };
 
   return (
-    <form onSubmit={handleDelete} className={cn(sharedStyles.modalForm)}>
+    <form
+      onSubmit={handleDelete}
+      className={cn(sharedStyles.modalForm, "bg-transparent dark:bg-transparent")}
+    >
       {/* Actions */}
-      <div className={cn(sharedStyles.btnParent, sharedStyles.modalBtnParent)}>
+      <div
+        className={cn(
+          sharedStyles.btnParent,
+          sharedStyles.modalBtnParent,
+          "mx-0 w-full max-w-none md:w-full md:max-w-none",
+        )}
+      >
         <button
           type="button"
-          // disabled={isPending}
+          disabled={isPending}
           onClick={() => setShowDeleteDialog(false)}
-          className={cn(sharedStyles.btnCancel, sharedStyles.btn)}
+          className={cn(sharedStyles.btnCancelDelete, sharedStyles.btn)}
         >
           Cancel
         </button>
@@ -60,11 +69,11 @@ const DeleteItemForm = () => {
         <button
           type="submit"
           disabled={isPending}
-          className={cn(sharedStyles.btnDelete, sharedStyles.btn, "py-1")}
+          className={cn(sharedStyles.btnDelete, sharedStyles.btn)}
         >
           {isPending ? (
-            <div className="w-full flex items-center justify-center text-white">
-              <Spinner className="size-6 md:size-6 text-red-500" />
+            <div className="flex w-full items-center justify-center text-white">
+              <Spinner className="size-6 text-white md:size-6" />
             </div>
           ) : (
             "Delete"

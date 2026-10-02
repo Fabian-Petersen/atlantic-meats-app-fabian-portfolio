@@ -142,7 +142,7 @@ export const getDisposalRequestsColumns = (
         delete: {
           config: {
             resourcePath: "api/disposals/requests",
-            queryKey: ["disposals", "delete-request"],
+            queryKey: ["disposals"],
             resourceName: "disposal request",
           },
           onDelete: openDeleteDialog,

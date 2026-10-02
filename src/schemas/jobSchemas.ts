@@ -89,6 +89,7 @@ export const createJobAssetSchema = jobRequestBaseSchema
   })
   .superRefine((data, ctx) => {
     const reason = data.assetIssueReason || undefined;
+    const imageKeys = new Set<string>();
 
     if (!data.assetID?.trim() && !reason) {
       ctx.addIssue({
@@ -113,6 +114,26 @@ export const createJobAssetSchema = jobRequestBaseSchema
         message: "Images are compulsory if no barcode is supplied",
       });
     }
+
+    for (const image of data.images ?? []) {
+      const imageKey = [
+        image.name,
+        image.size,
+        image.type,
+        image.lastModified,
+      ].join(":");
+
+      if (imageKeys.has(imageKey)) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["images"],
+          message: "The same image cannot be added more than once",
+        });
+        break;
+      }
+
+      imageKeys.add(imageKey);
+    }
   });
 
 export const createJobRequestSchema = jobRequestBaseSchema
@@ -128,6 +149,26 @@ export const createJobRequestSchema = jobRequestBaseSchema
     assets: z.array(createJobAssetSchema).min(1, {
       message: "Please add at least one asset to the job request",
     }),
+  })
+  .superRefine((data, ctx) => {
+    const breakdownTime = new Date(data.breakdown_time);
+
+    if (Number.isNaN(breakdownTime.getTime())) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["breakdown_time"],
+        message: "Please enter a valid breakdown time",
+      });
+      return;
+    }
+
+    if (breakdownTime.getTime() > Date.now()) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["breakdown_time"],
+        message: "Breakdown time cannot be in the future",
+      });
+    }
   });
 
 export type CreateJobRequestFormValues = z.infer<typeof createJobRequestSchema>;
@@ -211,6 +252,18 @@ export const jobApprovedAPIResponseSchema = jobRequestBaseSchema
     approved_at: z.string().optional(),
     approved_by: z.string().optional(),
     images: z.array(presignedURLSchema).default([]),
+    assets: z
+      .array(
+        z.object({
+          equipment: z.string(),
+          assetID: z.string().optional(),
+          area: z.string().optional(),
+          assetIssueReason: z.string().optional(),
+          assetIssueDetails: z.string().optional(),
+          images: z.array(presignedURLSchema).default([]),
+        }),
+      )
+      .optional(),
   });
 
 export type JobAPIResponse = z.infer<typeof jobRequestAPIResponseSchema>;

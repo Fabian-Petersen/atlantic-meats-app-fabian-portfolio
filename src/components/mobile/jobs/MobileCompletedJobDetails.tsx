@@ -44,6 +44,7 @@ import { TAB_CONFIG, type Tab } from "@/lib/tabConfig";
 
 // $ ————— utils ——————————————————————————————————————————————————————————————————
 import { formatDateTime } from "@/utils/formatDateTime";
+import { formatActionItems } from "@/utils/formatActionItems";
 
 // $ ── Types ─────────────────────────────────────────────────────────────────────
 /**
@@ -290,8 +291,14 @@ function MobileCompletedJobDetails({ item }: Props) {
                 <SectionTitle>Details</SectionTitle>
                 <Field label="Work order no" value={action.work_order_number} />
                 <Field label="Root cause" value={action.root_cause} />
-                <Field label="Parts used" value={action.parts} />
-                <Field label="Sundries" value={action.sundries} />
+                <Field
+                  label="Parts used"
+                  value={formatActionItems(action.parts)}
+                />
+                <Field
+                  label="Sundries"
+                  value={formatActionItems(action.sundries)}
+                />
                 <Field
                   label="Distance"
                   value={action.total_km ? `${action.total_km} km` : null}

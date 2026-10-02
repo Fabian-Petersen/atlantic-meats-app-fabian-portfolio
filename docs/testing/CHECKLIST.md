@@ -6,12 +6,12 @@ This checklist is to manually verify the application on localhost before a produ
 
 ## How to use this checklist
 
-- [ ] Record the test date, application commit, backend version, browser, device/viewport, tester, and environment below.
-- [ ] Use unique test identifiers such as `LOCAL-QA-YYYYMMDD-01` so created records are easy to find and remove.
-- [ ] Test with at least one account for each role: `admin`, `manager`, `user`, `maintenance`, and `contractor`.
-- [ ] For every mutation, verify all four outcomes: success feedback, correct redirect, list/detail data refresh, and persisted data after a hard reload.
-- [ ] For every destructive test, use disposable test data and confirm both the UI record and its backend-associated files/identity are handled correctly.
-- [ ] Record failures in the execution log at the end of this document with screenshots, console output, and network request details.
+[ ] Record the test date, application commit, backend version, browser, device/viewport, tester, and environment below.
+[ ] Use unique test identifiers such as `LOCAL-QA-YYYYMMDD-01` so created records are easy to find and remove.
+[ ] Test with at least one account for each role: `admin`, `manager`, `user`, `maintenance`, and `contractor`.
+[ ] For every mutation, verify all four outcomes: success feedback, correct redirect, list/detail data refresh, and persisted data after a hard reload.
+[ ] For every destructive test, use disposable test data and confirm both the UI record and its backend-associated files/identity are handled correctly.
+[ ] Record failures in the execution log at the end of this document with screenshots, console output, and network request details.
 
 ### Test run details
 
@@ -28,18 +28,19 @@ This checklist is to manually verify the application on localhost before a produ
 
 ### Result convention
 
-- `[x]` = passed
-- `[ ]` = not run
+`[x]` = passed
+`[ ]` = not run
+
 - Add `FAIL: defect-id` beside a failed test
 - Add `N/A: reason` only when the feature is intentionally excluded from the release
 
 ## 1. Environment and smoke test
 
-- [ ] Install dependencies with `npm ci` without errors.
-- [ ] Start the application with `npm run dev` and open the localhost URL printed by Vite.
-- [ ] Confirm the app has valid `VITE_COGNITO_USERPOOL_ID`, `VITE_COGNITO_CLIENT_ID`, and `VITE_SITE_URL` values without exposing them in the browser UI or repository.
-- [ ] Open the app in a clean/incognito session; the login screen renders without a blank page or uncaught console error.
-- [ ] Confirm the Atlantic Meats logo, fonts, icons, colors, and form controls load without missing assets.
+- [x] Install dependencies with `npm ci` without errors.
+- [x] Start the application with `npm run dev` and open the localhost URL printed by Vite.
+- [x] Confirm the app has valid `VITE_COGNITO_USERPOOL_ID`, `VITE_COGNITO_CLIENT_ID`, and `VITE_SITE_URL` values without exposing them in the browser UI or repository.
+- [x] Open the app in a clean/incognito session; the login screen renders without a blank page or uncaught console error.
+- [x] Confirm the Atlantic Meats logo, fonts, icons, colors, and form controls load without missing assets.
 - [ ] Confirm authenticated API calls use the intended localhost test API, never production by accident.
 - [ ] Confirm API calls include a Cognito bearer token while S3 presigned uploads do not incorrectly use that token.
 - [ ] Refresh each major page and confirm React Router resolves it instead of returning a server 404.
@@ -53,16 +54,16 @@ This checklist is to manually verify the application on localhost before a produ
 
 ### Login
 
-- [ ] Submit an empty login form; required/format validation appears and no request is sent.
-- [ ] Enter an invalid email; the form displays a useful validation message.
-- [ ] Enter a password that does not meet the displayed policy; the form blocks submission appropriately.
-- [ ] Toggle password visibility; only the display changes and the password value remains intact.
-- [ ] Sign in with valid credentials; the user reaches `/dashboard` and authenticated data loads.
-- [ ] Sign in with an incorrect password; a safe, understandable error appears without revealing account existence or backend details.
-- [ ] Double-click **Sign In** or press Enter repeatedly; only one effective login occurs.
-- [ ] While sign-in is pending, the loading state appears and the submit button cannot be used repeatedly.
-- [ ] Visit `/` while already authenticated; the public-only guard redirects away from login.
-- [ ] Directly visit a protected URL while signed out; access is denied and the user is returned to the login flow.
+- [x] Submit an empty login form; required/format validation appears and no request is sent.
+- [x] Enter an invalid email; the form displays a useful validation message.
+- [x] Enter a password that does not meet the displayed policy; the form blocks submission appropriately.
+- [x] Toggle password visibility; only the display changes and the password value remains intact.
+- [x] Sign in with valid credentials; the user reaches `/dashboard` and authenticated data loads.
+- [x] Sign in with an incorrect password; a safe, understandable error appears without revealing account existence or backend details.
+- [x] Double-click **Sign In** or press Enter repeatedly; only one effective login occurs.
+- [x] While sign-in is pending, the loading state appears and the submit button cannot be used repeatedly.
+- [x] Visit `/` while already authenticated; the public-only guard redirects away from login.
+- [x] Directly visit a protected URL while signed out; access is denied and the user is returned to the login flow.
 
 ### First login / temporary password
 
@@ -76,22 +77,22 @@ This checklist is to manually verify the application on localhost before a produ
 
 ### Forgot password
 
-- [ ] Open **Forgot Password** from login and confirm `/forgot-password` loads.
-- [ ] Submit an invalid email; inline validation appears.
-- [ ] Submit a registered test email; a reset code is delivered and the UI advances to the expected next step.
-- [ ] Enter a non-numeric, short, incorrect, expired, and valid six-digit code; each result is handled correctly.
-- [ ] Use **Resend Code**; a new code is delivered, rate limits are handled, and no duplicate uncontrolled requests occur.
-- [ ] Set and confirm a compliant new password, then log in with it.
-- [ ] Verify the old password no longer works.
-- [ ] Use **Back/Return** at each stage; navigation works without leaving sensitive form values visible.
+- [x] Open **Forgot Password** from login and confirm `/forgot-password` loads.
+- [x] Submit an invalid email; inline validation appears.
+- [x] Submit a registered test email; a reset code is delivered and the UI advances to the expected next step.
+- [x] Enter a non-numeric, short, incorrect, expired, and valid six-digit code; each result is handled correctly.
+- [x] Use **Resend Code**; a new code is delivered, rate limits are handled, and no duplicate uncontrolled requests occur.
+- [x] Set and confirm a compliant new password, then log in with it.
+- [x] Verify the old password no longer works.
+- [x] Use **Back/Return** at each stage; navigation works without leaving sensitive form values visible.
 
 ### Session lifecycle
 
-- [ ] Refresh an authenticated page; the session rehydrates without briefly exposing unauthorized content or making premature API calls.
+- [x] Refresh an authenticated page; the session rehydrates without briefly exposing unauthorized content or making premature API calls.
 - [ ] Open two tabs; sign out in one and verify the other no longer permits protected operations after refresh/request.
 - [ ] Let the access token expire or simulate a 401; the user is signed out and redirected to the actual login route `/` rather than a missing `/login` page.
-- [ ] Click logout; the local/auth session is cleared and browser Back cannot reopen protected content.
-- [ ] Confirm tokens, passwords, reset codes, and temporary passwords never appear in URLs, console logs, toast messages, or local UI history.
+- [x] Click logout; the local/auth session is cleared and browser Back cannot reopen protected content.
+- [x] Confirm tokens, passwords, reset codes, and temporary passwords never appear in URLs, console logs, toast messages, or local UI history.
 
 ## 3. Role-based navigation and authorization
 
@@ -99,7 +100,7 @@ Test both visible navigation and direct URL entry. Hiding a menu item is not suf
 
 ### Admin
 
-- [ ] Admin sees Dashboard, all maintenance pages, Assets, Asset Verification, Transfers, Disposals, Users, and My Profile as intended.
+- [x] Admin sees Dashboard, all maintenance pages, Assets, Asset Verification, Transfers, Disposals, Users, and My Profile as intended.
 - [ ] Admin can access admin-only routes: pending job approval, asset register/create/update/history/manual verification, transfer requests, disposal requests, users, and create user.
 
 ### Manager
@@ -134,77 +135,78 @@ Test both visible navigation and direct URL entry. Hiding a menu item is not suf
 
 ## 4. Global layout, navigation, and feedback
 
-- [ ] Desktop sidebar sections expand/collapse and every visible link opens the correct page.
-- [ ] Active navigation styling follows the current route.
-- [ ] Mobile menu opens, closes by its control and overlay, scrolls when long, and closes after navigation.
-- [ ] Navbar shows the correct signed-in user's name/avatar details.
-- [ ] Theme toggle changes light/dark theme, persists as intended, and all text/controls remain readable.
-- [ ] Breadcrumbs, Back buttons, Cancel buttons, and page headings lead to the expected parent page.
-- [ ] Search button/input appears only on intended pages and searches the currently displayed data correctly.
+- [x] Desktop sidebar sections expand/collapse and every visible link opens the correct page.
+- [x] Active navigation styling follows the current route.
+- [x] Mobile menu opens, closes by its control and overlay, scrolls when long, and closes after navigation.
+- [x] Navbar shows the correct signed-in user's name/avatar details.
+- [x] Theme toggle changes light/dark theme, persists as intended, and all text/controls remain readable.
+- [x] Breadcrumbs, Back buttons, Cancel buttons, and page headings lead to the expected parent page.
+- [x] Search button/input appears only on intended pages and searches the currently displayed data correctly.
 - [ ] Empty lists show a useful empty state rather than a broken table/card.
-- [ ] Loading skeletons/spinners appear during slow requests and disappear on completion.
-- [ ] API failures show a useful error state with no infinite spinner.
+- [x] Loading skeletons/spinners appear during slow requests and disappear on completion.
+- [x] API failures show a useful error state with no infinite spinner.
 - [ ] Success/error dialogs or toasts are accurate, dismissible, and do not persist into unrelated actions.
 - [ ] Repeated clicks on submit/delete/approve do not create duplicate actions.
-- [ ] Keyboard focus is visible and returns sensibly after dialogs/sidebars close.
+- [x] Keyboard focus is visible and returns sensibly after dialogs/sidebars close.
 
 ## 5. Dashboard
 
-- [ ] `/dashboard` loads all metric cards without console or schema errors.
-- [ ] Maintenance jobs, maintenance cost, open requests, and verification charts render with real test data.
-- [ ] Dashboard totals agree with the corresponding filtered lists and known test records.
-- [ ] Monthly/year-to-date values use the correct year, month, currency, and timezone.
-- [ ] Percentage changes handle zero previous values without `NaN`, `Infinity`, or misleading output.
-- [ ] Empty metrics render as zero/empty states instead of crashing.
-- [ ] Dashboard refreshes after a related job/asset workflow mutation or after a hard reload.
-- [ ] Narrow mobile screens do not clip chart labels, legends, or metric values.
+- [x] `/dashboard` loads all metric cards without console or schema errors.
+- [x] Maintenance jobs, maintenance cost, open requests, and verification charts render with real test data.
+- [x] Dashboard totals agree with the corresponding filtered lists and known test records.
+- [x] Monthly/year-to-date values use the correct year, month, currency, and timezone.
+- [x] Percentage changes handle zero previous values without `NaN`, `Infinity`, or misleading output.
+- [x] Empty metrics render as zero/empty states instead of crashing.
+- [x] Dashboard refreshes after a related job/asset workflow mutation or after a hard reload.
+- [x] Narrow mobile screens do not clip chart labels, legends, or metric values.
 
 ## 6. Maintenance jobs
 
 ### Create Job (`/jobs/create-job`)
 
-- [ ] **Create Job** loads location options from the API.
-- [ ] Selecting a location filters Area; selecting Area filters Equipment; selecting Equipment filters Asset ID.
-- [ ] Changing a parent selection clears incompatible child selections.
-- [ ] Submit with required fields missing; Location, Type, Priority, Equipment, Breakdown Time, Impact, and Description errors appear.
-- [ ] Create a valid single-asset job and verify the generated request/job-card identifier, pending status, requester, timestamps, and data.
-- [ ] Add two or more assets to one job; each asset preserves its own area, equipment, asset ID/reason, notes, and images.
-- [ ] Remove a middle asset from a multi-asset request; remaining values stay attached to the correct assets.
-- [ ] Attempt to remove the last asset; at least one asset remains or validation blocks submission.
-- [ ] Select an equipment item with a valid barcode; the Asset ID list and stored ID are correct.
-- [ ] Test the no-barcode flow with each reason: no barcode visible, damaged barcode, rental unit, and other.
-- [ ] Choose **other** without details; submission is blocked. Add details and confirm it succeeds.
-- [ ] Choose a no-barcode reason without an image; submission is blocked because evidence is required.
-- [ ] Upload one and multiple supported images; previews, filenames, compression, metadata submission, presigned uploads, and later display work.
+- [x] **Create Job** loads location options from the API.
+- [x] Selecting a location filters Area; selecting Area filters Equipment; selecting Equipment filters Asset ID.
+- [x] Changing a parent selection clears incompatible child selections.
+- [x] Submit with required fields missing; Location, Type, Priority, Equipment, Breakdown Time, Impact, and Description errors appear.
+- [x] Create a valid single-asset job and verify the generated request/job-card identifier, pending status, requester, timestamps, and data.
+- [x] Add two or more assets to one job; each asset preserves its own area, equipment, asset ID/reason, notes, and images.
+- [x] Remove a middle asset from a multi-asset request; remaining values stay attached to the correct assets.
+- [x] Attempt to remove the last asset; at least one asset remains or validation blocks submission.
+- [x] Select an equipment item with a valid barcode; the Asset ID list and stored ID are correct.
+- [x] Test the no-barcode flow with each reason: no barcode visible, damaged barcode, rental unit, and other.
+- [x] Choose **other** without details; submission is blocked. Add details and confirm it succeeds.
+- [x] Choose a no-barcode reason without an image; submission is blocked because evidence is required.
+- [x] Upload one and multiple supported images; previews, filenames, compression, metadata submission, presigned uploads, and later display work.
 - [ ] Try an unsupported, oversized, corrupt, duplicate, and zero-byte image; the UI handles each safely.
-- [ ] Use a past, current, and future Breakdown Time; confirm the accepted rule matches business expectations.
-- [ ] Cancel creation; no record or orphaned upload remains.
+- [x] Use a past, current, and future Breakdown Time; confirm the accepted rule matches business expectations.
+- [x] Cancel creation; no record or orphaned upload remains.
 - [ ] Simulate metadata success followed by S3 upload failure; the user receives an actionable error and the system does not silently report full success.
 
 ### Pending approval (`/jobs/pending-approval`, admin)
 
-- [ ] Pending list shows only pending requests with correct columns/status badges.
-- [ ] Search, column filters, pagination, page size, sorting, and row actions work together.
-- [ ] Open a request; all common and per-asset details/images display correctly.
-- [ ] Switch among assets in a multi-asset request; approval details track the selected asset without losing shared request information.
-- [ ] Approve without assignee/group/target date; validation prevents submission.
-- [ ] Approve and assign to a technician/contractor as supported; assignee name, group, approver, approval timestamp, target date, and status persist.
-- [ ] Attempt an invalid/past target date; confirm the business rule is enforced.
+- [x] Pending list shows only pending requests with correct columns/status badges.
+- [x] Search, column filters, pagination, page size, sorting, and row actions work together.
+- [x] Open a request; all common and per-asset details/images display correctly.
+- [x] Switch among assets in a multi-asset request; approval details track the selected asset without losing shared request information.
+- [x] Approve without assignee/group/target date; validation prevents submission.
+- [x] Approve and assign to a technician/contractor as supported; assignee name, group, approver, approval timestamp, target date, and status persist.
+- [x] Attempt an invalid/past target date; confirm the business rule is enforced.
 - [ ] Reject without a reason; validation prevents submission.
-- [ ] Reject with a reason; status, reject message, rejected-by, and rejected-at persist and display.
-- [ ] Cancel/close approve and reject dialogs; no mutation occurs.
-- [ ] Confirm approve/reject actions disappear or become invalid after the first decision, including from a second browser tab.
-- [ ] Delete a disposable pending request; Cancel preserves it and Confirm removes it after list refresh.
+- [x] Reject with a reason; status, reject message, rejected-by, and rejected-at persist and display.
+- [x] Cancel/close approve and reject dialogs; no mutation occurs.
+- [x] Confirm approve/reject actions disappear or become invalid after the first decision, including from a second browser tab.
+- [x] Delete a disposable pending request; Cancel preserves it and Confirm removes it after list refresh.
 
 ### Open/in-progress jobs (`/jobs/in-progress`)
 
-- [ ] Approved work appears in the in-progress list for the correct permitted users/assignee.
-- [ ] Open job details; request data, assignment, target date, status, and images are correct.
-- [ ] Overdue highlighting is correct at the date boundary and uses the intended timezone.
+- [x] Approved work appears in the in-progress list for the correct permitted users/assignee.
+- [x] Open job details; request data, assignment, target date, status, and images are correct.
+- [x] Overdue highlighting is correct at the date boundary and uses the intended timezone.
 - [ ] Edit/update an allowed request; changed fields persist after refresh without losing existing images.
-- [ ] Delete/cancel an in-progress job only if the business rules permit it; unauthorized roles cannot do so.
-- [ ] Open **Comments** from a row; the sidebar is tied to the correct request.
-- [ ] Open **Action Job** and verify required fields: start/end time, total km, work completed, root cause, status, signature, and signed-by.
+  - [ ] **_Notes: Move the edit form to a page and correct the data fields accordingly_**
+- [x] Delete/cancel an in-progress job only if the business rules permit it; unauthorized roles cannot do so.
+- [x] Open **Comments** from a row; the sidebar is tied to the correct request.
+- [x] Open **Action Job** and verify required fields: start/end time, total km, work completed, root cause, status, signature, and signed-by.
 - [ ] Enter future start/end times and an end before start; validation blocks each invalid case.
 - [ ] Enter zero, negative, non-numeric, and valid distance/cost values; validation and stored values are correct.
 - [ ] Test optional findings, sundries, parts, contractor, costs, work-order number, images, and invoices.
@@ -213,74 +215,74 @@ Test both visible navigation and direct URL entry. Hiding a menu item is not suf
 
 ### Completed jobs (`/jobs/completed` and `/jobs/:id/complete`)
 
-- [ ] List scope is correct: admin sees intended completed jobs; other roles see only their intended jobs.
+- [x] List scope is correct: admin sees intended completed jobs; other roles see only their intended jobs.
 - [ ] Completed details combine request and action data correctly, including costs, root cause, evidence, assignee, requester, and timestamps.
 - [ ] Image/invoice links open the correct objects and expired/missing links fail gracefully.
 - [ ] Download the job card PDF; filename, job number, fields, images/signature, formatting, and totals are correct.
 - [ ] Repeated download does not mutate the job or open duplicate uncontrolled windows.
-- [ ] Job status transitions cannot be replayed to produce duplicate action records.
+- [x] Job status transitions cannot be replayed to produce duplicate action records.
 
 ### Comments
 
-- [ ] Open comments from each job list/detail action; comments belong to the selected request only.
-- [ ] Post an empty/whitespace comment; it is rejected.
-- [ ] Post a normal, long, multiline, punctuation, emoji, and HTML-like comment; content is stored/displayed safely without script execution.
-- [ ] A new comment appears immediately with correct author and timestamp and remains after reload.
-- [ ] Simultaneous comments from two users appear without one overwriting the other.
-- [ ] If WhatsApp comment notifications are enabled in the test environment, confirm intended recipients receive exactly one message with job reference, comment, author, and timestamp.
-- [ ] A WhatsApp delivery failure does not make the successfully stored comment appear failed; failure is observable server-side.
+- [x] Open comments from each job list/detail action; comments belong to the selected request only.
+- [x] Post an empty/whitespace comment; it is rejected.
+- [x] Post a normal, long, multiline, punctuation, emoji, and HTML-like comment; content is stored/displayed safely without script execution.
+- [x] A new comment appears immediately with correct author and timestamp and remains after reload.
+- [x] Simultaneous comments from two users appear without one overwriting the other.
 
 ## 7. Assets
 
 ### Create New Asset (`/assets/create-new-asset`, admin)
 
-- [ ] The form loads Location, Business Unit, Area, Equipment, Asset Type, Category, Condition, and dependent option data.
-- [ ] Submit with required fields missing; clear errors appear.
-- [ ] Create a valid General asset with Location, Business Unit, Area, Equipment, Asset ID, Condition, Category, Replacement Value, optional Serial Number, Notes, and Images.
-- [ ] Create a Low Value asset below R5,000; it succeeds without an Asset ID if that is the intended rule.
-- [ ] Set a Low Value replacement value at/above R5,000; validation blocks it at the exact boundary expected by the business.
-- [ ] Create a High CAPEX asset above R50,000; it succeeds.
-- [ ] Set a High CAPEX replacement value at/below R50,000; validation blocks it at the expected boundary.
-- [ ] Create a Rental asset without an Asset ID; it follows the intended rule.
-- [ ] For asset types requiring a barcode, omit Asset ID; validation blocks submission.
-- [ ] Test zero, negative, decimal, very large, and formatted replacement values; stored currency/value is accurate.
+- [x] The form loads Location, Business Unit, Area, Equipment, Asset Type, Category, Condition, and dependent option data.
+- [x] Submit with required fields missing; clear errors appear.
+- [x] Create a valid General asset with Location, Business Unit, Area, Equipment, Asset ID, Condition, Category, Replacement Value, optional Serial Number, Notes, and Images.
+- [x] Create a Low Value asset below R5,000; it succeeds without an Asset ID if that is the intended rule.
+- [x] Set a Low Value replacement value at/above R5,000; validation blocks it at the exact boundary expected by the business.
+- [x] Create a High CAPEX asset above R50,000; it succeeds.
+- [x] Set a High CAPEX replacement value at/below R50,000; validation blocks it at the expected boundary.
+- [x] Create a Rental asset without an Asset ID; it follows the intended rule.
+- [x] For asset types requiring a barcode, omit Asset ID; validation blocks submission.
+- [x] Test zero, negative, decimal, very large, and formatted replacement values; stored currency/value is accurate.
+  - [ ] **_Notes: Error does not say barcode already exist, also redirects away without giving user option to correct_**
 - [ ] Attempt a duplicate Asset ID and duplicate Serial Number; the system applies the intended uniqueness rules with a useful error.
 - [ ] Upload multiple supported images and test invalid/oversized/corrupt/duplicate files.
 - [ ] Cancel creation; no record/orphaned file remains.
 
 ### Asset register (`/assets/list`, admin)
 
-- [ ] Newly created assets appear with correct values after creation and hard refresh.
-- [ ] Desktop table and mobile cards show equivalent data and actions.
-- [ ] Search and filter by Location, Equipment, verification status, and other exposed columns.
-- [ ] Combine filters, clear/reset them, paginate, change page size, and sort; results/counts remain correct.
-- [ ] Column visibility selection works and does not break row actions.
-- [ ] Open **View**; the correct asset detail loads.
-- [ ] Open **Edit**; current values and existing images are prefilled.
+- [x] Newly created assets appear with correct values after creation and hard refresh.
+- [x] Desktop table and mobile cards show equivalent data and actions.
+- [x] Search and filter by Location, Equipment, verification status, and other exposed columns.
+- [x] Combine filters, clear/reset them, paginate, change page size, and sort; results/counts remain correct.
+- [x] Column visibility selection works and does not break row actions.
+- [x] Open **View**; the correct asset detail loads.
+- [x] Open **Edit**; current values and existing images are prefilled.
 - [ ] Update text/select/value fields; save and confirm list/detail refresh.
-- [ ] Keep all existing images while updating metadata; no image is lost.
+- [x] Keep all existing images while updating metadata; no image is lost.
 - [ ] Add new images, remove selected existing images, and combine add/remove in one update; S3 and UI results match.
-- [ ] Cancel update; no changes persist.
-- [ ] Delete an asset using Cancel and Confirm paths; confirm list removal and intended file/history behavior.
+- [x] Cancel update; no changes persist.
+- [x] Delete an asset using Cancel and Confirm paths; confirm list removal and intended file/history behavior.
 - [ ] Attempt to delete an asset referenced by jobs/transfers/disposals; the business rule prevents orphaned records or clearly explains the result.
 
 ### Asset details and history (`/assets/:id`, `/assets/:id/history`)
 
-- [ ] Detail tabs show Details, Verification, Jobs, and Transfers data for the same asset.
-- [ ] Image gallery opens full-screen, moves between images, closes with button/Escape, and handles no images.
-- [ ] History metrics show completed, in-progress, pending, total cost, MTBF, MTTR, availability, and failure count accurately.
-- [ ] Maintenance cost chart and job history match known completed-job data.
+- [x] Detail tabs show Details, Verification, Jobs, and Transfers data for the same asset.
+- [x] Image gallery opens full-screen, moves between images, closes with button/Escape, and handles no images.
+- [x] History metrics show completed, in-progress, pending, total cost, MTBF, MTTR, availability, and failure count accurately.
+  - [ ] **_Notes: Add history metrics when viewing asset page_**
+- [x] Maintenance cost chart and job history match known completed-job data.
 - [ ] A history row opens the correct completed job details.
 - [ ] An asset with no history shows a stable empty state and zero/null metrics appropriately.
 
 ### Barcode and manual verification
 
 - [ ] Admin and Manager can enter `/assets/verification`; other roles cannot.
-- [ ] Grant camera permission; scanner starts, shows a usable camera view, and scans a known test barcode once.
+- [x] Grant camera permission; scanner starts, shows a usable camera view, and scans a known test barcode once.
 - [ ] Deny camera permission; the page explains recovery instead of hanging/crashing.
 - [ ] Test no camera, camera already in use, front/rear camera, slow initialization, and leaving the page while scanning.
-- [ ] Scan a valid Asset ID; verification posts the captured latitude/longitude and shows success.
-- [ ] Scan an unknown, malformed, or repeated barcode; controlled error/de-duplication behavior occurs.
+- [x] Scan a valid Asset ID; verification posts the captured latitude/longitude and shows success.
+- [x] Scan an unknown, malformed, or repeated barcode; controlled error/de-duplication behavior occurs.
 - [ ] Grant and deny geolocation permission; both outcomes are handled clearly.
 - [ ] Confirm coordinates are not submitted as zero/stale values before geolocation resolves.
 - [ ] Verify status, verified-by, last-verified date, next-due date, and location update in list/detail/history.
@@ -388,9 +390,9 @@ Test both visible navigation and direct URL entry. Hiding a menu item is not suf
 
 ### User list (`/users`, admin)
 
-- [ ] List loads created date, name, location, position, email, mobile, group, account status, and updated timestamp.
-- [ ] Search, sorting, pagination, page-size changes, empty state, and mobile cards work.
-- [ ] **Resend Password** appears only for `FORCE_CHANGE_PASSWORD` users.
+- [x] List loads created date, name, location, position, email, mobile, group, account status, and updated timestamp.
+- [x] Search, sorting, pagination, page-size changes, empty state, and mobile cards work.
+- [x] **Resend Password** appears only for `FORCE_CHANGE_PASSWORD` users.
 - [ ] Resend temporary password delivers credentials once, provides safe feedback, and never displays/logs the password.
 - [ ] Confirmed users do not expose an invalid resend action.
 
@@ -419,16 +421,16 @@ Test both visible navigation and direct URL entry. Hiding a menu item is not suf
 
 ### My Profile (`/users/profile`)
 
-- [ ] Each role sees only its own name, surname, location, group, position, email, mobile, and metadata.
-- [ ] Editing Mobile Number accepts a valid number and persists after reload.
+- [x] Each role sees only its own name, surname, location, group, position, email, mobile, and metadata.
+- [x] Editing Mobile Number accepts a valid number and persists after reload.
 - [ ] Invalid mobile numbers are rejected.
 - [ ] A user cannot alter disabled identity/authorization fields via the UI or crafted request.
 - [ ] A user cannot change another profile by modifying the route/request ID.
 
 ## 11. Notifications
 
-- [ ] Notification button opens/closes the sidebar and shows a correct unread count.
-- [ ] All, Unread, Read, and Archived tabs/categories show the correct notifications and counts.
+- [x] Notification button opens/closes the sidebar and shows a correct unread count.
+- [x] All, Unread, Read, and Archived tabs/categories show the correct notifications and counts.
 - [ ] Trigger transfer submitted/approved/rejected/in-transit/received/cancelled notifications and verify recipients, title, message, priority, time, and link target.
 - [ ] Trigger job assigned/completed/overdue notifications and verify the same fields.
 - [ ] Mark an unread notification read; badge and all counts update immediately and after reload.

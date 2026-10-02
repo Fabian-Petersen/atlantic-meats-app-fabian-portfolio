@@ -23,8 +23,15 @@ import { cn } from "@/lib/utils";
  * - `text-lg font-medium` Large, high-visibility pricing layout weight
  * - `text-gray-300` / `dark:text-gray-600` Dimmed styling logic applied exclusively to empty dashboard metrics
  */
-function CostCard({ label, value }: { label: string; value?: string | null }) {
-  const isEmpty = !value || value.trim() === "";
+function CostCard({
+  label,
+  value,
+}: {
+  label: string;
+  value?: string | number | null;
+}) {
+  const isEmpty =
+    value === null || value === undefined || String(value).trim() === "";
   return (
     <div className="bg-gray-50 dark:bg-gray-800/60 rounded-lg px-4 py-3">
       <p className="text-[10px] text-gray-400 dark:text-gray-500 mb-1">

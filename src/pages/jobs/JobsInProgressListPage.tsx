@@ -184,7 +184,7 @@ const JobsInProgressListPage = () => {
           searchPlaceholderText="search jobs"
           rowClassName={(row) => {
             return isTargetDateOverdue(row.targetDate)
-              ? "text-red-500"
+              ? "text-red-600 dark:text-red-400 !bg-red-50/90 dark:!bg-red-950/30 [&>td:first-child]:shadow-[inset_4px_0_0_0_#ef4444] hover:!bg-red-100/90 dark:hover:!bg-red-950/50"
               : "text-(--clr-textLight) dark:text-(--clr-textDark)";
           }}
         />

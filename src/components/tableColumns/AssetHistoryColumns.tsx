@@ -4,6 +4,7 @@ import { getTableMenuItems } from "@/lib/getTableMenuItems";
 // import type { Resource } from "@/utils/api";
 import { ChevronDown } from "lucide-react";
 import type { AssetHistoryItem } from "@/schemas/assetSchemas";
+import { formatActionItems } from "@/utils/formatActionItems";
 
 export const getAssetHistoryColumns = (
   //   setShowUpdateMaintenanceDialog: (v: boolean) => void,
@@ -80,8 +81,8 @@ export const getAssetHistoryColumns = (
     accessorKey: "sundries",
     header: "Sundries",
     cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
+      const value = getValue<string | string[] | null>();
+      return <p className="capitalize">{formatActionItems(value)}</p>;
     },
     minSize: 70,
     maxSize: 90,
@@ -101,8 +102,8 @@ export const getAssetHistoryColumns = (
     header: "Parts",
     enableColumnFilter: true,
     cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
+      const value = getValue<string | string[] | null>();
+      return <p className="capitalize">{formatActionItems(value)}</p>;
     },
   },
   {

@@ -142,7 +142,7 @@ export const getJobPendingColumns = (
         delete: {
           config: {
             resourcePath: "api/jobs",
-            queryKey: ["jobs", "delete-pending"],
+            queryKey: ["jobs"],
             resourceName: "request",
           },
           onDelete: openDeleteDialog,

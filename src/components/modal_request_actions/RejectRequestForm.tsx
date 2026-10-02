@@ -53,8 +53,8 @@ const RequestRejectedForm = () => {
 
   const { mutateAsync: rejectItem, isPending } = usePOST({
     id: selectedRowId ?? "",
-    resourcePath: `jobs` as Resource,
-    queryKey: ["maintenanceRequests"] as const,
+    resourcePath: "api/jobs" as Resource,
+    queryKey: ["jobs"] as const,
     action: "reject",
   });
 

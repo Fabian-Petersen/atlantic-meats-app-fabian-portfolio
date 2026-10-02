@@ -4,9 +4,11 @@ import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { Resource } from "@/utils/api";
 import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
-import { ChevronDown } from "lucide-react";
+import { AlertTriangle, ChevronDown } from "lucide-react";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { Badge } from "../features/Badge";
+import { AssetsDropdownCell } from "../features/tables/AssetsDropdownCell";
+import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
 
 export const getInProgressColumns = (
   setShowUpdateMaintenanceDialog: (v: boolean) => void,
@@ -43,6 +45,30 @@ export const getInProgressColumns = (
     maxSize: 150,
   },
   {
+    accessorKey: "approved_at",
+    header: ({ column }) => {
+      const sorted = column.getIsSorted(); // false | "asc" | "desc"
+      return (
+        <button
+          type="button"
+          className="flex items-center gap-1 select-none hover:cursor-pointer"
+          onClick={() => column.toggleSorting(sorted === "asc")}
+        >
+          <span>Date Approved</span>
+          <ChevronDown
+            className="h-4 w-4 transition-transform duration-200"
+            style={{
+              transform: sorted === "asc" ? "rotate(180deg)" : "rotate(0deg)",
+              opacity: sorted ? 1 : 0.4,
+            }}
+          />
+        </button>
+      );
+    },
+    minSize: 130,
+    maxSize: 150,
+  },
+  {
     accessorKey: "location",
     header: "Location",
     enableColumnFilter: true,
@@ -60,20 +86,32 @@ export const getInProgressColumns = (
     maxSize: 300,
   },
   {
-    accessorKey: "equipment",
-    header: "Equipment",
+    accessorKey: "assets",
+    header: "Equipment | Asset ID",
     enableColumnFilter: false,
-  },
-  {
-    accessorKey: "impact",
-    header: "Impact",
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
+    cell: ({ row }) => {
+      const assets = row.original.assets?.length
+        ? row.original.assets
+        : [
+            {
+              equipment: row.original.equipment,
+              assetID: row.original.assetID,
+            },
+          ];
+
+      return <AssetsDropdownCell assets={assets} />;
     },
-    minSize: 70,
-    maxSize: 90,
   },
+  // {
+  //   accessorKey: "impact",
+  //   header: "Impact",
+  //   cell: ({ getValue }) => {
+  //     const value = getValue<string>();
+  //     return <p className="capitalize">{value}</p>;
+  //   },
+  //   minSize: 70,
+  //   maxSize: 90,
+  // },
   {
     accessorKey: "jobcardNumber",
     header: "Jobcard Number",
@@ -94,6 +132,8 @@ export const getInProgressColumns = (
         />
       );
     },
+    minSize: 80,
+    maxSize: 100,
   },
   {
     accessorKey: "assign_to_name",
@@ -125,6 +165,22 @@ export const getInProgressColumns = (
             }}
           />
         </button>
+      );
+    },
+    cell: ({ getValue }) => {
+      const targetDate = getValue<string>();
+      const isOverdue = isTargetDateOverdue(targetDate);
+
+      return (
+        <div className="flex flex-wrap items-center gap-2">
+          <span>{targetDate}</span>
+          {isOverdue && (
+            <span className="inline-flex items-center gap-1 rounded-full border border-red-200 bg-red-100 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-red-700 dark:border-red-800 dark:bg-red-950/70 dark:text-red-300">
+              <AlertTriangle className="size-3" aria-hidden="true" />
+              Overdue
+            </span>
+          )}
+        </div>
       );
     },
     minSize: 130,
@@ -161,7 +217,7 @@ export const getInProgressColumns = (
         delete: {
           config: {
             resourcePath: "api/jobs",
-            queryKey: ["jobs", "delete-inProgess-job"],
+            queryKey: ["jobs"],
             resourceName: "job",
           },
           onDelete: openDeleteDialog,

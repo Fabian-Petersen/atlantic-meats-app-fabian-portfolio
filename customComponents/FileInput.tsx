@@ -53,12 +53,9 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
   existingFiles = [],
   onRemoveExisting,
 }: FileInputProps<T, TName>) {
-  const [files, setFiles] = useState<File[]>([]);
   const [localError, setLocalError] = useState<string | null>(null);
   const [previewIndex, setPreviewIndex] = useState(0);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-
-  const hasValue = files.length > 0;
 
   return (
     <Controller<T, TName>
@@ -66,9 +63,12 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
       control={control}
       render={({ field }) => {
         type Value = NonNullable<PathValue<T, TName>>;
+        const files = Array.isArray(field.value)
+          ? (field.value as File[])
+          : [];
+        const hasValue = files.length > 0;
 
         const updateForm = (updated: File[]) => {
-          setFiles(updated);
           field.onChange(updated as Value);
         };
 

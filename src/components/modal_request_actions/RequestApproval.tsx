@@ -194,7 +194,12 @@ function RequestApproval({
           Review all details before approving this request.
         </p>
         {/* <div className="flex w-full justify-end pt-6 bg-red-500/0"> */}
-        <div className={cn(sharedStyles.btnParent, "md:w-full")}>
+        <div
+          className={cn(
+            sharedStyles.btnParent,
+            "w-full max-w-none md:ml-auto md:w-auto md:max-w-none",
+          )}
+        >
           <button
             type="button"
             onClick={() => {
@@ -203,7 +208,7 @@ function RequestApproval({
             className={cn(
               sharedStyles.btnCancel,
               sharedStyles.btn,
-              "flex items-center justify-center gap-4",
+              "flex items-center justify-center gap-2 px-3 md:flex-none md:px-4",
             )}
           >
             <X className="w-6 h-6" />
@@ -216,7 +221,7 @@ function RequestApproval({
             className={cn(
               sharedStyles.btnApprove,
               sharedStyles.btn,
-              "flex items-center justify-center gap-4",
+              "flex items-center justify-center gap-2 px-3 md:flex-none md:px-4",
             )}
             onClick={handleApprove}
           >

@@ -42,28 +42,40 @@ const DeleteItemModal = () => {
 
   return (
     <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-      <DialogContent className={cn(sharedStyles.modal)}>
-        <div className={cn(sharedStyles.modalParent)}>
+      <DialogContent
+        className={cn(
+          sharedStyles.modal,
+          "w-[calc(100vw-2rem)] max-w-sm overflow-hidden sm:w-sm sm:max-w-md",
+        )}
+      >
+        <div
+          className={cn(
+            sharedStyles.modalParent,
+            "bg-transparent p-0 shadow-none dark:bg-transparent",
+          )}
+        >
           {/* Header */}
           <div className="flex justify-center items-center">
             <div className="rounded-full p-4 text-red-500 bg-red-500/20">
               <AlertTriangle className="size-12 md:size-16" />
             </div>
           </div>
-          <DialogTitle>
+          <DialogTitle className="text-center">
             <FormHeading
               heading="Confirm Delete"
-              className={cn(sharedStyles.headingForm, "md:text-center")}
+              className={cn(
+                sharedStyles.headingForm,
+                "px-0 text-center font-normal",
+              )}
+              headingStyles="justify-center"
             />
           </DialogTitle>
 
           {/* Body */}
-          <DialogDescription>
-            <p className="w-3/4 md:mt-2 text-cxs md:text-xs text-gray-600 dark:text-gray-300 text-center mx-auto">
-              Are you sure you want to delete the{" "}
-              <span className="capitalize">{config.resourceName}</span>? This
-              action cannot be undone.
-            </p>
+          <DialogDescription className="mx-auto w-3/4 text-center text-cxs text-gray-600 md:mt-2 md:text-xs dark:text-gray-300">
+            Are you sure you want to delete the{" "}
+            <span className="capitalize">{config.resourceName}</span>? This
+            action cannot be undone.
           </DialogDescription>
           <DeleteItemForm />
         </div>

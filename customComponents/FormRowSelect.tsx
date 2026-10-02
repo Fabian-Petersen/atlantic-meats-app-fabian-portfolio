@@ -18,6 +18,7 @@ type FormSelectProps<T extends FieldValues> = {
   defaultValues?: string | string[];
   onChange?: (selectedValues: string[]) => void;
   required?: boolean;
+  nativeRequired?: boolean;
   multiple?: boolean;
   disabled?: boolean;
   selectStyles?: string;
@@ -40,6 +41,7 @@ function FormRowSelect<T extends FieldValues>({
   register,
   onChange,
   required,
+  nativeRequired = required,
   className,
   selectStyles,
   labelStyles,
@@ -94,7 +96,7 @@ function FormRowSelect<T extends FieldValues>({
 
           onChange?.(selectedValues); // ✅ optional caller callback
         }}
-        required={required}
+        required={nativeRequired}
       >
         {/* Placeholder option — single-select only */}
         {!multiple && <option value="">--select--</option>}

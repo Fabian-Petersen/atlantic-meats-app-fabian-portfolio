@@ -197,7 +197,7 @@ export const getAssetColumns = (
         delete: {
           config: {
             resourcePath: "api/assets",
-            queryKey: ["assets", "asset-elete"],
+            queryKey: ["assets"],
             resourceName: "asset",
           },
           onDelete: openDeleteDialog,

@@ -146,7 +146,7 @@ export const getTransferRequestsColumns = (
         delete: {
           config: {
             resourcePath: "api/jobs",
-            queryKey: ["jobs", "delete-pending"],
+            queryKey: ["transfers"],
             resourceName: "request",
           },
           onDelete: openDeleteDialog,

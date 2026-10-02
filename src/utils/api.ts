@@ -237,7 +237,7 @@ export const usePOST = <RequestType, ResponseType>(options: {
     },
     onSuccess: () => {
       // queryKey must be the same as the queryKey for the GET function
-      queryClient.invalidateQueries({
+      return queryClient.invalidateQueries({
         queryKey: queryKey,
       });
     },
@@ -272,9 +272,7 @@ export const useUpdateItem = <TPayload, TResponse>({
       );
       return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey });
-    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
   });
 };
 

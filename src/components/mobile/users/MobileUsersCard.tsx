@@ -42,7 +42,7 @@ export function MobileUsersCard({ row, isOpen, setOpen, onToggle }: Props) {
     delete: {
       config: {
         resourcePath: "api/users",
-        queryKey: ["userRequests"],
+        queryKey: ["users"],
         resourceName: "user",
       },
       onDelete: (id, config) => {
