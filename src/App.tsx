@@ -59,6 +59,7 @@ const JobsInProgressListPage = lazy(
 import { PageLoadingSpinner } from "./components/features/PageLoadingSpinner";
 const UsersListPage = lazy(() => import("./pages/users/UsersListPage"));
 import { useAuth } from "./auth/useAuth";
+import JobInProgressUpdatePage from "./pages/jobs/JobInProgressUpdatePage";
 const CreateUserPage = lazy(() => import("./pages/users/CreateUserPage"));
 
 // $ Transfer Asset Pages
@@ -130,155 +131,170 @@ function App() {
   return (
     <Suspense fallback={<PageLoadingSpinner />}>
       <Routes>
-      {/* Login Route Only: Authenticated users must logout to direct to logout */}
-      <Route element={<PublicOnlyRoute />}>
-        <Route path="/" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-      </Route>
+        {/* Login Route Only: Authenticated users must logout to direct to logout */}
+        <Route element={<PublicOnlyRoute />}>
+          <Route path="/" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        </Route>
 
-      {/* Protected: Authenticated Users */}
-      <Route element={<ProtectedRoute />}>
-        {/* // % All company employee Routes */}
-        <Route element={<AppLayout />}>
-          <Route
-            element={
-              <RoleGaurdRoute
-                allowedGroups={["admin", "manager", "user", "maintenance"]}
+        {/* Protected: Authenticated Users */}
+        <Route element={<ProtectedRoute />}>
+          {/* // % All company employee Routes */}
+          <Route element={<AppLayout />}>
+            <Route
+              element={
+                <RoleGaurdRoute
+                  allowedGroups={["admin", "manager", "user", "maintenance"]}
+                />
+              }
+            >
+              <Route path="/dashboard" element={<DashboardPage />} />
+              {/* // $ Route will show the current signed in user profile page */}
+              <Route path="/users/profile" element={<UserProfilePage />} />
+              <Route path="/jobs/create-job" element={<CreateJobPage />} />
+              <Route
+                path="/jobs/:id/in-progress"
+                element={<JobInProgressItemPage />}
               />
-            }
-          >
-            <Route path="/dashboard" element={<DashboardPage />} />
-            {/* // $ Route will show the current signed in user profile page */}
-            <Route path="/users/profile" element={<UserProfilePage />} />
-            <Route path="/jobs/create-job" element={<CreateJobPage />} />
-            <Route
-              path="/jobs/:id/in-progress"
-              element={<JobInProgressItemPage />}
-            />
-            <Route
-              path="/jobs/in-progress"
-              element={<JobsInProgressListPage />}
-            />
-            <Route path="/jobs/:id/action" element={<JobActionPage />} />
-            <Route
-              path="/jobs/:id/complete"
-              element={<JobCompleteItemPage />}
-            />
-            {/* <Route path="/stocks/:id/stock-item" element={<StockItemPage />} /> */}
-            <Route path="/stocks/list" element={<StocksListPage />} />
+              <Route
+                path="/jobs/in-progress"
+                element={<JobsInProgressListPage />}
+              />
+              <Route
+                path="/jobs/:id/in-progress/action"
+                element={<JobActionPage />}
+              />
+              <Route
+                path="/jobs/:id/in-progress/update"
+                element={<JobInProgressUpdatePage />}
+              />
+              <Route
+                path="/jobs/:id/complete"
+                element={<JobCompleteItemPage />}
+              />
+              {/* <Route path="/stocks/:id/stock-item" element={<StockItemPage />} /> */}
+              <Route path="/stocks/list" element={<StocksListPage />} />
 
-            {/* // $ Transfer of an Asset Pages  */}
-            <Route
-              path="/transfers/create-new-transfer"
-              element={<CreateTransferPage />}
-            />
-            <Route
-              path="/transfers/in-transit"
-              element={<TransferTransitListPage />}
-            />
-            <Route
-              path="/transfers/:id/in-transit"
-              element={<CreateTransferTransitPage />}
-            />
-            <Route
-              path="/transfers/:id/receipt"
-              element={<CreateTransferReceiptPage />}
-            />
-            <Route path="/transfers/:id" element={<TransferItemPage />} />
-            <Route
-              path="/transfers/completed"
-              element={<TransferCompleteListPage />}
-            />
-            {/* // $ Disposal of an Asset Pages  */}
-            <Route
-              path="/disposals/create-new-disposal"
-              element={<CreateDisposalPage />}
-            />
-            <Route path="/disposals/:id" element={<DisposalItemPage />} />
-            <Route
-              path="/disposals/:id/completed"
-              element={<CreateDisposalCompletePage />}
-            />
-            <Route
-              path="/disposals/completed"
-              element={<DisposalCompletedListPage />}
-            />
-          </Route>
-          {/* // % Admin only Routes */}
-          <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>
-            <Route
-              path="/jobs/pending-approval"
-              element={<JobsPendingListPage />}
-            />
-            <Route
-              path="/transfers/requests"
-              element={<TransfersRequestsListPage />}
-            />
-            <Route
-              path="/disposals/requests"
-              element={<DisposalRequestsListPage />}
-            />
-            <Route path="/assets/list" element={<AssetsOverviewPage />} />
-            <Route
-              path="/assets/verification/manual"
-              element={<AssetsOverviewPage />}
-            />
-            {/* // $ Page to list an asset by id */}
-            <Route path="/assets/:id" element={<AssetItemPage />} />
-            <Route
-              path="/jobs/:id/pending-approval"
-              element={<JobPendingItemPage />}
-            />
-            <Route
-              path="/transfers/:id/pending-approval"
-              element={<TransferPendingItemPage />}
-            />
-            <Route
-              path="/disposals/:id/pending-approval"
-              element={<DisposalPendingItemPage />}
-            />
-            <Route
-              path="/assets/create-new-asset"
-              element={<CreateAssetPage />}
-            />
-            <Route
-              path="/assets/:id/update-asset"
-              element={<UpdateAssetPage />}
-            />
-            <Route path="/assets/:id/history" element={<AssetHistoryPage />} />
-            {/* // $ Page to create a new stock item */}
-            <Route
-              path="/stocks/create-new-stock"
-              element={<CreateStockPage />}
-            />
-            {/* // $ Page to list all the users */}
-            <Route path="/users" element={<UsersListPage />} />
-            {/* // $ Page to show the profile of a user or store */}
-            <Route path="/users/:id" element={<StoreProfilePage />} />
-            <Route path="/users/create-user" element={<CreateUserPage />} />
-          </Route>
-          {/* //% admin, manager routes */}
-          {/* // $ ======================= Maintenance Routes ======================= */}
-          {/* //% admin, maintenance, contractor Routes */}
-          <Route
-            element={
-              <RoleGaurdRoute
-                allowedGroups={["contractor", "maintenance", "admin"]}
+              {/* // $ Transfer of an Asset Pages  */}
+              <Route
+                path="/transfers/create-new-transfer"
+                element={<CreateTransferPage />}
               />
-            }
-          >
+              <Route
+                path="/transfers/in-transit"
+                element={<TransferTransitListPage />}
+              />
+              <Route
+                path="/transfers/:id/in-transit"
+                element={<CreateTransferTransitPage />}
+              />
+              <Route
+                path="/transfers/:id/receipt"
+                element={<CreateTransferReceiptPage />}
+              />
+              <Route path="/transfers/:id" element={<TransferItemPage />} />
+              <Route
+                path="/transfers/completed"
+                element={<TransferCompleteListPage />}
+              />
+              {/* // $ Disposal of an Asset Pages  */}
+              <Route
+                path="/disposals/create-new-disposal"
+                element={<CreateDisposalPage />}
+              />
+              <Route path="/disposals/:id" element={<DisposalItemPage />} />
+              <Route
+                path="/disposals/:id/completed"
+                element={<CreateDisposalCompletePage />}
+              />
+              <Route
+                path="/disposals/completed"
+                element={<DisposalCompletedListPage />}
+              />
+            </Route>
+            {/* // % Admin only Routes */}
+            <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>
+              <Route
+                path="/jobs/pending-approval"
+                element={<JobsPendingListPage />}
+              />
+              <Route
+                path="/transfers/requests"
+                element={<TransfersRequestsListPage />}
+              />
+              <Route
+                path="/disposals/requests"
+                element={<DisposalRequestsListPage />}
+              />
+              <Route path="/assets/list" element={<AssetsOverviewPage />} />
+              <Route
+                path="/assets/verification/manual"
+                element={<AssetsOverviewPage />}
+              />
+              {/* // $ Page to list an asset by id */}
+              <Route path="/assets/:id" element={<AssetItemPage />} />
+              <Route
+                path="/jobs/:id/pending-approval"
+                element={<JobPendingItemPage />}
+              />
+              <Route
+                path="/transfers/:id/pending-approval"
+                element={<TransferPendingItemPage />}
+              />
+              <Route
+                path="/disposals/:id/pending-approval"
+                element={<DisposalPendingItemPage />}
+              />
+              <Route
+                path="/assets/create-new-asset"
+                element={<CreateAssetPage />}
+              />
+              <Route
+                path="/assets/:id/update-asset"
+                element={<UpdateAssetPage />}
+              />
+              <Route
+                path="/assets/:id/history"
+                element={<AssetHistoryPage />}
+              />
+              {/* // $ Page to create a new stock item */}
+              <Route
+                path="/stocks/create-new-stock"
+                element={<CreateStockPage />}
+              />
+              {/* // $ Page to list all the users */}
+              <Route path="/users" element={<UsersListPage />} />
+              {/* // $ Page to show the profile of a user or store */}
+              <Route path="/users/:id" element={<StoreProfilePage />} />
+              <Route path="/users/create-user" element={<CreateUserPage />} />
+            </Route>
+            {/* //% admin, manager routes */}
+            {/* // $ ======================= Maintenance Routes ======================= */}
+            {/* //% admin, maintenance, contractor Routes */}
             <Route
-              path="/jobs/:id/complete"
-              element={<JobCompleteItemPage />}
-            />
-            <Route path="/jobs/completed" element={<JobsCompletedListPage />} />
+              element={
+                <RoleGaurdRoute
+                  allowedGroups={["contractor", "maintenance", "admin"]}
+                />
+              }
+            >
+              <Route
+                path="/jobs/:id/complete"
+                element={<JobCompleteItemPage />}
+              />
+              <Route
+                path="/jobs/completed"
+                element={<JobsCompletedListPage />}
+              />
+            </Route>
           </Route>
         </Route>
-      </Route>
-      {/* FULL SCREEN ROUTES (no layout) */}
-      <Route element={<RoleGaurdRoute allowedGroups={["admin", "manager"]} />}>
-        <Route path="/assets/verification" element={<AssetVerification />} />
-      </Route>
+        {/* FULL SCREEN ROUTES (no layout) */}
+        <Route
+          element={<RoleGaurdRoute allowedGroups={["admin", "manager"]} />}
+        >
+          <Route path="/assets/verification" element={<AssetVerification />} />
+        </Route>
       </Routes>
     </Suspense>
   );

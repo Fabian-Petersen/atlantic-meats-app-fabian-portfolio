@@ -11,7 +11,6 @@ import { AssetsDropdownCell } from "../features/tables/AssetsDropdownCell";
 import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
 
 export const getInProgressColumns = (
-  setShowUpdateMaintenanceDialog: (v: boolean) => void,
   navigate: (path: string) => void,
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (
@@ -102,16 +101,6 @@ export const getInProgressColumns = (
       return <AssetsDropdownCell assets={assets} />;
     },
   },
-  // {
-  //   accessorKey: "impact",
-  //   header: "Impact",
-  //   cell: ({ getValue }) => {
-  //     const value = getValue<string>();
-  //     return <p className="capitalize">{value}</p>;
-  //   },
-  //   minSize: 70,
-  //   maxSize: 90,
-  // },
   {
     accessorKey: "jobcardNumber",
     header: "Jobcard Number",
@@ -201,15 +190,15 @@ export const getInProgressColumns = (
         action: {
           url: `/jobs/${rowId}/action`,
           onOpen: () => {
-            navigate(`/jobs/${rowId}/action`);
+            navigate(`/jobs/${rowId}/in-progress/action`);
             setSelectedRowId(rowId);
           },
         },
 
         edit: {
-          url: "/update-request",
+          url: `/jobs/${rowId}/in-progress/update`,
           onOpen: () => {
-            setShowUpdateMaintenanceDialog(true);
+            navigate(`/jobs/${rowId}/in-progress/update`);
             setSelectedRowId(rowId);
           },
         },

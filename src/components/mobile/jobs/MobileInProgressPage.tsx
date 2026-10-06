@@ -29,6 +29,8 @@ import { priorityStyles } from "@/styles/priorityStyles";
 // $ ─── Types ────────────────────────────────────────────────────────────────────
 type MobileRequestApprovalProps = {
   item: JobApprovedAPIResponse;
+  selectedAssetIndex: number;
+  onSelectAsset: (index: number) => void;
 };
 
 // $ ─── Main Component ─────────────────────────────────────────────────────────────
@@ -59,9 +61,24 @@ type MobileRequestApprovalProps = {
  */
 export default function MobileInProgressPage({
   item,
+  selectedAssetIndex,
+  onSelectAsset,
 }: MobileRequestApprovalProps) {
   const { setOpenChatSidebar, setIsOpen } = useGlobalContext();
-  const hasImages = item.images && item.images.length > 0;
+  const assets = item.assets?.length
+    ? item.assets
+    : [
+        {
+          equipment: item.equipment,
+          assetID: item.assetID,
+          area: item.area,
+          assetIssueReason: item.assetIssueReason,
+          assetIssueDetails: item.assetIssueDetails,
+          images: item.images ?? [],
+        },
+      ];
+  const currentAsset = assets[selectedAssetIndex] ?? assets[0];
+  const hasImages = !!currentAsset?.images?.length;
   const navigate = useNavigate();
 
   // Image State
@@ -102,15 +119,46 @@ export default function MobileInProgressPage({
 
       {/* // $ ─── Scrollable Content ──────────────────────────────────── */}
       <div className="flex-1 overflow-y-auto pb-32">
+        {assets.length > 1 && (
+          <div className={cn(sharedStyles.cardRowParent)}>
+            <p className="mb-2 text-xs text-gray-400 dark:text-gray-500">
+              Assets in this request
+            </p>
+            <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+              {assets.map((asset, index) => (
+                <button
+                  key={`${asset.assetID ?? "asset"}-${index}`}
+                  type="button"
+                  onClick={() => {
+                    setImageIndex(null);
+                    onSelectAsset(index);
+                  }}
+                  className={cn(
+                    "shrink-0 rounded-md border p-1.5 text-xs font-medium capitalize transition-all",
+                    index === selectedAssetIndex
+                      ? "border-green-400 bg-green-400/10 text-green-600 dark:text-green-400"
+                      : "border-gray-200 text-gray-500 dark:border-gray-700 dark:text-gray-400",
+                  )}
+                >
+                  {`Asset ${index + 1} · ${asset.assetID || "No ID"}`}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Header card */}
-        <div className={cn(sharedStyles.cardRowParent, "py-2 mb-3")}>
+        <div className={cn(sharedStyles.cardRowParent, "mb-3 py-2")}>
           <CardRow
             label="Equipment"
-            value={item?.equipment}
+            value={currentAsset?.equipment}
             className="py-1.5"
           />
-          <CardRow label="Asset ID" value={item?.assetID} className="py-1.5" />
-          <CardRow label="Area" value={item?.area} className="py-1.5" />
+          <CardRow
+            label="Asset ID"
+            value={currentAsset?.assetID || "Not provided"}
+            className="py-1.5"
+          />
         </div>
 
         {/* Details card */}
@@ -126,6 +174,17 @@ export default function MobileInProgressPage({
             value={item?.requested_by}
           />
           <CardRow icon={MapPin} label="Location" value={item?.location} />
+          <CardRow icon={MapPin} label="Area" value={currentAsset?.area} />
+          <CardRow
+            icon={Tag}
+            label="Issue reason"
+            value={currentAsset?.assetIssueReason}
+          />
+          <CardRow
+            icon={FileText}
+            label="Issue details"
+            value={currentAsset?.assetIssueDetails}
+          />
           <CardRow icon={Tag} label="Type" value={item?.type} />
           <CardRow icon={Zap} label="Impact">
             <Badge value={item?.impact} styleMap={impactStyles} />
@@ -137,6 +196,26 @@ export default function MobileInProgressPage({
             icon={CalendarClock}
             label="Target Date"
             value={item?.targetDate}
+          />
+          <CardRow
+            icon={User}
+            label="Assigned to"
+            value={item?.assign_to_name}
+          />
+          <CardRow
+            icon={Wrench}
+            label="Assigned group"
+            value={item?.assign_to_group}
+          />
+          <CardRow
+            icon={User}
+            label="Approved by"
+            value={item?.approved_by}
+          />
+          <CardRow
+            icon={CalendarClock}
+            label="Approved"
+            value={item?.approved_at}
           />
         </div>
 
@@ -156,7 +235,7 @@ export default function MobileInProgressPage({
         )}
         {imageIndex !== null && (
           <MobileImageModal
-            images={item.images!}
+            images={currentAsset!.images}
             initialIndex={imageIndex}
             onClose={() => setImageIndex(null)}
           />
@@ -164,11 +243,11 @@ export default function MobileInProgressPage({
         {/* Images */}
         <div className={cn(sharedStyles.cardRowParent)}>
           <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">
-            Attached photos {hasImages ? `(${item.images!.length})` : ""}
+            Attached photos {hasImages ? `(${currentAsset!.images.length})` : ""}
           </p>
           {hasImages ? (
             <div className="grid grid-cols-2 gap-2">
-              {item.images!.map((image, i) => (
+              {currentAsset!.images.map((image, i) => (
                 <button
                   aria-label="image button to open images"
                   type="button"
@@ -200,7 +279,7 @@ export default function MobileInProgressPage({
         <div className={cn(sharedStyles.btnParent, "")}>
           <button
             type="button"
-            onClick={() => navigate(`/jobs/${item?.id}/action`)}
+            onClick={() => navigate(`/jobs/${item.id}/in-progress/action`)}
             className={cn(
               sharedStyles.btnApprove,
               sharedStyles.btn,

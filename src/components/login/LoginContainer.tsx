@@ -21,7 +21,7 @@ import useGlobalContext from "@/context/useGlobalContext";
 import { usePOST } from "@/utils/api";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
-import { LockKeyhole } from "lucide-react";
+import { KeyRound, LockKeyhole } from "lucide-react";
 
 type Step = "LOGIN" | "NEW_PASSWORD";
 
@@ -134,13 +134,23 @@ export default function LoginContainer() {
       )}
 
       {step === "NEW_PASSWORD" && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2 md:gap-4">
+          <div className="flex justify-center" aria-hidden="true">
+            <div className="flex size-20 items-center justify-center rounded-full bg-(--clr-primary)/10 text-(--clr-primary) dark:bg-(--clr-primary)/20">
+              <KeyRound className="size-10" strokeWidth={1.75} />
+            </div>
+          </div>
           <FormHeading
             heading="Set New Password"
-            className="text-center pb-4 pt-2"
+            className={cn(sharedStyles.headingForm, "text-center md:text-lg")}
+            headingStyles="text-center justify-center"
           />
+          <p className="text-center text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+            Create a secure password to finish setting up your account.
+          </p>
           <ChangePasswordForm
             onSubmit={handleChangePassword}
+            onCancel={() => setStep("LOGIN")}
             loading={loading}
           />
         </div>

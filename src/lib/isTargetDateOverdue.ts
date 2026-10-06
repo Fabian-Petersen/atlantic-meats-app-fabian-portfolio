@@ -1,15 +1,28 @@
-// $ This function take in an arguement "targetDate" and return true or false. The outcome is used in the table components to highlight overdure jobs in red.
+export type TargetDateStatus =
+  | "overdue"
+  | "due-today"
+  | "upcoming"
+  | "invalid";
 
-export function isTargetDateOverdue(targetDate: string) {
-  if (!targetDate) return false;
+export function getTargetDateStatus(targetDate: string): TargetDateStatus {
+  if (!targetDate) return "invalid";
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   const parsedTargetDate = new Date(targetDate);
-  if (isNaN(parsedTargetDate.getTime())) return false;
+  if (isNaN(parsedTargetDate.getTime())) return "invalid";
 
   parsedTargetDate.setHours(0, 0, 0, 0);
 
-  return parsedTargetDate < today;
+  if (parsedTargetDate < today) return "overdue";
+  if (parsedTargetDate.getTime() === today.getTime()) return "due-today";
+
+  return "upcoming";
+}
+
+// $ This function takes a targetDate and returns whether the job is overdue.
+
+export function isTargetDateOverdue(targetDate: string) {
+  return getTargetDateStatus(targetDate) === "overdue";
 }

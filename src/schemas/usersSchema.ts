@@ -11,7 +11,7 @@ export type UserPosition =
   | "operations manager"
   | "regional manager"
   | "maintenance manager"
-  | "manager"
+  | "branch manager"
   | "supervisor"
   | "technician"
   | "general worker";

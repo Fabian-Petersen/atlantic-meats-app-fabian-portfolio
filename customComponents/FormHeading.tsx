@@ -2,10 +2,11 @@ import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
+import type { ReactNode } from "react";
 
 type FormHeadingProps = {
   /** The text content to display inside the heading element. */
-  heading: string;
+  heading: ReactNode;
   /** Optional standard CSS class names to override or merge with default styles. */
   className?: string;
   /** If true, renders the heading text inside an `<h3>` HTML element. */
@@ -68,10 +69,16 @@ const FormHeading = ({
         className,
       )}
     >
-      <div className={cn("flex w-full gap-2 items-center", headingStyles)}>
+      <div
+        className={cn(
+          "flex w-full items-center gap-2",
+          redirect && "relative justify-center md:justify-start",
+          headingStyles,
+        )}
+      >
         {redirect && (
           <button
-            className="block md:hidden"
+            className="absolute left-0 block md:hidden"
             aria-label="return button"
             type="button"
             onClick={() => navigate(redirectTo ?? "")}

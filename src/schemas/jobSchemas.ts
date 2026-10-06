@@ -184,6 +184,72 @@ export type CreateJobRequestPayload = Omit<
   >;
 };
 
+// Updating a job uses the same multi-asset shape as creation, but existing
+// images are managed separately and therefore do not need to satisfy the
+// new-upload requirement.
+export const updateJobAssetSchema = jobRequestBaseSchema
+  .pick({
+    area: true,
+    equipment: true,
+    assetID: true,
+    assetIssueReason: true,
+    assetIssueDetails: true,
+    images: true,
+  })
+  .extend({
+    area: z.string().min(1, { message: "Please select an area" }),
+  })
+  .superRefine((data, ctx) => {
+    const reason = data.assetIssueReason || undefined;
+
+    if (!data.assetID?.trim() && !reason) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["assetID"],
+        message: "Select an asset ID or provide a reason why it is unavailable",
+      });
+    }
+
+    if (reason === "other" && !data.assetIssueDetails?.trim()) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["assetIssueDetails"],
+        message: "Please describe the issue with the asset ID",
+      });
+    }
+  });
+
+export const updateJobRequestSchema = jobRequestBaseSchema
+  .omit({
+    area: true,
+    equipment: true,
+    assetID: true,
+    assetIssueReason: true,
+    assetIssueDetails: true,
+    images: true,
+  })
+  .extend({
+    assets: z.array(updateJobAssetSchema).min(1, {
+      message: "Please add at least one asset to the job request",
+    }),
+  });
+
+export type UpdateJobRequestFormValues = z.infer<
+  typeof updateJobRequestSchema
+>;
+
+export type UpdateJobRequestPayload = Omit<
+  UpdateJobRequestFormValues,
+  "assets"
+> & {
+  assets: Array<
+    Omit<UpdateJobRequestFormValues["assets"][number], "images"> & {
+      images: Array<{ filename: string; content_type: string }>;
+    }
+  >;
+  deleted_image_keys: string[];
+};
+
 // $ Schema for the API Response from the database when fetching the maintenance requests
 export const jobRequestAPIResponseSchema = jobRequestBaseSchema
   .omit({

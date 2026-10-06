@@ -1,213 +1,460 @@
-//$ This component is used to create a maintenace job, the data is submitted to the database (dynamoDB) via API Gateway and Lambda on aws.
-
-// $ React-Hook-Form, zod & schema
-import { jobRequestSchema } from "../../schemas/index";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
-import { useForm, useWatch, type Resolver } from "react-hook-form";
-
-// $ Form Components
-import FormRowSelect from "../../../customComponents/FormRowSelect";
-import FileInput from "../../../customComponents/FileInput";
-import FormActionButtons from "../features/FormActionButtons";
-import FormSkeleton from "../forms/FormSkeleton";
+import {
+  useFieldArray,
+  useForm,
+  useWatch,
+  type Resolver,
+} from "react-hook-form";
 
 import useGlobalContext from "@/context/useGlobalContext";
+import { useAssetFilters } from "@/customHooks/useAssetFilters";
+import { impact, priority, type } from "@/data/maintenanceRequestFormData";
+import { compressImagesToWebpv1 } from "@/utils/compressImagesToWebpv1";
+import { useById, useUpdateItem } from "@/utils/api";
+import type { PresignedUrlResponse } from "@/schemas";
+import {
+  updateJobRequestSchema,
+  type JobApprovedAPIResponse,
+  type PresignedUrls,
+  type UpdateJobRequestFormValues,
+  type UpdateJobRequestPayload,
+} from "@/schemas/jobSchemas";
+import DynamicForm, {
+  DynamicFormActions,
+  type DynamicFormField,
+} from "../forms/DynamicForm";
+import { FormSkeleton } from "../forms/FormSkeleton";
+import FormInfo from "../features/forms/FormInfo";
+import { AddAssetButton } from "../forms/AddAssetButton";
+import JobAssetFields from "./JobAssetFields";
 
-// $ Import schemas
-import type { JobAPIResponse, JobRequestFormValues } from "../../schemas/index";
-import type { AssetEquipmentResponse } from "@/schemas/assetSchemas";
+const JOBS_QUERY_KEY = ["jobs", "in-progress"] as const;
 
-import { priority, type, impact } from "@/data/maintenanceRequestFormData";
-import { stores } from "@/data/stores";
-import { useById, useGetAll } from "@/utils/api";
+const normalizeOptions = (
+  options:
+    | Array<string>
+    | Array<{ label: string; value: string }>
+    | undefined
+    | null,
+): string[] =>
+  options?.map((option) =>
+    typeof option === "string" ? option : option.value,
+  ) ?? [];
 
-// import assets from "@/data/assets.json";
-// import { useCreateMaintenanceRequest } from "@/utils/maintenanceRequests";
+const includeCurrentOption = (options: string[], currentValue?: string) =>
+  currentValue && !options.includes(currentValue)
+    ? [currentValue, ...options]
+    : options;
 
-const JobUpdateForm = () => {
-  // const { mutateAsync } = useCreateMaintenanceRequest();
-  const { selectedRowId, setShowUpdateMaintenanceDialog } = useGlobalContext();
-  //   const navigate = useNavigate();
+const toDateTimeLocal = (value?: string) => {
+  if (!value) return "";
+  return value.length >= 16 ? value.slice(0, 16) : value;
+};
 
-  const { data: item, isPending } = useById<JobAPIResponse>({
-    id: selectedRowId ?? "",
-    resourcePath: "api/jobs",
-    queryKey: ["jobs", "pending-approval-job"],
-    params: {
-      status: "pending",
-    },
-  });
+const toAssetIssueReason = (
+  value?: string,
+): UpdateJobRequestFormValues["assets"][number]["assetIssueReason"] => {
+  const reasons = [
+    "No barcode visible",
+    "barcode damaged",
+    "rental unit",
+    "other",
+    "",
+  ] as const;
+  return reasons.find((reason) => reason === value) ?? "";
+};
 
-  // $ Form Schema
+type JobUpdateEditorProps = {
+  id: string;
+  item: JobApprovedAPIResponse;
+};
+
+const JobUpdateEditor = ({ id, item }: JobUpdateEditorProps) => {
+  const navigate = useNavigate();
+  const [openAssetIndex, setOpenAssetIndex] = useState(0);
   const {
-    register,
-    reset,
-    handleSubmit,
-    control,
-    formState: { errors, isSubmitting },
-  } = useForm<JobRequestFormValues>({
-    defaultValues: {
-      location: "",
-      type: "",
-      priority: "",
-      equipment: "",
-      breakdown_time: "",
-      impact: "",
-      description: "",
-      area: "",
-      assetID: "",
-      assetIssueReason: "",
-      assetIssueDetails: "",
-      images: [],
-    },
-    resolver: zodResolver(
-      jobRequestSchema,
-    ) as unknown as Resolver<JobRequestFormValues>,
-  });
+    setShowUpdateMaintenanceDialog,
+    setSuccessConfig,
+    setShowSuccess,
+    setErrorConfig,
+    setShowError,
+  } = useGlobalContext();
 
-  useEffect(() => {
-    if (!item) return;
+  const initialAssets = item.assets?.length
+    ? item.assets
+    : [
+        {
+          equipment: item.equipment,
+          assetID: item.assetID,
+          area: item.area,
+          assetIssueReason: item.assetIssueReason,
+          assetIssueDetails: item.assetIssueDetails,
+          images: item.images ?? [],
+        },
+      ];
 
-    reset({
-      location: item.location,
-      type: item.type,
-      priority: item.priority,
-      equipment: item.equipment,
-      breakdown_time: item.breakdown_time,
-      impact: item.impact,
-      description: item.description,
-      area: item.area ?? "",
-      assetID: item.assetID ?? "",
-      assetIssueReason: item.assetIssueReason ?? "",
-      assetIssueDetails: item.assetIssueDetails ?? "",
-      images: [],
-    });
-  }, [item, reset]);
-
-  const selectedLocation = useWatch({ control, name: "location" });
-  const selectedArea = useWatch({ control, name: "area" });
-  const selectedEquipment = useWatch({ control, name: "equipment" });
-  const selectedType = useWatch({ control, name: "type" });
-  const selectedImpact = useWatch({ control, name: "impact" });
-  const selectedPriority = useWatch({ control, name: "priority" });
-
-  const { data: equipmentData } = useGetAll<AssetEquipmentResponse>({
-    resourcePath: "api/assets/options",
-    queryKey: [
-      "assets",
-      "options",
-      "edit-job-equipment",
-      selectedLocation,
-      selectedArea,
-    ],
-    params: {
-      location: selectedLocation,
-      area: selectedArea,
-    },
-    enabled: !!selectedLocation && !!selectedArea,
-  });
-
-  const equipmentOptions = Array.from(
-    new Set(
-      [
-        selectedEquipment,
-        ...(equipmentData?.equipment.map((equipment) => equipment.name) ?? []),
-      ].filter((equipment): equipment is string => !!equipment),
-    ),
+  const [existingImagesByAsset, setExistingImagesByAsset] = useState<
+    PresignedUrls[][]
+  >(() => initialAssets.map((asset) => asset.images ?? []));
+  const [preservedAssets, setPreservedAssets] = useState(() =>
+    initialAssets.map((asset) => ({
+      area: asset.area,
+      equipment: asset.equipment,
+      assetID: asset.assetID,
+    })),
   );
+  const [deletedImageKeys, setDeletedImageKeys] = useState<string[]>([]);
 
-  const includeSelectedOption = (options: string[], selected: string) =>
-    selected && !options.includes(selected) ? [selected, ...options] : options;
+  const form = useForm<
+    UpdateJobRequestFormValues,
+    unknown,
+    UpdateJobRequestFormValues
+  >({
+    resolver: zodResolver(
+      updateJobRequestSchema,
+    ) as unknown as Resolver<UpdateJobRequestFormValues>,
+    defaultValues: {
+      description: item.description ?? "",
+      location: item.location ?? "",
+      type: item.type ?? "",
+      impact: item.impact ?? "",
+      priority: item.priority ?? "",
+      breakdown_time: toDateTimeLocal(item.breakdown_time),
+      assets: initialAssets.map((asset) => ({
+        area: asset.area ?? "",
+        equipment: asset.equipment ?? "",
+        assetID: asset.assetID ?? "",
+        assetIssueReason: toAssetIssueReason(asset.assetIssueReason),
+        assetIssueDetails: asset.assetIssueDetails ?? "",
+        images: [],
+      })),
+    },
+  });
 
-  const onSubmit = async (data: JobRequestFormValues) => {
+  const location = useWatch({ control: form.control, name: "location" });
+  const {
+    fields: assetFields,
+    append,
+    remove,
+  } = useFieldArray({
+    control: form.control,
+    name: "assets",
+  });
+  const { locationOptions } = useAssetFilters({
+    form,
+    locationField: "location",
+  });
+
+  const requestFields: DynamicFormField<UpdateJobRequestFormValues>[] = [
+    {
+      fieldType: "textarea",
+      name: "description",
+      label: "Job description",
+      rows: 2,
+      className: "md:col-span-2",
+      required: true,
+    },
+    {
+      fieldType: "select",
+      name: "location",
+      label: "Location",
+      placeholder: "Select Location",
+      options: includeCurrentOption(
+        normalizeOptions(locationOptions),
+        location,
+      ),
+      required: true,
+    },
+    {
+      fieldType: "input",
+      type: "datetime-local",
+      name: "breakdown_time",
+      label: "Breakdown Time",
+      placeholder: "",
+      required: true,
+    },
+    {
+      fieldType: "select",
+      name: "type",
+      label: "Type",
+      placeholder: "Select Type",
+      options: includeCurrentOption(type, form.watch("type")),
+      required: true,
+    },
+    {
+      fieldType: "select",
+      name: "impact",
+      label: "Impact",
+      placeholder: "Select Impact",
+      options: includeCurrentOption(impact, form.watch("impact")),
+      required: true,
+    },
+    {
+      fieldType: "select",
+      name: "priority",
+      label: "Priority",
+      placeholder: "Select Priority",
+      options: includeCurrentOption(priority, form.watch("priority")),
+      required: true,
+    },
+  ];
+
+  const { mutateAsync, isPending } = useUpdateItem<
+    UpdateJobRequestPayload,
+    { presigned_urls?: PresignedUrlResponse }
+  >({
+    resourcePath: "api/jobs",
+    queryKey: JOBS_QUERY_KEY,
+  });
+
+  const removeExistingImage = (assetIndex: number, image: PresignedUrls) => {
+    setExistingImagesByAsset((current) =>
+      current.map((images, index) =>
+        index === assetIndex
+          ? images.filter((existingImage) => existingImage.key !== image.key)
+          : images,
+      ),
+    );
+    setDeletedImageKeys((current) =>
+      current.includes(image.key) ? current : [...current, image.key],
+    );
+  };
+
+  const removeAsset = (assetIndex: number) => {
+    const removedImageKeys =
+      existingImagesByAsset[assetIndex]?.map((image) => image.key) ?? [];
+    setDeletedImageKeys((current) => [
+      ...current,
+      ...removedImageKeys.filter((key) => !current.includes(key)),
+    ]);
+    setExistingImagesByAsset((current) =>
+      current.filter((_, index) => index !== assetIndex),
+    );
+    setPreservedAssets((current) =>
+      current.filter((_, index) => index !== assetIndex),
+    );
+    remove(assetIndex);
+    setOpenAssetIndex((current) => {
+      if (current === assetIndex) return Math.max(0, assetIndex - 1);
+      if (current > assetIndex) return current - 1;
+      return current;
+    });
+  };
+
+  const onSubmit = async (values: UpdateJobRequestFormValues) => {
+    let hasImageError = false;
+    values.assets.forEach((asset, assetIndex) => {
+      if (
+        asset.assetIssueReason &&
+        !existingImagesByAsset[assetIndex]?.length &&
+        !asset.images?.length
+      ) {
+        form.setError(`assets.${assetIndex}.images`, {
+          message: "Images are compulsory if no barcode is supplied",
+        });
+        hasImageError = true;
+      }
+    });
+    if (hasImageError) return;
+
     try {
-      const base64Images = await Promise.all(
-        (data.images || []).map(
-          (file) =>
-            new Promise<string>((resolve, reject) => {
-              const reader = new FileReader();
-              reader.onload = () => resolve(reader.result as string);
-              reader.onerror = reject;
-              reader.readAsDataURL(file);
-            }),
-        ),
-      );
+      const rawImages = values.assets.flatMap((asset) => asset.images ?? []);
+      const compressedImages = rawImages.length
+        ? await compressImagesToWebpv1(rawImages)
+        : [];
+      let cursor = 0;
+      const assets = values.assets.map((asset) => {
+        const imageCount = asset.images?.length ?? 0;
+        const assetImages = compressedImages.slice(cursor, cursor + imageCount);
+        cursor += imageCount;
+        return {
+          ...asset,
+          assetIssueReason: asset.assetIssueReason ?? "",
+          assetIssueDetails: asset.assetIssueDetails ?? "",
+          images: assetImages.map((file) => ({
+            filename: file.name,
+            content_type: file.type,
+          })),
+        };
+      });
+      const payload: UpdateJobRequestPayload = {
+        ...values,
+        assets,
+        deleted_image_keys: deletedImageKeys,
+      };
 
-      const payload = { ...data, images: base64Images };
-      console.log("Submit Update Form:", payload);
-    } catch (err) {
-      console.error(err);
+      const response = await mutateAsync({ id, payload });
+
+      if (compressedImages.length) {
+        if (!response.presigned_urls) {
+          throw new Error("Expected upload URLs but none were returned.");
+        }
+        await Promise.all(
+          response.presigned_urls.map(async (upload) => {
+            const file = compressedImages.find(
+              (image) => image.name === upload.filename,
+            );
+            if (!file) {
+              throw new Error(
+                `Could not find local file for ${upload.filename}.`,
+              );
+            }
+            const uploadResponse = await fetch(upload.url, {
+              method: "PUT",
+              headers: { "Content-Type": upload.content_type },
+              body: file,
+            });
+            if (!uploadResponse.ok) {
+              throw new Error(`Image upload failed for ${upload.filename}.`);
+            }
+          }),
+        );
+      }
+
+      setSuccessConfig({
+        title: "Job Updated",
+        message: `Job ${item.jobcardNumber} was successfully updated.`,
+        redirectPath: "jobs/in-progress",
+      });
+      setShowSuccess(true);
+    } catch (error) {
+      console.error("Job update failed:", error);
+      setErrorConfig({
+        title: "Job Update Failed",
+        message: "Could not update the job. Please try again.",
+        redirectPath: "jobs/in-progress",
+      });
+      setShowError(true);
     }
   };
 
-  if (!selectedRowId || isPending || !item) {
-    return <FormSkeleton />;
-  }
+  const handleCancel = () => {
+    setShowUpdateMaintenanceDialog(false);
+    navigate("/jobs/in-progress");
+  };
 
   return (
-    <form
-      className="flex flex-col rounded-lg lg:w-full text-font dark:bg-(--bg-secondary_dark) gap-6"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full lg:py-6">
-        <FormRowSelect
-          name="location"
-          label="Location"
-          options={includeSelectedOption(stores, selectedLocation)}
-          // control={control}
-          placeholder="Select Store"
-          register={register}
-          error={errors.location}
-          className="capitalize"
-        />
-        <FormRowSelect
-          name="type"
-          label="Type"
-          options={includeSelectedOption(type, selectedType)}
-          // control={control}
-          placeholder="Select Type"
-          register={register}
-          error={errors.type}
-        />
-        <FormRowSelect
-          name="impact"
-          label="Impact"
-          options={includeSelectedOption(impact, selectedImpact)}
-          // control={control}
-          placeholder="Select Impact"
-          register={register}
-          error={errors.impact}
-        />
-        <FormRowSelect
-          name="priority"
-          label="Priority"
-          options={includeSelectedOption(priority, selectedPriority)}
-          // control={control}
-          placeholder="Select Priority"
-          register={register}
-          error={errors.priority}
-        />
-        <FormRowSelect
-          name="equipment"
-          label="Equipment"
-          options={equipmentOptions}
-          // control={control}
-          placeholder="Select Equipment"
-          register={register}
-          error={errors.equipment}
-        />
-        <FileInput control={control} name="images" multiple={true} />
+    <div className="space-y-8 p-1 dark:bg-(--bg-secondary_dark)">
+      <div className="text-center md:hidden">
+        <p className="text-[0.65rem] font-medium uppercase tracking-widest text-gray-400 dark:text-gray-500">
+          Job number
+        </p>
+        <p className="mt-1 text-xs font-semibold text-gray-700 dark:text-gray-200">
+          {item.jobcardNumber}
+        </p>
       </div>
-      <FormActionButtons
-        cancelText="Cancel"
-        submitText="Update"
-        isPending={isSubmitting}
-        onCancel={() => setShowUpdateMaintenanceDialog(false)}
-        className="border-0"
+      <DynamicForm<UpdateJobRequestFormValues>
+        form={form}
+        formId="job-update-form"
+        fields={requestFields}
+        formHeading={
+          <>
+            <span className="md:hidden">Update Job</span>
+            <span className="hidden md:inline">
+              Update Job · {item.jobcardNumber}
+            </span>
+          </>
+        }
+        redirect
+        redirectTo="/jobs/in-progress"
+        onSubmit={onSubmit}
+        isPending={isPending}
+        onCancel={handleCancel}
+        gridClassName="gap-6"
+        renderActions={false}
       />
-    </form>
+
+      <div className={location ? "space-y-2" : "space-y-3"}>
+        {location ? (
+          <div className="flex items-center justify-end">
+            <AddAssetButton
+              onClick={() => {
+                append({
+                  area: "",
+                  equipment: "",
+                  assetID: "",
+                  assetIssueReason: "",
+                  assetIssueDetails: "",
+                  images: [],
+                });
+                setExistingImagesByAsset((current) => [...current, []]);
+                setPreservedAssets((current) => [
+                  ...current,
+                  { area: undefined, equipment: "", assetID: undefined },
+                ]);
+                setOpenAssetIndex(assetFields.length);
+              }}
+            />
+          </div>
+        ) : (
+          <FormInfo
+            message={
+              <>
+                Select a <strong>Location</strong> before editing assets.
+              </>
+            }
+          />
+        )}
+
+        <div className="space-y-6">
+          {assetFields.map((field, index) => (
+            <JobAssetFields<UpdateJobRequestFormValues>
+              key={field.id}
+              form={form}
+              assetIndex={index}
+              isOpen={openAssetIndex === index}
+              onToggle={() =>
+                setOpenAssetIndex((current) => (current === index ? -1 : index))
+              }
+              canRemove={assetFields.length > 1}
+              onRemove={() => removeAsset(index)}
+              existingImages={existingImagesByAsset[index] ?? []}
+              onRemoveExistingImage={(image) =>
+                removeExistingImage(index, image)
+              }
+              initialAsset={preservedAssets[index]}
+              unifiedImageGallery
+            />
+          ))}
+        </div>
+      </div>
+
+      <DynamicFormActions
+        formId="job-update-form"
+        submitText="Update Job"
+        cancelText="Cancel"
+        onCancel={handleCancel}
+        isPending={isPending}
+      />
+    </div>
   );
+};
+
+const JobUpdateForm = () => {
+  const { id: routeId } = useParams<{ id: string }>();
+  const { selectedRowId } = useGlobalContext();
+  const id = routeId ?? selectedRowId ?? "";
+  const { data, isLoading, isError } = useById<JobApprovedAPIResponse>({
+    id,
+    resourcePath: "api/jobs",
+    queryKey: ["jobs", "in-progress-update"],
+    params: { status: "in progress" },
+  });
+
+  if (isLoading) return <FormSkeleton />;
+
+  if (!id || isError || !data) {
+    return (
+      <p className="py-8 text-center text-sm text-destructive">
+        The job could not be loaded. Please return to the in-progress jobs list
+        and try again.
+      </p>
+    );
+  }
+
+  return <JobUpdateEditor key={id} id={id} item={data} />;
 };
 
 export default JobUpdateForm;

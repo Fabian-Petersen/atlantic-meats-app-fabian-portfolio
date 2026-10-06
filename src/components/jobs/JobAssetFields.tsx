@@ -1,7 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
-import type { UseFormReturn } from "react-hook-form";
+import type { Path, UseFormReturn } from "react-hook-form";
 
-import type { CreateJobRequestFormValues } from "@/schemas/jobSchemas";
+import type {
+  CreateJobRequestFormValues,
+  PresignedUrls,
+  UpdateJobRequestFormValues,
+} from "@/schemas/jobSchemas";
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
 import { cn } from "@/lib/utils";
 import { motionVariants } from "@/styles/motionStyles";
@@ -9,13 +13,25 @@ import { sharedStyles } from "@/styles/shared";
 import DynamicForm, { type DynamicFormField } from "../forms/DynamicForm";
 import { AssetSectionHeader } from "../forms/AssetSectionHeader";
 
-interface JobAssetFieldsProps {
-  form: UseFormReturn<CreateJobRequestFormValues>;
+type JobAssetFormValues =
+  | CreateJobRequestFormValues
+  | UpdateJobRequestFormValues;
+
+interface JobAssetFieldsProps<TForm extends JobAssetFormValues> {
+  form: UseFormReturn<TForm>;
   assetIndex: number;
   isOpen: boolean;
   onToggle: () => void;
   onRemove: () => void;
   canRemove: boolean;
+  existingImages?: PresignedUrls[];
+  onRemoveExistingImage?: (image: PresignedUrls) => void;
+  initialAsset?: {
+    area?: string;
+    equipment?: string;
+    assetID?: string;
+  };
+  unifiedImageGallery?: boolean;
 }
 
 const normalizeOptions = (
@@ -29,20 +45,27 @@ const normalizeOptions = (
     typeof option === "string" ? option : option.value,
   ) ?? [];
 
-const JobAssetFields = ({
+const JobAssetFields = <TForm extends JobAssetFormValues>({
   form,
   assetIndex,
   isOpen,
   onToggle,
   onRemove,
   canRemove,
-}: JobAssetFieldsProps) => {
-  const area = form.watch(`assets.${assetIndex}.area`);
-  const equipment = form.watch(`assets.${assetIndex}.equipment`);
-  const assetID = form.watch(`assets.${assetIndex}.assetID`);
+  existingImages = [],
+  onRemoveExistingImage,
+  initialAsset,
+  unifiedImageGallery = false,
+}: JobAssetFieldsProps<TForm>) => {
+  const path = (name: string) => name as Path<TForm>;
+  const area = form.watch(path(`assets.${assetIndex}.area`)) as string;
+  const equipment = form.watch(
+    path(`assets.${assetIndex}.equipment`),
+  ) as string;
+  const assetID = form.watch(path(`assets.${assetIndex}.assetID`)) as string;
   const assetIssueReason = form.watch(
-    `assets.${assetIndex}.assetIssueReason`,
-  );
+    path(`assets.${assetIndex}.assetIssueReason`),
+  ) as string;
 
   const {
     equipmentOptions,
@@ -55,19 +78,37 @@ const JobAssetFields = ({
     isAssetLoading,
   } = useAssetFilters({
     form,
-    locationField: "location",
+    locationField: path("location"),
     assetIndex,
+    preserveValues: {
+      area: initialAsset?.area,
+      equipment:
+        area === initialAsset?.area ? initialAsset?.equipment : undefined,
+      assetID:
+        area === initialAsset?.area &&
+        equipment === initialAsset?.equipment
+          ? initialAsset?.assetID
+          : undefined,
+    },
   });
 
   const showUnidentifiedAssetWorkflow =
     !!equipment && !hasVerifiedAssets && allowUnidentifiedAsset;
 
-  const assetIdField: DynamicFormField<CreateJobRequestFormValues>[] =
+  const includeCurrentOption = (
+    options: string[],
+    currentValue?: string,
+  ): string[] =>
+    currentValue && !options.includes(currentValue)
+      ? [currentValue, ...options]
+      : options;
+
+  const assetIdField: DynamicFormField<TForm>[] =
     showUnidentifiedAssetWorkflow
       ? [
           {
             fieldType: "select",
-            name: `assets.${assetIndex}.assetIssueReason`,
+            name: path(`assets.${assetIndex}.assetIssueReason`),
             label: "No Asset ID Available — Reason",
             placeholder: "Select a reason",
             options: [
@@ -83,7 +124,7 @@ const JobAssetFields = ({
             ? [
                 {
                   fieldType: "textarea" as const,
-                  name: `assets.${assetIndex}.assetIssueDetails` as const,
+                  name: path(`assets.${assetIndex}.assetIssueDetails`),
                   label: "Please describe the issue",
                   rows: 2,
                   required: true,
@@ -95,42 +136,53 @@ const JobAssetFields = ({
       : [
           {
             fieldType: "select",
-            name: `assets.${assetIndex}.assetID`,
+            name: path(`assets.${assetIndex}.assetID`),
             label: "Asset ID",
             placeholder: "Select Asset ID",
-            options: normalizeOptions(assetIdOptions),
+            options: includeCurrentOption(
+              normalizeOptions(assetIdOptions),
+              assetID,
+            ),
             required: false,
             disabled: !area || !equipment || isAssetLoading,
           },
         ];
 
-  const fields: DynamicFormField<CreateJobRequestFormValues>[] = [
+  const fields: DynamicFormField<TForm>[] = [
     {
       fieldType: "select",
-      name: `assets.${assetIndex}.area`,
+      name: path(`assets.${assetIndex}.area`),
       label: "Area",
       placeholder: "Select Area",
-      options: normalizeOptions(areaOptions),
+      options: includeCurrentOption(normalizeOptions(areaOptions), area),
       required: true,
-      disabled: !form.watch("location") || isLocationsLoading,
+      disabled: !form.watch(path("location")) || isLocationsLoading,
     },
     {
       fieldType: "select",
-      name: `assets.${assetIndex}.equipment`,
+      name: path(`assets.${assetIndex}.equipment`),
       label: "Equipment",
       placeholder: "Select Equipment",
-      options: normalizeOptions(equipmentOptions),
+      options: includeCurrentOption(
+        normalizeOptions(equipmentOptions),
+        equipment,
+      ),
       required: true,
       disabled: !area,
     },
     ...assetIdField,
     {
       fieldType: "file",
-      name: `assets.${assetIndex}.images`,
-      label: "Upload Images",
+      name: path(`assets.${assetIndex}.images`),
+      label: unifiedImageGallery ? "Images" : "Upload Images",
       placeholder: "",
       multiple: true,
-      className: "md:col-span-1",
+      className: unifiedImageGallery
+        ? "md:col-span-2"
+        : "md:col-span-1",
+      existingFiles: existingImages,
+      onRemoveExisting: onRemoveExistingImage,
+      galleryMode: unifiedImageGallery,
     },
   ];
 
@@ -157,7 +209,7 @@ const JobAssetFields = ({
             exit="closed"
             className="overflow-hidden px-2 py-2"
           >
-            <DynamicForm
+            <DynamicForm<TForm>
               form={form}
               fields={fields}
               renderFieldsOnly

@@ -16,7 +16,7 @@ import {
 
 import { Badge } from "@/components/features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
-import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
+import { getTargetDateStatus } from "@/lib/isTargetDateOverdue";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import { motionVariants } from "@/styles/motionStyles";
@@ -32,23 +32,20 @@ type Props = {
 export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
   const navigate = useNavigate();
 
-  const {
-    setSelectedRowId,
-    setShowUpdateMaintenanceDialog,
-    openDeleteDialog,
-    setOpenChatSidebar,
-  } = useGlobalContext();
+  const { setSelectedRowId, openDeleteDialog, setOpenChatSidebar } =
+    useGlobalContext();
 
   const rowId = row.original.id;
-  const isOverdue = isTargetDateOverdue(row.original.targetDate);
+  const targetDateStatus = getTargetDateStatus(row.original.targetDate);
+  const isOverdue = targetDateStatus === "overdue";
   const menuItems = getTableMenuItems({
     rowId,
     setSelectedRowId,
     action: {
-      onOpen: () => navigate(`/jobs/${rowId}/action`),
+      onOpen: () => navigate(`/jobs/${rowId}/in-progress/action`),
     },
     edit: {
-      onOpen: () => setShowUpdateMaintenanceDialog(true),
+      onOpen: () => navigate(`/jobs/${rowId}/in-progress/update`),
     },
     view: {
       label: "View Details",
@@ -74,6 +71,8 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
         "flex flex-col",
         isOverdue &&
           "border-l-4 border-l-red-500 bg-red-50/70 dark:bg-red-950/20",
+        targetDateStatus === "due-today" && "border-l-4 border-l-orange-500",
+        targetDateStatus === "upcoming" && "border-l-4 border-l-green-500",
         isOpen && sharedStyles.cardIsOpen, // Apply the cardIsOpen style when isOpen is true
       )}
       onClick={onToggle}

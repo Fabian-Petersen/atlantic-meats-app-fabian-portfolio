@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type {
   Control,
   FieldError,
@@ -7,7 +7,7 @@ import type {
   PathValue,
 } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import { Eye, Trash2 } from "lucide-react";
+import { Eye, ImagePlus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import { SkeletonInput } from "@/components/skeletons/SkeletonInput";
@@ -35,7 +35,24 @@ type FileInputProps<T extends FieldValues, TName extends Path<T>> = {
     filename: string;
     url: string;
   }) => void;
+  galleryMode?: boolean;
 };
+
+function SelectedImagePreview({ file }: { file: File }) {
+  const previewUrl = useMemo(() => URL.createObjectURL(file), [file]);
+
+  useEffect(() => {
+    return () => URL.revokeObjectURL(previewUrl);
+  }, [previewUrl]);
+
+  return previewUrl ? (
+    <img
+      src={previewUrl}
+      alt={file.name}
+      className="size-full object-cover"
+    />
+  ) : null;
+}
 
 function FileInput<T extends FieldValues, TName extends Path<T>>({
   name,
@@ -52,6 +69,7 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
   disabled,
   existingFiles = [],
   onRemoveExisting,
+  galleryMode = false,
 }: FileInputProps<T, TName>) {
   const [localError, setLocalError] = useState<string | null>(null);
   const [previewIndex, setPreviewIndex] = useState(0);
@@ -97,6 +115,120 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
           const updated = files.filter((_, i) => i !== index);
           updateForm(updated);
         };
+
+        if (galleryMode) {
+          const imageCount = existingFiles.length + files.length;
+
+          return isLoading ? (
+            <SkeletonInput />
+          ) : (
+            <div className={cn("w-full pb-1", className)}>
+              <div className="mb-2 flex items-center justify-between gap-3">
+                <p className="text-xs font-medium text-gray-600 dark:text-gray-300">
+                  {label ?? "Images"} ({imageCount})
+                </p>
+                <span className="text-[0.7rem] text-gray-400 dark:text-gray-500">
+                  Up to {MAX_FILES} images
+                </span>
+              </div>
+
+              <input
+                id={String(name)}
+                type="file"
+                multiple={multiple}
+                accept={accept}
+                className="hidden"
+                onChange={handleSelect}
+                disabled={disabled}
+              />
+
+              <div className="flex min-h-28 gap-2 overflow-x-auto rounded-lg border border-gray-200 bg-gray-50/80 p-2 dark:border-gray-700 dark:bg-gray-800/40">
+                {existingFiles.map((file, index) => (
+                  <div
+                    key={file.key || `${file.filename}-${file.url}`}
+                    className="group/image relative size-24 shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPreviewIndex(index);
+                        setIsPreviewOpen(true);
+                      }}
+                      className="size-full"
+                      title={`View ${file.filename}`}
+                    >
+                      <img
+                        src={file.url}
+                        alt={file.filename}
+                        className="size-full object-cover"
+                      />
+                    </button>
+                    {onRemoveExisting && (
+                      <button
+                        type="button"
+                        aria-label={`Remove ${file.filename}`}
+                        onClick={() => onRemoveExisting(file)}
+                        className="absolute right-1 top-1 flex size-7 items-center justify-center rounded-full bg-black/65 text-white shadow-sm transition hover:bg-red-600"
+                      >
+                        <Trash2 className="size-3.5" />
+                      </button>
+                    )}
+                    <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1.5 py-1 text-[0.65rem] text-white">
+                      {file.filename}
+                    </span>
+                  </div>
+                ))}
+
+                {files.map((file, index) => (
+                  <div
+                    key={`${file.name}-${file.size}-${file.lastModified}`}
+                    className="relative size-24 shrink-0 overflow-hidden rounded-lg border border-emerald-300 bg-white ring-1 ring-emerald-400/30 dark:border-emerald-700 dark:bg-gray-900"
+                  >
+                    <SelectedImagePreview file={file} />
+                    <button
+                      type="button"
+                      aria-label={`Remove ${file.name}`}
+                      onClick={() => removeFile(index)}
+                      className="absolute right-1 top-1 flex size-7 items-center justify-center rounded-full bg-black/65 text-white shadow-sm transition hover:bg-red-600"
+                    >
+                      <Trash2 className="size-3.5" />
+                    </button>
+                    <span className="absolute inset-x-0 bottom-0 truncate bg-emerald-700/85 px-1.5 py-1 text-[0.65rem] text-white">
+                      New · {file.name}
+                    </span>
+                  </div>
+                ))}
+
+                {imageCount < MAX_FILES && (
+                  <label
+                    htmlFor={String(name)}
+                    className={cn(
+                      "flex size-24 shrink-0 cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-emerald-500/50 bg-white text-emerald-700 transition hover:border-emerald-500 hover:bg-emerald-50",
+                      "dark:bg-gray-900 dark:text-emerald-300 dark:hover:bg-emerald-950/30",
+                      disabled && "pointer-events-none opacity-50",
+                    )}
+                  >
+                    <ImagePlus className="size-6" aria-hidden="true" />
+                    <span className="text-xs font-semibold">Add images</span>
+                  </label>
+                )}
+              </div>
+
+              {(localError || error) && (
+                <p className="mt-1 text-xs text-red-500">
+                  {localError ?? error?.message}
+                </p>
+              )}
+              {isPreviewOpen && existingFiles.length > 0 && (
+                <FullscreenImageModal
+                  images={existingFiles.map((file) => file.url)}
+                  activeIndex={previewIndex}
+                  setIsOpen={setIsPreviewOpen}
+                />
+              )}
+            </div>
+          );
+        }
 
         return isLoading ? (
           <SkeletonInput />

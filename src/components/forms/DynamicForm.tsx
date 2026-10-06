@@ -11,6 +11,7 @@ import {
   type DefaultValues,
   type UseFormReturn,
 } from "react-hook-form";
+import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -109,6 +110,7 @@ export type FileField<T extends FieldValues> = BaseField<T> & {
     filename: string;
     url: string;
   }) => void;
+  galleryMode?: boolean;
 };
 
 export type RadioField<T extends FieldValues> = BaseField<T> & {
@@ -147,7 +149,7 @@ type DynamicFormBaseProps<T extends FieldValues> = {
 
   isPending?: boolean;
   defaultValues?: DefaultValues<T>;
-  formHeading?: string;
+  formHeading?: ReactNode;
   isLoading?: boolean;
   redirect?: boolean;
   redirectTo?: string;
@@ -321,6 +323,7 @@ function DynamicForm<T extends FieldValues>({
             multiple={field.multiple}
             existingFiles={field.existingFiles}
             onRemoveExisting={field.onRemoveExisting}
+            galleryMode={field.galleryMode}
             placeholder={field.placeholder}
             className={field.className}
             error={fieldError(field.name)}

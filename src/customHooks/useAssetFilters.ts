@@ -78,6 +78,11 @@ type Params<TForm extends AssetFilterForm> = {
    * This allows the hook to support multiple transfer assets.
    */
   assetIndex?: number;
+  preserveValues?: {
+    area?: string;
+    equipment?: string;
+    assetID?: string;
+  };
 };
 
 // ============================================================================
@@ -127,6 +132,7 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
   form,
   locationField,
   assetIndex,
+  preserveValues,
 }: Params<TForm>) => {
   // ==========================================================================
   // Resolve form field names
@@ -327,14 +333,20 @@ export const useAssetFilters = <TForm extends AssetFilterForm>({
 
     area:
       !selectedArea ||
+      selectedArea === preserveValues?.area ||
+      isLocationLoading ||
       areaOptions.some((option) => option.value === selectedArea),
 
     equipment:
       !selectedEquipment ||
+      selectedEquipment === preserveValues?.equipment ||
+      isAreaLoading ||
       equipmentOptions.some((option) => option.value === selectedEquipment),
 
     assetID:
       !selectedAssetID ||
+      selectedAssetID === preserveValues?.assetID ||
+      isAssetLoading ||
       assetIdOptions.some((option) => option.value === selectedAssetID),
   };
 

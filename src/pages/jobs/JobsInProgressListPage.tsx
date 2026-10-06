@@ -22,7 +22,7 @@ import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 import useGlobalContext from "@/context/useGlobalContext";
 
 // $ ———————— Helper Functions  —————————————————————————————————————————————————————————
-import { isTargetDateOverdue } from "@/lib/isTargetDateOverdue";
+import { getTargetDateStatus } from "@/lib/isTargetDateOverdue";
 
 // $ ———————— Columns ———————————————————————————————————————————————————————————————————
 import { getInProgressColumns } from "@/components/tableColumns/InProgressColumns";
@@ -104,14 +104,17 @@ const EMPTY_JOBS: JobApprovedAPIResponse[] = [];
  */
 
 const JobsInProgressListPage = () => {
-  const { data = EMPTY_JOBS, isError, isPending } =
-    useGetAll<JobApprovedAPIResponse[]>({
+  const {
+    data = EMPTY_JOBS,
+    isError,
+    isPending,
+  } = useGetAll<JobApprovedAPIResponse[]>({
     resourcePath: "api/jobs/requests",
     queryKey: ["jobs", "in_progress"],
     params: {
       status: "in progress",
     },
-    });
+  });
   const navigate = useNavigate();
 
   // console.log("data:", data);
@@ -128,7 +131,6 @@ const JobsInProgressListPage = () => {
   });
 
   const {
-    setShowUpdateMaintenanceDialog,
     setSelectedRowId,
     openDeleteDialog,
     setOpenChatSidebar,
@@ -138,14 +140,12 @@ const JobsInProgressListPage = () => {
   const columns = useMemo(
     () =>
       getInProgressColumns(
-        setShowUpdateMaintenanceDialog,
         navigate,
         setSelectedRowId,
         openDeleteDialog,
         setOpenChatSidebar,
       ),
     [
-      setShowUpdateMaintenanceDialog,
       navigate,
       setSelectedRowId,
       openDeleteDialog,
@@ -178,14 +178,26 @@ const JobsInProgressListPage = () => {
           data={data}
           columns={columns}
           rowPath="jobs"
-          action="action"
+          action="in-progress"
           tableHeading="Jobs In Progress"
           className="hidden md:flex flex-col gap-2"
           searchPlaceholderText="search jobs"
           rowClassName={(row) => {
-            return isTargetDateOverdue(row.targetDate)
-              ? "text-red-600 dark:text-red-400 !bg-red-50/90 dark:!bg-red-950/30 [&>td:first-child]:shadow-[inset_4px_0_0_0_#ef4444] hover:!bg-red-100/90 dark:hover:!bg-red-950/50"
-              : "text-(--clr-textLight) dark:text-(--clr-textDark)";
+            const targetDateStatus = getTargetDateStatus(row.targetDate);
+
+            if (targetDateStatus === "overdue") {
+              return "text-red-600 dark:text-red-400 !bg-red-50/90 dark:!bg-red-950/30 [&>td:first-child]:shadow-[inset_4px_0_0_0_#ef4444] hover:!bg-red-100/90 dark:hover:!bg-red-950/50";
+            }
+
+            if (targetDateStatus === "due-today") {
+              return "text-(--clr-textLight) dark:text-(--clr-textDark) [&>td:first-child]:shadow-[inset_4px_0_0_0_#f97316]";
+            }
+
+            if (targetDateStatus === "upcoming") {
+              return "text-(--clr-textLight) dark:text-(--clr-textDark) [&>td:first-child]:shadow-[inset_4px_0_0_0_#22c55e]";
+            }
+
+            return "text-(--clr-textLight) dark:text-(--clr-textDark)";
           }}
         />
       </div>

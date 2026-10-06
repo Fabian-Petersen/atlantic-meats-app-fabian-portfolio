@@ -212,6 +212,23 @@ http://localhost:5173
 
 ---
 
+Sync Application with atlantic-meat repository:
+
+Account 1 commit
+
+```bash
+git add .
+git commit -m "Update backend"
+git push origin main
+```
+
+sync with repository in account 2
+
+```bash
+git push origin main
+git push frontend main
+```
+
 # Environment Variables
 
 Create a `.env` file in the root directory:
@@ -530,16 +547,16 @@ The desktop tables and mobile cards expose equivalent core actions. The shared c
 
 ### Jobs Frontend Routes and Access
 
-| Route | Purpose | Current frontend guard |
-| --- | --- | --- |
-| `/jobs/create-job` | Create a maintenance request | `admin`, `manager`, `user`, `maintenance` |
-| `/jobs/pending-approval` | List pending requests | `admin` |
-| `/jobs/:id/pending-approval` | Review a pending request | `admin` |
-| `/jobs/in-progress` | List active assigned jobs | `admin`, `manager`, `user`, `maintenance` |
-| `/jobs/:id/in-progress` | View an active job | `admin`, `manager`, `user`, `maintenance` |
-| `/jobs/:id/action` | Submit work performed | `admin`, `manager`, `user`, `maintenance` |
-| `/jobs/completed` | List completed/actioned jobs | `admin`, `maintenance`, `contractor` |
-| `/jobs/:id/complete` | View combined request/action details | Declared in two guard groups; effectively intended for authorized employees and assigned workers |
+| Route                        | Purpose                              | Current frontend guard                                                                           |
+| ---------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| `/jobs/create-job`           | Create a maintenance request         | `admin`, `manager`, `user`, `maintenance`                                                        |
+| `/jobs/pending-approval`     | List pending requests                | `admin`                                                                                          |
+| `/jobs/:id/pending-approval` | Review a pending request             | `admin`                                                                                          |
+| `/jobs/in-progress`          | List active assigned jobs            | `admin`, `manager`, `user`, `maintenance`                                                        |
+| `/jobs/:id/in-progress`      | View an active job                   | `admin`, `manager`, `user`, `maintenance`                                                        |
+| `/jobs/:id/action`           | Submit work performed                | `admin`, `manager`, `user`, `maintenance`                                                        |
+| `/jobs/completed`            | List completed/actioned jobs         | `admin`, `maintenance`, `contractor`                                                             |
+| `/jobs/:id/complete`         | View combined request/action details | Declared in two guard groups; effectively intended for authorized employees and assigned workers |
 
 Backend authorization is authoritative and follows the data-access rules documented below. The current navigation labels the completed route as **Completed Jobs** for admins and **My Jobs** for other groups.
 
@@ -607,15 +624,15 @@ Rejection uses `POST /api/jobs/{id}/reject` and requires `reject_message`. The b
 
 The action form submits to `POST /api/jobs/{id}/action`. The current frontend collects:
 
-| Category | Fields |
-| --- | --- |
+| Category        | Fields                                                             |
+| --------------- | ------------------------------------------------------------------ |
 | Time and travel | `start_time`, `end_time`, `total_km`, optional `work_order_number` |
-| Work details | `work_completed`, `findings`, `root_cause`, action `status` |
-| Sundries | Description and subtotal |
-| Parts/materials | Description and subtotal |
-| Contractor | Contractor name and subtotal |
-| Evidence | Images and invoices |
-| Sign-off | `signedBy` and a required digital signature |
+| Work details    | `work_completed`, `findings`, `root_cause`, action `status`        |
+| Sundries        | Description and subtotal                                           |
+| Parts/materials | Description and subtotal                                           |
+| Contractor      | Contractor name and subtotal                                       |
+| Evidence        | Images and invoices                                                |
+| Sign-off        | `signedBy` and a required digital signature                        |
 
 Start and end values must parse as dates, neither may be in the future, and the end cannot precede the start. `total_km` must be greater than zero. Work completed, root cause, status, signatory name, and signature are required by the schema; the UI also presents findings as required.
 
@@ -627,19 +644,19 @@ Images are compressed before upload; invoices retain their original files. Both 
 
 All non-`OPTIONS` routes use Cognito authentication. Paths are relative to `VITE_SITE_URL`.
 
-| Method and endpoint | Purpose |
-| --- | --- |
-| `GET /api/jobs/requests` | List requests, optionally filtered by status. |
-| `POST /api/jobs/requests` | Create a maintenance request and return upload URLs. |
-| `GET /api/jobs/completed` | List actioned/completed job records. |
-| `GET /api/jobs/{id}?status=...` | Retrieve a request or a combined completed job. |
-| `PUT /api/jobs/{id}` | Update a request. |
-| `DELETE /api/jobs/{id}` | Delete a request and its associated request images. |
-| `POST /api/jobs/{id}/approve` | Assign and approve a pending request. |
-| `POST /api/jobs/{id}/reject` | Reject and remove a pending request. |
-| `POST /api/jobs/{id}/action` | Record work performed against an active request. |
-| `GET /api/jobs/{id}/jobcard` | Return the generated job-card download URL. |
-| `GET /api/assets/options` | Return the location -> area -> equipment -> asset hierarchy. |
+| Method and endpoint             | Purpose                                                      |
+| ------------------------------- | ------------------------------------------------------------ |
+| `GET /api/jobs/requests`        | List requests, optionally filtered by status.                |
+| `POST /api/jobs/requests`       | Create a maintenance request and return upload URLs.         |
+| `GET /api/jobs/completed`       | List actioned/completed job records.                         |
+| `GET /api/jobs/{id}?status=...` | Retrieve a request or a combined completed job.              |
+| `PUT /api/jobs/{id}`            | Update a request.                                            |
+| `DELETE /api/jobs/{id}`         | Delete a request and its associated request images.          |
+| `POST /api/jobs/{id}/approve`   | Assign and approve a pending request.                        |
+| `POST /api/jobs/{id}/reject`    | Reject and remove a pending request.                         |
+| `POST /api/jobs/{id}/action`    | Record work performed against an active request.             |
+| `GET /api/jobs/{id}/jobcard`    | Return the generated job-card download URL.                  |
+| `GET /api/assets/options`       | Return the location -> area -> equipment -> asset hierarchy. |
 
 Frontend usage by screen:
 
@@ -769,16 +786,16 @@ The backend keeps request creation, approval/rejection, action capture, complete
 
 ### Jobs Infrastructure
 
-| Component | Purpose |
-| --- | --- |
-| Cognito | Authentication, group claims, requester identity, approver identity, and worker scope. |
-| API Gateway | Authenticated job, action, asset-option, and job-card endpoints. |
-| Lambda | Request CRUD, approval, rejection, action processing, list/detail reads, upload metadata, and PDF generation. |
-| DynamoDB request table | Maintenance request state, assignment, asset references, and request/action linkage. |
-| DynamoDB action table | Work performed, costs, evidence metadata, and completion data. |
-| DynamoDB Streams | Starts asynchronous PDF generation after completion. |
-| S3 | Request/action evidence, invoices, signatures where applicable, and generated job cards. |
-| CloudWatch | Logs, metrics, alarms, stream failures, upload failures, and PDF-generation visibility. |
+| Component              | Purpose                                                                                                       |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Cognito                | Authentication, group claims, requester identity, approver identity, and worker scope.                        |
+| API Gateway            | Authenticated job, action, asset-option, and job-card endpoints.                                              |
+| Lambda                 | Request CRUD, approval, rejection, action processing, list/detail reads, upload metadata, and PDF generation. |
+| DynamoDB request table | Maintenance request state, assignment, asset references, and request/action linkage.                          |
+| DynamoDB action table  | Work performed, costs, evidence metadata, and completion data.                                                |
+| DynamoDB Streams       | Starts asynchronous PDF generation after completion.                                                          |
+| S3                     | Request/action evidence, invoices, signatures where applicable, and generated job cards.                      |
+| CloudWatch             | Logs, metrics, alarms, stream failures, upload failures, and PDF-generation visibility.                       |
 
 Each Lambda should have least-privilege access to only the table, index, S3 prefix, and stream operations it needs. Cognito claims must be validated server-side for every non-preflight route.
 
@@ -949,7 +966,7 @@ PENDING → EXPIRED
 APPROVED → CANCELLED
 APPROVED → IN_TRANSIT
 IN_TRANSIT → RECEIVED
-````
+```
 
 ---
 

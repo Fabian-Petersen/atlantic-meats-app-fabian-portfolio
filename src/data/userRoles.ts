@@ -1,10 +1,11 @@
 import type { UserGroup, UserPosition } from "@/schemas/usersSchema";
 
 export const userRoles: UserGroup[] = [
-  "manager",
   "admin",
-  "user",
   "contractor",
+  "maintenance",
+  "manager",
+  "user",
 ];
 
 export const division: string[] = [
@@ -17,7 +18,7 @@ export const division: string[] = [
 export const userPosition: UserPosition[] = [
   "operations manager",
   "regional manager",
-  "manager",
+  "branch manager",
   "supervisor",
   "maintenance manager",
   "technician",

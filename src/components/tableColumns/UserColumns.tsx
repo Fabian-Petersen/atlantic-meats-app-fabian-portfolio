@@ -111,10 +111,15 @@ export const getUserColumns = (
   {
     accessorKey: "updatedAt",
     header: "Last Updated",
-    cell: ({ getValue }) => {
-      const value = getValue<boolean>();
-      return <p className="">{value}</p>;
-    },
+    cell: ({ getValue }) =>
+      new Date(getValue<string>()).toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }),
   },
   {
     id: "actions",

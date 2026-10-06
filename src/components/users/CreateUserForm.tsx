@@ -83,6 +83,7 @@ function CreateUserForm() {
     <form
       className={cn(sharedStyles.form, "gap-4")}
       onSubmit={handleSubmit(submit)}
+      noValidate
     >
       <div className={cn(sharedStyles.formParent, "gap-6 md:gap-4")}>
         <FormHeading
@@ -93,7 +94,6 @@ function CreateUserForm() {
           )}
         />
         <FormRowInput
-          // label=""
           name="name"
           label="Name"
           className="capitalize"
@@ -103,7 +103,6 @@ function CreateUserForm() {
           control={control}
         />
         <FormRowInput
-          // label=""
           name="family_name"
           label="surname"
           register={register}
@@ -113,7 +112,6 @@ function CreateUserForm() {
           control={control}
         />
         <FormRowSelect
-          // label=""
           name="location"
           label="Location"
           options={allLocations}
@@ -123,7 +121,6 @@ function CreateUserForm() {
           required={true}
         />
         <FormRowSelect
-          // label=""
           name="group"
           label="Group"
           options={userRoles}
@@ -133,7 +130,6 @@ function CreateUserForm() {
           required={true}
         />
         <FormRowSelect
-          // label=""
           name="position"
           label="Position"
           options={userPosition}
@@ -150,7 +146,6 @@ function CreateUserForm() {
           )}
         />
         <FormRowInput
-          // label=""
           type="email"
           name="email"
           label="email"
@@ -159,7 +154,6 @@ function CreateUserForm() {
           control={control}
         />
         <FormRowInput
-          // label=""
           type="text"
           name="mobile"
           label="mobile number"

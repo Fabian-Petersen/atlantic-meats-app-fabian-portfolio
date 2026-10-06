@@ -74,8 +74,7 @@ function UserProfileForm({ user }: UserProfileProps) {
         <FormRowInput
           label="Name"
           name="name"
-          // placeholder="Name"
-          className="capitalize"
+          inputStyles="capitalize"
           readOnly={true}
           register={register}
           control={control}
@@ -83,10 +82,9 @@ function UserProfileForm({ user }: UserProfileProps) {
         <FormRowInput
           label="Surname"
           name="family_name"
-          // placeholder="Surname"
           readOnly={true}
           register={register}
-          className="capitalize"
+          inputStyles="capitalize"
           control={control}
         />
         <FormRowInput
@@ -94,27 +92,23 @@ function UserProfileForm({ user }: UserProfileProps) {
           name="location"
           readOnly={true}
           register={register}
-          className="capitalize"
+          inputStyles="capitalize"
           control={control}
         />
         <FormRowInput
           label="Group"
           name="group"
-          // placeholder="Group"
           readOnly={true}
           register={register}
-          className="capitalize"
-          // errors={error}
+          inputStyles="capitalize"
           control={control}
         />
         <FormRowInput
           label="Position"
           name="position"
-          // placeholder="Group"
-          // readOnly={true}
+          readOnly={true}
           register={register}
-          className="capitalize"
-          // errors={error}
+          inputStyles="capitalize"
           control={control}
         />
         <FormHeading
@@ -128,7 +122,6 @@ function UserProfileForm({ user }: UserProfileProps) {
           label="Email"
           type="email"
           name="email"
-          // placeholder="Email"
           readOnly={true}
           register={register}
           control={control}
@@ -137,7 +130,6 @@ function UserProfileForm({ user }: UserProfileProps) {
           label="Mobile Number"
           type="text"
           name="mobile"
-          // placeholder="Mobile Number"
           register={register}
           className="capitalize"
           error={errors.mobile}
