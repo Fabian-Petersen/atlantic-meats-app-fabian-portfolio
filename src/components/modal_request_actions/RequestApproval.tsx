@@ -11,7 +11,7 @@ import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 // import { toast } from "sonner";
 
 // icons
-import { X, Check } from "lucide-react";
+import { Check, Pencil, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
@@ -48,7 +48,12 @@ function RequestApproval({
     selectedRowId,
     setShowRejectRequestDialog,
     setShowApproveRequestDialog,
+    setShowUpdateMaintenanceDialog,
+    openDeleteDialog,
+    user,
   } = useGlobalContext();
+
+  const canApproveOrReject = user?.group?.toLowerCase() === "admin";
 
   // Generate a random number for the request - not stored in db
   const [randomNumber] = useState(() => Math.floor(Math.random() * 9999) + 1);
@@ -191,43 +196,78 @@ function RequestApproval({
       {/* ── Actions ── */}
       <div className="mt-auto pt-4 flex flex-col gap-6">
         <p className="text-xs text-center text-gray-400 dark:text-gray-500">
-          Review all details before approving this request.
+          {canApproveOrReject
+            ? "Review all details before approving this request."
+            : "Review the request details before updating or deleting it."}
         </p>
         {/* <div className="flex w-full justify-end pt-6 bg-red-500/0"> */}
         <div
           className={cn(
             sharedStyles.btnParent,
-            "w-full max-w-none md:ml-auto md:w-auto md:max-w-none",
+            "md:w-full",
           )}
         >
-          <button
-            type="button"
-            onClick={() => {
-              setShowRejectRequestDialog(true);
-            }}
-            className={cn(
-              sharedStyles.btnCancel,
-              sharedStyles.btn,
-              "flex items-center justify-center gap-2 px-3 md:flex-none md:px-4",
-            )}
-          >
-            <X className="w-6 h-6" />
-            <span className="text-md">Reject</span>
-          </button>
-          <button
-            type="submit"
-            // variant="submit"
-            // size="lg"
-            className={cn(
-              sharedStyles.btnApprove,
-              sharedStyles.btn,
-              "flex items-center justify-center gap-2 px-3 md:flex-none md:px-4",
-            )}
-            onClick={handleApprove}
-          >
-            <Check className="w-6 h-6" />
-            <span className="text-md">Approve</span>
-          </button>
+          {canApproveOrReject ? (
+            <>
+              <button
+                type="button"
+                onClick={() => setShowRejectRequestDialog(true)}
+                className={cn(
+                  sharedStyles.btnCancel,
+                  sharedStyles.btn,
+                  "flex items-center justify-center gap-2 px-3 md:flex-none md:px-4",
+                )}
+              >
+                <X className="w-6 h-6" />
+                <span className="text-md">Reject</span>
+              </button>
+              <button
+                type="submit"
+                className={cn(
+                  sharedStyles.btnApprove,
+                  sharedStyles.btn,
+                  "flex items-center justify-center gap-2 px-3 md:flex-none md:px-4",
+                )}
+                onClick={handleApprove}
+              >
+                <Check className="w-6 h-6" />
+                <span className="text-md">Approve</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() =>
+                  openDeleteDialog(item.id, {
+                    resourcePath: "api/jobs",
+                    queryKey: ["jobs"],
+                    resourceName: "request",
+                  })
+                }
+                className={cn(
+                  sharedStyles.btnCancel,
+                  sharedStyles.btn,
+                  "flex items-center justify-center gap-2 px-3 md:flex-none md:px-4",
+                )}
+              >
+                <Trash2 className="w-5 h-5" />
+                <span className="text-md">Delete</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowUpdateMaintenanceDialog(true)}
+                className={cn(
+                  sharedStyles.btnSubmit,
+                  sharedStyles.btn,
+                  "flex items-center justify-center gap-2 px-3 md:flex-none md:px-4",
+                )}
+              >
+                <Pencil className="w-5 h-5" />
+                <span className="text-md">Update</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

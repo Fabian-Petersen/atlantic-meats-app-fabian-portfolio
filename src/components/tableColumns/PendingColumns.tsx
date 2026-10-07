@@ -18,6 +18,7 @@ export const getJobPendingColumns = (
   setOpenChatSidebar: (v: boolean) => void,
   setShowApproveRequestDialog: (v: boolean) => void,
   setShowRejectRequestDialog: (v: boolean) => void,
+  canApproveOrReject: boolean,
 ): ColumnDef<JobAPIResponse>[] => [
   {
     accessorKey: "jobCreated",
@@ -156,26 +157,28 @@ export const getJobPendingColumns = (
         },
       });
 
-      menuItems.unshift(
-        {
-          id: "approve",
-          label: "Approve",
-          icon: CheckCircle2,
-          onClick: () => {
-            setSelectedRowId(rowId);
-            setShowApproveRequestDialog(true);
+      if (canApproveOrReject) {
+        menuItems.unshift(
+          {
+            id: "approve",
+            label: "Approve",
+            icon: CheckCircle2,
+            onClick: () => {
+              setSelectedRowId(rowId);
+              setShowApproveRequestDialog(true);
+            },
           },
-        },
-        {
-          id: "reject",
-          label: "Reject",
-          icon: XCircle,
-          onClick: () => {
-            setSelectedRowId(rowId);
-            setShowRejectRequestDialog(true);
+          {
+            id: "reject",
+            label: "Reject",
+            icon: XCircle,
+            onClick: () => {
+              setSelectedRowId(rowId);
+              setShowRejectRequestDialog(true);
+            },
           },
-        },
-      );
+        );
+      }
 
       return (
         <div className="tex-center" onClick={(e) => e.stopPropagation()}>

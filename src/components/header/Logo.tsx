@@ -1,33 +1,25 @@
 import clsx from "clsx";
-import { useLocation, useNavigate } from "react-router-dom";
+import atlanticMeatLogo from "@/assets/atlantic_meat_logo_v1.jpg";
 
 type Props = {
   className?: string;
 };
-// Routes where logo should be visible on mobile
-const LOGO_ROUTES = ["/", "/forgot-password", "/change-password"];
-
 const Logo = ({ className }: Props) => {
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
-
-  // Only show logo if current route is in allowed routes
-  const isVisible = LOGO_ROUTES.includes(pathname);
   return (
-    <div
+    <a
+      href="https://www.atlanticmeat.co.za"
+      aria-label="Visit the Atlantic Meat website"
       className={clsx(
         className,
-        "hover:cursor-pointer h-12 max-h-24",
-        isVisible ? "md:block" : "md:block", // This only display the logo when on "/" and when in desktop view
+        "block h-10 shrink-0 overflow-hidden rounded-sm md:h-12",
       )}
-      onClick={() => navigate("https://www.atlanticmeat.co.za")}
     >
       <img
-        src="https://www.atlanticmeat.co.za/assets/images/am20loyalty20logo-472x214.webp"
-        alt="Logo"
+        src={atlanticMeatLogo}
+        alt="Atlantic Meat"
         className="h-full w-auto"
       />
-    </div>
+    </a>
   );
 };
 

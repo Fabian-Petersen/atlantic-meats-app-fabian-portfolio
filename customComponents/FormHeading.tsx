@@ -70,15 +70,11 @@ const FormHeading = ({
       )}
     >
       <div
-        className={cn(
-          "flex w-full items-center gap-2",
-          redirect && "relative justify-center md:justify-start",
-          headingStyles,
-        )}
+        className={cn("flex w-full items-center gap-2", headingStyles)}
       >
         {redirect && (
           <button
-            className="absolute left-0 block md:hidden"
+            className="block md:hidden"
             aria-label="return button"
             type="button"
             onClick={() => navigate(redirectTo ?? "")}

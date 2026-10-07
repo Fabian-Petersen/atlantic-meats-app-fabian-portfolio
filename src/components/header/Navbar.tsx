@@ -1,4 +1,5 @@
 import NavbarMenuButton from "./NavbarMenuButton";
+import Logo from "./Logo";
 import NavbarActionButtons from "./NavbarActionButtons";
 import { useLocation } from "react-router-dom";
 import ThemeToggleButton from "./ThemeToggleButton";
@@ -10,18 +11,27 @@ type Props = {
 
 const Navbar = ({ className }: Props) => {
   const { pathname } = useLocation();
-  const isAuthPage = pathname === "/" || pathname === "/forgot-password";
+  const isAuthPage = ["/", "/forgot-password", "/change-password"].includes(
+    pathname,
+  );
 
   return (
     <nav className={`${className} fixed z-20 w-full`}>
-      {/* Row 1: action icons */}
-      <div className="flex justify-end w-full items-center px-2 md:px-4 md:py-2 bg-primary">
+      {/* Row 1: authenticated logo + action icons */}
+      <div
+        className={`flex w-full items-center bg-primary px-2 md:px-4 md:py-2 ${
+          isAuthPage ? "justify-end" : "justify-between"
+        }`}
+      >
         {isAuthPage ? (
           <ThemeToggleButton />
         ) : (
-          <div className="flex justify-end w-full px-2 lg:px-0">
-            <NavbarActionButtons />
-          </div>
+          <>
+            <Logo />
+            <div className="flex min-w-0 flex-1 justify-end pl-2 lg:pl-4">
+              <NavbarActionButtons />
+            </div>
+          </>
         )}
       </div>
 

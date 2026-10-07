@@ -150,6 +150,8 @@ type DynamicFormBaseProps<T extends FieldValues> = {
   isPending?: boolean;
   defaultValues?: DefaultValues<T>;
   formHeading?: ReactNode;
+  formHeadingClassName?: string;
+  showFormHeading?: boolean;
   isLoading?: boolean;
   redirect?: boolean;
   redirectTo?: string;
@@ -213,6 +215,8 @@ function DynamicForm<T extends FieldValues>({
   // $ Existing whole-form loading behaviour.
   isLoading = false,
   formHeading,
+  formHeadingClassName,
+  showFormHeading = true,
   renderFieldsOnly = false,
   redirectTo,
   redirect,
@@ -428,12 +432,14 @@ function DynamicForm<T extends FieldValues>({
 
   return (
     <>
-      <FormHeading
-        className={cn(sharedStyles.headingForm, "px-0")}
-        heading={formHeading ?? "Form"}
-        redirect={redirect}
-        redirectTo={redirectTo}
-      />
+      {showFormHeading && (
+        <FormHeading
+          className={cn(sharedStyles.headingForm, "px-0", formHeadingClassName)}
+          heading={formHeading ?? "Form"}
+          redirect={redirect}
+          redirectTo={redirectTo}
+        />
+      )}
 
       <form
         id={formId}
@@ -466,12 +472,14 @@ export const DynamicFormActions = ({
   cancelText = "Cancel",
   onCancel,
   isPending = false,
+  className,
 }: {
   formId?: string;
   submitText?: string;
   cancelText?: string;
   onCancel?: () => void;
   isPending?: boolean;
+  className?: string;
 }) => {
   return (
     <FormActionButtons
@@ -480,6 +488,7 @@ export const DynamicFormActions = ({
       cancelText={cancelText}
       onCancel={onCancel}
       isPending={isPending}
+      className={className}
     />
   );
 };

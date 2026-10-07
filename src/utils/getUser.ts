@@ -3,8 +3,6 @@
 import { useGetAll } from "@/utils/api";
 import type { UsersAPIResponse } from "@/schemas/usersSchema";
 
-// $ Get the list of technicians from the database
-
 export const useGetUser = () => {
   return useGetAll<UsersAPIResponse>({
     resourcePath: `api/users/get-current-user`,

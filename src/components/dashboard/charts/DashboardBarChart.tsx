@@ -1,9 +1,11 @@
 import type { ChartPoint } from "@/schemas/dashboardSchema";
+import { cn } from "@/lib/utils";
 
 type Props = {
   data: ChartPoint[];
   isMobile: boolean;
   onSelect: (point: ChartPoint) => void;
+  compactMobileLeft?: boolean;
 };
 
 const getPointLabel = (point: ChartPoint, isMobile: boolean) =>
@@ -13,12 +15,19 @@ export default function DashboardBarChart({
   data,
   isMobile,
   onSelect,
+  compactMobileLeft = false,
 }: Props) {
   const values = data.map((point) => Number(point.value) || 0);
   const maxValue = Math.max(...values, 1);
 
   return (
-    <div className="grid h-full min-h-0 w-full grid-cols-[2.25rem_minmax(0,1fr)] gap-2 px-1 py-2 md:grid-cols-[2.5rem_minmax(0,1fr)] md:px-4 md:py-3">
+    <div
+      className={cn(
+        "grid h-full min-h-0 w-full grid-cols-[2.25rem_minmax(0,1fr)] gap-2 px-1 py-2 md:grid-cols-[2.5rem_minmax(0,1fr)] md:px-4 md:py-3",
+        compactMobileLeft &&
+          "grid-cols-[1.75rem_minmax(0,1fr)] gap-1 px-0 md:grid-cols-[2.5rem_minmax(0,1fr)] md:gap-2 md:px-4",
+      )}
+    >
       <div
         className="flex flex-col justify-between pb-7 pt-10 text-right text-[0.625rem] text-gray-500 dark:text-gray-400"
         aria-hidden="true"
@@ -28,7 +37,12 @@ export default function DashboardBarChart({
         <span>0</span>
       </div>
 
-      <div className="flex min-h-0 min-w-0 items-stretch gap-1 overflow-hidden border-b border-l border-gray-300 px-1 pt-10 dark:border-gray-600 md:gap-2 md:px-2">
+      <div
+        className={cn(
+          "flex min-h-0 min-w-0 items-stretch gap-1 overflow-hidden border-b border-l border-gray-300 px-1 pt-10 dark:border-gray-600 md:gap-2 md:px-2",
+          compactMobileLeft && "px-0 md:px-2",
+        )}
+      >
         {data.map((point, index) => {
           const value = values[index];
           const label = getPointLabel(point, isMobile);

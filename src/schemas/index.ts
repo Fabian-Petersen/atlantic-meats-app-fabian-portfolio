@@ -7,7 +7,10 @@ import {
   forgotPasswordSchema,
 } from "./authSchemas";
 import { jobRequestSchema } from "./jobSchemas";
-import { actionRequestSchema } from "./actionSchemas";
+import {
+  actionExpensePayloadItemSchema,
+  actionRequestSchema,
+} from "./actionSchemas";
 import { assetRequestSchema } from "./assetSchemas";
 import { commentRequestSchema, commentResponseSchema } from "./commentSchemas";
 import { usersResponseSchema, usersRequestSchema } from "./usersSchema";
@@ -36,6 +39,7 @@ import {
 export {
   jobRequestSchema,
   actionRequestSchema,
+  actionExpensePayloadItemSchema,
   assetRequestSchema,
   loginSchema,
   changePasswordSchema,
@@ -88,6 +92,8 @@ import type {
   ActionAPIResponse,
   ActionRequestFormValues,
   ActionTableRow,
+  ActionExpensePayloadItem,
+  ActionExpenseResponseValue,
 } from "./actionSchemas";
 
 // % Assets Types
@@ -168,6 +174,8 @@ export type {
   ActionAPIResponse,
   ActionRequestPayload,
   ActionTableRow,
+  ActionExpensePayloadItem,
+  ActionExpenseResponseValue,
   //Asset Types
   AssetRequestFormValues,
   AssetTableRow,

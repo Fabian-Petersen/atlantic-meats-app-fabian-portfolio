@@ -142,7 +142,7 @@ function FileInput<T extends FieldValues, TName extends Path<T>>({
                 disabled={disabled}
               />
 
-              <div className="flex min-h-28 gap-2 overflow-x-auto rounded-lg border border-gray-200 bg-gray-50/80 p-2 dark:border-gray-700 dark:bg-gray-800/40">
+              <div className="flex min-h-28 gap-2 overflow-x-auto rounded-lg border border-gray-200 bg-gray-50/80 px-2 pb-4 pt-2 dark:border-gray-700 dark:bg-gray-800/40">
                 {existingFiles.map((file, index) => (
                   <div
                     key={file.key || `${file.filename}-${file.url}`}

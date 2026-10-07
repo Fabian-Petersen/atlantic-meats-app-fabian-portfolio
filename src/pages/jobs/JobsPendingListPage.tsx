@@ -49,7 +49,10 @@ const JobsPendingListPage = () => {
     setOpenChatSidebar,
     setShowApproveRequestDialog,
     setShowRejectRequestDialog,
+    user,
   } = useGlobalContext();
+
+  const canApproveOrReject = user?.group?.toLowerCase() === "admin";
 
   // $ Pass the props to the function generating the columns to be used in the table
   const columns = useMemo(
@@ -61,6 +64,7 @@ const JobsPendingListPage = () => {
         setOpenChatSidebar,
         setShowApproveRequestDialog,
         setShowRejectRequestDialog,
+        canApproveOrReject,
       ),
     [
       setShowUpdateMaintenanceDialog,
@@ -69,6 +73,7 @@ const JobsPendingListPage = () => {
       setOpenChatSidebar,
       setShowApproveRequestDialog,
       setShowRejectRequestDialog,
+      canApproveOrReject,
     ],
   );
 

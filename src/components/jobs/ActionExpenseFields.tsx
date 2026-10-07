@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  BriefcaseBusiness,
   ChevronDown,
+  HardHat,
   PackagePlus,
   Plus,
   ReceiptText,
@@ -54,10 +54,14 @@ const EXPENSE_CONFIGS: ExpenseConfig[] = [
 
 function AddExpenseButton({
   label,
+  mobileLabel,
+  icon: Icon,
   onClick,
   disabled = false,
 }: {
   label: string;
+  mobileLabel: string;
+  icon: LucideIcon;
   onClick: () => void;
   disabled?: boolean;
 }) {
@@ -66,16 +70,18 @@ function AddExpenseButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group inline-flex min-h-10 items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-400/10 px-3.5 py-2 text-xs font-semibold text-emerald-700 shadow-xs transition-all hover:cursor-pointer hover:border-emerald-500/50 hover:bg-emerald-400/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-emerald-400/25 dark:bg-emerald-400/10 dark:text-emerald-300 dark:hover:border-emerald-400/45 dark:hover:bg-emerald-400/15"
+      aria-label={label}
+      className="group inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-400/10 px-2 py-2 text-xs font-semibold text-emerald-700 shadow-xs transition-all hover:cursor-pointer hover:border-emerald-500/50 hover:bg-emerald-400/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-emerald-400/25 dark:bg-emerald-400/10 dark:text-emerald-300 dark:hover:border-emerald-400/45 dark:hover:bg-emerald-400/15 md:w-auto md:justify-start md:px-3.5"
     >
       <span className="relative flex size-6 items-center justify-center rounded-md bg-emerald-500 text-white shadow-sm transition-transform group-hover:scale-105 dark:bg-emerald-400 dark:text-gray-950">
-        <PackagePlus className="size-3.5" aria-hidden="true" />
+        <Icon className="size-3.5" aria-hidden="true" />
         <Plus
           className="absolute -right-1 -top-1 size-3 rounded-full bg-white p-0.5 text-emerald-600 ring-1 ring-emerald-500/20 dark:bg-gray-900 dark:text-emerald-300"
           aria-hidden="true"
         />
       </span>
-      <span>{label}</span>
+      <span className="md:hidden">{mobileLabel}</span>
+      <span className="hidden md:inline">{label}</span>
     </button>
   );
 }
@@ -285,9 +291,11 @@ export default function ActionExpenseFields({
 
   return (
     <div className="col-span-2 space-y-4">
-      <div className="flex flex-wrap justify-end gap-2">
+      <div className="grid w-full grid-cols-3 gap-2 md:flex md:flex-wrap md:justify-end">
         <AddExpenseButton
           label="Add Part"
+          mobileLabel="Part"
+          icon={Wrench}
           onClick={() => {
             parts.append({ description: "", cost: "" });
             setOpenPartIndex(parts.fields.length);
@@ -295,6 +303,8 @@ export default function ActionExpenseFields({
         />
         <AddExpenseButton
           label="Add Sundry"
+          mobileLabel="Sundry"
+          icon={PackagePlus}
           onClick={() => {
             sundries.append({ description: "", cost: "" });
             setOpenSundryIndex(sundries.fields.length);
@@ -302,6 +312,8 @@ export default function ActionExpenseFields({
         />
         <AddExpenseButton
           label="Add Contractor"
+          mobileLabel="Contractor"
+          icon={HardHat}
           disabled={contractorEnabled}
           onClick={() => {
             form.setValue("contractor_enabled", true, { shouldDirty: true });
@@ -339,7 +351,7 @@ export default function ActionExpenseFields({
             title="Contractor"
             summary={contractorName?.trim() || "Contractor details not completed"}
             isOpen={contractorOpen}
-            icon={BriefcaseBusiness}
+            icon={HardHat}
             onToggle={() => setContractorOpen((current) => !current)}
             onRemove={() => {
               form.setValue("contractor_enabled", false, { shouldDirty: true });

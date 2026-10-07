@@ -9,6 +9,8 @@ import type {
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import { ChevronDown } from "lucide-react";
+import { AssetsDropdownCell } from "../features/tables/AssetsDropdownCell";
+import { ExpenseItemsDropdownCell } from "../features/tables/ExpenseItemsDropdownCell";
 
 export const getJobCompletedColumns = (
   setSelectedRowId: (id: string) => void,
@@ -62,34 +64,54 @@ export const getJobCompletedColumns = (
     },
   },
   {
-    accessorKey: "assetID",
-    header: "assetID",
-    enableColumnFilter: true,
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="">{value}</p>;
+    accessorKey: "assets",
+    header: "Equipment | Asset ID",
+    enableColumnFilter: false,
+    cell: ({ row }) => {
+      const assets = row.original.assets?.length
+        ? row.original.assets
+        : [
+            {
+              equipment: row.original.equipment ?? "Equipment",
+              assetID: row.original.assetID,
+            },
+          ];
+
+      return <AssetsDropdownCell assets={assets} />;
     },
   },
   {
     accessorKey: "start_time",
     header: "Start Date",
+    cell: ({ getValue }) => (
+      <p className="">
+        {new Date(getValue<string>()).toLocaleString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })}
+      </p>
+    ),
     enableColumnFilter: true,
   },
   {
     accessorKey: "end_time",
     header: "End Date",
-    enableColumnFilter: true,
-  },
-  {
-    accessorKey: "total_km",
-    header: "Total Km",
-  },
-  {
-    accessorKey: "work_order_number",
-    header: "Works Order #",
-    size: 140,
-    minSize: 120,
-    maxSize: 160,
+    cell: ({ getValue }) => (
+      <p className="">
+        {new Date(getValue<string>()).toLocaleString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })}
+      </p>
+    ),
     enableColumnFilter: true,
   },
   {
@@ -99,18 +121,6 @@ export const getJobCompletedColumns = (
     minSize: 10,
     maxSize: 160,
     enableColumnFilter: true,
-  },
-  {
-    accessorKey: "requested_by",
-    header: "Requested By",
-    size: 140,
-    minSize: 120,
-    maxSize: 160,
-    enableColumnFilter: true,
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <p className="capitalize">{value}</p>;
-    },
   },
   {
     accessorKey: "actioned_by",
@@ -123,6 +133,45 @@ export const getJobCompletedColumns = (
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;
     },
+  },
+  {
+    accessorKey: "parts",
+    header: "Parts",
+    enableColumnFilter: false,
+    cell: ({ row }) => (
+      <ExpenseItemsDropdownCell
+        label="Parts"
+        value={row.original.parts}
+        total={row.original.total_cost_parts}
+      />
+    ),
+    minSize: 110,
+    maxSize: 140,
+  },
+  {
+    accessorKey: "sundries",
+    header: "Sundries",
+    enableColumnFilter: false,
+    cell: ({ row }) => (
+      <ExpenseItemsDropdownCell
+        label="Sundries"
+        value={row.original.sundries}
+        total={row.original.total_cost_sundries}
+      />
+    ),
+    minSize: 120,
+    maxSize: 150,
+  },
+  {
+    accessorKey: "contractor",
+    header: "Contractor",
+    enableColumnFilter: true,
+    cell: ({ getValue }) => {
+      const value = getValue<string | undefined>();
+      return <p className="capitalize">{value?.trim() || "-"}</p>;
+    },
+    minSize: 100,
+    maxSize: 140,
   },
   {
     id: "actions",

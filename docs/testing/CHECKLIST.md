@@ -243,17 +243,18 @@ Test both visible navigation and direct URL entry. Hiding a menu item is not suf
 - [x] Set a High CAPEX replacement value at/below R50,000; validation blocks it at the expected boundary.
 - [x] Create a Rental asset without an Asset ID; it follows the intended rule.
 - [x] For asset types requiring a barcode, omit Asset ID; validation blocks submission.
-- [x] Test zero, negative, decimal, very large, and formatted replacement values; stored currency/value is accurate.
+- [ ] Test zero, negative, decimal, very large, and formatted replacement values; stored currency/value is accurate.
   - [ ] **_Notes: Error does not say barcode already exist, also redirects away without giving user option to correct_**
 - [ ] Attempt a duplicate Asset ID and duplicate Serial Number; the system applies the intended uniqueness rules with a useful error.
-- [ ] Upload multiple supported images and test invalid/oversized/corrupt/duplicate files.
-- [ ] Cancel creation; no record/orphaned file remains.
+- [x] Upload multiple supported images and test invalid/oversized/corrupt/duplicate files.
+- [x] Cancel creation; no record/orphaned file remains.
 
 ### Asset register (`/assets/list`, admin)
 
 - [x] Newly created assets appear with correct values after creation and hard refresh.
 - [x] Desktop table and mobile cards show equivalent data and actions.
 - [x] Search and filter by Location, Equipment, verification status, and other exposed columns.
+  - [ ] **_Notes:Filter container does not accomdate large descriptions_**
 - [x] Combine filters, clear/reset them, paginate, change page size, and sort; results/counts remain correct.
 - [x] Column visibility selection works and does not break row actions.
 - [x] Open **View**; the correct asset detail loads.
@@ -295,11 +296,13 @@ Test both visible navigation and direct URL entry. Hiding a menu item is not suf
 
 ### Create Transfer (`/transfers/create-new-transfer`)
 
-- [ ] Location From and Location To options load.
-- [ ] Select the same From and To location; validation blocks submission.
-- [ ] Select From, then Area, Equipment, and Asset ID; dependent options show only eligible source assets.
+- [x ] Location From and Location To options load.
+- [x ] Select the same From and To location; validation blocks submission.
+- [x ] Select From, then Area, Equipment, and Asset ID; dependent options show only eligible source assets.
 - [ ] Changing Location From clears incompatible selected assets and child fields.
+- [ ] **_Notes: Does not clear images_**
 - [ ] Create a valid one-asset transfer with reason and expected date.
+  - [ ] **_Notes: Users cannot see their own transfers_**.
 - [ ] Create a multi-asset transfer; add/remove/reorder behavior keeps each asset's data/images correct.
 - [ ] Test no-barcode reasons, required “other” details, and required image evidence.
 - [ ] Try an expected date in the past and at the boundary; the intended business rule is enforced.

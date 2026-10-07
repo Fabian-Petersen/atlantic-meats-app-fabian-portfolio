@@ -33,14 +33,17 @@ import { MobileJobsCompletedParent } from "@/components/mobile/jobs/MobileJobsCo
 const EMPTY_JOBS: ActionAPIResponse[] = [];
 
 const JobsCompletedListPage = () => {
-  const { data = EMPTY_JOBS, isError, isPending } =
-    useGetAll<ActionAPIResponse[]>({
+  const {
+    data = EMPTY_JOBS,
+    isError,
+    isPending,
+  } = useGetAll<ActionAPIResponse[]>({
     resourcePath: "api/jobs/completed",
     queryKey: ["jobs", "all", "status: complete"],
     // params: {
     //   group: "technician",
     // },
-    });
+  });
   const { setSelectedRowId, setOpenChatSidebar } = useGlobalContext();
 
   const { mutateAsync: downloadItem } = useDownloadPdf({
@@ -67,6 +70,8 @@ const JobsCompletedListPage = () => {
       ),
     [setSelectedRowId, downloadItem, setOpenChatSidebar],
   );
+
+  console.log("completed-jobs-data:", data);
 
   // $ This data is passed into the mobile component
   const table = useReactTable({

@@ -15,6 +15,8 @@ import {
   FileText,
   ChevronLeft,
   ImageOff,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -70,7 +72,11 @@ export default function MobileRequestApproval({
     setShowApproveRequestDialog,
     setOpenChatSidebar,
     setIsOpen,
+    setShowUpdateMaintenanceDialog,
+    openDeleteDialog,
+    user,
   } = useGlobalContext();
+  const canApproveOrReject = user?.group?.toLowerCase() === "admin";
   const assets = item.assets?.length
     ? item.assets
     : [
@@ -288,35 +294,72 @@ export default function MobileRequestApproval({
       {/* ── Sticky action bar ── */}
       <div className="fixed bottom-0 left-0 right-0 z-10 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700/60 px-4 pt-3 pb-6 safe-area-inset-bottom">
         <div className={cn(sharedStyles.btnParent)}>
-          <button
-            type="button"
-            onClick={() => setShowRejectRequestDialog(true)}
-            className={cn(
-              sharedStyles.btnCancel,
-              sharedStyles.btn,
-              "text-sm uppercase flex gap-6 justify-center items-center",
-            )}
-          >
-            <X className="w-6 h-6" />
-            Reject
-          </button>
-          <button
-            type="button"
-            disabled={isPending}
-            onClick={handleSubmit}
-            className={cn(
-              sharedStyles.btnApprove,
-              sharedStyles.btn,
-              "text-sm uppercase flex gap-6 justify-center items-center",
-            )}
-          >
-            {isPending ? (
-              <Spinner className="size-6" />
-            ) : (
-              <Check className="w-6 h-6" />
-            )}
-            Approve
-          </button>
+          {canApproveOrReject ? (
+            <>
+              <button
+                type="button"
+                onClick={() => setShowRejectRequestDialog(true)}
+                className={cn(
+                  sharedStyles.btnCancel,
+                  sharedStyles.btn,
+                  "text-sm uppercase flex gap-6 justify-center items-center",
+                )}
+              >
+                <X className="w-6 h-6" />
+                Reject
+              </button>
+              <button
+                type="button"
+                disabled={isPending}
+                onClick={handleSubmit}
+                className={cn(
+                  sharedStyles.btnApprove,
+                  sharedStyles.btn,
+                  "text-sm uppercase flex gap-6 justify-center items-center",
+                )}
+              >
+                {isPending ? (
+                  <Spinner className="size-6" />
+                ) : (
+                  <Check className="w-6 h-6" />
+                )}
+                Approve
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() =>
+                  openDeleteDialog(item.id, {
+                    resourcePath: "api/jobs",
+                    queryKey: ["jobs"],
+                    resourceName: "request",
+                  })
+                }
+                className={cn(
+                  sharedStyles.btnCancel,
+                  sharedStyles.btn,
+                  "text-sm uppercase flex gap-4 justify-center items-center",
+                )}
+              >
+                <Trash2 className="w-5 h-5" />
+                Delete
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowUpdateMaintenanceDialog(true)}
+                className={cn(
+                  sharedStyles.btnSubmit,
+                  sharedStyles.btn,
+                  "text-sm uppercase flex gap-4 justify-center items-center",
+                )}
+              >
+                <Pencil className="w-5 h-5" />
+                Update
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

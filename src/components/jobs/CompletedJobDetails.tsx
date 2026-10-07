@@ -12,7 +12,7 @@ import SectionTitle from "../features/layout/SectionTitle";
 import Field from "../features/layout/Field";
 import DescriptionBox from "../features/layout/DescriptionBox";
 import TimeChip from "../features/layout/TimeChip";
-import CostCard from "../features/layout/CostCard";
+import ExpenseItemsList from "../features/layout/ExpenseItemsList";
 import PersonRow from "../features/layout/PersonRow";
 
 // $ ————— config ——————————————————————————————————————————————————————————————————
@@ -318,15 +318,39 @@ function CompletedJobDetails({ item }: Props) {
           <div className="flex flex-col gap-4">
             <SectionTitle>Cost breakdown</SectionTitle>
             <div className="grid grid-cols-2 gap-3">
-              <CostCard label="Parts" value={action.total_cost_parts} />
-              <CostCard label="Sundries" value={action.total_cost_sundries} />
-              <CostCard
-                label="Contractor"
-                value={action.total_cost_contractor}
+              <ExpenseItemsList
+                label="Parts"
+                value={action.parts}
+                total={action.total_cost_parts}
               />
-              <CostCard
-                label="Distance"
-                value={action.total_km ? `${action.total_km} km` : null}
+              <ExpenseItemsList
+                label="Sundries"
+                value={action.sundries}
+                total={action.total_cost_sundries}
+              />
+              <ExpenseItemsList
+                label="Contractor"
+                value={
+                  action.contractor
+                    ? [
+                        {
+                          description: action.contractor,
+                          cost: action.total_cost_contractor ?? 0,
+                        },
+                      ]
+                    : []
+                }
+                total={action.total_cost_contractor}
+              />
+              <ExpenseItemsList
+                label="Transport"
+                value={
+                  action.total_km
+                    ? [{ description: "Distance", cost: action.total_km }]
+                    : []
+                }
+                total={action.total_km}
+                unit="km"
               />
             </div>
 

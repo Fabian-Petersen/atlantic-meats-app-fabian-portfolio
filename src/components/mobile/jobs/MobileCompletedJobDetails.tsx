@@ -36,7 +36,7 @@ import Field from "../../features/layout/Field";
 import DescriptionBox from "../../features/layout/DescriptionBox";
 import SurfaceCard from "../../features/layout/SurfaceCard";
 import TimeChip from "../../features/layout/TimeChip";
-import CostCard from "../../features/layout/CostCard";
+import ExpenseItemsList from "../../features/layout/ExpenseItemsList";
 import PersonRow from "../../features/layout/PersonRow";
 
 // $ ————— config ——————————————————————————————————————————————————————————————————
@@ -342,16 +342,48 @@ function MobileCompletedJobDetails({ item }: Props) {
           {activeTab === "costs" && action && (
             <>
               <div className="grid grid-cols-2 gap-2">
-                <CostCard label="Parts" value={action.total_cost_parts} />
-                <CostCard label="Sundries" value={action.total_cost_sundries} />
-                <CostCard
-                  label="Contractor"
-                  value={action.total_cost_contractor}
-                />
-                <CostCard
-                  label="Distance"
-                  value={action.total_km ? `${action.total_km} km` : null}
-                />
+                <div className="col-span-2">
+                  <ExpenseItemsList
+                    label="Parts"
+                    value={action.parts}
+                    total={action.total_cost_parts}
+                  />
+                </div>
+                <div className="col-span-2">
+                  <ExpenseItemsList
+                    label="Sundries"
+                    value={action.sundries}
+                    total={action.total_cost_sundries}
+                  />
+                </div>
+                <div className="col-span-2">
+                  <ExpenseItemsList
+                    label="Contractor"
+                    value={
+                      action.contractor
+                        ? [
+                            {
+                              description: action.contractor,
+                              cost: action.total_cost_contractor ?? 0,
+                            },
+                          ]
+                        : []
+                    }
+                    total={action.total_cost_contractor}
+                  />
+                </div>
+                <div className="col-span-2">
+                  <ExpenseItemsList
+                    label="Transport"
+                    value={
+                      action.total_km
+                        ? [{ description: "Distance", cost: action.total_km }]
+                        : []
+                    }
+                    total={action.total_km}
+                    unit="km"
+                  />
+                </div>
               </div>
 
               <div className="flex items-center justify-between bg-white dark:bg-gray-800/40 border border-gray-100 dark:border-gray-700/60 rounded-xl px-4 py-3">

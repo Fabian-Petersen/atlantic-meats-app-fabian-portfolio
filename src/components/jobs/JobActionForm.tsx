@@ -90,7 +90,6 @@ const JobActionForm = ({ onCancel }: Props) => {
       end_time: "",
       total_km: "",
       work_completed: "",
-      work_order_number: "",
       status: "",
       root_cause: "",
       findings: "",
@@ -149,9 +148,15 @@ const JobActionForm = ({ onCancel }: Props) => {
         total_cost_contractor: contractor_enabled
           ? values.total_cost_contractor
           : "",
-        parts: part_items.map((item) => item.description.trim()),
+        parts: part_items.map((item) => ({
+          description: item.description.trim(),
+          cost: Number(item.cost),
+        })),
         total_cost_parts: totalCost(part_items),
-        sundries: sundry_items.map((item) => item.description.trim()),
+        sundries: sundry_items.map((item) => ({
+          description: item.description.trim(),
+          cost: Number(item.cost),
+        })),
         total_cost_sundries: totalCost(sundry_items),
         selectedRowId: selectedRowId ?? "", // id expected by the backend
         images: compressed.map((f) => ({
@@ -222,16 +227,6 @@ const JobActionForm = ({ onCancel }: Props) => {
           error={errors.total_km}
           control={control}
         />
-        <FormRowInput
-          // label="Work Order Number"
-          type="text"
-          name="work_order_number"
-          label="Work Order Number"
-          register={register}
-          className="col-span-2 md:col-span-1"
-          error={errors.work_order_number}
-          control={control}
-        />
         <FormRowSelect
           // label="Root Cause"
           name="root_cause"
@@ -279,18 +274,20 @@ const JobActionForm = ({ onCancel }: Props) => {
         />
         <ActionExpenseFields form={form} />
         <FileInput
-          label=""
-          placeholder="add invoices"
+          label="Invoices"
+          placeholder="Add invoices"
           name="invoices"
           multiple={true}
           control={control as unknown as Control<ActionRequestFormValues>}
+          className="col-span-2 mb-0"
         />
         <FileInput
-          label=""
+          label="Images"
+          placeholder="Add images"
           control={control as unknown as Control<ActionRequestFormValues>}
           name="images"
           multiple={true}
-          className="col-span-1"
+          className="col-span-2 mb-0"
         />
         <FormRowInput
           name="signedBy"

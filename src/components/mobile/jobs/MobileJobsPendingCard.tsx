@@ -46,7 +46,10 @@ export default function MobileJobsPendingCard({
     setShowUpdateMaintenanceDialog,
     openDeleteDialog,
     setOpenChatSidebar,
+    user,
   } = useGlobalContext();
+
+  const canApproveOrReject = user?.group?.toLowerCase() === "admin";
 
   const menuItems = getTableMenuItems({
     rowId: item.id,
@@ -71,26 +74,28 @@ export default function MobileJobsPendingCard({
     },
   });
 
-  menuItems.push(
-    {
-      id: "reject",
-      label: "Reject",
-      icon: XCircle,
-      onClick: () => {
-        setShowRejectRequestDialog(true);
-        setSelectedRowId(item.id);
+  if (canApproveOrReject) {
+    menuItems.push(
+      {
+        id: "reject",
+        label: "Reject",
+        icon: XCircle,
+        onClick: () => {
+          setShowRejectRequestDialog(true);
+          setSelectedRowId(item.id);
+        },
       },
-    },
-    {
-      id: "approve",
-      label: "Approve",
-      icon: CheckCircle2,
-      onClick: () => {
-        setSelectedRowId(item.id);
-        setShowApproveRequestDialog(true);
+      {
+        id: "approve",
+        label: "Approve",
+        icon: CheckCircle2,
+        onClick: () => {
+          setSelectedRowId(item.id);
+          setShowApproveRequestDialog(true);
+        },
       },
-    },
-  );
+    );
+  }
 
   // const { mutateAsync: approveRequest, isPending } = usePOST({
   //   id: selectedRowId ?? "",

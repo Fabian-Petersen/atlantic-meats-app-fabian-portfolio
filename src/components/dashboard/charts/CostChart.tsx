@@ -92,6 +92,7 @@ function CostChart({ data, onSelect, selectedYear }: Props) {
       data={chartData}
       isMobile={isMobile}
       onSelect={handleBarClick}
+      compactMobileLeft
     />
   );
 }

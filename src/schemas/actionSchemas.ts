@@ -24,6 +24,28 @@ const actionExpenseItemSchema = z.object({
     ),
 });
 
+export const actionExpensePayloadItemSchema = z.object({
+  description: z.string().trim().min(1),
+  cost: z.number().nonnegative(),
+});
+
+const actionExpenseResponseItemSchema = z.object({
+  description: z.string(),
+  cost: z.union([z.string(), z.number()]),
+});
+
+const actionExpenseResponseSchema = z.union([
+  z.string(),
+  z.array(z.union([z.string(), actionExpenseResponseItemSchema])),
+]);
+
+export type ActionExpensePayloadItem = z.infer<
+  typeof actionExpensePayloadItemSchema
+>;
+export type ActionExpenseResponseValue = z.infer<
+  typeof actionExpenseResponseSchema
+>;
+
 export const defaultActionRequestSchema = z.object({
   start_time: z
     .string()
@@ -43,7 +65,6 @@ export const defaultActionRequestSchema = z.object({
       },
       { message: "Start km must be a greater than zero" },
     ),
-  work_order_number: z.string().optional(),
   work_completed: z.string().min(1, { message: "Please enter work completed" }),
   status: z.string().min(1, { message: "Please select a job status" }), // "pending", "in progress", "complete"
   root_cause: z.enum(ROOT_CAUSES, {
@@ -152,9 +173,21 @@ export const actionResponseSchema = defaultActionRequestSchema
     location: z.string(),
     requested_by: z.string(),
     jobcardNumber: z.string(),
-    sundries: z.union([z.string(), z.array(z.string())]).optional(),
+    // Retained for historical completed-job records only. New action requests
+    // no longer collect or submit a works order number.
+    work_order_number: z.string().optional(),
+    equipment: z.string().optional(),
+    assets: z
+      .array(
+        z.object({
+          equipment: z.string(),
+          assetID: z.string().optional(),
+        }),
+      )
+      .optional(),
+    sundries: actionExpenseResponseSchema.optional(),
     total_cost_sundries: z.union([z.string(), z.number()]).optional(),
-    parts: z.union([z.string(), z.array(z.string())]).optional(),
+    parts: actionExpenseResponseSchema.optional(),
     total_cost_parts: z.union([z.string(), z.number()]).optional(),
     total_cost_contractor: z.union([z.string(), z.number()]).optional(),
     invoices: presignedURLResponseSchema.array().optional(),
@@ -174,8 +207,8 @@ export type ActionRequestPayload = Omit<
   | "total_cost_parts"
   | "total_cost_sundries"
 > & {
-  parts: string[];
-  sundries: string[];
+  parts: ActionExpensePayloadItem[];
+  sundries: ActionExpensePayloadItem[];
   total_cost_parts: number;
   total_cost_sundries: number;
   images: {

@@ -37,7 +37,7 @@ export const maintenanceLinks: NavlinkProps[] = [
     name: "pending approval",
     icon: Hourglass,
     url: "/jobs/pending-approval",
-    allowedGroups: ["admin"],
+    allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
   {
     name: "open jobs",
@@ -52,12 +52,6 @@ export const maintenanceLinks: NavlinkProps[] = [
     url: "/jobs/completed",
     allowedGroups: ["admin", "maintenance", "manager", "contractor"],
   },
-  // {
-  //   name: "schedule task",
-  //   icon: Clock,
-  //   url: "#",
-  //   allowedGroups: ["admin"],
-  // },
 ] as const;
 
 export const actionLinks: NavlinkProps[] = [
@@ -131,23 +125,16 @@ export const disposalLinks: NavlinkProps[] = [
     url: "/disposals/requests",
     allowedGroups: ["admin", "user", "maintenance", "manager"],
   },
-  // {
-  //   name: "open disposals",
-  //   icon: FileClock,
-  //   url: "/disposals/in-progress",
-  //   allowedGroups: ["admin", "user", "maintenance", "manager"],
-  // },
   {
     name: ({ groups }) =>
       groups.includes("admin") ? "Completed Disposals" : "My Disposals",
     icon: CheckCircleIcon,
     url: "/disposals/completed",
-    allowedGroups: ["admin", "maintenance", "manager"],
+    allowedGroups: ["admin", "maintenance", "user", "manager"],
   },
 ] as const;
 
 export const profileLinks: NavlinkProps[] = [
-  // { name: "Settings", icon: Settings, url: "/settings" },
   {
     name: "User List",
     icon: Users2,
@@ -161,22 +148,6 @@ export const profileLinks: NavlinkProps[] = [
     allowedGroups: ["admin", "user", "maintenance", "manager", "contractor"],
   },
 ];
-
-// export const stockLinks: NavlinkProps[] = [
-//   // { name: "Settings", icon: Settings, url: "/settings" },
-//   {
-//     name: "Create Stock Item",
-//     icon: Bolt,
-//     url: "/stocks/create-new-stock", // frontend routes only, POST: /stocks for backend
-//     allowedGroups: ["admin"],
-//   },
-//   {
-//     name: "Stock Register",
-//     icon: List,
-//     url: "/stocks/list", // frontend routes only, GET: /stocks for backend
-//     allowedGroups: ["admin", "user", "maintenance", "manager"],
-//   },
-// ];
 
 /**
  * This structure allows us to easily map over sections and their respective links in the Sidebar component, while keeping all related data organized in one place. Each section has a heading and an array of links, which can be rendered conditionally based on user groups.

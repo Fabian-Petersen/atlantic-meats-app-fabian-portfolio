@@ -153,6 +153,14 @@ function App() {
               <Route path="/users/profile" element={<UserProfilePage />} />
               <Route path="/jobs/create-job" element={<CreateJobPage />} />
               <Route
+                path="/jobs/pending-approval"
+                element={<JobsPendingListPage />}
+              />
+              <Route
+                path="/jobs/:id/pending-approval"
+                element={<JobPendingItemPage />}
+              />
+              <Route
                 path="/jobs/:id/in-progress"
                 element={<JobInProgressItemPage />}
               />
@@ -181,6 +189,14 @@ function App() {
                 element={<CreateTransferPage />}
               />
               <Route
+                path="/transfers/:id/pending-approval"
+                element={<TransferPendingItemPage />}
+              />
+              <Route
+                path="/transfers/requests"
+                element={<TransfersRequestsListPage />}
+              />
+              <Route
                 path="/transfers/in-transit"
                 element={<TransferTransitListPage />}
               />
@@ -202,30 +218,32 @@ function App() {
                 path="/disposals/create-new-disposal"
                 element={<CreateDisposalPage />}
               />
-              <Route path="/disposals/:id" element={<DisposalItemPage />} />
               <Route
-                path="/disposals/:id/completed"
-                element={<CreateDisposalCompletePage />}
-              />
-              <Route
-                path="/disposals/completed"
-                element={<DisposalCompletedListPage />}
-              />
-            </Route>
-            {/* // % Admin only Routes */}
-            <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>
-              <Route
-                path="/jobs/pending-approval"
-                element={<JobsPendingListPage />}
-              />
-              <Route
-                path="/transfers/requests"
-                element={<TransfersRequestsListPage />}
+                path="/disposals/:id/pending-approval"
+                element={<DisposalPendingItemPage />}
               />
               <Route
                 path="/disposals/requests"
                 element={<DisposalRequestsListPage />}
               />
+              <Route path="/disposals/:id" element={<DisposalItemPage />} />
+              <Route
+                path="/disposals/completed"
+                element={<DisposalCompletedListPage />}
+              />
+              <Route
+                path="/disposals/:id/completed"
+                element={<CreateDisposalCompletePage />}
+              />
+            </Route>
+
+            {/* 
+          /* --------------------------------------------------------------------------
+          /*                              Admin only Routes                             
+          /* --------------------------------------------------------------------------
+          */}
+
+            <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>
               <Route path="/assets/list" element={<AssetsOverviewPage />} />
               <Route
                 path="/assets/verification/manual"
@@ -233,18 +251,6 @@ function App() {
               />
               {/* // $ Page to list an asset by id */}
               <Route path="/assets/:id" element={<AssetItemPage />} />
-              <Route
-                path="/jobs/:id/pending-approval"
-                element={<JobPendingItemPage />}
-              />
-              <Route
-                path="/transfers/:id/pending-approval"
-                element={<TransferPendingItemPage />}
-              />
-              <Route
-                path="/disposals/:id/pending-approval"
-                element={<DisposalPendingItemPage />}
-              />
               <Route
                 path="/assets/create-new-asset"
                 element={<CreateAssetPage />}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   useFieldArray,
@@ -29,8 +29,6 @@ import { FormSkeleton } from "../forms/FormSkeleton";
 import FormInfo from "../features/forms/FormInfo";
 import { AddAssetButton } from "../forms/AddAssetButton";
 import JobAssetFields from "./JobAssetFields";
-
-const JOBS_QUERY_KEY = ["jobs", "in-progress"] as const;
 
 const normalizeOptions = (
   options:
@@ -69,10 +67,19 @@ const toAssetIssueReason = (
 type JobUpdateEditorProps = {
   id: string;
   item: JobApprovedAPIResponse;
+  requestStatus: "pending" | "in progress";
 };
 
-const JobUpdateEditor = ({ id, item }: JobUpdateEditorProps) => {
+const JobUpdateEditor = ({
+  id,
+  item,
+  requestStatus,
+}: JobUpdateEditorProps) => {
   const navigate = useNavigate();
+  const isPendingRequest = requestStatus === "pending";
+  const returnPath = isPendingRequest
+    ? "jobs/pending-approval"
+    : "jobs/in-progress";
   const [openAssetIndex, setOpenAssetIndex] = useState(0);
   const {
     setShowUpdateMaintenanceDialog,
@@ -206,7 +213,7 @@ const JobUpdateEditor = ({ id, item }: JobUpdateEditorProps) => {
     { presigned_urls?: PresignedUrlResponse }
   >({
     resourcePath: "api/jobs",
-    queryKey: JOBS_QUERY_KEY,
+    queryKey: ["jobs", isPendingRequest ? "pending" : "in-progress"],
   });
 
   const removeExistingImage = (assetIndex: number, image: PresignedUrls) => {
@@ -316,7 +323,7 @@ const JobUpdateEditor = ({ id, item }: JobUpdateEditorProps) => {
       setSuccessConfig({
         title: "Job Updated",
         message: `Job ${item.jobcardNumber} was successfully updated.`,
-        redirectPath: "jobs/in-progress",
+        redirectPath: returnPath,
       });
       setShowSuccess(true);
     } catch (error) {
@@ -324,7 +331,7 @@ const JobUpdateEditor = ({ id, item }: JobUpdateEditorProps) => {
       setErrorConfig({
         title: "Job Update Failed",
         message: "Could not update the job. Please try again.",
-        redirectPath: "jobs/in-progress",
+        redirectPath: returnPath,
       });
       setShowError(true);
     }
@@ -332,16 +339,16 @@ const JobUpdateEditor = ({ id, item }: JobUpdateEditorProps) => {
 
   const handleCancel = () => {
     setShowUpdateMaintenanceDialog(false);
-    navigate("/jobs/in-progress");
+    navigate(`/${returnPath}`);
   };
 
   return (
-    <div className="space-y-8 p-1 dark:bg-(--bg-secondary_dark)">
-      <div className="text-center md:hidden">
+    <div className="space-y-1 p-1 dark:bg-(--bg-secondary_dark) md:space-y-8">
+      <div className="flex items-center justify-between rounded-md border border-gray-200/80 bg-gray-50/80 px-3 py-2 md:hidden dark:border-gray-700/60 dark:bg-gray-800/40">
         <p className="text-[0.65rem] font-medium uppercase tracking-widest text-gray-400 dark:text-gray-500">
           Job number
         </p>
-        <p className="mt-1 text-xs font-semibold text-gray-700 dark:text-gray-200">
+        <p className="text-xs font-semibold text-gray-700 dark:text-gray-200">
           {item.jobcardNumber}
         </p>
       </div>
@@ -349,6 +356,8 @@ const JobUpdateEditor = ({ id, item }: JobUpdateEditorProps) => {
         form={form}
         formId="job-update-form"
         fields={requestFields}
+        showFormHeading={!isPendingRequest}
+        formHeadingClassName="py-2 md:py-0"
         formHeading={
           <>
             <span className="md:hidden">Update Job</span>
@@ -358,11 +367,11 @@ const JobUpdateEditor = ({ id, item }: JobUpdateEditorProps) => {
           </>
         }
         redirect
-        redirectTo="/jobs/in-progress"
+        redirectTo={`/${returnPath}`}
         onSubmit={onSubmit}
         isPending={isPending}
         onCancel={handleCancel}
-        gridClassName="gap-6"
+        gridClassName="gap-6 pt-3 md:pt-2"
         renderActions={false}
       />
 
@@ -427,6 +436,7 @@ const JobUpdateEditor = ({ id, item }: JobUpdateEditorProps) => {
         cancelText="Cancel"
         onCancel={handleCancel}
         isPending={isPending}
+        className="py-4"
       />
     </div>
   );
@@ -434,13 +444,17 @@ const JobUpdateEditor = ({ id, item }: JobUpdateEditorProps) => {
 
 const JobUpdateForm = () => {
   const { id: routeId } = useParams<{ id: string }>();
+  const { pathname } = useLocation();
   const { selectedRowId } = useGlobalContext();
   const id = routeId ?? selectedRowId ?? "";
+  const requestStatus = pathname.includes("/pending-approval")
+    ? "pending"
+    : "in progress";
   const { data, isLoading, isError } = useById<JobApprovedAPIResponse>({
     id,
     resourcePath: "api/jobs",
-    queryKey: ["jobs", "in-progress-update"],
-    params: { status: "in progress" },
+    queryKey: ["jobs", requestStatus, "update"],
+    params: { status: requestStatus },
   });
 
   if (isLoading) return <FormSkeleton />;
@@ -454,7 +468,14 @@ const JobUpdateForm = () => {
     );
   }
 
-  return <JobUpdateEditor key={id} id={id} item={data} />;
+  return (
+    <JobUpdateEditor
+      key={id}
+      id={id}
+      item={data}
+      requestStatus={requestStatus}
+    />
+  );
 };
 
 export default JobUpdateForm;

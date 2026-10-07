@@ -59,3 +59,41 @@ There is no test script or test framework configured in `package.json`.
 - The Axios 401 interceptor redirects to `/login`, while the public login route is `/`; preserve or correct that inconsistency deliberately rather than assuming the routes match.
 - `asset-import/` is a separate Python/DynamoDB import utility. Its scripts write directly to configured/hard-coded DynamoDB tables and should not be run or changed as part of frontend work without explicit scope and AWS credentials.
 - `dist/` is build output. Preserve unrelated worktree changes.
+
+## AI execution and token-efficiency rules
+
+- Keep task scope narrow. Inspect only files directly related to the requested change.
+- Do not scan the entire repository unless the task genuinely requires it.
+- Reuse existing project patterns and implementations before creating new abstractions.
+- Do not refactor unrelated code.
+- Preserve unrelated worktree changes.
+- Do not modify backend, infrastructure, CI/CD, or AWS configuration unless the task explicitly requires it.
+- Do not inspect or modify `dist/`, `node_modules/`, generated files, lockfiles, or build output unless directly relevant.
+
+### Validation
+
+- There is currently no automated test framework configured for this frontend.
+- Do not create tests unless explicitly requested or the change introduces sufficiently complex logic that cannot reasonably be verified otherwise.
+- Do not run `npm run build` after routine UI changes unless compilation/build verification is necessary.
+- Do not run broad validation automatically for trivial changes such as:
+  - text or label changes
+  - styling changes
+  - simple conditional rendering
+  - adding or removing a table column
+  - displaying an existing API field
+- When validation is useful, prefer the smallest relevant check.
+- Use `npm run lint` only when the change warrants lint verification.
+- Use `npm run build` when TypeScript/build correctness needs to be confirmed or before changes affecting shared types, routing, configuration, or production behaviour.
+- Do not repeatedly run the same validation command after minor follow-up edits unless the affected code changed materially.
+
+### Implementation workflow
+
+- First identify an existing implementation of the requested behaviour elsewhere in the application.
+- Prefer adapting that implementation rather than designing a new pattern.
+- Read only the minimum supporting files necessary to understand that pattern.
+- Make the smallest change that satisfies the request.
+- After making changes, review only the modified files or git diff rather than re-reading the repository.
+- Keep final explanations concise:
+  - what changed
+  - which files changed
+  - any important caveats
