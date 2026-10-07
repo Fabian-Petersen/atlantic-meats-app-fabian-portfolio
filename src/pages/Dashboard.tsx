@@ -47,7 +47,7 @@ const Dashboard = () => {
   // $ Hook combine backend and frontend data to generate a card
   const cards = useDashboardJobsMetrics(metrics?.cards);
 
-  // console.log("verification:", metrics?.verification);
+  console.log("metrics:", metrics?.cards);
 
   return (
     <main className="w-full h-full md:p-4 p-2">

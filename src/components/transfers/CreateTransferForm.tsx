@@ -28,7 +28,7 @@ import FormInfo from "../features/forms/FormInfo";
 const CreateTransferForm = () => {
   const navigate = useNavigate();
 
-  const [openAssetIndex, setOpenAssetIndex] = useState(0);
+  const [openAssetIndex, setOpenAssetIndex] = useState(-1);
 
   const { setSuccessConfig, setShowSuccess, setErrorConfig, setShowError } =
     useGlobalContext();

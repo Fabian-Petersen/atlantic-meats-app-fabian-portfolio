@@ -13,6 +13,8 @@ import {
   ChevronLeft,
   ImageOff,
   CalendarClock,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import { Badge } from "../../features/Badge";
 
@@ -64,7 +66,9 @@ export default function MobileInProgressPage({
   selectedAssetIndex,
   onSelectAsset,
 }: MobileRequestApprovalProps) {
-  const { setOpenChatSidebar, setIsOpen } = useGlobalContext();
+  const { setOpenChatSidebar, setIsOpen, openDeleteDialog, user } =
+    useGlobalContext();
+  const canActionJob = user?.group?.toLowerCase() === "maintenance";
   const assets = item.assets?.length
     ? item.assets
     : [
@@ -277,20 +281,53 @@ export default function MobileInProgressPage({
       {/* ── Sticky action bar ── */}
       <div className="fixed bottom-0 left-0 right-0 z-10 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700/60 px-2 pt-3 pb-6 safe-area-inset-bottom">
         <div className={cn(sharedStyles.btnParent, "")}>
-          <button
-            type="button"
-            onClick={() => navigate(`/jobs/${item.id}/in-progress/action`)}
-            className={cn(
-              sharedStyles.btnApprove,
-              sharedStyles.btn,
-              "text-sm uppercase flex gap-6 justify-center items-center",
-            )}
-          >
-            <div className="flex items-center justify-center gap-4">
+          {canActionJob ? (
+            <button
+              type="button"
+              onClick={() => navigate(`/jobs/${item.id}/in-progress/action`)}
+              className={cn(
+                sharedStyles.btnApprove,
+                sharedStyles.btn,
+                "text-sm uppercase flex gap-6 justify-center items-center",
+              )}
+            >
               <Wrench className="w-6 h-6" />
               <span>Action Job</span>
-            </div>
-          </button>
+            </button>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() =>
+                  openDeleteDialog(item.id, {
+                    resourcePath: "api/jobs",
+                    queryKey: ["jobs"],
+                    resourceName: "job",
+                  })
+                }
+                className={cn(
+                  sharedStyles.btnCancel,
+                  sharedStyles.btn,
+                  "text-sm uppercase flex gap-4 justify-center items-center",
+                )}
+              >
+                <Trash2 className="w-5 h-5" />
+                Delete
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate(`/jobs/${item.id}/in-progress/update`)}
+                className={cn(
+                  sharedStyles.btnSubmit,
+                  sharedStyles.btn,
+                  "text-sm uppercase flex gap-4 justify-center items-center",
+                )}
+              >
+                <Pencil className="w-5 h-5" />
+                Update
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

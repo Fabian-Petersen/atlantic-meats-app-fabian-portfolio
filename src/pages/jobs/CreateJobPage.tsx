@@ -9,7 +9,7 @@ const CreateJobPage = () => {
     <div
       className={cn(
         sharedStyles.pageContainer,
-        "md:h-[calc(100dvh-var(--sm-navbarHeight))] md:max-h-[calc(100dvh-var(--sm-navbarHeight))] md:items-start md:overflow-y-auto md:py-6 md:[scrollbar-gutter:stable] lg:h-[calc(100dvh-var(--lg-navbarHeight))] lg:max-h-[calc(100dvh-var(--lg-navbarHeight))]",
+        "md:h-[calc(100dvh-var(--sm-navbarHeight))] md:max-h-[calc(100dvh-var(--sm-navbarHeight))] md:overflow-y-auto md:py-6 md:[scrollbar-gutter:stable] lg:h-[calc(100dvh-var(--lg-navbarHeight))] lg:max-h-[calc(100dvh-var(--lg-navbarHeight))]",
       )}
     >
       <div className={cn(sharedStyles.pageContent, "md:shrink-0")}>

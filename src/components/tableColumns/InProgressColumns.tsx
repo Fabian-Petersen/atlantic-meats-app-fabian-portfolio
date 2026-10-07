@@ -4,7 +4,7 @@ import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
 import { getTableMenuItems } from "@/lib/getTableMenuItems";
 import type { Resource } from "@/utils/api";
 import type { JobApprovedAPIResponse } from "@/schemas/jobSchemas";
-import { AlertTriangle, ChevronDown } from "lucide-react";
+import { AlertTriangle, ChevronDown, Wrench } from "lucide-react";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { Badge } from "../features/Badge";
 import { AssetsDropdownCell } from "../features/tables/AssetsDropdownCell";
@@ -18,6 +18,7 @@ export const getInProgressColumns = (
     config: { resourcePath: Resource; queryKey: readonly unknown[] },
   ) => void,
   setOpenChatSidebar: (v: boolean) => void,
+  canActionJob: boolean,
 ): ColumnDef<JobApprovedAPIResponse>[] => [
   {
     accessorKey: "jobCreated",
@@ -187,14 +188,6 @@ export const getInProgressColumns = (
         rowId: row.original.id,
         setSelectedRowId,
 
-        action: {
-          url: `/jobs/${rowId}/action`,
-          onOpen: () => {
-            navigate(`/jobs/${rowId}/in-progress/action`);
-            setSelectedRowId(rowId);
-          },
-        },
-
         edit: {
           url: `/jobs/${rowId}/in-progress/update`,
           onOpen: () => {
@@ -219,6 +212,18 @@ export const getInProgressColumns = (
           },
         },
       });
+
+      if (canActionJob) {
+        menuItems.unshift({
+          id: "action",
+          label: "Action",
+          icon: Wrench,
+          onClick: () => {
+            navigate(`/jobs/${rowId}/in-progress/action`);
+            setSelectedRowId(rowId);
+          },
+        });
+      }
 
       return (
         <div className="tex-center" onClick={(e) => e.stopPropagation()}>

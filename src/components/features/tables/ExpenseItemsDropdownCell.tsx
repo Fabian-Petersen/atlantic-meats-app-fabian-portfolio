@@ -31,7 +31,10 @@ function normaliseItems(
   // Older records store descriptions separately from one aggregate cost. Keep
   // those descriptions together so the available cost is shown accurately,
   // rather than displaying a misleading per-item value or an empty cost.
-  if (rawItems.length > 0 && rawItems.every((item) => typeof item === "string")) {
+  if (
+    rawItems.length > 0 &&
+    rawItems.every((item) => typeof item === "string")
+  ) {
     const descriptions = rawItems
       .map((item) => (item as string).trim())
       .filter(Boolean);
@@ -78,7 +81,7 @@ export function ExpenseItemsDropdownCell({
           className="gap-2 rounded-lg border border-blue-200 bg-blue-50 text-xs font-medium text-blue-800 transition-none hover:cursor-pointer hover:bg-blue-100 hover:text-blue-900 dark:border-blue-800 dark:bg-blue-950/60 dark:text-blue-200 dark:hover:bg-blue-900"
         >
           <ReceiptText className="size-3.5" aria-hidden="true" />
-          {label} ({itemCount})
+          {label}
           <ChevronDown className="size-3.5" aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>

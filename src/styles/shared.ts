@@ -154,12 +154,14 @@ export const sharedStyles = {
   btnCancelDelete: cn(
     "flex-1",
     // light
-    "bg-amber-50 border-amber-300 text-amber-900",
+    "bg-white border-gray-300 text-gray-700",
     // dark
-    "dark:bg-amber-400/10 dark:border-amber-400/30 dark:text-amber-200",
+    "dark:bg-gray-800/50 dark:border-gray-600 dark:text-gray-200",
     // hover
-    "hover:bg-amber-100 hover:border-amber-400",
-    "dark:hover:bg-amber-400/20 dark:hover:border-amber-400/50",
+    "hover:bg-gray-100 hover:border-gray-400",
+    "dark:hover:bg-gray-700 dark:hover:border-gray-500",
+    // disabled
+    "disabled:cursor-not-allowed disabled:opacity-60",
   ),
   /* //$ ——— Badge Styles ———————————————————————————————————————————————————————— */
   badge: cn(),

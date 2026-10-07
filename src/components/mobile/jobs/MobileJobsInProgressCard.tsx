@@ -32,8 +32,10 @@ type Props = {
 export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
   const navigate = useNavigate();
 
-  const { setSelectedRowId, openDeleteDialog, setOpenChatSidebar } =
+  const { setSelectedRowId, openDeleteDialog, setOpenChatSidebar, user } =
     useGlobalContext();
+
+  const canActionJob = user?.group?.toLowerCase() === "maintenance";
 
   const rowId = row.original.id;
   const targetDateStatus = getTargetDateStatus(row.original.targetDate);
@@ -41,9 +43,6 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
   const menuItems = getTableMenuItems({
     rowId,
     setSelectedRowId,
-    action: {
-      onOpen: () => navigate(`/jobs/${rowId}/in-progress/action`),
-    },
     edit: {
       onOpen: () => navigate(`/jobs/${rowId}/in-progress/update`),
     },
@@ -63,6 +62,18 @@ export function MobileJobsInProgressCard({ row, isOpen, onToggle }: Props) {
       onOpen: () => setOpenChatSidebar(true),
     },
   });
+
+  if (canActionJob) {
+    menuItems.unshift({
+      id: "action",
+      label: "Action",
+      icon: Wrench,
+      onClick: () => {
+        setSelectedRowId(rowId);
+        navigate(`/jobs/${rowId}/in-progress/action`);
+      },
+    });
+  }
 
   return (
     <div

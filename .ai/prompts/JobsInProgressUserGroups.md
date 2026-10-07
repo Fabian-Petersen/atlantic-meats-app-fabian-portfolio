@@ -1,4 +1,4 @@
-Status: `Pending`
+Status: `partial complete`
 
 Task 1:
 Update the maintenance in progress jobs table so that normal users can view their jobs, but only the maintenance group can see the `Action` actions.
@@ -82,7 +82,7 @@ Remove the "Action Job" button when the group is anything other than "maintenanc
 - The rest of the page can remain as is that is show the details, images and other metadata of the request.
 - The groups other than "maintenance" cannot "action" the request in progress.
 
-- Maintain the button styling for the rest of the app using sharedStyles. The current button "Action Job" styling is not consitent with the app. The size of the button can remain the same.
+- Maintain the button styling for the rest of the app using sharedStyles. The current button "Action Job" styling is not consitent with the app. The size of the button can remain the same. **_`Not Completed`_**
 
 - The edit and delete button styling for the other groups must also comply to the app theme, ignore if it complies already.
 

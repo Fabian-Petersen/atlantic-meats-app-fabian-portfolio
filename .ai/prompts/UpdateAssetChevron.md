@@ -1,4 +1,4 @@
-Status: `Pending`
+Status: `Complete`
 Update all instances of the asset chevron/expandable asset section so that they are **closed/collapsed by default** when the component or form first renders.
 
 Goal:

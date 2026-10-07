@@ -80,7 +80,7 @@ const JobUpdateEditor = ({
   const returnPath = isPendingRequest
     ? "jobs/pending-approval"
     : "jobs/in-progress";
-  const [openAssetIndex, setOpenAssetIndex] = useState(0);
+  const [openAssetIndex, setOpenAssetIndex] = useState(-1);
   const {
     setShowUpdateMaintenanceDialog,
     setSuccessConfig,
@@ -393,7 +393,6 @@ const JobUpdateEditor = ({
                   ...current,
                   { area: undefined, equipment: "", assetID: undefined },
                 ]);
-                setOpenAssetIndex(assetFields.length);
               }}
             />
           </div>

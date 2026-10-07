@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import { Wrench } from "lucide-react";
 import { formatDateTime } from "@/utils/formatDateTime";
+import { Pencil, Trash2 } from "lucide-react";
+import useGlobalContext from "@/context/useGlobalContext";
 
 type Props = {
   item: JobApprovedAPIResponse;
@@ -37,6 +39,8 @@ function JobApprovedItemInfo({
   onSelectAsset,
 }: Props) {
   const navigate = useNavigate();
+  const { openDeleteDialog, user } = useGlobalContext();
+  const canActionJob = user?.group?.toLowerCase() === "maintenance";
   const assets = item.assets?.length
     ? item.assets
     : [
@@ -145,7 +149,9 @@ function JobApprovedItemInfo({
 
       <div className="mt-auto flex flex-col gap-4 pt-4">
         <p className="text-center text-xs text-gray-400 dark:text-gray-500">
-          Review the request details before actioning this job.
+          {canActionJob
+            ? "Review the request details before actioning this job."
+            : "Review the job details before updating or deleting it."}
         </p>
         <div
           className={cn(
@@ -153,18 +159,53 @@ function JobApprovedItemInfo({
             "mx-auto w-full max-w-sm md:mx-auto md:w-full md:max-w-sm",
           )}
         >
-          <button
-            type="button"
-            onClick={() => navigate(`/jobs/${item.id}/in-progress/action`)}
-            className={cn(
-              sharedStyles.btnApprove,
-              sharedStyles.btn,
-              "flex min-h-12 items-center justify-center gap-3 px-8 py-3 text-sm font-semibold shadow-md shadow-green-900/15",
-            )}
-          >
-            <Wrench className="size-6" />
-            <span>Action Job</span>
-          </button>
+          {canActionJob ? (
+            <button
+              type="button"
+              onClick={() => navigate(`/jobs/${item.id}/in-progress/action`)}
+              className={cn(
+                sharedStyles.btnApprove,
+                sharedStyles.btn,
+                "flex min-h-12 items-center justify-center gap-3 px-8 py-3 text-sm font-semibold shadow-md shadow-green-900/15",
+              )}
+            >
+              <Wrench className="size-6" />
+              <span>Action Job</span>
+            </button>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() =>
+                  openDeleteDialog(item.id, {
+                    resourcePath: "api/jobs",
+                    queryKey: ["jobs"],
+                    resourceName: "job",
+                  })
+                }
+                className={cn(
+                  sharedStyles.btnCancel,
+                  sharedStyles.btn,
+                  "flex min-h-12 items-center justify-center gap-2 px-4 text-sm font-semibold",
+                )}
+              >
+                <Trash2 className="size-5" />
+                <span>Delete</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate(`/jobs/${item.id}/in-progress/update`)}
+                className={cn(
+                  sharedStyles.btnSubmit,
+                  sharedStyles.btn,
+                  "flex min-h-12 items-center justify-center gap-2 px-4 text-sm font-semibold",
+                )}
+              >
+                <Pencil className="size-5" />
+                <span>Update</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

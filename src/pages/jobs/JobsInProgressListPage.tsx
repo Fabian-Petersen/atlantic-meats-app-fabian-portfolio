@@ -134,7 +134,10 @@ const JobsInProgressListPage = () => {
     setSelectedRowId,
     openDeleteDialog,
     setOpenChatSidebar,
+    user,
   } = useGlobalContext();
+
+  const canActionJob = user?.group?.toLowerCase() === "maintenance";
 
   // $ Pass the props to the function generating the columns to be used in the table
   const columns = useMemo(
@@ -144,12 +147,14 @@ const JobsInProgressListPage = () => {
         setSelectedRowId,
         openDeleteDialog,
         setOpenChatSidebar,
+        canActionJob,
       ),
     [
       navigate,
       setSelectedRowId,
       openDeleteDialog,
       setOpenChatSidebar,
+      canActionJob,
     ],
   );
 

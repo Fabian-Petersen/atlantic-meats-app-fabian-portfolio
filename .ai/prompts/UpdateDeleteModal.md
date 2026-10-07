@@ -1,4 +1,4 @@
-Status: `Pending`
+Status: `Complete`
 Task 1:
 Update the action buttons for the delete action dialog in the tables.
 
