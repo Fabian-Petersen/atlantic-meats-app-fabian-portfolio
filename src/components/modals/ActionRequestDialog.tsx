@@ -12,6 +12,7 @@ import MaintenanceActionForm from "../jobs/JobActionForm";
 // import { useGetJobDetails } from "@/customHooks/useGetJobDetails";
 
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import FormHeading from "../../../customComponents/FormHeading";
 import { useById } from "@/utils/api";
 import type { JobAPIResponse } from "@/schemas";
@@ -19,8 +20,8 @@ import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 
 function ActionRequestDialog() {
-  const { showActionDialog, setShowActionDialog, selectedRowId } =
-    useGlobalContext();
+  const { setShowActionDialog } = useGlobalContext();
+  const { showActionDialog, selectedRowId } = useModalState();
 
   const { data: job } = useById<JobAPIResponse>({
     id: selectedRowId!,

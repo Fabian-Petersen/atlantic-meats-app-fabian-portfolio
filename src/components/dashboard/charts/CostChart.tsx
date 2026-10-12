@@ -82,7 +82,7 @@ function CostChart({ data, onSelect, selectedYear }: Props) {
   const handleBarClick = (data: ChartPoint) => {
     if (!selectedYear) return;
 
-    const label = isMobile ? (data?.code ?? "") : data?.name;
+    const label = isMobile ? (data?.code ?? data?.name) : data?.name;
 
     onSelect?.(selectedYear, label);
   };

@@ -1,4 +1,5 @@
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import type { DisposalWorkflowResponse } from "@/schemas/disposalsSchemas";
 import { CardRow } from "../CardRow";
 import { MobileImageModal } from "../MobileImageModal";
@@ -40,12 +41,12 @@ export default function MobileDisposalRequestApproval({
   onSelectAsset,
 }: MobileDisposalRequestApprovalProps) {
   const {
-    selectedRowId,
     setShowRejectRequestDialogGeneric,
     setRejectConfig,
     setOpenChatSidebar,
     setIsOpen,
   } = useGlobalContext();
+  const { selectedRowId } = useModalState();
 
   const navigate = useNavigate();
 

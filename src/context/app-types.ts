@@ -131,37 +131,25 @@ export type AppContextType = {
   setOpenSearchInput: Dispatch<SetStateAction<boolean>>;
 
   // $ Modals and Dialog
-  showUpdateMaintenanceDialog: boolean;
   setShowUpdateMaintenanceDialog: (v: boolean) => void;
-  showActionDialog: boolean;
   setShowActionDialog: (v: boolean) => void;
   setShowUpdateAssetDialog: (v: boolean) => void;
-  showUpdateAssetDialog: boolean;
-  showManualVerificationDialog: boolean;
   setShowManualVerificationDialog: (v: boolean) => void;
-  showUserProfileDialog: boolean;
   setShowUserProfileDialog: (v: boolean) => void;
 
   // $ Create User Dialog
-  showCreateUserDialog: boolean;
   setShowCreateUserDialog: (v: boolean) => void;
 
   // $ TableMenuItems
   setSelectedRowId: (v: string) => void;
-  selectedRowId: string | null;
 
   // $ Delete Modal
-  showDeleteDialog: boolean;
   setShowDeleteDialog: (v: boolean) => void;
   setDeleteConfig: (config: DeleteConfig) => void;
-  deleteConfig: DeleteConfig | null;
 
   // $ Reject Request Modal
-  showRejectRequestDialog: boolean;
   setShowRejectRequestDialog: (v: boolean) => void;
-  showRejectRequestDialogGeneric: boolean;
   setShowRejectRequestDialogGeneric: (v: boolean) => void;
-  rejectConfig: RejectConfig | null;
 
   /**
    * config = {
@@ -177,11 +165,9 @@ export type AppContextType = {
   setRejectConfig: (config: RejectConfig) => void;
 
   // $ Approve Request Modal
-  showApproveRequestDialog: boolean;
   setShowApproveRequestDialog: (v: boolean) => void;
 
   // $ Approve Transfer Request Modal
-  showApproveTransferDialog: boolean;
   setShowApproveTransferDialog: (v: boolean) => void;
 
   openDeleteDialog: (id: string, config: DeleteConfig) => void;

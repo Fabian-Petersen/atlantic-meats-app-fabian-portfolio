@@ -1,180 +1,33 @@
 import { useState } from "react";
 
-/* -------------------------------------------------------------------------- */
-/*                                 Components                                 */
-/* -------------------------------------------------------------------------- */
-
 import JobsChart from "../charts/JobsChart";
 import ChartHeading from "../ChartHeading";
 import { JobRequestsChartSkeleton } from "../charts/JobRequestsChartSkeleton";
+import { HeadingSkeleton } from "../charts/HeadingSkeleton";
 
-/* -------------------------------------------------------------------------- */
-/*                                Hooks & Utils                               */
-/* -------------------------------------------------------------------------- */
-
-import { useStoreJobMetrics } from "@/hooks/useStoreJobMetrics";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 
-/* -------------------------------------------------------------------------- */
-/*                                    Types                                   */
-/* -------------------------------------------------------------------------- */
-
 import type { StoreJobMetrics } from "@/schemas/dashboardSchema";
-import { HeadingSkeleton } from "../charts/HeadingSkeleton";
-
-type DrilldownLevel = "sites" | "months";
 
 type JobStatus = "pending" | "in progress" | "complete" | "cancelled";
 
 type Props = {
   data: StoreJobMetrics;
   isPending: boolean;
-  isAdmin: boolean;
-  userLocation?: string;
+  userGroup?: string;
 };
 
-/* ========================================================================== */
-/*                             MaintenanceJobs                                */
-/* ========================================================================== */
+function MaintenanceJobs({ data, isPending, userGroup }: Props) {
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedStatus, setSelectedStatus] =
+    useState<JobStatus>("pending");
 
-function MaintenanceJobs({ data, isPending, isAdmin, userLocation }: Props) {
-  /* ------------------------------------------------------------------------ */
-  /*                               State                                      */
-  /* ------------------------------------------------------------------------ */
-
-  const [selectedYear, setSelectedYear] = useState<string>("");
-
-  const [selectedStore, setSelectedStore] = useState<{
-    year: string;
-    location: string;
-  } | null>(null);
-
-  const [selectedStatus, setSelectedStatus] = useState<JobStatus>("pending");
-
-  /* ------------------------------------------------------------------------ */
-  /*                              Initial Chart Data                          */
-  /* ------------------------------------------------------------------------ */
-
-  const initialChartData = data?.[selectedStatus] ?? {};
-
-  const initialYears = Object.keys(initialChartData).sort();
-
-  const latestInitialYear = initialYears[initialYears.length - 1] ?? "";
-
-  /* ------------------------------------------------------------------------ */
-  /*                              Location                                    */
-  /* ------------------------------------------------------------------------ */
-
-  const location = isAdmin
-    ? (selectedStore?.location ?? null)
-    : (userLocation ?? null);
-
-  /* ------------------------------------------------------------------------ */
-  /*                                Year                                      */
-  /* ------------------------------------------------------------------------ */
-
-  const year = isAdmin
-    ? (selectedStore?.year ?? null)
-    : selectedYear || latestInitialYear || null;
-
-  /* ------------------------------------------------------------------------ */
-  /*                              API Data                                    */
-  /* ------------------------------------------------------------------------ */
-
-  const { data: jobsByStore, isPending: isJobsByStorePending } =
-    useStoreJobMetrics(year, location, selectedStatus);
-
-  /* ------------------------------------------------------------------------ */
-  /*                              Drilldown Level                             */
-  /* ------------------------------------------------------------------------ */
-
-  const drilldownLevel: DrilldownLevel = isAdmin
-    ? selectedStore
-      ? "months"
-      : "sites"
-    : "months";
-
-  /* ------------------------------------------------------------------------ */
-  /*                              Chart Data                                  */
-  /* ------------------------------------------------------------------------ */
-
-  const chartData =
-    drilldownLevel === "sites" ? initialChartData : (jobsByStore?.data ?? {});
-
-  /* ------------------------------------------------------------------------ */
-  /*                              Loading                                     */
-  /* ------------------------------------------------------------------------ */
-
-  const isLoading =
-    drilldownLevel === "sites" ? isPending : isJobsByStorePending;
-
-  /* ------------------------------------------------------------------------ */
-  /*                              Empty State                                 */
-  /* ------------------------------------------------------------------------ */
-
-  /**
-   * A response such as:
-   *
-   * {
-   *   "complete": {}
-   * }
-   *
-   * means the request succeeded but there are no jobs.
-   *
-   * It must NOT be treated as a loading state.
-   */
-  const hasChartData = Object.keys(chartData).some(
-    (yearKey) =>
-      Array.isArray(chartData[yearKey]) &&
-      chartData[yearKey].some((item) => Number(item.value) > 0),
-  );
-
-  /* ------------------------------------------------------------------------ */
-  /*                              Year Handling                               */
-  /* ------------------------------------------------------------------------ */
-
+  const chartData = data[selectedStatus] ?? {};
   const years = Object.keys(chartData).sort();
-
   const latestYear = years[years.length - 1] ?? "";
-
   const resolvedYear =
-    drilldownLevel === "sites"
-      ? selectedYear || latestYear
-      : year || latestYear;
-
-  /* ------------------------------------------------------------------------ */
-  /*                              Chart Interaction                           */
-  /* ------------------------------------------------------------------------ */
-
-  const handleChartSelect = (chartYear: string, label: string) => {
-    if (drilldownLevel === "sites") {
-      setSelectedStore({
-        year: chartYear,
-        location: label,
-      });
-
-      return;
-    }
-  };
-
-  /* ------------------------------------------------------------------------ */
-  /*                              Status Change                               */
-  /* ------------------------------------------------------------------------ */
-
-  const handleStatusChange = (status: JobStatus) => {
-    setSelectedStatus(status);
-
-    if (isAdmin) {
-      setSelectedStore(null);
-    }
-
-    setSelectedYear("");
-  };
-
-  /* ------------------------------------------------------------------------ */
-  /*                              Empty Message                               */
-  /* ------------------------------------------------------------------------ */
+    selectedYear && chartData[selectedYear] ? selectedYear : latestYear;
 
   const statusLabel =
     selectedStatus === "in progress"
@@ -185,9 +38,19 @@ function MaintenanceJobs({ data, isPending, isAdmin, userLocation }: Props) {
           ? "Cancelled"
           : "Pending";
 
-  /* ------------------------------------------------------------------------ */
-  /*                                Rendering                                 */
-  /* ------------------------------------------------------------------------ */
+  const isTechnician = userGroup?.toLowerCase() === "maintenance";
+  const chartTitle = isTechnician
+    ? `My ${statusLabel} Jobs YTD`
+    : "Maintenance Jobs YTD";
+
+  const hasChartData =
+    !!resolvedYear &&
+    (chartData[resolvedYear]?.some((item) => Number(item.value) > 0) ?? false);
+
+  const handleStatusChange = (status: JobStatus) => {
+    setSelectedStatus(status);
+    setSelectedYear("");
+  };
 
   return (
     <div
@@ -198,44 +61,20 @@ function MaintenanceJobs({ data, isPending, isAdmin, userLocation }: Props) {
       )}
     >
       <div className="flex flex-col gap-4 h-full">
-        {/* ------------------------------------------------------------------ */}
-        {/* Header                                                             */}
-        {/* ------------------------------------------------------------------ */}
-
         <div className="flex items-center justify-between">
-          {isLoading ? (
-            <ChartHeading
-              title="Maintenance Jobs YTD"
-              className={cn(sharedStyles.chartHeading)}
-            />
-          ) : (
-            <ChartHeading
-              title={
-                drilldownLevel === "months"
-                  ? `${location} — ${selectedStatus} Jobs ${resolvedYear}`
-                  : "Maintenance Jobs YTD"
-              }
-              returnAction={drilldownLevel === "months" && isAdmin}
-              onClick={() => {
-                if (drilldownLevel === "months" && isAdmin) {
-                  setSelectedStore(null);
-                }
-              }}
-              className={cn(sharedStyles.chartHeading, "capitalize")}
-            />
-          )}
+          <ChartHeading
+            title={isPending ? "Maintenance Jobs YTD" : chartTitle}
+            className={cn(sharedStyles.chartHeading)}
+          />
 
           <div className="flex items-center gap-2">
-            {/* -------------------------------------------------------------- */}
-            {/* Status selector                                                */}
-            {/* -------------------------------------------------------------- */}
-            {isLoading ? (
+            {isPending ? (
               <HeadingSkeleton className="w-16" />
             ) : (
               <select
                 value={selectedStatus}
-                onChange={(e) =>
-                  handleStatusChange(e.target.value as JobStatus)
+                onChange={(event) =>
+                  handleStatusChange(event.target.value as JobStatus)
                 }
                 aria-label="job status selector"
                 className={cn(sharedStyles.chartSelectBtn)}
@@ -246,36 +85,28 @@ function MaintenanceJobs({ data, isPending, isAdmin, userLocation }: Props) {
                 <option value="cancelled">Cancelled</option>
               </select>
             )}
-            {/* -------------------------------------------------------------- */}
-            {/* Year selector                                                  */}
-            {/* -------------------------------------------------------------- */}
 
-            {drilldownLevel === "sites" &&
-              (isLoading ? (
-                <HeadingSkeleton className="w-12" />
-              ) : (
-                <select
-                  value={resolvedYear}
-                  onChange={(e) => setSelectedYear(e.target.value)}
-                  aria-label="year selector"
-                  className={cn(sharedStyles.chartSelectBtn)}
-                >
-                  {years.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-              ))}
+            {isPending ? (
+              <HeadingSkeleton className="w-12" />
+            ) : (
+              <select
+                value={resolvedYear}
+                onChange={(event) => setSelectedYear(event.target.value)}
+                aria-label="year selector"
+                className={cn(sharedStyles.chartSelectBtn)}
+              >
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
         </div>
 
-        {/* ------------------------------------------------------------------ */}
-        {/* Chart                                                              */}
-        {/* ------------------------------------------------------------------ */}
-
         <div className="flex-1 min-h-0">
-          {isLoading ? (
+          {isPending ? (
             <JobRequestsChartSkeleton />
           ) : !hasChartData ? (
             <div className="h-full flex items-center justify-center">
@@ -286,11 +117,7 @@ function MaintenanceJobs({ data, isPending, isAdmin, userLocation }: Props) {
               </div>
             </div>
           ) : (
-            <JobsChart
-              data={chartData}
-              selectedYear={resolvedYear}
-              onSelect={handleChartSelect}
-            />
+            <JobsChart data={chartData} selectedYear={resolvedYear} />
           )}
         </div>
       </div>

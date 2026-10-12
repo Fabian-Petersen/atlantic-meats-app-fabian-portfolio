@@ -8,6 +8,7 @@ import { ImageGallery } from "@/components/features/ImageGallery";
 import RequestApproval from "@/components/modal_request_actions/RequestApproval";
 import { Success } from "@/components/features/Success";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import MobileRequestApproval from "@/components/mobile/jobs/MobileRequestApproval";
 import BackButton from "@/components/features/BackButton";
 import { cn } from "@/lib/utils";
@@ -19,7 +20,8 @@ export type PresignedUrlResponse = {
 };
 
 const JobPendingItemPage = () => {
-  const { showSuccess, selectedRowId } = useGlobalContext();
+  const { showSuccess } = useGlobalContext();
+  const { selectedRowId } = useModalState();
 
   const { data: item } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",

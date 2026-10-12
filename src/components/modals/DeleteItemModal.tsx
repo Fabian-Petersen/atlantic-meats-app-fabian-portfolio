@@ -1,5 +1,6 @@
 import { AlertTriangle } from "lucide-react";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import FormHeading from "../../../customComponents/FormHeading";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
@@ -9,8 +10,8 @@ import DeleteItemForm from "@/components/modal_request_actions/DeleteItemForm";
 import type { Resource } from "@/utils/api";
 
 const DeleteItemModal = () => {
-  const { setShowDeleteDialog, deleteConfig, showDeleteDialog } =
-    useGlobalContext();
+  const { setShowDeleteDialog } = useGlobalContext();
+  const { deleteConfig, showDeleteDialog } = useModalState();
 
   const config = deleteConfig ?? {
     resourcePath: "asset" as Resource,

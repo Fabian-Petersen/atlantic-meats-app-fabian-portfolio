@@ -2,6 +2,7 @@
 
 import Separator from "@/components/dashboardSidebar/Seperator";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import { useById } from "@/utils/api";
 import { Error } from "../features/Error";
 import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
@@ -43,8 +44,9 @@ function DisposalRequestApproval({
   selectedAssetIndex,
   onSelectAsset,
 }: DisposalRequestApprovalProps) {
-  const { selectedRowId, setShowRejectRequestDialogGeneric, setRejectConfig } =
+  const { setShowRejectRequestDialogGeneric, setRejectConfig } =
     useGlobalContext();
+  const { selectedRowId } = useModalState();
 
   /* -------------------------------------------------------------------------- */
   /*                          Item Data                                         */

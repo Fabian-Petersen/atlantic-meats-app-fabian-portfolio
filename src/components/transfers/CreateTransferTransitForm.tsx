@@ -16,6 +16,7 @@ import { transferInTransitRequestSchema } from "../../schemas/index";
 
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import { useTransfersTransitFields } from "../forms/configs/useTransfersTransitFields";
 import DynamicForm from "../forms/DynamicForm";
 
@@ -31,11 +32,11 @@ const CreateTransferForm = ({ data }: Props) => {
   /* -------------------------------------------------------------------------- */
   const {
     setSuccessConfig,
-    selectedRowId,
     setShowSuccess,
     setErrorConfig,
     setShowError,
   } = useGlobalContext();
+  const { selectedRowId } = useModalState();
 
   /* -------------------------------------------------------------------------- */
   /*                              POST: Data                                    */

@@ -28,16 +28,16 @@ import { sharedStyles } from "@/styles/shared";
 
 // $ Context
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 // import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 
 const ApproveRequestForm = () => {
   const {
     setShowApproveRequestDialog,
-    selectedRowId,
     setShowSuccess,
-    showApproveRequestDialog,
     setSuccessConfig,
   } = useGlobalContext();
+  const { selectedRowId, showApproveRequestDialog } = useModalState();
 
   const { data: technicians = [] } = useGetTechnicians();
   // $ Form Schema

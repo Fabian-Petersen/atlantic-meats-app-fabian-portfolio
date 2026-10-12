@@ -47,8 +47,6 @@ const Dashboard = () => {
   // $ Hook combine backend and frontend data to generate a card
   const cards = useDashboardJobsMetrics(metrics?.cards);
 
-  console.log("metrics:", metrics?.cards);
-
   return (
     <main className="w-full h-full md:p-4 p-2">
       {/* <NotificationSidebar /> */}
@@ -62,6 +60,7 @@ const Dashboard = () => {
           data={metrics?.storeCost ?? {}}
           isPending={isPending}
           isAdmin={isAdmin}
+          userGroup={metrics?.user.role}
           userLocation={userLocation}
         />
         {/* Asset Verification Pie Chart Component */}
@@ -75,8 +74,7 @@ const Dashboard = () => {
           <MaintenanceJobs
             data={metrics?.storeJobs ?? emptyStoreJobMetrics}
             isPending={isPending}
-            isAdmin={isAdmin}
-            userLocation={userLocation}
+            userGroup={metrics?.user.role}
           />
         </section>
       </div>

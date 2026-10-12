@@ -3,6 +3,7 @@
 import Separator from "@/components/dashboardSidebar/Seperator";
 import type { TransferWorkflowResponse } from "@/schemas";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import { useById } from "@/utils/api";
 import { Error } from "../features/Error";
 import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
@@ -44,11 +45,11 @@ function TransferRequestApproval({
   onSelectAsset,
 }: TransferRequestApprovalProps) {
   const {
-    selectedRowId,
     // showRejectRequestDialogGeneric,
     setShowRejectRequestDialogGeneric,
     setRejectConfig,
   } = useGlobalContext();
+  const { selectedRowId } = useModalState();
 
   /* -------------------------------------------------------------------------- */
   /*                          Item Data                                         */

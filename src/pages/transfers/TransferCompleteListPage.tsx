@@ -20,6 +20,7 @@ import {
 } from "@tanstack/react-table";
 
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import { useMemo, useState } from "react";
 import type { TransferWorkflowResponse } from "@/schemas";
 // import { Error } from "@/components/features/Error";
@@ -74,9 +75,9 @@ const TransferCompleteListPage = () => {
   const {
     setShowUpdateAssetDialog,
     setSelectedRowId,
-    selectedRowId,
     openDeleteDialog,
   } = useGlobalContext();
+  const { selectedRowId } = useModalState();
 
   /* -------------------------------------------------------------------------- */
   /*                                   COLUMNS                                  */

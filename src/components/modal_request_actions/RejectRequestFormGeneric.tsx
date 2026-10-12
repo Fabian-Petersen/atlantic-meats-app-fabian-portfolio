@@ -16,6 +16,7 @@ import { Spinner } from "../ui/spinner";
 
 // $ Context
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import type { RejectConfig } from "@/context/app-types";
@@ -27,9 +28,8 @@ type Props = {
 const RejectRequestFormGeneric = ({ rejectConfig }: Props) => {
   const {
     setShowRejectRequestDialogGeneric,
-    selectedRowId,
-    showRejectRequestDialogGeneric,
   } = useGlobalContext();
+  const { selectedRowId, showRejectRequestDialogGeneric } = useModalState();
 
   const { resourcePath, queryKey, successMessage, errorMessage, redirectPath } =
     rejectConfig;

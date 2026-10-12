@@ -1,4 +1,5 @@
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import CommentForm from "./CommentForm";
 import type { CommentAPIResponse } from "@/schemas";
 import CommentItem from "./CommentItem";
@@ -13,8 +14,8 @@ import { sidebarMotion } from "@/styles/motionStyles";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ChatSidebar = () => {
-  const { openChatSidebar, setOpenChatSidebar, selectedRowId } =
-    useGlobalContext();
+  const { openChatSidebar, setOpenChatSidebar } = useGlobalContext();
+  const { selectedRowId } = useModalState();
 
   // $ Disable the comments input when a job is completed
   const isCompleteJobPage = useMatch("/jobs/:id/complete") !== null;

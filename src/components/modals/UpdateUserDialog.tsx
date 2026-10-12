@@ -1,13 +1,14 @@
 import { Dialog, DialogTitle, DialogContent } from "@/components/ui/dialog";
 
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import FormHeading from "../../../customComponents/FormHeading";
 import UserProfileUpdateForm from "../users/UserProfileUpdateForm";
 import { DialogDescription } from "@radix-ui/react-dialog";
 
 function UpdateUserDialog() {
-  const { showUserProfileDialog, setShowUserProfileDialog } =
-    useGlobalContext();
+  const { setShowUserProfileDialog } = useGlobalContext();
+  const { showUserProfileDialog } = useModalState();
 
   return (
     <Dialog

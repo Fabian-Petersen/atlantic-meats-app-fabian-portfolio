@@ -32,6 +32,7 @@ import TextAreaInput from "../../../customComponents/TextAreaInput";
 import DigitalSignature from "./DigitalSignature";
 import FileInput from "../../../customComponents/FileInput";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 // import { Spinner } from "../ui/spinner";
@@ -110,13 +111,13 @@ const JobActionForm = ({ onCancel }: Props) => {
   } = form;
 
   const {
-    selectedRowId,
     setShowActionDialog,
     setSuccessConfig,
     setErrorConfig,
     setShowError,
     setShowSuccess,
   } = useGlobalContext();
+  const { selectedRowId } = useModalState();
   // const navigate = useNavigate();
 
   // $ Hook that handles the file compression and form submission to backend with success and error modals

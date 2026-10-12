@@ -20,6 +20,7 @@ import { transferReceiptRequestSchema } from "../../schemas/index";
 
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import DynamicForm from "../forms/DynamicForm";
 import { useTransfersReceiptFields } from "../forms/configs/useTransfersReceiptFields";
 
@@ -35,11 +36,11 @@ const CreateTransferForm = ({ data }: Props) => {
   /* -------------------------------------------------------------------------- */
   const {
     setSuccessConfig,
-    selectedRowId,
     setShowSuccess,
     setErrorConfig,
     setShowError,
   } = useGlobalContext();
+  const { selectedRowId } = useModalState();
 
   /* -------------------------------------------------------------------------- */
   /*                              POST: Data                                    */

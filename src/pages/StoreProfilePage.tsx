@@ -1,7 +1,7 @@
 import FormHeading from "../../customComponents/FormHeading";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { Error } from "@/components/features/Error";
-import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import type { UsersAPIResponse } from "@/schemas";
 import { useById } from "@/utils/api";
 import StoreProfileForm from "@/components/users/StoreProfileForm";
@@ -10,7 +10,7 @@ import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 
 function StoreProfilePage() {
-  const { showUserProfileDialog, selectedRowId } = useGlobalContext();
+  const { showUserProfileDialog, selectedRowId } = useModalState();
 
   const {
     data: user,

@@ -7,6 +7,7 @@ import { type DisposalWorkflowResponse } from "@/schemas/disposalsSchemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
 import { Success } from "@/components/features/Success";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import BackButton from "@/components/features/BackButton";
 import { cn } from "@/lib/utils";
 import DisposalRequestApproval from "@/components/disposals/DisposalRequestApproval";
@@ -20,7 +21,8 @@ export type PresignedUrlResponse = {
 };
 
 const DisposalPendingItemPage = () => {
-  const { showSuccess, selectedRowId } = useGlobalContext();
+  const { showSuccess } = useGlobalContext();
+  const { selectedRowId } = useModalState();
 
   const { data: item } = useById<DisposalWorkflowResponse>({
     id: selectedRowId ?? "",

@@ -5,7 +5,7 @@ import { useById } from "../../utils/api";
 import { type JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
 import JobApprovedItemInfo from "@/components/jobs/JobApprovedItemInfo";
-import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import BackButton from "@/components/features/BackButton";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import MobileInProgressPage from "@/components/mobile/jobs/MobileInProgressPage";
 
 const JobInProgressItemPage = () => {
-  const { selectedRowId } = useGlobalContext();
+  const { selectedRowId } = useModalState();
 
   const { data: item, isPending } = useById<JobApprovedAPIResponse>({
     id: selectedRowId ?? "",

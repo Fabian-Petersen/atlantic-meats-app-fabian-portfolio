@@ -4,7 +4,7 @@ import Separator from "@/components/dashboardSidebar/Seperator";
 import type { JobAPIResponse } from "@/schemas";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
-import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import { useById } from "@/utils/api";
 // import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 import { Error } from "../features/Error";
@@ -15,7 +15,7 @@ import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 // };
 
 function JobPendingSingleItemInfo() {
-  const { selectedRowId } = useGlobalContext();
+  const { selectedRowId } = useModalState();
 
   const { data: job, isPending } = useById<JobAPIResponse>({
     id: selectedRowId ?? "",

@@ -13,6 +13,7 @@ import {
 
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import { getUserColumns } from "@/components/tableColumns/UserColumns";
 import { useMemo, useState } from "react";
 import { Error } from "@/components/features/Error";
@@ -55,8 +56,8 @@ const UsersListPage = () => {
     setGlobalFilter,
     setShowSuccess,
     setSuccessConfig,
-    selectedRowId,
   } = useGlobalContext();
+  const { selectedRowId } = useModalState();
 
   const { resend, isPending: pendingResendPassword } =
     useResendTemporaryPassword(selectedRowId ?? "");

@@ -7,12 +7,13 @@ import {
 } from "@/components/ui/dialog";
 
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import FormHeading from "../../../customComponents/FormHeading";
 import UpdateAssetForm from "../assets/UpdateAssetForm";
 
 function UpdateAssetDialog() {
-  const { showUpdateAssetDialog, setShowUpdateAssetDialog } =
-    useGlobalContext();
+  const { setShowUpdateAssetDialog } = useGlobalContext();
+  const { showUpdateAssetDialog } = useModalState();
   return (
     <Dialog
       open={showUpdateAssetDialog}

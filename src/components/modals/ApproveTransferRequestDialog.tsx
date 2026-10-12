@@ -1,6 +1,7 @@
 import { Dialog, DialogTitle, DialogContent } from "@/components/ui/dialog";
 
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import FormHeading from "../../../customComponents/FormHeading";
 import ApproveTransferForm from "@/components/modal_request_actions/ApproveTransferForm";
 import { cn } from "@/lib/utils";
@@ -9,8 +10,8 @@ import { sharedStyles } from "@/styles/shared";
 import { CheckCircle } from "lucide-react";
 
 function ApproveTransferRequestDialog() {
-  const { showApproveTransferDialog, setShowApproveTransferDialog } =
-    useGlobalContext();
+  const { setShowApproveTransferDialog } = useGlobalContext();
+  const { showApproveTransferDialog } = useModalState();
   return (
     <Dialog
       open={showApproveTransferDialog}

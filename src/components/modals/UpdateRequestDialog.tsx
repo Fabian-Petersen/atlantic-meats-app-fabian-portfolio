@@ -9,13 +9,14 @@ import {
 import MaintenanceUpdateForm from "../jobs/JobUpdateForm";
 
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import FormHeading from "../../../customComponents/FormHeading";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 
 function UpdateRequestDialog() {
-  const { showUpdateMaintenanceDialog, setShowUpdateMaintenanceDialog } =
-    useGlobalContext();
+  const { setShowUpdateMaintenanceDialog } = useGlobalContext();
+  const { showUpdateMaintenanceDialog } = useModalState();
   return (
     <Dialog
       open={showUpdateMaintenanceDialog}

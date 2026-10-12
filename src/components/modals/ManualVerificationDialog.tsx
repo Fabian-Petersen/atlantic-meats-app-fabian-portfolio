@@ -16,6 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import {
   manualAssetVerificationSchema,
   type ManualAssetVerificationPayload,
@@ -26,11 +27,8 @@ import { location } from "@/data/assetSelectOptions";
 
 const ManualVerificationDialog = () => {
   const navigate = useNavigate();
-  const {
-    selectedRowId,
-    showManualVerificationDialog,
-    setShowManualVerificationDialog,
-  } = useGlobalContext();
+  const { setShowManualVerificationDialog } = useGlobalContext();
+  const { selectedRowId, showManualVerificationDialog } = useModalState();
 
   const {
     register,

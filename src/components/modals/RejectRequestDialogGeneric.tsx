@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import { OctagonX } from "lucide-react";
 
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import FormHeading from "../../../customComponents/FormHeading";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
@@ -25,10 +26,9 @@ const defaultRejectConfig: Partial<RejectConfig> = {
 
 function RejectRequestDialogGeneric() {
   const {
-    showRejectRequestDialogGeneric,
     setShowRejectRequestDialogGeneric,
-    rejectConfig,
   } = useGlobalContext();
+  const { showRejectRequestDialogGeneric, rejectConfig } = useModalState();
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 

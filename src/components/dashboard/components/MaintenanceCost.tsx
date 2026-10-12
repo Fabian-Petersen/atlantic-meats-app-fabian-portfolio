@@ -32,6 +32,7 @@ type Props = {
   data: StoreCostByYear;
   isPending: boolean;
   isAdmin: boolean;
+  userGroup?: string;
   userLocation?: string;
 };
 
@@ -42,7 +43,12 @@ type Props = {
 function toJobsChartData(
   jobsByMonth: StoreJobsByMonth | undefined,
 ): CostByYear {
-  if (!jobsByMonth) return {};
+  if (
+    !jobsByMonth?.month ||
+    !Array.isArray(jobsByMonth.jobs)
+  ) {
+    return {};
+  }
 
   return {
     [jobsByMonth.month]: jobsByMonth.jobs.map((job) => ({
@@ -60,7 +66,11 @@ function useJobRequestIdLookup(jobsByMonth: StoreJobsByMonth | undefined) {
   return useMemo(() => {
     const map = new Map<string, string>();
 
-    jobsByMonth?.jobs.forEach((job) => {
+    if (!Array.isArray(jobsByMonth?.jobs)) {
+      return map;
+    }
+
+    jobsByMonth.jobs.forEach((job) => {
       map.set(job.assetID, job.action_id);
     });
 
@@ -72,9 +82,11 @@ function MaintenanceCost({
   data: costByYear,
   isPending,
   isAdmin,
+  userGroup,
   userLocation,
 }: Props) {
   const navigate = useNavigate();
+  const isTechnician = userGroup?.toLowerCase() === "maintenance";
 
   const [selectedYear, setSelectedYear] = useState<string>("");
 
@@ -102,8 +114,11 @@ function MaintenanceCost({
    * Admin:
    *   data.costAll     → total cost per site
    *
+   * Maintenance:
+   *   monthly cost for all jobs assigned to the technician
+   *
    * User/Manager:
-   *   data.costByStore → monthly cost for their location
+   *   monthly cost for their location
    *
    * The parent passes the appropriate response as `data`.
    */
@@ -131,13 +146,20 @@ function MaintenanceCost({
    * Admin:
    *   selectedStore + selectedMonth
    *
+   * Maintenance:
+   *   selectedMonth only; the backend scopes by the authenticated sub
+   *
    * User/Manager:
    *   userLocation + selectedMonth
    */
   const { data: jobsByMonth, isPending: isJobsByMonthPending } =
     useStoreCostByMonth(
       isAdmin ? (selectedStore?.year ?? null) : selectedYear || null,
-      isAdmin ? (selectedStore?.location ?? null) : (userLocation ?? null),
+      isAdmin
+        ? (selectedStore?.location ?? null)
+        : isTechnician
+          ? "all"
+          : (userLocation ?? null),
       selectedMonth,
     );
 
@@ -255,6 +277,7 @@ function MaintenanceCost({
        * Both admin and non-admin users select a month here.
        *
        * For admins the store is already stored in selectedStore.
+       * For maintenance users the backend scopes by the authenticated sub.
        * For users/managers the location comes from userLocation.
        */
       setSelectedMonth(label);
@@ -298,9 +321,13 @@ function MaintenanceCost({
             <ChartHeading
               title={
                 drilldownLevel === "jobs"
-                  ? `${isAdmin ? selectedStore?.location : userLocation} — ${selectedMonth} ${headingYear}`
+                  ? isTechnician
+                    ? `My Maintenance Costs — ${selectedMonth} ${headingYear}`
+                    : `${isAdmin ? selectedStore?.location : userLocation} — ${selectedMonth} ${headingYear}`
                   : drilldownLevel === "months"
-                    ? `${isAdmin ? selectedStore?.location : userLocation} — Cost Breakdown ${resolvedYear}`
+                    ? isTechnician
+                      ? "My Maintenance Cost YTD"
+                      : `${isAdmin ? selectedStore?.location : userLocation} — Cost Breakdown ${resolvedYear}`
                     : "Maintenance Cost YTD"
               }
               returnAction={

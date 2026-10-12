@@ -6,12 +6,13 @@ import {
 } from "@/components/ui/dialog";
 
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import RejectRequestForm from "@/components/modal_request_actions/RejectRequestForm";
 import { OctagonX } from "lucide-react";
 
 function RejectRequestDialog() {
-  const { showRejectRequestDialog, setShowRejectRequestDialog } =
-    useGlobalContext();
+  const { setShowRejectRequestDialog } = useGlobalContext();
+  const { showRejectRequestDialog } = useModalState();
   return (
     <Dialog
       open={showRejectRequestDialog}

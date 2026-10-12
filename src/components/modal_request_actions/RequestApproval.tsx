@@ -4,6 +4,7 @@ import Separator from "@/components/dashboardSidebar/Seperator";
 import type { JobAPIResponse } from "@/schemas";
 // import { useNavigate } from "react-router-dom";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import { useById } from "@/utils/api";
 import { Error } from "../features/Error";
 import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
@@ -45,13 +46,13 @@ function RequestApproval({
   onSelectAsset,
 }: RequestApprovalProps) {
   const {
-    selectedRowId,
     setShowRejectRequestDialog,
     setShowApproveRequestDialog,
     setShowUpdateMaintenanceDialog,
     openDeleteDialog,
     user,
   } = useGlobalContext();
+  const { selectedRowId } = useModalState();
 
   const canApproveOrReject = user?.group?.toLowerCase() === "admin";
 

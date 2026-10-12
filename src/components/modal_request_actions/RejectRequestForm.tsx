@@ -21,6 +21,7 @@ import { MessageSquareWarning, X } from "lucide-react";
 
 // $ Context
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import { useNavigate } from "react-router-dom";
 // import { OctagonX } from "lucide-react";
 // import FormHeading from "../../../customComponents/FormHeading";
@@ -28,11 +29,10 @@ import { useNavigate } from "react-router-dom";
 const RequestRejectedForm = () => {
   const {
     setShowRejectRequestDialog,
-    selectedRowId,
-    showRejectRequestDialog,
     setShowSuccess,
     setSuccessConfig,
   } = useGlobalContext();
+  const { selectedRowId, showRejectRequestDialog } = useModalState();
   const navigate = useNavigate();
 
   // $ Form Schema

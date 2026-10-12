@@ -9,6 +9,7 @@ import {
 } from "react-hook-form";
 
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
 import { impact, priority, type } from "@/data/maintenanceRequestFormData";
 import { compressImagesToWebpv1 } from "@/utils/compressImagesToWebpv1";
@@ -444,7 +445,7 @@ const JobUpdateEditor = ({
 const JobUpdateForm = () => {
   const { id: routeId } = useParams<{ id: string }>();
   const { pathname } = useLocation();
-  const { selectedRowId } = useGlobalContext();
+  const { selectedRowId } = useModalState();
   const id = routeId ?? selectedRowId ?? "";
   const requestStatus = pathname.includes("/pending-approval")
     ? "pending"

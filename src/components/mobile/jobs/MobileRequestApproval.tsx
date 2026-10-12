@@ -1,4 +1,5 @@
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import type { JobAPIResponse } from "@/schemas";
 import { usePOST } from "@/utils/api";
 import { CardRow } from "../CardRow";
@@ -67,7 +68,6 @@ export default function MobileRequestApproval({
   onSelectAsset,
 }: MobileRequestApprovalProps) {
   const {
-    selectedRowId,
     setShowRejectRequestDialog,
     setShowApproveRequestDialog,
     setOpenChatSidebar,
@@ -76,6 +76,7 @@ export default function MobileRequestApproval({
     openDeleteDialog,
     user,
   } = useGlobalContext();
+  const { selectedRowId } = useModalState();
   const canApproveOrReject = user?.group?.toLowerCase() === "admin";
   const assets = item.assets?.length
     ? item.assets

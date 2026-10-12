@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import { toast } from "sonner";
 import { useDeleteItem, type Resource } from "@/utils/api";
 import { Spinner } from "../ui/spinner";
@@ -10,11 +11,9 @@ import { sharedStyles } from "@/styles/shared";
 const DeleteItemForm = () => {
   const {
     setShowDeleteDialog,
-    selectedRowId,
-    deleteConfig,
-    showDeleteDialog,
     closeDeleteDialog,
   } = useGlobalContext();
+  const { selectedRowId, deleteConfig, showDeleteDialog } = useModalState();
 
   const config = deleteConfig ?? {
     resourcePath: "asset" as Resource,

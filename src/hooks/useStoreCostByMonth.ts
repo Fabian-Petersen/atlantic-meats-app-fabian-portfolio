@@ -22,10 +22,10 @@ export const useStoreCostByMonth = (
     ],
     params: {
       year,
-      location,
+      ...(location ? { location } : {}),
       month,
     },
-    enabled: !!year && !!location && !!month,
+    enabled: !!year && !!month,
   });
 
   return {

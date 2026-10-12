@@ -7,13 +7,15 @@ import {
 } from "@/components/ui/dialog";
 
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import FormHeading from "../../../customComponents/FormHeading";
 import CreateUserForm from "../users/CreateUserForm";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 
 function CreateUserDialog() {
-  const { showCreateUserDialog, setShowCreateUserDialog } = useGlobalContext();
+  const { setShowCreateUserDialog } = useGlobalContext();
+  const { showCreateUserDialog } = useModalState();
   return (
     <Dialog open={showCreateUserDialog} onOpenChange={setShowCreateUserDialog}>
       <DialogContent

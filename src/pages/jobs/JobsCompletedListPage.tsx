@@ -71,7 +71,7 @@ const JobsCompletedListPage = () => {
     [setSelectedRowId, downloadItem, setOpenChatSidebar],
   );
 
-  console.log("completed-jobs-data:", data);
+  // console.log("completed-jobs-data:", data);
 
   // $ This data is passed into the mobile component
   const table = useReactTable({

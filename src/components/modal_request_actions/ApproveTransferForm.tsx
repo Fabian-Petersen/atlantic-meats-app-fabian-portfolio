@@ -8,17 +8,17 @@ import { Spinner } from "../ui/spinner";
 
 // $ Context
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
 
 const ApproveTransferForm = () => {
   const {
     setShowApproveTransferDialog,
-    selectedRowId,
     setShowSuccess,
-    showApproveTransferDialog,
     setSuccessConfig,
   } = useGlobalContext();
+  const { selectedRowId, showApproveTransferDialog } = useModalState();
 
   const { mutateAsync: approveItem, isPending } = usePOST({
     id: selectedRowId ?? "",

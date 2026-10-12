@@ -7,6 +7,7 @@ import { type TransferWorkflowResponse } from "@/schemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
 import { Success } from "@/components/features/Success";
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import MobileTransferRequestApproval from "@/components/mobile/transfers/MobileTransfersRequestApproval";
 import BackButton from "@/components/features/BackButton";
 import { cn } from "@/lib/utils";
@@ -20,7 +21,8 @@ export type PresignedUrlResponse = {
 };
 
 const TransferPendingItemPage = () => {
-  const { showSuccess, selectedRowId } = useGlobalContext();
+  const { showSuccess } = useGlobalContext();
+  const { selectedRowId } = useModalState();
 
   const { data: item } = useById<TransferWorkflowResponse>({
     id: selectedRowId ?? "",

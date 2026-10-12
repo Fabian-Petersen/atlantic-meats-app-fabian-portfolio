@@ -6,12 +6,13 @@ import {
 } from "@/components/ui/dialog";
 
 import useGlobalContext from "@/context/useGlobalContext";
+import { useModalState } from "@/context/useModalState";
 import ApproveRequestForm from "@/components/modal_request_actions/ApproveRequestForm";
 import { CheckCircle2 } from "lucide-react";
 
 function ApproveRequestDialog() {
-  const { showApproveRequestDialog, setShowApproveRequestDialog } =
-    useGlobalContext();
+  const { setShowApproveRequestDialog } = useGlobalContext();
+  const { showApproveRequestDialog } = useModalState();
   return (
     <Dialog
       open={showApproveRequestDialog}
