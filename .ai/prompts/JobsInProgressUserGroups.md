@@ -1,4 +1,4 @@
-Status: `partial complete`
+Status: `Partial Complete`
 
 Task 1:
 Update the maintenance in progress jobs table so that normal users can view their jobs, but only the maintenance group can see the `Action` actions.

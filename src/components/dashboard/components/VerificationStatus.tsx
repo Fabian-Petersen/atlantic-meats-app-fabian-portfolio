@@ -14,39 +14,20 @@ import { HeadingSkeleton } from "../charts/HeadingSkeleton";
 type Props = {
   data?: AssetVerificationSummary;
   isPending: boolean;
-  isAdmin: boolean;
+  canViewAllSites: boolean;
 };
 
-function VerificationStatus({ data, isPending, isAdmin }: Props) {
+function VerificationStatus({ data, isPending, canViewAllSites }: Props) {
   const [selectedStore, setSelectedStore] = useState<StoreValue>("all");
 
-  const isAllStores = selectedStore === "all";
-
-  const verificationLocation =
-    isAdmin && !isAllStores ? selectedStore : undefined;
+  const verificationLocation = canViewAllSites ? selectedStore : undefined;
 
   const { data: selectedVerificationData, isPending: isVerificationPending } =
     useVerificationData(verificationLocation);
 
-  const activeData = isAdmin && !isAllStores ? selectedVerificationData : data;
+  const activeData = canViewAllSites ? selectedVerificationData : data;
 
-  const activeIsPending =
-    isAdmin && !isAllStores ? isVerificationPending : isPending;
-
-  // console.log("VerificationStatus props:", {
-  //   data,
-  //   isPending,
-  // });
-
-  // console.log("VerificationStatus state:", {
-  //   role,
-  //   selectedStore,
-  //   isAdmin,
-  //   isAllStores,
-  //   verificationLocation,
-  //   selectedVerificationData,
-  //   activeData,
-  // });
+  const activeIsPending = canViewAllSites ? isVerificationPending : isPending;
 
   return (
     <section
@@ -62,7 +43,7 @@ function VerificationStatus({ data, isPending, isAdmin }: Props) {
           title="Asset Verification Status"
           className={cn(sharedStyles.chartHeading)}
         />
-        {isAdmin ? (
+        {canViewAllSites ? (
           isPending ? (
             <HeadingSkeleton className="w-12" />
           ) : (

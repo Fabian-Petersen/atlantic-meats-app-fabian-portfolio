@@ -1,8 +1,8 @@
 import { useGetAll } from "@/utils/api";
 import type { AssetVerificationSummary } from "@/schemas/dashboardSchema";
 
-// location is only ever sent for admins choosing a specific location;
-// managers get their own location resolved server-side from claims regardless.
+// Admins/technicians use this endpoint for both all-site and specific-location
+// summaries. Managers/users use the dashboard summary scoped by the backend.
 export function useVerificationData(location: string | undefined) {
   const { data, isPending } = useGetAll<AssetVerificationSummary>({
     resourcePath: "api/dashboard/metrics/verification",

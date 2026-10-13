@@ -6,16 +6,23 @@ type Props = {
   isMobile: boolean;
   onSelect: (point: ChartPoint) => void;
   compactMobileLeft?: boolean;
+  useCodeLabels?: boolean;
+  valueFormatter?: (value: number) => string;
 };
 
-const getPointLabel = (point: ChartPoint, isMobile: boolean) =>
-  isMobile ? (point.code ?? point.name) : point.name;
+const getPointLabel = (
+  point: ChartPoint,
+  isMobile: boolean,
+  useCodeLabels: boolean,
+) => (useCodeLabels || isMobile ? (point.code ?? point.name) : point.name);
 
 export default function DashboardBarChart({
   data,
   isMobile,
   onSelect,
   compactMobileLeft = false,
+  useCodeLabels = false,
+  valueFormatter = (value) => value.toLocaleString(),
 }: Props) {
   const values = data.map((point) => Number(point.value) || 0);
   const maxValue = Math.max(...values, 1);
@@ -45,7 +52,8 @@ export default function DashboardBarChart({
       >
         {data.map((point, index) => {
           const value = values[index];
-          const label = getPointLabel(point, isMobile);
+          const label = getPointLabel(point, isMobile, useCodeLabels);
+          const formattedValue = valueFormatter(value);
           const height = value > 0 ? Math.max((value / maxValue) * 100, 2) : 0;
           const tooltipPosition =
             index === 0
@@ -60,8 +68,8 @@ export default function DashboardBarChart({
               type="button"
               className="group flex min-w-0 flex-1 flex-col justify-end outline-none"
               onClick={() => onSelect(point)}
-              title={`${point.name}: ${value.toLocaleString()}`}
-              aria-label={`${point.name}: ${value.toLocaleString()}`}
+              title={`${point.name}: ${formattedValue}`}
+              aria-label={`${point.name}: ${formattedValue}`}
             >
               <span className="flex min-h-0 flex-1 items-end justify-center">
                 <span
@@ -69,9 +77,9 @@ export default function DashboardBarChart({
                   style={{ height: `${height}%` }}
                 >
                   <span
-                    className={`pointer-events-none absolute -top-9 z-20 hidden max-w-40 whitespace-nowrap rounded-md border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-950 shadow-md group-hover:block group-focus-visible:block dark:border-amber-400/30 dark:bg-gray-700 dark:text-amber-100 md:text-sm ${tooltipPosition}`}
+                    className={`pointer-events-none absolute bottom-full z-20 mb-2 hidden w-max max-w-80 whitespace-normal break-words rounded-md border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-950 shadow-md group-hover:block group-focus-visible:block dark:border-amber-400/30 dark:bg-gray-700 dark:text-amber-100 md:text-sm ${tooltipPosition}`}
                   >
-                    <span className="capitalize">{label}</span>: {value.toLocaleString()}
+                    <span className="capitalize">{point.name}</span>: {formattedValue}
                   </span>
                 </span>
               </span>

@@ -1,4 +1,4 @@
-Status = `Pending`
+Status = `Complete`
 
 Investigate and fix performance stuttering when opening and closing modals in the React application.
 

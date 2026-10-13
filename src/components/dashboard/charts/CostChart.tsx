@@ -10,6 +10,7 @@ import DashboardBarChart from "./DashboardBarChart";
 type Props = {
   data: CostByYear;
   selectedYear?: string;
+  useCodeLabels?: boolean;
 
   // Level 1: store selected
   onSelect?: (year: string, name: string) => void;
@@ -70,7 +71,10 @@ type Props = {
  * - value = array of chart points for that year
  */
 
-function CostChart({ data, onSelect, selectedYear }: Props) {
+const formatRand = (value: number) =>
+  `R${value.toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
+
+function CostChart({ data, onSelect, selectedYear, useCodeLabels }: Props) {
   const isMobile = useScreenSize(400);
   // const { isDarkTheme } = useGlobalContext();
 
@@ -82,9 +86,7 @@ function CostChart({ data, onSelect, selectedYear }: Props) {
   const handleBarClick = (data: ChartPoint) => {
     if (!selectedYear) return;
 
-    const label = isMobile ? (data?.code ?? data?.name) : data?.name;
-
-    onSelect?.(selectedYear, label);
+    onSelect?.(selectedYear, data.name);
   };
 
   return (
@@ -93,6 +95,8 @@ function CostChart({ data, onSelect, selectedYear }: Props) {
       isMobile={isMobile}
       onSelect={handleBarClick}
       compactMobileLeft
+      useCodeLabels={useCodeLabels}
+      valueFormatter={formatRand}
     />
   );
 }

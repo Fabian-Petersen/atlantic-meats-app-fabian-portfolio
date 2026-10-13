@@ -1,3 +1,5 @@
+Status = `Partial Complete`
+
 Investigate and update the `MaintenanceCost` / Maintenance Cost YTD chart so that cost data is scoped correctly according to the authenticated user's group.
 
 ## Context

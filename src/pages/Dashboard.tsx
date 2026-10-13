@@ -42,6 +42,8 @@ const Dashboard = () => {
   });
 
   const isAdmin = metrics?.user.role === "admin";
+  const canViewAllVerificationSites =
+    isAdmin || metrics?.user.role === "maintenance";
   const userLocation = metrics?.user.location;
 
   // $ Hook combine backend and frontend data to generate a card
@@ -67,7 +69,7 @@ const Dashboard = () => {
         <VerificationStatus
           data={metrics?.verification}
           isPending={isPending}
-          isAdmin={isAdmin}
+          canViewAllSites={canViewAllVerificationSites}
         />
         {/* Pending Requests Table */}
         <section className={cn(sharedStyles.chartTable, "p-0")}>

@@ -21,7 +21,7 @@ type Props = {
 function MaintenanceJobs({ data, isPending, userGroup }: Props) {
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedStatus, setSelectedStatus] =
-    useState<JobStatus>("pending");
+    useState<JobStatus>("complete");
 
   const chartData = data[selectedStatus] ?? {};
   const years = Object.keys(chartData).sort();

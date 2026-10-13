@@ -36,6 +36,9 @@ type Props = {
   userLocation?: string;
 };
 
+const getAssetLabel = (assetID: string | null | undefined) =>
+  assetID?.trim() || "No Barcode";
+
 /**
  * Adapts the level-3 API response (a single month's job list)
  * into the CostByYear shape expected by CostChart.
@@ -43,16 +46,13 @@ type Props = {
 function toJobsChartData(
   jobsByMonth: StoreJobsByMonth | undefined,
 ): CostByYear {
-  if (
-    !jobsByMonth?.month ||
-    !Array.isArray(jobsByMonth.jobs)
-  ) {
+  if (!jobsByMonth?.month || !Array.isArray(jobsByMonth.jobs)) {
     return {};
   }
 
   return {
     [jobsByMonth.month]: jobsByMonth.jobs.map((job) => ({
-      name: job.assetID,
+      name: getAssetLabel(job.assetID),
       value: job.costs.total,
     })),
   };
@@ -71,7 +71,7 @@ function useJobRequestIdLookup(jobsByMonth: StoreJobsByMonth | undefined) {
     }
 
     jobsByMonth.jobs.forEach((job) => {
-      map.set(job.assetID, job.action_id);
+      map.set(getAssetLabel(job.assetID), job.action_id);
     });
 
     return map;
@@ -87,12 +87,13 @@ function MaintenanceCost({
 }: Props) {
   const navigate = useNavigate();
   const isTechnician = userGroup?.toLowerCase() === "maintenance";
+  const hasSiteDrilldown = isAdmin || isTechnician;
 
   const [selectedYear, setSelectedYear] = useState<string>("");
 
   /**
-   * Admin only:
-   * Tracks the site selected from the first-level site-cost chart.
+   * Tracks the site selected from the first-level site-cost chart for admins
+   * and technicians.
    */
   const [selectedStore, setSelectedStore] = useState<{
     year: string;
@@ -107,15 +108,11 @@ function MaintenanceCost({
   /* -------------------------------------------------------------------------- */
   /*                               Initial Data                                 */
   /* -------------------------------------------------------------------------- */
-
   /**
-   * The backend now returns different first-level data:
+   * The backend returns location totals first for admins and technicians:
    *
-   * Admin:
-   *   data.costAll     → total cost per site
-   *
-   * Maintenance:
-   *   monthly cost for all jobs assigned to the technician
+   * Admin/Maintenance:
+   *   total cost per site (with maintenance scoped by the authenticated sub)
    *
    * User/Manager:
    *   monthly cost for their location
@@ -129,37 +126,33 @@ function MaintenanceCost({
   /* -------------------------------------------------------------------------- */
 
   /**
-   * Admin only:
-   *
-   * After clicking a site, fetch the monthly cost breakdown
-   * for that site/year.
+   * After an admin or technician clicks a site, fetch its monthly cost
+   * breakdown for the selected year.
    */
   const { data: costPerStoreByYear, isPending: isCostPerStorePending } =
     useStoreCostByYear(
-      isAdmin ? (selectedStore?.year ?? null) : null,
-      isAdmin ? (selectedStore?.location ?? null) : null,
+      hasSiteDrilldown ? (selectedStore?.year ?? null) : null,
+      hasSiteDrilldown ? (selectedStore?.location ?? null) : null,
     );
 
   /**
    * Level 3:
    *
-   * Admin:
+   * Admin/Maintenance:
    *   selectedStore + selectedMonth
-   *
-   * Maintenance:
-   *   selectedMonth only; the backend scopes by the authenticated sub
+   *   (the backend additionally scopes maintenance users by authenticated sub)
    *
    * User/Manager:
    *   userLocation + selectedMonth
    */
   const { data: jobsByMonth, isPending: isJobsByMonthPending } =
     useStoreCostByMonth(
-      isAdmin ? (selectedStore?.year ?? null) : selectedYear || null,
-      isAdmin
+      hasSiteDrilldown
+        ? (selectedStore?.year ?? null)
+        : selectedYear || null,
+      hasSiteDrilldown
         ? (selectedStore?.location ?? null)
-        : isTechnician
-          ? "all"
-          : (userLocation ?? null),
+        : (userLocation ?? null),
       selectedMonth,
     );
 
@@ -168,7 +161,7 @@ function MaintenanceCost({
   /* -------------------------------------------------------------------------- */
 
   /**
-   * Admin:
+   * Admin/Maintenance:
    *
    * sites → months → jobs
    *
@@ -176,7 +169,7 @@ function MaintenanceCost({
    *
    * months → jobs
    */
-  const drilldownLevel: DrilldownLevel = isAdmin
+  const drilldownLevel: DrilldownLevel = hasSiteDrilldown
     ? selectedMonth
       ? "jobs"
       : selectedStore
@@ -202,7 +195,7 @@ function MaintenanceCost({
     drilldownLevel === "sites"
       ? initialChartData
       : drilldownLevel === "months"
-        ? isAdmin
+        ? hasSiteDrilldown
           ? (costPerStoreByYear?.data ?? {})
           : initialChartData
         : jobsChartData;
@@ -211,7 +204,7 @@ function MaintenanceCost({
     drilldownLevel === "sites"
       ? isPending
       : drilldownLevel === "months"
-        ? isAdmin
+        ? hasSiteDrilldown
           ? isCostPerStorePending
           : isPending
         : isJobsByMonthPending;
@@ -224,7 +217,7 @@ function MaintenanceCost({
   const latestYear = years[years.length - 1] ?? "";
 
   /**
-   * Admin selects the year at the site level.
+   * Admins and technicians select the year at the site level.
    *
    * For users/managers, the year is already represented by the
    * costByStore response.
@@ -234,7 +227,7 @@ function MaintenanceCost({
 
   const headingYear =
     drilldownLevel === "jobs"
-      ? isAdmin
+      ? hasSiteDrilldown
         ? (selectedStore?.year ?? "")
         : selectedYear
       : resolvedYear;
@@ -277,7 +270,8 @@ function MaintenanceCost({
        * Both admin and non-admin users select a month here.
        *
        * For admins the store is already stored in selectedStore.
-       * For maintenance users the backend scopes by the authenticated sub.
+       * For maintenance users the selected site is sent while the backend
+       * retains its authenticated-sub scope.
        * For users/managers the location comes from userLocation.
        */
       setSelectedMonth(label);
@@ -321,18 +315,14 @@ function MaintenanceCost({
             <ChartHeading
               title={
                 drilldownLevel === "jobs"
-                  ? isTechnician
-                    ? `My Maintenance Costs — ${selectedMonth} ${headingYear}`
-                    : `${isAdmin ? selectedStore?.location : userLocation} — ${selectedMonth} ${headingYear}`
+                  ? `${hasSiteDrilldown ? selectedStore?.location : userLocation} — ${selectedMonth} ${headingYear}`
                   : drilldownLevel === "months"
-                    ? isTechnician
-                      ? "My Maintenance Cost YTD"
-                      : `${isAdmin ? selectedStore?.location : userLocation} — Cost Breakdown ${resolvedYear}`
+                    ? `${hasSiteDrilldown ? selectedStore?.location : userLocation} — Cost Breakdown ${resolvedYear}`
                     : "Maintenance Cost YTD"
               }
               returnAction={
                 drilldownLevel === "jobs" ||
-                (drilldownLevel === "months" && isAdmin)
+                (drilldownLevel === "months" && hasSiteDrilldown)
               }
               onClick={() => {
                 if (drilldownLevel === "jobs") {
@@ -340,7 +330,7 @@ function MaintenanceCost({
                   return;
                 }
 
-                if (drilldownLevel === "months" && isAdmin) {
+                if (drilldownLevel === "months" && hasSiteDrilldown) {
                   setSelectedStore(null);
                 }
               }}
@@ -348,7 +338,7 @@ function MaintenanceCost({
             />
           )}
 
-          {/* Year selector is only displayed for the admin site level. */}
+          {/* Year selector is displayed for admin/technician site totals. */}
           {drilldownLevel === "sites" &&
             (isLoading ? (
               <HeadingSkeleton className="w-12" />
@@ -380,6 +370,7 @@ function MaintenanceCost({
               data={chartData}
               selectedYear={resolvedYear}
               onSelect={handleChartSelect}
+              useCodeLabels={drilldownLevel === "sites"}
             />
           )}
         </div>

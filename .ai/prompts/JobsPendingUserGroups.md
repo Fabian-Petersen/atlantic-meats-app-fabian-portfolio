@@ -95,6 +95,7 @@ Important:
 - Keep testing to a minimum, only to the affected components or related components impacted by the change.
 
 Task 3:
+Status: `Pending`
 
 - Maintain the button styling for the rest of the app using sharedStyles. The current button styling is not consitent with the app.
 
