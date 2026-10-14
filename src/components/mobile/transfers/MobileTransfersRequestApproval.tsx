@@ -47,8 +47,10 @@ export default function MobileTransferRequestApproval({
     setRejectConfig,
     setOpenChatSidebar,
     setIsOpen,
+    user,
   } = useGlobalContext();
   const { selectedRowId } = useModalState();
+  const canApproveOrReject = user?.group?.toLowerCase() === "admin";
 
   const navigate = useNavigate();
 
@@ -117,9 +119,9 @@ export default function MobileTransferRequestApproval({
         <button
           type="button"
           onClick={() => navigate("/transfers/requests")}
-          className="flex items-center gap-1.5 text-sm text-red-400 dark:text-red-400/95 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+          className={cn(sharedStyles.btnBack)}
         >
-          <ChevronLeft className="w-4 h-4" />
+          <ChevronLeft className={cn(sharedStyles.btnBackIcon)} />
           Back
         </button>
         <div className="flex-1 text-center">
@@ -286,6 +288,7 @@ export default function MobileTransferRequestApproval({
       </div>
 
       {/* ── Sticky action bar ── */}
+      {canApproveOrReject && (
       <div className="fixed bottom-0 left-0 right-0 z-10 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700/60 px-4 pt-3 pb-6 safe-area-inset-bottom">
         <div className={cn(sharedStyles.btnParent)}>
           <button
@@ -319,6 +322,7 @@ export default function MobileTransferRequestApproval({
           </button>
         </div>
       </div>
+      )}
     </div>
   );
 }

@@ -117,9 +117,9 @@ export default function MobileDisposalRequestApproval({
         <button
           type="button"
           onClick={() => navigate("/disposals/requests")}
-          className="flex items-center gap-1.5 text-sm text-red-400 dark:text-red-400/95 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+          className={cn(sharedStyles.btnBack)}
         >
-          <ChevronLeft className="w-4 h-4" />
+          <ChevronLeft className={cn(sharedStyles.btnBackIcon)} />
           Back
         </button>
         <div className="flex-1 text-center">

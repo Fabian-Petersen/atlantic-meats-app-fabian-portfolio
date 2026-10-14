@@ -25,6 +25,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "../../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { ImageGallery } from "../../features/ImageGallery";
+import { sharedStyles } from "@/styles/shared";
 import {
   ChevronLeft,
   ClipboardList,
@@ -115,10 +116,10 @@ function MobileAssetDetails({ item }: Props) {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 -ml-1"
+          className={cn(sharedStyles.btnBack)}
           aria-label="Go back"
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className={cn(sharedStyles.btnBackIcon)} />
           Back
         </button>
         <p className="flex-1 text-center text-sm font-medium text-gray-800 dark:text-gray-100 truncate">

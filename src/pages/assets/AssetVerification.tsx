@@ -16,6 +16,8 @@ import { usePOST } from "@/utils/api";
 import { getCurrentPosition } from "@/utils/getCurrentPosition";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
 type VerifyAssetResponse = {
   statusCode: number;
@@ -232,10 +234,13 @@ export default function ScannerPage() {
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="absolute left-0 flex min-h-11 items-center gap-1 rounded-full px-2 text-sm text-slate-700 transition-colors hover:bg-slate-200/70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400 dark:text-slate-200 dark:hover:bg-white/10"
+              className={cn(sharedStyles.btnBack, "absolute left-0")}
               aria-label="Go back"
             >
-              <ChevronLeft className="size-5" aria-hidden="true" />
+              <ChevronLeft
+                className={cn(sharedStyles.btnBackIcon)}
+                aria-hidden="true"
+              />
               Back
             </button>
             <p className="text-sm font-medium tracking-wide text-slate-700 dark:text-slate-200">

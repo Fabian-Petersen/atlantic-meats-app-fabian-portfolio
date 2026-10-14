@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { sharedStyles } from "@/styles/shared";
 
 interface BackButtonProps {
   to: string;
@@ -22,15 +23,11 @@ export default function BackButton({
       type="button"
       onClick={() => navigate(to)}
       className={cn(
-        "group inline-flex items-center gap-2 text-md font-medium text-gray-500",
-        "transition-all duration-200 hover:text-gray-900 hover:cursor-pointer",
-        "dark:text-(--clr-textDark) w-fit",
+        sharedStyles.btnBack,
         parentStyles,
       )}
     >
-      <span className="transition-all duration-200 group-hover:-translate-x-0.5">
-        <ArrowLeft className={iconStyles} />
-      </span>
+      <ArrowLeft className={cn(sharedStyles.btnBackIcon, iconStyles)} />
       {label}
     </button>
   );

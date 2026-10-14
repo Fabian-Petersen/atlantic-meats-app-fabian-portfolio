@@ -98,6 +98,16 @@ export const sharedStyles = {
     // hover
     "hover:cursor-pointer",
   ), // button general styles
+  btnBack: cn(
+    "group inline-flex min-h-11 w-fit shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 md:min-h-9",
+    "text-sm font-medium text-gray-600 transition-colors duration-200",
+    "bg-gray-100/80 hover:bg-gray-200 hover:text-gray-900 hover:cursor-pointer",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500/50",
+    "dark:bg-white/5 dark:text-gray-300 dark:hover:bg-white/10 dark:hover:text-white",
+  ),
+  btnBackIcon: cn(
+    "size-4 transition-transform duration-200 group-hover:-translate-x-0.5",
+  ),
   btnCancel: cn(
     "",
     // light

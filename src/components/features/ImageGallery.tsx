@@ -18,18 +18,32 @@ export const ImageGallery = ({ images, className }: Props) => {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [startIndex, setStartIndex] = useState(0);
+  const displayedImageIndex =
+    activeIndex < (images?.length ?? 0) ? activeIndex : 0;
 
-  const visibleImages = (images ?? []).slice(
+  const thumbnailImages = (images ?? [])
+    .map((image, index) => ({ image, originalIndex: index }))
+    .filter(({ originalIndex }) => originalIndex !== displayedImageIndex);
+
+  const visibleStartIndex = Math.min(
     startIndex,
-    startIndex + MAX_VISIBLE,
+    Math.max(thumbnailImages.length - MAX_VISIBLE, 0),
+  );
+
+  const visibleImages = thumbnailImages.slice(
+    visibleStartIndex,
+    visibleStartIndex + MAX_VISIBLE,
   );
 
   // Reserve the 4th slot for an overflow indicator if there are more images
-  const overflowCount =
-    images.length > MAX_VISIBLE + 1 ? images.length - MAX_VISIBLE : 0;
+  const overflowCount = Math.max(
+    thumbnailImages.length - (visibleStartIndex + MAX_VISIBLE),
+    0,
+  );
 
-  const canScrollLeft = startIndex > 0;
-  const canScrollRight = startIndex + MAX_VISIBLE < images.length;
+  const canScrollLeft = visibleStartIndex > 0;
+  const canScrollRight =
+    visibleStartIndex + MAX_VISIBLE < thumbnailImages.length;
 
   if (!images || images.length === 0) {
     return (
@@ -43,7 +57,7 @@ export const ImageGallery = ({ images, className }: Props) => {
 
   return (
     <div
-      className={`${className} bg-white grid grid-rows-[25rem_5rem] md:grid-rows-[2fr_1fr] gap-3 rounded-md dark:border-gray-700/50 dark:bg-(--bg-primary_dark) h-full min-h-0`}
+      className={`${className} bg-white grid ${thumbnailImages.length > 0 ? "grid-rows-[25rem_5rem] md:grid-rows-[2fr_1fr]" : "grid-rows-[25rem] md:grid-rows-[1fr]"} gap-3 rounded-md dark:border-gray-700/50 dark:bg-(--bg-primary_dark) h-full min-h-0`}
     >
       {/* Main Image */}
       <div className="relative rounded-md overflow-hidden min-h-0">
@@ -54,9 +68,9 @@ export const ImageGallery = ({ images, className }: Props) => {
           onClick={() => setIsOpen(true)}
         >
           <img
-            src={images[activeIndex]?.url}
+            src={images[displayedImageIndex]?.url}
             className="object-cover h-full w-full transition-opacity duration-200"
-            alt={images[activeIndex]?.filename}
+            alt={images[displayedImageIndex]?.filename}
           />
         </button>
 
@@ -79,7 +93,7 @@ export const ImageGallery = ({ images, className }: Props) => {
             <polyline points="21 15 16 10 5 21" />
           </svg>
           <span>
-            {activeIndex + 1} / {images.length}
+            {displayedImageIndex + 1} / {images.length}
           </span>
         </div>
       </div>
@@ -88,17 +102,18 @@ export const ImageGallery = ({ images, className }: Props) => {
         <FullscreenImageModal
           images={images.map((img) => img.url)}
           setIsOpen={setIsOpen}
-          activeIndex={activeIndex}
+          activeIndex={displayedImageIndex}
         />
       )}
 
       {/* Thumbnails */}
-      <div className="relative flex items-center gap-2 h-full group min-h-0">
+      {thumbnailImages.length > 0 && (
+        <div className="relative flex items-center gap-2 h-full group min-h-0">
         {/* Left Scroll */}
         {canScrollLeft && (
           <button
             type="button"
-            onClick={() => setStartIndex((prev) => prev - 1)}
+            onClick={() => setStartIndex(visibleStartIndex - 1)}
             aria-label="Scroll left"
             title="Scroll left"
             className="absolute z-10 hover:cursor-pointer top-1/2 left-[1%] -translate-y-1/2"
@@ -113,24 +128,19 @@ export const ImageGallery = ({ images, className }: Props) => {
 
         <div className="grid grid-cols-4 gap-2 h-full w-full py-0.5">
           {/* Visible thumbnails */}
-          {visibleImages.map((img, index) => {
-            const actualIndex = startIndex + index;
+          {visibleImages.map(({ image, originalIndex }) => {
             return (
               <button
                 type="button"
-                aria-label={`View image ${actualIndex + 1}`}
-                key={actualIndex}
-                onClick={() => setActiveIndex(actualIndex)}
-                className={`cursor-pointer bg-gray-200 rounded-md h-full w-full overflow-hidden transition-all duration-150 ${
-                  actualIndex === activeIndex
-                    ? "ring-1 ring-primary ring-offset-0"
-                    : "opacity-70 hover:opacity-100"
-                }`}
+                aria-label={`View image ${originalIndex + 1}`}
+                key={originalIndex}
+                onClick={() => setActiveIndex(originalIndex)}
+                className="cursor-pointer bg-gray-200 rounded-md h-full w-full overflow-hidden opacity-70 hover:opacity-100 transition-all duration-150"
               >
                 <img
-                  src={img.url}
+                  src={image.url}
                   className="h-full w-full object-cover rounded-md"
-                  alt={img.filename}
+                  alt={image.filename}
                 />
               </button>
             );
@@ -141,24 +151,19 @@ export const ImageGallery = ({ images, className }: Props) => {
             <button
               type="button"
               aria-label={`View ${overflowCount} more images`}
-              onClick={() => setStartIndex((prev) => prev + 1)}
+              onClick={() => setStartIndex(visibleStartIndex + 1)}
               className="cursor-pointer bg-gray-100 dark:bg-gray-700 rounded-md h-full w-full overflow-hidden flex items-center justify-center text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
             >
               +{overflowCount}
             </button>
-          ) : (
-            // Empty placeholder to maintain 4-column grid when no overflow
-            visibleImages.length < MAX_VISIBLE + 1 && (
-              <div className="rounded-md h-full w-full bg-gray-50 dark:bg-gray-800/40 border border-dashed border-gray-200 dark:border-gray-700" />
-            )
-          )}
+          ) : null}
         </div>
 
         {/* Right Scroll */}
         {canScrollRight && (
           <button
             type="button"
-            onClick={() => setStartIndex((prev) => prev + 1)}
+            onClick={() => setStartIndex(visibleStartIndex + 1)}
             aria-label="Scroll right"
             title="Scroll right"
             className="absolute z-10 top-1/2 right-[1%] -translate-y-1/2 px-2
@@ -174,7 +179,8 @@ export const ImageGallery = ({ images, className }: Props) => {
             />
           </button>
         )}
-      </div>
+        </div>
+      )}
     </div>
   );
 

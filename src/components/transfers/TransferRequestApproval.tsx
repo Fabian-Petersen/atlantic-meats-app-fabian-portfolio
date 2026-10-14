@@ -48,8 +48,10 @@ function TransferRequestApproval({
     // showRejectRequestDialogGeneric,
     setShowRejectRequestDialogGeneric,
     setRejectConfig,
+    user,
   } = useGlobalContext();
   const { selectedRowId } = useModalState();
+  const canApproveOrReject = user?.group?.toLowerCase() === "admin";
 
   /* -------------------------------------------------------------------------- */
   /*                          Item Data                                         */
@@ -225,6 +227,7 @@ function TransferRequestApproval({
       )}
 
       {/* ── Actions ── */}
+      {canApproveOrReject && (
       <div className="mt-auto pt-4 flex flex-col gap-6">
         <p className="text-xs text-center text-gray-400 dark:text-gray-500">
           Review all details before approving this request.
@@ -261,6 +264,7 @@ function TransferRequestApproval({
           </button>
         </div>
       </div>
+      )}
     </div>
   );
 }

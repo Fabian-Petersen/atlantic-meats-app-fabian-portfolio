@@ -29,6 +29,7 @@ import { badgeStyles } from "@/styles/badgeStyles";
 import { ImageGallery } from "../../features/ImageGallery";
 import { ChevronLeft, FileText } from "lucide-react";
 import type { CompletedJobResponse, PresignedUrls } from "@/schemas/jobSchemas";
+import { sharedStyles } from "@/styles/shared";
 
 // $ ————— Feature Components ——————————————————————————————————————————————————————
 import SectionTitle from "../../features/layout/SectionTitle";
@@ -112,10 +113,10 @@ function MobileCompletedJobDetails({ item }: Props) {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 -ml-1"
+          className={cn(sharedStyles.btnBack)}
           aria-label="Go back"
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className={cn(sharedStyles.btnBackIcon)} />
           Jobs
         </button>
         <p className="flex-1 text-center text-sm font-medium text-gray-800 dark:text-gray-100 truncate">
