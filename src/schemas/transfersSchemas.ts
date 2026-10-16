@@ -144,6 +144,41 @@ export const transferRequestSchema = transferRequestBaseSchema.superRefine(
   },
 );
 
+/** Editable request-stage fields accepted by PUT /api/transfers/{transferId}. */
+export const transferUpdateSchema = transferRequestBaseSchema
+  .pick({
+    locationFrom: true,
+    locationTo: true,
+    expectedDate: true,
+    transferReason: true,
+  })
+  .extend({
+    assets: z.array(transferAssetBaseSchema).min(1, {
+      message: "Please retain at least one asset in the transfer request",
+    }),
+  })
+  .superRefine((data, ctx) => {
+    if (data.locationFrom === data.locationTo) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["locationTo"],
+        message: "The location To must be different from the current location.",
+      });
+    }
+
+    const selectedDate = new Date(data.expectedDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["expectedDate"],
+        message: "The expected transit date cannot be in the past.",
+      });
+    }
+  });
+
 /* -------------------------------------------------------------------------- */
 /*                         TRANSFER REQUEST PAYLOAD                           */
 /* -------------------------------------------------------------------------- */
@@ -438,6 +473,18 @@ export type TransferResponseValues = z.infer<
 export type TransferRequestPayload = z.infer<
   typeof transferRequestPayloadSchema
 >;
+export type TransferUpdateFormValues = z.infer<typeof transferUpdateSchema>;
+export type TransferUpdatePayload = Omit<
+  TransferUpdateFormValues,
+  "assets"
+> & {
+  assets: Array<
+    Omit<TransferUpdateFormValues["assets"][number], "images"> & {
+      images: z.infer<typeof transferFileMetadataSchema>[];
+    }
+  >;
+  deleted_image_keys: string[];
+};
 export type TransferInTransitRequestValues = z.infer<
   typeof transferInTransitRequestSchema
 >;

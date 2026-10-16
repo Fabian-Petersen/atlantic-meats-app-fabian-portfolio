@@ -74,10 +74,10 @@ function DisposalItemDetails({ item }: Props) {
       ? signedFiles(disposed?.disposalImages)
       : (currentAsset?.images ?? []);
   const documents = disposed?.disposalDocuments ?? [];
-  const description =
-    "description" in request && typeof request.description === "string"
-      ? request.description
-      : item.description;
+  // const description =
+  //   "description" in request && typeof request.description === "string"
+  //     ? request.description
+  //     : item.description;
 
   return (
     <div
@@ -235,6 +235,7 @@ function DisposalItemDetails({ item }: Props) {
             </>
             <div className="flex flex-col gap-3">
               <SectionTitle>Disposal details</SectionTitle>
+              <Field label="Description" value={request?.description} />
               <Field label="Asset ID" value={currentAsset?.assetID} />
               <Field label="Equipment" value={currentAsset?.equipment} />
               <Field label="Area" value={currentAsset?.area} />
@@ -274,13 +275,15 @@ function DisposalItemDetails({ item }: Props) {
             <Separator width="100%" />
 
             <SectionTitle>Reason for disposal</SectionTitle>
-            <DescriptionBox>{request?.disposalReason}</DescriptionBox>
-            {description && (
+            <DescriptionBox className="capitalize">
+              {request?.disposalReason}
+            </DescriptionBox>
+            {/* {description && (
               <>
                 <SectionTitle>Description</SectionTitle>
                 <DescriptionBox>{description}</DescriptionBox>
               </>
-            )}
+            )} */}
             {item.expired && (
               <>
                 <SectionTitle>Expired</SectionTitle>

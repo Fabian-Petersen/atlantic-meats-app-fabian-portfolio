@@ -14,7 +14,6 @@ import { badgeStyles } from "@/styles/badgeStyles";
 import type { Resource } from "@/utils/api";
 
 export const getDisposalRequestsColumns = (
-  setShowUpdateMaintenanceDialog: (value: boolean) => void,
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (
     selectedRowId: string,
@@ -129,10 +128,10 @@ export const getDisposalRequestsColumns = (
           },
         },
         edit: {
-          url: "/disposals/update-request",
+          url: `/disposals/${rowId}/update`,
           onOpen: () => {
-            setShowUpdateMaintenanceDialog(true);
             setSelectedRowId(rowId);
+            navigate(`/disposals/${rowId}/update`);
           },
         },
         view: {
@@ -141,7 +140,7 @@ export const getDisposalRequestsColumns = (
         },
         delete: {
           config: {
-            resourcePath: "api/disposals/requests",
+            resourcePath: "api/disposals",
             queryKey: ["disposals"],
             resourceName: "disposal request",
           },

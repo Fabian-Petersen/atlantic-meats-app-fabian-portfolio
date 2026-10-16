@@ -79,6 +79,9 @@ export type ErrorConfig = {
   title: string;
   message: string;
   redirectPath?: RedirectResource | null;
+  primaryActionLabel?: string;
+  secondaryActionLabel?: string;
+  onSecondaryAction?: () => void;
 };
 
 export type AppContextType = {

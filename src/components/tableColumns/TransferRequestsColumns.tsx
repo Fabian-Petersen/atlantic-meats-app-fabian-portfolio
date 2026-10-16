@@ -11,7 +11,6 @@ import { AssetsDropdownCell } from "../features/tables/AssetsDropdownCell";
 import type { AssetItem } from "@/schemas/transfersSchemas";
 
 export const getTransferRequestsColumns = (
-  setShowUpdateMaintenanceDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (
     selectedRowId: string,
@@ -127,13 +126,16 @@ export const getTransferRequestsColumns = (
         status: row.original.status,
         setSelectedRowId,
 
-        edit: {
-          url: "/update-request",
-          onOpen: () => {
-            setShowUpdateMaintenanceDialog(true);
-            setSelectedRowId(rowId);
-          },
-        },
+        edit:
+          row.original.status === "pending"
+            ? {
+                url: `/transfers/${rowId}/update`,
+                onOpen: () => {
+                  setSelectedRowId(rowId);
+                  navigate(`/transfers/${rowId}/update`);
+                },
+              }
+            : undefined,
 
         transit: {
           url: "/transfers/in-transit",

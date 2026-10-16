@@ -91,7 +91,6 @@ const DisposalRequestsListPage = () => {
   const [globalFilter, setGlobalFilter] = useState("");
 
   const {
-    setShowUpdateMaintenanceDialog,
     setSelectedRowId,
     openDeleteDialog,
     setOpenChatSidebar,
@@ -104,14 +103,12 @@ const DisposalRequestsListPage = () => {
   const columns = useMemo(
     () =>
       getDisposalRequestsColumns(
-        setShowUpdateMaintenanceDialog,
         setSelectedRowId,
         openDeleteDialog,
         setOpenChatSidebar,
         navigate,
       ),
     [
-      setShowUpdateMaintenanceDialog,
       setSelectedRowId,
       openDeleteDialog,
       setOpenChatSidebar,

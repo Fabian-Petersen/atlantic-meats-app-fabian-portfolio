@@ -63,14 +63,14 @@ export type Resource =
   | `api/transfers/metrics` // "GET: Dashboard metrics for transfer requests"
   | `api/transfers/my-transfers` // "GET: Transfers by user sub"
   // $ Disposal ROUTES
-  | "api/disposals" // "POST: Transfer request" | "GET: All disposals"
-  | `api/disposals/${string}` // "GET: Transfer request"
-  | "api/disposals/requests" // "POST: Job request" | "GET: All jobs enum["pending", "approved",
+  | "api/disposals" // "POST: Disposal request" | "GET: All disposals"
+  | `api/disposals/${string}` // "GET: Disposal request", DELETE
+  | "api/disposals/requests" // "POST: Disposal request"
   | `api/disposals/${string}/approve` // "POST: status === `approve`
   | `api/disposals/${string}/reject` // "POST: status === `reject`
   | `api/disposals/${string}/cancel` // "POST: status === `cancel`
   | `api/disposals/${string}/download` // GET: Download disposal details from backend
-  | `api/disposals/my-disposals` // "GET: Transfers by user sub"
+  | `api/disposals/my-disposals` // "GET: Disposals by user sub"
   // $ Notifications
   | "api/notifications" // "GET: All notifications by user id
   // $ Stocks ROUTES
@@ -364,9 +364,9 @@ type DownloadPdfOptions<TResponse> = DownloadPdfPathOptions & {
 };
 
 // Existing base-path callers retain the jobcard endpoint and response type.
-export function useDownloadPdf(options: DownloadPdfPathOptions): ReturnType<
-  typeof useMutation<JobcardPresignedUrlResponse, Error, string>
->;
+export function useDownloadPdf(
+  options: DownloadPdfPathOptions,
+): ReturnType<typeof useMutation<JobcardPresignedUrlResponse, Error, string>>;
 export function useDownloadPdf<TResponse>(
   options: DownloadPdfOptions<TResponse>,
 ): ReturnType<typeof useMutation<TResponse, Error, string>>;
@@ -377,11 +377,12 @@ export function useDownloadPdf<TResponse>(
     mutationFn: async (id: string) => {
       const urlPath = `/${options.resourcePath}/${id}/${options.path ?? "jobcard"}`;
       if (!("getDownloadUrl" in options)) {
-        const { data } = await apiClient.get<JobcardPresignedUrlResponse>(
-          urlPath,
-        );
+        const { data } =
+          await apiClient.get<JobcardPresignedUrlResponse>(urlPath);
         if (!data.jobcard_url?.trim()) {
-          throw new Error("The document response did not contain a download URL.");
+          throw new Error(
+            "The document response did not contain a download URL.",
+          );
         }
         window.location.href = data.jobcard_url;
         return data;
@@ -390,7 +391,9 @@ export function useDownloadPdf<TResponse>(
       const { data } = await apiClient.get<TResponse>(urlPath);
       const url = options.getDownloadUrl(data);
       if (typeof url !== "string" || !url.trim()) {
-        throw new Error("The document response did not contain a download URL.");
+        throw new Error(
+          "The document response did not contain a download URL.",
+        );
       }
       window.location.href = url;
       return data;

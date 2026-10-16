@@ -15,7 +15,6 @@ import { Badge } from "../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 
 export const getTransferColumns = (
-  setShowUpdateAssetDialog: (v: boolean) => void,
   setSelectedRowId: (id: string) => void,
   openDeleteDialog: (
     selectedRowId: string,
@@ -124,12 +123,10 @@ export const getTransferColumns = (
         rowId: row.original.id,
         setSelectedRowId,
         edit: {
-          url: `api/transfers/${rowId}`,
+          url: `api/transfers/${rowId}/update`,
           onOpen: () => {
-            setShowUpdateAssetDialog(true);
-            // console.log(showUpdateAssetDialog);
-            // console.log("rowId:", rowId);
             setSelectedRowId(rowId);
+            navigate(`/transfers/${rowId}/update`);
           },
         },
         history: {

@@ -164,6 +164,47 @@ export const disposalRequestSchema = disposalRequestBaseSchema.superRefine(
   },
 );
 
+/** Editable request-level fields accepted by PUT /api/disposals/{disposalId}. */
+export const disposalUpdateSchema = disposalRequestBaseSchema
+  .pick({
+    location: true,
+    disposalReason: true,
+    description: true,
+    expectedDisposalDate: true,
+  })
+  .extend({
+    assets: z
+      .array(
+        disposalAssetBaseSchema.extend({
+          assetIndex: z.number().int().nonnegative(),
+        }),
+      )
+      .min(1, {
+        message: "Please retain at least one asset in the disposal request",
+      }),
+  })
+  .superRefine((data, ctx) => {
+    if (!data.disposalReason) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["disposalReason"],
+        message: "Please select a disposal reason",
+      });
+    }
+
+    const selectedDate = new Date(data.expectedDisposalDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["expectedDisposalDate"],
+        message: "The expected disposal date cannot be in the past.",
+      });
+    }
+  });
+
 /* -------------------------------------------------------------------------- */
 /*                         DISPOSAL REQUEST PAYLOAD                           */
 /* -------------------------------------------------------------------------- */
@@ -277,6 +318,7 @@ export const disposalCancellationSchema = z.object({
 });
 
 const disposalPendingSchema = z.object({
+  description: z.string(),
   requestedBy: z.string(),
   requestorName: z.string(),
   requestorSub: z.string(),
@@ -357,6 +399,18 @@ export type DisposalRequestFormValues = z.infer<typeof disposalRequestSchema>;
 export type DisposalRequestPayload = z.infer<
   typeof disposalRequestPayloadSchema
 >;
+export type DisposalUpdateFormValues = z.infer<typeof disposalUpdateSchema>;
+export type DisposalUpdatePayload = Omit<
+  DisposalUpdateFormValues,
+  "assets"
+> & {
+  assets: Array<
+    Omit<DisposalUpdateFormValues["assets"][number], "images"> & {
+      images: DisposalFileMetadata[];
+    }
+  >;
+  deleted_image_keys: string[];
+};
 export type DisposalApprovalFormValues = z.infer<typeof disposalApprovalSchema>;
 export type DisposalCompletionFormValues = z.infer<
   typeof disposalCompletionSchema

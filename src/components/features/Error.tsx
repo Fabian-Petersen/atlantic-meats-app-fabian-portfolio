@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import { modalVariants } from "@/styles/motionStyles";
+import type { ErrorConfig } from "@/context/app-types";
 
 /**
  * Error Component
@@ -58,7 +59,7 @@ export const Error = () => {
   const { showError, setShowError, errorConfig } = useGlobalContext();
   const navigate = useNavigate();
 
-  const DEFAULT_ERROR_CONFIG = {
+  const DEFAULT_ERROR_CONFIG: ErrorConfig = {
     title: "Oops, something went wrong!!",
     message: "We couldn’t load the data. Please try again.",
     redirectPath: null as RedirectResource | null,
@@ -72,6 +73,11 @@ export const Error = () => {
     if (config.redirectPath) {
       navigate(`/${config.redirectPath}`);
     }
+  };
+
+  const handleSecondaryAction = () => {
+    setShowError(false);
+    config.onSecondaryAction?.();
   };
 
   if (!showError) return null;
@@ -121,18 +127,31 @@ export const Error = () => {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="w-full"
+              className="flex w-full gap-3 md:w-3/4"
             >
+              {config.secondaryActionLabel && (
+                <button
+                  type="button"
+                  onClick={handleSecondaryAction}
+                  className={cn(
+                    sharedStyles.btn,
+                    sharedStyles.btnCancel,
+                    "text-md",
+                  )}
+                >
+                  {config.secondaryActionLabel}
+                </button>
+              )}
               <button
                 type="button"
                 onClick={handleClose}
                 className={cn(
                   sharedStyles.btn,
                   sharedStyles.btnSubmit,
-                  "text-md w-full md:w-3/4",
+                  "text-md",
                 )}
               >
-                Continue
+                {config.primaryActionLabel ?? "Continue"}
               </button>
             </motion.div>
           </motion.div>

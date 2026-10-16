@@ -30,8 +30,12 @@ const AssetVerification = lazy(
   () => import("./pages/assets/AssetVerification"),
 );
 
+// $ Transfer Pages
+import TransferUpdatePage from "./pages/transfers/TransferUpdatePage";
+
 // $ User Management Pages
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+
 const UserProfilePage = lazy(() => import("./pages/users/UserProfilePage"));
 const StoreProfilePage = lazy(() => import("./pages/StoreProfilePage"));
 
@@ -60,6 +64,7 @@ import { PageLoadingSpinner } from "./components/features/PageLoadingSpinner";
 const UsersListPage = lazy(() => import("./pages/users/UsersListPage"));
 import { useAuth } from "./auth/useAuth";
 import JobInProgressUpdatePage from "./pages/jobs/JobInProgressUpdatePage";
+import DisposalUpdatePage from "./pages/disposals/DisposalUpdatePage";
 const CreateUserPage = lazy(() => import("./pages/users/CreateUserPage"));
 
 // $ Transfer Asset Pages
@@ -205,6 +210,10 @@ function App() {
                 element={<CreateTransferTransitPage />}
               />
               <Route
+                path="/transfers/:id/update"
+                element={<TransferUpdatePage />}
+              />
+              <Route
                 path="/transfers/:id/receipt"
                 element={<CreateTransferReceiptPage />}
               />
@@ -227,6 +236,10 @@ function App() {
                 element={<DisposalRequestsListPage />}
               />
               <Route path="/disposals/:id" element={<DisposalItemPage />} />
+              <Route
+                path="/disposals/:id/update"
+                element={<DisposalUpdatePage />}
+              />
               <Route
                 path="/disposals/completed"
                 element={<DisposalCompletedListPage />}

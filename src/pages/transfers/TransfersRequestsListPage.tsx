@@ -82,7 +82,6 @@ const TransfersRequestsListPage = () => {
   const [globalFilter, setGlobalFilter] = useState("");
 
   const {
-    setShowUpdateMaintenanceDialog,
     setSelectedRowId,
     openDeleteDialog,
     setOpenChatSidebar,
@@ -95,14 +94,12 @@ const TransfersRequestsListPage = () => {
   const columns = useMemo(
     () =>
       getTransferRequestsColumns(
-        setShowUpdateMaintenanceDialog,
         setSelectedRowId,
         openDeleteDialog,
         setOpenChatSidebar,
         navigate,
       ),
     [
-      setShowUpdateMaintenanceDialog,
       setSelectedRowId,
       openDeleteDialog,
       setOpenChatSidebar,

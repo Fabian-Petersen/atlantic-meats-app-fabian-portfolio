@@ -2,6 +2,7 @@
 
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
 
 // $ React-Hook-Form, zod & schema
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,6 +31,34 @@ import {
   type DisposalRequestPayload,
 } from "@/schemas/disposalsSchemas";
 // import { useDisposalsFields } from "../forms/configs/useDisposalFields";
+
+type DuplicateDisposalResponse = {
+  message?: string;
+  assetID?: string;
+  serialNumber?: string;
+  existingDisposalId?: string;
+};
+
+const getDuplicateDisposalMessage = (
+  error: unknown,
+): string | undefined => {
+  if (
+    !axios.isAxiosError<DuplicateDisposalResponse>(error) ||
+    error.response?.status !== 409
+  ) {
+    return undefined;
+  }
+
+  const assetID = error.response.data?.assetID?.trim();
+  const serialNumber = error.response.data?.serialNumber?.trim();
+  const assetIdentifier = assetID
+    ? `asset ${assetID}${serialNumber ? ` with serial number ${serialNumber}` : ""}`
+    : serialNumber
+      ? `the asset with serial number ${serialNumber}`
+      : "this asset";
+
+  return `A disposal request already exists for ${assetIdentifier}. Please cancel the existing disposal request if it is no longer required, or select another asset.`;
+};
 
 const CreateDisposalForm = () => {
   const navigate = useNavigate();
@@ -144,6 +173,7 @@ const CreateDisposalForm = () => {
       type: "date" as const,
       name: "expectedDisposalDate" as const,
       label: "Expected Disposal Date",
+      required: true,
     },
   ];
 
@@ -202,11 +232,27 @@ const CreateDisposalForm = () => {
       setShowSuccess(true);
     },
 
-    onError: () => {
+    onError: (error) => {
+      const duplicateDisposalMessage = getDuplicateDisposalMessage(error);
+
       setErrorConfig({
-        title: "Transfer Request Failed",
-        message: "Could not create the disposal request. Please try again.",
-        redirectPath: "disposals/requests",
+        title: duplicateDisposalMessage
+          ? "Disposal Request Already Exists"
+          : "Transfer Request Failed",
+        message:
+          duplicateDisposalMessage ??
+          "Could not create the disposal request. Please try again.",
+        redirectPath: duplicateDisposalMessage ? null : "disposals/requests",
+        primaryActionLabel: duplicateDisposalMessage
+          ? "Edit request"
+          : undefined,
+        secondaryActionLabel: duplicateDisposalMessage ? "Cancel" : undefined,
+        onSecondaryAction: duplicateDisposalMessage
+          ? () => {
+              form.reset();
+              setOpenAssetIndex(-1);
+            }
+          : undefined,
       });
 
       setShowError(true);

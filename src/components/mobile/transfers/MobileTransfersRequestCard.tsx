@@ -35,7 +35,7 @@ function MobileTransferRequestCard({
 }: MobileTransferRequestCardProps) {
   const item = row.original;
   const navigate = useNavigate();
-  const { setSelectedRowId, setShowUpdateAssetDialog } = useGlobalContext();
+  const { setSelectedRowId } = useGlobalContext();
 
   const rowId = item.id;
   const isStatusPending = item.status === "pending";
@@ -53,13 +53,15 @@ function MobileTransferRequestCard({
         navigate(`/transfers/${rowId}/in-transit`);
       },
     },
-    edit: {
-      url: `api/transfers/${rowId}`,
-      onOpen: () => {
-        setShowUpdateAssetDialog(true);
-        setSelectedRowId(rowId);
-      },
-    },
+    edit: isStatusPending
+      ? {
+          url: `/transfers/${rowId}/update`,
+          onOpen: () => {
+            setSelectedRowId(rowId);
+            navigate(`/transfers/${rowId}/update`);
+          },
+        }
+      : undefined,
     view: {
       url: `api/transfers/${rowId}`,
       onOpen: () => {
