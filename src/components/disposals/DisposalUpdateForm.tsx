@@ -14,8 +14,12 @@ import {
 } from "@/schemas/disposalsSchemas";
 import { useById, useUpdateItem } from "@/utils/api";
 import { compressImagesToWebpv1 } from "@/utils/compressImagesToWebpv1";
+import {
+  normalizeDeletedImageKeys,
+  normalizeDisposalUpdateImages,
+  type DisposalUpdateImage,
+} from "@/utils/disposalUpdateImages";
 import type { PresignedUrlResponse } from "@/schemas";
-import type { PresignedUrls } from "@/schemas/jobSchemas";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
 import DynamicForm, {
@@ -47,9 +51,13 @@ const DisposalUpdateEditor = ({ id, item }: DisposalUpdateEditorProps) => {
     useGlobalContext();
   const request = item.pending;
   const [existingImagesByAsset, setExistingImagesByAsset] = useState<
-    PresignedUrls[][]
-  >(() => item.assets.map((asset) => asset.images ?? []));
-  const [deletedImageKeys, setDeletedImageKeys] = useState<string[]>([]);
+    DisposalUpdateImage[][]
+  >(() =>
+    item.assets.map((asset) =>
+      normalizeDisposalUpdateImages(asset.images ?? []),
+    ),
+  );
+  const [deletedImages, setDeletedImages] = useState<unknown[]>([]);
 
   const form = useForm<DisposalUpdateFormValues>({
     resolver: zodResolver(
@@ -124,7 +132,10 @@ const DisposalUpdateEditor = ({ id, item }: DisposalUpdateEditorProps) => {
     queryKey: DISPOSALS_QUERY_KEY,
   });
 
-  const removeExistingImage = (assetIndex: number, image: PresignedUrls) => {
+  const removeExistingImage = (
+    assetIndex: number,
+    image: DisposalUpdateImage,
+  ) => {
     setExistingImagesByAsset((current) =>
       current.map((images, index) =>
         index === assetIndex
@@ -132,9 +143,7 @@ const DisposalUpdateEditor = ({ id, item }: DisposalUpdateEditorProps) => {
           : images,
       ),
     );
-    setDeletedImageKeys((current) =>
-      current.includes(image.key) ? current : [...current, image.key],
-    );
+    setDeletedImages((current) => [...current, image]);
   };
 
   const onSubmit = async (values: DisposalUpdateFormValues) => {
@@ -183,7 +192,7 @@ const DisposalUpdateEditor = ({ id, item }: DisposalUpdateEditorProps) => {
         location: values.location,
         expectedDisposalDate: values.expectedDisposalDate,
         assets,
-        deleted_image_keys: deletedImageKeys,
+        deleted_image_keys: normalizeDeletedImageKeys(deletedImages),
       };
 
       const response = await mutateAsync({ id, payload });

@@ -14,6 +14,8 @@ import {
   Calendar,
   ImageOff,
   ChevronLeft,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -45,10 +47,13 @@ export default function MobileDisposalRequestApproval({
     setRejectConfig,
     setOpenChatSidebar,
     setIsOpen,
+    openDeleteDialog,
+    user,
   } = useGlobalContext();
   const { selectedRowId } = useModalState();
 
   const navigate = useNavigate();
+  const canApproveOrReject = user?.group?.toLowerCase() === "admin";
 
   const assets = item?.assets ?? [];
   const currentAsset = assets[selectedAssetIndex] ?? assets[0];
@@ -282,35 +287,72 @@ export default function MobileDisposalRequestApproval({
       {/* ── Sticky action bar ── */}
       <div className="fixed bottom-0 left-0 right-0 z-10 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700/60 px-4 pt-3 pb-6 safe-area-inset-bottom">
         <div className={cn(sharedStyles.btnParent)}>
-          <button
-            type="button"
-            onClick={handleReject}
-            className={cn(
-              sharedStyles.btnCancel,
-              sharedStyles.btn,
-              "text-sm uppercase flex gap-6 justify-center items-center",
-            )}
-          >
-            <X className="w-6 h-6" />
-            Reject
-          </button>
-          <button
-            type="button"
-            disabled={isPending}
-            onClick={handleApprove}
-            className={cn(
-              sharedStyles.btnApprove,
-              sharedStyles.btn,
-              "text-sm uppercase flex gap-6 justify-center items-center",
-            )}
-          >
-            {isPending ? (
-              <Spinner className="size-6" />
-            ) : (
-              <Check className="w-6 h-6" />
-            )}
-            Approve
-          </button>
+          {canApproveOrReject ? (
+            <>
+              <button
+                type="button"
+                onClick={handleReject}
+                className={cn(
+                  sharedStyles.btnCancel,
+                  sharedStyles.btn,
+                  "text-sm uppercase flex gap-6 justify-center items-center",
+                )}
+              >
+                <X className="w-6 h-6" />
+                Reject
+              </button>
+              <button
+                type="button"
+                disabled={isPending}
+                onClick={handleApprove}
+                className={cn(
+                  sharedStyles.btnApprove,
+                  sharedStyles.btn,
+                  "text-sm uppercase flex gap-6 justify-center items-center",
+                )}
+              >
+                {isPending ? (
+                  <Spinner className="size-6" />
+                ) : (
+                  <Check className="w-6 h-6" />
+                )}
+                Approve
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() =>
+                  openDeleteDialog(item.id, {
+                    resourcePath: "api/disposals",
+                    queryKey: ["disposals"],
+                    resourceName: "disposal request",
+                  })
+                }
+                className={cn(
+                  sharedStyles.btnCancel,
+                  sharedStyles.btn,
+                  "text-sm uppercase flex gap-4 justify-center items-center",
+                )}
+              >
+                <Trash2 className="w-5 h-5" />
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate(`/disposals/${item.id}/update`)}
+                className={cn(
+                  sharedStyles.btnSubmit,
+                  sharedStyles.btn,
+                  "text-sm uppercase flex gap-4 justify-center items-center",
+                )}
+              >
+                <Pencil className="w-5 h-5" />
+                Update
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ import { PageLoadingSpinner } from "../features/PageLoadingSpinner";
 import { toast } from "sonner";
 
 // icons
-import { X, Check } from "lucide-react";
+import { X, Check, Pencil, Trash2 } from "lucide-react";
 import { Badge } from "../features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { sharedStyles } from "@/styles/shared";
@@ -19,6 +19,7 @@ import axios from "axios";
 import { Spinner } from "../ui/spinner";
 import { useApproveRequest } from "@/hooks/useApproveRequest";
 import type { DisposalWorkflowResponse } from "@/schemas/disposalsSchemas";
+import { useNavigate } from "react-router-dom";
 
 function Field({ label, value }: { label: string; value?: string | null }) {
   if (!value) return null;
@@ -44,9 +45,15 @@ function DisposalRequestApproval({
   selectedAssetIndex,
   onSelectAsset,
 }: DisposalRequestApprovalProps) {
-  const { setShowRejectRequestDialogGeneric, setRejectConfig } =
-    useGlobalContext();
+  const {
+    setShowRejectRequestDialogGeneric,
+    setRejectConfig,
+    openDeleteDialog,
+    user,
+  } = useGlobalContext();
   const { selectedRowId } = useModalState();
+  const navigate = useNavigate();
+  const canApproveOrReject = user?.group?.toLowerCase() === "admin";
 
   /* -------------------------------------------------------------------------- */
   /*                          Item Data                                         */
@@ -221,38 +228,77 @@ function DisposalRequestApproval({
       {/* ── Actions ── */}
       <div className="mt-auto pt-4 flex flex-col gap-6">
         <p className="text-xs text-center text-gray-400 dark:text-gray-500">
-          Review all details before approving this request.
+          {canApproveOrReject
+            ? "Review all details before approving this request."
+            : "Review the request details before cancelling or updating it."}
         </p>
         <div className={cn(sharedStyles.btnParent, "md:w-full")}>
-          <button
-            type="button"
-            onClick={handleReject}
-            className={cn(
-              sharedStyles.btnCancel,
-              sharedStyles.btn,
-              "flex items-center justify-center gap-4",
-            )}
-          >
-            <X className="w-6 h-6" />
-            <span className="text-md">Reject</span>
-          </button>
-          <button
-            type="submit"
-            disabled={isApproving}
-            className={cn(
-              sharedStyles.btnApprove,
-              sharedStyles.btn,
-              "flex items-center justify-center gap-4",
-            )}
-            onClick={handleApprove}
-          >
-            {isApproving ? (
-              <Spinner className="w-6 h-6" />
-            ) : (
-              <Check className="w-6 h-6" />
-            )}
-            <span className="text-md">Approve</span>
-          </button>
+          {canApproveOrReject ? (
+            <>
+              <button
+                type="button"
+                onClick={handleReject}
+                className={cn(
+                  sharedStyles.btnCancel,
+                  sharedStyles.btn,
+                  "flex items-center justify-center gap-4",
+                )}
+              >
+                <X className="w-6 h-6" />
+                <span className="text-md">Reject</span>
+              </button>
+              <button
+                type="submit"
+                disabled={isApproving}
+                className={cn(
+                  sharedStyles.btnApprove,
+                  sharedStyles.btn,
+                  "flex items-center justify-center gap-4",
+                )}
+                onClick={handleApprove}
+              >
+                {isApproving ? (
+                  <Spinner className="w-6 h-6" />
+                ) : (
+                  <Check className="w-6 h-6" />
+                )}
+                <span className="text-md">Approve</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() =>
+                  openDeleteDialog(item.id, {
+                    resourcePath: "api/disposals",
+                    queryKey: ["disposals"],
+                    resourceName: "disposal request",
+                  })
+                }
+                className={cn(
+                  sharedStyles.btnCancel,
+                  sharedStyles.btn,
+                  "flex items-center justify-center gap-4",
+                )}
+              >
+                <Trash2 className="w-5 h-5" />
+                <span className="text-md">Delete</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate(`/disposals/${item.id}/update`)}
+                className={cn(
+                  sharedStyles.btnSubmit,
+                  sharedStyles.btn,
+                  "flex items-center justify-center gap-4",
+                )}
+              >
+                <Pencil className="w-5 h-5" />
+                <span className="text-md">Update</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

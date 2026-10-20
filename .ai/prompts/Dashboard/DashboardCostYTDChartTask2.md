@@ -1,4 +1,4 @@
-Status = `Pending`
+Status = `Partial Complete`
 
 # Maintenance Cost YTD — Fix Technician Chart and Drilldown
 
