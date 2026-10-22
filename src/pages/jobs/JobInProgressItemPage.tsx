@@ -1,11 +1,13 @@
 // $ This page renders the full details of an approved request with information and pictures
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../../utils/api";
 import { type JobApprovedAPIResponse } from "@/schemas/jobSchemas";
 import { ImageGallery } from "@/components/features/ImageGallery";
 import JobApprovedItemInfo from "@/components/jobs/JobApprovedItemInfo";
 import { useModalState } from "@/context/useModalState";
+import useGlobalContext from "@/context/useGlobalContext";
 import BackButton from "@/components/features/BackButton";
 import { cn } from "@/lib/utils";
 
@@ -13,23 +15,31 @@ import { cn } from "@/lib/utils";
 import MobileInProgressPage from "@/components/mobile/jobs/MobileInProgressPage";
 
 const JobInProgressItemPage = () => {
+  const { id: routeId } = useParams<{ id: string }>();
   const { selectedRowId } = useModalState();
+  const { setSelectedRowId } = useGlobalContext();
+
+  useEffect(() => {
+    if (routeId && routeId !== selectedRowId) {
+      setSelectedRowId(routeId);
+    }
+  }, [routeId, selectedRowId, setSelectedRowId]);
 
   const { data: item, isPending } = useById<JobApprovedAPIResponse>({
-    id: selectedRowId ?? "",
+    id: routeId ?? "",
     queryKey: ["jobs", "in-progress"],
     resourcePath: "api/jobs",
     params: { status: "in progress" },
   });
 
   const [selectedAssetIndex, setSelectedAssetIndex] = useState(0);
-  const [prevRowId, setPrevRowId] = useState(selectedRowId);
-  if (selectedRowId !== prevRowId) {
-    setPrevRowId(selectedRowId);
+  const [prevRouteId, setPrevRouteId] = useState(routeId);
+  if (routeId !== prevRouteId) {
+    setPrevRouteId(routeId);
     setSelectedAssetIndex(0);
   }
 
-  if (!selectedRowId || !item) {
+  if (!routeId || !item) {
     return <PageLoadingSpinner />;
   }
 

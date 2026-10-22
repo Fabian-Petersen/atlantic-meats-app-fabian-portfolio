@@ -1,6 +1,7 @@
 // $ This page renders the full details of a maintenance request for approval with the information and the supporting pictures.
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { useById } from "../../utils/api";
 import { type JobAPIResponse } from "@/schemas";
@@ -20,11 +21,18 @@ export type PresignedUrlResponse = {
 };
 
 const JobPendingItemPage = () => {
-  const { showSuccess } = useGlobalContext();
+  const { id: routeId } = useParams<{ id: string }>();
+  const { showSuccess, setSelectedRowId } = useGlobalContext();
   const { selectedRowId } = useModalState();
 
+  useEffect(() => {
+    if (routeId && routeId !== selectedRowId) {
+      setSelectedRowId(routeId);
+    }
+  }, [routeId, selectedRowId, setSelectedRowId]);
+
   const { data: item } = useById<JobAPIResponse>({
-    id: selectedRowId ?? "",
+    id: routeId ?? "",
     queryKey: ["jobs", "pending-approval-job"],
     resourcePath: `api/jobs`,
     params: {
@@ -33,13 +41,13 @@ const JobPendingItemPage = () => {
   });
 
   const [selectedAssetIndex, setSelectedAssetIndex] = useState(0);
-  const [prevRowId, setPrevRowId] = useState(selectedRowId);
-  if (selectedRowId !== prevRowId) {
-    setPrevRowId(selectedRowId);
+  const [prevRouteId, setPrevRouteId] = useState(routeId);
+  if (routeId !== prevRouteId) {
+    setPrevRouteId(routeId);
     setSelectedAssetIndex(0);
   }
 
-  if (!selectedRowId || !item) {
+  if (!routeId || !item) {
     return <PageLoadingSpinner />;
   }
 

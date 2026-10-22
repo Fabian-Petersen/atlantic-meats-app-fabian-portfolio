@@ -9,6 +9,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Control, type Resolver } from "react-hook-form";
 import { Controller } from "react-hook-form";
+import { useParams } from "react-router-dom";
 
 import FormRowInput from "../../../customComponents/FormRowInput";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
@@ -68,7 +69,7 @@ type Props = {
  * - onCancel: Callback triggered when the user cancels the form.
  *
  * Data Flow:
- * - Reads selectedRowId and global UI state from context.
+ * - Uses the route ID for page submissions, with selectedRowId as a modal fallback.
  * - Sends action payload via usePOST hook.
  * - Receives presigned URLs for direct S3 uploads.
  *
@@ -117,7 +118,9 @@ const JobActionForm = ({ onCancel }: Props) => {
     setShowError,
     setShowSuccess,
   } = useGlobalContext();
+  const { id: routeId } = useParams<{ id: string }>();
   const { selectedRowId } = useModalState();
+  const requestId = routeId ?? selectedRowId ?? "";
   // const navigate = useNavigate();
 
   // $ Hook that handles the file compression and form submission to backend with success and error modals
@@ -125,7 +128,7 @@ const JobActionForm = ({ onCancel }: Props) => {
     ActionRequestFormValues,
     ActionRequestPayload
   >({
-    id: selectedRowId ?? "",
+    id: requestId,
     resourcePath: "api/jobs",
     queryKey: ["jobs"],
     action: "action",
@@ -159,7 +162,7 @@ const JobActionForm = ({ onCancel }: Props) => {
           cost: Number(item.cost),
         })),
         total_cost_sundries: totalCost(sundry_items),
-        selectedRowId: selectedRowId ?? "", // id expected by the backend
+        selectedRowId: requestId, // id expected by the backend
         images: compressed.map((f) => ({
           filename: f.name,
           content_type: f.type,
