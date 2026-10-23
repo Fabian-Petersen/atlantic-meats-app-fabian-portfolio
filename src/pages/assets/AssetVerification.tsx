@@ -66,6 +66,12 @@ const showGenericVerificationError = () => {
   showVerificationError("Unable to verify asset. Please try again.");
 };
 
+const showAssetNotFoundError = () => {
+  showVerificationError(
+    "Asset not found. Please check the Asset ID and try again.",
+  );
+};
+
 export default function ScannerPage() {
   const [started, setStarted] = useState(false);
   const [barcode, setBarcode] = useState<string | null>(null);
@@ -108,7 +114,7 @@ export default function ScannerPage() {
 
         if (result.statusCode >= 400) {
           if (result.statusCode === 404) {
-            showVerificationError(result.message);
+            showAssetNotFoundError();
           } else {
             console.error("Asset verification failed:", result);
             showGenericVerificationError();
@@ -125,9 +131,7 @@ export default function ScannerPage() {
         const httpStatus = isAxiosError ? error.response?.status : undefined;
 
         if (result?.statusCode === 404 || httpStatus === 404) {
-          showVerificationError(
-            result?.message ?? `Asset ${value} not registered in the database`,
-          );
+          showAssetNotFoundError();
           return;
         }
 
@@ -233,7 +237,7 @@ export default function ScannerPage() {
           <header className="relative flex h-12 items-center justify-center">
             <button
               type="button"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate("/dashboard")}
               className={cn(sharedStyles.btnBack, "absolute left-0")}
               aria-label="Go back"
             >

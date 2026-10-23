@@ -89,7 +89,7 @@ const ManualVerificationDialog = () => {
         if (!open) closeDialog();
       }}
     >
-      <DialogContent className="top-auto bottom-0 left-0 max-h-[92dvh] max-w-none translate-x-0 translate-y-0 overflow-y-auto rounded-t-3xl rounded-b-none border-none bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] dark:bg-[#1d2739] dark:text-gray-100 dark:border-gray-700/50 z-3000 sm:top-[50%] sm:bottom-auto sm:left-[50%] sm:max-w-156 sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg sm:p-6">
+      <DialogContent className="top-auto bottom-0 left-0 max-h-[92dvh] max-w-none translate-x-0 translate-y-0 overflow-y-auto rounded-t-3xl rounded-b-none border-none bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] data-[state=open]:slide-in-from-bottom-full dark:bg-[#1d2739] dark:text-gray-100 dark:border-gray-700/50 z-3000 sm:top-[50%] sm:bottom-auto sm:left-[50%] sm:max-w-156 sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg sm:p-6 sm:data-[state=open]:[--tw-enter-translate-y:0]">
         <div className="flex justify-center items-center">
           <div className="rounded-full bg-green-100 p-3 text-green-600 dark:bg-green-950/50 dark:text-green-400 md:p-4">
             <ShieldCheck className="size-9 md:size-16" aria-hidden="true" />
