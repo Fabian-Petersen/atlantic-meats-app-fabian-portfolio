@@ -37,7 +37,9 @@ import TransferUpdatePage from "./pages/transfers/TransferUpdatePage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 const UserProfilePage = lazy(() => import("./pages/users/UserProfilePage"));
-const StoreProfilePage = lazy(() => import("./pages/StoreProfilePage"));
+const UserAccountProfilePage = lazy(
+  () => import("./pages/users/UserAccountProfilePage"),
+);
 
 // $ Job Management Pages for single items
 const JobPendingItemPage = lazy(
@@ -65,6 +67,8 @@ const UsersListPage = lazy(() => import("./pages/users/UsersListPage"));
 import { useAuth } from "./auth/useAuth";
 import JobInProgressUpdatePage from "./pages/jobs/JobInProgressUpdatePage";
 import DisposalUpdatePage from "./pages/disposals/DisposalUpdatePage";
+// import UserAccountProfilePage from "./pages/users/UserAccountProfilePage";
+
 const CreateUserPage = lazy(() => import("./pages/users/CreateUserPage"));
 
 // $ Transfer Asset Pages
@@ -250,20 +254,27 @@ function App() {
               />
             </Route>
 
+            {/*
+            --------------------------------------------------------------------------
+            /* Admin and Branch Manager only Routes /*
+            --------------------------------------------------------------------------
+                     */}
+            <Route
+              element={<RoleGaurdRoute allowedGroups={["admin", "manager"]} />}
+            ></Route>
             {/* 
           /* --------------------------------------------------------------------------
           /*                              Admin only Routes                             
           /* --------------------------------------------------------------------------
           */}
-
             <Route element={<RoleGaurdRoute allowedGroups={["admin"]} />}>
               <Route path="/assets/list" element={<AssetsOverviewPage />} />
+              <Route path="/assets/:id" element={<AssetItemPage />} />
               <Route
                 path="/assets/verification/manual"
                 element={<AssetsOverviewPage />}
               />
               {/* // $ Page to list an asset by id */}
-              <Route path="/assets/:id" element={<AssetItemPage />} />
               <Route
                 path="/assets/create-new-asset"
                 element={<CreateAssetPage />}
@@ -284,7 +295,7 @@ function App() {
               {/* // $ Page to list all the users */}
               <Route path="/users" element={<UsersListPage />} />
               {/* // $ Page to show the profile of a user or store */}
-              <Route path="/users/:id" element={<StoreProfilePage />} />
+              <Route path="/users/:id" element={<UserAccountProfilePage />} />
               <Route path="/users/create-user" element={<CreateUserPage />} />
             </Route>
             {/* //% admin, manager routes */}

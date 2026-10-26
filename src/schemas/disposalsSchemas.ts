@@ -164,6 +164,30 @@ export const disposalRequestSchema = disposalRequestBaseSchema.superRefine(
   },
 );
 
+const restrictedLocationMessage =
+  "The selected location is not equal to your branch location. Please select the correct location to create disposal request";
+
+export const createRestrictedDisposalRequestSchema = (
+  assignedLocation?: string,
+) =>
+  disposalRequestSchema.superRefine((data, ctx) => {
+    const selectedLocation = data.location.trim().toLocaleLowerCase();
+    const normalizedAssignedLocation = assignedLocation
+      ?.trim()
+      .toLocaleLowerCase();
+
+    if (
+      !normalizedAssignedLocation ||
+      selectedLocation !== normalizedAssignedLocation
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["location"],
+        message: restrictedLocationMessage,
+      });
+    }
+  });
+
 /** Editable request-level fields accepted by PUT /api/disposals/{disposalId}. */
 export const disposalUpdateSchema = disposalRequestBaseSchema
   .pick({

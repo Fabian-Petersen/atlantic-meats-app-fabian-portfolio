@@ -171,6 +171,28 @@ export const createJobRequestSchema = jobRequestBaseSchema
     }
   });
 
+const restrictedLocationMessage =
+  "The selected location is not equal to your branch location. Please select the correct location to create job request";
+
+export const createRestrictedJobRequestSchema = (assignedLocation?: string) =>
+  createJobRequestSchema.superRefine((data, ctx) => {
+    const selectedLocation = data.location.trim().toLocaleLowerCase();
+    const normalizedAssignedLocation = assignedLocation
+      ?.trim()
+      .toLocaleLowerCase();
+
+    if (
+      !normalizedAssignedLocation ||
+      selectedLocation !== normalizedAssignedLocation
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["location"],
+        message: restrictedLocationMessage,
+      });
+    }
+  });
+
 export type CreateJobRequestFormValues = z.infer<typeof createJobRequestSchema>;
 
 export type CreateJobRequestPayload = Omit<

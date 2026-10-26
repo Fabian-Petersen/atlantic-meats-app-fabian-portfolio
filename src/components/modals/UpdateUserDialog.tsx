@@ -16,7 +16,7 @@ function UpdateUserDialog() {
       onOpenChange={setShowUserProfileDialog}
     >
       <DialogContent
-        className="sm:max-w-[625px] bg-white z-3000"
+        className="sm:max-w-156.5 bg-white z-3000"
         aria-label="update-user-details-modal"
       >
         <div className="flex gap-2 flex-col">

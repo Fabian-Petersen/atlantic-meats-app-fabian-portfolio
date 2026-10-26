@@ -14,6 +14,7 @@ import type { AssetTableRow } from "@/schemas";
 type MobileAssetFilterToolbarProps = {
   table: Table<AssetTableRow>;
   locations: string[];
+  areas: string[];
   equipment: string[];
 };
 
@@ -79,10 +80,51 @@ function CompactSelect({
 export function MobileAssetFilterToolbar({
   table,
   locations,
+  areas,
   equipment,
 }: MobileAssetFilterToolbarProps) {
   const locationColumn = table.getColumn("location");
+  const areaColumn = table.getColumn("area");
   const equipmentColumn = table.getColumn("equipment");
+  const selectedLocation =
+    (locationColumn?.getFilterValue() as string | undefined) ?? "";
+  const selectedArea =
+    (areaColumn?.getFilterValue() as string | undefined) ?? "";
+
+  const availableAreas = selectedLocation
+    ? Array.from(
+        new Set(
+          table
+            .getCoreRowModel()
+            .rows.filter((row) => row.original.location === selectedLocation)
+            .map((row) => row.original.area)
+            .filter(
+              (area): area is string =>
+                typeof area === "string" && area.trim().length > 0,
+            ),
+        ),
+      ).sort((a, b) => a.localeCompare(b))
+    : areas;
+
+  const availableEquipment = selectedLocation || selectedArea
+    ? Array.from(
+        new Set(
+          table
+            .getCoreRowModel()
+            .rows.filter(
+              (row) =>
+                (!selectedLocation ||
+                  row.original.location === selectedLocation) &&
+                (!selectedArea || row.original.area === selectedArea),
+            )
+            .map((row) => row.original.equipment)
+            .filter(
+              (item): item is string =>
+                typeof item === "string" && item.trim().length > 0,
+            ),
+        ),
+      ).sort((a, b) => a.localeCompare(b))
+    : equipment;
 
   const updateFilter = (
     column: typeof locationColumn,
@@ -100,24 +142,92 @@ export function MobileAssetFilterToolbar({
     })),
   ];
 
+  const areaOptions: FilterOption[] = [
+    { value: ALL_OPTIONS_VALUE, label: "All Areas" },
+    ...availableAreas.map((area) => ({
+      value: area,
+      label: titleCase(area),
+    })),
+  ];
+
   const equipmentOptions: FilterOption[] = [
     { value: ALL_OPTIONS_VALUE, label: "All Equipment" },
-    ...equipment.map((item) => ({
+    ...availableEquipment.map((item) => ({
       value: item,
       label: titleCase(item),
     })),
   ];
 
+  const updateLocationFilter = (value: string) => {
+    const selectedEquipment = equipmentColumn?.getFilterValue();
+    const isAreaAvailable =
+      !selectedArea ||
+      !value ||
+      table
+        .getCoreRowModel()
+        .rows.some(
+          (row) =>
+            row.original.location === value && row.original.area === selectedArea,
+        );
+
+    if (!isAreaAvailable) areaColumn?.setFilterValue(undefined);
+
+    if (value && typeof selectedEquipment === "string" && selectedEquipment) {
+      const isEquipmentAvailable = table
+        .getCoreRowModel()
+        .rows.some(
+          (row) =>
+            row.original.location === value &&
+            (!isAreaAvailable ||
+              !selectedArea ||
+              row.original.area === selectedArea) &&
+            row.original.equipment === selectedEquipment,
+        );
+
+      if (!isEquipmentAvailable) equipmentColumn.setFilterValue(undefined);
+    }
+
+    updateFilter(locationColumn, value);
+  };
+
+  const updateAreaFilter = (value: string) => {
+    const selectedEquipment = equipmentColumn?.getFilterValue();
+
+    if (value && typeof selectedEquipment === "string" && selectedEquipment) {
+      const isEquipmentAvailable = table
+        .getCoreRowModel()
+        .rows.some(
+          (row) =>
+            (!selectedLocation ||
+              row.original.location === selectedLocation) &&
+            row.original.area === value &&
+            row.original.equipment === selectedEquipment,
+        );
+
+      if (!isEquipmentAvailable) equipmentColumn.setFilterValue(undefined);
+    }
+
+    updateFilter(areaColumn, value);
+  };
+
   return (
     <div
-      className="grid grid-cols-2 gap-2"
+      className="grid grid-cols-3 gap-2"
       aria-label="Asset list options"
     >
       <CompactSelect
         ariaLabel="Filter by location"
-        value={(locationColumn?.getFilterValue() as string) ?? ""}
-        onChange={(value) => updateFilter(locationColumn, value)}
+        value={selectedLocation}
+        onChange={updateLocationFilter}
         options={locationOptions}
+        icon={<MapPin className="size-3.5" aria-hidden="true" />}
+      />
+
+      <CompactSelect
+        ariaLabel="Filter by area"
+        value={selectedArea}
+        onChange={updateAreaFilter}
+        options={areaOptions}
         icon={<MapPin className="size-3.5" aria-hidden="true" />}
       />
 

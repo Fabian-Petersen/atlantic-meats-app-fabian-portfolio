@@ -29,7 +29,7 @@ export function ColumnFilterItem({
         className={cn(
           sharedStyles.formInputDefault,
           sharedStyles.formSelect,
-          "base-select",
+          "base-select table-column-filter",
           "hover:cursor-pointer w-44 h-full",
         )}
         value={(value ?? "") as string}

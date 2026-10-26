@@ -1,7 +1,7 @@
 // //$ This component is used to create a maintenace job, the data is submitted to the database (dynamoDB) via API Gateway and Lambda on aws.
 
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import axios from "axios";
 
 // $ React-Hook-Form, zod & schema
@@ -25,11 +25,13 @@ import { useAssetFilters } from "@/customHooks/useAssetFilters";
 import FormInfo from "../features/forms/FormInfo";
 
 import {
+  createRestrictedDisposalRequestSchema,
   disposalRequestSchema,
   disposalReasons,
   type DisposalRequestFormValues,
   type DisposalRequestPayload,
 } from "@/schemas/disposalsSchemas";
+import { useGetUser } from "@/utils/getUser";
 // import { useDisposalsFields } from "../forms/configs/useDisposalFields";
 
 type DuplicateDisposalResponse = {
@@ -64,9 +66,22 @@ const CreateDisposalForm = () => {
   const navigate = useNavigate();
 
   const [openAssetIndex, setOpenAssetIndex] = useState(-1);
+  const { data: currentUser, isPending: isCurrentUserPending } = useGetUser();
 
   const { setSuccessConfig, setShowSuccess, setErrorConfig, setShowError } =
     useGlobalContext();
+
+  const normalizedUserGroup = currentUser?.group.trim().toLocaleLowerCase();
+  const isLocationRestricted =
+    normalizedUserGroup === "user" || normalizedUserGroup === "manager";
+  const assignedLocation = currentUser?.location;
+  const validationSchema = useMemo(
+    () =>
+      isLocationRestricted
+        ? createRestrictedDisposalRequestSchema(assignedLocation)
+        : disposalRequestSchema,
+    [assignedLocation, isLocationRestricted],
+  );
 
   // ---------------------------------------------------------------------------
   // Form
@@ -74,7 +89,7 @@ const CreateDisposalForm = () => {
 
   const form = useForm<DisposalRequestFormValues>({
     resolver: zodResolver(
-      disposalRequestSchema,
+      validationSchema,
     ) as unknown as Resolver<DisposalRequestFormValues>,
 
     defaultValues: {
@@ -119,6 +134,20 @@ const CreateDisposalForm = () => {
     form,
     locationField: "location",
   });
+  const availableLocationOptions = useMemo(() => {
+    if (!isLocationRestricted) return locationOptions;
+
+    const normalizedAssignedLocation = assignedLocation
+      ?.trim()
+      .toLocaleLowerCase();
+
+    if (!normalizedAssignedLocation) return [];
+
+    return locationOptions.filter(
+      (option) =>
+        option.value.trim().toLocaleLowerCase() === normalizedAssignedLocation,
+    );
+  }, [assignedLocation, isLocationRestricted, locationOptions]);
 
   // [TODO] make a util function to normalise this helper function
   const normalizeOptions = (
@@ -165,8 +194,11 @@ const CreateDisposalForm = () => {
       name: "location" as const,
       label: "Location",
       placeholder: "Select Location",
-      options: normalizeOptions(locationOptions),
+      options: normalizeOptions(availableLocationOptions),
       required: true,
+      isLoading: isCurrentUserPending,
+      disabled:
+        isCurrentUserPending || (isLocationRestricted && !assignedLocation),
     },
     {
       fieldType: "input" as const,
@@ -277,7 +309,7 @@ const CreateDisposalForm = () => {
         redirect={true}
         redirectTo="/disposals/requests"
         onSubmit={submit}
-        isPending={isPending}
+        isPending={isPending || isCurrentUserPending}
         submitText="Submit"
         cancelText="Cancel"
         onCancel={() => navigate("/disposals/requests")}
@@ -361,7 +393,7 @@ const CreateDisposalForm = () => {
         submitText="Submit"
         cancelText="Cancel"
         onCancel={() => navigate("/disposals/requests")}
-        isPending={isPending}
+        isPending={isPending || isCurrentUserPending}
       />
     </div>
   );

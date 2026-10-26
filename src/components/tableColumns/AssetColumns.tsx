@@ -47,6 +47,7 @@ export const getAssetColumns = (
   {
     accessorKey: "area",
     header: "Area",
+    enableColumnFilter: true,
     cell: ({ getValue }) => {
       const value = getValue<string>();
       return <p className="capitalize">{value}</p>;

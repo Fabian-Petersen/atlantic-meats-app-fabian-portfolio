@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -9,11 +9,14 @@ import {
 } from "react-hook-form";
 
 import useGlobalContext from "@/context/useGlobalContext";
+import { useAuth } from "@/auth/useAuth";
 import { useAssetFilters } from "@/customHooks/useAssetFilters";
 import { impact, priority, type } from "@/data/maintenanceRequestFormData";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { useGetUser } from "@/utils/getUser";
 import {
   createJobRequestSchema,
+  createRestrictedJobRequestSchema,
   type CreateJobRequestFormValues,
   type CreateJobRequestPayload,
 } from "@/schemas/jobSchemas";
@@ -39,12 +42,27 @@ const normalizeOptions = (
 const CreateJobForm = () => {
   const navigate = useNavigate();
   const [openAssetIndex, setOpenAssetIndex] = useState(-1);
+  const { userGroups } = useAuth();
+  const { data: currentUser, isPending: isCurrentUserPending } = useGetUser();
   const { setSuccessConfig, setShowSuccess, setErrorConfig, setShowError } =
     useGlobalContext();
 
+  const isLocationRestricted =
+    userGroups.some((group) => group === "user" || group === "manager") &&
+    userGroups.every((group) => group === "user" || group === "manager");
+
+  const assignedLocation = currentUser?.location;
+  const validationSchema = useMemo(
+    () =>
+      isLocationRestricted
+        ? createRestrictedJobRequestSchema(assignedLocation)
+        : createJobRequestSchema,
+    [assignedLocation, isLocationRestricted],
+  );
+
   const form = useForm<CreateJobRequestFormValues>({
     resolver: zodResolver(
-      createJobRequestSchema,
+      validationSchema,
     ) as unknown as Resolver<CreateJobRequestFormValues>,
     defaultValues: {
       description: "",
@@ -81,6 +99,20 @@ const CreateJobForm = () => {
     form,
     locationField: "location",
   });
+  const availableLocationOptions = useMemo(() => {
+    if (!isLocationRestricted) return locationOptions;
+
+    const normalizedAssignedLocation = assignedLocation
+      ?.trim()
+      .toLocaleLowerCase();
+
+    if (!normalizedAssignedLocation) return [];
+
+    return locationOptions.filter(
+      (option) =>
+        option.value.trim().toLocaleLowerCase() === normalizedAssignedLocation,
+    );
+  }, [assignedLocation, isLocationRestricted, locationOptions]);
 
   const requestFields: DynamicFormField<CreateJobRequestFormValues>[] = [
     {
@@ -96,8 +128,10 @@ const CreateJobForm = () => {
       name: "location",
       label: "Location",
       placeholder: "Select Location",
-      options: normalizeOptions(locationOptions),
+      options: normalizeOptions(availableLocationOptions),
       required: true,
+      isLoading: isLocationRestricted && isCurrentUserPending,
+      disabled: isLocationRestricted && !assignedLocation,
     },
     {
       fieldType: "input",

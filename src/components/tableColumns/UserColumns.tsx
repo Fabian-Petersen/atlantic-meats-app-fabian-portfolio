@@ -146,6 +146,7 @@ export const getUserColumns = (
           url: `/users/profile`,
           onOpen: () => {
             setSelectedRowId(rowId);
+            navigate(`/users/${rowId}`);
           },
         },
 

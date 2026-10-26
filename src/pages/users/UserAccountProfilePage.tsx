@@ -1,26 +1,32 @@
-import FormHeading from "../../customComponents/FormHeading";
+import FormHeading from "../../../customComponents/FormHeading";
 import { PageLoadingSpinner } from "@/components/features/PageLoadingSpinner";
 import { Error } from "@/components/features/Error";
 import { useModalState } from "@/context/useModalState";
 import type { UsersAPIResponse } from "@/schemas";
 import { useById } from "@/utils/api";
-import StoreProfileForm from "@/components/users/StoreProfileForm";
+import UserAccountProfileForm from "@/components/users/UserAccountProfileForm";
 import { stores } from "@/data/stores";
 import { sharedStyles } from "@/styles/shared";
 import { cn } from "@/lib/utils";
+import { useParams } from "react-router-dom";
 
-function StoreProfilePage() {
-  const { showUserProfileDialog, selectedRowId } = useModalState();
+function UserAccountProfilePage() {
+  const { showUserProfileDialog } = useModalState();
+  const { id } = useParams<{ id: string }>();
 
   const {
     data: user,
     isPending,
     isError,
   } = useById<UsersAPIResponse>({
-    id: selectedRowId ?? "",
-    queryKey: ["userRequests", "user"],
+    id: id ?? "",
+    queryKey: ["users", "detail"],
     resourcePath: "api/users",
   });
+
+  if (!id || isError) {
+    return <Error />;
+  }
 
   if (isPending) {
     return <PageLoadingSpinner />;
@@ -30,9 +36,6 @@ function StoreProfilePage() {
   if (!user) {
     return <Error />;
   }
-
-  if (isPending) return <PageLoadingSpinner />;
-  if (isError) return <Error />;
 
   const username = user?.name;
   /**
@@ -64,10 +67,10 @@ function StoreProfilePage() {
           redirect={true}
           redirectTo="/users"
         />
-        <StoreProfileForm user={user ?? null} />
+        <UserAccountProfileForm user={user ?? null} />
       </div>
     </div>
   );
 }
 
-export default StoreProfilePage;
+export default UserAccountProfilePage;

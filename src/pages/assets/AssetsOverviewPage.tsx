@@ -85,8 +85,25 @@ const AssetsOverviewPage = () => {
       locations: Array.from(new Set(rows.map((asset) => asset.location))).sort(
         (a, b) => a.localeCompare(b),
       ),
+      areas: Array.from(
+        new Set(
+          rows
+            .map((asset) => asset.area)
+            .filter(
+              (area): area is string =>
+                typeof area === "string" && area.trim().length > 0,
+            ),
+        ),
+      ).sort((a, b) => a.localeCompare(b)),
       equipment: Array.from(
-        new Set(rows.map((asset) => asset.equipment)),
+        new Set(
+          rows
+            .map((asset) => asset.equipment)
+            .filter(
+              (equipment): equipment is string =>
+                typeof equipment === "string" && equipment.trim().length > 0,
+            ),
+        ),
       ).sort((a, b) => a.localeCompare(b)),
     }),
     [rows],
@@ -146,6 +163,11 @@ const AssetsOverviewPage = () => {
           addPagination={true}
           addPageSelector={true}
           tableHeading="Assets Register"
+          dependentFilters={[
+            { parentColumnId: "location", childColumnId: "area" },
+            { parentColumnId: "location", childColumnId: "equipment" },
+            { parentColumnId: "area", childColumnId: "equipment" },
+          ]}
         />
       </div>
       {/* // $ Mobile View */}
@@ -169,6 +191,7 @@ const AssetsOverviewPage = () => {
             <MobileAssetFilterToolbar
               table={table}
               locations={mobileFilterOptions.locations}
+              areas={mobileFilterOptions.areas}
               equipment={mobileFilterOptions.equipment}
             />
             {table.getRowModel().rows.length === 0 ? (

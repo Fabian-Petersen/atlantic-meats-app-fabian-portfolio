@@ -25,7 +25,7 @@ type UserProfileProps = {
 
 // Type passed into component = UsersAPIResponse
 
-function StoreProfileForm({ user }: UserProfileProps) {
+function UserAccountProfileForm({ user }: UserProfileProps) {
   const navigate = useNavigate();
   const { setShowSuccess, setSuccessConfig } = useGlobalContext();
 
@@ -38,8 +38,8 @@ function StoreProfileForm({ user }: UserProfileProps) {
   }, []);
 
   const { mutateAsync: updateItem, isPending } = useUpdateItem({
-    resourcePath: "users",
-    queryKey: ["userRequests", "user"],
+    resourcePath: "api/users",
+    queryKey: ["users"],
   });
 
   const {
@@ -68,11 +68,11 @@ function StoreProfileForm({ user }: UserProfileProps) {
 
     console.log(payload);
 
-    setSuccessConfig({ message: `Sucessfully updated user ${user.name}` });
-    setShowSuccess(true);
-    navigate("/users");
     try {
       await updateItem({ id: user.id ?? "", payload: payload });
+      setSuccessConfig({ message: `Sucessfully updated user ${user.name}` });
+      setShowSuccess(true);
+      navigate("/users");
     } catch (error) {
       console.log(error);
     }
@@ -160,4 +160,4 @@ function StoreProfileForm({ user }: UserProfileProps) {
   );
 }
 
-export default StoreProfileForm;
+export default UserAccountProfileForm;

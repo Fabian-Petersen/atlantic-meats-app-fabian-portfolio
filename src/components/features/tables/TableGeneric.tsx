@@ -44,6 +44,10 @@ type Props<T extends { id: string }> = {
   addPageSelector?: boolean;
   action?: string | ((row: T) => string); // e.g. "action" for the action page, "update" for the update page, etc. This is used to construct the path when a row is clicked, e.g. /jobs/123/action or /assets/123/update. It can also dynamically check the action with multitype data e.g. TransferPendingListPage.tsx
   addFilter?: boolean; // whether to show the filter component or not. This is useful because not all tables will have filterable columns, and the filter component takes up a lot of space.
+  dependentFilters?: Array<{
+    parentColumnId: string;
+    childColumnId: string;
+  }>;
 };
 
 export function TableGeneric<T extends { id: string }>({
@@ -64,6 +68,7 @@ export function TableGeneric<T extends { id: string }>({
   addPageSelector,
   action,
   addFilter,
+  dependentFilters,
 }: Props<T>) {
   const navigate = useNavigate();
   const { setSelectedRowId, globalFilter, setGlobalFilter } =
@@ -119,7 +124,12 @@ export function TableGeneric<T extends { id: string }>({
             onChange={setGlobalFilter}
             placeholder={searchPlaceholderText}
           />
-          {addFilter && <FilterContainer table={table} />}
+          {addFilter && (
+            <FilterContainer
+              table={table}
+              dependentFilters={dependentFilters}
+            />
+          )}
           {addPageSelector ? (
             <TablePageSizeSelector table={table} className="" />
           ) : undefined}
