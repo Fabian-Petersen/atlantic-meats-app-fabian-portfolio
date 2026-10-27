@@ -106,30 +106,28 @@ export function MobileAssetFilterToolbar({
       ).sort((a, b) => a.localeCompare(b))
     : areas;
 
-  const availableEquipment = selectedLocation || selectedArea
-    ? Array.from(
-        new Set(
-          table
-            .getCoreRowModel()
-            .rows.filter(
-              (row) =>
-                (!selectedLocation ||
-                  row.original.location === selectedLocation) &&
-                (!selectedArea || row.original.area === selectedArea),
-            )
-            .map((row) => row.original.equipment)
-            .filter(
-              (item): item is string =>
-                typeof item === "string" && item.trim().length > 0,
-            ),
-        ),
-      ).sort((a, b) => a.localeCompare(b))
-    : equipment;
+  const availableEquipment =
+    selectedLocation || selectedArea
+      ? Array.from(
+          new Set(
+            table
+              .getCoreRowModel()
+              .rows.filter(
+                (row) =>
+                  (!selectedLocation ||
+                    row.original.location === selectedLocation) &&
+                  (!selectedArea || row.original.area === selectedArea),
+              )
+              .map((row) => row.original.equipment)
+              .filter(
+                (item): item is string =>
+                  typeof item === "string" && item.trim().length > 0,
+              ),
+          ),
+        ).sort((a, b) => a.localeCompare(b))
+      : equipment;
 
-  const updateFilter = (
-    column: typeof locationColumn,
-    value: string,
-  ) => {
+  const updateFilter = (column: typeof locationColumn, value: string) => {
     column?.setFilterValue(value || undefined);
     table.setPageIndex(0);
   };
@@ -167,7 +165,8 @@ export function MobileAssetFilterToolbar({
         .getCoreRowModel()
         .rows.some(
           (row) =>
-            row.original.location === value && row.original.area === selectedArea,
+            row.original.location === value &&
+            row.original.area === selectedArea,
         );
 
     if (!isAreaAvailable) areaColumn?.setFilterValue(undefined);
@@ -184,7 +183,7 @@ export function MobileAssetFilterToolbar({
             row.original.equipment === selectedEquipment,
         );
 
-      if (!isEquipmentAvailable) equipmentColumn.setFilterValue(undefined);
+      if (!isEquipmentAvailable) equipmentColumn?.setFilterValue(undefined);
     }
 
     updateFilter(locationColumn, value);
@@ -198,23 +197,19 @@ export function MobileAssetFilterToolbar({
         .getCoreRowModel()
         .rows.some(
           (row) =>
-            (!selectedLocation ||
-              row.original.location === selectedLocation) &&
+            (!selectedLocation || row.original.location === selectedLocation) &&
             row.original.area === value &&
             row.original.equipment === selectedEquipment,
         );
 
-      if (!isEquipmentAvailable) equipmentColumn.setFilterValue(undefined);
+      if (!isEquipmentAvailable) equipmentColumn?.setFilterValue(undefined);
     }
 
     updateFilter(areaColumn, value);
   };
 
   return (
-    <div
-      className="grid grid-cols-3 gap-2"
-      aria-label="Asset list options"
-    >
+    <div className="grid grid-cols-3 gap-2" aria-label="Asset list options">
       <CompactSelect
         ariaLabel="Filter by location"
         value={selectedLocation}

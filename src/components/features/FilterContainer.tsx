@@ -21,9 +21,10 @@ function FilterContainer<T extends Record<string, unknown>>({
     .filter((col) => col.columnDef.enableColumnFilter);
 
   const uniqueValues = (columnId: string) => {
-    const dependencies = dependentFilters?.filter(
-      ({ childColumnId }) => childColumnId === columnId,
-    ) ?? [];
+    const dependencies =
+      dependentFilters?.filter(
+        ({ childColumnId }) => childColumnId === columnId,
+      ) ?? [];
     const activeDependencies = dependencies.flatMap((dependency) => {
       const value = table
         .getColumn(dependency.parentColumnId)
@@ -72,35 +73,30 @@ function FilterContainer<T extends Record<string, unknown>>({
           const selectedChildValue = childColumn?.getFilterValue();
 
           if (typeof selectedChildValue === "string" && selectedChildValue) {
-            const childDependencies =
-              dependentFilters.filter(
-                (dependency) => dependency.childColumnId === childColumnId,
-              );
-            const isChildValueAvailable = table
-              .getCoreRowModel()
-              .rows.some(
-                (row) =>
-                  childDependencies.every(({ parentColumnId }) => {
-                    const parentValue =
-                      parentColumnId === columnId
-                        ? value
-                        : resetColumnIds.has(parentColumnId)
-                          ? undefined
-                          : table
-                              .getColumn(parentColumnId)
-                              ?.getFilterValue();
+            const childDependencies = dependentFilters.filter(
+              (dependency) => dependency.childColumnId === childColumnId,
+            );
+            const isChildValueAvailable = table.getCoreRowModel().rows.some(
+              (row) =>
+                childDependencies.every(({ parentColumnId }) => {
+                  const parentValue =
+                    parentColumnId === columnId
+                      ? value
+                      : resetColumnIds.has(parentColumnId)
+                        ? undefined
+                        : table.getColumn(parentColumnId)?.getFilterValue();
 
-                    return (
-                      typeof parentValue !== "string" ||
-                      !parentValue ||
-                      row.original[parentColumnId as keyof T] === parentValue
-                    );
-                  }) &&
-                  row.original[childColumnId as keyof T] === selectedChildValue,
-              );
+                  return (
+                    typeof parentValue !== "string" ||
+                    !parentValue ||
+                    row.original[parentColumnId as keyof T] === parentValue
+                  );
+                }) &&
+                row.original[childColumnId as keyof T] === selectedChildValue,
+            );
 
             if (!isChildValueAvailable) {
-              childColumn.setFilterValue(undefined);
+              childColumn?.setFilterValue(undefined);
               resetColumnIds.add(childColumnId);
             }
           }
