@@ -120,10 +120,14 @@ export const assetApiResponseSchema = assetRequestBaseSchema
     last_verified_at: z.string(),
     next_verification_due: z.string(),
 
-    verified_location: z.object({
-      longitude: z.number(),
-      latitude: z.number(),
-    }),
+    verified_location: z.union([
+      z.object({
+        longitude: z.number(),
+        latitude: z.number(),
+      }),
+      z.string(),
+      z.object({ location: z.string() }),
+    ]),
 
     verify_status: z.enum(["verified", "overdue", "due soon", "not found"]),
   });

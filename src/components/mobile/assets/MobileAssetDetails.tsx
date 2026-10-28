@@ -46,6 +46,7 @@ import MobileAssetTransferCard from "./MobileAssetTransferCard";
 
 // $ ————— utils ——————————————————————————————————————————————————————————————————
 import { formatDateTime } from "@/utils/formatDateTime";
+import { formatVerifiedLocation } from "@/utils/formatVerifiedLocation";
 import type { AssetAPIResponse } from "@/schemas";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -64,11 +65,6 @@ type MaintenanceJob = {
 
 type Props = {
   item: AssetAPIResponse & {
-    verify_status?: string;
-    verified_by?: string;
-    last_verified_at?: string;
-    next_verification_due?: string;
-    verified_location?: { latitude: number; longitude: number };
     maintenanceHistory?: MaintenanceJob[];
     transferHistory?: TransferWorkflowResponse[];
   };
@@ -98,6 +94,7 @@ function MobileAssetDetails({ item }: Props) {
 
   const maintenanceJobs = item.maintenanceHistory ?? [];
   const transfers = item.transferHistory ?? [];
+  const verifiedLocation = formatVerifiedLocation(item.verified_location);
 
   const handleTabChange = (tab: AssetTab) => {
     setActiveTab(tab);
@@ -292,18 +289,17 @@ function MobileAssetDetails({ item }: Props) {
                 />
               </SurfaceCard>
 
-              {item.verified_location && (
+              {verifiedLocation && (
                 <SurfaceCard>
                   <SectionTitle>Verified location</SectionTitle>
                   <div className="flex items-start gap-3 bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700 rounded-md px-3 py-2.5">
                     <MapPin className="w-4 h-4 mt-0.5 text-gray-400 shrink-0" />
                     <div className="flex flex-col gap-0.5">
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        GPS Coordinates
+                        {verifiedLocation.label}
                       </p>
                       <p className="text-sm text-gray-800 dark:text-gray-200 font-mono">
-                        {item.verified_location.latitude.toFixed(6)},{" "}
-                        {item.verified_location.longitude.toFixed(6)}
+                        {verifiedLocation.value}
                       </p>
                     </div>
                   </div>

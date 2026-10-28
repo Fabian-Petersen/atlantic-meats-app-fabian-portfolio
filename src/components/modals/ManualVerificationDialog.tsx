@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { useForm, useWatch, type FieldError } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -27,6 +28,7 @@ import { location } from "@/data/assetSelectOptions";
 
 const ManualVerificationDialog = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { setShowManualVerificationDialog } = useGlobalContext();
   const { selectedRowId, showManualVerificationDialog } = useModalState();
 
@@ -53,7 +55,7 @@ const ManualVerificationDialog = () => {
     ManualAssetVerificationPayload
   >({
     resourcePath: `api/assets/${selectedRowId ?? ""}/verify-manual`,
-    queryKey: ["assets"],
+    queryKey: ["assets", "list"],
     buildPayload: (values, compressedImages) => ({
       id: selectedRowId ?? values.id,
       location: values.location,
@@ -64,6 +66,10 @@ const ManualVerificationDialog = () => {
       })),
     }),
     onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: ["assets", "list"],
+        exact: true,
+      });
       toast.success("Asset manually verified", { duration: 1500 });
       closeDialog();
     },
