@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { Table } from "@tanstack/react-table";
-import { MapPin, Wrench } from "lucide-react";
+import { MapPin, Wrench, Factory } from "lucide-react";
 
 import {
   Select,
@@ -209,7 +209,10 @@ export function MobileAssetFilterToolbar({
   };
 
   return (
-    <div className="grid grid-cols-3 gap-2" aria-label="Asset list options">
+    <div
+      className="grid grid-cols-3 gap-2 py-2"
+      aria-label="Asset list options"
+    >
       <CompactSelect
         ariaLabel="Filter by location"
         value={selectedLocation}
@@ -223,7 +226,7 @@ export function MobileAssetFilterToolbar({
         value={selectedArea}
         onChange={updateAreaFilter}
         options={areaOptions}
-        icon={<MapPin className="size-3.5" aria-hidden="true" />}
+        icon={<Factory className="size-3.5" aria-hidden="true" />}
       />
 
       <CompactSelect
