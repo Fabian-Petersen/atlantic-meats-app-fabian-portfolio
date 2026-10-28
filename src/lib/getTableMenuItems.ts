@@ -15,6 +15,7 @@ import {
   Eye,
   CheckCircle,
   ShieldCheck,
+  Scan,
 } from "lucide-react";
 
 import type { Resource } from "@/utils/api";
@@ -95,6 +96,10 @@ export const tableActionStyles: Record<
     color: "text-emerald-600 dark:text-emerald-400",
     bgColor: "bg-emerald-50 dark:bg-emerald-950/50",
   },
+  verify: {
+    color: "text-blue-600 dark:text-blue-400",
+    bgColor: "bg-blue-50 dark:bg-blue-950/50",
+  },
 };
 
 type GetTableMenuItemsProps = {
@@ -123,6 +128,12 @@ type GetTableMenuItemsProps = {
   };
 
   edit?: {
+    label?: string;
+    url?: string;
+    onOpen: () => void;
+  };
+
+  verify?: {
     label?: string;
     url?: string;
     onOpen: () => void;
@@ -217,6 +228,7 @@ export const getTableMenuItems = ({
   history,
   dispose,
   manualVerification,
+  verify,
 }: GetTableMenuItemsProps): TableActionLinks[] => {
   const items: TableActionLinks[] = [];
 
@@ -341,6 +353,20 @@ export const getTableMenuItems = ({
       onClick: () => {
         setSelectedRowId(rowId);
         view.onOpen();
+      },
+    });
+  }
+
+  if (verify) {
+    items.push({
+      id: "verify",
+      label: verify.label ?? "Verify",
+      icon: Scan,
+      ...tableActionStyles.verify,
+      url: verify.url,
+      onClick: () => {
+        setSelectedRowId(rowId);
+        verify.onOpen();
       },
     });
   }

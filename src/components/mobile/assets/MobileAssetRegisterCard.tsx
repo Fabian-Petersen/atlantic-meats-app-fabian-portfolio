@@ -1,10 +1,6 @@
 import type { AssetTableRow } from "@/schemas";
 import {
   ChevronDown,
-  Pencil,
-  Eye,
-  Trash2,
-  ShieldCheck,
   Barcode,
   Box,
   MapPin,
@@ -22,6 +18,7 @@ import { Badge } from "@/components/features/Badge";
 import { badgeStyles } from "@/styles/badgeStyles";
 import { formatDateTime } from "@/utils/formatDateTime";
 import { formatDate } from "@/utils/formatDate";
+import { getAssetMenuItems } from "@/lib/getAssetMenuItems";
 
 type Props = {
   row: Row<AssetTableRow>;
@@ -32,34 +29,19 @@ type Props = {
 export function MobileAssetRegisterCard({ row, isOpen, onToggle }: Props) {
   const item = row.original;
   const navigate = useNavigate();
-  const { setSelectedRowId, setShowManualVerificationDialog } =
-    useGlobalContext();
+  const {
+    setSelectedRowId,
+    setShowManualVerificationDialog,
+    openDeleteDialog,
+  } = useGlobalContext();
 
-  const handleNavigate = () => {
-    setSelectedRowId(item.id);
-    navigate(`/assets/${item.id}`);
-  };
-
-  const handleEdit = () => {
-    setSelectedRowId(item.id);
-    navigate(`/assets/${item.id}/update-asset`);
-  };
-
-  const menuItems = [
-    { id: "edit", label: "Edit", icon: Pencil, onClick: handleEdit },
-    { id: "view", label: "View", icon: Eye, onClick: handleNavigate },
-    {
-      id: "manual-verification",
-      label: "Manual Verification",
-      icon: ShieldCheck,
-      onClick: () => {
-        setSelectedRowId(item.id);
-        setShowManualVerificationDialog(true);
-        navigate("/assets/verification/manual");
-      },
-    },
-    { id: "delete", label: "Delete", icon: Trash2, onClick: handleNavigate },
-  ];
+  const menuItems = getAssetMenuItems({
+    rowId: item.id,
+    setSelectedRowId,
+    setShowManualVerificationDialog,
+    openDeleteDialog,
+    navigate,
+  });
 
   return (
     <div

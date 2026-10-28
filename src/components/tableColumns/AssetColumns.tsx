@@ -3,7 +3,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { AssetTableRow } from "@/schemas";
 import { DropdownMenuButtonDialog } from "../modals/DropdownMenuButtonDialog";
-import { getTableMenuItems } from "@/lib/getTableMenuItems";
+import { getAssetMenuItems } from "@/lib/getAssetMenuItems";
 import type { NavigateFunction } from "react-router-dom";
 
 // This type is used to define the shape of our data.
@@ -166,43 +166,12 @@ export const getAssetColumns = (
     cell: ({ row }) => {
       const rowId = row.original.id;
 
-      const menuItems = getTableMenuItems({
-        rowId: row.original.id,
+      const menuItems = getAssetMenuItems({
+        rowId,
         setSelectedRowId,
-        edit: {
-          url: `/assets/${rowId}/update-asset`,
-          onOpen: () => {
-            setSelectedRowId(rowId);
-            navigate(`/assets/${rowId}/update-asset`);
-          },
-        },
-        history: {
-          url: `/assets/${rowId}/history`,
-          config: {
-            resourcePath: `api/assets/${rowId}/history`,
-            queryKey: ["assets", "asset-history"],
-            resourceName: "asset",
-          },
-          onOpen: () => {
-            setSelectedRowId(rowId);
-            navigate(`/assets/${rowId}/history`);
-          },
-        },
-        manualVerification: {
-          url: "/assets/verification/manual",
-          onOpen: () => {
-            setShowManualVerificationDialog(true);
-            navigate("/assets/verification/manual");
-          },
-        },
-        delete: {
-          config: {
-            resourcePath: "api/assets",
-            queryKey: ["assets"],
-            resourceName: "asset",
-          },
-          onDelete: openDeleteDialog,
-        },
+        setShowManualVerificationDialog,
+        openDeleteDialog,
+        navigate,
       });
 
       return (
