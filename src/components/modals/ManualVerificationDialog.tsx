@@ -5,6 +5,7 @@ import { useForm, useWatch, type FieldError } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ShieldCheck } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import FormInfo from "@/components/features/forms/FormInfo";
 import TextAreaInput from "../../../customComponents/TextAreaInput";
 import FormRowSelect from "../../../customComponents/FormRowSelect";
@@ -83,7 +84,11 @@ const ManualVerificationDialog = () => {
 
   const images = useWatch({ control, name: "images" });
 
-  const { submit: verifyManually, isPending } = useFormSubmit<
+  const {
+    submit: verifyManually,
+    isPending,
+    submissionProgress,
+  } = useFormSubmit<
     ManualAssetVerificationRequest,
     ManualAssetVerificationPayload
   >({
@@ -124,14 +129,50 @@ const ManualVerificationDialog = () => {
 
   const sortedLocations = [...location].sort((a, b) => a.localeCompare(b));
 
+  const progressMessage = (() => {
+    if (!submissionProgress) return null;
+
+    switch (submissionProgress.stage) {
+      case "image-processing":
+        return submissionProgress.imageCount === 1
+          ? "Compressing verification image..."
+          : `Compressing ${submissionProgress.imageCount} verification images one at a time...`;
+      case "api-request":
+        return "Saving verification details...";
+      case "file-upload":
+        return "Uploading verification images...";
+      case "success-handler":
+        return "Finishing verification...";
+    }
+  })();
+
   return (
     <Dialog
       open={showManualVerificationDialog}
       onOpenChange={(open) => {
-        if (!open) closeDialog();
+        if (!open && !isPending) closeDialog();
       }}
     >
       <DialogContent className="top-auto bottom-0 left-0 max-h-[92dvh] max-w-none translate-x-0 translate-y-0 overflow-y-auto rounded-t-3xl rounded-b-none border-none bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] data-[state=open]:slide-in-from-bottom-full dark:bg-(--bg-secondary_dark) dark:text-(--clr-textDark) dark:border-(--clr-borderDark) z-3000 sm:top-[50%] sm:bottom-auto sm:left-[50%] sm:max-w-156 sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg sm:p-6 sm:data-[state=open]:[--tw-enter-translate-y:0]">
+        {progressMessage && (
+          <div
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-5 bg-white/95 px-8 text-center dark:bg-(--bg-secondary_dark)/95 sm:absolute sm:rounded-lg"
+            role="status"
+            aria-live="polite"
+            aria-label={progressMessage}
+          >
+            <Spinner className="size-12 text-green-600 dark:text-green-400" />
+            <div>
+              <p className="text-lg font-medium">Verifying asset</p>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                {progressMessage}
+              </p>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                Keep this screen open until the upload is complete.
+              </p>
+            </div>
+          </div>
+        )}
         <div className="flex justify-center items-center">
           <div className="rounded-full bg-green-100 p-3 text-green-600 dark:bg-green-950/50 dark:text-green-400 md:p-4">
             <ShieldCheck className="size-9 md:size-16" aria-hidden="true" />

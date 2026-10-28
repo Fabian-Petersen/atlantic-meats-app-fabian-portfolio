@@ -1,5 +1,6 @@
 import { usePOST } from "@/utils/api";
 import { compressImagesToWebpv1 } from "@/utils/compressImagesToWebpv1";
+import { useState } from "react";
 
 import type { Resource } from "@/utils/api";
 import type { PresignedUrlResponse } from "@/schemas";
@@ -29,6 +30,11 @@ export type FormSubmitStage =
   | "api-request"
   | "file-upload"
   | "success-handler";
+
+export type FormSubmitProgress = {
+  stage: FormSubmitStage;
+  imageCount: number;
+};
 
 type WithPresignedUrls = {
   presigned_urls: PresignedUrlResponse;
@@ -148,7 +154,12 @@ export const useFormSubmit = <TForm extends object, TPayload>({
   onSuccess,
   onError,
 }: UseFormSubmitOptions<TForm, TPayload>) => {
-  const { mutateAsync, isPending, isError } = usePOST<TPayload, unknown>({
+  const [submissionProgress, setSubmissionProgress] =
+    useState<FormSubmitProgress | null>(null);
+  const { mutateAsync, isPending: isRequestPending, isError } = usePOST<
+    TPayload,
+    unknown
+  >({
     id,
     resourcePath,
     queryKey,
@@ -169,6 +180,11 @@ export const useFormSubmit = <TForm extends object, TPayload>({
 
       const hasImages = rawFiles.length > 0;
       const hasInvoices = rawInvoices.length > 0;
+
+      setSubmissionProgress({
+        stage: "image-processing",
+        imageCount: rawFiles.length,
+      });
 
       // console.log("hasImages:", hasImages);
       // console.log("hasInvoices:", hasInvoices);
@@ -191,6 +207,7 @@ export const useFormSubmit = <TForm extends object, TPayload>({
 
       // ── 4. POST metadata to the API ───────────────────────────────────────
       stage = "api-request";
+      setSubmissionProgress({ stage, imageCount: rawFiles.length });
       const response = await mutateAsync(payload);
       // console.log("response-payload:", response);
 
@@ -200,6 +217,7 @@ export const useFormSubmit = <TForm extends object, TPayload>({
       // which have no images or invoices.
       if (hasImages || hasInvoices) {
         stage = "file-upload";
+        setSubmissionProgress({ stage, imageCount: rawFiles.length });
         const { presigned_urls } = response as WithPresignedUrls;
 
         if (!presigned_urls) {
@@ -253,6 +271,7 @@ export const useFormSubmit = <TForm extends object, TPayload>({
 
       // ── 6. Delegate success handling ─────────────────────────────────────
       stage = "success-handler";
+      setSubmissionProgress({ stage, imageCount: rawFiles.length });
       onSuccess?.(formValues, data);
     } catch (err) {
       console.error(
@@ -261,13 +280,16 @@ export const useFormSubmit = <TForm extends object, TPayload>({
       );
 
       onError(err, data, stage);
+    } finally {
+      setSubmissionProgress(null);
     }
   };
 
   return {
     submit,
-    isPending,
+    isPending: isRequestPending || submissionProgress !== null,
     isError,
+    submissionProgress,
   };
 };
 
