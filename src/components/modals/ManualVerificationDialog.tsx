@@ -25,10 +25,7 @@ import {
   type ManualAssetVerificationPayload,
   type ManualAssetVerificationRequest,
 } from "@/schemas/assetSchemas";
-import {
-  useFormSubmit,
-  type FormSubmitStage,
-} from "@/hooks/useFormSubmit";
+import { useFormSubmit, type FormSubmitStage } from "@/hooks/useFormSubmit";
 import { location } from "@/data/assetSelectOptions";
 
 const getManualVerificationError = (
@@ -225,6 +222,7 @@ const ManualVerificationDialog = () => {
               disabled={isPending}
               required
               multiple
+              className={`${images.length === 0 && "mt-3"}`}
             />
           </div>
           <FormActionButtons

@@ -38,23 +38,39 @@ export async function compressImagesToWebpv1(files: File[]) {
         );
 
         try {
-          const compressed = await imageCompression(file, {
+          const jpeg = await imageCompression(file, {
             ...baseOptions,
             fileType: "image/jpeg",
           });
+          const normalizedJpeg = new File(
+            [jpeg],
+            file.name.replace(/\.\w+$/, ".jpg"),
+            { type: "image/jpeg" },
+          );
+
+          // Some mobile screenshots fail direct WebP conversion. Normalizing
+          // them to JPEG first gives the encoder a simpler input while still
+          // keeping the API and presigned S3 upload on the working WebP path.
+          const normalizedWebp = await imageCompression(normalizedJpeg, {
+            ...baseOptions,
+            fileType: "image/webp",
+          });
           compressedFiles.push(
-            new File([compressed], file.name.replace(/\.\w+$/, ".jpg"), {
-              type: "image/jpeg",
-            }),
+            new File(
+              [normalizedWebp],
+              file.name.replace(/\.\w+$/, ".webp"),
+              { type: "image/webp" },
+            ),
           );
           continue;
         } catch (jpegError) {
-          console.warn(
-            `[image-compression] JPEG compression also failed for ${file.name}; uploading the original ${file.type} file instead.`,
+          console.error(
+            `[image-compression] Screenshot normalization failed for ${file.name}.`,
             jpegError,
           );
-          compressedFiles.push(file);
-          continue;
+          throw new Error(
+            `The image ${file.name} could not be converted to a supported WebP upload.`,
+          );
         }
       }
 
