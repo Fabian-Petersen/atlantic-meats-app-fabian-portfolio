@@ -112,8 +112,11 @@ function MobileAssetDetails({ item }: Props) {
       <header className="flex items-center gap-3 px-4 h-14 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700/60 shrink-0 z-10">
         <button
           type="button"
-          onClick={() => navigate(-1)}
-          className={cn(sharedStyles.btnBack)}
+          onClick={() => navigate("/assets/list")}
+          className={cn(
+            sharedStyles.btnBack,
+            "bg-transparent dark:bg-transparent",
+          )}
           aria-label="Go back"
         >
           <ChevronLeft className={cn(sharedStyles.btnBackIcon)} />
@@ -150,7 +153,7 @@ function MobileAssetDetails({ item }: Props) {
           <h1 className="text-xl font-semibold capitalize leading-tight text-gray-900 dark:text-gray-100">
             {item.equipment}
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 capitalize">
             {item.location}
           </p>
           <div className="flex flex-wrap justify-between items-center gap-2 mt-3 text-cxs capitalize">
