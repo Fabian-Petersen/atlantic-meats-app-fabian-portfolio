@@ -50,7 +50,8 @@ const getManualVerificationError = (
   }
 
   if (stage === "file-upload") {
-    return "The verification was accepted, but the evidence image upload failed.";
+    const detail = error instanceof Error ? ` ${error.message}` : "";
+    return `The verification was accepted, but the evidence image upload failed.${detail}`;
   }
 
   if (stage === "success-handler") {
