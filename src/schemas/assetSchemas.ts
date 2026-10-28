@@ -238,7 +238,9 @@ export const manualAssetVerificationSchema = z.object({
     .string()
     .trim()
     .min(1, { message: "Please enter a reason for manual verification" }),
-  images: z.array(z.instanceof(File)),
+  images: z
+    .array(z.instanceof(File))
+    .min(1, { message: "At least one verification image is required" }),
 });
 
 // $ Schema for the Asset Verification History API response

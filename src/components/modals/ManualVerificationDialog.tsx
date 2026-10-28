@@ -173,7 +173,7 @@ const ManualVerificationDialog = () => {
               required
             />
             {images.length === 0 && (
-              <FormInfo message="Evidence images are optional while testing manual verification on mobile." />
+              <FormInfo message="Add at least one clear image as evidence of the asset's identity and condition when its barcode cannot be scanned." />
             )}
             <FileInput
               name="images"
@@ -181,6 +181,7 @@ const ManualVerificationDialog = () => {
               label="Verification Images"
               error={errors.images as FieldError | undefined}
               disabled={isPending}
+              required
               multiple
             />
           </div>
