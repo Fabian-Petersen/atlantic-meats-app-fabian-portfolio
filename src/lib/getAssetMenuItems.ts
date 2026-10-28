@@ -21,6 +21,14 @@ export const getAssetMenuItems = ({
   getTableMenuItems({
     rowId,
     setSelectedRowId,
+    order: [
+      "view",
+      "edit",
+      "history",
+      "verify",
+      "manual-verification",
+      "delete",
+    ],
     view: {
       url: `/assets/${rowId}`,
       onOpen: () => navigate(`/assets/${rowId}`),

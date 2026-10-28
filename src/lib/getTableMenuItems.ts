@@ -107,6 +107,7 @@ type GetTableMenuItemsProps = {
   request_id?: string;
   userStatus?: string;
   status?: string;
+  order?: TableActionLinks["id"][];
   setSelectedRowId: (id: string) => void;
 
   create?: {
@@ -212,6 +213,7 @@ export const getTableMenuItems = ({
   rowId,
   request_id,
   status,
+  order,
   setSelectedRowId,
   approve,
   edit,
@@ -441,5 +443,13 @@ export const getTableMenuItems = ({
     });
   }
 
-  return items;
+  if (!order) return items;
+
+  const orderById = new Map(order.map((id, index) => [id, index]));
+
+  return items.sort(
+    (a, b) =>
+      (orderById.get(a.id) ?? Number.MAX_SAFE_INTEGER) -
+      (orderById.get(b.id) ?? Number.MAX_SAFE_INTEGER),
+  );
 };

@@ -24,6 +24,12 @@ export type FileExtractor<TForm extends object> = (
   formValues: TForm,
 ) => FormSubmitFiles;
 
+export type FormSubmitStage =
+  | "image-processing"
+  | "api-request"
+  | "file-upload"
+  | "success-handler";
+
 type WithPresignedUrls = {
   presigned_urls: PresignedUrlResponse;
   [key: string]: unknown;
@@ -81,7 +87,11 @@ type UseFormSubmitOptions<TForm extends object, TPayload, TData = TForm> = {
   onSuccess?: (formValues: TForm, data?: TData) => void;
 
   /** Called when POST, compression, or S3 upload fails. */
-  onError: (err: unknown, data?: TData) => void;
+  onError: (
+    err: unknown,
+    data?: TData,
+    stage?: FormSubmitStage,
+  ) => void;
 };
 
 // ─── Default File Extractor ───────────────────────────────────────────────────
@@ -147,6 +157,7 @@ export const useFormSubmit = <TForm extends object, TPayload>({
 
   const submit = async (formValues: TForm): Promise<void> => {
     console.log("formvalues:", formValues);
+    let stage: FormSubmitStage = "image-processing";
 
     try {
       // ── 1. Extract files ──────────────────────────────────────────────────
@@ -179,6 +190,7 @@ export const useFormSubmit = <TForm extends object, TPayload>({
       // console.log("payload:", payload);
 
       // ── 4. POST metadata to the API ───────────────────────────────────────
+      stage = "api-request";
       const response = await mutateAsync(payload);
       // console.log("response-payload:", response);
 
@@ -187,6 +199,7 @@ export const useFormSubmit = <TForm extends object, TPayload>({
       // This block is skipped entirely for forms such as CreateUserForm,
       // which have no images or invoices.
       if (hasImages || hasInvoices) {
+        stage = "file-upload";
         const { presigned_urls } = response as WithPresignedUrls;
 
         if (!presigned_urls) {
@@ -239,11 +252,15 @@ export const useFormSubmit = <TForm extends object, TPayload>({
       }
 
       // ── 6. Delegate success handling ─────────────────────────────────────
+      stage = "success-handler";
       onSuccess?.(formValues, data);
     } catch (err) {
-      console.error(`[useFormSubmit] POST to "${resourcePath}" failed:`, err);
+      console.error(
+        `[useFormSubmit] ${stage} failed for "${resourcePath}":`,
+        err,
+      );
 
-      onError(err, data);
+      onError(err, data, stage);
     }
   };
 

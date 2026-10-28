@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { useForm, useWatch, type FieldError } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -23,8 +24,40 @@ import {
   type ManualAssetVerificationPayload,
   type ManualAssetVerificationRequest,
 } from "@/schemas/assetSchemas";
-import { useFormSubmit } from "@/hooks/useFormSubmit";
+import {
+  useFormSubmit,
+  type FormSubmitStage,
+} from "@/hooks/useFormSubmit";
 import { location } from "@/data/assetSelectOptions";
+
+const getManualVerificationError = (
+  error: unknown,
+  stage?: FormSubmitStage,
+) => {
+  if (stage === "image-processing") {
+    return "The selected image could not be processed on this device. Try a different image or camera format.";
+  }
+
+  if (stage === "api-request") {
+    const status = axios.isAxiosError(error)
+      ? error.response?.status
+      : undefined;
+
+    return status
+      ? `The verification API request failed with HTTP ${status}.`
+      : "The verification API request could not reach the server.";
+  }
+
+  if (stage === "file-upload") {
+    return "The verification was accepted, but the evidence image upload failed.";
+  }
+
+  if (stage === "success-handler") {
+    return "The verification completed, but the page could not refresh correctly.";
+  }
+
+  return "The verification failed for an unknown reason.";
+};
 
 const ManualVerificationDialog = () => {
   const navigate = useNavigate();
@@ -73,8 +106,11 @@ const ManualVerificationDialog = () => {
       toast.success("Asset manually verified", { duration: 1500 });
       closeDialog();
     },
-    onError: () => {
-      toast.error("Failed to verify asset manually", { duration: 1500 });
+    onError: (error, _data, stage) => {
+      toast.error("Failed to verify asset manually", {
+        description: getManualVerificationError(error, stage),
+        duration: 6000,
+      });
     },
   });
 
@@ -137,7 +173,7 @@ const ManualVerificationDialog = () => {
               required
             />
             {images.length === 0 && (
-              <FormInfo message="Add at least one clear image as evidence of the asset's identity and condition when its barcode cannot be scanned." />
+              <FormInfo message="Evidence images are optional while testing manual verification on mobile." />
             )}
             <FileInput
               name="images"
@@ -145,7 +181,6 @@ const ManualVerificationDialog = () => {
               label="Verification Images"
               error={errors.images as FieldError | undefined}
               disabled={isPending}
-              required
               multiple
             />
           </div>
