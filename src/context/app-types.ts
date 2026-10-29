@@ -1,11 +1,25 @@
 import type { Dispatch, SetStateAction } from "react";
 import type {
+  ColumnFiltersState,
+  PaginationState,
+  SortingState,
+} from "@tanstack/react-table";
+import type {
   GlobalData,
   PendingTableAction,
   UsersAPIResponse,
 } from "../schemas";
 
 import type { Resource, RedirectResource } from "@/utils/api";
+
+export type AssetRegisterTableState = {
+  globalFilter: string;
+  columnFilters: ColumnFiltersState;
+  desktopSorting: SortingState;
+  desktopPagination: PaginationState;
+  mobileSorting: SortingState;
+  mobilePagination: PaginationState;
+};
 
 // $ The config passed to the modal to delete an asset or maintenance item.
 
@@ -186,6 +200,11 @@ export type AppContextType = {
   // $ Table Search State
   globalFilter: string;
   setGlobalFilter: Dispatch<SetStateAction<string>>;
+
+  assetRegisterTableState: AssetRegisterTableState;
+  setAssetRegisterTableState: Dispatch<
+    SetStateAction<AssetRegisterTableState>
+  >;
 
   // $ State for the Maintennace and Assets Table Ations (delete, update and edit item)
   pendingTableAction: PendingTableAction;

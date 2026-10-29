@@ -15,15 +15,15 @@ import {
   getSortedRowModel,
   useReactTable,
   getPaginationRowModel,
-  type SortingState,
-  type PaginationState,
   type FilterFn,
+  type Updater,
 } from "@tanstack/react-table";
 
 import { getAssetColumns } from "../../components/tableColumns/AssetColumns";
 import useGlobalContext from "@/context/useGlobalContext";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import type { AssetAPIResponse, AssetTableRow } from "@/schemas";
+import type { AssetRegisterTableState } from "@/context/app-types";
 import { TableGeneric } from "@/components/features/tables/TableGeneric";
 import TablePaginationControls from "@/components/features/tables/TablePaginationControls";
 import { SearchInput } from "@/components/features/SearchInput";
@@ -50,6 +50,11 @@ const assetGlobalFilter: FilterFn<AssetTableRow> = (
   return cellValue.includes(searchValue);
 };
 
+const resolveUpdater = <T,>(updater: Updater<T>, current: T): T =>
+  typeof updater === "function"
+    ? (updater as (previous: T) => T)(current)
+    : updater;
+
 const AssetsOverviewPage = () => {
   const navigate = useNavigate();
   const { data, isPending, isError } = useGetAll<AssetAPIResponse[]>({
@@ -59,22 +64,23 @@ const AssetsOverviewPage = () => {
 
   // console.log("assets:", data);
 
-  const [sorting, setSorting] = useState<SortingState>([
-    { id: "createdAt", desc: true },
-  ]);
-
-  const [globalFilter, setGlobalFilter] = useState("");
-
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10, // 👈 this controls "10 items per page"
-  });
-
   const {
     setShowManualVerificationDialog,
     setSelectedRowId,
     openDeleteDialog,
+    assetRegisterTableState,
+    setAssetRegisterTableState,
   } = useGlobalContext();
+
+  const updateAssetRegisterState = <K extends keyof AssetRegisterTableState>(
+    key: K,
+    updater: Updater<AssetRegisterTableState[K]>,
+  ) => {
+    setAssetRegisterTableState((current) => ({
+      ...current,
+      [key]: resolveUpdater(updater, current[key]),
+    }));
+  };
 
   // $ Map through the data returned to match the TableRow Data Schema
   const rows: AssetTableRow[] = useMemo(
@@ -148,9 +154,18 @@ const AssetsOverviewPage = () => {
     data: rows,
     columns,
     columnResizeMode: "onChange",
-    state: { sorting, pagination, globalFilter },
-    onSortingChange: setSorting,
-    onPaginationChange: setPagination,
+    state: {
+      sorting: assetRegisterTableState.mobileSorting,
+      pagination: assetRegisterTableState.mobilePagination,
+      globalFilter: assetRegisterTableState.globalFilter,
+      columnFilters: assetRegisterTableState.columnFilters,
+    },
+    onSortingChange: (updater) =>
+      updateAssetRegisterState("mobileSorting", updater),
+    onPaginationChange: (updater) =>
+      updateAssetRegisterState("mobilePagination", updater),
+    onColumnFiltersChange: (updater) =>
+      updateAssetRegisterState("columnFilters", updater),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -189,14 +204,30 @@ const AssetsOverviewPage = () => {
             { parentColumnId: "area", childColumnId: "equipment" },
           ]}
           globalFilterFn={assetGlobalFilter}
+          globalFilterValue={assetRegisterTableState.globalFilter}
+          onGlobalFilterChange={(updater) =>
+            updateAssetRegisterState("globalFilter", updater)
+          }
+          columnFilters={assetRegisterTableState.columnFilters}
+          onColumnFiltersChange={(updater) =>
+            updateAssetRegisterState("columnFilters", updater)
+          }
+          sorting={assetRegisterTableState.desktopSorting}
+          onControlledSortingChange={(updater) =>
+            updateAssetRegisterState("desktopSorting", updater)
+          }
+          pagination={assetRegisterTableState.desktopPagination}
+          onControlledPaginationChange={(updater) =>
+            updateAssetRegisterState("desktopPagination", updater)
+          }
         />
       </div>
       {/* // $ Mobile View */}
       <div className="grid lg:hidden gap-2 w-full p-2">
         <SearchInput
           enableMobile={true}
-          value={globalFilter}
-          onChange={setGlobalFilter}
+          value={assetRegisterTableState.globalFilter}
+          onChange={(value) => updateAssetRegisterState("globalFilter", value)}
           placeholder="Search Assets"
         />{" "}
         {data.length === 0 ? (
@@ -218,8 +249,8 @@ const AssetsOverviewPage = () => {
             {table.getRowModel().rows.length === 0 ? (
               <EmptyMobilePlaceholder
                 message={
-                  globalFilter
-                    ? `No results for "${globalFilter}"`
+                  assetRegisterTableState.globalFilter
+                    ? `No results for "${assetRegisterTableState.globalFilter}"`
                     : "No assets match the selected filters"
                 }
               />

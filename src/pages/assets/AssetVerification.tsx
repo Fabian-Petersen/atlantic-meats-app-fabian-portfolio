@@ -237,7 +237,7 @@ export default function ScannerPage() {
           <header className="relative flex h-12 items-center justify-center">
             <button
               type="button"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate("/assets/list")}
               className={cn(sharedStyles.btnBack, "absolute left-0")}
               aria-label="Go back"
             >
@@ -245,7 +245,7 @@ export default function ScannerPage() {
                 className={cn(sharedStyles.btnBackIcon)}
                 aria-hidden="true"
               />
-              Back
+              Asset List
             </button>
             <p className="text-sm font-medium tracking-wide text-slate-700 dark:text-slate-200">
               Asset verification

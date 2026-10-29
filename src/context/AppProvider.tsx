@@ -1,10 +1,13 @@
 import {
   useCallback,
+  useEffect,
   useMemo,
+  useRef,
   useState,
   type Dispatch,
   type SetStateAction,
 } from "react";
+import { useLocation } from "react-router-dom";
 import { AppContext } from "./app-context";
 import { ModalStateContext } from "./modal-context";
 import type {
@@ -17,9 +20,20 @@ import type {
   ErrorConfig,
   SuccessConfig,
   RejectConfig,
+  AssetRegisterTableState,
 } from "./app-types";
 
+const createDefaultAssetRegisterTableState = (): AssetRegisterTableState => ({
+  globalFilter: "",
+  columnFilters: [],
+  desktopSorting: [],
+  desktopPagination: { pageIndex: 0, pageSize: 10 },
+  mobileSorting: [{ id: "createdAt", desc: true }],
+  mobilePagination: { pageIndex: 0, pageSize: 10 },
+});
+
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
+  const { pathname } = useLocation();
   // $ [Step 3]: Create the state and set the initial state value
 
   // $ State for the Error and Success Components
@@ -120,6 +134,19 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     useState<PendingTableAction | null>(null);
 
   const [globalFilter, setGlobalFilter] = useState("");
+  const [assetRegisterTableState, setAssetRegisterTableState] =
+    useState<AssetRegisterTableState>(createDefaultAssetRegisterTableState);
+  const wasInAssetsModule = useRef(pathname.startsWith("/assets"));
+
+  useEffect(() => {
+    const isInAssetsModule = pathname.startsWith("/assets");
+
+    if (wasInAssetsModule.current && !isInAssetsModule) {
+      setAssetRegisterTableState(createDefaultAssetRegisterTableState());
+    }
+
+    wasInAssetsModule.current = isInAssetsModule;
+  }, [pathname]);
 
   // $ State for the User
   const [userId, setUserId] = useState<string | null>(null);
@@ -198,6 +225,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       setSuccessConfig,
       globalFilter,
       setGlobalFilter,
+      assetRegisterTableState,
+      setAssetRegisterTableState,
       setShowCreateUserDialog,
       openNotificationSidebar,
       setOpenNotificationSidebar,
@@ -229,6 +258,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       setOpenChatSidebar,
       successConfig,
       globalFilter,
+      assetRegisterTableState,
       openNotificationSidebar,
       setOpenNotificationSidebar,
       user,

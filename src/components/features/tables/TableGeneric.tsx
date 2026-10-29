@@ -15,6 +15,8 @@ import {
   type ColumnResizeMode,
   type PaginationState,
   type FilterFn,
+  type ColumnFiltersState,
+  type OnChangeFn,
 } from "@tanstack/react-table";
 
 import FormHeading from "@/../customComponents/FormHeading";
@@ -50,6 +52,14 @@ type Props<T extends { id: string }> = {
     childColumnId: string;
   }>;
   globalFilterFn?: FilterFn<T>;
+  globalFilterValue?: string;
+  onGlobalFilterChange?: OnChangeFn<string>;
+  columnFilters?: ColumnFiltersState;
+  onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>;
+  sorting?: SortingState;
+  onControlledSortingChange?: OnChangeFn<SortingState>;
+  pagination?: PaginationState;
+  onControlledPaginationChange?: OnChangeFn<PaginationState>;
 };
 
 export function TableGeneric<T extends { id: string }>({
@@ -72,27 +82,47 @@ export function TableGeneric<T extends { id: string }>({
   addFilter,
   dependentFilters,
   globalFilterFn,
+  globalFilterValue,
+  onGlobalFilterChange,
+  columnFilters: controlledColumnFilters,
+  onColumnFiltersChange: onControlledColumnFiltersChange,
+  sorting: controlledSorting,
+  onControlledSortingChange,
+  pagination: controlledPagination,
+  onControlledPaginationChange,
 }: Props<T>) {
   const navigate = useNavigate();
   const { setSelectedRowId, globalFilter, setGlobalFilter } =
     useGlobalContext();
 
   const [sorting, setSorting] = useState<SortingState>(initialSorting);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnResizeMode] = useState<ColumnResizeMode>("onChange");
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: pageSize ?? 10, // 👈 this controls "10 items per page"
   });
+  const activeGlobalFilter = globalFilterValue ?? globalFilter;
+  const activeColumnFilters = controlledColumnFilters ?? columnFilters;
+  const activeSorting = controlledSorting ?? sorting;
+  const activePagination = controlledPagination ?? pagination;
 
   const location = useLocation();
 
   const table = useReactTable({
     data,
     columns,
-    state: { sorting, globalFilter, pagination },
-    onSortingChange: setSorting,
-    onPaginationChange: setPagination,
+    state: {
+      sorting: activeSorting,
+      globalFilter: activeGlobalFilter,
+      pagination: activePagination,
+      columnFilters: activeColumnFilters,
+    },
+    onSortingChange: onControlledSortingChange ?? setSorting,
+    onPaginationChange: onControlledPaginationChange ?? setPagination,
+    onColumnFiltersChange:
+      onControlledColumnFiltersChange ?? setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -123,8 +153,8 @@ export function TableGeneric<T extends { id: string }>({
       {location.pathname === "/dashboard" ? undefined : (
         <div className="flex gap-4 items-end w-full h-11">
           <SearchInput
-            value={globalFilter}
-            onChange={setGlobalFilter}
+            value={activeGlobalFilter}
+            onChange={onGlobalFilterChange ?? setGlobalFilter}
             placeholder={searchPlaceholderText}
           />
           {addFilter && (
@@ -213,7 +243,7 @@ export function TableGeneric<T extends { id: string }>({
               ) : table.getRowModel().rows.length === 0 ? (
                 <EmptyTablePlaceholder
                   colSpan={table.getAllColumns().length}
-                  message={`No results for "${globalFilter}"`}
+                  message={`No results for "${activeGlobalFilter}"`}
                 />
               ) : (
                 table.getRowModel().rows.map((row) => {
