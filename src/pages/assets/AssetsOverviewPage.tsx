@@ -17,6 +17,7 @@ import {
   getPaginationRowModel,
   type SortingState,
   type PaginationState,
+  type FilterFn,
 } from "@tanstack/react-table";
 
 import { getAssetColumns } from "../../components/tableColumns/AssetColumns";
@@ -30,6 +31,24 @@ import EmptyMobilePlaceholder from "@/components/features/EmptyMobilePlaceholder
 import { MobileAssetFilterToolbar } from "@/components/mobile/assets/MobileAssetFilterToolbar";
 import { cn } from "@/lib/utils";
 import { sharedStyles } from "@/styles/shared";
+
+const assetGlobalFilter: FilterFn<AssetTableRow> = (
+  row,
+  columnId,
+  filterValue,
+) => {
+  const searchValue = String(filterValue).toLowerCase().trim();
+  const cellValue = String(row.getValue(columnId) ?? "").toLowerCase();
+
+  if (
+    columnId === "verify_status" &&
+    (searchValue === "verified" || searchValue === "unverified")
+  ) {
+    return cellValue === searchValue;
+  }
+
+  return cellValue.includes(searchValue);
+};
 
 const AssetsOverviewPage = () => {
   const navigate = useNavigate();
@@ -136,6 +155,7 @@ const AssetsOverviewPage = () => {
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    globalFilterFn: assetGlobalFilter,
   });
 
   if (isPending) return <PageLoadingSpinner />;
@@ -168,6 +188,7 @@ const AssetsOverviewPage = () => {
             { parentColumnId: "location", childColumnId: "equipment" },
             { parentColumnId: "area", childColumnId: "equipment" },
           ]}
+          globalFilterFn={assetGlobalFilter}
         />
       </div>
       {/* // $ Mobile View */}

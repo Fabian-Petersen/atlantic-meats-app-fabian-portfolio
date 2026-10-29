@@ -14,6 +14,7 @@ import {
   type SortingState,
   type ColumnResizeMode,
   type PaginationState,
+  type FilterFn,
 } from "@tanstack/react-table";
 
 import FormHeading from "@/../customComponents/FormHeading";
@@ -48,6 +49,7 @@ type Props<T extends { id: string }> = {
     parentColumnId: string;
     childColumnId: string;
   }>;
+  globalFilterFn?: FilterFn<T>;
 };
 
 export function TableGeneric<T extends { id: string }>({
@@ -69,6 +71,7 @@ export function TableGeneric<T extends { id: string }>({
   action,
   addFilter,
   dependentFilters,
+  globalFilterFn,
 }: Props<T>) {
   const navigate = useNavigate();
   const { setSelectedRowId, globalFilter, setGlobalFilter } =
@@ -93,7 +96,7 @@ export function TableGeneric<T extends { id: string }>({
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    globalFilterFn: "includesString",
+    globalFilterFn: globalFilterFn ?? "includesString",
     getPaginationRowModel: getPaginationRowModel(),
 
     // ----- Resizing ------

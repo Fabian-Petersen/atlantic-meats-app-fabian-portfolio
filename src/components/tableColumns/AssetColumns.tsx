@@ -123,7 +123,8 @@ export const getAssetColumns = (
     },
   },
   {
-    accessorKey: "verify_status",
+    id: "verify_status",
+    accessorFn: (row) => row.verify_status || "unverified",
     header: "Verify Status",
     size: 120,
     minSize: 100,
