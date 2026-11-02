@@ -251,7 +251,6 @@ export default function ScannerPage() {
               Asset verification
             </p>
           </header>
-
           <main className="relative flex flex-1 flex-col items-center justify-center py-8 text-center">
             <div className="relative mb-8 flex size-32 items-center justify-center rounded-4xl border border-slate-200 bg-white shadow-2xl shadow-emerald-900/10 backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:shadow-emerald-950/30">
               <div className="absolute inset-3 rounded-3xl border border-dashed border-emerald-400/40" />
