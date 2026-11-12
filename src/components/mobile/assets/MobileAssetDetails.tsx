@@ -237,9 +237,12 @@ function MobileAssetDetails({ item }: Props) {
                   <DescriptionBox>{item.additional_notes}</DescriptionBox>
                 </SurfaceCard>
               )}
-              {/* Image gallery strip — rendered at the bottom of every tab */}
-              <div className="h-52 w-full shrink-0">
-                <ImageGallery images={item.images ?? []} />
+              {/* Image gallery grid — rendered at the bottom of the details tab */}
+              <div className="min-h-20 w-full shrink-0">
+                <ImageGallery
+                  images={item.images ?? []}
+                  className="grid-cols-[repeat(auto-fit,minmax(4.5rem,1fr))]! grid-rows-none! auto-rows-[5rem] gap-2 [&>.group]:contents! [&>.group>div]:contents! [&>.group>button]:hidden"
+                />
               </div>
             </>
           )}

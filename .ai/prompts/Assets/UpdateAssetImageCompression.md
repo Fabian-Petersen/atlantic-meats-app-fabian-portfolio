@@ -46,3 +46,5 @@ After implementation, provide a summary of the files modified, the changes made,
 1. The images still fail on a mobile phone, I tried a single image and it failed to upload the new image.
 
 Multiple images work on the laptop on the deployed environment, therefore it is not the code itself but how the compression is handled on mobile
+
+2. Multiple images still failed, 1 image updated the asset successfully. The compression is still not handling the images without error. Add a error message in the Error Modal to view what is the issue for report back when more than one image is selected to focus on the error before more changes are made.
