@@ -241,6 +241,7 @@ function MobileAssetDetails({ item }: Props) {
               <div className="min-h-20 w-full shrink-0">
                 <ImageGallery
                   images={item.images ?? []}
+                  openThumbnailsInViewer
                   className="grid-cols-[repeat(auto-fit,minmax(4.5rem,1fr))]! grid-rows-none! auto-rows-[5rem] gap-2 [&>.group]:contents! [&>.group>div]:contents! [&>.group>button]:hidden"
                 />
               </div>

@@ -43,8 +43,47 @@ After implementation, provide a summary of the files modified, the changes made,
 
 ## Continued Errors
 
-1. The images still fail on a mobile phone, I tried a single image and it failed to upload the new image.
+### Error 1: Image Upload Failure on Mobile
 
-Multiple images work on the laptop on the deployed environment, therefore it is not the code itself but how the compression is handled on mobile
+Images are still failing to upload on mobile devices, even when only a single image is selected.
 
-2. Multiple images still failed, 1 image updated the asset successfully. The compression is still not handling the images without error. Add a error message in the Error Modal to view what is the issue for report back when more than one image is selected to focus on the error before more changes are made.
+Multiple images upload successfully on a laptop in the deployed environment, suggesting that the issue may be related to how image compression, memory usage, or file handling is performed on mobile browsers.
+
+Investigate mobile-specific image processing behaviour and identify the underlying cause.
+
+### Error 2: Multiple Image Compression/Upload Failure
+
+**Observed behaviour:**
+
+- Updating an asset with one new image succeeds.
+- Updating an asset with multiple new images fails.
+- The existing sequential compression implementation has not resolved the issue.
+
+**Required investigation:**
+
+1. Review the complete image processing workflow in `UpdateAssetForm`, including compression, file preparation, uploads, and the final asset update request.
+2. Determine exactly which stage fails when multiple images are selected.
+3. Inspect the existing error handling to identify whether the original error is being swallowed, replaced, or incorrectly handled.
+4. **Update the existing Error Modal to display detailed error information** when image compression, uploading, or the asset update request fails.
+5. Include useful diagnostic information where available:
+   - Failed operation (compression, upload, or asset update).
+   - Original error message.
+   - Image filename and image index.
+   - Total number of selected images.
+   - HTTP status code and API error response, if applicable.
+6. Ensure the error details remain visible in the Error Modal so they can be copied or reported for further investigation.
+7. Do not expose sensitive information such as authentication tokens, credentials, or presigned upload URLs.
+
+**Important:**
+
+The priority is to **identify the actual cause of the failure before implementing further fixes**.
+
+Do not introduce additional compression changes, refactor hooks, modify API request structures, or change the existing upload logic at this stage.
+
+Only implement the diagnostic error handling necessary to expose the underlying issue.
+
+**Expected outcome:**
+
+When an asset update fails with multiple images, the Error Modal must clearly show the relevant error details so the exact failure can be reported back for further investigation.
+
+Preserve all existing functionality and avoid unrelated code or logic changes.

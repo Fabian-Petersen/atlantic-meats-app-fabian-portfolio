@@ -9,9 +9,14 @@ import FullscreenImageModal from "../modals/FullscreenImageModal";
 type Props = {
   images: PresignedUrls[];
   className?: string;
+  openThumbnailsInViewer?: boolean;
 };
 
-export const ImageGallery = ({ images, className }: Props) => {
+export const ImageGallery = ({
+  images,
+  className,
+  openThumbnailsInViewer = false,
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const MAX_VISIBLE = 3;
@@ -134,7 +139,10 @@ export const ImageGallery = ({ images, className }: Props) => {
                 type="button"
                 aria-label={`View image ${originalIndex + 1}`}
                 key={originalIndex}
-                onClick={() => setActiveIndex(originalIndex)}
+                onClick={() => {
+                  setActiveIndex(originalIndex);
+                  if (openThumbnailsInViewer) setIsOpen(true);
+                }}
                 className="cursor-pointer bg-gray-200 rounded-md h-full w-full overflow-hidden opacity-70 hover:opacity-100 transition-all duration-150"
               >
                 <img
