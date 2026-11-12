@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
+import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Resolver } from "react-hook-form";
@@ -11,13 +12,104 @@ import {
   type PresignedUrlResponse,
   type UpdateAssetPayload,
 } from "@/schemas";
-import { compressImagesToWebpv1 } from "@/utils/compressImagesToWebpv1";
+import {
+  compressImagesToWebpv1,
+  ImageCompressionError,
+} from "@/utils/compressImagesToWebpv1";
 import { useById, useUpdateItem } from "@/utils/api";
 import DynamicForm from "@/components/forms/DynamicForm";
 import { FormSkeleton } from "@/components/forms/FormSkeleton";
 import { useAssetsFields } from "@/components/forms/configs/useAssetsFields";
 
 const ASSETS_QUERY_KEY = ["assets", "list"] as const;
+
+type AssetUpdateStage = "compression" | "asset update" | "upload";
+
+class AssetImageUploadError extends Error {
+  readonly filename?: string;
+  readonly imageIndex?: number;
+  readonly status?: number;
+
+  constructor(
+    message: string,
+    filename?: string,
+    imageIndex?: number,
+    status?: number,
+  ) {
+    super(message);
+    this.name = "AssetImageUploadError";
+    this.filename = filename;
+    this.imageIndex = imageIndex;
+    this.status = status;
+  }
+}
+
+const sanitizeDiagnosticValue = (value: unknown): unknown => {
+  if (typeof value === "string") {
+    return value.replace(/https?:\/\/\S+/gi, "[redacted URL]");
+  }
+
+  if (Array.isArray(value)) return value.map(sanitizeDiagnosticValue);
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, nestedValue]) => [
+        key,
+        /(token|authorization|password|credential|secret|cookie|url)/i.test(key)
+          ? "[redacted]"
+          : sanitizeDiagnosticValue(nestedValue),
+      ]),
+    );
+  }
+
+  return value;
+};
+
+const formatAssetUpdateError = (
+  error: unknown,
+  stage: AssetUpdateStage,
+  totalImages: number,
+) => {
+  const lines = [`Failed operation: ${stage}`, `Selected images: ${totalImages}`];
+
+  if (error instanceof ImageCompressionError) {
+    lines.push(
+      `Image: ${error.filename}`,
+      `Image index: ${error.imageIndex + 1} of ${error.totalImages}`,
+    );
+    const originalMessage =
+      error.originalError instanceof Error
+        ? error.originalError.message
+        : String(error.originalError);
+    if (originalMessage && originalMessage !== error.message) {
+      lines.push(
+        `Original error: ${sanitizeDiagnosticValue(originalMessage)}`,
+      );
+    }
+  } else if (error instanceof AssetImageUploadError) {
+    if (error.filename) lines.push(`Image: ${error.filename}`);
+    if (error.imageIndex !== undefined) {
+      lines.push(`Image index: ${error.imageIndex + 1} of ${totalImages}`);
+    }
+    if (error.status !== undefined) lines.push(`HTTP status: ${error.status}`);
+  }
+
+  const message = error instanceof Error ? error.message : String(error);
+  lines.push(`Error: ${sanitizeDiagnosticValue(message)}`);
+
+  if (axios.isAxiosError(error)) {
+    if (error.response?.status !== undefined) {
+      lines.push(`HTTP status: ${error.response.status}`);
+    }
+    if (error.response?.data !== undefined) {
+      const safeResponse = sanitizeDiagnosticValue(error.response.data);
+      const response = JSON.stringify(safeResponse, null, 2) ?? String(safeResponse);
+      lines.push(`API response: ${response.slice(0, 2000)}`);
+    }
+  }
+
+  return lines.join("\n");
+};
 
 type UpdateAssetEditorProps = {
   id: string;
@@ -30,8 +122,6 @@ const UpdateAssetEditor = ({ id, item }: UpdateAssetEditorProps) => {
     useGlobalContext();
   const [existingImages, setExistingImages] = useState(item.images);
   const [deletedImageKeys, setDeletedImageKeys] = useState<string[]>([]);
-  const [isProcessingImages, setIsProcessingImages] = useState(false);
-  const isSubmittingRef = useRef(false);
 
   const form = useForm<AssetRequestFormValues>({
     resolver: zodResolver(
@@ -74,7 +164,7 @@ const UpdateAssetEditor = ({ id, item }: UpdateAssetEditorProps) => {
     },
   });
 
-  const { mutateAsync, isPending: isUpdatePending } = useUpdateItem<
+  const { mutateAsync, isPending } = useUpdateItem<
     UpdateAssetPayload,
     { presigned_urls?: PresignedUrlResponse }
   >({
@@ -83,12 +173,8 @@ const UpdateAssetEditor = ({ id, item }: UpdateAssetEditorProps) => {
   });
 
   const onSubmit = async (values: AssetRequestFormValues) => {
-    // Image compression can be slow on mobile. Guard the complete submission
-    // lifecycle so a second tap cannot start another compression run.
-    if (isSubmittingRef.current) return;
-
-    isSubmittingRef.current = true;
-    setIsProcessingImages(true);
+    let stage: AssetUpdateStage = "compression";
+    const totalImages = values.images.length;
 
     try {
       const { images, ...assetValues } = values;
@@ -104,34 +190,58 @@ const UpdateAssetEditor = ({ id, item }: UpdateAssetEditorProps) => {
         deleted_image_keys: deletedImageKeys,
       };
 
+      stage = "asset update";
       const response = await mutateAsync({ id, payload });
 
       if (compressedImages.length) {
+        stage = "upload";
         if (!response.presigned_urls) {
-          throw new Error("Expected upload URLs but none were returned.");
-        }
-
-        // Keep uploads sequential too, limiting peak memory and network usage
-        // on constrained mobile browsers.
-        for (const upload of response.presigned_urls) {
-          const file = compressedImages.find(
-            (image) => image.name === upload.filename,
+          throw new AssetImageUploadError(
+            "Expected upload URLs but none were returned.",
           );
-
-          if (!file) {
-            throw new Error(`Could not find local file for ${upload.filename}.`);
-          }
-
-          const uploadResponse = await fetch(upload.url, {
-            method: "PUT",
-            headers: { "Content-Type": upload.content_type },
-            body: file,
-          });
-
-          if (!uploadResponse.ok) {
-            throw new Error(`Image upload failed for ${upload.filename}.`);
-          }
         }
+
+        await Promise.all(
+          response.presigned_urls.map(async (upload, imageIndex) => {
+            const file = compressedImages.find(
+              (image) => image.name === upload.filename,
+            );
+
+            if (!file) {
+              throw new AssetImageUploadError(
+                `Could not find local file for ${upload.filename}.`,
+                upload.filename,
+                imageIndex,
+              );
+            }
+
+            let uploadResponse: Response;
+            try {
+              uploadResponse = await fetch(upload.url, {
+                method: "PUT",
+                headers: { "Content-Type": upload.content_type },
+                body: file,
+              });
+            } catch (uploadError) {
+              throw new AssetImageUploadError(
+                uploadError instanceof Error
+                  ? uploadError.message
+                  : "The image upload request failed.",
+                upload.filename,
+                imageIndex,
+              );
+            }
+
+            if (!uploadResponse.ok) {
+              throw new AssetImageUploadError(
+                `Image upload failed for ${upload.filename}.`,
+                upload.filename,
+                imageIndex,
+                uploadResponse.status,
+              );
+            }
+          }),
+        );
       }
 
       setSuccessConfig({
@@ -144,13 +254,12 @@ const UpdateAssetEditor = ({ id, item }: UpdateAssetEditorProps) => {
       console.error("Asset update failed:", error);
       setErrorConfig({
         title: "Asset Update Failed",
-        message: "Could not update the asset. Please try again.",
+        message:
+          "Could not update the asset. Copy the details below when reporting this problem.",
+        details: formatAssetUpdateError(error, stage, totalImages),
         redirectPath: "assets/list",
       });
       setShowError(true);
-    } finally {
-      isSubmittingRef.current = false;
-      setIsProcessingImages(false);
     }
   };
 
@@ -162,7 +271,7 @@ const UpdateAssetEditor = ({ id, item }: UpdateAssetEditorProps) => {
       redirect
       redirectTo="/assets/list"
       onSubmit={onSubmit}
-      isPending={isProcessingImages || isUpdatePending}
+      isPending={isPending}
       submitText="Update Asset"
       cancelText="Cancel"
       onCancel={() => navigate("/assets/list")}

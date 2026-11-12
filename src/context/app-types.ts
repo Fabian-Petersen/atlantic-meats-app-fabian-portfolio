@@ -92,6 +92,7 @@ export type RejectConfig = {
 export type ErrorConfig = {
   title: string;
   message: string;
+  details?: string;
   redirectPath?: RedirectResource | null;
   primaryActionLabel?: string;
   secondaryActionLabel?: string;

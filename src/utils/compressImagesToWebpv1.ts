@@ -8,6 +8,28 @@ const ORIGINAL_IMAGE_FALLBACK_TYPES = new Set([
   "image/bmp",
 ]);
 
+export class ImageCompressionError extends Error {
+  readonly filename: string;
+  readonly imageIndex: number;
+  readonly totalImages: number;
+  readonly originalError: unknown;
+
+  constructor(
+    message: string,
+    filename: string,
+    imageIndex: number,
+    totalImages: number,
+    originalError: unknown,
+  ) {
+    super(message);
+    this.name = "ImageCompressionError";
+    this.filename = filename;
+    this.imageIndex = imageIndex;
+    this.totalImages = totalImages;
+    this.originalError = originalError;
+  }
+}
+
 export async function compressImagesToWebpv1(files: File[]) {
   // A worker duplicates part of the image-processing memory footprint. That is
   // useful on desktop, but can exhaust the much smaller browser memory budget
@@ -26,7 +48,7 @@ export async function compressImagesToWebpv1(files: File[]) {
   const compressedFiles: File[] = [];
 
   // Process one image at a time to keep peak memory usage low on mobile devices.
-  for (const file of files) {
+  for (const [imageIndex, file] of files.entries()) {
     try {
       const compressed = await imageCompression(file, {
         ...baseOptions,
@@ -75,13 +97,25 @@ export async function compressImagesToWebpv1(files: File[]) {
             `[image-compression] Screenshot normalization failed for ${file.name}.`,
             jpegError,
           );
-          throw new Error(
+          throw new ImageCompressionError(
             `The image ${file.name} could not be converted to a supported WebP upload.`,
+            file.name,
+            imageIndex,
+            files.length,
+            jpegError,
           );
         }
       }
 
-      throw error;
+      if (error instanceof ImageCompressionError) throw error;
+
+      throw new ImageCompressionError(
+        error instanceof Error ? error.message : "Image compression failed.",
+        file.name,
+        imageIndex,
+        files.length,
+        error,
+      );
     }
   }
 

@@ -93,7 +93,11 @@ export const Error = () => {
           exit="exit"
         >
           <motion.div
-            className={cn(sharedStyles.actionModalContent)}
+            className={cn(
+              sharedStyles.actionModalContent,
+              config.details &&
+                "h-auto max-h-[90dvh] max-w-2xl justify-start overflow-y-auto py-6",
+            )}
             variants={modalVariants.content}
             initial="initial"
             animate="animate"
@@ -113,6 +117,7 @@ export const Error = () => {
               initial="initial"
               animate="animate"
               exit="exit"
+              className="w-full"
             >
               <h1 className={cn(sharedStyles.actionModalTitle)}>
                 {config.title}
@@ -120,6 +125,25 @@ export const Error = () => {
               <p className={cn(sharedStyles.actionModalMessage)}>
                 {config.message}
               </p>
+              {config.details && (
+                <div className="mt-4 w-full max-w-2xl text-left">
+                  <div className="mb-2 flex items-center justify-between gap-3">
+                    <p className="text-sm font-semibold">Error details</p>
+                    <button
+                      type="button"
+                      className="text-sm font-medium text-blue-600 underline dark:text-blue-400"
+                      onClick={() =>
+                        void navigator.clipboard?.writeText(config.details ?? "")
+                      }
+                    >
+                      Copy details
+                    </button>
+                  </div>
+                  <pre className="max-h-64 select-text overflow-auto whitespace-pre-wrap break-words rounded-md bg-slate-100 p-3 text-xs text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+                    {config.details}
+                  </pre>
+                </div>
+              )}
             </motion.div>
 
             <motion.div
