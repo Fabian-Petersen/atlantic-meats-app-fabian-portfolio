@@ -9,10 +9,17 @@ const ORIGINAL_IMAGE_FALLBACK_TYPES = new Set([
 ]);
 
 export async function compressImagesToWebpv1(files: File[]) {
+  // A worker duplicates part of the image-processing memory footprint. That is
+  // useful on desktop, but can exhaust the much smaller browser memory budget
+  // on phones even when only one high-resolution camera image is selected.
+  const useWebWorker =
+    typeof window !== "undefined" &&
+    !window.matchMedia("(pointer: coarse)").matches;
+
   const baseOptions = {
     maxSizeMB: 0.5, // target size per image
     maxWidthOrHeight: 1920, // prevent huge images
-    useWebWorker: true,
+    useWebWorker,
     initialQuality: 0.8,
   };
 

@@ -40,3 +40,9 @@ Before implementing changes, inspect the relevant components, hooks, and utiliti
 A reliable, reusable image compression process that prevents mobile browser memory-related errors when updating assets with multiple new images, without affecting existing asset functionality.
 
 After implementation, provide a summary of the files modified, the changes made, and any potential impacts on other components.
+
+## Continued Errors
+
+1. The images still fail on a mobile phone, I tried a single image and it failed to upload the new image.
+
+Multiple images work on the laptop on the deployed environment, therefore it is not the code itself but how the compression is handled on mobile
