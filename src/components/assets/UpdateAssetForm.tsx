@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Resolver } from "react-hook-form";
@@ -30,6 +30,8 @@ const UpdateAssetEditor = ({ id, item }: UpdateAssetEditorProps) => {
     useGlobalContext();
   const [existingImages, setExistingImages] = useState(item.images);
   const [deletedImageKeys, setDeletedImageKeys] = useState<string[]>([]);
+  const [isProcessingImages, setIsProcessingImages] = useState(false);
+  const isSubmittingRef = useRef(false);
 
   const form = useForm<AssetRequestFormValues>({
     resolver: zodResolver(
@@ -72,7 +74,7 @@ const UpdateAssetEditor = ({ id, item }: UpdateAssetEditorProps) => {
     },
   });
 
-  const { mutateAsync, isPending } = useUpdateItem<
+  const { mutateAsync, isPending: isUpdatePending } = useUpdateItem<
     UpdateAssetPayload,
     { presigned_urls?: PresignedUrlResponse }
   >({
@@ -81,6 +83,13 @@ const UpdateAssetEditor = ({ id, item }: UpdateAssetEditorProps) => {
   });
 
   const onSubmit = async (values: AssetRequestFormValues) => {
+    // Image compression can be slow on mobile. Guard the complete submission
+    // lifecycle so a second tap cannot start another compression run.
+    if (isSubmittingRef.current) return;
+
+    isSubmittingRef.current = true;
+    setIsProcessingImages(true);
+
     try {
       const { images, ...assetValues } = values;
       const compressedImages = images.length
@@ -102,27 +111,27 @@ const UpdateAssetEditor = ({ id, item }: UpdateAssetEditorProps) => {
           throw new Error("Expected upload URLs but none were returned.");
         }
 
-        await Promise.all(
-          response.presigned_urls.map(async (upload) => {
-            const file = compressedImages.find(
-              (image) => image.name === upload.filename,
-            );
+        // Keep uploads sequential too, limiting peak memory and network usage
+        // on constrained mobile browsers.
+        for (const upload of response.presigned_urls) {
+          const file = compressedImages.find(
+            (image) => image.name === upload.filename,
+          );
 
-            if (!file) {
-              throw new Error(`Could not find local file for ${upload.filename}.`);
-            }
+          if (!file) {
+            throw new Error(`Could not find local file for ${upload.filename}.`);
+          }
 
-            const uploadResponse = await fetch(upload.url, {
-              method: "PUT",
-              headers: { "Content-Type": upload.content_type },
-              body: file,
-            });
+          const uploadResponse = await fetch(upload.url, {
+            method: "PUT",
+            headers: { "Content-Type": upload.content_type },
+            body: file,
+          });
 
-            if (!uploadResponse.ok) {
-              throw new Error(`Image upload failed for ${upload.filename}.`);
-            }
-          }),
-        );
+          if (!uploadResponse.ok) {
+            throw new Error(`Image upload failed for ${upload.filename}.`);
+          }
+        }
       }
 
       setSuccessConfig({
@@ -139,6 +148,9 @@ const UpdateAssetEditor = ({ id, item }: UpdateAssetEditorProps) => {
         redirectPath: "assets/list",
       });
       setShowError(true);
+    } finally {
+      isSubmittingRef.current = false;
+      setIsProcessingImages(false);
     }
   };
 
@@ -150,7 +162,7 @@ const UpdateAssetEditor = ({ id, item }: UpdateAssetEditorProps) => {
       redirect
       redirectTo="/assets/list"
       onSubmit={onSubmit}
-      isPending={isPending}
+      isPending={isProcessingImages || isUpdatePending}
       submitText="Update Asset"
       cancelText="Cancel"
       onCancel={() => navigate("/assets/list")}

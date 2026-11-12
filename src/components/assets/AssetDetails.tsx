@@ -230,7 +230,7 @@ function AssetDetails({ item }: Props) {
                     : "bg-amber-500",
                 )}
               />
-              {item.verify_status === "verified" ? "erified" : "Unverified"}
+              {item.verify_status === "verified" ? "Verified" : "Unverified"}
               {item.last_verified_at
                 ? `· ${formatDateTime(item.last_verified_at)}`
                 : ""}
